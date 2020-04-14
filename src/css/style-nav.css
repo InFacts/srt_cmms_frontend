@@ -1,0 +1,13 @@
+.border{
+    border-bottom: 1px solid #999999;
+}
+
+.fixed-bottom {
+    background-color: #ffffff;
+    padding-top:1rem;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1030;
+}
