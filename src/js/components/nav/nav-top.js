@@ -13,7 +13,7 @@ class NavTop extends React.Component {
                     <div className="p-navigation__row">
                         <div className="p-navigation__banner">
                             <div className="p-navigation__logo">
-                                <Link className="p-navigation__item" to="/">
+                                <Link className="p-navigation__item" to="/main">
                                     <img className="p-navigation__image" src={logo} alt="logo" height="70px" width="170px" style={{ maxHeight:"5rem" }} />
                                 </Link>
                             </div>
@@ -77,7 +77,7 @@ class NavTop extends React.Component {
                             <ul className="p-navigation__items" role="menu">
                                 <li className="p-navigation__item p-subnav" role="menuitem" id="link-1">
                                     <div className="p-subnav__toggle p-navigation__link" aria-controls="account-menu"><i className="fas fa-bell" style={{ fontSize: "20px" ,color: "#BDBDBD" }}></i></div>
-                                    <ul className="p-subnav__items--right" id="account-menu" aria-hidden="true">
+                                    <ul className="p-subnav__items--right" id="account-menu" aria-hidden="false">
                                         <li>
                                             {/* <Link to="/" className="p-subnav__item">Sign out</Link> */}
                                         </li>
