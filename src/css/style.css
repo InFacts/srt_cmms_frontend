@@ -1,23 +1,51 @@
+@font-face {
+    font-family: Kanit;
+    src: url(../font/Kanit/Kanit-Regular.ttf);
+}
+
+@font-face {
+    font-family: KanitLight;
+    src: url(../font/Kanit/Kanit-Light.ttf);
+}
+
 body {
     background: #F7F7F7;
     width: 100vw;
     height: 100vh;
-  }
+    font-family:KanitLight;
+}
+
+.position-absolute{
+    position: absolute;
+}
+
+h4.pt0 {
+    padding-top: 0rem;
+}
+
+.border-none{
+    border: none;
+}
 
 .head-title{
     color: #2F6FCA;
     font-weight: bold;
     font-size: 1.2rem;
+    margin-top: 1rem;
 }
 
 .head-title-bottom{
     color: #000000;
     font-weight: bold;
-    font-size: 1.1rem;
+    font-size: 1rem;
 }
 
 .blackground-white{
     background-color: #ffffff; 
+}
+
+.blackground-gray{
+    background-color: #F7F7F7; 
 }
 
 .blackground-gray-for-head-table{
@@ -27,6 +55,91 @@ body {
 .blackground-white-for-table{
     background-color: #ffffff; 
 }
+
+.font-size-top-tap-content{
+    font-size: 0.8rem;
+}
+
+.font-size-bottom-content{
+    font-size: 0.8rem;
+}
+
+.min-width-top-content{
+    min-width: 5rem;
+}
+
+.pt-0{
+    padding-top: 0rem;
+}
+
+.pt-1{
+    padding-top: 0.5rem;
+}
+
+.pt-2{
+    padding-top: 1rem;
+}
+
+.pt-3{
+    padding-top: 1.5rem;
+}
+
+.pt-4{
+    padding-top: 2rem;
+}
+
+.pt-5{
+    padding-top: 2.5rem;
+}
+
+.pl-0{
+    padding-left: 0rem;
+}
+
+.pl-1{
+    padding-left: 0.5rem;
+}
+
+.pl-2{
+    padding-left: 1rem;
+}
+
+.pl-3{
+    padding-left: 1.5rem;
+}
+
+.pl-4{
+    padding-left: 2rem;
+}
+
+.pl-5{
+    padding-left: 2.5rem;
+}
+
+.pr-0{
+    padding-right: 0rem;
+}
+
+.pr-1{
+    padding-right: 0.5rem;
+}
+
+.pr-2{
+    padding-right: 1rem;
+}
+
+.pr-3{
+    padding-right: 1.5rem;
+}
+
+.pr-4{
+    padding-right: 2rem;
+}
+
+.pr-5{
+    padding-right: 2.5rem;
+}
+
 
 .mt-0{
     margin-top: 0rem;
@@ -52,6 +165,10 @@ body {
     margin-top: 2.5rem;
 }
 
+.mt-auto{
+    margin-top: auto;
+}
+
 .mb-0{
     margin-bottom: 0rem;
 }
@@ -74,6 +191,10 @@ body {
 
 .mb-5{
     margin-bottom: 2.5rem;
+}
+
+.mb-auto{
+    margin-bottom: auto;
 }
 
 .mt-1n{
@@ -119,3 +240,155 @@ body {
 .mr-5{
     margin-right: 2.5rem
 }
+
+.ml-0{
+    margin-left: 0
+}
+
+.ml-1{
+    margin-left: 0.5rem;
+}
+
+.ml-2{
+    margin-left: 1rem;
+}
+
+.ml-3{
+    margin-left: 1.5rem;
+}
+
+.ml-4{
+    margin-left: 2rem;
+}
+
+.ml-5{
+    margin-left: 2.5rem
+}
+
+.ml-1n{
+    margin-left: -0.5rem;
+}
+
+.ml-2n{
+    margin-left: -1rem;
+}
+
+.ml-3n{
+    margin-left: -1.5rem;
+}
+
+.ml-4n{
+    margin-left: -2rem;
+}
+
+.ml-5n{
+    margin-left: -2.5rem
+}
+
+.p-search-box.mo {
+    margin: 0;
+}
+
+.p-search-box__button.m0 {
+    margin: 0;
+}
+
+.p-modal.none-popup{
+    display: none;
+}
+
+.p-modal__dialog.blackground-white{
+    background-color: #ffffff; 
+    z-index: 1024;
+}
+
+.p-button--positive.blue{
+    background-color: #2F6FCA;
+    border: none;
+    margin-bottom: 0;
+    margin-top: 1rem;
+    margin-left: auto;
+    margin-right: 0;
+}
+
+th.pp, td.pp{
+    padding-left: 0.1rem;
+    padding-right: 0.1rem;
+}
+
+table.border th.border, td.border{
+    border: 1px solid #DCDCDC;
+}
+
+input.mb-1{
+    margin-bottom: 0.5rem;
+}
+
+input.cancel-default{
+    min-width: 0em;
+    margin-bottom: 0rem;
+    margin-right: 0rem;
+    margin-left: auto;
+    width: 100%;
+    padding-right: 2rem;
+    padding-top: 0rem;
+    padding-bottom: 0rem;
+}
+
+.p-search-box__button.cancel-d{
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.w-100{
+    width: 100%;
+}
+
+/* Tea */
+.ui.segment.item {
+    position: relative;
+    background: #fff;
+    box-shadow: 0px 1px 2px 0 rgba(34, 36, 38, 0.15);
+    margin: 2rem 0;
+    padding: 1em;
+    border-radius: 0.25rem;
+    border: 1px solid rgba(34, 36, 38, 0.15);
+}
+
+.dropZone {
+    overflow-y:scroll;
+    background: white;
+    color: black;
+    padding:2%;
+    text-align: center;
+    height:250px
+}
+
+.card {
+    background: #fff;
+    display: inline-block;
+    border: 2px solid #949191;
+    padding: 3%;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.card:hover{
+    border-color: #860104;
+}
+
+.image {
+    float: left;
+    width: 30%;
+    height: 100%;
+    position: relative;
+}
+
+.content {
+    float: left;
+    height: 100%;
+    width: 65%;
+    padding: 2%;
+}
+  

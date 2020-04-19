@@ -1,0 +1,366 @@
+.one-one{
+    position: absolute;
+    left: 190px;
+    top: 120px;
+}
+
+.one-two{
+    position: absolute;
+    left: 190px;
+    top: 230px;
+}
+
+.one-three{
+    position: absolute;
+    left: 190px;
+    top: 340px;
+}
+
+.arrow1{
+    position: absolute;
+    left: 310px;
+    top: 200px;
+}
+
+.arrow2{
+    position: absolute;
+    left: 310px;
+    top: 270px;
+}
+
+.arrow3{
+    position: absolute;
+    left: 310px;
+    top: 330px;
+}
+
+.text1{
+    /* นำเข้าอะไหล่โดยมีใบสั่งซื้อ */
+    position: absolute;
+    width: 141px;
+    height: 21px;
+    left: 143px;
+    top: 190px;
+
+    font-family: Kanit;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+    /* identical to box height */
+    text-align: center;
+
+    color: #000000;
+}
+
+.text2{
+    position: absolute;
+    width: 162px;
+    height: 21px;
+    left: 129px;
+    top: 300px;
+
+    font-family: Kanit;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+    /* identical to box height */
+    text-align: center;
+
+    color: #000000;
+}
+
+.text3{
+    /* นำอะไหล่เข้าโดยไม่มีใบสั่งซื้อ (สำหรับโอนย้ายอะไหล่) */
+    position: absolute;
+    width: 154px;
+    height: 42px;
+    left: 134px;
+    top: 400px;
+
+    font-family: Kanit;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+    text-align: center;
+
+    color: #000000;
+}
+
+.center{
+    position: absolute;
+    left: 370px;
+    top: 250px;
+}
+
+.text4{
+    /* คงคลังอะไหล่ */
+    position: absolute;
+    width: 75px;
+    height: 21px;
+    left: 362px;
+    top: 300px;
+
+    font-family: Kanit;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+    /* identical to box height */
+    text-align: center;
+
+    color: #000000;
+}
+
+.two-one{
+    position: absolute;
+    width: 65px;
+    height: 65px;
+    left: 519px;
+    top: 135px;
+}
+
+.two-two{
+    position: absolute;
+    left: 519px;
+    top: 240px;
+}
+
+.two-three{
+    position: absolute;
+width: 55px;
+height: 55px;
+left: 519px;
+top: 340px;
+}
+
+.arrow4{
+position: absolute;
+left: 465px;
+top: 200px;
+}
+
+.arrow5{
+position: absolute;
+left: 465px;
+top: 270px;
+}
+
+.arrow6{
+    position: absolute;
+    left: 465px;
+top: 330px;
+
+}
+
+.text5{
+position: absolute;
+width: 102px;
+height: 21px;
+left: 500px;
+top: 193px;
+
+font-family: Kanit;
+font-style: normal;
+font-weight: 300;
+font-size: 14px;
+line-height: 21px;
+/* identical to box height */
+text-align: center;
+
+color: #000000;
+}
+
+.text6{
+    /* นำอะไหลชำรุดออก */
+
+position: absolute;
+width: 103px;
+height: 21px;
+left: 496px;
+top: 302px;
+
+font-family: Kanit;
+font-style: normal;
+font-weight: 300;
+font-size: 14px;
+line-height: 21px;
+/* identical to box height */
+text-align: center;
+
+color: #000000;
+
+
+}
+
+.text7{
+    /* ส่งซ่อมอะไหล่ */
+
+position: absolute;
+width: 74px;
+height: 21px;
+left: 509px;
+top: 400px;
+
+font-family: Kanit;
+font-style: normal;
+font-weight: 300;
+font-size: 14px;
+line-height: 21px;
+/* identical to box height */
+text-align: center;
+
+color: #000000;
+
+
+}
+
+.three-one{
+position: absolute;
+left: 690px;
+    top: 118px;
+}
+
+.three-two{
+    position: absolute;
+    left: 690px;
+    top: 245px;
+}
+
+.three-three{
+position: absolute;
+left: 690px;
+top: 340px;
+}
+
+.text8{
+    /* ส่งซ่อมอะไหล่ */
+
+position: absolute;
+width: 110px;
+height: 42px;
+left: 660px;
+top: 195px;
+
+font-family: Kanit;
+font-style: normal;
+font-weight: 300;
+font-size: 14px;
+line-height: 21px;
+/* identical to box height */
+text-align: center;
+
+color: #000000;
+}
+
+.text9{
+position: absolute;
+width: 110px;
+height: 42px;
+left: 660px;
+top: 302px;
+
+font-family: Kanit;
+font-style: normal;
+font-weight: 300;
+font-size: 14px;
+line-height: 21px;
+/* identical to box height */
+text-align: center;
+
+color: #000000;
+}
+
+.text10{
+    /* จำหน่ายซากอะไหล่ */
+
+position: absolute;
+width: 101px;
+height: 21px;
+left: 665px;
+top: 402px;
+
+font-family: Kanit;
+font-style: normal;
+font-weight: 300;
+font-size: 14px;
+line-height: 21px;
+/* identical to box height */
+text-align: center;
+
+color: #000000;
+}
+
+.four-one{
+    position: absolute;
+    left: 840px;
+    top: 130px;
+}
+
+.four-two{
+    position: absolute;
+    left: 840px;
+    top: 250px;
+}
+
+.four-three{
+    position: absolute;
+    left: 840px;
+    top: 345px;
+}
+
+.text11{
+    position: absolute;
+width: 84px;
+height: 21px;
+left: 830px;
+top: 195px;
+
+font-family: Kanit;
+font-style: normal;
+font-weight: 300;
+font-size: 14px;
+line-height: 21px;
+/* identical to box height */
+text-align: center;
+
+color: #000000;
+}
+
+.text12{
+    position: absolute;
+width: 84px;
+height: 21px;
+left: 830px;
+top: 305px;
+
+font-family: Kanit;
+font-style: normal;
+font-weight: 300;
+font-size: 14px;
+line-height: 21px;
+/* identical to box height */
+text-align: center;
+
+color: #000000;
+}
+
+.text13{
+    position: absolute;
+width: 84px;
+height: 21px;
+left: 830px;
+top: 405px;
+
+font-family: Kanit;
+font-style: normal;
+font-weight: 300;
+font-size: 14px;
+line-height: 21px;
+/* identical to box height */
+text-align: center;
+
+color: #000000;
+}
