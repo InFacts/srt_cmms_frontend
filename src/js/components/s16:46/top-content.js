@@ -3,6 +3,13 @@ import React from 'react';
 import '../../../css/style.css'
 
 class TopContent extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+        }
+    }
+
     render() {
         return (
             <div className="mb-1">

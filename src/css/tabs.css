@@ -7,9 +7,11 @@
   .tab button {
     background-color: inherit;
     float: left;
+    font-size: 20px;
+    font-weight: 600;
+    color: #666666;
     border: none;
-    /* outline: none;
-    cursor: pointer; */
+    margin: 0;
     padding: 14px 16px;
     transition: 0.3s;
   }

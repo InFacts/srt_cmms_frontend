@@ -8,7 +8,6 @@ class NavBottom extends React.Component {
     render() {
         return (
             <div>
-                {/* <header id="navigation" className="mt-2"> */}
                 <header id="navigation" className="fixed-bottom">
                     <div className="p-navigation__row">
                         <nav className="p-navigation__nav">
