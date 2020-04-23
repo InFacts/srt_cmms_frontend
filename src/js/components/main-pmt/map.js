@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom'
 import '../../../vender/fontawesome-free/css/all.css';
 import '../../../css/position-arrow-pmt.css';
 
+import Dropdown from '../../../images/spare/drop-dawn.svg'
+
 import Oneone from '../../../images/pmt/one-one.svg'
 import Onetwo from '../../../images/pmt/one-two.svg'
 import Onethree from '../../../images/pmt/one-three.svg'
@@ -38,7 +40,7 @@ class Map extends React.Component {
                     <div className="container_12 clearfix">
                         <section className="grid_12 ">
                             <div className="ml-3" style={{ height: "500px" }}>
-                                <h4 className="head-title">ระบบบริหารงานซ่อมบำรุง - PMT</h4>
+                                <h4 className="head-title" style={{ color: "black"}}>ระบบบริหารงานซ่อมบำรุง - PMT</h4>
                                 <img alt='some value' src={Oneone} className="Pone-one" />
                                 <img alt='some value' src={Onetwo} className="Pone-two" />
                                 <img alt='some value' src={Onethree} className="Pone-three" />
@@ -61,6 +63,28 @@ class Map extends React.Component {
                                 <img alt='some value' src={Text9} className="Ptext9" />
                                 <img alt='some value' src={Fiveone} className="Pfive-one" />
                                 <img alt='some value' src={Text10} className="Ptext10" />
+
+                                <span className="p-contextual-menu--left Pdrop-dawn1">
+                                    <button className="p-contextual-menu__toggle" style={{ border: "none", padding: "0" }} aria-controls="menu-1" aria-expanded="false" aria-haspopup="true"><img alt='some value' src={Dropdown} /></button>
+                                    <span className="p-contextual-menu__dropdown" id="menu-1" aria-hidden="true" aria-label="submenu">
+                                        <span className="p-contextual-menu__group">
+                                            <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>Commission</Link>
+                                            <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>Aquire</Link>
+                                            <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>Deploy</Link>
+                                        </span>
+                                    </span>
+                                </span>
+
+                                <span className="p-contextual-menu--left Pdrop-dawn2">
+                                    <button className="p-contextual-menu__toggle" style={{ border: "none", padding: "0" }} aria-controls="menu-2" aria-expanded="false" aria-haspopup="true"><img alt='some value' src={Dropdown} /></button>
+                                    <span className="p-contextual-menu__dropdown" id="menu-2" aria-hidden="true" aria-label="submenu">
+                                        <span className="p-contextual-menu__group">
+                                            <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>Commission</Link>
+                                            <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>Aquire</Link>
+                                            <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>Deploy</Link>
+                                        </span>
+                                    </span>
+                                </span>
                             </div>
                         </section>
                     </div>

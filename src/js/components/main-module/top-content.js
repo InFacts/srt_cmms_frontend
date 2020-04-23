@@ -14,7 +14,7 @@ class TopContent extends React.Component {
         <div id="blackground-white">
           <div className="container_12 clearfix">
             <section className="grid_12" style={{ width:"960px"}}>
-              <h4 className="head-title">ระบบฐานข้อมูลระบบอาณัติสัญญาณเพื่อวิเคราะห์และวางแผนซ่อมบำรุง</h4>
+              <h4 className="head-title" style={{ color: "black"}}>ระบบฐานข้อมูลระบบอาณัติสัญญาณเพื่อวิเคราะห์และวางแผนซ่อมบำรุง</h4>
               <div className="grid_4">
                 <Link to="/main-spare">
                   <div className="card p-tooltip--btm-center" aria-describedby="btm-cntr">

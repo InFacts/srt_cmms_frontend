@@ -21,9 +21,9 @@ class Login extends Component {
             <h4 className="head-signin">เข้าสู่ระบบ</h4>
             <form className="from-sigin-input">
               <label className="input-signin">รหัสพนักงาน</label>
-              <input className="cancel-default" type="text" />
+              <input className="cancel-default-signin" type="text" />
               <label className="input-signin mt-2">รหัสผ่าน</label>
-              <input className="cancel-default" type="password" id="exampleInputPassword1" />
+              <input className="cancel-default-signin" type="password" id="exampleInputPassword1" />
               <input type="checkbox" id="checkExample1" ></input>
 
               <input type="checkbox" id="checkExample2" />

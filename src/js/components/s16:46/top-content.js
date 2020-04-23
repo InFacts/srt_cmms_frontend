@@ -8,34 +8,12 @@ class TopContent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            fileUploadState: "",
-            file_show: [
-            ],
-            number: 0,
+            
         }
-        this.fileUploadButton = this.fileUploadButton.bind(this);
-
     }
 
     componentDidMount(){
         document.getElementById("defaultOpen").click();
-    }
-
-    fileUploadButton = () => {
-        document.getElementById('fileButton').click();
-        document.getElementById('fileButton').onchange = () => {
-            this.setState({ fileUploadState: document.getElementById('fileButton').value });
-            this.setState({ number: this.state.number + 1 });
-
-            var myArray = this.state.file_show;
-            myArray.push(
-                {
-                    "des": this.state.fileUploadState
-                }
-            )
-            this.setState({ file_show: myArray });
-
-        }
     }
     
     tapChange(evt, cityName) {

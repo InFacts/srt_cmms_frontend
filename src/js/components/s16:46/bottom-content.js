@@ -25,16 +25,30 @@ class BottomContent extends React.Component {
 
                             <div id="คลังต้นทาง" className="tabcontent">
                                 <h3 className="head-title-bottom mt-2">คลังต้นทาง</h3>
-                                <div className="grid_12 mb-2">
-                                    <div className="grid_2">
-                                        <h5 className="cancel-default">เลขที่เอกสาร:</h5>
-                                        <h5 className="cancel-default">รูปแบบการรับของ:</h5>
-                                    </div>
-                                    <div className="grid_5 pull_0">
+                                <div className="grid_12">
+                                    <div className="grid_3"><p className="cancel-default">เลขที่เอกสาร:</p></div>
+                                    <div className="grid_6 pull_0">
                                         <div className="p-search-box cancel-margin">
                                             <input type="text" className="p-search-box__input cancel-default" />
-                                            <button type="button" className="p-search-box__button cancel-padding" alt="search" ><i className="p-icon--search" id="showModal" aria-controls="modal" ></i></button>
+                                            <button type="button" className="p-search-box__button cancel-padding" alt="search"><i className="p-icon--search" id="showModal" aria-controls="modal" ></i></button>
                                         </div>
+                                    </div>
+                                </div>
+                                <div className="grid_12 mb-2">
+                                    <div className="grid_3"><p className="cancel-default">รูปแบบการรับของ:</p></div>
+                                    <div className="grid_6 pull_0">
+                                        <input className="d-inline" type="radio" name="RadioOptions" id="Radio1" value="option1" />
+                                        <label htmlFor="Radio1" className="cancel-default d-inline">รับของเอง</label>
+                                        <input className="d-inline ml-3" type="radio" name="RadioOptions" id="Radio2" value="option2" />
+                                        <label htmlFor="Radio2" className="cancel-default d-inline ml-3">ส่งไปยังคลังปลายทาง</label>
+                                    </div>
+                                </div>
+
+                                {/* <div className="grid_12 mb-2">
+                                    <div className="grid_2">
+                                        <p className="top-text">เลขที่เอกสาร:</p>
+                                    </div>
+                                    <div className="grid_5 pull_0">
                                         <div className="" style={{ width: "300px" }}>
                                             <input className="d-inline" type="radio" name="RadioOptions" id="Radio1" value="option1" />
                                             <label htmlFor="Radio1" className="cancel-default d-inline">รับของเอง</label>
@@ -42,7 +56,8 @@ class BottomContent extends React.Component {
                                             <label htmlFor="Radio2" className="cancel-default d-inline ml-3">ส่งไปยังคลังปลายทาง</label>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
+
                                 <table className="cancel-border">
                                     <thead>
                                         <tr style={{ border: "none", }}>
@@ -83,7 +98,7 @@ class BottomContent extends React.Component {
                                             <td className="edit-padding" style={{ width: "100px" }}>
                                                 <div className="p-search-box cancel-margin">
                                                     <input type="text" className="p-search-box__input cancel-default" />
-                                                    <button type="button" className="p-search-box__button cancel-padding" alt="search"><i className="p-icon--search"></i></button>
+                                                    <button type="button" className="p-search-box__button cancel-padding" alt="search"><i className="p-icon--search" id="showModal2" aria-controls="modal2"></i></button>
                                                 </div>
                                             </td>
                                             <td className="edit-padding" style={{ width: "110px" }}>4-days</td>
@@ -130,11 +145,11 @@ class BottomContent extends React.Component {
                                     <thead>
                                         <tr>
                                             <th className="font-for-status" style={{ width: "50px" }}></th>
-                                            <th className="font-for-status">เลขที่สิ่งของ</th>
-                                            <th className="font-for-status">รายละเอียดอะไหล่</th>
-                                            <th className="font-for-status">เบิกจำนวน</th>
-                                            <th className="font-for-status">หน่วย</th>
-                                            <th className="font-for-status">คงคลัง</th>
+                                            <th className="font-for-status">ตำแหน่ง</th>
+                                            <th className="font-for-status">หน่วยงาน</th>
+                                            <th className="font-for-status">ชื่อผู้ลงนาม</th>
+                                            <th className="font-for-status">วันที่ลงนาม</th>
+                                            <th className="font-for-status">สถานะ</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -172,22 +187,22 @@ class BottomContent extends React.Component {
                         <h3 className="head-title-modal">คลังต้นทาง</h3>
                         <div className="container-modal">
                             <h5 className="cancel-default colum1of2-modal">ค้นหาเลขที่คลัง:</h5>
-                            <button className="button-blue ml-1" style={{ float: "right" }} type="button">ค้นหา</button>
+                            <button className="button-blue ml-1 float-right" type="button">ค้นหา</button>
                             <input type="text" className="cancel-default colum2of2-modal" />
                             <table className="cancel-border mt-3">
                                 <thead>
                                     <tr>
-                                        <th className="font-for-status" style={{ width: "270px", paddingLeft: "50px"}}>เลขที่คลัง</th>
-                                        <th className="font-for-status" style={{ width: "270px"}}>ชื่อคลัง</th>
+                                        <th className="font-for-status" style={{ width: "270px", paddingLeft: "50px" }}>เลขที่คลัง</th>
+                                        <th className="font-for-status" style={{ width: "270px" }}>ชื่อคลัง</th>
                                         <th className="font-for-status"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td className="font-for-status" style={{ width: "270px", paddingLeft: "50px"}}>
+                                        <td className="font-for-status" style={{ width: "270px", paddingLeft: "50px" }}>
                                             1123451
                                         </td>
-                                        <td className="font-for-status" style={{ width: "270px"}}>
+                                        <td className="font-for-status" style={{ width: "270px" }}>
                                             คลังหากใหญ่้
                                         </td>
                                         <td className="font-for-status">
@@ -196,10 +211,45 @@ class BottomContent extends React.Component {
                                     </tr>
                                 </tbody>
                             </table>
-                            <button className="button-blue mt-3" style={{ float: "right" }} type="button" aria-label="Close active modal" aria-controls="modal" id="aria-controls">Close</button>
+                            <button className="button-blue mt-3 float-right" type="button" aria-label="Close active modal" aria-controls="modal" id="aria-controls">Close</button>
                         </div>
                     </div>
                 </div>
+
+                <div className="modal" id="modal2" style={{ display: "none" }}>
+                    <div className="gray-board">
+                        <h3 className="head-title-modal">เลขที่สิ่งของ</h3>
+                        <div className="container-modal">
+                            <h5 className="cancel-default colum1of2-modal">ค้นหาเลขที่สิ่งของ:</h5>
+                            <button className="button-blue ml-1 float-right" type="button">ค้นหา</button>
+                            <input type="text" className="cancel-default colum2of2-modal" />
+                            <table className="cancel-border mt-3">
+                                <thead>
+                                    <tr>
+                                        <th className="font-for-status" style={{ width: "270px", paddingLeft: "50px" }}>เลขที่สิ่งของ</th>
+                                        <th className="font-for-status" style={{ width: "270px" }}>รายละเอียดอะไหล่</th>
+                                        <th className="font-for-status"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td className="font-for-status" style={{ width: "270px", paddingLeft: "50px" }}>
+                                            1123451
+                                        </td>
+                                        <td className="font-for-status" style={{ width: "270px" }}>
+                                            คลังหากใหญ่้
+                                        </td>
+                                        <td className="font-for-status">
+                                            <button className="button-green">ยืนยัน</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button className="button-blue mt-3 float-right" type="button" aria-label="Close active modal" aria-controls="modal2" id="aria-controls">Close</button>
+                        </div>
+                    </div>
+                </div>
+
             </form>
         )
     };
