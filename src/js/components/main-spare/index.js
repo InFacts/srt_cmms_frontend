@@ -10,12 +10,7 @@ class MainModule extends React.Component {
         return (
             <div>
                 <NavTopbar />
-                <section className="blackground-white mb-2n">
-                    <div className="row">
-                        <Map />
-                    </div>
-                </section>
-
+                <Map />
             </div>
         )
     };

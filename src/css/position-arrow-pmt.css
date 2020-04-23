@@ -1,31 +1,31 @@
 .Pone-one{
     position: absolute;
-    left: 190px;
+    left: 70px;
     top: 120px;
 }
 
 .Pone-two{
     position: absolute;
-    left: 190px;
+    left: 70px;
     top: 260px;
 }
 
 .Pone-three{
     position: absolute;
-    left: 190px;
+    left: 70px; 
     top: 370px;
 }
 
 .Parrow1{
     position: absolute;
-    left: 310px;
+    left: 190px;
     top: 145px;
 }
 
 .Ptext1{
     /* นำเข้าอะไหล่โดยมีใบสั่งซื้อ */
     position: absolute;
-    left: 159px;
+    left: 39px;
     top: 185px;
 
     font-family: Kanit;
@@ -41,7 +41,7 @@
 
 .Ptext2{
     position: absolute;
-    left: 167px;
+    left: 47px;
     top: 320px;
 
     font-family: Kanit;
@@ -58,7 +58,7 @@
 .Ptext3{
     /* นำอะไหล่เข้าโดยไม่มีใบสั่งซื้อ (สำหรับโอนย้ายอะไหล่) */
     position: absolute;
-    left: 194px;
+    left: 74px;
     top: 450px;
 
     font-family: Kanit;
@@ -73,25 +73,25 @@
 
 .Ptwo-one{
     position: absolute;
-    left: 400px;
+    left: 280px;
     top: 120px;
 }
 
 .Ptwo-two{
     position: absolute;
-    left: 390px;
+    left: 270px;
     top: 260px;
 }
 
 .Ptwo-three{
     position: absolute;
-    left: 400px;
+    left: 280px;
     top: 380px;
 }
 
 .Ptext4{
     position: absolute;
-    left: 350px;
+    left: 230px;
     top: 185px;
 
     font-family: Kanit;
@@ -106,7 +106,7 @@
 
 .Ptext5{
     position: absolute;
-    left: 395px;
+    left: 275px;
     top: 320px;
 
     font-family: Kanit;
@@ -121,7 +121,7 @@
 
 .Ptext6{
     position: absolute;
-    left: 415px;
+    left: 295px;
     top: 450px;
 
     font-family: Kanit;
@@ -136,20 +136,20 @@
 
 .Pthree-one{
     position: absolute;
-    left: 600px;
+    left: 480px;
     top: 105px;
 }
 
 .Parrow2{
     position: absolute;
-    left: 520px;
+    left: 400px;
     top: 145px;
 }
 
 .Ptext7{
     /* นำเข้าอะไหล่โดยมีใบสั่งซื้อ */
     position: absolute;
-    left: 580px;
+    left: 460px;
     top: 185px;
 
     font-family: Kanit;
@@ -165,10 +165,11 @@
 
 .Pfour-one{
     position: absolute;
-    left: 800px;
+    left: 680px;
     top: 120px;
 }
 
+/* ลบ 120 ต่อ ด้านล่าง */
 .Pfour-two{
     position: absolute;
     left: 805px;
