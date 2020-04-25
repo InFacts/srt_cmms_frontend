@@ -1,0 +1,496 @@
+
+@font-face {
+  font-family: THSarabunNew;
+  src: url(../font/THSarabunNew/THSarabunNew.ttf);
+}
+
+@font-face {
+  font-family: Anakotmai-Light;
+  src: url(../font/Anakotmai/Anakotmai-Light.ttf);
+}
+
+* {
+  font-family: THSarabunNew;
+}
+
+.mt-0{
+  margin-top: 0rem;
+}
+
+.mt-1{
+  margin-top: 0.5rem;
+}
+
+.mt-2{
+  margin-top: 1rem;
+}
+
+.mt-3{
+  margin-top: 1.5rem;
+}
+
+.mt-4{
+  margin-top: 2rem;
+}
+
+.mt-5{
+  margin-top: 2.5rem;
+}
+
+.mt-auto{
+  margin-top: auto;
+}
+
+.mb-0{
+  margin-bottom: 0rem;
+}
+
+.mb-1{
+  margin-bottom: 0.5rem;
+}
+
+.mb-2{
+  margin-bottom: 1rem;
+}
+
+.mb-3{
+  margin-bottom: 1.5rem;
+}
+
+.mb-4{
+  margin-bottom: 2rem;
+}
+
+.mb-5{
+  margin-bottom: 2.5rem;
+}
+
+.mb-auto{
+  margin-bottom: auto;
+}
+
+.mt-1n{
+  margin-top: -0.5rem;
+}
+
+.mt-2n{
+  margin-top: -1rem;
+}
+
+.mt-3n{
+  margin-top: -1.5rem;
+}
+
+.mt-4n{
+  margin-top: -2rem;
+}
+
+.mt-5n{
+  margin-top: -2.5rem;
+}
+
+.mr-0{
+  margin-right: 0;
+}
+
+.mr-1{
+  margin-right: 0.5rem;
+}
+
+.mr-2{
+  margin-right: 1rem;
+}
+
+.mr-3{
+  margin-right: 1.5rem;
+}
+
+.mr-4{
+  margin-right: 2rem;
+}
+
+.mr-5{
+  margin-right: 2.5rem
+}
+
+.ml-0{
+  margin-left: 0
+}
+
+.ml-1{
+  margin-left: 0.5rem;
+}
+
+.ml-2{
+  margin-left: 1rem;
+}
+
+.ml-3{
+  margin-left: 1.5rem;
+}
+
+.ml-4{
+  margin-left: 2rem;
+}
+
+.ml-5{
+  margin-left: 2.5rem
+}
+
+.pt-0{
+  padding-top: 0.5rem;
+}
+
+.pt-1{
+  padding-top: 1rem;
+}
+
+.pt-2{
+  padding-top: 1.5rem;
+}
+
+.pt-3{
+  padding-top: 2rem;
+}
+
+.pt-4{
+  padding-top: 2.5rem;
+}
+
+.pt-5{
+  padding-top: 3rem;
+}
+
+.d-inline{
+  display: inline;
+}
+
+#header{
+  background-color: #840204;
+  width: 100%;
+  position: fixed;
+  z-index: 1;
+}
+
+#blackground-gray{
+  background: #F7F7F7;
+  height: 100%;
+  padding-bottom: 4rem;
+}
+
+#blackground-white{
+  background: white;
+  height: 100%;
+}
+
+section{
+  margin-top: 55px;
+}
+
+li {
+  display: inline;
+  padding: 5px;
+}
+
+/* NavTop */
+ul.nav-ul {
+  font-family: Anakotmai-Light;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+li.nav-li {
+  font-family: Anakotmai-Light;
+  float: left;
+}
+
+li.nav-li a {
+  font-family: Anakotmai-Light;
+  display: block;
+  font-size: 12px;
+  color: white;
+  text-align: center;
+  padding: 4px 12px 0px 12px;
+  text-decoration: none;
+}
+
+a.mt-12{
+  margin-top: 12px;
+}
+
+li.nav-li a:visited{
+  color: white;
+}
+
+.active {
+  background-color: #4CAF50;
+}
+
+/* Top Content */
+.head-title{
+  font-family: Anakotmai-Light;
+  color: #2F6FCA;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 36px;
+  margin-top: 1rem;
+  margin-bottom: 10px;
+}
+
+p.top-text{
+  font-size: 20px;
+  line-height: 21px;
+  margin-bottom: 7px;
+}
+
+/* Input Bottom */
+input.cancel-default{
+  width: 100%;
+  padding-right: 2rem;
+  padding-top: 0rem;
+  padding-bottom: 0rem;
+  min-width: 0em;
+  margin-bottom: 0rem;
+  margin-right: 0rem;
+  margin-left: auto;
+  margin-top: 5px;
+}
+
+.p-search-box__button.cancel-padding{
+  top: 5px;
+  right: 10px;
+  padding: 0;
+}
+
+.p-search-box.cancel-margin {
+  margin-bottom: 0;
+}
+
+.head-title-bottom{
+  color: #000000;
+  font-size: 28px;
+  line-height: 30px;
+} 
+
+label.cancel-default{
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 20px;
+  margin-bottom: auto;
+  top: 1px;
+}
+
+h5.cancel-default{
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 20px;
+  margin-bottom: 5px;
+}
+
+/* Table */
+table.cancel-border{
+  border-bottom: 0;
+}
+
+thead{
+  background-color:#EAEAEA;
+}
+
+tbody{
+  background-color: white;
+}
+
+th.font{
+  color: #000000;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+tr{
+  font-size: 20px;
+}
+
+/* Footer */
+#footer{
+  bottom: 0;
+  background-color: white;
+  width: 100%;
+  height: 40px;
+  padding-top: 3px;
+  position: fixed;
+  z-index: 1;
+}
+
+.nav-footer {
+  overflow: hidden;
+  background-color: white;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.float-right{
+  float: right;
+}
+
+.p-button--base.edit{
+  color: #2F6FCA;
+  font-family: Anakotmai-Light;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.button-blue{
+  background-color: #2F6FCA;
+  border: none;
+  color: rgb(37, 32, 87);
+  font-family: Anakotmai-Light;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.button-gray{
+  background-color: #F7F7F7;
+  border: none;
+  color: #2F6FCA;
+  font-family: Anakotmai-Light;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.button-blue:hover{
+  background-color: rgb(38, 91, 165);
+}
+
+
+/* tae */
+
+p.top-input{
+  font-size: 20px;
+  line-height: 21px;
+  margin-bottom: 12px;
+}
+
+select.cancel-default{
+  width: 100%;
+  padding-right: 2rem;
+  padding-top: 0rem;
+  padding-bottom: 0rem;
+  min-width: 0em;
+  margin-bottom: 0rem;
+  margin-right: 0rem;
+  margin-left: auto;
+  margin-top: 5px;
+}
+
+.mm{
+  height: 1.9rem;
+}
+
+.ml-1n{
+  margin-left: -0.5rem;
+}
+
+.ml-2n{
+  margin-left: -1rem;
+}
+
+.ml-3n{
+  margin-left: -1.5rem;
+}
+
+.ml-4n{
+  margin-left: -2rem;
+}
+
+.ml-5n{
+  margin-left: -2.5rem
+}
+
+.ml-6n{
+  margin-left: -3rem
+}
+
+.ml-7n{
+  margin-left: -3.5rem
+}
+
+.ml-8n{
+  margin-left: -4rem
+}
+
+.w-50{
+  width: 50%;
+}
+
+.w-30{
+  width: 30%;
+}
+
+.w-10{
+  width:10%;
+}
+
+.w-20{
+  width:20%;
+}
+
+.w-80{
+  width: 80%;
+}
+
+.w-100{
+  width: 100%;
+}
+
+input.cancel-table{
+  width: 100%;
+  padding-right: 2rem;
+  padding-top: 0rem;
+  padding-bottom: 0rem;
+  min-width: 0em;
+  margin-bottom: 0rem;
+  margin-right: 0rem;
+  margin-left: auto;
+  margin-top: 0px;
+}
+
+textarea.cancel-table{
+  width: 100%;
+  padding-right: 2rem;
+  padding-top: 0rem;
+  padding-bottom: 0rem;
+  min-width: 0em;
+  margin-bottom: 0rem;
+  margin-right: 0rem;
+  margin-left: auto;
+  margin-top: 7px;
+}
+
+button.cancel-table{
+  width: 70%;
+  padding-right: 2rem;
+  padding-top: 0rem;
+  padding-bottom: 0rem;
+  min-width: 0em;
+  margin-bottom: 0rem;
+  margin-right: 0rem;
+  margin-left: auto;
+  margin-top: 0px;
+}
+
+.head-label{
+  font-family: Anakotmai-Light;
+  color: rgb(0, 0, 0);
+  font-weight: none;
+  font-size: 18px;
+  line-height: 0px;
+  margin-top: 0rem;
+  margin-bottom: 0px;
+}
+
+thead blackground-white{
+  background-color:#ffffff;
+}
