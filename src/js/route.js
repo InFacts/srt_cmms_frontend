@@ -8,6 +8,7 @@ import MainPmt from './components/main-pmt';
 import S1646 from './components/s16-46';
 import SS101 from './components/ss101'
 import WO from './components/work-order'
+import WR from './components/work-request'
 
 class FrontEnd extends React.Component {
     render() {
@@ -20,6 +21,7 @@ class FrontEnd extends React.Component {
                 <Route exact path="/ss101" component={SS101} />
                 <Route exact path="/s1646" component={S1646} />
                 <Route exact path="/wo" component={WO} />
+                <Route exact path="/wr" component={WR} />
             </div>
         );
     }
