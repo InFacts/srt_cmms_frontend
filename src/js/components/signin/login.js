@@ -28,7 +28,7 @@ class Login extends Component {
 
               <input type="checkbox" id="checkExample2" />
               <label className="alert-signin float-left mt-1 font-signin">จดจำรหัสผ่าน</label>
-              <label className="alert-signin float-right mt-1 font-signin" style={{ marginTop: "-23px" }}>ลืมรหัสผ่าน ?</label>
+              <label className="alert-signin float-right mt-1 font-signin" style={{ marginTop: "9px" }}>ลืมรหัสผ่าน ?</label>
 
               <Link to="/main"><button className="button-red font-signin" type="submit">เข้าสู่ระบบ</button></Link>
             </form>
