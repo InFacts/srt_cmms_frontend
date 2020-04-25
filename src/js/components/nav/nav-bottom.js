@@ -5,6 +5,8 @@ import '../../../css/style-nav.css'
 import '../../../css/style.css'
 
 class NavBottom extends React.Component {
+
+    // <h1>{this.props.type}</h1>
     render() {
         return (
             <div id="footer">

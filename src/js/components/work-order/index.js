@@ -7,12 +7,13 @@ import NavBottom from '../nav/nav-bottom.js';
 
 class WO extends React.Component {
     render() {
+        const type = 'WO';
         return (
             <div>
                 <NavTopbar />
                 <TopContent />
                 <BottomContent />
-                <NavBottom />
+                <NavBottom type={type} />
             </div>
         )
     };

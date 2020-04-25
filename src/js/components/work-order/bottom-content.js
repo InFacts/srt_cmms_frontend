@@ -14,20 +14,15 @@ class BottomContent extends React.Component {
             <div className="grid_12 ">
 
               <div id="อาการเสีย" className="tabcontent">
-                <h3 className="head-title-bottom mt-2">ข้อมูลเกี่ยวกับอาการขัดข้อง</h3>
+                <h3 className="head-title-bottom mt-2">ข้อมูลเกี่ยวกับอาการขัดข้อง:</h3>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">เดินทางโดย:</p></div>
+                  <div className="grid_3"><p className="cancel-default">ชื่องาน:</p></div>
                   <div className="grid_7 pull_0">
-                    <select className="edit-select" name="exampleSelect" id="exampleSelect">
-                      <option defaultValue="0"></option>
-                      <option defaultValue="1">Cosmic Cuttlefish</option>
-                      <option defaultValue="2">Bionic Beaver</option>
-                      <option defaultValue="3">Xenial Xerus</option>
-                    </select>
+                    <input type="text" className="cancel-default mt-1"></input>
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">ออกเดินทาง:</p></div>
+                  <div className="grid_3"><p className="cancel-default">วันเวลาที่เกิดเหตุ:</p></div>
                   <div className="grid_7 pull_0">
                     <input type="date" className="cancel-default grid_3 mt-1"></input>
                     <input type="date" className="cancel-default grid_3 mt-1 float-right"></input>
@@ -35,7 +30,7 @@ class BottomContent extends React.Component {
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">เดินทางถึง:</p></div>
+                  <div className="grid_3"><p className="cancel-default">วันเวลาที่รับแจ้ง:</p></div>
                   <div className="grid_7 pull_0">
                     <input type="date" className="cancel-default grid_3 mt-1"></input>
                     <input type="date" className="cancel-default grid_3 mt-1 float-right"></input>
@@ -43,85 +38,36 @@ class BottomContent extends React.Component {
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">วันเวลาที่แล้วเสร็จ:</p></div>
+                  <div className="grid_3"><p className="cancel-default">อาการเสียโดยสรุป:</p></div>
                   <div className="grid_7 pull_0">
-                    <input type="date" className="cancel-default grid_3 mt-1"></input>
-                    <input type="date" className="cancel-default grid_3 mt-1 float-right"></input>
-                    <p className="cancel-default grid_1 float-right">เวลา:</p>
-                  </div>
-                </div>
-                <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">ระบบตรวจซ่อม:</p></div>
-                  <div className="grid_7 pull_0">
-                    <select className="edit-select grid_3" name="exampleSelect" id="exampleSelect">
-                      <option defaultValue="0"></option>
-                      <option defaultValue="1">Cosmic Cuttlefish</option>
-                      <option defaultValue="2">Bionic Beaver</option>
-                      <option defaultValue="3">Xenial Xerus</option>
-                    </select>
-                    <select className="edit-select grid_3 float-right" name="exampleSelect" id="exampleSelect">
-                      <option defaultValue="0"></option>
-                      <option defaultValue="1">Cosmic Cuttlefish</option>
-                      <option defaultValue="2">Bionic Beaver</option>
-                      <option defaultValue="3">Xenial Xerus</option>
-                    </select>
-                    <p className="cancel-default grid_1 float-right">ชนิด:</p>
-                  </div>
-                </div>
-                <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">รายการที่ซ่อม:</p></div>
-                  <div className="grid_8 pull_0">
                     <input type="text" className="cancel-default mt-1"></input>
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม:</p></div>
-                  <div className="grid_8 pull_0">
-                    <input type="text" className="cancel-default mt-1"></input>
-                  </div>
-                </div>
-                <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">ชื่ออุปกรณ์ที่บำรุงรักษา:</p></div>
-                  <div className="grid_8 pull_0">
-                    <input type="text" className="cancel-default mt-1"></input>
-                  </div>
-                </div>
-                <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">สาเหตุและอาการเสียโดยสรุป:</p></div>
-                  <div className="grid_8 pull_0">
-                    <textarea className="edit" name="Text1" cols="40" rows="2"></textarea>
-                  </div>
-                </div>
-                <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">ขบวนรถที่:</p></div>
-                  <div className="grid_8 pull_0">
-                    <p className="cancel-default grid_1 float-right">นาที:</p>
-                    <input type="text" className="cancel-default mt-1 grid_3"></input>
-                    <input type="text" className="cancel-default mt-1 grid_2 float-right"></input>
-                    <p className="cancel-default grid_2 float-right">เสียเวลาเพราะเหตุนี้:</p>
-                  </div>
-                </div>
-                <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">สรุปการแก้ไขและการซ่อมแซม:</p></div>
-                  <div className="grid_8 pull_0">
-                    <textarea className="edit" name="Text1" cols="40" rows="2"></textarea>
-                  </div>
-                </div>
-                <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">ยังไม่ได้จัดการแก้ไขเพราะ:</p></div>
+                  <div className="grid_3"><p className="cancel-default">ได้รับเหตุจาก:</p></div>
                   <div className="grid_7 pull_0">
-                    <select className="edit-select" name="exampleSelect" id="exampleSelect">
-                      <option defaultValue="0"></option>
-                      <option defaultValue="1">Cosmic Cuttlefish</option>
-                      <option defaultValue="2">Bionic Beaver</option>
-                      <option defaultValue="3">Xenial Xerus</option>
-                    </select>
+                    <input type="text" className="cancel-default mt-1"></input>
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">สรุปการแก้ไขและการซ่อมแซม:</p></div>
-                  <div className="grid_8 pull_0">
-                    <textarea className="edit" name="Text1" cols="40" rows="2"></textarea>
+                  <div className="grid_3"><p className="cancel-default">ได้รับข้อมูลผ่านช่องทาง:</p></div>
+                  <div className="grid_7 pull_0">
+                    <input className="d-inline" type="radio" name="RadioOptions" id="Radio1" value="option1" />
+                    <label htmlFor="Radio1" className="cancel-default d-inline">โทรศัพท์</label>
+                    <input className="d-inline ml-3" type="radio" name="RadioOptions" id="Radio2" value="option2" />
+                    <label htmlFor="Radio2" className="cancel-default d-inline ml-3">จดหมาย</label>
+                  </div>
+                </div>
+                <div className="grid_12">
+                  <div className="grid_3"><p className="cancel-default">รายงานการตรวจซ่อมอุปกรณ์แขวง:</p></div>
+                  <div className="grid_7 pull_0">
+                    <input type="text" className="cancel-default mt-1"></input>
+                  </div>
+                </div>
+                <div className="grid_12">
+                  <div className="grid_3"><p className="cancel-default" style={{ paddingRight: "50px" }}>ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม (สถานที่/ที่ตั้ง):</p></div>
+                  <div className="grid_7 pull_0">
+                    <input type="text" className="cancel-default mt-1"></input>
                   </div>
                 </div>
               </div>
@@ -145,7 +91,7 @@ class BottomContent extends React.Component {
                   <div className="grid_12 cancel-default2">คลิกที่ "+" ในการแนบเอกสาร</div>
                 </div>
               </div>
-            
+
             </div>
           </div>
         </div>

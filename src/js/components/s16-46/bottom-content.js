@@ -43,21 +43,7 @@ class BottomContent extends React.Component {
                                         <label htmlFor="Radio2" className="cancel-default d-inline ml-3">ส่งไปยังคลังปลายทาง</label>
                                     </div>
                                 </div>
-
-                                {/* <div className="grid_12 mb-2">
-                                    <div className="grid_2">
-                                        <p className="top-text">เลขที่เอกสาร:</p>
-                                    </div>
-                                    <div className="grid_5 pull_0">
-                                        <div className="" style={{ width: "300px" }}>
-                                            <input className="d-inline" type="radio" name="RadioOptions" id="Radio1" value="option1" />
-                                            <label htmlFor="Radio1" className="cancel-default d-inline">รับของเอง</label>
-                                            <input className="d-inline ml-3" type="radio" name="RadioOptions" id="Radio2" value="option2" />
-                                            <label htmlFor="Radio2" className="cancel-default d-inline ml-3">ส่งไปยังคลังปลายทาง</label>
-                                        </div>
-                                    </div>
-                                </div> */}
-
+                                
                                 <table className="cancel-border">
                                     <thead>
                                         <tr style={{ border: "none", }}>
