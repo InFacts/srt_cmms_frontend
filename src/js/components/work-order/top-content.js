@@ -40,14 +40,20 @@ class TopContent extends React.Component {
               <h4 className="head-title">ออกใบสั่งซ่อมบำรุง</h4>
               <div className="grid_12">
                 <div className="grid_3"><p className="cancel-default">เลขที่เอกสารแจ้งเหตุขัดข้อง (ถ้ามี):</p></div>
-                <div className="grid_7 pull_0">
-                  
+                <div className="grid_3 pull_0">
+                  <div className="p-search-box cancel-margin">
+                    <input type="text" className="p-search-box__input cancel-default" />
+                    <button type="button" className="p-search-box__button cancel-padding" alt="search"><i className="p-icon--search" id="showModal" aria-controls="modal" ></i></button>
+                  </div>
                 </div>
               </div>
               <div className="grid_12">
                 <div className="grid_3"><p className="cancel-default">เลขที่เอกสารใบสั่งซ่อมบำรุง:</p></div>
-                <div className="grid_7 pull_0">
-                  
+                <div className="grid_3 pull_0">
+                  <div className="p-search-box cancel-margin">
+                    <input type="text" className="p-search-box__input cancel-default" />
+                    <button type="button" className="p-search-box__button cancel-padding" alt="search"><i className="p-icon--search" id="showModal" aria-controls="modal" ></i></button>
+                  </div>
                 </div>
               </div>
             </section>

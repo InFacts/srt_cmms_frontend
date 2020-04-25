@@ -41,7 +41,7 @@ class Map extends React.Component {
                         <section className="grid_12 ">
                             <div className="ml-3" style={{ height: "500px" }}>
                                 <h4 className="head-title" style={{ color: "black"}}>ระบบบริหารงานซ่อมบำรุง - PMT</h4>
-                                <img alt='some value' src={Oneone} className="Pone-one" />
+                                <Link to="/wr"><img alt='some value' src={Oneone} className="Pone-one" /></Link>
                                 <Link to="/assmas"><img alt='some value' src={Onetwo} className="Pone-two" /></Link>
                                 <img alt='some value' src={Onethree} className="Pone-three" />
                                 <img alt='some value' src={Arrow1} className="Parrow1" />
