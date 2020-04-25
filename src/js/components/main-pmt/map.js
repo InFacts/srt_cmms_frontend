@@ -42,15 +42,15 @@ class Map extends React.Component {
                             <div className="ml-3" style={{ height: "500px" }}>
                                 <h4 className="head-title" style={{ color: "black"}}>ระบบบริหารงานซ่อมบำรุง - PMT</h4>
                                 <img alt='some value' src={Oneone} className="Pone-one" />
-                                <img alt='some value' src={Onetwo} className="Pone-two" />
+                                <Link to="/assmas"><img alt='some value' src={Onetwo} className="Pone-two" /></Link>
                                 <img alt='some value' src={Onethree} className="Pone-three" />
                                 <img alt='some value' src={Arrow1} className="Parrow1" />
                                 <img alt='some value' src={Text1} className="Ptext1" />
                                 <img alt='some value' src={Text2} className="Ptext2" />
                                 <img alt='some value' src={Text3} className="Ptext3" />
                                 <img alt='some value' src={Twoone} className="Ptwo-one" />
-                                <img alt='some value' src={Twotwo} className="Ptwo-two" />
-                                <img alt='some value' src={Twothree} className="Ptwo-three" />
+                                <Link to="/assint"><img alt='some value' src={Twotwo} className="Ptwo-two" /></Link>
+                                <Link to="/plan"><img alt='some value' src={Twothree} className="Ptwo-three" /></Link>
                                 <img alt='some value' src={Text4} className="Ptext4" />
                                 <img alt='some value' src={Text5} className="Ptext5" />
                                 <img alt='some value' src={Text6} className="Ptext6" />
