@@ -10,14 +10,16 @@ class TopContent extends React.Component {
     this.state = {
 
     }
+    this.tapChange = this.tapChange.bind(this);
   }
 
   componentDidMount() {
+    console.log("hello")
+    console.log(document.getElementById("defaultOpen"))
     document.getElementById("defaultOpen").click();
   }
 
   tapChange(evt, cityName) {
-    console.log("hello")
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
     for (i = 0; i < tabcontent.length; i++) {
@@ -32,6 +34,8 @@ class TopContent extends React.Component {
   }
 
   render() {
+    console.log("hello render")
+
     return (
       <div>
         <div id="blackground-white">
@@ -60,8 +64,8 @@ class TopContent extends React.Component {
 
             <div className="grid_12">
               <div className="tab grid_8">
-                <button id="defaultOpen" className="tablinks" onClick={e => this.tapChange(e, "อาการเสีย")}>อาการเสีย</button>
-                <button className="tablinks" onClick={e => this.tapChange(e, "แนบไฟล์")}>แนบไฟล์</button>
+                <button type="button" id="defaultOpen" className="tablinks" onClick={e => this.tapChange(e, "อาการเสีย")}>อาการเสีย</button>
+                <button type="button" className="tablinks" onClick={e => this.tapChange(e, "แนบไฟล์")}>แนบไฟล์</button>
               </div>
             </div>
           </div>

@@ -1,7 +1,6 @@
 import React from 'react';
 import Document from '../../../images/document.svg'
 import '../../../css/style.css'
-import '../../../css/test.css'
 import '../../../css/tabs.css'
 import '../../../css/grid12.css';
 
@@ -44,7 +43,6 @@ class BottomContent extends React.Component {
 
   render() {
     return (
-
       <form>
         <div id="blackground-gray">
           <div className="container_12 clearfix">
@@ -52,135 +50,126 @@ class BottomContent extends React.Component {
 
               <div id="ทั่วไป" className="tabcontent">
 
-
-                <div className="grid_12 mt-2 ">
-                  <div className="grid_2  mt-1">
-                    <p className="cancel-default">กลุ่มของสินทรัพย์:</p>
-                    <p className=" cancel-default ">Serial Number:</p>
-                    <p className="cancel-default ">ระบบนำเข้า:</p>
-                    <p className="cancel-default ">ค่าเลื่อนต่อปี:</p>
-                    <p className="cancel-default ">สถานะ:</p>
-                  </div>
-                  <div className="grid_3 pull_0">
-                    <div className=" p-search-box cancel-margin  ">
-                      <select className="cancel-default" name="exampleSelect" id="exampleSelect" style={{ fontSize: "0.8rem" }}>
-                        <option value="1"></option>
-                        <option value="2"></option>
-                        <option value="3"></option>
-                      </select>
-                    </div>
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">กลุ่มของสินทรัพย์:</p></div>
+                  <div className="grid_4 pull_0">
                     <div className="p-search-box cancel-margin ">
-                      <input className="cancel-default" type="text" id="exampleTextInput" />
-                    </div>
-                    <div className="p-search-box cancel-margin">
-                      <input className="cancel-default" type="text" id="exampleTextInput" />
-                    </div>
-                    <div className="p-search-box cancel-margin ">
-                      <input className="cancel-default" type="text" id="exampleTextInput" />
-                    </div>
-                    <div className="p-search-box cancel-margin mm ">
-                      <select className="p-search-box__input cancel-default" name="exampleSelect" id="exampleSelect" style={{ fontSize: "0.8rem" }}>
-                        <option value="1"></option>
-                        <option value="2"></option>
-                        <option value="3"></option>
+                      <select className="edit-select" >
+                        <option defaultValue="0"></option>
+                        <option defaultValue="1">Cosmic Cuttlefish</option>
+                        <option defaultValue="2">Bionic Beaver</option>
+                        <option defaultValue="3">Xenial Xerus</option>
                       </select>
                     </div>
                   </div>
                 </div>
-
-
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">Serial Number:</p></div>
+                  <div className="grid_4 pull_0">
+                    <div className="p-search-box cancel-margin ">
+                      <input className="cancel-default mt-1" type="text"  />
+                    </div>
+                  </div>
+                </div>
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">ระบบนำเข้า:</p></div>
+                  <div className="grid_4 pull_0">
+                    <div className="p-search-box cancel-margin ">
+                      <input className="cancel-default mt-1" type="text"  />
+                    </div>
+                  </div>
+                </div>
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">ค่าเลื่อนต่อปี:</p></div>
+                  <div className="grid_4 pull_0">
+                    <div className="p-search-box cancel-margin ">
+                      <input className="cancel-default mt-1" type="text"  />
+                    </div>
+                  </div>
+                </div>
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">สถานะ:</p></div>
+                  <div className="grid_4 pull_0">
+                    <div className="p-search-box cancel-margin ">
+                      <select className="edit-select" >
+                        <option defaultValue="0"></option>
+                        <option defaultValue="1">Cosmic Cuttlefish</option>
+                        <option defaultValue="2">Bionic Beaver</option>
+                        <option defaultValue="3">Xenial Xerus</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div id="คลัง" className="tabcontent">
+                <h4 className="head-title-bottom mt-2">พิกัดของคลัง</h4>
 
-                <h4 style={{ fontWeight: "bold" }}>พิกัดของคลัง</h4>
-                <div className="grid_12 ">
-
-
-                  <div className="grid_2 mt-1 ">
-                    <p className="cancel-default">คลัง:</p>
-                    <p className="cancel-default ">Required (ต้องจัดซื้อ):</p>
-                    <p className=" cancel-default ">Minimum:</p>
-                    <p className=" cancel-default ">Minimum:</p>
-
-                  </div>
-                  <div className="grid_3 pull_0">
-
-                    <div className="p-search-box cancel-margin ml-2">
-                      <input type="search" class="p-search-box__input cancel-default" />
-                      <button class="p-search-box__button cancel-padding" ><i class="p-icon--external-link" id="aria-controls"></i></button>
-                    </div>
-
-                    <div className="p-search-box cancel-margin ml-2">
-                      <input className="cancel-default" type="text" id="exampleTextInput" />
-                    </div>
-                    <div className="p-search-box cancel-margin ml-2">
-                      <input className="cancel-default" type="text" id="exampleTextInput" />
-                    </div>
-                    <div className="p-search-box cancel-margin ml-2">
-                      <input className="cancel-default" type="text" id="exampleTextInput" />
-                    </div>
-
-                  </div>
-
-                  <div className="grid_2  mt-4">
-                    <p className="cancel-default">Valuation Method:</p>
-                  </div>
-
-                  <div className="grid_3 pull_0 mt-3">
-                    <div className="p-search-box cancel-margin  ">
-                      <select className="cancel-default" name="exampleSelect" id="exampleSelect" style={{ fontSize: "0.8rem" }}>
-                        <option value="1"></option>
-                        <option value="2"></option>
-                        <option value="3"></option>
-                      </select>
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">คลัง:</p></div>
+                  <div className="grid_4 pull_0">
+                    <div className="p-search-box cancel-margin ">
+                      <input type="search" className="p-search-box__input cancel-default" />
+                      <button className="p-search-box__button cancel-padding" ><i className="p-icon--external-link" id="showModal" aria-controls="modal"></i></button>
                     </div>
                   </div>
-
                 </div>
-
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">Required (ต้องจัดซื้อ):</p></div>
+                  <div className="grid_3 pull_0">
+                    <input className="cancel-default" type="text"  />
+                  </div>
+                  <div className="grid_2"><p className="cancel-default">Valuation Method:</p></div>
+                  <div className="grid_3 pull_0">
+                    <input className="cancel-default" type="text"  />
+                  </div>
+                </div>
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">Minimum:</p></div>
+                  <div className="grid_4 pull_0">
+                    <input className="cancel-default" type="text"  />
+                  </div>
+                </div>
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">Maximum:</p></div>
+                  <div className="grid_4 pull_0">
+                    <input className="cancel-default" type="text"  />
+                  </div>
+                </div>
               </div>
 
               <div id="แผนบำรุงรักษา" className="tabcontent">
-
-
-                <div className="u-clearfix mt-2">
-                  <div className="u-float-left">
-                    <label className="p-form__label" style={{ fontWeight: "bold" }} ><span className="top-text">แผนบำรุงรักษา</span></label>
-                  </div>
-                  <div className=" u-float-right">
-                    <input id="fileButton" type="file" hidden />
-                    <label><span className="top-text">เพิ่มวาระซ่อมบำรุง +</span></label>
-                  </div>
+                <h4 className="head-title-bottom mt-2">แผนบำรุงรักษา</h4>
+                <div className=" u-float-right">
+                  <input  type="file" hidden />
+                  <label><span className="top-text">เพิ่มวาระซ่อมบำรุง +</span></label>
                 </div>
+
 
                 <table className="cancel-border">
                   <thead>
                     <tr>
-                      <th className="font" style={{ paddingLeft: "25px" }}>#</th>
-                      <th className="font">ชื่อแผน</th>
-                      <th className="font" style={{ paddingLeft: "25px" }}>ความถี่</th>
-                      <th className="font">จำนวนรายการ</th>
-                      <th className="font" style={{ paddingLeft: "30px" }}>รายละเอียด</th>
+                      <th className="font-for-status" style={{ paddingLeft: "25px" }}>#</th>
+                      <th className="font-for-status">ชื่อแผน</th>
+                      <th className="font-for-status" style={{ paddingLeft: "25px" }}>ความถี่</th>
+                      <th className="font-for-status">จำนวนรายการ</th>
+                      <th className="font-for-status" style={{ paddingLeft: "30px" }}>รายละเอียด</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <th style={{ paddingLeft: "25px" }}>1</th>
-                      <td>แผนซ่อม A</td>
-                      <td>2 ครั้งต่อเดือน</td>
-                      <td style={{ paddingLeft: "30px" }}>10</td>
-                      <td><div><button className="p-button--positive cancel-table" style={{ backgroundColor: "#2F6FCA", border: "none" }}>แก้ไข</button></div></td>
+                      <th className="font-for-status" style={{ paddingLeft: "25px" }}>1</th>
+                      <td className="font-for-status">แผนซ่อม A</td>
+                      <td className="font-for-status">2 ครั้งต่อเดือน</td>
+                      <td className="font-for-status" style={{ paddingLeft: "30px" }}>10</td>
+                      <td className="font-for-status">
+                        <button className="button-blue">แก้ไข</button>
+                      </td>
                     </tr>
 
                   </tbody>
                 </table>
-
-
-
               </div>
-
-
 
               <div id="แนบไฟล์" className="tabcontent">
                 <h4 className="head-title-bottom mt-2">ข้อมูลแนบไฟล์</h4>
@@ -189,7 +178,7 @@ class BottomContent extends React.Component {
                     <label className="p-form__label" ><span className="top-text">ไฟล์เอกสาร</span></label>
                   </div>
                   <div className=" u-float-right">
-                    <input id="fileButton" type="file" hidden />
+                    <input  type="file" hidden />
                     <label><span className="top-text">แนบไฟล์ +</span></label>
                   </div>
                 </div>
@@ -202,11 +191,10 @@ class BottomContent extends React.Component {
                 </div>
               </div>
 
-
               <div id="หมายเหตุ" className="tabcontent">
                 <div className="grid_12 mt-2">
                   <div className="grid_2">
-                    <h5 className="cancel-default">หมายเหตุ:</h5>
+                    <p className="cancel-default">หมายเหตุ:</p>
                   </div>
                   <div className="grid_3 pull_0">
                     <div>
@@ -219,7 +207,6 @@ class BottomContent extends React.Component {
             </div>
           </div>
         </div>
-
       </form>
 
     )
