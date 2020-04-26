@@ -247,7 +247,7 @@
   
   .p-search-box.cancel-margin {
     height: 26px;
-    top: 5px;
+    /* top: -5px; */
     margin-bottom: 10px;
   }
   
@@ -258,6 +258,14 @@
   } 
   
   label.cancel-default{
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 20px;
+    margin-bottom: auto;
+    top: 8px;
+  }
+
+  h5.cancel-default{
     font-weight: 300;
     font-size: 20px;
     line-height: 20px;
@@ -306,7 +314,7 @@
     background-color: white;
   }
   
-  th.font{
+  tr th.font{
     color: #000000;
     font-size: 19px;
     padding: 5px;

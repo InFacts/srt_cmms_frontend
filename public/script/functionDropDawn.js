@@ -52,6 +52,7 @@ function setupAllContextualMenus(contextualMenuToggleSelector) {
 
   // Add handler for clicking outside the menu.
   document.addEventListener('click', function(event) {
+
     for (var i = 0, l = toggles.length; i < l; i++) {
       var toggle = toggles[i];
       var contextualMenu = document.getElementById(toggle.getAttribute('aria-controls'));

@@ -49,91 +49,76 @@ class BottomContent extends React.Component {
 
               <div id="ทั่วไป" className="tabcontent">
 
-
-
-
-
-
-                <div className="grid_12 mt-2">
-                  <div className="grid_2 mt-1 ">
-                    <p className="cancel-default">วันที่ติดตั้งเสร็จ:</p>
-                    <p className="cancel-default ">วันที่ประกาศใช้:</p>
-                    <p className="cancel-default ">ค่าเลื่อนต่อปี:</p>
-                    <p className="cancel-default ">สถานะ:</p>
-
-                  </div>
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">วันที่ติดตั้งเสร็จ:</p></div>
                   <div className="grid_9 pull_0">
-                    <div className="p-search-box cancel-margin">
-                      <input className="cancel-default" type="text" id="exampleTextInput" />
-                    </div>
-                    <div className="p-search-box cancel-margin">
-                      <input className="cancel-default" type="text" id="exampleTextInput" />
-                    </div>
-                    <div className="p-search-box cancel-margin">
-                      <input className="cancel-default" type="text" id="exampleTextInput" />
-                    </div>
-                    <div className="p-search-box cancel-margin ">
-                      <select className=" cancel-default" name="exampleSelect" id="exampleSelect" style={{ fontSize: "0.8rem" }}>
-                        <option value="1"></option>
-                        <option value="2"></option>
-                        <option value="3"></option>
-                      </select>
-                    </div>
-
+                    <input className="cancel-default mt-1" type="text"  />
                   </div>
                 </div>
-
-
-
-
-
-
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">วันที่ประกาศใช้:</p></div>
+                  <div className="grid_9 pull_0">
+                    <input className="cancel-default mt-1" type="text"  />
+                  </div>
+                </div>
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">ค่าเลื่อนต่อปี:</p></div>
+                  <div className="grid_9 pull_0">
+                    <input className="cancel-default mt-1" type="text"  />
+                  </div>
+                </div>
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">สถานะ:</p></div>
+                  <div className="grid_9 pull_0">
+                    <select className="edit-select" >
+                      <option value="1"></option>
+                      <option value="2"></option>
+                      <option value="3"></option>
+                    </select>
+                  </div>
+                </div>
               </div>
 
               <div id="สถานที่ติดตั้ง" className="tabcontent">
 
-                <div className="grid_12 mt-2">
-                  <div className="grid_2 mt-1">
-                    <p className="cancel-default ">ที่อยู่:</p>
-                    <p className="cancel-default ">แขวง:</p>
-                    <p className="cancel-default">เขต:</p>
-                    <p className="cancel-default  ">เลขไปรณีย์:</p>
-                    <p className="cancel-default ">Google Map:</p>
-
-                  </div>
-                  <div className="grid_9 pull_0 ">
-                    <div className="p-search-box cancel-margin">
-                      <input className="cancel-default" type="text" id="exampleTextInput" />
-                    </div>
-                    <div className="p-search-box cancel-margin">
-                      <select className="cancel-default" name="exampleSelect" id="exampleSelect" style={{ fontSize: "0.8rem" }}>
-                        <option value="1"></option>
-                        <option value="2"></option>
-                        <option value="3"></option>
-                      </select>
-                    </div>
-                    <div className="p-search-box cancel-margin">
-                      <select className="cancel-default" name="exampleSelect" id="exampleSelect" style={{ fontSize: "0.8rem" }}>
-                        <option value="1"></option>
-                        <option value="2"></option>
-                        <option value="3"></option>
-                      </select>
-                    </div>
-                    <div className="p-search-box cancel-margin">
-                      <input className="cancel-default" type="text" id="exampleTextInput" />
-                    </div>
-                    <div className="p-search-box cancel-margin">
-                      <input className="cancel-default" type="text" id="exampleTextInput" />
-                    </div>
-
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">ที่อยู่:</p></div>
+                  <div className="grid_9 pull_0 mt-1">
+                    <input className="cancel-default" type="text"  />
                   </div>
                 </div>
-
-
-
-
-
-
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">แขวง:</p></div>
+                  <div className="grid_9 pull_0">
+                    <select className="edit-select" >
+                      <option value="1"></option>
+                      <option value="2"></option>
+                      <option value="3"></option>
+                    </select>
+                  </div>
+                </div>
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">เขต:</p></div>
+                  <div className="grid_9 pull_0">
+                    <select className="edit-select" >
+                      <option value="1"></option>
+                      <option value="2"></option>
+                      <option value="3"></option>
+                    </select>
+                  </div>
+                </div>
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">เลขไปรณีย์:</p></div>
+                  <div className="grid_9 pull_0 mt-1">
+                    <input className="cancel-default" type="text"  />
+                  </div>
+                </div>
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">Google Map:</p></div>
+                  <div className="grid_9 pull_0 mt-1">
+                    <input className="cancel-default" type="text"  />
+                  </div>
+                </div>
               </div>
 
               <div id="แนบไฟล์" className="tabcontent">
@@ -156,7 +141,6 @@ class BottomContent extends React.Component {
                 </div>
               </div>
 
-
               <div id="หมายเหตุ" className="tabcontent">
                 <div className="grid_12 mt-2">
                   <div className="grid_2">
@@ -169,16 +153,10 @@ class BottomContent extends React.Component {
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
-
       </form>
-
-
-
-
     )
   };
 }

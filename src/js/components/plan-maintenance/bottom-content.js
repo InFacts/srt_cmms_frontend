@@ -1,27 +1,13 @@
 import React from 'react';
-import Document from '../../../images/document.svg'
+
 import '../../../css/style.css'
 import '../../../css/tabs.css'
 import '../../../css/grid12.css';
 
 class BottomContent extends React.Component {
-
-  constructor(props) {
-    super(props);
-
-
-  }
-
-  componentDidMount() {
-    document.getElementById("defaultOpen").click();
-  }
-
-
-
-
+  
   render() {
     return (
-
       <form>
         <div id="blackground-gray">
           <div className="container_12 clearfix">
@@ -49,14 +35,14 @@ class BottomContent extends React.Component {
                   </thead>
                   <tbody>
                     <tr>
-                      <th><div className="w-80" style={{ paddingLeft: "10px" }}><input className="cancel-default" type="text" id="exampleTextInput" /></div></th>
-                      <td ><div className="w-30"><input className="cancel-default" type="text" id="exampleTextInput" /></div></td>
-                      <td><div className="w-50"><input className="cancel-default" type="text" id="exampleTextInput" /></div></td>
+                      <th><div className="w-80" style={{ paddingLeft: "10px" }}><input className="cancel-default" type="text"  /></div></th>
+                      <td ><div className="w-30"><input className="cancel-default" type="text"  /></div></td>
+                      <td><div className="w-50"><input className="cancel-default" type="text"  /></div></td>
                     </tr>
                     <tr>
-                      <th><div className="w-80" style={{ paddingLeft: "10px" }}><input className="cancel-default" type="text" id="exampleTextInput" /></div></th>
-                      <td><div className="w-30"><input className="cancel-default" type="text" id="exampleTextInput" /></div></td>
-                      <td><div className="w-50"><input className="cancel-default" type="text" id="exampleTextInput" /></div></td>
+                      <th><div className="w-80" style={{ paddingLeft: "10px" }}><input className="cancel-default" type="text"  /></div></th>
+                      <td><div className="w-30"><input className="cancel-default" type="text"  /></div></td>
+                      <td><div className="w-50"><input className="cancel-default" type="text"  /></div></td>
                     </tr>
                   </tbody>
                 </table>
@@ -67,56 +53,47 @@ class BottomContent extends React.Component {
 
               <div id="ระบุผู้ปฎิบัติงาน" className="tabcontent">
 
-                <div className="grid_12 mt-2">
-                  <div className="grid_2">
-                    <h5 className="cancel-default">ตอนที่รับผิดชอบ:</h5>
-                    <h5 className="cancel-default ">สถานที่:</h5>
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">ตอนที่รับผิดชอบ:</p></div>
+                  <div className="grid_4 pull_0">
+                    <input className="cancel-default" type="text"  />
                   </div>
-
-
-                  <div className="grid_3 pull_0 ">
-                    <div className=" p-search-box cancel-margin  ">
-                      <select className="cancel-default" name="exampleSelect" id="exampleSelect" style={{ fontSize: "0.8rem" }}>
-                        <option value="1"></option>
-                        <option value="2"></option>
-                        <option value="3"></option>
+                </div>
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">สถานที่:</p></div>
+                  <div className="grid_4 pull_0">
+                    <div className="p-search-box cancel-margin ">
+                      <select className="edit-select" name="exampleSelect" id="exampleSelect">
+                        <option defaultValue="0"></option>
+                        <option defaultValue="1">Cosmic Cuttlefish</option>
+                        <option defaultValue="2">Bionic Beaver</option>
+                        <option defaultValue="3">Xenial Xerus</option>
                       </select>
                     </div>
-                    <div className="p-search-box cancel-margin">
-                      <input className="cancel-default" type="text" id="exampleTextInput" />
-                    </div>
                   </div>
-
-
-
                 </div>
-
-
-
-
               </div>
-
 
               <div id="สรุป" className="tabcontent">
 
                 <table className="border mt-2">
                   <thead >
                     <tr role="row">
-                      <th rowspan="3" className="font border u-align--center" style={{ fontSize: "0.9rem" }}>ลำดับ</th>
-                      <th rowspan="3" className="font border u-align--center" style={{ width: "12rem", fontSize: "0.9rem" }}>รายละเอียด</th>
-                      <th rowspan="3" className="font border u-align--center" style={{ width: "3rem", fontSize: "0.9rem" }}>หน่วย</th>
-                      <th colspan="10" className="font border u-align--center" style={{ width: "27rem", fontSize: "0.9rem" }}>การดำเนินการ</th>
-                      <th colspan="2" className="font border u-align--center" style={{ fontSize: "0.9rem" }}>สรุปรวม</th>
-                      <th rowspan="3" className="font border u-align--center" style={{ width: "7rem", fontSize: "0.9rem" }}>หมายเหตุ</th>
+                      <th rowSpan="3" className="font border u-align--center" style={{ fontSize: "0.9rem" }}>ลำดับ</th>
+                      <th rowSpan="3" className="font border u-align--center" style={{ width: "12rem", fontSize: "0.9rem" }}>รายละเอียด</th>
+                      <th rowSpan="3" className="font border u-align--center" style={{ width: "3rem", fontSize: "0.9rem" }}>หน่วย</th>
+                      <th colSpan="10" className="font border u-align--center" style={{ width: "27rem", fontSize: "0.9rem" }}>การดำเนินการ</th>
+                      <th colSpan="2" className="font border u-align--center" style={{ fontSize: "0.9rem" }}>สรุปรวม</th>
+                      <th rowSpan="3" className="font border u-align--center" style={{ width: "7rem", fontSize: "0.9rem" }}>หมายเหตุ</th>
                     </tr>
 
                     <tr role="row">
-                      <th colspan="2" className="font border u-align--center" style={{ fontSize: "0.9rem" }}>ตอน นตส.พบ.</th>
-                      <th colspan="2" className="font border u-align--center" style={{ fontSize: "0.9rem" }}>ตอน นตส.หห.</th>
-                      <th colspan="2" className="font border u-align--center" style={{ fontSize: "0.9rem" }}>ตอน นตส.จข.</th>
-                      <th colspan="2" className="font border u-align--center" style={{ fontSize: "0.9rem" }}>ตอน นตส.พญ.</th>
-                      <th colspan="2" className="font border u-align--center" style={{ fontSize: "0.9rem" }}>ตอน นตส.ขพ.</th>
-                      <th colspan="2" className="font border u-align--center" style={{ fontSize: "0.9rem" }}>แขวง</th>
+                      <th colSpan="2" className="font border u-align--center" style={{ fontSize: "0.9rem" }}>ตอน นตส.พบ.</th>
+                      <th colSpan="2" className="font border u-align--center" style={{ fontSize: "0.9rem" }}>ตอน นตส.หห.</th>
+                      <th colSpan="2" className="font border u-align--center" style={{ fontSize: "0.9rem" }}>ตอน นตส.จข.</th>
+                      <th colSpan="2" className="font border u-align--center" style={{ fontSize: "0.9rem" }}>ตอน นตส.พญ.</th>
+                      <th colSpan="2" className="font border u-align--center" style={{ fontSize: "0.9rem" }}>ตอน นตส.ขพ.</th>
+                      <th colSpan="2" className="font border u-align--center" style={{ fontSize: "0.9rem" }}>แขวง</th>
                     </tr>
 
                     <tr role="row">
@@ -157,8 +134,6 @@ class BottomContent extends React.Component {
                 </table>
               </div>
 
-
-
               <div id="หมายเหตุ" className="tabcontent">
                 <div className="grid_12 mt-2">
                   <div className="grid_2">
@@ -172,12 +147,9 @@ class BottomContent extends React.Component {
                 </div>
               </div>
 
-
-
             </div>
           </div>
         </div>
-
       </form>
     )
   };

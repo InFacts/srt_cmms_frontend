@@ -1,6 +1,5 @@
 import React from 'react';
 
-import '../../../css/test.css'
 import '../../../css/grid12.css';
 
 class TopContent extends React.Component {
@@ -35,28 +34,15 @@ class TopContent extends React.Component {
       <div id="blackground-white">
         <div className="container_12 clearfix">
           <section className="grid_12  ">
-            {/* <div className="mb-auto" >
-          <i class="p-icon--user p-button--positive t"></i>
-          <i class="p-icon--plus p-button--positive t"></i>
-          <i class="p-icon--minus p-button--positive t"></i>
-          <i class="p-icon--expand p-button--positive t"></i>
-          <i class="p-icon--collapse p-button--positive t"></i>
-          <i class="p-icon--close p-button--positive t"></i>
-          <i class="p-icon--delete p-button--positive t"></i>
-          <i class="p-icon--menu p-button--positive t"></i>
-          <i class="p-icon--code p-button--positive t"></i>
-        </div> */}
-
             <h4 className="head-title">ติดตั้งสินทรัพย์</h4>
 
-            <div className="grid_2 ">
-              <p className="top-text  mt-1 ">Serial Number:</p>
-            </div>
-
-            <div className="grid_3 pull_0 ">
-              <div className="p-search-box cancel-margin ">
-                <input type="text" className="p-search-box__input cancel-default" />
-                <button type="button" className="p-search-box__button cancel-padding" alt="search"><i className="p-icon--search" id="showModal" aria-controls="modal" ></i></button>
+            <div className="grid_12">
+              <div className="grid_2"><p className="cancel-default">Serial Number:</p></div>
+              <div className="grid_4 pull_0">
+                <div className="p-search-box cancel-margin ">
+                  <input type="search" className="p-search-box__input cancel-default" />
+                  <button className="p-search-box__button cancel-padding" ><i className="p-icon--external-link" id="showModal" aria-controls="modal"></i></button>
+                </div>
               </div>
             </div>
           </section>

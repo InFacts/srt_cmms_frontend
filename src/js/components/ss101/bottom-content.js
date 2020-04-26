@@ -18,7 +18,7 @@ class BottomContent extends React.Component {
                 <div className="grid_12">
                   <div className="grid_3"><p className="cancel-default">เดินทางโดย:</p></div>
                   <div className="grid_7 pull_0">
-                    <select className="edit-select" name="exampleSelect" id="exampleSelect">
+                    <select className="edit-select" >
                       <option defaultValue="0"></option>
                       <option defaultValue="1">Cosmic Cuttlefish</option>
                       <option defaultValue="2">Bionic Beaver</option>
@@ -53,13 +53,13 @@ class BottomContent extends React.Component {
                 <div className="grid_12">
                   <div className="grid_3"><p className="cancel-default">ระบบตรวจซ่อม:</p></div>
                   <div className="grid_7 pull_0">
-                    <select className="edit-select grid_3" name="exampleSelect" id="exampleSelect">
+                    <select className="edit-select grid_3" >
                       <option defaultValue="0"></option>
                       <option defaultValue="1">Cosmic Cuttlefish</option>
                       <option defaultValue="2">Bionic Beaver</option>
                       <option defaultValue="3">Xenial Xerus</option>
                     </select>
-                    <select className="edit-select grid_3 float-right" name="exampleSelect" id="exampleSelect">
+                    <select className="edit-select grid_3 float-right" >
                       <option defaultValue="0"></option>
                       <option defaultValue="1">Cosmic Cuttlefish</option>
                       <option defaultValue="2">Bionic Beaver</option>
@@ -110,7 +110,7 @@ class BottomContent extends React.Component {
                 <div className="grid_12">
                   <div className="grid_3"><p className="cancel-default">ยังไม่ได้จัดการแก้ไขเพราะ:</p></div>
                   <div className="grid_7 pull_0">
-                    <select className="edit-select" name="exampleSelect" id="exampleSelect">
+                    <select className="edit-select" >
                       <option defaultValue="0"></option>
                       <option defaultValue="1">Cosmic Cuttlefish</option>
                       <option defaultValue="2">Bionic Beaver</option>
@@ -132,7 +132,7 @@ class BottomContent extends React.Component {
                   <div className="grid_2"><p className="cancel-default">ผู้ควบคุมทดสอบชื่อ:</p></div>
                   <div className="grid_8 pull_0">
                     <input type="text" className="cancel-default grid_4 mt-1"></input>
-                    <select className="edit-select grid_3 float-right" name="exampleSelect" id="exampleSelect">
+                    <select className="edit-select grid_3 float-right" >
                       <option defaultValue="0"></option>
                       <option defaultValue="1">Cosmic Cuttlefish</option>
                       <option defaultValue="2">Bionic Beaver</option>
@@ -146,7 +146,7 @@ class BottomContent extends React.Component {
                   <div className="grid_2"><p className="cancel-default">ดำเนินการแก้ไขชื่อ:</p></div>
                   <div className="grid_8 pull_0">
                     <input type="text" className="cancel-default grid_4 mt-1"></input>
-                    <select className="edit-select grid_3 float-right" name="exampleSelect" id="exampleSelect">
+                    <select className="edit-select grid_3 float-right" >
                       <option defaultValue="0"></option>
                       <option defaultValue="1">Cosmic Cuttlefish</option>
                       <option defaultValue="2">Bionic Beaver</option>
@@ -160,7 +160,7 @@ class BottomContent extends React.Component {
                   <div className="grid_2"><p className="cancel-default">รายชื่อเพื่อนร่วมงาน:</p></div>
                   <div className="grid_8 pull_0">
                     <input type="text" className="cancel-default grid_4 mt-1"></input>
-                    <select className="edit-select grid_3 float-right" name="exampleSelect" id="exampleSelect">
+                    <select className="edit-select grid_3 float-right" >
                       <option defaultValue="0"></option>
                       <option defaultValue="1">Cosmic Cuttlefish</option>
                       <option defaultValue="2">Bionic Beaver</option>
@@ -173,7 +173,7 @@ class BottomContent extends React.Component {
                   <div className="grid_2"><p className="cancel-default">รายชื่อเพื่อนร่วมงาน:</p></div>
                   <div className="grid_8 pull_0">
                     <input type="text" className="cancel-default grid_4 mt-1"></input>
-                    <select className="edit-select grid_3 float-right" name="exampleSelect" id="exampleSelect">
+                    <select className="edit-select grid_3 float-right" >
                       <option defaultValue="0"></option>
                       <option defaultValue="1">Cosmic Cuttlefish</option>
                       <option defaultValue="2">Bionic Beaver</option>
@@ -186,7 +186,7 @@ class BottomContent extends React.Component {
                   <div className="grid_2"><p className="cancel-default">รายชื่อเพื่อนร่วมงาน:</p></div>
                   <div className="grid_8 pull_0">
                     <input type="text" className="cancel-default grid_4 mt-1"></input>
-                    <select className="edit-select grid_3 float-right" name="exampleSelect" id="exampleSelect">
+                    <select className="edit-select grid_3 float-right" >
                       <option defaultValue="0"></option>
                       <option defaultValue="1">Cosmic Cuttlefish</option>
                       <option defaultValue="2">Bionic Beaver</option>
@@ -199,7 +199,7 @@ class BottomContent extends React.Component {
                   <div className="grid_2"><p className="cancel-default">รายชื่อเพื่อนร่วมงาน:</p></div>
                   <div className="grid_8 pull_0">
                     <input type="text" className="cancel-default grid_4 mt-1"></input>
-                    <select className="edit-select grid_3 float-right" name="exampleSelect" id="exampleSelect">
+                    <select className="edit-select grid_3 float-right" >
                       <option defaultValue="0"></option>
                       <option defaultValue="1">Cosmic Cuttlefish</option>
                       <option defaultValue="2">Bionic Beaver</option>
