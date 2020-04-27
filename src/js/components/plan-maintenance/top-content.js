@@ -69,7 +69,7 @@ class TopContent extends React.Component {
                 <div className="modal" id="modal" style={{ display: "none" }}>
                     <div className="gray-board">
                         <h3 className="head-title-modal">คลังต้นทาง</h3>
-                        <div className="container-modal">
+                        <div className="container">
 
                             <div className="grid_12">
 

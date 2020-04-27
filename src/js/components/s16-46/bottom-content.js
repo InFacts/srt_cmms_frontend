@@ -43,7 +43,7 @@ class BottomContent extends React.Component {
                                         <label htmlFor="Radio2" className="cancel-default d-inline ml-3">ส่งไปยังคลังปลายทาง</label>
                                     </div>
                                 </div>
-                                
+
                                 <table className="cancel-border">
                                     <thead>
                                         <tr style={{ border: "none", }}>
@@ -170,16 +170,21 @@ class BottomContent extends React.Component {
                 {/* PopUp */}
                 <div className="modal" id="modal" style={{ display: "none" }}>
                     <div className="gray-board">
-                        <h3 className="head-title-modal">คลังต้นทาง</h3>
-                        <div className="container-modal">
-                            <h5 className="cancel-default colum1of2-modal">ค้นหาเลขที่คลัง:</h5>
-                            <button className="button-blue ml-1 float-right" type="button">ค้นหา</button>
-                            <input type="text" className="cancel-default colum2of2-modal" />
+                        <p className="head-title-modal edit">คลังต้นทาง</p>
+                        <div className="container_12 edit-padding">
+                            <div className="grid_12">
+                                <div className="grid_2"><p className="cancel-default">ค้นหาเลขที่คลัง:</p></div>
+                                <div className="grid_8 pull_0">
+                                    <input type="text" className="cancel-default" />
+                                </div>
+                                <button className="button-blue ml-1 grid_1 pull_0" type="button">ค้นหา</button>
+                            </div>
+
                             <table className="cancel-border mt-3">
                                 <thead>
                                     <tr>
-                                        <th className="font-for-status" style={{ width: "270px", paddingLeft: "50px" }}>เลขที่คลัง</th>
-                                        <th className="font-for-status" style={{ width: "270px" }}>ชื่อคลัง</th>
+                                        <th className="font-for-status" style={{ width: "350px", paddingLeft: "50px" }}>เลขที่คลัง</th>
+                                        <th className="font-for-status" style={{ width: "350px" }}>ชื่อคลัง</th>
                                         <th className="font-for-status"></th>
                                     </tr>
                                 </thead>

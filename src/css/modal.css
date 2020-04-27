@@ -18,34 +18,26 @@
 
 .gray-board{
   background-color: #F7F7F7;
-  /* padding: 20px 60px 20px 60px; */
-  width: 700px;
+  width: 960px;
   height: 500px;
   z-index: 5;
 }
 
 .head-title-modal{
+  padding: 10px 20px 5px 20px;
+  width: 100%;
   background-color: white;
   color: #2F6FCA;
   font-weight: bold;
   font-size: 20px;
   font-family: Anakotmai-Light;
   line-height: 36px;
-  padding: 30px 30px 15px 30px;
 }
 
-.container-modal{
-  width: 700px;
-  padding: 0px 30px 15px 30px;
+p.edit{
+  max-width: 960px;
 }
 
-h5.colum1of2-modal{
-  display: inline;
-  width: 180px;
-}
-
-input.colum2of2-modal{
-  display: inline;
-  float: right;
-  width: 400px;
+.container_12.edit-padding{
+  padding: 5px 20px 10px 20px;
 }

@@ -178,6 +178,15 @@
     position: fixed;
     z-index: 1;
   }
+
+  #toolbar{
+    top: 48px;
+    height: 25px;
+    background-color: white;
+    width: 100%;
+    position: fixed;
+    z-index: 1;
+  }
   
   #blackground-gray{
     background: #F7F7F7;
@@ -207,7 +216,7 @@
     font-weight: bold;
     font-size: 20px;
     line-height: 36px;
-    margin-top: 1rem;
+    margin-top: 1.5rem;
     margin-bottom: 10px;
   }
   
