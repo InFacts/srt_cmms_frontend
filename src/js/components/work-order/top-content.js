@@ -14,8 +14,6 @@ class TopContent extends React.Component {
   }
 
   componentDidMount() {
-    console.log("hello")
-    console.log(document.getElementById("defaultOpen"))
     document.getElementById("defaultOpen").click();
   }
 
@@ -34,7 +32,6 @@ class TopContent extends React.Component {
   }
 
   render() {
-    console.log("hello render")
 
     return (
       <div>
@@ -66,6 +63,7 @@ class TopContent extends React.Component {
               <div className="tab grid_8">
                 <button type="button" id="defaultOpen" className="tablinks" onClick={e => this.tapChange(e, "อาการเสีย")}>อาการเสีย</button>
                 <button type="button" className="tablinks" onClick={e => this.tapChange(e, "แนบไฟล์")}>แนบไฟล์</button>
+                <button type="button" className="tablinks" onClick={e => this.tapChange(e, "สินทรัพย์ที่เกี่ยวข้อง")}>สินทรัพย์ที่เกี่ยวข้อง</button>
               </div>
             </div>
           </div>

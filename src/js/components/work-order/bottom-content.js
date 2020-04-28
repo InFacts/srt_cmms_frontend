@@ -92,6 +92,52 @@ class BottomContent extends React.Component {
                 </div>
               </div>
 
+              <div id="สินทรัพย์ที่เกี่ยวข้อง" className="tabcontent">
+                <h4 className="head-title-bottom mt-2">ข้อมูลเกี่ยวกับอาการขัดข้อง</h4>
+
+                <table className="table-many-column">
+                  <thead>
+                    <tr>
+                      <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
+                      <th className="font" style={{ minWidth: "130px" }}>เลขที่สินทรัพย์</th>
+                      <th className="font" style={{ minWidth: "250px" }}>รายละเอียด</th>
+                      <th className="font text-center" style={{ minWidth: "150px" }}>ที่อยู่ปัจจุบัน</th>
+                      <th className="font text-center" style={{ minWidth: "100px" }}>สถานะ</th>
+                      <th className="font text-center" style={{ minWidth: "500px" }}>หมายเหตุ</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th className="edit-padding text-center" style={{ minWidth: "30px" }}>1</th>
+                      <td className="edit-padding" style={{ minWidth: "130px" }}>001</td>
+                      <td className="edit-padding text-left" style={{ minWidth: "250px" }}>10</td>
+                      <td className="edit-padding text-center" style={{ minWidth: "80px" }}>คลังพัสดุส่วนกลางบางซื่อ</td>
+                      <td className="edit-padding text-center" style={{ minWidth: "100px" }}>
+                        <select className="edit-select-table">
+                          <option defaultValue="1">เสียหาย</option>
+                          <option defaultValue="2">ของเก่า</option>
+                        </select>
+                      </td>
+                      <td className="edit-padding text-left" style={{ minWidth: "300px" }}></td>
+                    </tr>
+                    <tr>
+                      <th className="edit-padding text-center" style={{ minWidth: "30px" }}></th>
+                      <td className="edit-padding" style={{ minWidth: "130px" }}></td>
+                      <td className="edit-padding text-left" style={{ minWidth: "250px" }}></td>
+                      <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                      <td className="edit-padding text-center" style={{ minWidth: "100px" }}>
+                        <select className="edit-select-table">
+                          <option defaultValue="1"></option>
+                          <option defaultValue="2"></option>
+                        </select>
+                      </td>
+                      <td className="edit-padding text-left" style={{ minWidth: "300px" }}></td>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </div>
+
             </div>
           </div>
         </div>

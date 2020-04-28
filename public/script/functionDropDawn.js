@@ -7,7 +7,6 @@
 */
 function toggleMenu(element, show, top) {
   var target = document.getElementById(element.getAttribute('aria-controls'));
-
   if (target) {
     element.setAttribute('aria-expanded', show);
     target.setAttribute('aria-hidden', !show);
@@ -45,17 +44,19 @@ function setupContextualMenu(menuToggle) {
 function setupAllContextualMenus(contextualMenuToggleSelector) {
   // Setup all menu toggles on the page.
   var toggles = document.querySelectorAll(contextualMenuToggleSelector);
-
   for (var i = 0, l = toggles.length; i < l; i++) {
+    console.log(toggles[i])
+
     setupContextualMenu(toggles[i]);
   }
 
   // Add handler for clicking outside the menu.
   document.addEventListener('click', function(event) {
-
     for (var i = 0, l = toggles.length; i < l; i++) {
+
       var toggle = toggles[i];
       var contextualMenu = document.getElementById(toggle.getAttribute('aria-controls'));
+
       var clickOutside = !(toggle.contains(event.target) || contextualMenu.contains(event.target));
 
       if (clickOutside) {

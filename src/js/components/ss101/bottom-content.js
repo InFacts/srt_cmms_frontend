@@ -3,6 +3,7 @@ import React from 'react';
 import Document from '../../../images/document.svg'
 
 import '../../../css/style.css'
+import '../../../css/table.css';
 
 class BottomContent extends React.Component {
 
@@ -212,29 +213,28 @@ class BottomContent extends React.Component {
 
               <div id="รายการค่าเสียหาย" className="tabcontent">
                 <h4 className="head-title-bottom mt-2">ข้อมูลรายการค่าเสียหาย</h4>
-                <table className="cancel-border">
+
+                <table className="table-many-column">
                   <thead>
                     <tr>
-                      <th className="font-for-status" style={{ width: "50px", paddingLeft: "20px" }}>#</th>
-                      <th className="font-for-status">รายการ</th>
-                      <th className="font-for-status">จำนวน</th>
-                      <th className="font-for-status">จำนวนเงิน</th>
-                      <th className="font-for-status">เลขที่อุปกรณ์</th>
-                      <th className="font-for-status">หมายเหตุ</th>
+                      <th className="font text-center" style={{ minWidth: "50px" }}>#</th>
+                      <th className="font text-center" style={{ minWidth: "300px" }}>รายการ</th>
+                      <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
+                      <th className="font text-center" style={{ minWidth: "80px" }}>หน่วย</th>
+                      <th className="font text-center" style={{ minWidth: "80px" }}>จำนวนเงิน</th>
+                      <th className="font text-center" style={{ minWidth: "80px" }}>เลขที่อุปกรณ์</th>
+                      <th className="font text-center" style={{ minWidth: "400px" }}>หมายเหตุ</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td className="font-for-status" style={{ width: "50px", paddingLeft: "20px" }}>
-                        1
-                      </td>
-                      <td className="font-for-status">
-                        <input type="text" className="cancel-default"></input>
-                      </td>
-                      <td className="font-for-status"></td>
-                      <td className="font-for-status"></td>
-                      <td className="font-for-status"></td>
-                      <td className="font-for-status"></td>
+                      <td className="edit-padding text-center" style={{ minWidth: "50px" }}>1</td>
+                      <td className="edit-padding text-center" style={{ minWidth: "200px" }}></td>
+                      <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                      <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                      <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                      <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                      <td className="edit-padding text-center" style={{ minWidth: "300px" }}></td>
                     </tr>
                   </tbody>
                 </table>

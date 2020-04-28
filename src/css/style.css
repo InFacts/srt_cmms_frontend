@@ -310,39 +310,6 @@
     font-size: 14px;
   }
 
-  /* Table */
-  table.cancel-border{
-    border-bottom: 0;
-  }
-  
-  thead{
-    background-color:#EAEAEA;
-  }
-  
-  tbody{
-    background-color: white;
-  }
-  
-  tr th.font{
-    color: #000000;
-    font-size: 19px;
-    padding: 5px;
-  }
-  
-  td.edit-padding{
-    font-size: 18px;
-    padding: 5px 5px 1px 5px;
-  }
-
-  th.font-for-status{
-    color: #000000;
-    font-size: 19px;
-  }
-  
-  td.font-for-status{
-    font-size: 18px;
-  }
-  
   /* Footer */
   #footer{
     bottom: 0;
@@ -509,4 +476,16 @@
     height: 100%;
     width: 65%;
     padding: 2%;
+}
+
+.text-center{
+  text-align: center;
+}
+
+.text-left{
+  text-align: left;
+}
+
+.text-right{
+  text-align: right;
 }
