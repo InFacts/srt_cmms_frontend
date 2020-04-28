@@ -38,7 +38,7 @@ class TopContent extends React.Component {
             <h4 className="head-title">ข้อมูลสินทรัพย์หลัก</h4>
 
             <div className="grid_12">
-              <div className="grid_2"><p className="cancel-default">เลขที่สิ่งของ:</p></div>
+              <div className="grid_2"><p className="cancel-default">เลขที่สิ่งของ</p></div>
               <div className="grid_4 pull_0">
                 <div className="p-search-box cancel-margin ">
                   <input type="search" className="p-search-box__input cancel-default" />
@@ -47,13 +47,13 @@ class TopContent extends React.Component {
               </div>
             </div>
             <div className="grid_12">
-              <div className="grid_2"><p className="cancel-default">รายละเอียด:</p></div>
+              <div className="grid_2"><p className="cancel-default">รายละเอียด</p></div>
               <div className="grid_9 pull_0">
                 <input className="cancel-default" type="text" />
               </div>
             </div>
             <div className="grid_12">
-              <div className="grid_2"><p className="cancel-default">ประเภทสิ่งของ:</p></div>
+              <div className="grid_2"><p className="cancel-default">ประเภทสิ่งของ</p></div>
               <div className="grid_4 pull_0">
                 <select className="edit-select-top" >
                   <option defaultValue="0"></option>
@@ -64,11 +64,11 @@ class TopContent extends React.Component {
               </div>
             </div>
             <div className="grid_12">
-              <div className="grid_2"><p className="cancel-default">กลุ่มของอะไหล่:</p></div>
+              <div className="grid_2"><p className="cancel-default">กลุ่มของอะไหล่</p></div>
               <div className="grid_4 pull_0">
                 <input className="cancel-default " type="text" />
               </div>
-              <div className="grid_2"><p className="cancel-default float-left">ประเภทบัญชี:</p></div>
+              <div className="grid_2"><p className="cancel-default float-left">ประเภทบัญชี</p></div>
               <div className="grid_3 pull_0">
                 <select className="edit-select-top" >
                   <option defaultValue="0"></option>

@@ -49,10 +49,11 @@ class BottomContent extends React.Component {
 
               <div id="ทั่วไป" className="tabcontent">
 
-                <h4 className="head-title-bottom-sub mt-2">ผู้ที่รับผิดชอบ</h4>
+                
+                <h4 className="head-title-bottom mt-2">ผู้ที่รับผิดชอบ</h4>
                 <div className="grid_12">
-                  <div className="grid_2"><p className="cancel-default">หน่วยงาน/แขวง:</p></div>
-                  <div className="grid_4 pull_0">
+                  <div className="grid_2"><p className="cancel-default">หน่วยงาน/แขวง</p></div>
+                  <div className="grid_3 pull_0">
                     <select className="edit-select" >
                       <option defaultValue="0"></option>
                       <option defaultValue="1">Cosmic Cuttlefish</option>
@@ -61,9 +62,9 @@ class BottomContent extends React.Component {
                     </select>
                   </div>
                 </div>
-                <div className="grid_12">
-                  <div className="grid_2"><p className="cancel-default">ตอน:</p></div>
-                  <div className="grid_4 pull_0">
+                <div className="grid_12 mb-4">
+                  <div className="grid_2"><p className="cancel-default">ตอน</p></div>
+                  <div className="grid_3 pull_0">
                     <select className="edit-select" >
                       <option defaultValue="0"></option>
                       <option defaultValue="1">Cosmic Cuttlefish</option>
@@ -72,26 +73,26 @@ class BottomContent extends React.Component {
                     </select>
                   </div>
                 </div>
-                <h4 className="head-title-bottom-sub mt-4">การติดตั้ง</h4>
-                <div className="grid_12">
-                  <div className="grid_2"><p className="cancel-default  ">วันที่ติดตั้งเสร็จ:</p></div>
-                  <div className="grid_4 pull_0">
+                <h4 className="head-title-bottom mt-2">การติดตั้ง</h4>
+                <div className="grid_12 ">
+                  <div className="grid_2"><p className="cancel-default  ">วันที่ติดตั้งเสร็จ</p></div>
+                  <div className="grid_3 pull_0">
                     <div className="p-search-box cancel-margin ">
                       <input type="date" className="p-search-box__input cancel-default" />
                     </div>
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_2"><p className="cancel-default ">วันที่ประกาศใช้:</p></div>
-                  <div className="grid_4 pull_0">
+                  <div className="grid_2"><p className="cancel-default ">วันที่ประกาศใช้</p></div>
+                  <div className="grid_3 pull_0">
                     <div className="p-search-box cancel-margin">
                       <input type="date" className="p-search-box__input cancel-default" />
                     </div>
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_2"><p className="cancel-default">ตอน:</p></div>
-                  <div className="grid_4 pull_0">
+                  <div className="grid_2"><p className="cancel-default">ตอน</p></div>
+                  <div className="grid_3 pull_0">
                     <select className="edit-select-top" >
                       <option defaultValue="0"></option>
                       <option defaultValue="1">Cosmic Cuttlefish</option>
@@ -101,8 +102,8 @@ class BottomContent extends React.Component {
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_2"><p className="cancel-default">หมายเหตุ:</p></div>
-                  <div className="grid_9 pull_0">
+                  <div className="grid_2"><p className="cancel-default">หมายเหตุ</p></div>
+                  <div className="grid_8 pull_0">
                     <textarea className="edit" name="Text1" cols="40" rows="2"></textarea>
                   </div>
                 </div>
@@ -139,13 +140,13 @@ class BottomContent extends React.Component {
               <div id="สถานที่ติดตั้ง" className="tabcontent">
 
                 <div className="grid_12">
-                  <div className="grid_2"><p className="cancel-default">ที่อยู่:</p></div>
+                  <div className="grid_2"><p className="cancel-default">ที่อยู่</p></div>
                   <div className="grid_9 pull_0 mt-1">
                     <input className="cancel-default" type="text" />
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_2"><p className="cancel-default">แขวง:</p></div>
+                  <div className="grid_2"><p className="cancel-default">แขวง</p></div>
                   <div className="grid_9 pull_0">
                     <select className="edit-select" >
                       <option value="1"></option>
@@ -155,7 +156,7 @@ class BottomContent extends React.Component {
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_2"><p className="cancel-default">เขต:</p></div>
+                  <div className="grid_2"><p className="cancel-default">เขต</p></div>
                   <div className="grid_9 pull_0">
                     <select className="edit-select" >
                       <option value="1"></option>
@@ -165,13 +166,13 @@ class BottomContent extends React.Component {
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_2"><p className="cancel-default">เลขไปรณีย์:</p></div>
+                  <div className="grid_2"><p className="cancel-default">เลขไปรณีย์</p></div>
                   <div className="grid_9 pull_0 mt-1">
                     <input className="cancel-default" type="text" />
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_2"><p className="cancel-default">Google Map:</p></div>
+                  <div className="grid_2"><p className="cancel-default">Google Map</p></div>
                   <div className="grid_9 pull_0 mt-1">
                     <input className="cancel-default" type="text" />
                   </div>
@@ -200,7 +201,7 @@ class BottomContent extends React.Component {
 
               <div id="หมายเหตุ" className="tabcontent">
                 <div className="grid_12">
-                  <div className="grid_2"><p className="cancel-default">หมายเหตุ:</p></div>
+                  <div className="grid_2"><p className="cancel-default">หมายเหตุ</p></div>
                   <div className="grid_9 pull_0">
                     <textarea className="edit" name="Text1" cols="40" rows="2" style={{ height: "15rem", resize: "none" }}></textarea>
                   </div>

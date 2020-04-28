@@ -45,31 +45,31 @@ class TopContent extends React.Component {
 
 
               <div className="grid_12">
-              <div className="grid_3"><p className="top-text">เลขที่เอกสารใบสั่งซ่อมบำรุง:</p></div>
-              <div className="grid_8 pull_0">
-                <div className="p-search-box cancel-margin grid_3 ">
+              <div className="grid_3"><p className="top-text">เลขที่เอกสารใบสั่งซ่อมบำรุง</p></div>
+              <div >
+                <div className="p-search-box cancel-margin grid_3 pull_0">
                   <input type="search" className="p-search-box__input cancel-default " />
                   <button className="p-search-box__button cancel-padding" ><i className="p-icon--external-link" id="showModal" aria-controls="modal" ></i></button>
                 </div>
-                <div className="p-search-box cancel-margin grid_2  float-right">
+                <div className="p-search-box cancel-margin grid_3  float-right">
                   <input type="date" className="p-search-box__input cancel-default " disabled="disabled" />
                 </div>
-                <div className="grid_2 cancel-default float-right"><p className="cancel-default float-right">วันที่ออกเอกสาร:</p></div>
+                <div className="grid_2 cancel-default float-right"><p className="cancel-default float-right">วันที่ออกเอกสาร</p></div>
               </div>
             </div>
 
 
             <div className="grid_12">
-              <div className="grid_3"><p className="top-text">เลขที่เอกสารแจ้งเหตุขัดข้อง (ถ้ามี):</p></div>
-              <div className="grid_8 pull_0">
-                <div className="p-search-box cancel-margin grid_3 ">
+              <div className="grid_3"><p className="top-text">เลขที่เอกสารแจ้งเหตุขัดข้อง (ถ้ามี)</p></div>
+              <div >
+                <div className="p-search-box cancel-margin grid_3 pull_0">
                 <input type="search" className="p-search-box__input cancel-default " />
                   <button className="p-search-box__button cancel-padding" ><i className="p-icon--external-link" id="showModal" aria-controls="modal" ></i></button>
                 </div>
-                <div className="p-search-box cancel-margin grid_2   float-right">
+                <div className="p-search-box cancel-margin grid_3   float-right">
                   <input type="text" className=" p-search-box__input cancel-default  " disabled="disabled" ></input>
                 </div>
-                <div className="grid_2 cancel-default float-right"><p className="cancel-default float-right">ผู้สร้างเอกสาร:</p></div>
+                <div className="grid_2 cancel-default float-right"><p className="cancel-default float-right">ผู้สร้างเอกสาร</p></div>
               </div>
             </div>
               {/* <div className="grid_12">

@@ -41,54 +41,52 @@ class TopContent extends React.Component {
 
 
               <div className="grid_12">
-                <div className="grid_2"><p className="top-text">เลขที่เอกสาร:</p></div>
-                <div className="grid_8 pull_0">
-                  <div className="p-search-box cancel-margin grid_3 ">
+                <div className="grid_2"><p className="top-text">เลขที่เอกสาร</p></div>
+                <div >
+                  <div className="p-search-box cancel-margin grid_3  pull_0">
                     <input type="search" className="p-search-box__input cancel-default " />
                     <button className="p-search-box__button cancel-padding" ><i className="p-icon--external-link" id="showModal" aria-controls="modal"></i></button>
                   </div>
-                  <div className="p-search-box cancel-margin grid_2  float-right">
+                  <div className="p-search-box cancel-margin grid_3  float-right">
                     <input type="date" className="p-search-box__input cancel-default " disabled="disabled" />
                   </div>
-                  <div className="grid_2 cancel-default float-right"><p className="cancel-default float-right">วันที่ออกเอกสาร:</p></div>
+                  <div className="grid_2 cancel-default float-right"><p className="cancel-default float-right">วันที่ออกเอกสาร</p></div>
                 </div>
               </div>
 
 
               <div className="grid_12">
-                <div className="grid_2"><p className="top-text">เลขที่เอกสารอ้างอิง:</p></div>
-                <div className="grid_8 pull_0">
-                  <div className="p-search-box cancel-margin grid_3 ">
+                <div className="grid_2"><p className="top-text">เลขที่เอกสารอ้างอิง</p></div>
+                <div>
+                  <div className="p-search-box cancel-margin grid_3 pull_0">
                     <input type="search" className="p-search-box__input cancel-default " />
                     <button className="p-search-box__button cancel-padding" ><i className="p-icon--external-link" id="showModal" aria-controls="modal"></i></button>
                   </div>
-                  <div className="p-search-box cancel-margin grid_2   float-right">
+                  <div className="p-search-box cancel-margin grid_3   float-right">
                     <input type="text" className=" p-search-box__input cancel-default  " disabled="disabled"></input>
                   </div>
-                  <div className="grid_2 cancel-default float-right"><p className="cancel-default float-right">ผู้สร้างเอกสาร:</p></div>
+                  <div className="grid_2 cancel-default float-right"><p className="cancel-default float-right">ผู้สร้างเอกสาร</p></div>
                 </div>
               </div>
 
               <div className="grid_12">
                 <div className="grid_2">
-                  <p className="top-text">ชื่องาน:</p>
-                  <p className="top-text mt-1">วันเวลาที่เกิดเหตุ:</p>
-                  <p className="top-text">วันเวลาที่รับแจ้ง:</p>
+                  <p className="top-text">ชื่องาน</p>
+                  <p className="top-text mt-1">วันเวลาที่เกิดเหตุ</p>
+                  <p className="top-text">วันเวลาที่รับแจ้ง</p>
                 </div>
-                <div className="grid_2 pull_0">
+                <div className="grid_3 pull_0">
                   <p className="top-text">XXX-XXXXX-XXXX</p>
                   <p className="top-text" >14 เม.ย. 2563  06:02 น.</p>
                   <p className="top-text">14 เม.ย. 2563  12:02 น.</p>
                 </div>
-                <div className="grid_4">
-                  <p className="top-text">รายงานการตรวจซ่อมอุปกรณ์แขวง:</p>
-
-                  <p className="top-text">ได้รับข้อมูลผ่านช่องทาง:</p>
+                <div className="grid_3">
+                  <p className="top-text">รายงานการตรวจซ่อมอุปกรณ์แขวง</p>
+                  <p className="top-text">ได้รับข้อมูลผ่านช่องทาง</p>
                 </div>
-                <div className="grid_2 pull_0">
+                <div className="grid_3 pull_0">
                   <p className="top-text">สสญ. ธน. ตอน นตส.ตช.</p>
                   <p className="top-text">XXXXXXX</p>
-
                   <p className="top-text">XXXXXXX</p>
                 </div>
               </div>

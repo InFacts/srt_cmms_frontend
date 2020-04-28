@@ -37,9 +37,9 @@ class TopContent extends React.Component {
             <h4 className="head-title">ติดตั้งสินทรัพย์</h4>
 
             <div className="grid_12">
-              <div className="grid_2"><p className="top-text">เลขที่สินทรัพย์:</p></div>
-              <div className="grid_9 pull_0">
-                <div className="p-search-box cancel-margin grid_3 ">
+              <div className="grid_2"><p className="top-text">เลขที่สินทรัพย์</p></div>
+              <div>
+                <div className="p-search-box cancel-margin grid_3 pull_0 ">
                   <input type="search" className="p-search-box__input cancel-default " />
                   <button className="p-search-box__button cancel-padding" ><i className="p-icon--external-link" id="showModal" aria-controls="modal"></i></button>
                 </div>
@@ -47,35 +47,35 @@ class TopContent extends React.Component {
                   <input type="date" className="p-search-box__input cancel-default " disabled="disabled" />
 
                 </div>
-                <div className="grid_2 cancel-default float-right"><p className="cancel-default float-right">วันที่ออกเอกสาร:</p></div>
+                <div className="grid_2 cancel-default float-right"><p className="cancel-default float-right">วันที่ออกเอกสาร</p></div>
               </div>
             </div>
 
 
             <div className="grid_12">
-              <div className="grid_2"><p className="top-text">เลขที่ของ:</p></div>
-              <div className="grid_9 pull_0">
-                <div className="p-search-box cancel-margin grid_3 ">
+              <div className="grid_2"><p className="top-text">เลขที่ของ</p></div>
+              <div>
+                <div className="p-search-box cancel-margin grid_3 pull_0">
                   <input type="text" className="cancel-default grid_3  "></input>
                 </div>
                 <div className="p-search-box cancel-margin grid_3   float-right">
                   <input type="text" className=" p-search-box__input cancel-default  " disabled="disabled"></input>
                 </div>
-                <div className="grid_2 cancel-default float-right"><p className="cancel-default float-right">ผู้สร้างเอกสาร:</p></div>
+                <div className="grid_2 cancel-default float-right"><p className="cancel-default float-right">ผู้สร้างเอกสาร</p></div>
               </div>
             </div>
             <div className="grid_12">
-              <div className="grid_2"><p className="cancel-default">รายละเอียด:</p></div>
-              <div className="grid_6 pull_0">
-                <div className="p-search-box cancel-margin grid_4 ">
+              <div className="grid_2 cancel-default "><p className="cancel-default ">รายละเอียด</p></div>
+              <div>
+                <div className="p-search-box cancel-margin grid_4 pull_0">
                   <input type="text" className="cancel-default "></input>
                 </div>
               </div>
             </div>
             <div className="grid_12">
-              <div className="grid_2"><p className="cancel-default">หน่วย:</p></div>
-              <div className="grid_4 pull_0">
-                <div className="p-search-box cancel-margin grid_3 ">
+              <div className="grid_2 cancel-default "><p className="cancel-default ">หน่วย</p></div>
+              <div>
+                <div className="p-search-box cancel-margin grid_3 pull_0">
                   <input type="text" className="cancel-default "></input>
                 </div>
               </div>

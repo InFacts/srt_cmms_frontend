@@ -32,7 +32,7 @@ class TopContent extends React.Component {
                         <h4 className="head-title">สร้างแผนวาระการซ่อมบำรุงรักษา</h4>
 
                         <div className="grid_12">
-                            <div className="grid_2"><p className="cancel-default">ชื่อแผนซ่อมบำรุง:</p></div>
+                            <div className="grid_2"><p className="cancel-default">ชื่อแผนซ่อมบำรุง</p></div>
                             <div className="grid_7 pull_0">
                                 <div className="p-search-box cancel-margin">
                                     <input type="search" className="p-search-box__input cancel-default" />
@@ -41,7 +41,7 @@ class TopContent extends React.Component {
                             </div>
                         </div>
                         <div className="grid_12">
-                            <div className="grid_2"><p className="cancel-default">ความถี่การซ่อมบำรุง:</p></div>
+                            <div className="grid_2"><p className="cancel-default">ความถี่การซ่อมบำรุง</p></div>
                             <div className="grid_7 pull_0">
                                 <input type="text" className="cancel-default grid_3 "></input>
 
@@ -52,17 +52,17 @@ class TopContent extends React.Component {
                                     <option defaultValue="3">Xenial Xerus</option>
                                 </select>
 
-                                <p className="cancel-default grid_1 float-right">ครั้งต่อ:</p>
+                                <p className="cancel-default grid_1 float-right">ครั้งต่อ</p>
                             </div>
                         </div>
                         <div className="grid_12">
-                            <div className="grid_2"><p className="cancel-default">แขวง:</p></div>
+                            <div className="grid_2"><p className="cancel-default">แขวง</p></div>
                             <div className="grid_3 pull_0">
                                 <input className="cancel-default" type="text" />
                             </div>
                         </div>
                         <div className="grid_12">
-                            <div className="grid_2"><p className="cancel-default">รายละเอียดสถานที่:</p></div>
+                            <div className="grid_2"><p className="cancel-default">รายละเอียดสถานที่</p></div>
                             <div className="grid_9 pull_0">
                                 <textarea className="edit" name="Text1" cols="40" rows="2"></textarea>
                             </div>

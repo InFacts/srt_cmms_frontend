@@ -39,55 +39,55 @@ class TopContent extends React.Component {
                         <h4 className="head-title">เบิก/โอนย้าย อะไหล่/พัสดุ - แบบ ส.16/46</h4>
 
                         <div className="grid_12">
-                            <div className="grid_2"><p className="top-text">เลขที่เอกสาร:</p></div>
-                            <div className="grid_9 pull_0">
-                                <input type="text" className="cancel-default grid_3 mt-1 "></input>
+                            <div className="grid_2"><p className="top-text">เลขที่เอกสาร</p></div>
+                            <div>
+                                <input type="text" className="cancel-default grid_3 mt-1 pull_0"></input>
                                 <div className="p-search-box cancel-margin grid_3 mt-1  float-right">
                                     <input type="text" className=" p-search-box__input cancel-default  " disabled="disabled"></input>
                                 </div>
-                                <div className="grid_1 cancel-default float-right"><p className="cancel-default float-right">สถานะ:</p></div>
+                                <div className="grid_1 cancel-default float-right"><p className="cancel-default float-right">สถานะ</p></div>
                             </div>
                         </div>
 
                         <div className="grid_12">
-                            <div className="grid_2"><p className="top-text">ผู้เบิก:</p></div>
-                            <div className="grid_9 pull_0">
-                                <input type="text" className="cancel-default grid_3  "></input>
+                            <div className="grid_2"><p className="top-text">ผู้เบิก</p></div>
+                            <div>
+                                <input type="text" className="cancel-default grid_3  pull_0"></input>
                                 <div className="p-search-box cancel-margin grid_3   float-right">
                                     <input type="date" className=" p-search-box__input cancel-default  "></input>
                                 </div>
-                                <div className="grid_1 cancel-default float-right"><p className="cancel-default float-right">วันที่:</p></div>
+                                <div className="grid_1 cancel-default float-right"><p className="cancel-default float-right">วันที่</p></div>
                             </div>
                         </div>
 
-                        <div className="grid_12 ">
-                            <div className="grid_4 pull_0 float-right">
-                                <div className="p-search-box cancel-margin grid_3 ">
+                        <div className="grid_12">
+                            <div>
+                                <div className="p-search-box cancel-margin grid_3  float-right">
                                     <input type="text" className="p-search-box__input cancel-default  " />
                                     <button type="button" className="p-search-box__button cancel-padding" alt="search"><i className="p-icon--search" id="showModal" aria-controls="modal" ></i></button>
                                 </div>
                             </div>
-                            <div className="grid_2 cancel-default float-right"><p className="cancel-default ml-5">คลังต้นทาง:</p></div>
+                            <div className="grid_2 cancel-default float-right"><p className="cancel-default float-right">คลังต้นทาง</p></div>
                         </div>
 
                         <div className="grid_12 ">
-                            <div className="grid_4 pull_0 float-right">
-                                <div className="p-search-box cancel-margin grid_3 ">
+                            <div>
+                                <div className="p-search-box cancel-margin grid_3 float-right">
                                     <input type="text" className="p-search-box__input cancel-default  " />
                                     <button type="button" className="p-search-box__button cancel-padding" alt="search"><i className="p-icon--search" id="showModal" aria-controls="modal" ></i></button>
                                 </div>
                             </div>
-                            <div className="grid_2 cancel-default float-right"><p className="cancel-default ml-4">คลังปลายทาง:</p></div>
+                            <div className="grid_2 cancel-default float-right"><p className="cancel-default float-right">คลังปลายทาง</p></div>
                         </div>
 
-                        <div className="grid_12 mb-2 ">
-                            <div className="grid_4 pull_0 float-right">
-                                <input className="d-inline" type="radio" name="RadioOptions" id="Radio1" value="option1" />
-                                <label htmlFor="Radio1" className="cancel-default d-inline">รับของเอง</label>
-                                <input className="d-inline ml-3" type="radio" name="RadioOptions" id="Radio2" value="option2" />
-                                <label htmlFor="Radio2" className="cancel-default d-inline ml-3">ส่งไปยังคลังปลายทาง</label>
+                        <div className="grid_12 ">
+                            <div className="float-right ">
+                                <input className="d-inline " type="radio" name="RadioOptions" id="Radio1" value="option1" />
+                                <label htmlFor="Radio1" className="cancel-default d-inline ml-2n">รับของเอง</label>
+                                <input className="d-inline" type="radio" name="RadioOptions" id="Radio2" value="option2" />
+                                <label htmlFor="Radio2" className="cancel-default d-inline  ml-1">ส่งไปยังคลังปลายทาง</label>
                             </div>
-                            <div className="grid_2 float-right"><p className="cancel-default">รูปแบบการรับของ:</p></div>
+                            <div className="grid_2  cancel-default float-right "><p className="cancel-default float-right">รูปแบบการรับของ</p></div>
                         </div>
                     </section>
 

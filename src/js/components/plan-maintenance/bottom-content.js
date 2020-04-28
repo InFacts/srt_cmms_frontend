@@ -149,10 +149,10 @@ class BottomContent extends React.Component {
 
               <div id="แผนการดำเนินงาน" className="tabcontent">
                 <div className="grid_12">
-                  <div className="grid_2"><p className="cancel-default">หมายเหตุ:</p></div>
-                  <div className="grid_9 pull_0">
-                    <textarea className="edit" name="Text1" cols="40" rows="2"></textarea>
-                  </div>
+                  <div className="grid_2"><p className="cancel-default">หมายเหตุ</p></div>
+                  
+                    <textarea className="edit grid_8  pull_0 " name="Text1" cols="40" rows="2"></textarea>
+                  
                 </div>
               </div>
 
