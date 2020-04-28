@@ -70,6 +70,13 @@ class BottomContent extends React.Component {
                     <input type="text" className="cancel-default mt-1"></input>
                   </div>
                 </div>
+
+                <div className="grid_12">
+                            <div className="grid_3"><p className="cancel-default">หมายเหตุ:</p></div>
+                            <div className="grid_7 pull_0">
+                            <textarea className="edit" name="Text1" cols="40" rows="2"></textarea>
+                            </div>
+                        </div>
               </div>
 
               <div id="แนบไฟล์" className="tabcontent">
@@ -90,6 +97,10 @@ class BottomContent extends React.Component {
                   <div className="grid_12 cancel-default2">ไม่พบไฟล์เอกสาร</div>
                   <div className="grid_12 cancel-default2">คลิกที่ "+" ในการแนบเอกสาร</div>
                 </div>
+              </div>
+
+              <div id="สินทรัพย์ที่เกี่ยวข้อง" className="tabcontent">
+
               </div>
 
             </div>

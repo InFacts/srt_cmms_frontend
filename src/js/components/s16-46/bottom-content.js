@@ -23,9 +23,30 @@ class BottomContent extends React.Component {
                     <div className="container_12 clearfix">
                         <div className="grid_12 ">
 
-                            <div id="คลังต้นทาง" className="tabcontent">
+                            <div id="รายการ" className="tabcontent">
                                 <h3 className="head-title-bottom mt-2">คลังต้นทาง</h3>
+
                                 <div className="grid_12">
+                                    <div className="grid_2"><p className="cancel-default">ประเภทบัญชี:</p></div>
+                                    <div className="grid_9 pull_0">
+                                        <input type="text" className="cancel-default grid_3 mt-1"></input>
+                                        <input type="text" className="cancel-default grid_3 mt-1 float-right"></input>
+                                        <p className="cancel-default grid_2 float-right">จำนวนสุทธิ:</p>
+                                    </div>
+                                </div>
+
+                                <div className="grid_12">
+                                    <div className="grid_2"><p className="cancel-default">หมายเหตุ:</p></div>
+                                    <div className="grid_3 pull_0">
+                                        <textarea className="edit" name="Text1" cols="40" rows="2"></textarea>
+                                    </div>
+                                </div>
+
+
+
+
+
+                                {/* <div className="grid_12">
                                     <div className="grid_3"><p className="cancel-default">เลขที่เอกสาร:</p></div>
                                     <div className="grid_6 pull_0">
                                         <div className="p-search-box cancel-margin">
@@ -102,7 +123,7 @@ class BottomContent extends React.Component {
                                             <td className="edit-padding" style={{ width: "60px" }}>1,0000</td>
                                         </tr>
                                     </tbody>
-                                </table>
+                                </table> */}
                             </div>
 
                             <div id="แนบไฟล์" className="tabcontent">
