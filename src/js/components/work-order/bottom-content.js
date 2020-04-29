@@ -14,44 +14,44 @@ class BottomContent extends React.Component {
             <div className="grid_12 ">
 
               <div id="อาการเสีย" className="tabcontent">
-                <h3 className="head-title-bottom mt-2">ข้อมูลเกี่ยวกับอาการขัดข้อง:</h3>
+                <h3 className="head-title-bottom mt-2">ข้อมูลเกี่ยวกับอาการขัดข้อง</h3>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">ชื่องาน:</p></div>
-                  <div className="grid_7 pull_0">
+                  <div className="grid_3"><p className="cancel-default">ชื่องาน</p></div>
+                  <div className="grid_7 ">
                     <input type="text" className="cancel-default mt-1"></input>
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">วันเวลาที่เกิดเหตุ:</p></div>
-                  <div className="grid_7 pull_0">
+                  <div className="grid_3"><p className="cancel-default">วันเวลาที่เกิดเหตุ</p></div>
+                  <div className="grid_7 ">
                     <input type="date" className="cancel-default grid_3 mt-1"></input>
                     <input type="date" className="cancel-default grid_3 mt-1 float-right"></input>
-                    <p className="cancel-default grid_1 float-right">เวลา:</p>
+                    <p className="cancel-default grid_1 float-right">เวลา</p>
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">วันเวลาที่รับแจ้ง:</p></div>
-                  <div className="grid_7 pull_0">
+                  <div className="grid_3"><p className="cancel-default">วันเวลาที่รับแจ้ง</p></div>
+                  <div className="grid_7 ">
                     <input type="date" className="cancel-default grid_3 mt-1"></input>
                     <input type="date" className="cancel-default grid_3 mt-1 float-right"></input>
-                    <p className="cancel-default grid_1 float-right">เวลา:</p>
+                    <p className="cancel-default grid_1 float-right">เวลา</p>
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">อาการเสียโดยสรุป:</p></div>
-                  <div className="grid_7 pull_0">
+                  <div className="grid_3"><p className="cancel-default">อาการเสียโดยสรุป</p></div>
+                  <div className="grid_7 ">
                     <input type="text" className="cancel-default mt-1"></input>
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">ได้รับเหตุจาก:</p></div>
-                  <div className="grid_7 pull_0">
+                  <div className="grid_3"><p className="cancel-default">ได้รับเหตุจาก</p></div>
+                  <div className="grid_7">
                     <input type="text" className="cancel-default mt-1"></input>
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">ได้รับข้อมูลผ่านช่องทาง:</p></div>
-                  <div className="grid_7 pull_0">
+                  <div className="grid_3"><p className="cancel-default">ได้รับข้อมูลผ่านช่องทาง</p></div>
+                  <div className="grid_7 ">
                     <input className="d-inline" type="radio" name="RadioOptions" id="Radio1" value="option1" />
                     <label htmlFor="Radio1" className="cancel-default d-inline">โทรศัพท์</label>
                     <input className="d-inline ml-3" type="radio" name="RadioOptions" id="Radio2" value="option2" />
@@ -59,17 +59,24 @@ class BottomContent extends React.Component {
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">รายงานการตรวจซ่อมอุปกรณ์แขวง:</p></div>
-                  <div className="grid_7 pull_0">
+                  <div className="grid_3"><p className="cancel-default">รายงานการตรวจซ่อมอุปกรณ์แขวง</p></div>
+                  <div className="grid_7 ">
                     <input type="text" className="cancel-default mt-1"></input>
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default" style={{ paddingRight: "50px" }}>ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม (สถานที่/ที่ตั้ง):</p></div>
-                  <div className="grid_7 pull_0">
+                  <div className="grid_3"><p className="cancel-default" style={{ paddingRight: "50px" }}>ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม (สถานที่/ที่ตั้ง)</p></div>
+                  <div className="grid_7 ">
                     <input type="text" className="cancel-default mt-1"></input>
                   </div>
                 </div>
+
+                <div className="grid_12">
+                            <div className="grid_3"><p className="cancel-default">หมายเหตุ</p></div>
+                            <div className="grid_7">
+                            <textarea className="edit" name="Text1" cols="40" rows="2"></textarea>
+                            </div>
+                        </div>
               </div>
 
               <div id="แนบไฟล์" className="tabcontent">

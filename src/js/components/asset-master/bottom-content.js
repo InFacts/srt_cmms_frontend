@@ -51,6 +51,55 @@ class BottomContent extends React.Component {
               <div id="ทั่วไป" className="tabcontent">
 
                 <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">ชื่อหน่วยนับการนำเข้า</p></div>
+                  <div className="grid_3 ">
+                      <input className="cancel-default grid_2 mt-1 " disabled="disabled" type="text"  />
+                  </div>
+                </div>
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">จำนวนต่อหน่วยนำเข้า</p></div>
+                  <div className="grid_3 ">
+                      <input className="cancel-default grid_2 mt-1 " disabled="disabled" type="text"  />
+                      <p className="cancel-default grid_1 float-right ">Pack</p>  
+                  </div>
+                </div>
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">ค่าเลื่อนต่อปี</p></div>
+                  <div className="grid_3 ">
+                      <input className="cancel-default grid_2 mt-1 " type="text"  />
+                      <p className="cancel-default grid_1 float-right ">บาท</p>  
+                  </div>
+                </div>
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">ค่าเลื่อนต่อปี</p></div>
+                  <div className="grid_2 ">
+                    <select className="edit-select grid_2 " >
+                      <option defaultValue="0"></option>
+                      <option defaultValue="1">Cosmic Cuttlefish</option>
+                      <option defaultValue="2">Bionic Beaver</option>
+                      <option defaultValue="3">Xenial Xerus</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="grid_12 mt-5">
+                    <div className="grid_2">
+                        <input className="d-inline" type="radio" name="RadioOptions" id="Radio1" value="option1" />
+                        <label htmlFor="Radio1" className="cancel-default d-inline">เปิดการใช้งาน</label>
+                    </div>
+                </div>
+                <div className="grid_12 ">
+                    <div className="grid_2">
+                        <input className="d-inline" type="radio" name="RadioOptions" id="Radio1" value="option1" />
+                        <label htmlFor="Radio1" className="cancel-default d-inline">ปิดการใช้งาน</label>
+                    </div>
+                </div>
+                <div className="grid_12 mt-1">
+                  <div className="grid_2"><p className="cancel-default">หมายเหตุ</p></div>
+                  <div className="grid_8">
+                    <textarea className="edit" name="Text1" cols="40" rows="2"></textarea>
+                  </div>
+                </div>
+                {/* <div className="grid_12">
                   <div className="grid_2"><p className="cancel-default">กลุ่มของสินทรัพย์:</p></div>
                   <div className="grid_4 pull_0">
                     <div className="p-search-box cancel-margin ">
@@ -99,10 +148,10 @@ class BottomContent extends React.Component {
                       </select>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
 
-              <div id="คลัง" className="tabcontent">
+              {/* <div id="คลัง" className="tabcontent">
                 <h4 className="head-title-bottom mt-2">พิกัดของคลัง</h4>
 
                 <div className="grid_12">
@@ -136,10 +185,25 @@ class BottomContent extends React.Component {
                     <input className="cancel-default" type="text"  />
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <div id="แผนบำรุงรักษา" className="tabcontent">
-                <h4 className="head-title-bottom mt-2">แผนบำรุงรักษา</h4>
+                <div className="grid_12">
+                  <div className="grid_2 "><p className="cancel-default">กลุ่มของการบำรุงรักษา</p></div>
+                  <div className="grid_3">
+                      <input className="cancel-default grid_2 mt-1 " type="text"  />
+                      <button className="button-white edit mt-1 grid_1 float-right" type="button">...</button>
+                  </div>
+                </div>
+
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">ชนิดของการบำรุงรักษา</p></div>
+                  <div className="grid_3 ">
+                      <input className="cancel-default grid_2 mt-1 " type="text"  />
+                      <button className="button-white edit mt-1 grid_1 float-right" type="button">...</button>
+                  </div>
+                </div>
+                {/* <h4 className="head-title-bottom mt-2">แผนบำรุงรักษา</h4>
                 <div className=" u-float-right">
                   <input  type="file" hidden />
                   <label><span className="top-text">เพิ่มวาระซ่อมบำรุง +</span></label>
@@ -166,7 +230,7 @@ class BottomContent extends React.Component {
                       </td>
                     </tr>
                   </tbody>
-                </table>
+                </table> */}
               </div>
 
               <div id="แนบไฟล์" className="tabcontent">
@@ -192,9 +256,9 @@ class BottomContent extends React.Component {
               <div id="หมายเหตุ" className="tabcontent">
                 <div className="grid_12 mt-2">
                   <div className="grid_2">
-                    <p className="cancel-default">หมายเหตุ:</p>
+                    <p className="cancel-default">หมายเหตุ</p>
                   </div>
-                  <div className="grid_3 pull_0">
+                  <div className="grid_3">
                     <div>
                       <textarea className="cancel-table " cols="24" rows="4" style={{ width: "45rem", height: "15rem", resize: "none" }}></textarea>
                     </div>
@@ -202,6 +266,43 @@ class BottomContent extends React.Component {
                 </div>
               </div>
 
+              <div id="รายการสินทรัพย์" className="tabcontent">
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">ชื่อย่อหน่วยนับ</p></div>
+                  <div className="grid_3">
+                      <input className="cancel-default grid_2 mt-1 " type="text"  />
+                      <button className="button-white edit mt-1 grid_1 float-right" type="button">...</button>
+                  </div>
+                </div>
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">ชื่อหน่วยนับ</p></div>
+                  <div className="grid_2 ">
+                      <input className="cancel-default grid_2 mt-1 "disabled="disabled" type="text"  />
+                  </div>
+                </div>
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">ค่าเลื่อนต่อปี</p></div>
+                  <div className="grid_2 ">
+                    <select className="edit-select grid_3 " >
+                      <option defaultValue="0"></option>
+                      <option defaultValue="1">Cosmic Cuttlefish</option>
+                      <option defaultValue="2">Bionic Beaver</option>
+                      <option defaultValue="3">Xenial Xerus</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">Valuation Method</p></div>
+                  <div className="grid_2 ">
+                    <select className="edit-select grid_3 " >
+                      <option defaultValue="0"></option>
+                      <option defaultValue="1">Cosmic Cuttlefish</option>
+                      <option defaultValue="2">Bionic Beaver</option>
+                      <option defaultValue="3">Xenial Xerus</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
