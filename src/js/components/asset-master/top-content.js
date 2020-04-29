@@ -133,10 +133,11 @@ class TopContent extends React.Component {
             
               <div className="grid_12 ">
                 <div className="grid_8 pull_0 float-right">
-                  <button className="button-white edit mt-3 grid_1 float-right" type="button" aria-label="Close active modal" aria-controls="modal" id="aria-controls">ยกเลิก</button>
-                  <button className="button-blue edit mt-3  grid_1 float-right" type="button" aria-label="Save active modal" aria-controls="modal" id="aria-controls">บันทึก</button>
+                  <button className="button-blue edit mt-3 grid_1 float-right p_0" type="button" aria-label="Close active modal" aria-controls="modal" id="aria-controls">ยกเลิก</button>
+                  <button className="button-blue edit mt-3  grid_1 float-right p_0" type="button" aria-label="Save active modal" aria-controls="modal" id="aria-controls">บันทึก</button>
                 </div>
               </div>
+
             </div>
           </div>
         </div>

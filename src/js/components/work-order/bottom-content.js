@@ -72,11 +72,11 @@ class BottomContent extends React.Component {
                 </div>
 
                 <div className="grid_12">
-                            <div className="grid_3"><p className="cancel-default">หมายเหตุ</p></div>
-                            <div className="grid_7">
-                            <textarea className="edit" name="Text1" cols="40" rows="2"></textarea>
-                            </div>
-                        </div>
+                  <div className="grid_3"><p className="cancel-default">หมายเหตุ</p></div>
+                  <div className="grid_7">
+                    <textarea className="edit" name="Text1" cols="40" rows="2"></textarea>
+                  </div>
+                </div>
               </div>
 
               <div id="แนบไฟล์" className="tabcontent">
@@ -101,7 +101,7 @@ class BottomContent extends React.Component {
 
               <div id="สินทรัพย์ที่เกี่ยวข้อง" className="tabcontent">
                 <h4 className="head-title-bottom mt-2">ข้อมูลเกี่ยวกับอาการขัดข้อง</h4>
-
+                <div className="grid_12" style={{ paddingRight: "10px"}}>
                 <table className="table-many-column">
                   <thead>
                     <tr>
@@ -142,6 +142,7 @@ class BottomContent extends React.Component {
                     </tr>
                   </tbody>
                 </table>
+                </div>
 
               </div>
 

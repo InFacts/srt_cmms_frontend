@@ -74,7 +74,7 @@ class TopContent extends React.Component {
                             <div>
                                 <div className="p-search-box cancel-margin grid_3 float-right">
                                     <input type="text" className="p-search-box__input cancel-default  " />
-                                    <button type="button" className="p-search-box__button cancel-padding" alt="search"><i className="p-icon--search" id="showModal" aria-controls="modal" ></i></button>
+                                    <button type="button" className="p-search-box__button cancel-padding" alt="search"><i className="p-icon--search"></i></button>
                                 </div>
                             </div>
                             <div className="grid_2 cancel-default float-right"><p className="cancel-default float-right">คลังปลายทาง</p></div>

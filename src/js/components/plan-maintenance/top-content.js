@@ -111,7 +111,7 @@ class TopContent extends React.Component {
                                 <div className="grid_8 pull_0">
                                     <input type="text" className="cancel-default grid_3" />
                                 </div>
-                                <button className="button-blue ml-1 grid_1 pull_0" type="button">ค้นหา</button>
+                                <button className="button-blue grid_1 float-right" style={{ marginRight: "30px"}} type="button">ค้นหา</button>
                             </div>
 
                             <table className="cancel-border mt-3">
@@ -137,11 +137,9 @@ class TopContent extends React.Component {
                                 </tbody>
                             </table>
 
-                            <div className="grid_12 ">
-                                <div className="grid_8 pull_0 float-right">
-                                    <button className="button-white edit mt-3 grid_1 float-right" type="button" aria-label="Close active modal" aria-controls="modal" id="aria-controls">ยกเลิก</button>
-                                    <button className="button-blue edit mt-3  grid_1 float-right" type="button" aria-label="Select active modal" aria-controls="modal" id="aria-controls">เลือก</button>
-                                </div>
+                            <div className="grid_12" style={{ paddingRight: "13px"}}>
+                                <button className="button-blue edit mt-3 grid_1 float-right p_0 mr-2" type="button" aria-label="Close active modal" aria-controls="modal" id="aria-controls">ยกเลิก</button>
+                                <button className="button-blue edit mt-3 grid_1 float-right p_0" type="button" aria-label="Select active modal" aria-controls="modal" id="aria-controls">เลือก</button>
                             </div>
                         </div>
                     </div>
