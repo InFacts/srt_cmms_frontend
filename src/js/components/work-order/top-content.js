@@ -14,8 +14,6 @@ class TopContent extends React.Component {
   }
 
   componentDidMount() {
-    console.log("hello")
-    console.log(document.getElementById("defaultOpen"))
     document.getElementById("defaultOpen").click();
   }
 
@@ -34,7 +32,6 @@ class TopContent extends React.Component {
   }
 
   render() {
-    console.log("hello render")
 
     return (
       <div>

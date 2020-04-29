@@ -209,28 +209,26 @@ class BottomContent extends React.Component {
                   <label><span className="top-text">เพิ่มวาระซ่อมบำรุง +</span></label>
                 </div>
 
-
-                <table className="cancel-border">
+                <table className="table-many-column">
                   <thead>
                     <tr>
-                      <th className="font-for-status" style={{ paddingLeft: "25px" }}>#</th>
-                      <th className="font-for-status">ชื่อแผน</th>
-                      <th className="font-for-status" style={{ paddingLeft: "25px" }}>ความถี่</th>
-                      <th className="font-for-status">จำนวนรายการ</th>
-                      <th className="font-for-status" style={{ paddingLeft: "30px" }}>รายละเอียด</th>
+                      <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
+                      <th className="font" style={{ minWidth: "150px" }}>ชื่อรายการบำรุงรักษา</th>
+                      <th className="font text-center" style={{ minWidth: "250px" }}>ความถี่ของการบำรุงรักษา</th>
+                      <th className="font" style={{ minWidth: "400px" }}>หมายเหตุ</th>
+                      <th className="font" style={{ minWidth: "80px" }}>action</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <th className="font-for-status" style={{ paddingLeft: "25px" }}>1</th>
-                      <td className="font-for-status">แผนซ่อม A</td>
-                      <td className="font-for-status">2 ครั้งต่อเดือน</td>
-                      <td className="font-for-status" style={{ paddingLeft: "30px" }}>10</td>
-                      <td className="font-for-status">
+                      <th className="edit-padding text-center" style={{ minWidth: "30px" }}>1</th>
+                      <td className="edit-padding" style={{ minWidth: "150px" }}>แผนซ่อม A</td>
+                      <td className="edit-padding text-center" style={{ minWidth: "250px" }}>2 ครั้งต่อเดือน</td>
+                      <td className="edit-padding" style={{ minWidth: "400px" }}>10</td>
+                      <td className="edit-padding" style={{ minWidth: "80px" }}>
                         <button className="button-blue">แก้ไข</button>
                       </td>
                     </tr>
-
                   </tbody>
                 </table> */}
               </div>

@@ -34,13 +34,14 @@ import RedHouse from '../../../images/red-house.svg';
 class Map extends React.Component {
 
     render() {
+
         return (
             <div>
-                <div id="blackground-white">
+                <div>
                     <div className="container_12 clearfix">
                         <section className="grid_12 ">
-                            <div className="ml-3" style={{ height: "500px" }}>
-                                <h4 className="head-title" style={{ color: "black"}}>ระบบบริหารงานซ่อมบำรุง - PMT</h4>
+                            <h4 className="head-title" style={{ color: "black" }}>ระบบบริหารงานซ่อมบำรุง - PMT</h4>
+                            <div className="ml-3" style={{ height: "350px" }} id="blackground-white">
                                 <Link to="/wr"><img alt='some value' src={Oneone} className="Pone-one" /></Link>
                                 <Link to="/assmas"><img alt='some value' src={Onetwo} className="Pone-two" /></Link>
                                 <Link to="/plan"><img alt='some value' src={Onethree} className="Pone-three" /></Link>
@@ -83,6 +84,7 @@ class Map extends React.Component {
                                         </span>
                                     </span>
                                 </span>
+
                             </div>
                         </section>
                     </div>

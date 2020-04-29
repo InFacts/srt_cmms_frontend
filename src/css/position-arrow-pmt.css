@@ -1,7 +1,7 @@
 .Pone-one{
     position: absolute;
     left: 70px;
-    top: 60px;
+    top: 80px;
 }
 
 .Pone-two{
@@ -19,14 +19,14 @@
 .Parrow1{
     position: absolute;
     left: 170px;
-    top: 85px;
+    top: 105px;
 }
 
 .Ptext1{
     /* นำเข้าอะไหล่โดยมีใบสั่งซื้อ */
     position: absolute;
     left: 39px;
-    top: 125px;
+    top: 145px;
 
     font-family: Kanit;
     font-style: normal;
@@ -74,7 +74,7 @@
 .Ptwo-one{
     position: absolute;
     left: 260px;
-    top: 60px;
+    top: 80px;
 }
 
 .Ptwo-two{
@@ -92,7 +92,7 @@
 .Ptext4{
     position: absolute;
     left: 210px;
-    top: 125px;
+    top: 145px;
 
     font-family: Kanit;
     font-style: normal;
@@ -137,20 +137,20 @@
 .Pthree-one{
     position: absolute;
     left: 460px;
-    top: 45px;
+    top: 75px;
 }
 
 .Parrow2{
     position: absolute;
     left: 380px;
-    top: 85px;
+    top: 105px;
 }
 
 .Ptext7{
     /* นำเข้าอะไหล่โดยมีใบสั่งซื้อ */
     position: absolute;
     left: 440px;
-    top: 125px;
+    top: 150px;
     font-family: Kanit;
     font-style: normal;
     font-weight: 300;
@@ -165,7 +165,7 @@
 .Pfour-one{
     position: absolute;
     left: 640px;
-    top: 60px;
+    top: 80px;
 }
 
 .Pfour-two{
@@ -178,7 +178,7 @@
     /* นำเข้าอะไหล่โดยมีใบสั่งซื้อ */
     position: absolute;
     left: 630px;
-    top: 130px;
+    top: 150px;
 
     font-family: Kanit;
     font-style: normal;
@@ -211,14 +211,14 @@
 .Pfive-one{
     position: absolute;
     left: 800px;
-    top: 65px;
+    top: 85px;
 }
 
 .Ptext10{
     /* นำเข้าอะไหล่โดยมีใบสั่งซื้อ */
     position: absolute;
     left: 805px;
-    top: 135px;
+    top: 155px;
 
     font-family: Kanit;
     font-style: normal;
@@ -234,11 +234,11 @@
 .Pdrop-dawn1{
     position: absolute;
     left: 290px;
-    top: -20px;
+    top: 0px;
 }
 
 .Pdrop-dawn2{
     position: absolute;
-    left: 650px;
-    top: -20px;
+    left: 660px;
+    top: 0px;
 }

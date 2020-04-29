@@ -6,6 +6,7 @@ import '../../../css/style.css'
 import '../../../css/tabs.css'
 import '../../../css/grid12.css';
 import '../../../css/modal.css';
+import '../../../css/table.css';
 
 class BottomContent extends React.Component {
 
@@ -93,62 +94,300 @@ class BottomContent extends React.Component {
                                     </div>
                                 </div>
 
-                                <table className="cancel-border">
+                                <table className="table-many-column">
                                     <thead>
-                                        <tr style={{ border: "none", }}>
-                                            <th style={{ width: "28px" }}></th>
-                                            <th style={{ width: "100px" }}></th>
-                                            <th style={{ width: "110px" }}></th>
-                                            <th></th>
-                                            <th style={{ width: "50px" }}></th>
-
-                                            <th style={{ width: "60px", borderBottom: "1px solid #969696" }}></th>
-                                            <th style={{ borderBottom: "1px solid #969696" }}></th>
-                                            <th style={{ borderBottom: "1px solid #969696" }}></th>
-                                            <th className="font" style={{ width: "80px", textAlign: "center", borderBottom: "1px solid #969696" }}>คลังปลายทาง</th>
-                                            <th style={{ width: "60px", borderBottom: "1px solid #969696" }}></th>
-                                            <th style={{ width: "100px", borderBottom: "1px solid #969696" }}></th>
-                                            <th style={{ width: "60px", borderBottom: "1px solid #969696" }}></th>
-                                            <th style={{ width: "60px", borderBottom: "1px solid #969696" }}></th>
-                                        </tr>
                                         <tr>
-                                            <th className="font" style={{ width: "28px" }}>#</th>
-                                            <th className="font" style={{ width: "100px" }}>เลขที่สิ่งของ</th>
-                                            <th className="font" style={{ width: "110px" }}>รายละเอียดอะไหล่</th>
-                                            <th className="font">เบิกจำนวน</th>
-                                            <th className="font" style={{ width: "50px" }}>หน่วย</th>
-                                            <th className="font" style={{ width: "60px" }}>คงคลัง</th>
-                                            <th className="font">รอส่งมอบ</th>
-                                            <th className="font">ระหว่างการจัดซื้อ</th>
-                                            <th className="font" style={{ width: "80px" }}>จำนวนสุทธิ</th>
-                                            <th className="font" style={{ width: "60px" }}>ซาก</th>
-                                            <th className="font" style={{ width: "100px" }}>ของเก่าพร้อมใช้งาน</th>
-                                            <th className="font" style={{ width: "60px" }}>ส่งซ่อม</th>
-                                            <th className="font" style={{ width: "60px" }}>ของเสีย</th>
+                                            <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
+                                            <th className="font" style={{ minWidth: "130px" }}>เลขที่อะไหล่</th>
+                                            <th className="font" style={{ minWidth: "250px" }}>ชื่ออะไหล่</th>
+                                            <th className="font text-center" style={{ minWidth: "80px" }}>คงคลัง</th>
+                                            <th className="font text-center" style={{ minWidth: "80px" }}>รอส่งมอบ</th>
+                                            <th className="font text-center" style={{ minWidth: "80px" }}>ระหว่างการจัดซื้อ</th>
+                                            <th className="font text-center" style={{ minWidth: "80px" }}>จำนวนสุทธิ</th>
+                                            <th className="font text-center" style={{ minWidth: "100px" }}>สถานะ</th>
+                                            <th className="font" style={{ minWidth: "80px" }}>จำนวน</th>
+                                            <th className="font" style={{ minWidth: "80px" }}>หน่วยนับ</th>
+                                            <th className="font" style={{ minWidth: "80px" }}>ราคาต่อหน่วย</th>
+                                            <th className="font" style={{ minWidth: "80px" }}>จำนวนเงิน</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td className="edit-padding" style={{ width: "28px" }}>1</td>
-                                            <td className="edit-padding" style={{ width: "100px" }}>
-                                                <div className="p-search-box cancel-margin">
-                                                    <input type="text" className="p-search-box__input cancel-default" />
-                                                    <button type="button" className="p-search-box__button cancel-padding" alt="search"><i className="p-icon--search" id="showModal2" aria-controls="modal2"></i></button>
-                                                </div>
+                                            <th className="edit-padding text-center" style={{ minWidth: "30px" }}>1</th>
+                                            <td className="edit-padding" style={{ minWidth: "130px" }}>
+                                                <button type="button" class="button-for-table" id="showModal2" aria-controls="modal2"><i className="fas fa-arrow-right" style={{ color: "#FFCB21" }} id="showModal2" aria-controls="modal2"></i></button>
+                                                <input type="text" defaultValue="SIG 003" className="cancel-default-for-table"></input>
                                             </td>
-                                            <td className="edit-padding" style={{ width: "110px" }}>4-days</td>
-                                            <td className="edit-padding">
-                                                <input className="cancel-default" style={{ paddingRight: "3px" }} type="number" />
+                                            <td className="edit-padding" style={{ minWidth: "250px" }}>คลังพัสดุส่วนกลางบางซื่อ</td>
+                                            <td className="edit-padding text-center disable" style={{ minWidth: "80px" }} >10</td>
+                                            <td className="edit-padding text-center disable" style={{ minWidth: "80px" }} >10</td>
+                                            <td className="edit-padding text-center disable" style={{ minWidth: "80px" }} >10</td>
+                                            <td className="edit-padding text-center disable" style={{ minWidth: "80px" }} >10</td>
+                                            <td className="edit-padding text-center disable" style={{ minWidth: "80px" }} >
+                                                <select className="edit-select-table" disabled>
+                                                    <option defaultValue="1" style={{ minWidth: "80px" }} >ของใหม่</option>
+                                                    <option defaultValue="2" style={{ minWidth: "80px" }} >ของเก่า</option>
+                                                </select>
                                             </td>
-                                            <td className="edit-padding" style={{ width: "50px" }}>ชิ้น</td>
-                                            <td className="edit-padding" style={{ width: "60px" }}>1,0000</td>
-                                            <td className="edit-padding">1,0000</td>
-                                            <td className="edit-padding">2-days</td>
-                                            <td className="edit-padding" style={{ width: "80px" }}>1,0000</td>
-                                            <td className="edit-padding" style={{ width: "60px" }}>1,0000</td>
-                                            <td className="edit-padding" style={{ width: "100px" }}>1,0000</td>
-                                            <td className="edit-padding" style={{ width: "60px" }}>1,0000</td>
-                                            <td className="edit-padding" style={{ width: "60px" }}>1,0000</td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} >
+                                                <input type="number" min="1" defaultValue="10" className="cancel-default-for-table"></input>
+                                            </td>
+                                            <td className="edit-padding text-left" style={{ minWidth: "80px" }} >ชิ้น</td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} >1,120.0000</td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} >11,200.00</td>
+                                        </tr>
+                                        <tr>
+                                            <th className="edit-padding text-center" style={{ minWidth: "30px" }}></th>
+                                            <td className="edit-padding" style={{ minWidth: "130px" }}>
+                                                <button type="button" class="button-for-table" id="showModal2" aria-controls="modal2"><i className="fas fa-arrow-right" style={{ color: "#FFCB21" }} id="showModal2" aria-controls="modal2"></i></button>
+                                                <input type="text" className="cancel-default-for-table"></input>
+                                            </td>
+                                            <td className="edit-padding" style={{ minWidth: "250px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }}>
+                                                <input type="number" min="1" className="cancel-default-for-table"></input>
+                                            </td>
+                                            <td className="edit-padding text-left" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                        </tr>
+                                        <tr>
+                                            <th className="edit-padding text-center" style={{ minWidth: "30px" }}></th>
+                                            <td className="edit-padding" style={{ minWidth: "130px" }}>
+
+                                            </td>
+                                            <td className="edit-padding" style={{ minWidth: "250px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }}>
+                                                <input type="number" min="1" className="cancel-default-for-table"></input>
+                                            </td>
+                                            <td className="edit-padding text-left" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                        </tr>
+                                        <tr>
+                                            <th className="edit-padding text-center" style={{ minWidth: "30px" }}></th>
+                                            <td className="edit-padding" style={{ minWidth: "130px" }}>
+
+                                            </td>
+                                            <td className="edit-padding" style={{ minWidth: "250px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }}>
+                                                <input type="number" min="1" className="cancel-default-for-table"></input>
+                                            </td>
+                                            <td className="edit-padding text-left" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                        </tr>
+                                        <tr>
+                                            <th className="edit-padding text-center" style={{ minWidth: "30px" }}></th>
+                                            <td className="edit-padding" style={{ minWidth: "130px" }}>
+
+                                            </td>
+                                            <td className="edit-padding" style={{ minWidth: "250px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }}>
+                                                <input type="number" min="1" className="cancel-default-for-table"></input>
+                                            </td>
+                                            <td className="edit-padding text-left" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                        </tr>
+                                        <tr>
+                                            <th className="edit-padding text-center" style={{ minWidth: "30px" }}></th>
+                                            <td className="edit-padding" style={{ minWidth: "130px" }}>
+
+                                            </td>
+                                            <td className="edit-padding" style={{ minWidth: "250px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }}>
+                                                <input type="number" min="1" className="cancel-default-for-table"></input>
+                                            </td>
+                                            <td className="edit-padding text-left" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                        </tr>
+                                        <tr>
+                                            <th className="edit-padding text-center" style={{ minWidth: "30px" }}></th>
+                                            <td className="edit-padding" style={{ minWidth: "130px" }}>
+
+                                            </td>
+                                            <td className="edit-padding" style={{ minWidth: "250px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }}>
+                                                <input type="number" min="1" className="cancel-default-for-table"></input>
+                                            </td>
+                                            <td className="edit-padding text-left" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                        </tr>
+                                        <tr>
+                                            <th className="edit-padding text-center" style={{ minWidth: "30px" }}></th>
+                                            <td className="edit-padding" style={{ minWidth: "130px" }}>
+
+                                            </td>
+                                            <td className="edit-padding" style={{ minWidth: "250px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }}>
+                                                <input type="number" min="1" className="cancel-default-for-table"></input>
+                                            </td>
+                                            <td className="edit-padding text-left" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                        </tr>
+                                        <tr>
+                                            <th className="edit-padding text-center" style={{ minWidth: "30px" }}></th>
+                                            <td className="edit-padding" style={{ minWidth: "130px" }}>
+
+                                            </td>
+                                            <td className="edit-padding" style={{ minWidth: "250px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }}>
+                                                <input type="number" min="1" className="cancel-default-for-table"></input>
+                                            </td>
+                                            <td className="edit-padding text-left" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                        </tr>
+                                        <tr>
+                                            <th className="edit-padding text-center" style={{ minWidth: "30px" }}></th>
+                                            <td className="edit-padding" style={{ minWidth: "130px" }}>
+
+                                            </td>
+                                            <td className="edit-padding" style={{ minWidth: "250px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }}>
+                                                <input type="number" min="1" className="cancel-default-for-table"></input>
+                                            </td>
+                                            <td className="edit-padding text-left" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                        </tr>
+                                        <tr>
+                                            <th className="edit-padding text-center" style={{ minWidth: "30px" }}></th>
+                                            <td className="edit-padding" style={{ minWidth: "130px" }}>
+
+                                            </td>
+                                            <td className="edit-padding" style={{ minWidth: "250px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }}>
+                                                <input type="number" min="1" className="cancel-default-for-table"></input>
+                                            </td>
+                                            <td className="edit-padding text-left" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                        </tr>
+                                        <tr>
+                                            <th className="edit-padding text-center" style={{ minWidth: "30px" }}></th>
+                                            <td className="edit-padding" style={{ minWidth: "130px" }}>
+
+                                            </td>
+                                            <td className="edit-padding" style={{ minWidth: "250px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }}>
+                                                <input type="number" min="1" className="cancel-default-for-table"></input>
+                                            </td>
+                                            <td className="edit-padding text-left" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                        </tr>
+                                        <tr>
+                                            <th className="edit-padding text-center" style={{ minWidth: "30px" }}></th>
+                                            <td className="edit-padding" style={{ minWidth: "130px" }}>
+
+                                            </td>
+                                            <td className="edit-padding" style={{ minWidth: "250px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }}>
+                                                <input type="number" min="1" className="cancel-default-for-table"></input>
+                                            </td>
+                                            <td className="edit-padding text-left" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                        </tr>
+                                        <tr>
+                                            <th className="edit-padding text-center" style={{ minWidth: "30px" }}></th>
+                                            <td className="edit-padding" style={{ minWidth: "130px" }}>
+
+                                            </td>
+                                            <td className="edit-padding" style={{ minWidth: "250px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }}>
+                                                <input type="number" min="1" className="cancel-default-for-table"></input>
+                                            </td>
+                                            <td className="edit-padding text-left" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                        </tr>
+                                        <tr>
+                                            <th className="edit-padding text-center" style={{ minWidth: "30px" }}></th>
+                                            <td className="edit-padding" style={{ minWidth: "130px" }}>
+
+                                            </td>
+                                            <td className="edit-padding" style={{ minWidth: "250px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "80px" }}></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }}>
+                                                <input type="number" min="1" className="cancel-default-for-table"></input>
+                                            </td>
+                                            <td className="edit-padding text-left" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
+                                            <td className="edit-padding text-right" style={{ minWidth: "80px" }} ></td>
                                         </tr>
                                     </tbody>
                                 </table> */}
