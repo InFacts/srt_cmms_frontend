@@ -11,7 +11,7 @@ class TopContent extends React.Component {
   render() {
     return (
       <div>
-        <div id="blackground-white">
+        <div id="blackground-white" style={{ width: "100vw", height: "100vh" }}>
           <div className="container_12 clearfix">
             <section className="grid_12" style={{ width:"960px"}}>
               <h4 className="head-title" style={{ color: "black"}}>ระบบฐานข้อมูลระบบอาณัติสัญญาณเพื่อวิเคราะห์และวางแผนซ่อมบำรุง</h4>

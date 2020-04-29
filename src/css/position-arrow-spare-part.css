@@ -1,56 +1,56 @@
 
 .drop-dawn1{
     position: absolute;
-    left: 120px;
-    top: 100px;
+    left: 150px;
+    top: 130px;
 }
 
 .drop-dawn2{
     position: absolute;
-    left: 580px;
-    top: -10px;
+    left: 610px;
+    top: 20px;
 }
 
 .drop-dawn3{
     position: absolute;
-    left: 710px;
-    top: 210px;
+    left: 740px;
+    top: 240px;
 }
 
 .one-one{
     position: absolute;
-    left: 70px;
-    top: 60px;
+    left: 100px;
+    top: 90px;
 }
 
 .one-two{
     position: absolute;
-    left: 70px;
-    top: 170px;
+    left: 100px;
+    top: 200px;
 }
 
 .one-three{
     position: absolute;
-    left: 70px;
-    top: 280px;
+    left: 100px;
+    top: 310px;
 }
 
 .arrow1{
     position: absolute;
-    left: 190px;
-    top: 140px;
+    left: 220px;
+    top: 170px;
 }
 
 .arrow2{
     position: absolute;
-    left: 190px;
-    top: 210px;
+    left: 220px;
+    top: 240px;
 }
 
 .arrow3{
     position: absolute;
-    left: 190px;
-    top: 270px;
+    left: 220px;
+    top: 300px;
 }
 
 .text1{
@@ -58,8 +58,8 @@
     position: absolute;
     width: 141px;
     height: 21px;
-    left: 28px;
-    top: 130px;
+    left: 58px;
+    top: 160px;
 
     font-family: Kanit;
     font-style: normal;
@@ -76,8 +76,8 @@
     position: absolute;
     width: 162px;
     height: 21px;
-    left: 14px;
-    top: 240px;
+    left: 44px;
+    top: 270px;
 
     font-family: Kanit;
     font-style: normal;
@@ -95,8 +95,8 @@
     position: absolute;
     width: 154px;
     height: 42px;
-    left: 19px;
-    top: 340px;
+    left: 49px;
+    top: 370px;
 
     font-family: Kanit;
     font-style: normal;
@@ -110,8 +110,8 @@
 
 .center{
     position: absolute;
-    left: 250px;
-    top: 190px;
+    left: 280px;
+    top: 220px;
 }
 
 .text4{
@@ -119,8 +119,8 @@
     position: absolute;
     width: 75px;
     height: 21px;
-    left: 242px;
-    top: 240px;
+    left: 272px;
+    top: 270px;
 
     font-family: Kanit;
     font-style: normal;
@@ -137,40 +137,40 @@
     position: absolute;
     width: 65px;
     height: 65px;
-    left: 399px;
-    top: 75px;
+    left: 429px;
+    top: 105px;
 }
 
 .two-two{
     position: absolute;
-    left: 399px;
-    top: 180px;
+    left: 429px;
+    top: 210px;
 }
 
 .two-three{
     position: absolute;
 width: 55px;
 height: 55px;
-left: 399px;
-top: 280px;
+left: 429px;
+top: 310px;
 }
 
 .arrow4{
 position: absolute;
-left: 345px;
-top: 140px;
+left: 375px;
+top: 170px;
 }
 
 .arrow5{
 position: absolute;
-left: 345px;
-top: 210px;
+left: 375px;
+top: 240px;
 }
 
 .arrow6{
     position: absolute;
-    left: 345px;
-top: 270px;
+    left: 375px;
+top: 300px;
 
 }
 
@@ -178,8 +178,8 @@ top: 270px;
 position: absolute;
 width: 102px;
 height: 21px;
-left: 380px;
-top: 133px;
+left: 410px;
+top: 163px;
 
 font-family: Kanit;
 font-style: normal;
@@ -198,8 +198,8 @@ color: #000000;
 position: absolute;
 width: 103px;
 height: 21px;
-left: 376px;
-top: 242px;
+left: 406px;
+top: 272px;
 
 font-family: Kanit;
 font-style: normal;
@@ -220,8 +220,8 @@ color: #000000;
 position: absolute;
 width: 74px;
 height: 21px;
-left: 389px;
-top: 340px;
+left: 419px;
+top: 370px;
 
 font-family: Kanit;
 font-style: normal;
@@ -238,20 +238,20 @@ color: #000000;
 
 .three-one{
 position: absolute;
-left: 570px;
-    top: 58px;
+left: 600px;
+    top: 88px;
 }
 
 .three-two{
     position: absolute;
-    left: 570px;
-    top: 185px;
+    left: 600px;
+    top: 215px;
 }
 
 .three-three{
 position: absolute;
-left: 570px;
-top: 280px;
+left: 600px;
+top: 310px;
 }
 
 .text8{
@@ -260,8 +260,8 @@ top: 280px;
 position: absolute;
 width: 110px;
 height: 42px;
-left: 540px;
-top: 135px;
+left: 570px;
+top: 165px;
 
 font-family: Kanit;
 font-style: normal;
@@ -278,8 +278,8 @@ color: #000000;
 position: absolute;
 width: 110px;
 height: 42px;
-left: 540px;
-top: 242px;
+left: 570px;
+top: 272px;
 
 font-family: Kanit;
 font-style: normal;
@@ -298,8 +298,8 @@ color: #000000;
 position: absolute;
 width: 101px;
 height: 21px;
-left: 545px;
-top: 342px;
+left: 575px;
+top: 372px;
 
 font-family: Kanit;
 font-style: normal;
@@ -314,28 +314,28 @@ color: #000000;
 
 .four-one{
     position: absolute;
-    left: 720px;
-    top: 70px;
+    left: 750px;
+    top: 100px;
 }
 
 .four-two{
     position: absolute;
-    left: 720px;
-    top: 190px;
+    left: 750px;
+    top: 220px;
 }
 
 .four-three{
     position: absolute;
-    left: 720px;
-    top: 285px;
+    left: 750px;
+    top: 315px;
 }
 
 .text11{
     position: absolute;
 width: 84px;
 height: 21px;
-left: 710px;
-top: 135px;
+left: 740px;
+top: 165px;
 
 font-family: Kanit;
 font-style: normal;
@@ -352,8 +352,8 @@ color: #000000;
     position: absolute;
 width: 84px;
 height: 21px;
-left: 710px;
-top: 245px;
+left: 740px;
+top: 275px;
 
 font-family: Kanit;
 font-style: normal;
@@ -370,8 +370,8 @@ color: #000000;
     position: absolute;
 width: 84px;
 height: 21px;
-left: 710px;
-top: 345px;
+left: 740px;
+top: 375px;
 
 font-family: Kanit;
 font-style: normal;

@@ -5,6 +5,8 @@ import logo from '../../../images/logo.png';
 import '../../../vender/fontawesome-free/css/all.css';
 import '../../../css/style-nav.css'
 
+import './function-nav-drop-dawn.js'
+
 class NavTop extends React.Component {
 
     constructor(props) {
@@ -54,7 +56,7 @@ class NavTop extends React.Component {
     setupAllContextualMenus(contextualMenuToggleSelector) {
         var toggles = document.querySelectorAll(contextualMenuToggleSelector);
         for (var i = 0, l = toggles.length; i < l; i++) {
-            console.log(toggles[i])
+            // console.log(toggles[i])
 
             this.setupContextualMenu(toggles[i]);
         }
@@ -62,8 +64,8 @@ class NavTop extends React.Component {
         document.addEventListener('click', function (event) {
             for (var i = 0, l = toggles.length; i < l; i++) {
 
-                var toggle = toggles[i];
-                var contextualMenu = document.getElementById(toggle.getAttribute('aria-controls'));
+                // var toggle = toggles[i];
+                // var contextualMenu = document.getElementById(toggle.getAttribute('aria-controls'));
 
                 // var clickOutside = !(toggle.contains(event.target) || contextualMenu.contains(event.target));
 
@@ -84,6 +86,7 @@ class NavTop extends React.Component {
         });
     }
 
+    
     render() {
         return (
             <div>
