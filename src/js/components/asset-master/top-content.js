@@ -38,7 +38,7 @@ class TopContent extends React.Component {
             <h4 className="head-title">ข้อมูลสินทรัพย์หลัก</h4>
 
             <div className="grid_12">
-              <div className="grid_2"><p className="cancel-default">เลขที่สิ่งของ:</p></div>
+              <div className="grid_2"><p className="cancel-default">เลขที่สิ่งของ</p></div>
               <div className="grid_4 pull_0">
                 <div className="p-search-box cancel-margin ">
                   <input type="search" className="p-search-box__input cancel-default" />
@@ -47,15 +47,15 @@ class TopContent extends React.Component {
               </div>
             </div>
             <div className="grid_12">
-              <div className="grid_2"><p className="cancel-default">รายละเอียด:</p></div>
+              <div className="grid_2"><p className="cancel-default">รายละเอียด</p></div>
               <div className="grid_9 pull_0">
-                <input className="cancel-default" type="text"  />
+                <input className="cancel-default" type="text" />
               </div>
             </div>
             <div className="grid_12">
-              <div className="grid_2"><p className="cancel-default">ประเภทสิ่งของ:</p></div>
+              <div className="grid_2"><p className="cancel-default">ประเภทสิ่งของ</p></div>
               <div className="grid_4 pull_0">
-                <select className="edit-select" >
+                <select className="edit-select-top" >
                   <option defaultValue="0"></option>
                   <option defaultValue="1">Cosmic Cuttlefish</option>
                   <option defaultValue="2">Bionic Beaver</option>
@@ -64,13 +64,13 @@ class TopContent extends React.Component {
               </div>
             </div>
             <div className="grid_12">
-              <div className="grid_2"><p className="cancel-default">กลุ่มของอะไหล่:</p></div>
+              <div className="grid_2"><p className="cancel-default">กลุ่มของอะไหล่</p></div>
               <div className="grid_4 pull_0">
-                <input className="cancel-default mt-1" type="text"  />
+                <input className="cancel-default " type="text" />
               </div>
-              <div className="grid_2"><p className="cancel-default float-left">ประเภทบัญชี:</p></div>
+              <div className="grid_2"><p className="cancel-default float-left">ประเภทบัญชี</p></div>
               <div className="grid_3 pull_0">
-                <select className="edit-select" >
+                <select className="edit-select-top" >
                   <option defaultValue="0"></option>
                   <option defaultValue="1">Cosmic Cuttlefish</option>
                   <option defaultValue="2">Bionic Beaver</option>
@@ -78,7 +78,7 @@ class TopContent extends React.Component {
                 </select>
               </div>
             </div>
-            <div className="grid_12">
+            {/* <div className="grid_12">
               <div className="grid_2"><p className="cancel-default">หน่วย:</p></div>
               <div className="grid_4 pull_0">
                 <input className="cancel-default mt-1" type="text"  />
@@ -87,15 +87,15 @@ class TopContent extends React.Component {
               <div className="grid_3 pull_0">
                 <input className="cancel-default mt-1" type="text"  />
               </div>
-            </div>
+            </div> */}
           </section>
 
           <div className="grid_12">
             <div className="tab grid_7">
               <button id="defaultOpen" className="tablinks" onClick={e => this.tapChange(e, "ทั่วไป")}>ทั่วไป</button>
-              <button className="tablinks" onClick={e => this.tapChange(e, "คลัง")}>คลัง</button>
+              <button className="tablinks" onClick={e => this.tapChange(e, "รายการสินทรัพย์")}>รายการสินทรัพย์</button>
               <button className="tablinks" onClick={e => this.tapChange(e, "แผนบำรุงรักษา")}>แผนบำรุงรักษา</button>
-              <button className="tablinks" onClick={e => this.tapChange(e, "หมายเหตุ")}>หมายเหตุ</button>
+              {/* <button className="tablinks" onClick={e => this.tapChange(e, "หมายเหตุ")}>หมายเหตุ</button> */}
               <button className="tablinks" onClick={e => this.tapChange(e, "แนบไฟล์")}>แนบไฟล์</button>
             </div>
           </div>
@@ -105,56 +105,39 @@ class TopContent extends React.Component {
         {/* PopUp */}
         <div className="modal" id="modal" style={{ display: "none" }}>
           <div className="gray-board">
-            <h3 className="head-title-modal">แผนบำรุงรักษา</h3>
-            <div className="container-modal">
+            <p className="head-title-modal edit">แผนบำรุงรักษา</p>
+            <div className="container_12 edit-padding">
 
-              <div className="grid_1 ">
-                <p className="top-text">ชือแผนซ่อมบำรุง:</p>
-                <p className="top-text" style={{ marginTop: "8px" }}>ความถี่การซ่อมบำรุง:</p>
-              </div>
 
-              <div className="grid_2 pull_0">
-                <div className="p-search-box cancel-margin">
-                  <input className="cancel-default" type="text"  />
-                </div>
-                <div className="p-search-box cancel-margin">
-                  <input className="cancel-default" type="text"  />
+              <div className="grid_12">
+                <div className="grid_2"><p className="cancel-default">ชือแผนซ่อมบำรุง:</p></div>
+                <div className="grid_8 pull_0">
+                  <input type="text" className="cancel-default grid_3" />
                 </div>
               </div>
 
-              <div className="grid_1">
-                <p className="top-text" style={{ marginTop: "35px" }}>ครั้งต่อ:</p>
-              </div>
-
-              <div className="grid_2 pull_0" style={{ marginTop: "13px" }}>
-                <div className="mt-3 p-search-box cancel-margin  ">
-                  <select className="cancel-default "  style={{ fontSize: "0.8rem" }}>
-                    <option value="1"></option>
-                    <option value="2"></option>
-                    <option value="3"></option>
+              <div className="grid_12">
+                <div className="grid_2"><p className="cancel-default">ความถี่การซ่อมบำรุง:</p></div>
+                <div className="grid_7 pull_0">
+                  <input type="text" className="cancel-default grid_3 "></input>
+                  <select className="edit-select-top grid_3 float-right" >
+                    <option defaultValue="0"></option>
+                    <option defaultValue="1">Cosmic Cuttlefish</option>
+                    <option defaultValue="2">Bionic Beaver</option>
+                    <option defaultValue="3">Xenial Xerus</option>
                   </select>
+                  <p className="cancel-default grid_1 float-right">ครั้งต่อ:</p>
                 </div>
               </div>
 
-              <p className="cancel-default">เพิ่มวาระซ่อมบำรุง +</p>
-              <table className="cancel-border mt-3">
-                <thead>
-                  <tr>
-                    <th className="font-for-status" style={{ width: "270px", paddingLeft: "50px" }}>ตรวจสอบ</th>
-                    <th className="font-for-status" style={{ width: "270px" }}>หมายเหตุ</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="font-for-status" style={{ width: "270px", paddingLeft: "50px" }}>1123451</td>
-                    <td className="font-for-status" style={{ width: "270px" }}>คลังหากใหญ่้</td>
-                  </tr>
-                </tbody>
-              </table>
+            
+              <div className="grid_12 ">
+                <div className="grid_8 pull_0 float-right">
+                  <button className="button-white edit mt-3 grid_1 float-right" type="button" aria-label="Close active modal" aria-controls="modal" id="aria-controls">ยกเลิก</button>
+                  <button className="button-blue edit mt-3  grid_1 float-right" type="button" aria-label="Save active modal" aria-controls="modal" id="aria-controls">บันทึก</button>
+                </div>
+              </div>
             </div>
-
-            <button className="button-blue mt-3 ml-2 float-right" type="button" aria-label="Close active modal" aria-controls="modal" id="aria-controls">ยกเลิก</button>
-            <button className="button-blue mt-3 float-right" type="button" aria-label="Close active modal" aria-controls="modal" id="aria-controls">บันทึก</button>
           </div>
         </div>
       </div>

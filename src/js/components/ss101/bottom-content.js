@@ -16,8 +16,8 @@ class BottomContent extends React.Component {
               <div id="อาการเสีย" className="tabcontent">
                 <h3 className="head-title-bottom mt-2">ข้อมูลเกี่ยวกับอาการขัดข้อง</h3>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">เดินทางโดย:</p></div>
-                  <div className="grid_7 pull_0">
+                  <div className="grid_3"><p className="cancel-default">เดินทางโดย</p></div>
+                  <div className="grid_7">
                     <select className="edit-select" >
                       <option defaultValue="0"></option>
                       <option defaultValue="1">Cosmic Cuttlefish</option>
@@ -27,32 +27,32 @@ class BottomContent extends React.Component {
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">ออกเดินทาง:</p></div>
-                  <div className="grid_7 pull_0">
+                  <div className="grid_3"><p className="cancel-default">ออกเดินทาง</p></div>
+                  <div className="grid_7">
                     <input type="date" className="cancel-default grid_3 mt-1"></input>
                     <input type="date" className="cancel-default grid_3 mt-1 float-right"></input>
-                    <p className="cancel-default grid_1 float-right">เวลา:</p>
+                    <p className="cancel-default grid_1 float-right">เวลา</p>
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">เดินทางถึง:</p></div>
-                  <div className="grid_7 pull_0">
+                  <div className="grid_3"><p className="cancel-default">เดินทางถึง</p></div>
+                  <div className="grid_7">
                     <input type="date" className="cancel-default grid_3 mt-1"></input>
                     <input type="date" className="cancel-default grid_3 mt-1 float-right"></input>
-                    <p className="cancel-default grid_1 float-right">เวลา:</p>
+                    <p className="cancel-default grid_1 float-right">เวลา</p>
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">วันเวลาที่แล้วเสร็จ:</p></div>
-                  <div className="grid_7 pull_0">
+                  <div className="grid_3"><p className="cancel-default">วันเวลาที่แล้วเสร็จ</p></div>
+                  <div className="grid_7 ">
                     <input type="date" className="cancel-default grid_3 mt-1"></input>
                     <input type="date" className="cancel-default grid_3 mt-1 float-right"></input>
-                    <p className="cancel-default grid_1 float-right">เวลา:</p>
+                    <p className="cancel-default grid_1 float-right">เวลา</p>
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">ระบบตรวจซ่อม:</p></div>
-                  <div className="grid_7 pull_0">
+                  <div className="grid_3"><p className="cancel-default">ระบบตรวจซ่อม</p></div>
+                  <div className="grid_7 ">
                     <select className="edit-select grid_3" >
                       <option defaultValue="0"></option>
                       <option defaultValue="1">Cosmic Cuttlefish</option>
@@ -65,51 +65,51 @@ class BottomContent extends React.Component {
                       <option defaultValue="2">Bionic Beaver</option>
                       <option defaultValue="3">Xenial Xerus</option>
                     </select>
-                    <p className="cancel-default grid_1 float-right">ชนิด:</p>
+                    <p className="cancel-default grid_1 float-right">ชนิด</p>
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">รายการที่ซ่อม:</p></div>
-                  <div className="grid_8 pull_0">
+                  <div className="grid_3"><p className="cancel-default">รายการที่ซ่อม</p></div>
+                  <div className="grid_8 ">
                     <input type="text" className="cancel-default mt-1"></input>
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม:</p></div>
-                  <div className="grid_8 pull_0">
+                  <div className="grid_3"><p className="cancel-default">ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม</p></div>
+                  <div className="grid_8">
                     <input type="text" className="cancel-default mt-1"></input>
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">ชื่ออุปกรณ์ที่บำรุงรักษา:</p></div>
-                  <div className="grid_8 pull_0">
+                  <div className="grid_3"><p className="cancel-default">ชื่ออุปกรณ์ที่บำรุงรักษา</p></div>
+                  <div className="grid_8">
                     <input type="text" className="cancel-default mt-1"></input>
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">สาเหตุและอาการเสียโดยสรุป:</p></div>
-                  <div className="grid_8 pull_0">
+                  <div className="grid_3"><p className="cancel-default">สาเหตุและอาการเสียโดยสรุป</p></div>
+                  <div className="grid_8">
                     <textarea className="edit" name="Text1" cols="40" rows="2"></textarea>
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">ขบวนรถที่:</p></div>
-                  <div className="grid_8 pull_0">
+                  <div className="grid_3"><p className="cancel-default">ขบวนรถที่</p></div>
+                  <div className="grid_8">
                     <p className="cancel-default grid_1 float-right">นาที:</p>
                     <input type="text" className="cancel-default mt-1 grid_3"></input>
                     <input type="text" className="cancel-default mt-1 grid_2 float-right"></input>
-                    <p className="cancel-default grid_2 float-right">เสียเวลาเพราะเหตุนี้:</p>
+                    <p className="cancel-default grid_2 float-right">เสียเวลาเพราะเหตุนี้</p>
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">สรุปการแก้ไขและการซ่อมแซม:</p></div>
-                  <div className="grid_8 pull_0">
+                  <div className="grid_3"><p className="cancel-default">สรุปการแก้ไขและการซ่อมแซม</p></div>
+                  <div className="grid_8 ">
                     <textarea className="edit" name="Text1" cols="40" rows="2"></textarea>
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">ยังไม่ได้จัดการแก้ไขเพราะ:</p></div>
-                  <div className="grid_7 pull_0">
+                  <div className="grid_3"><p className="cancel-default">ยังไม่ได้จัดการแก้ไขเพราะ</p></div>
+                  <div className="grid_7 ">
                     <select className="edit-select" >
                       <option defaultValue="0"></option>
                       <option defaultValue="1">Cosmic Cuttlefish</option>
@@ -119,8 +119,8 @@ class BottomContent extends React.Component {
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_3"><p className="cancel-default">สรุปการแก้ไขและการซ่อมแซม:</p></div>
-                  <div className="grid_8 pull_0">
+                  <div className="grid_3"><p className="cancel-default">สรุปการแก้ไขและการซ่อมแซม</p></div>
+                  <div className="grid_8 ">
                     <textarea className="edit" name="Text1" cols="40" rows="2"></textarea>
                   </div>
                 </div>
@@ -129,7 +129,7 @@ class BottomContent extends React.Component {
               <div id="ผู้ที่เกี่ยวข้อง" className="tabcontent">
                 <h3 className="head-title-bottom mt-2">ผู้ปฎิบัติงาน</h3>
                 <div className="grid_12">
-                  <div className="grid_2"><p className="cancel-default">ผู้ควบคุมทดสอบชื่อ:</p></div>
+                  <div className="grid_2"><p className="cancel-default">ผู้ควบคุมทดสอบชื่อ</p></div>
                   <div className="grid_8 pull_0">
                     <input type="text" className="cancel-default grid_4 mt-1"></input>
                     <select className="edit-select grid_3 float-right" >
@@ -138,12 +138,12 @@ class BottomContent extends React.Component {
                       <option defaultValue="2">Bionic Beaver</option>
                       <option defaultValue="3">Xenial Xerus</option>
                     </select>
-                    <p className="cancel-default grid_1 float-right">ตำแหน่ง:</p>
+                    <p className="cancel-default grid_1 float-right">ตำแหน่ง</p>
                   </div>
                 </div>
 
                 <div className="grid_12">
-                  <div className="grid_2"><p className="cancel-default">ดำเนินการแก้ไขชื่อ:</p></div>
+                  <div className="grid_2"><p className="cancel-default">ดำเนินการแก้ไขชื่อ</p></div>
                   <div className="grid_8 pull_0">
                     <input type="text" className="cancel-default grid_4 mt-1"></input>
                     <select className="edit-select grid_3 float-right" >
@@ -152,13 +152,13 @@ class BottomContent extends React.Component {
                       <option defaultValue="2">Bionic Beaver</option>
                       <option defaultValue="3">Xenial Xerus</option>
                     </select>
-                    <p className="cancel-default grid_1 float-right">ตำแหน่ง:</p>
+                    <p className="cancel-default grid_1 float-right">ตำแหน่ง</p>
                   </div>
                 </div>
 
                 <div className="grid_12">
-                  <div className="grid_2"><p className="cancel-default">รายชื่อเพื่อนร่วมงาน:</p></div>
-                  <div className="grid_8 pull_0">
+                  <div className="grid_2"><p className="cancel-default">รายชื่อเพื่อนร่วมงาน</p></div>
+                  <div className="grid_8 pull_0" >
                     <input type="text" className="cancel-default grid_4 mt-1"></input>
                     <select className="edit-select grid_3 float-right" >
                       <option defaultValue="0"></option>
@@ -166,11 +166,11 @@ class BottomContent extends React.Component {
                       <option defaultValue="2">Bionic Beaver</option>
                       <option defaultValue="3">Xenial Xerus</option>
                     </select>
-                    <p className="cancel-default grid_1 float-right">ตำแหน่ง:</p>
+                    <p className="cancel-default grid_1 float-right">ตำแหน่ง</p>
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_2"><p className="cancel-default">รายชื่อเพื่อนร่วมงาน:</p></div>
+                  <div className="grid_2"><p className="cancel-default">รายชื่อเพื่อนร่วมงาน</p></div>
                   <div className="grid_8 pull_0">
                     <input type="text" className="cancel-default grid_4 mt-1"></input>
                     <select className="edit-select grid_3 float-right" >
@@ -179,11 +179,11 @@ class BottomContent extends React.Component {
                       <option defaultValue="2">Bionic Beaver</option>
                       <option defaultValue="3">Xenial Xerus</option>
                     </select>
-                    <p className="cancel-default grid_1 float-right">ตำแหน่ง:</p>
+                    <p className="cancel-default grid_1 float-right">ตำแหน่ง</p>
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_2"><p className="cancel-default">รายชื่อเพื่อนร่วมงาน:</p></div>
+                  <div className="grid_2"><p className="cancel-default">รายชื่อเพื่อนร่วมงาน</p></div>
                   <div className="grid_8 pull_0">
                     <input type="text" className="cancel-default grid_4 mt-1"></input>
                     <select className="edit-select grid_3 float-right" >
@@ -192,11 +192,11 @@ class BottomContent extends React.Component {
                       <option defaultValue="2">Bionic Beaver</option>
                       <option defaultValue="3">Xenial Xerus</option>
                     </select>
-                    <p className="cancel-default grid_1 float-right">ตำแหน่ง:</p>
+                    <p className="cancel-default grid_1 float-right">ตำแหน่ง</p>
                   </div>
                 </div>
                 <div className="grid_12">
-                  <div className="grid_2"><p className="cancel-default">รายชื่อเพื่อนร่วมงาน:</p></div>
+                  <div className="grid_2"><p className="cancel-default">รายชื่อเพื่อนร่วมงาน</p></div>
                   <div className="grid_8 pull_0">
                     <input type="text" className="cancel-default grid_4 mt-1"></input>
                     <select className="edit-select grid_3 float-right" >
@@ -205,7 +205,7 @@ class BottomContent extends React.Component {
                       <option defaultValue="2">Bionic Beaver</option>
                       <option defaultValue="3">Xenial Xerus</option>
                     </select>
-                    <p className="cancel-default grid_1 float-right">ตำแหน่ง:</p>
+                    <p className="cancel-default grid_1 float-right">ตำแหน่ง</p>
                   </div>
                 </div>
               </div>

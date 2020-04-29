@@ -5,7 +5,7 @@ import '../../../css/tabs.css'
 import '../../../css/grid12.css';
 
 class BottomContent extends React.Component {
-  
+
   render() {
     return (
       <form>
@@ -13,7 +13,7 @@ class BottomContent extends React.Component {
           <div className="container_12 clearfix">
             <div className="grid_12 ">
 
-              <div id="Checklist" className="tabcontent">
+              {/* <div id="Checklist" className="tabcontent">
 
                 <div className="u-clearfix mt-2">
                   <div className="u-float-left">
@@ -145,6 +145,19 @@ class BottomContent extends React.Component {
                     </div>
                   </div>
                 </div>
+              </div> */}
+
+              <div id="แผนการดำเนินงาน" className="tabcontent">
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">หมายเหตุ</p></div>
+                  
+                    <textarea className="edit grid_8  pull_0 " name="Text1" cols="40" rows="2"></textarea>
+                  
+                </div>
+              </div>
+
+              <div id="อุปกรณ์ที่ต้องนำไปปฎิบัติงาน" className="tabcontent">
+
               </div>
 
             </div>
