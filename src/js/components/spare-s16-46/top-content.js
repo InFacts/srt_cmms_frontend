@@ -17,7 +17,6 @@ class TopContent extends React.Component {
     }
 
     tapChange(evt, cityName) {
-        console.log("hello")
         var i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("tabcontent");
         for (i = 0; i < tabcontent.length; i++) {

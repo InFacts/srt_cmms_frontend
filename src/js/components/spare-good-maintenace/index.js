@@ -6,18 +6,20 @@ import TopContent from './top-content';
 import BottomContent from './bottom-content';
 import NavBottom from '../nav/nav-bottom.js';
 
-class Home extends React.Component {
+class SpareGoodMaintenace extends React.Component {
+    
     render() {
+        const type = 'default';
         return (
             <div>
                 <NavTopbar />
                 <ToolBar />
                 <TopContent />
                 <BottomContent />
-                <NavBottom />
+                <NavBottom type={type}/>
             </div>
         )
     };
 }
 
-export default Home;
+export default SpareGoodMaintenace;
