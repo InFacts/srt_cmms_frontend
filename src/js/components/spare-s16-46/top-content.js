@@ -25,6 +25,7 @@ class TopContent extends React.Component {
     }
 
     render() {
+        const current = this;
         return (
             <div id="blackground-white">
                 <div className="container_12 clearfix">
@@ -122,13 +123,25 @@ class TopContent extends React.Component {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {/* <tr>
-                                            <td className="edit-padding" style={{ minWidth: "200px" }}>1123451</td>
-                                            <td className="edit-padding" style={{ minWidth: "300px" }}>คลังหากใหญ่้</td>
-                                            <td className="edit-padding text-left" style={{ minWidth: "80px" }}>
-                                                <button type="button" className="button-green">ยืนยัน</button>
-                                            </td>
-                                        </tr> */}
+                                        {/* {console.log(this.props.bodyTable_list_no_document[0].variousValues)} */}
+                                        {this.props.bodyTable_list_no_document[0].variousValues.map(function (bodyTable_list_no_document, row_bodyTable_list_no_document) {
+                                            return (
+                                                <tr key={row_bodyTable_list_no_document} id={row_bodyTable_list_no_document}>
+                                                    {bodyTable_list_no_document.map(function (bodyTable_list_no_document, column_bodyTable_list_no_document) {
+                                                        console.log("bodyTable_list_no_document", bodyTable_list_no_document.bodyTable)
+                                                        return (
+                                                            <>
+                                                                <td className={`edit-padding ${bodyTable_list_no_document[1]}`} key={column_bodyTable_list_no_document} id={column_bodyTable_list_no_document}>
+                                                                    {
+                                                                        bodyTable_list_no_document[2] ? <button type="button" className="button-green" aria-label="Close active modal" aria-controls="modalNoDocument" id="aria-controls2">ยืนยัน</button> : bodyTable_list_no_document[0]
+                                                                    }
+                                                                </td>
+                                                            </>
+                                                        )
+                                                    })}
+                                                </tr>
+                                            )
+                                        })}
                                     </tbody>
                                 </table>
                             </div>
@@ -187,7 +200,8 @@ class TopContent extends React.Component {
 const mapStateToProps = state => {
     return {
         no_document: state.no_document,
-        headTable_list_no_document: state.headTable_list_no_document
+        headTable_list_no_document: state.headTable_list_no_document,
+        bodyTable_list_no_document: state.bodyTable_list_no_document
     };
 };
 

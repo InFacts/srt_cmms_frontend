@@ -126,7 +126,7 @@ const initialState = {
                 ["10", "", "display-none", false], //จำนวนสุทธิ
                 ["พร้อมใช้งาน", "", "display-none", false], //สถานะ
                 ["ชิ้น", "", "display-none", false], //หน่อยนับ
-                ["100", "", "display-none", false] //ราคาต่อหน่วย
+                ["100", "", "display-none", false], //ราคาต่อหน่วย
             ]
         ],
     bodyTablePopUp_Show: [],
@@ -142,39 +142,48 @@ const initialState = {
     no_document: "",
     headTable_list_no_document:
         [
-            ["เลขที่คลัง", "300px"],
-            ["ชื่อคลัง", "500px"],
+            ["เลขที่เอกสาร", "300px"],
+            ["ผู้เบิก", "500px"],
             ["Action", "100px"]
         ],
     bodyTable_list_no_document:
         [
-
             {
-                no_document: "1", //เลขที่เอกสาร
-                pathfinder: "นายศุภากร", //ผู้เบิก
-                status: "เสร็จสิ้น",
-                date: "12/09/2560",
-                from_inventory: "หาดใหญ๋",
-                to_inventory: "ลาดกระบัง",
-                type_pickup: 1,
-                type_account: "เครดิต",
-                total_money: "1000",
-                note: ""
-            }
-            ,
-
+                variousValues:
+                    [
+                        // value, css show dom, ระบุว่าเป็น text หรือ button
+                        ["1", "block", false], //เลขที่เอกสาร
+                        ["นายศุภากร", "block", false], //ผู้เบิก
+                        ["", "block", true], //button ในpopUp
+                        ["เสร็จสิ้น", "display-none", false],  //status
+                        ["12/09/2560", "display-none", false], //date
+                        ["หาดใหญ๋", "display-none", false],  //from_inventory
+                        ["ลาดกระบัง", "display-none", false],  //to_inventory
+                        [1, "display-none", false], //type_pickup
+                        ["เครดิต", "display-none", false], //type_account
+                        ["1000", "display-none", false], //total_money
+                        ["", "display-none", false],  //note
+                    ]
+            },
             {
-                no_document: "2", //เลขที่เอกสาร
-                pathfinder: "นายสรวิศ", //ผู้เบิก
-                status: "ยังไม่เสด",
-                date: "12/09/2560",
-                from_inventory: "หาดใหญ๋",
-                to_inventory: "ลาดกระบัง",
-                type_pickup: 1,
-                type_account: "เครดิต",
-                total_money: "1000",
-                note: ""
+                bodyTable:
+                    [
+                        // value, css text center, css gray background, check type
+                        ["", "text-center", "disable", ""],
+                        ["", "", "", "search"],
+                        ["", "", "", "text"],
+                        ["", "text-center", "disable", ""],
+                        ["", "text-center", "disable", ""],
+                        ["", "text-center", "disable", ""],
+                        ["", "text-center", "disable", ""],
+                        ["", "text-center", "disable", ""],
+                        ["", "text-right", "", "number"],
+                        ["", "text-left", "", ""],
+                        ["", "text-center", "", ""],
+                        ["", "text-right", "", ""]
+                    ],
             }
+
         ]
 }
 export default (state = initialState, action) => {
