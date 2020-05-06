@@ -2,10 +2,8 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import reducers from './reducers';
-import AppTest from './app-test';
-
-import Toolbar from './nav-toolbar';
-import Files from './files'
+import Toolbar from '../common/nav-toolbar';
+import Files from '../common/files'
 
 
 
