@@ -45,11 +45,11 @@ class Table extends React.Component {
             {this.props.bodyTable.map((bodyTable, rowBodyTable) => {
               return (
                 <tr key={rowBodyTable} id={rowBodyTable}>
-                  {bodyTable.map((rowBodyTable, columnBodyTable) => {
+                  {bodyTable.map((bodyTable, columnBodyTable) => {
                     return (
                       <>
-                        <td className={`edit-padding" ${rowBodyTable[1]} ${rowBodyTable[2]}`} key={columnBodyTable} id={columnBodyTable}>
-                          {current.checkVariable(rowBodyTable[3], rowBodyTable[0])}
+                        <td className={`edit-padding" ${bodyTable[1]} ${bodyTable[2]}`} key={columnBodyTable} id={columnBodyTable}>
+                          {current.checkVariable(bodyTable[3], bodyTable[0])}
                         </td>
                       </>
                     )
@@ -85,9 +85,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(Table);
 
 // Action Creator
 export const changeSearch = (e) => {
-  // console.log(e.target.parentNode.parentNode.parentNode)
+  console.log("hi")
   return {
-    type: "CLICK SEARCH TYPE HAVE WORD",
+    type: "CHANGE SEARCH TYPE HAVE WORD",
     value: e.target.value,
     columnBodyTable: e.target.parentNode.parentNode.id,
     rowBodyTable: e.target.parentNode.parentNode.parentNode.id

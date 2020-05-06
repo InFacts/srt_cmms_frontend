@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux'
 
 import Document from '../../../images/document.svg';
 import Table from '../common/table.js';
@@ -77,48 +78,56 @@ class BottomContent extends React.Component {
                 </div>
 
                 {/* PopUp */}
-                <div className="modal" id="modal" style={{ display: "none" }}>
+                <div className="modal" id={this.props.idPopUpTable} style={{ display: "none" }}>
                     <div className="gray-board">
-                        <p className="head-title-modal edit">คลังต้นทาง</p>
+                        <p className="head-title-modal edit">{this.props.variablePopUp.head}</p>
                         <div className="container_12 edit-padding">
                             <div className="grid_12">
-                                <div className="grid_2"><p className="cancel-default">ค้นหาเลขที่คลัง</p></div>
+                                <div className="grid_2"><p className="cancel-default">{this.props.variablePopUp.labelFind}</p></div>
                                 <div className="grid_8 pull_0">
-                                    <input type="text" className="cancel-default" />
+                                    <input type="text" className="cancel-default" onChange={(e) => this.props.handleChangeSearchPopUp(e)} value={this.props.variablePopUp.filterInventoryID} />
                                 </div>
-                                <button className="button-blue grid_1 float-right mr-5" type="button">ค้นหา</button>
+                                <button className="button-blue grid_1 float-right mr-5" type="button" onClick={(e) => this.props.handleSubmitSearch(e)}>ค้นหา</button>
                             </div>
 
                             <div className="grid_12">
-                                <table className="table-many-column">
-                                    <thead>
-                                        <tr>
-                                            <th className="font" style={{ minWidth: "300px" }}>เลขที่คลัง</th>
-                                            <th className="font" style={{ minWidth: "500px" }}>ชื่อคลัง</th>
-                                            <th className="font" style={{ minWidth: "100px" }}>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="edit-padding" style={{ minWidth: "200px" }}>1123451</td>
-                                            <td className="edit-padding" style={{ minWidth: "300px" }}>คลังหากใหญ่้</td>
-                                            <td className="edit-padding text-left" style={{ minWidth: "80px" }}>
-                                                <button type="button" className="button-green">ยืนยัน</button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <TablePopUp />
                             </div>
                             <div className="grid_12">
-                                <button className="button-blue mt-5 float-right grid_1 mr-5" type="button" aria-label="Close active modal" aria-controls="modal" id="aria-controls">กลับ</button>
+                                <button className="button-blue mt-5 float-right grid_1 mr-5" type="button" aria-label="Close active modal" aria-controls={this.props.idPopUpTable} id="aria-controls2">กลับ</button>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <TablePopUp />
             </form>
         )
     };
 }
-export default BottomContent;
+
+const mapStateToProps = state => {
+    return {
+        idPopUpTable: state.idPopUpTable,
+        variablePopUp: state.variablePopUp
+    };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+    handleChangeSearchPopUp: (e) => dispatch(changeSearchPopUp(e)),
+    handleSubmitSearch: (e) => dispatch(submitSearch(e)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(BottomContent);
+
+export const changeSearchPopUp = (e) => {
+    return {
+        type: "SEARCH POPUP",
+        value: e.target.value
+    }
+}
+
+export const submitSearch = (e) => {
+    return {
+        type: "SUBMIT SEARCH",
+        value: e.target.value
+    }
+}

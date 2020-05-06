@@ -20,7 +20,7 @@ const initialState = {
                 // value, css text center, css gray background, check type
                 ["", "text-center", "disable", ""],
                 ["", "", "", "search"],
-                ["", "", "", ""],
+                ["", "", "", "text"],
                 ["", "text-center", "disable", ""],
                 ["", "text-center", "disable", ""],
                 ["", "text-center", "disable", ""],
@@ -46,6 +46,8 @@ const initialState = {
                 ["", "text-right", "", ""]
             ]
         ],
+
+    // State Table Satus
     headTableStatus:
         [
             ["", "50px"],
@@ -74,6 +76,8 @@ const initialState = {
                 ["ลงนามเรียบร้อยแล้ว", "110px", ""]
             ]
         ],
+
+    // State Table POPUP
     idPopUpTable: "modalTable",
     variablePopUp: {
         head: "เลขที่สิ่งของ",
@@ -126,12 +130,56 @@ const initialState = {
             ]
         ],
     bodyTablePopUp_Show: [],
+
+    // ROW COLUMN ของ TABLE หลัก
     rowBodyTable: "",
-    columnBodyTable: ""
+    columnBodyTable: "",
+
+    // FOOTER SHow or Not
+    show_footer: "block",
+
+    // Variable Top Componant
+    no_document: "",
+    headTable_list_no_document:
+        [
+            ["เลขที่คลัง", "300px"],
+            ["ชื่อคลัง", "500px"],
+            ["Action", "100px"]
+        ],
+    bodyTable_list_no_document:
+        [
+
+            {
+                no_document: "1", //เลขที่เอกสาร
+                pathfinder: "นายศุภากร", //ผู้เบิก
+                status: "เสร็จสิ้น",
+                date: "12/09/2560",
+                from_inventory: "หาดใหญ๋",
+                to_inventory: "ลาดกระบัง",
+                type_pickup: 1,
+                type_account: "เครดิต",
+                total_money: "1000",
+                note: ""
+            }
+            ,
+
+            {
+                no_document: "2", //เลขที่เอกสาร
+                pathfinder: "นายสรวิศ", //ผู้เบิก
+                status: "ยังไม่เสด",
+                date: "12/09/2560",
+                from_inventory: "หาดใหญ๋",
+                to_inventory: "ลาดกระบัง",
+                type_pickup: 1,
+                type_account: "เครดิต",
+                total_money: "1000",
+                note: ""
+            }
+        ]
 }
 export default (state = initialState, action) => {
     switch (action.type) {
-        case "CLICK SEARCH TYPE HAVE WORD":
+        case "CHANGE SEARCH TYPE HAVE WORD":
             const cloneTableSearch = [...initialState.bodyTable];
             cloneTableSearch[action.rowBodyTable][action.columnBodyTable][0] = action.value;
             initialState.variablePopUp.filterInventoryID = action.value;
@@ -170,13 +218,18 @@ export default (state = initialState, action) => {
                         cloneBodyTable[state.rowBodyTable][7][0] = bodyTablePopUp[7][0];
                         cloneBodyTable[state.rowBodyTable][9][0] = bodyTablePopUp[8][0];
                         cloneBodyTable[state.rowBodyTable][10][0] = bodyTablePopUp[9][0];
+                        return null
                     }
+                    return null
                     // console.log("AFTER", cloneBodyTable)
                 })
                 return {
                     ...state,
                     bodyTable: cloneBodyTable
                 }
+            }
+            else {
+                return state
             }
         case "CLICK SEARCH TYPE NO WORD":
             const cloneTableSearch2 = [...initialState.bodyTable];
@@ -265,12 +318,19 @@ export default (state = initialState, action) => {
                     cloneBodyTable[state.rowBodyTable][7][0] = bodyTablePopUp_Show[7][0];
                     cloneBodyTable[state.rowBodyTable][9][0] = bodyTablePopUp_Show[8][0];
                     cloneBodyTable[state.rowBodyTable][10][0] = bodyTablePopUp_Show[9][0];
+                    return null;
                 }
+                return null;
                 // console.log("AFTER", cloneBodyTable)
             })
             return {
                 ...state,
                 bodyTable: cloneBodyTable
+            }
+        case "CHANGE NO DOCUMENT":
+            return {
+                ...state,
+                no_document: action.value
             }
         default:
             return state
