@@ -8,6 +8,15 @@ const initialState = {
     data: {},
 
 
+    files:[],
+    clickable: true,
+    accepts: null,
+    multiple: true,
+    maxFiles: Infinity,
+    maxFileSize: Infinity,
+    minFileSize: 0,
+
+
 
 
 
@@ -45,6 +54,12 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 data: action.value
+            }
+
+        case "FILES":
+            return {
+                ...state,
+                files: action.value
             }
 
 
