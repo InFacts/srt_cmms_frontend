@@ -216,6 +216,11 @@ class ButtonFile extends React.Component {
 
 class Files extends React.Component {
 
+    constructor(props) {
+        super(props)
+        this.filesRemoveOne = this.filesRemoveOne.bind(this)
+    }
+
     onFilesChange = (files) => {
         this.props.handleOnFilesChange(files);
         console.log(files)
@@ -260,21 +265,25 @@ class Files extends React.Component {
                 {
                     this.props.files.length > 0
                             ? 
-                            
-                            
-
                             <div className="dropZone-list" >
                             {this.props.files.map((file) =>
 
                                 <li className="list-group-item" key={file.id}>
                                     <div className="media-body media-left">
-                                        <img className="media-object" src={file.preview.url}/>
+                                        <img className="media-object" src={file.preview.url} width={150} height={100}/>
                                     </div>
                                     <div className="media-body">
-                                        <h4 className="media-heading">{file.name}</h4>
+                                        <h4 className="media-heading" style={{fontWeight: 'bold'}}>{file.name}</h4>
                                         <p className="media-heading">ขนาดไฟล์ : {file.sizeReadable}</p>
+                                        <p className="media-heading" style={{color: "blue"}}
+                                             id={file.id}
+                                             onClick={ (e) => {  if (window.confirm('คุณต้องการลบสินนี้หรือไม่'))this.filesRemoveOne(file)
+                                                }
+                                             }
+                                        >ลบ</p>  
                                     </div>
                                 </li>
+                                
                             )}
                             </div>                            
                             : 

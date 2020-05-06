@@ -11,9 +11,11 @@
 }
 .media-object {
     display: block;
+    width:250px;
+    height: 150px;
 }
 .media-left  {
-    padding-right: 60px;
+    padding-right: 15px;
 }
 .media-body  {
     display: table-cell;
