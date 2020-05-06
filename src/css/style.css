@@ -12,6 +12,10 @@
     font-family: THSarabunNew;
   }
 
+  .display-none{
+    display: none;
+  }
+
   .float-left{
     float: left;
   }
