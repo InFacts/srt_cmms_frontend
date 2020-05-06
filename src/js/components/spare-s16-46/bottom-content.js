@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux'
+// import { connect } from 'react-redux'
 
 import Document from '../../../images/document.svg';
 import Table from '../common/table.js';

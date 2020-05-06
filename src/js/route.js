@@ -18,13 +18,13 @@ import SpareGoodReceipt from './components/spare-good-receipt';
 import SpareGoodIssue from './components/spare-good-issue';
 import SpareGoodMaintenace from './components/spare-good-maintenace';
 
-import Test from './components/test';
+import Test2 from './components/test-components-v2';
 
 class FrontEnd extends React.Component {
     render() {
         return (
             <div>
-                <Route exact path="/" component={Login} />
+                {/* <Route exact path="/" component={Login} /> */}
                 <Route exact path="/main" component={Main4Module} />
                 <Route exact path="/main-spare" component={MainSpare} />
                 <Route exact path="/main-pmt" component={MainPmt} />
@@ -41,7 +41,7 @@ class FrontEnd extends React.Component {
                 <Route exact path="/good-issue" component={SpareGoodIssue} />
                 <Route exact path="/good-maintenace" component={SpareGoodMaintenace} />
 
-                <Route exact path="/test" component={Test} />
+                <Route exact path="/" component={Test2} />
             </div>
         );
     }
