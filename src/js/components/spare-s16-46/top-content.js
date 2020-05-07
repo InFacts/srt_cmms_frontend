@@ -25,6 +25,7 @@ class TopContent extends React.Component {
     }
 
     render() {
+        // console.log("bodyTable_list_no_document_Show", this.props.bodyTable_list_no_document_Show)
         const current = this;
         return (
             <div id="blackground-white">
@@ -42,7 +43,7 @@ class TopContent extends React.Component {
                                     </button>
                                 </div>
                                 <div className="p-search-box cancel-margin grid_3 mt-1  float-right">
-                                    <input type="text" className=" p-search-box__input cancel-default" disabled="disabled"></input>
+                                    <input type="text" className=" p-search-box__input cancel-default" value={this.props.status}></input>
                                 </div>
                                 <div className="grid_1 cancel-default float-right"><p className="cancel-default float-right">สถานะ</p></div>
                             </div>
@@ -51,9 +52,9 @@ class TopContent extends React.Component {
                         <div className="grid_12">
                             <div className="grid_2"><p className="top-text">ผู้เบิก</p></div>
                             <div>
-                                <input type="text" className="cancel-default grid_3  pull_0"></input>
+                                <input type="text" className="cancel-default grid_3  pull_0" value={this.props.name} ></input>
                                 <div className="p-search-box cancel-margin grid_3   float-right">
-                                    <input type="date" className=" p-search-box__input cancel-default  "></input>
+                                    <input type="date" className=" p-search-box__input cancel-default" value={this.props.date} ></input>
                                 </div>
                                 <div className="grid_1 cancel-default float-right"><p className="cancel-default float-right">วันที่</p></div>
                             </div>
@@ -62,7 +63,7 @@ class TopContent extends React.Component {
                         <div className="grid_12">
                             <div>
                                 <div className="p-search-box cancel-margin grid_3  float-right">
-                                    <input type="text" className="p-search-box__input cancel-default  " />
+                                    <input type="text" className="p-search-box__input cancel-default" value={this.props.from_inventory} />
                                     <button type="button" className="p-search-box__button cancel-padding" alt="search"><i className="p-icon--search" id="showModal" aria-controls="modalFindInventory" ></i></button>
                                 </div>
                             </div>
@@ -72,7 +73,7 @@ class TopContent extends React.Component {
                         <div className="grid_12 ">
                             <div>
                                 <div className="p-search-box cancel-margin grid_3 float-right">
-                                    <input type="text" className="p-search-box__input cancel-default" />
+                                    <input type="text" className="p-search-box__input cancel-default" value={this.props.to_inventory} />
                                 </div>
                             </div>
                             <div className="grid_2 cancel-default float-right"><p className="cancel-default float-right">คลังปลายทาง</p></div>
@@ -108,7 +109,7 @@ class TopContent extends React.Component {
                                 <div className="grid_8 pull_0">
                                     <input type="text" className="cancel-default" value={this.props.no_document} onChange={(e) => this.props.handleChangeNoDocument(e)} />
                                 </div>
-                                <button className="button-blue grid_1 float-right mr-5" type="button">ค้นหา</button>
+                                <button className="button-blue grid_1 float-right mr-5" type="button" onClick={(e) => this.props.handleSearchNoDocument(e)}>ค้นหา</button>
                             </div>
 
                             <div className="grid_12">
@@ -123,22 +124,23 @@ class TopContent extends React.Component {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {/* {console.log(this.props.bodyTable_list_no_document[0].variousValues)} */}
-                                        {this.props.bodyTable_list_no_document[0].variousValues.map(function (bodyTable_list_no_document, row_bodyTable_list_no_document) {
+                                        {/* {console.log(this.props.no_document)} */}
+                                        {this.props.bodyTable_list_no_document_Show[0].variousValues.map(function (bodyTable_list_no_document, row_bodyTable_list_no_document) {
                                             return (
                                                 <tr key={row_bodyTable_list_no_document} id={row_bodyTable_list_no_document}>
                                                     {bodyTable_list_no_document.map(function (bodyTable_list_no_document, column_bodyTable_list_no_document) {
-                                                        console.log("bodyTable_list_no_document", bodyTable_list_no_document.bodyTable)
+                                                        // console.log("bodyTable_list_no_document", bodyTable_list_no_document)
                                                         return (
                                                             <>
                                                                 <td className={`edit-padding ${bodyTable_list_no_document[1]}`} key={column_bodyTable_list_no_document} id={column_bodyTable_list_no_document}>
                                                                     {
-                                                                        bodyTable_list_no_document[2] ? <button type="button" className="button-green" aria-label="Close active modal" aria-controls="modalNoDocument" id="aria-controls2">ยืนยัน</button> : bodyTable_list_no_document[0]
+                                                                        bodyTable_list_no_document[2] ? <button type="button" className="button-green" aria-label="Close active modal" aria-controls="modalNoDocument" id="aria-controls2" onClick={(e) => current.props.handleOnClickDocumentPopUp(e)}>ยืนยัน</button> : bodyTable_list_no_document[0]
                                                                     }
                                                                 </td>
                                                             </>
                                                         )
                                                     })}
+
                                                 </tr>
                                             )
                                         })}
@@ -201,12 +203,20 @@ const mapStateToProps = state => {
     return {
         no_document: state.no_document,
         headTable_list_no_document: state.headTable_list_no_document,
-        bodyTable_list_no_document: state.bodyTable_list_no_document
+        bodyTable_list_no_document: state.bodyTable_list_no_document,
+        bodyTable_list_no_document_Show: state.bodyTable_list_no_document_Show,
+        name: state.name,
+        status: state.status,
+        date: state.date,
+        from_inventory: state.from_inventory,
+        to_inventory: state.to_inventory,
     };
 };
 
 const mapDispatchToProps = (dispatch) => ({
     handleChangeNoDocument: (e) => dispatch(changeNoDocument(e)),
+    handleSearchNoDocument: (e) => dispatch(searchNoDocument(e)),
+    handleOnClickDocumentPopUp: (e) => dispatch(onClickDocumentPopUp(e))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TopContent);
@@ -215,5 +225,19 @@ export const changeNoDocument = (e) => {
     return {
         type: "CHANGE NO DOCUMENT",
         value: e.target.value
+    }
+}
+
+export const searchNoDocument = (e) => {
+    return {
+        type: "SEARCH NO DOCUMENT"
+    }
+}
+
+export const onClickDocumentPopUp = (e) => {
+    // console.log("row", e.target.parentNode.parentNode.id)
+    return {
+        type: "SELECT NO DOCUMENT IN POPUP",
+        rowPopUpDocument: e.target.parentNode.parentNode.id
     }
 }

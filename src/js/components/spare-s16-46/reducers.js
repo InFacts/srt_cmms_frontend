@@ -20,7 +20,119 @@ const initialState = {
                 // value, css text center, css gray background, check type
                 ["", "text-center", "disable", ""],
                 ["", "", "", "search"],
-                ["", "", "", "text"],
+                ["", "", "", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-right", "", "number"],
+                ["", "text-left", "", ""],
+                ["", "text-center", "", ""],
+                ["", "text-right", "", ""]
+            ],
+            [
+                ["", "text-center", "disable", ""],
+                ["", "", "", "search"],
+                ["", "", "", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-right", "", "number"],
+                ["", "text-left", "", ""],
+                ["", "text-center", "", ""],
+                ["", "text-right", "", ""]
+            ],
+            [
+                ["", "text-center", "disable", ""],
+                ["", "", "", "search"],
+                ["", "", "", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-right", "", "number"],
+                ["", "text-left", "", ""],
+                ["", "text-center", "", ""],
+                ["", "text-right", "", ""]
+            ],
+            [
+                ["", "text-center", "disable", ""],
+                ["", "", "", "search"],
+                ["", "", "", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-right", "", "number"],
+                ["", "text-left", "", ""],
+                ["", "text-center", "", ""],
+                ["", "text-right", "", ""]
+            ],
+            [
+                ["", "text-center", "disable", ""],
+                ["", "", "", "search"],
+                ["", "", "", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-right", "", "number"],
+                ["", "text-left", "", ""],
+                ["", "text-center", "", ""],
+                ["", "text-right", "", ""]
+            ],
+            [
+                ["", "text-center", "disable", ""],
+                ["", "", "", "search"],
+                ["", "", "", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-right", "", "number"],
+                ["", "text-left", "", ""],
+                ["", "text-center", "", ""],
+                ["", "text-right", "", ""]
+            ],
+            [
+                ["", "text-center", "disable", ""],
+                ["", "", "", "search"],
+                ["", "", "", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-right", "", "number"],
+                ["", "text-left", "", ""],
+                ["", "text-center", "", ""],
+                ["", "text-right", "", ""]
+            ],
+            [
+                ["", "text-center", "disable", ""],
+                ["", "", "", "search"],
+                ["", "", "", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-center", "disable", ""],
+                ["", "text-right", "", "number"],
+                ["", "text-left", "", ""],
+                ["", "text-center", "", ""],
+                ["", "text-right", "", ""]
+            ],
+            [
+                ["", "text-center", "disable", ""],
+                ["", "", "", "search"],
+                ["", "", "", ""],
                 ["", "text-center", "disable", ""],
                 ["", "text-center", "disable", ""],
                 ["", "text-center", "disable", ""],
@@ -138,7 +250,7 @@ const initialState = {
     // FOOTER SHow or Not
     show_footer: "block",
 
-    // Variable Top Componant
+    // Variable PopUp no document
     no_document: "",
     headTable_list_no_document:
         [
@@ -151,18 +263,104 @@ const initialState = {
             {
                 variousValues:
                     [
-                        // value, css show dom, ระบุว่าเป็น text หรือ button
-                        ["1", "block", false], //เลขที่เอกสาร
-                        ["นายศุภากร", "block", false], //ผู้เบิก
-                        ["", "block", true], //button ในpopUp
-                        ["เสร็จสิ้น", "display-none", false],  //status
-                        ["12/09/2560", "display-none", false], //date
-                        ["หาดใหญ๋", "display-none", false],  //from_inventory
-                        ["ลาดกระบัง", "display-none", false],  //to_inventory
-                        [1, "display-none", false], //type_pickup
-                        ["เครดิต", "display-none", false], //type_account
-                        ["1000", "display-none", false], //total_money
-                        ["", "display-none", false],  //note
+                        [
+                            // value, css show dom, ระบุว่าเป็น text หรือ button
+                            ["1", "block", false], //เลขที่เอกสาร
+                            ["นายศุภากร", "block", false], //ผู้เบิก
+                            ["", "block", true], //button ในpopUp
+                            ["เสร็จสิ้น", "display-none", false],  //status
+                            ["2020-05-05", "display-none", false], //date
+                            ["หาดใหญ๋", "display-none", false],  //from_inventory
+                            ["ลาดกระบัง", "display-none", false],  //to_inventory
+                            [1, "display-none", false], //type_pickup
+                            ["เครดิต", "display-none", false], //type_account
+                            ["1000", "display-none", false], //total_money
+                            ["", "display-none", false],  //note
+                        ],
+                        [
+                            // value, css show dom, ระบุว่าเป็น text หรือ button
+                            ["2", "block", false], //เลขที่เอกสาร
+                            ["นายสรวิศ", "block", false], //ผู้เบิก
+                            ["", "block", true], //button ในpopUp
+                            ["เสร็จสิ้น", "display-none", false],  //status
+                            ["2020-10-05", "display-none", false], //date
+                            ["หาดใหญ๋", "display-none", false],  //from_inventory
+                            ["ลาดกระบัง", "display-none", false],  //to_inventory
+                            [1, "display-none", false], //type_pickup
+                            ["เครดิต", "display-none", false], //type_account
+                            ["1000", "display-none", false], //total_money
+                            ["", "display-none", false],  //note
+                        ]
+                    ]
+            },
+            {
+                bodyTable:
+                    [
+                        {
+                            0:
+                                [
+                                    [
+                                        // value, css text center, css gray background, check type
+                                        ["1", "text-center", "disable", ""],
+                                        ["100", "", "", "search"],
+                                        ["เครื่องกั้นไฟฟ้า", "", "", "text"],
+                                        ["10", "text-center", "disable", ""],
+                                        ["10", "text-center", "disable", ""],
+                                        ["10", "text-center", "disable", ""],
+                                        ["10", "text-center", "disable", ""],
+                                        ["10", "text-center", "disable", ""],
+                                        ["5", "text-right", "", "number"],
+                                        ["ชิ้น", "text-left", "", ""],
+                                        ["100", "text-center", "", ""],
+                                        ["500", "text-right", "", ""]
+                                    ],
+                                    [
+                                        // value, css text center, css gray background, check type
+                                        ["2", "text-center", "disable", ""],
+                                        ["200", "", "", "search"],
+                                        ["วิทยุ", "", "", "text"],
+                                        ["20", "text-center", "disable", ""],
+                                        ["20", "text-center", "disable", ""],
+                                        ["20", "text-center", "disable", ""],
+                                        ["20", "text-center", "disable", ""],
+                                        ["20", "text-center", "disable", ""],
+                                        ["10", "text-right", "", "number"],
+                                        ["เครื่อง", "text-left", "", ""],
+                                        ["200", "text-center", "", ""],
+                                        ["1000", "text-right", "", ""]
+                                    ]
+                                ]
+                        },
+                        {
+                            1:
+                                [
+                                    [
+                                        // value, css text center, css gray background, check type
+                                        ["1", "text-center", "disable", ""],
+                                        ["100", "", "", "search"],
+                                        ["เครื่องกั้นไฟฟ้า", "", "", "text"],
+                                        ["10", "text-center", "disable", ""],
+                                        ["10", "text-center", "disable", ""],
+                                        ["10", "text-center", "disable", ""],
+                                        ["10", "text-center", "disable", ""],
+                                        ["10", "text-center", "disable", ""],
+                                        ["5", "text-right", "", "number"],
+                                        ["ชิ้น", "text-left", "", ""],
+                                        ["100", "text-center", "", ""],
+                                        ["500", "text-right", "", ""]
+                                    ]
+                                ]
+                        }
+                    ]
+            }
+
+        ],
+    bodyTable_list_no_document_Show:
+        [
+            {
+                variousValues:
+                    [
+                        []
                     ]
             },
             {
@@ -183,8 +381,18 @@ const initialState = {
                         ["", "text-right", "", ""]
                     ],
             }
+        ],
 
-        ]
+    // Variable Componant
+    name: "",
+    status: "",
+    date: "",
+    from_inventory: "",
+    to_inventory: "",
+    type_pickup: "",  //ยังไม่ได้ใช้
+    type_account: "",
+    total_money: "",
+    note: ""
 }
 export default (state = initialState, action) => {
     switch (action.type) {
@@ -285,6 +493,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 bodyTablePopUp_Show: initialState.bodyTablePopUp.filter(function (bodyTablePopUp) {
+                    console.log(bodyTablePopUp[0])
                     const regex = new RegExp(`${state.variablePopUp.filterInventoryID}`, 'i');
                     var isMatch = regex.test(bodyTablePopUp[0]);
                     console.log(state.variablePopUp);
@@ -340,6 +549,41 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 no_document: action.value
+            }
+        case "SEARCH NO DOCUMENT":
+            // มี bug ที่เกิดขึ้นคือ ค้นหาเลขที่เอกสารแล้วมันไม่ขึ้น
+            const cloneNewListNoDocument = [...initialState.bodyTable_list_no_document];
+            const filterVariousValues = initialState.bodyTable_list_no_document[0].variousValues.filter(function (cloneListNoDocument) {
+                // console.log(cloneListNoDocument[0][0])
+                const regex = new RegExp(`${state.no_document}`, 'i');
+                var isMatch = regex.test(cloneListNoDocument[0][0]);
+                // console.log(isMatch)
+                return isMatch
+            })
+            // console.log("filter" ,filter)
+            cloneNewListNoDocument[0].variousValues = filterVariousValues;
+            return {
+                ...state,
+                bodyTable_list_no_document_Show: cloneNewListNoDocument
+            }
+        case "SELECT NO DOCUMENT IN POPUP":
+            // console.log(state.bodyTable_list_no_document_Show)
+            var clone_bodyTable = [...initialState.bodyTable];
+            clone_bodyTable = state.bodyTable_list_no_document[1].bodyTable[action.rowPopUpDocument][action.rowPopUpDocument]
+            console.log(clone_bodyTable)
+            return {
+                ...state,
+                no_document: state.bodyTable_list_no_document_Show[0].variousValues[action.rowPopUpDocument][0][0],
+                name: state.bodyTable_list_no_document_Show[0].variousValues[action.rowPopUpDocument][1][0],
+                status: state.bodyTable_list_no_document_Show[0].variousValues[action.rowPopUpDocument][3][0],
+                date: state.bodyTable_list_no_document_Show[0].variousValues[action.rowPopUpDocument][4][0],
+                from_inventory: state.bodyTable_list_no_document_Show[0].variousValues[action.rowPopUpDocument][5][0],
+                to_inventory: state.bodyTable_list_no_document_Show[0].variousValues[action.rowPopUpDocument][6][0],
+                type_pickup: state.bodyTable_list_no_document_Show[0].variousValues[action.rowPopUpDocument][7][0],  //ยังไม่ได้ใช้
+                type_account: state.bodyTable_list_no_document_Show[0].variousValues[action.rowPopUpDocument][8][0],
+                total_money: state.bodyTable_list_no_document_Show[0].variousValues[action.rowPopUpDocument][9][0],
+                note: state.bodyTable_list_no_document_Show[0].variousValues[action.rowPopUpDocument][10][0],
+                bodyTable: clone_bodyTable
             }
         default:
             return state

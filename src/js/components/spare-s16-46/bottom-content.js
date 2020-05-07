@@ -31,11 +31,11 @@ class BottomContent extends React.Component {
                                 <div className="grid_12">
                                     <div className="grid_2"><p className="cancel-default">ประเภทบัญชี</p></div>
                                     <div className="grid_3 pull_0">
-                                        <input type="text" className="cancel-default"></input>
+                                        <input type="text" className="cancel-default" value={this.props.type_account} ></input>
                                     </div>
 
                                     <div className="p-search-box cancel-margin grid_3  float-right">
-                                        <input type="text" className=" p-search-box__input cancel-default  "></input>
+                                        <input type="text" className=" p-search-box__input cancel-default" value={this.props.total_money} ></input>
                                     </div>
                                     <div className="grid_2 cancel-default float-right"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
                                 </div>
@@ -43,7 +43,7 @@ class BottomContent extends React.Component {
                                 <div className="grid_12">
                                     <div className="grid_2"><p className="cancel-default">หมายเหตุ</p></div>
                                     <div className="grid_5 pull_0">
-                                        <textarea className="edit" name="Text1" cols="40" rows="2"></textarea>
+                                        <textarea className="edit" name="Text1" cols="40" rows="2" value={this.props.note}></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -107,7 +107,10 @@ class BottomContent extends React.Component {
 const mapStateToProps = state => {
     return {
         idPopUpTable: state.idPopUpTable,
-        variablePopUp: state.variablePopUp
+        variablePopUp: state.variablePopUp,
+        type_account: state.type_account,
+        total_money: state.total_money,
+        note: state.note
     };
 };
 
