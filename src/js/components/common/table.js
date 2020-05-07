@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
 
+import '../../../css/table.css';
 class Table extends React.Component {
   checkVariable = (check, value) => {
     if (check === "search") {
@@ -48,7 +49,7 @@ class Table extends React.Component {
                   {bodyTable.map((bodyTable, columnBodyTable) => {
                     return (
                       <>
-                        <td className={`edit-padding" ${bodyTable[1]} ${bodyTable[2]}`} key={columnBodyTable} id={columnBodyTable}>
+                        <td className={`edit-padding ${bodyTable[1]} ${bodyTable[2]}`} key={columnBodyTable} id={columnBodyTable}>
                           {current.checkVariable(bodyTable[3], bodyTable[0])}
                         </td>
                       </>
