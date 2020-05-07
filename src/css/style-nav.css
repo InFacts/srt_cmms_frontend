@@ -68,3 +68,10 @@ ul.nav-ul {
     padding-left: 0;
     padding-top: 2px;
   }
+
+  .selecting {
+    background-color: rgb(212, 212, 212);
+    width: 20px;
+    height: 20px;
+    border: 1px 
+  }

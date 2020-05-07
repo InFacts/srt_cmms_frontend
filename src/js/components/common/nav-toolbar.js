@@ -22,54 +22,78 @@ import SearchDocument from '../../../images/toolbar/search.svg'
 class ToolbarItem extends React.Component{
 
     render(){
-        var {alt ,src,callback} = this.props;
+        var {id,alt ,src,select,callback} = this.props;
         return(
-            <li className="nav-li" ><Link to="#" className="toolbar"><img alt={alt} src={src} onClick={callback} className="img-toolbar" /></Link></li>
-        );
+            
+            (select === id)
+            ?   
+                <li className="nav-li" ><Link to="#" className="toolbar"><div class="selecting"><img alt={alt} src={src} onClick={()=>{callback(0)}}  className="img-toolbar "  /></div></Link></li>
+            :
+                <li className="nav-li" ><Link to="#" className="toolbar"><img  alt={alt} src={src} onClick={()=>{callback(id)}} className="img-toolbar" /></Link></li>  
+            );
     }
 }
 
 class Toolbar extends React.Component {
+
+    constructor(props) {
+        super(props)
+       
+        this.state = {
+            id: 0,
+        }
+    }
+
     render() {
         var menu, items;
         menu = [
             {
+                id:1,
                 alt: "home",
                 src : HomeDocument,
             },
             {
+                id:2,
                 alt: "search",
                 src : SearchDocument,
             },
             {
+                id:3,
                 alt: "edit",
                 src : EditDocument,
             },
             {
+                id:4,
                 alt: "add",
                 src : AddDocument,
             },
             {
+                id:5,
                 alt: "copy",
                 src : CopyDocument,
             },
             {
+                id:6,
                 alt: "save",
                 src : SaveDocument,
             },
             {
+                id:7,
                 alt: "retry",
                 src : RetryDocument,
             },
             {
+                id:8,
                 alt: "back",
                 src : BackDocument,
             },
             {
+                id:9,
                 alt: "forward",
                 src : ForwardDocument,
             },
             {
+                id:10,
                 alt: "pdf",
                 src : PdfDocument,
             },
@@ -78,7 +102,10 @@ class Toolbar extends React.Component {
 
 
         items = menu.map((item , index) =>
-            <ToolbarItem key={index} alt={item.alt} src={item.src} callback={() => {
+            <ToolbarItem  key={item.id} id={item.id} alt={item.alt} src={item.src} select={this.state.id} callback={(idx) => {
+                this.setState({
+                    id:idx,
+                })
                 this.props.handleAction(item.alt);
             }}/>
         );
