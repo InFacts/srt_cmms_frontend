@@ -3,6 +3,8 @@ import React from 'react';
 
 import Document from '../../../images/document.svg';
 import Table from '../common/table.js';
+import TableStatus from '../common/table-status.js';
+import TablePopUp from '../common/table-popup.js';
 
 import '../../../css/style.css';
 import '../../../css/tabs.css';
@@ -22,18 +24,18 @@ class BottomContent extends React.Component {
                             <div id="รายการ" className="tabcontent">
                                 <h3 className="head-title-bottom mt-2">คลังต้นทาง</h3>
 
-                                <div className="grid_12 mb-2" style={{ paddingRight: "10px" }}>
-                                    <Table headTable={this.props.headTable} bodyTable={this.props.bodyTable} />
+                                <div className="grid_12 mb-2" style={{ paddingRight: "10px" }} key="table">
+                                    <Table />
                                 </div>
 
                                 <div className="grid_12">
                                     <div className="grid_2"><p className="cancel-default">ประเภทบัญชี</p></div>
                                     <div className="grid_3 pull_0">
-                                        <input type="text" className="cancel-default"></input>
+                                        <input type="text" className="cancel-default" value={this.props.type_account} ></input>
                                     </div>
 
                                     <div className="p-search-box cancel-margin grid_3  float-right">
-                                        <input type="text" className=" p-search-box__input cancel-default  "></input>
+                                        <input type="text" className=" p-search-box__input cancel-default" value={this.props.total_money} ></input>
                                     </div>
                                     <div className="grid_2 cancel-default float-right"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
                                 </div>
@@ -41,7 +43,7 @@ class BottomContent extends React.Component {
                                 <div className="grid_12">
                                     <div className="grid_2"><p className="cancel-default">หมายเหตุ</p></div>
                                     <div className="grid_5 pull_0">
-                                        <textarea className="edit" name="Text1" cols="40" rows="2"></textarea>
+                                        <textarea className="edit" name="Text1" cols="40" rows="2" value={this.props.note}></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -68,40 +70,7 @@ class BottomContent extends React.Component {
 
                             <div id="สถานะเอกสาร" className="tabcontent">
                                 <h4 className="head-title-bottom mt-2">สถานะของเอกสาร</h4>
-                                <table className="cancel-border">
-                                    <thead>
-                                        <tr>
-                                            <th className="font-for-status" style={{ width: "50px" }}></th>
-                                            <th className="font-for-status">ตำแหน่ง</th>
-                                            <th className="font-for-status">หน่วยงาน</th>
-                                            <th className="font-for-status">ชื่อผู้ลงนาม</th>
-                                            <th className="font-for-status">วันที่ลงนาม</th>
-                                            <th className="font-for-status">สถานะ</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="font-for-status" style={{ width: "50px" }}>
-                                                <i className="fas fa-check-circle" style={{ color: "green" }}></i>
-                                            </td>
-                                            <td className="font-for-status">ช่างฝีมือ 6</td>
-                                            <td className="font-for-status">ตอนหาดใหญ่ (ผู้ขอเบิก)</td>
-                                            <td className="font-for-status">นายวิชัย ไชยแก้ว</td>
-                                            <td className="font-for-status">31/07/2018 22:24PM</td>
-                                            <td className="font-for-status">ลงนามเรียบร้อยแล้ว</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="font-for-status" style={{ width: "50px" }}>
-                                                <i className="fas fa-check-circle" style={{ color: "gray" }}></i>
-                                            </td>
-                                            <td className="font-for-status">สสญ.หม (ผู้ขอเบิก)</td>
-                                            <td className="font-for-status">แขวงบำรุงรักษาอาณัติสัญญาณหาดใหญ่</td>
-                                            <td className="font-for-status">นายภาคิน แก้วเมืองสอง</td>
-                                            <td className="font-for-status">-</td>
-                                            <td className="font-for-status">รอการอนุมัติ</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <TableStatus />
                             </div>
 
                         </div>
@@ -109,107 +78,59 @@ class BottomContent extends React.Component {
                 </div>
 
                 {/* PopUp */}
-                <div className="modal" id="modal" style={{ display: "none" }}>
+                <div className="modal" id={this.props.idPopUpTable} style={{ display: "none" }}>
                     <div className="gray-board">
-                        <p className="head-title-modal edit">คลังต้นทาง</p>
+                        <p className="head-title-modal edit">{this.props.variablePopUp.head}</p>
                         <div className="container_12 edit-padding">
                             <div className="grid_12">
-                                <div className="grid_2"><p className="cancel-default">ค้นหาเลขที่คลัง</p></div>
+                                <div className="grid_2"><p className="cancel-default">{this.props.variablePopUp.labelFind}</p></div>
                                 <div className="grid_8 pull_0">
-                                    <input type="text" className="cancel-default" />
+                                    <input type="text" className="cancel-default" onChange={(e) => this.props.handleChangeSearchPopUp(e)} value={this.props.variablePopUp.filterInventoryID} />
                                 </div>
-                                <button className="button-blue grid_1 float-right mr-5" type="button">ค้นหา</button>
+                                <button className="button-blue grid_1 float-right mr-5" type="button" onClick={(e) => this.props.handleSubmitSearch(e)}>ค้นหา</button>
                             </div>
 
                             <div className="grid_12">
-                                <table className="table-many-column">
-                                    <thead>
-                                        <tr>
-                                            <th className="font" style={{ minWidth: "300px" }}>เลขที่คลัง</th>
-                                            <th className="font" style={{ minWidth: "500px" }}>ชื่อคลัง</th>
-                                            <th className="font" style={{ minWidth: "100px" }}>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="edit-padding" style={{ minWidth: "200px" }}>1123451</td>
-                                            <td className="edit-padding" style={{ minWidth: "300px" }}>คลังหากใหญ่้</td>
-                                            <td className="edit-padding text-left" style={{ minWidth: "80px" }}>
-                                                <button className="button-green">ยืนยัน</button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <TablePopUp />
                             </div>
                             <div className="grid_12">
-                                <button className="button-blue mt-5 float-right grid_1 mr-5" type="button" aria-label="Close active modal" aria-controls="modal" id="aria-controls">กลับ</button>
+                                <button className="button-blue mt-5 float-right grid_1 mr-5" type="button" aria-label="Close active modal" aria-controls={this.props.idPopUpTable} id="aria-controls2">กลับ</button>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div className="modal" id="modal2" style={{ display: "none" }}>
-                    <div className="gray-board">
-                        <p className="head-title-modal edit">เลขที่สิ่งของ</p>
-                        <div className="container_12 edit-padding">
-                            <div className="grid_12">
-                                <div className="grid_2"><p className="cancel-default">ค้นหาเลขที่สิ่งของ</p></div>
-                                <div className="grid_8 pull_0">
-                                    <input type="text" className="cancel-default" />
-                                </div>
-                                <button className="button-blue grid_1 float-right mr-5" type="button">ค้นหา</button>
-                            </div>
-
-                            <div className="grid_12">
-                                <table className="table-many-column mt-3">
-                                    <thead>
-                                        <tr>
-                                            <th className="font" style={{ minWidth: "300px" }}>เลขที่สิ่งของ</th>
-                                            <th className="font" style={{ minWidth: "500px" }}>รายละเอียดอะไหล่</th>
-                                            <th className="font" style={{ minWidth: "100px" }}>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="edit-padding" style={{ minWidth: "200px" }}>1123451</td>
-                                            <td className="edit-padding" style={{ minWidth: "300px" }}>คลังหากใหญ่้</td>
-                                            <td className="edit-padding text-left" style={{ minWidth: "80px" }}>
-                                                <button className="button-green">ยืนยัน</button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div className="grid_12">
-                                <button className="button-blue mt-5 float-right grid_1 mr-5" type="button" aria-label="Close active modal" aria-controls="modal2" id="aria-controls">กลับ</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </form>
         )
     };
 }
 
-// const mapStateToProps = (state) => ({
-//     headTable: state.headTable,
-//     bodyTable: state.bodyTable
-// })
+const mapStateToProps = state => {
+    return {
+        idPopUpTable: state.idPopUpTable,
+        variablePopUp: state.variablePopUp,
+        type_account: state.type_account,
+        total_money: state.total_money,
+        note: state.note
+    };
+};
 
-// const mapDispatchToProps = (dispatch) => ({
-//     handleChangeText: (e) => dispatch(changeText(e)),
-// })
+const mapDispatchToProps = (dispatch) => ({
+    handleChangeSearchPopUp: (e) => dispatch(changeSearchPopUp(e)),
+    handleSubmitSearch: (e) => dispatch(submitSearch(e)),
+})
 
-// export default connect(mapStateToProps)(BottomContent);
-export default BottomContent;
+export default connect(mapStateToProps, mapDispatchToProps)(BottomContent);
 
+export const changeSearchPopUp = (e) => {
+    return {
+        type: "SEARCH POPUP",
+        value: e.target.value
+    }
+}
 
-// ACtion Creator
-// export const changeText = (e) => {
-//     console.log(e.target.value)
-//     return {
-//         type: "TEXT",
-//         value: e.target.value
-//     }
-// }
+export const submitSearch = (e) => {
+    return {
+        type: "SUBMIT SEARCH",
+        value: e.target.value
+    }
+}

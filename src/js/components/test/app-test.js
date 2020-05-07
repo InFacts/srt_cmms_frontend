@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux'
 class Counter extends React.Component {
     render() {
+        console.log("test render",this.props.countNum)
         return (
             <div>
             <p>Counter: {this.props.countNum}</p>
