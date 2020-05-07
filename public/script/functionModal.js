@@ -15,7 +15,7 @@ function toggleModal(modal) {
 // Add click handler for clicks on elements with aria-controls
 document.addEventListener('click', function(event) {
   var targetControls = event.target.getAttribute('aria-controls');
-  // console.log(targetControls)
+  // console.log("js.",targetControls)
   if (targetControls) {
     toggleModal(document.getElementById(targetControls));
   }

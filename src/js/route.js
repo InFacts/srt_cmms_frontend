@@ -5,13 +5,20 @@ import Login from './components/signin/login.js';
 import Main4Module from './components/main-module';
 import MainSpare from './components/main-spare';
 import MainPmt from './components/main-pmt';
-import S1646 from './components/s16-46';
-import SS101 from './components/ss101'
-import WO from './components/work-order'
-import WR from './components/work-request'
-import Plan from './components/plan-maintenance'
-import AssInt from './components/asset-install'
-import AssMas from './components/asset-master'
+import S1646 from './components/spare-s16-46';
+import SS101 from './components/ss101';
+import WO from './components/work-order';
+import WR from './components/work-request';
+import Plan from './components/plan-maintenance';
+import AssInt from './components/asset-install';
+import AssMas from './components/asset-master';
+import Inventory from './components/spare-inventory';
+import ItemMasterData from './components/spare-item-master-data';
+import SpareGoodReceipt from './components/spare-good-receipt';
+import SpareGoodIssue from './components/spare-good-issue';
+import SpareGoodMaintenace from './components/spare-good-maintenace';
+
+import Test2 from './components/test-components-v2';
 
 class FrontEnd extends React.Component {
     render() {
@@ -28,6 +35,13 @@ class FrontEnd extends React.Component {
                 <Route exact path="/plan" component={Plan} />
                 <Route exact path="/assint" component={AssInt} />
                 <Route exact path="/assmas" component={AssMas} />
+                <Route exact path="/inventory" component={Inventory} />
+                <Route exact path="/item-master-data" component={ItemMasterData} />
+                <Route exact path="/good-receipt" component={SpareGoodReceipt} />
+                <Route exact path="/good-issue" component={SpareGoodIssue} />
+                <Route exact path="/good-maintenace" component={SpareGoodMaintenace} />
+
+                <Route exact path="/test" component={Test2} />
             </div>
         );
     }

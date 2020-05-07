@@ -51,7 +51,7 @@ class Map extends React.Component {
                         <section className="grid_12 ">
                         <h4 className="head-title" style={{ color: "black"}}>ระบบบริหารข้อมูลอะไหล่ - Spare</h4>
                             <div className="ml-3" id="blackground-white" style={{ height: "380px" }}>
-                                <img alt='some value' src={Oneone} className="one-one" />
+                                <Link to="/good-receipt"><img alt='some value' src={Oneone} className="one-one" /></Link>
                                 <img alt='some value' src={Onetwo} className="one-two" />
                                 <img alt='some value' src={Onethree} className="one-three" />
                                 <img alt='some value' src={Arrow1} className="arrow1" />
@@ -60,11 +60,11 @@ class Map extends React.Component {
                                 <img alt='some value' src={Text1} className="text1" />
                                 <img alt='some value' src={Text2} className="text2" />
                                 <img alt='some value' src={Text3} className="text3" />
-                                <img alt='some value' src={Center} className="center" />
+                                <Link to="/inventory"><img alt='some value' src={Center} className="center" /></Link>
                                 <img alt='some value' src={Text4} className="text4" />
-                                <img alt='some value' src={Twoone} className="two-one" />
+                                <Link to="/good-issue"><img alt='some value' src={Twoone} className="two-one" /></Link>
                                 <img alt='some value' src={Twotwo} className="two-two" />
-                                <img alt='some value' src={Twothree} className="two-three" />
+                                <Link to="/good-maintenace"><img alt='some value' src={Twothree} className="two-three" /></Link>
                                 <img alt='some value' src={Arrow4} className="arrow4" />
                                 <img alt='some value' src={Arrow5} className="arrow5" />
                                 <img alt='some value' src={Arrow6} className="arrow6" />
@@ -78,7 +78,7 @@ class Map extends React.Component {
                                 <img alt='some value' src={Text9} className="text9" />
                                 <img alt='some value' src={Text10} className="text10" />
                                 <img alt='some value' src={Fourone} className="four-one" />
-                                <img alt='some value' src={Fourtwo} className="four-two" />
+                                <Link to="/item-master-data"><img alt='some value' src={Fourtwo} className="four-two" /></Link>
                                 <img alt='some value' src={Fourthree} className="four-three" />
                                 <img alt='some value' src={Text11} className="text11" />
                                 <img alt='some value' src={Text12} className="text12" />

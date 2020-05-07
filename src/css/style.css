@@ -180,7 +180,7 @@
     background-color: #840204;
     width: 100%;
     position: fixed;
-    z-index: 1;
+    z-index: 2;
   }
 
   #toolbar{
@@ -256,6 +256,10 @@
     top: -2px;
     right: 10px;
     padding: 0;
+  }
+
+  .p-search-box__button.cancel-padding.hidden{
+    display: none;
   }
   
   .p-search-box.cancel-margin {
@@ -337,6 +341,16 @@
     float: right;
   }
   
+  .p-button--neutral.edit{
+    font-family: Anakotmai-Light;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 0;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    width: auto;
+  }
+
   .p-button--base.edit{
     color: #2F6FCA;
     font-family: Anakotmai-Light;
@@ -350,6 +364,19 @@
   
   .button-blue{
     background-color: #2F6FCA;
+    border: none;
+    color: white;
+    font-family: Anakotmai-Light;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 0;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    width: auto;
+  }
+
+  .button-gray{
+    background-color: #6B6B6B;
     border: none;
     color: white;
     font-family: Anakotmai-Light;
@@ -427,7 +454,7 @@
 }
 
 .dropZone {
-    overflow-y:scroll;
+    /* overflow-y:scroll; */
     background: white;
     color: black;
     padding: 20px 10px 20px 10px;
@@ -515,3 +542,23 @@ select.edit-select-top{
   font-weight: bold;
   line-height: 30px;
 } 
+
+input.p-search-box__input:focus + .p-search-box__button.hidden{
+  display: block;
+}
+
+.p-search-box__button.hidden:hover{
+  display: block;
+}
+
+.p-search-box__button.hidden:active{
+  display: block;
+}
+
+.p-search-box__button.hidden:focus{
+  display: block;
+}
+
+[readonly][type='text'].font-black{
+  color: #000000;
+}

@@ -1,0 +1,39 @@
+/* LIST */
+/* ================== */
+
+.list-group-item {
+    position: relative;
+    display: block;
+    padding: 15px 15px;
+    margin-bottom: 15px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+.media-object {
+    display: block;
+    width:250px;
+    height: 150px;
+}
+.media-left  {
+    padding-right: 15px;
+}
+.media-body  {
+    display: table-cell;
+    vertical-align: top;
+}
+.media-body {
+    width:250px;
+    height: 10px;
+}
+.media-heading {
+    margin-top: 0;
+    margin-bottom: 0px;
+}
+
+.dropZone-list {
+    overflow-y:scroll;
+    background: white;
+    color: black;
+    padding: 20px 10px 20px 10px;
+    height:250px
+}
