@@ -27,7 +27,7 @@ class ToolbarItem extends React.Component{
             
             (select === id)
             ?   
-                <li className="nav-li" ><Link to="#" className="toolbar"><div class="selecting"><img alt={alt} src={src} onClick={()=>{callback(0)}}  className="img-toolbar "  /></div></Link></li>
+                <li className="nav-li" ><Link to="#" className="toolbar"><div className="selecting"><img alt={alt} src={src} onClick={()=>{callback(0)}}  className="img-toolbar "  /></div></Link></li>
             :
                 <li className="nav-li" ><Link to="#" className="toolbar"><img  alt={alt} src={src} onClick={()=>{callback(id)}} className="img-toolbar" /></Link></li>  
             );

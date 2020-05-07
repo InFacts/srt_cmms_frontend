@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import Document from '../../../images/document.svg'
 
@@ -7,89 +8,100 @@ import '../../../css/table.css';
 
 class BottomContent extends React.Component {
 
+  checkActionMode = (mode) => {
+    if (mode === "search") {
+      console.log("Search mode is Action")
+      return (
+        <>
+          <div className="grid_12 mt-2">
+            <div className="grid_4 ml-3">
+              <input type="checkbox" id="checkExample2" />
+              <label className="cancel-default d-inline ml-2n" htmlFor="checkExample2">ปิดการใช้งาน</label>
+            </div>
+          </div>
+
+          <div className="grid_12 mt-2">
+            <div className="grid_12">
+              <div className="grid_2"><p className="cancel-default">สถานที่</p></div>
+              <div className="grid_4 pull_0">
+                <select className="edit-select" >
+                  <option defaultValue="0"></option>
+                  <option defaultValue="1">Cosmic Cuttlefish</option>
+                  <option defaultValue="2">Bionic Beaver</option>
+                  <option defaultValue="3">Xenial Xerus</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="grid_12 mt-5">
+              <div className="grid_2 cancel-default">
+                <p className="cancel-default">ที่อยู่</p>
+              </div>
+              <div className="grid_4 pull_0">
+                <input type="text" className="cancel-default font-black"></input>
+              </div>
+            </div>
+
+            <div className="grid_12">
+              <div className="grid_2"><p className="cancel-default">แขวง/ตำบล</p></div>
+              <div className="grid_4 pull_0">
+                <select className="edit-select" >
+                  <option defaultValue="0"></option>
+                  <option defaultValue="1">Cosmic Cuttlefish</option>
+                  <option defaultValue="2">Bionic Beaver</option>
+                  <option defaultValue="3">Xenial Xerus</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="grid_12">
+              <div className="grid_2"><p className="cancel-default">เขต/อำเภอ</p></div>
+              <div className="grid_4 pull_0">
+                <select className="edit-select" >
+                  <option defaultValue="0"></option>
+                  <option defaultValue="1">Cosmic Cuttlefish</option>
+                  <option defaultValue="2">Bionic Beaver</option>
+                  <option defaultValue="3">Xenial Xerus</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="grid_12">
+              <div className="grid_2"><p className="cancel-default">จังหวัด</p></div>
+              <div className="grid_4 pull_0">
+                <select className="edit-select" >
+                  <option defaultValue="0"></option>
+                  <option defaultValue="1">Cosmic Cuttlefish</option>
+                  <option defaultValue="2">Bionic Beaver</option>
+                  <option defaultValue="3">Xenial Xerus</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="grid_12 mt-1">
+              <div className="grid_2 cancel-default">
+                <p className="cancel-default">รหัสไปรษณีย์</p>
+              </div>
+              <div className="grid_4 pull_0">
+                <input type="text" className="cancel-default font-black"></input>
+              </div>
+            </div>
+
+          </div>
+        </>
+      )
+    }
+  }
+
   render() {
-    // console.log(this.props.mockUpData)
     return (
       <div id="blackground-gray">
         <div className="container_12 clearfix">
           <div className="grid_12 ">
 
             <div id="ทั่วไป" className="tabcontent">
-              <div className="grid_12 mt-2">
-                <div className="grid_4 ml-3">
-                  <input type="checkbox" id="checkExample2" />
-                  <label className="cancel-default d-inline ml-2n" htmlFor="checkExample2">ปิดการใช้งาน</label>
-                </div>
-              </div>
-
-              <div className="grid_12 mt-2">
-                <div className="grid_12">
-                  <div className="grid_2"><p className="cancel-default">สถานที่</p></div>
-                  <div className="grid_4 pull_0">
-                    <select className="edit-select" >
-                      <option defaultValue="0"></option>
-                      <option defaultValue="1">Cosmic Cuttlefish</option>
-                      <option defaultValue="2">Bionic Beaver</option>
-                      <option defaultValue="3">Xenial Xerus</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="grid_12 mt-5">
-                  <div className="grid_2 cancel-default">
-                    <p className="cancel-default">ที่อยู่</p>
-                  </div>
-                  <div className="grid_4 pull_0">
-                    <input type="text" className="cancel-default font-black" defaultValue={this.props.mockUpData.address} readOnly></input>
-                  </div>
-                </div>
-
-                <div className="grid_12">
-                  <div className="grid_2"><p className="cancel-default">แขวง/ตำบล</p></div>
-                  <div className="grid_4 pull_0">
-                    <select className="edit-select" >
-                      <option defaultValue="0"></option>
-                      <option defaultValue="1">Cosmic Cuttlefish</option>
-                      <option defaultValue="2">Bionic Beaver</option>
-                      <option defaultValue="3">Xenial Xerus</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="grid_12">
-                  <div className="grid_2"><p className="cancel-default">เขต/อำเภอ</p></div>
-                  <div className="grid_4 pull_0">
-                    <select className="edit-select" >
-                      <option defaultValue="0"></option>
-                      <option defaultValue="1">Cosmic Cuttlefish</option>
-                      <option defaultValue="2">Bionic Beaver</option>
-                      <option defaultValue="3">Xenial Xerus</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="grid_12">
-                  <div className="grid_2"><p className="cancel-default">จังหวัด</p></div>
-                  <div className="grid_4 pull_0">
-                    <select className="edit-select" >
-                      <option defaultValue="0"></option>
-                      <option defaultValue="1">Cosmic Cuttlefish</option>
-                      <option defaultValue="2">Bionic Beaver</option>
-                      <option defaultValue="3">Xenial Xerus</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="grid_12">
-                  <div className="grid_2 cancel-default">
-                    <p className="cancel-default">รหัสไปรษณีย์</p>
-                  </div>
-                  <div className="grid_4 pull_0">
-                    <input type="text" className="cancel-default font-black" defaultValue={this.props.mockUpData.no_po} readOnly></input>
-                  </div>
-                </div>
-
-              </div>
+              {/* Input in Bottom */}
+              {this.checkActionMode(this.props.actionMode)}
             </div>
 
             <div id="แนบไฟล์" className="tabcontent">
@@ -119,4 +131,19 @@ class BottomContent extends React.Component {
   };
 }
 
-export default BottomContent;
+const mapStateToProps = (state) => ({
+  actionMode: state.action,
+})
+const mapDispatchToProps = (dispatch) => ({
+  // handleAction: (value) => dispatch(action(value))
+})
+export default connect(mapStateToProps, mapDispatchToProps)(BottomContent);
+
+// export const action = (value) => {
+
+//   return {
+//       type: "ACTION",
+//       value: value
+//   }
+// }
+
