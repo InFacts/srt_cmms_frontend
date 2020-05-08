@@ -12,9 +12,7 @@ class BottomContent extends React.Component {
       <div id="blackground-gray">
         <div className="container_12 clearfix">
           <div className="grid_12 ">
-
             <div id="ทั่วไป" className="tabcontent">
-
               <div className="grid_12 mt-3">
                 <div className="grid_2 cancel-default">
                   <p className="cancel-default">ชื่อย่อหน่วยนับการนำเข้า </p>
@@ -23,7 +21,7 @@ class BottomContent extends React.Component {
                   <input type="text" className="cancel-default"></input>
                 </div>
                 <div className="grid_1 ml-0">
-                  <button class="p-button--neutral edit">...</button>
+                  <button type="button" className="p-button--neutral edit">...</button>
                 </div>
 
                 <div className="float-right">
@@ -116,7 +114,7 @@ class BottomContent extends React.Component {
                   <input type="text" className="cancel-default"></input>
                 </div>
                 <div className="grid_1 ml-0 pull_0">
-                  <button class="p-button--neutral edit">...</button>
+                  <button type="button" className="p-button--neutral edit">...</button>
                 </div>
 
                 <div className="float-right">
@@ -219,7 +217,7 @@ class BottomContent extends React.Component {
                     <tr>
                       <th className="edit-padding text-center" style={{ minWidth: "30px" }}>1</th>
                       <td className="edit-padding" style={{ minWidth: "130px" }}>
-                        <button type="button" class="button-for-table" id="showModal2" aria-controls="modal2"><i className="fas fa-arrow-right" style={{ color: "#FFCB21" }} id="showModal2" aria-controls="modal2"></i></button>
+                        <button type="button" className="button-for-table" id="showModal2" aria-controls="modal2"><i className="fas fa-arrow-right" style={{ color: "#FFCB21" }} id="showModal2" aria-controls="modal2"></i></button>
                         <input type="text" defaultValue="SIG 003" className="cancel-default-for-table"></input>
                       </td>
                       <td className="edit-padding" style={{ minWidth: "250px" }}>คลังพัสดุส่วนกลางบางซื่อ</td>
@@ -237,7 +235,7 @@ class BottomContent extends React.Component {
               </div>
 
               <div className="grid_12 mt-2" style={{ paddingRight: "10px" }}>
-                  <button className="button-gray float-right">ตั้งเป็นคลังตั้งต้น</button>
+                  <button type="button" className="button-gray float-right">ตั้งเป็นคลังตั้งต้น</button>
               </div>
 
             </div>
