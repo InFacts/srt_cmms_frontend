@@ -8,9 +8,9 @@ import '../../../css/style.css'
 class Footer extends React.Component {
 
   checkActionMode = (mode) => {
-    console.log("hello footer")
+    // console.log("hello footer")
     if (mode === "search") {
-      console.log("Search mode is Action")
+      // console.log("Search mode is Action")
       return (
         <div className="grid_12 nav-footer">
           
@@ -18,7 +18,7 @@ class Footer extends React.Component {
       )
     }
     if (mode === "edit" || mode === "add") {
-      console.log("Edit/Add mode is Action")
+      // console.log("Edit/Add mode is Action")
       return (
         <div className="grid_12 nav-footer">
           <button type="button" className="p-button--base edit float-right">ยกเลิก</button>
