@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
 
-import Document from '../../../images/document.svg'
+import Files from '../common/files'
 
 import '../../../css/style.css'
 import '../../../css/table.css';
@@ -13,68 +13,46 @@ class BottomContent extends React.Component {
     if (mode === "search") {
       return (
         <>
-          <div id="รายการ" className="tabcontent">
-            <div className="grid_12 mt-1" style={{ paddingRight: "10px" }}>
-              <table className="table-many-column">
-                <thead>
-                  <tr>
-                    <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
-                    <th className="font" style={{ minWidth: "130px" }}>เลขที่อะไหล่</th>
-                    <th className="font" style={{ minWidth: "448px" }}>ชื่ออะไหล่</th>
-                    <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
-                    <th className="font text-center" style={{ minWidth: "80px" }}>หน่วยนับ</th>
-                    <th className="font text-right" style={{ minWidth: "80px" }}>ราคาต่อหน่วย</th>
-                    <th className="font text-right" style={{ minWidth: "80px" }}>จำนวนเงิน</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {current.props.list_show.map(function (list, index) {
-                    return (
-                      <tr key={index}>
-                        <th className="edit-padding text-center">{list.id}</th>
-                        <td className="edit-padding">{list.no_part}</td>
-                        <td className="edit-padding">{list.name_part}</td>
-                        <td className="edit-padding text-center">{list.quility}</td>
-                        <td className="edit-padding text-center">{list.unit}</td>
-                        <td className="edit-padding text-right">{list.unit_per_bath}</td>
-                        <td className="edit-padding text-right">{list.total}</td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
-            <div className="grid_12 mt-3">
-              <div className="grid_4 float-right">
-                <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.total}></input>
-              </div>
-              <div className="grid_2 float-right"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
-            </div>
-            <div className="grid_12">
-              <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
-              <div className="grid_4">
-                <textarea className="edit" name="Text1" cols="40" rows="2" defaultValue={current.props.document_show.note}></textarea>
-              </div>
-            </div>
+          <div className="grid_12 mt-1" style={{ paddingRight: "10px" }}>
+            <table className="table-many-column">
+              <thead>
+                <tr>
+                  <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
+                  <th className="font" style={{ minWidth: "130px" }}>เลขที่อะไหล่</th>
+                  <th className="font" style={{ minWidth: "448px" }}>ชื่ออะไหล่</th>
+                  <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
+                  <th className="font text-center" style={{ minWidth: "80px" }}>หน่วยนับ</th>
+                  <th className="font text-right" style={{ minWidth: "80px" }}>ราคาต่อหน่วย</th>
+                  <th className="font text-right" style={{ minWidth: "80px" }}>จำนวนเงิน</th>
+                </tr>
+              </thead>
+              <tbody>
+                {current.props.list_show.map(function (list, index) {
+                  return (
+                    <tr key={index}>
+                      <th className="edit-padding text-center">{list.id}</th>
+                      <td className="edit-padding">{list.no_part}</td>
+                      <td className="edit-padding">{list.name_part}</td>
+                      <td className="edit-padding text-center">{list.quility}</td>
+                      <td className="edit-padding text-center">{list.unit}</td>
+                      <td className="edit-padding text-right">{list.unit_per_bath}</td>
+                      <td className="edit-padding text-right">{list.total}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
           </div>
-
-          <div id="แนบไฟล์" className="tabcontent">
-            <h4 className="head-title-bottom mt-2">ข้อมูลแนบไฟล์</h4>
-            <div className="u-clearfix">
-              <div className="u-float-left">
-                <label className="p-form__label" ><p className="top-text">ไฟล์เอกสาร</p></label>
-              </div>
-              <div className=" u-float-right">
-                <input id="fileButton" type="file" hidden />
-                <label><p className="top-text">แนบไฟล์ +</p></label>
-              </div>
+          <div className="grid_12 mt-3">
+            <div className="grid_4 float-right">
+              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.total} disabled="disabled"></input>
             </div>
-            <div className="dropZone" >
-              <div className="grid_12">
-                <img src={Document} alt="Generic placeholder thumbnail" height="100px" />
-              </div>
-              <div className="grid_12 top-text">ไม่พบไฟล์เอกสาร</div>
-              <div className="grid_12 top-text">คลิกที่ "+" ในการแนบเอกสาร</div>
+            <div className="grid_2 float-right"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
+          </div>
+          <div className="grid_12">
+            <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
+            <div className="grid_4">
+              <textarea className="edit" name="Text1" cols="40" rows="2" defaultValue={current.props.document_show.note} disabled="disabled"></textarea>
             </div>
           </div>
         </>
@@ -84,73 +62,206 @@ class BottomContent extends React.Component {
       const current = this;
       return (
         <>
-          <div id="รายการ" className="tabcontent">
-            <div className="grid_12 mt-1" style={{ paddingRight: "10px" }}>
-              <table className="table-many-column">
-                <thead>
-                  <tr>
-                    <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
-                    <th className="font" style={{ minWidth: "130px" }}>เลขที่อะไหล่</th>
-                    <th className="font" style={{ minWidth: "448px" }}>ชื่ออะไหล่</th>
-                    <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
-                    <th className="font text-center" style={{ minWidth: "80px" }}>หน่วยนับ</th>
-                    <th className="font text-right" style={{ minWidth: "80px" }}>ราคาต่อหน่วย</th>
-                    <th className="font text-right" style={{ minWidth: "80px" }}>จำนวนเงิน</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {current.props.list_show.map(function (list, index) {
-                    return (
-                      <tr key={index} id={index}>
-                        <th className="edit-padding text-center">{list.id}</th>
-                        <td className="edit-padding">
-                          <div className="p-search-box cancel-margin" style={{ marginBottom: "0"}}>
-                            <input type="text" className="p-search-box__input cancel-default-table" value={list.no_part} onChange={(e) => current.props.onChangeNoPart(e)} />
-                            <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="showModalNoPart"></i></button>
-                          </div>
-                        </td>
-                        <td className="edit-padding">{list.name_part}</td>
-                        <td className="edit-padding text-center">{list.quility}</td>
-                        <td className="edit-padding text-center">{list.unit}</td>
-                        <td className="edit-padding text-right">{list.unit_per_bath}</td>
-                        <td className="edit-padding text-right">{list.total}</td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
+          <div className="grid_12 mt-1" style={{ paddingRight: "10px" }}>
+            <table className="table-many-column">
+              <thead>
+                <tr>
+                  <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
+                  <th className="font" style={{ minWidth: "130px" }}>เลขที่อะไหล่</th>
+                  <th className="font" style={{ minWidth: "448px" }}>ชื่ออะไหล่</th>
+                  <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
+                  <th className="font text-center" style={{ minWidth: "80px" }}>หน่วยนับ</th>
+                  <th className="font text-right" style={{ minWidth: "80px" }}>ราคาต่อหน่วย</th>
+                  <th className="font text-right" style={{ minWidth: "80px" }}>จำนวนเงิน</th>
+                </tr>
+              </thead>
+              <tbody>
+                {current.props.list_show.map(function (list, index) {
+                  console.log(list.total)
+                  return (
+                    <tr key={index} id={index}>
+                      <th className="edit-padding text-center">{list.id}</th>
+                      <td className="edit-padding">
+                        <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
+                          <input type="text" className="p-search-box__input cancel-default-table" value={list.no_part} onChange={(e) => current.props.onChangeNoPartEachRow(e)} />
+                          <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPart" onClick={(e) => current.props.onClickNoPartEachRow(e)}></i></button>
+                        </div>
+                      </td>
+                      <td className="edit-padding">{list.name_part}</td>
+                      <td className="edit-padding text-center">
+                        <input type="number" min="1" className="cancel-default float-right" value={list.quility} onChange={(e) => current.props.onChangeQuilityEachRow(e)}></input>
+                      </td>
+                      <td className="edit-padding text-center">{list.unit}</td>
+                      <td className="edit-padding text-right">{list.unit_per_bath}</td>
+                      <td className="edit-padding text-right">
+                        <input type="number" min="1" className="cancel-default float-right" value={list.total} onChange={(e) => current.props.onChangeTotalEachRow(e)}></input>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+          <div className="grid_12 mt-3">
+            <div className="grid_4 float-right">
+              <input type="number" min="1" className="cancel-default float-right" value={current.props.document_show.total} onChange={(e) => this.props.onChangeTotal(e)}></input>
             </div>
-            <div className="grid_12 mt-3">
-              <div className="grid_4 float-right">
-                <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.total}></input>
-              </div>
-              <div className="grid_2 float-right"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
-            </div>
-            <div className="grid_12">
-              <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
-              <div className="grid_4">
-                <textarea className="edit" name="Text1" cols="40" rows="2" defaultValue={current.props.document_show.note}></textarea>
-              </div>
+            <div className="grid_2 float-right"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
+          </div>
+          <div className="grid_12">
+            <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
+            <div className="grid_4">
+              <textarea className="edit" name="Text1" cols="40" rows="2" value={current.props.document_show.note} onChange={(e) => this.props.onChangeNote(e)}></textarea>
             </div>
           </div>
 
-          <div id="แนบไฟล์" className="tabcontent">
-            <h4 className="head-title-bottom mt-2">ข้อมูลแนบไฟล์</h4>
-            <div className="u-clearfix">
-              <div className="u-float-left">
-                <label className="p-form__label" ><p className="top-text">ไฟล์เอกสาร</p></label>
-              </div>
-              <div className=" u-float-right">
-                <input id="fileButton" type="file" hidden />
-                <label><p className="top-text">แนบไฟล์ +</p></label>
+          {/* PopUp เลขที่อะไหล่ */}
+          <div className="modal" id="modalNoPart" style={{ display: "none" }}>
+            <div className="gray-board">
+              <p className="head-title-modal edit">ค้นหาเลขที่อะไหล่</p>
+              <div className="container_12 edit-padding">
+
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">เลขที่อะไหล่</p></div>
+                  <div className="grid_8 pull_0">
+                    <input type="text" className="cancel-default grid_3" value={this.props.list_no_part} onChange={(e) => this.props.onChangeNoPart(e)} />
+                    <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickSearchPopUpNoPart(e)}>ค้นหา</button>
+                  </div>
+                </div>
+
+                <div className="grid_12">
+                  <table className="table-many-column mt-3">
+                    <thead>
+                      <tr>
+                        <th className="font" style={{ minWidth: "300px" }}>เลขที่อะไหล่</th>
+                        <th className="font" style={{ minWidth: "450px" }}>ชื่ออะไหล่</th>
+                        <th className="font" style={{ minWidth: "150px" }}>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {this.props.no_part_show.map(function (no_part_show, index) {
+                        return (
+                          <tr key={index} id={index}>
+                            <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show.no_part} </td>
+                            <td className="edit-padding" style={{ minWidth: "300px" }}> {no_part_show.name_part} </td>
+                            <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
+                              <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectPopUpNoPart(e)} aria-label="Close active modal" aria-controls="modalNoPart" id="closeModalNoPart" >เลือก</button>
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="grid_12">
+                  <button className="button-blue float-right grid_1 mr-5" type="button" aria-label="Close active modal" aria-controls="modalNoPart" id="closeModalNoPart">กลับ</button>
+                </div>
+
               </div>
             </div>
-            <div className="dropZone" >
-              <div className="grid_12">
-                <img src={Document} alt="Generic placeholder thumbnail" height="100px" />
+          </div>
+        </>
+      )
+    }
+    if (mode === "add") {
+      const current = this;
+      return (
+        <>
+          <div className="grid_12 mt-1" style={{ paddingRight: "10px" }}>
+            <table className="table-many-column">
+              <thead>
+                <tr>
+                  <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
+                  <th className="font" style={{ minWidth: "130px" }}>เลขที่อะไหล่</th>
+                  <th className="font" style={{ minWidth: "448px" }}>ชื่ออะไหล่</th>
+                  <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
+                  <th className="font text-center" style={{ minWidth: "80px" }}>หน่วยนับ</th>
+                  <th className="font text-right" style={{ minWidth: "80px" }}>ราคาต่อหน่วย</th>
+                  <th className="font text-right" style={{ minWidth: "80px" }}>จำนวนเงิน</th>
+                </tr>
+              </thead>
+              <tbody>
+                {current.props.list_show_mode_add.map(function (list, index) {
+                  return (
+                    <tr key={index} id={index}>
+                      <th className="edit-padding text-center">{list.id}</th>
+                      <td className="edit-padding">
+                        <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
+                          <input type="text" className="p-search-box__input cancel-default-table" value={list.no_part} onChange={(e) => current.props.onChangeNoPartEachRowModeAdd(e)} />
+                          <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPartModeAdd" onClick={(e) => current.props.onClickNoPartEachRowModeAdd(e)}></i></button>
+                        </div>
+                      </td>
+                      <td className="edit-padding">{list.name_part}</td>
+                      <td className="edit-padding text-center">
+                        <input type="number" min="1" className="cancel-default float-right" value={list.quility} onChange={(e) => current.props.onChangeQuilityEachRowModeAdd(e)}></input>
+                      </td>
+                      <td className="edit-padding text-center">{list.unit}</td>
+                      <td className="edit-padding text-right">{list.unit_per_bath}</td>
+                      <td className="edit-padding text-right">
+                        <input type="number" min="1" className="cancel-default float-right" value={list.total} onChange={(e) => current.props.onChangeTotalEachRowModeAdd(e)}></input>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+          <div className="grid_12 mt-3">
+            <div className="grid_4 float-right">
+              <input type="number" min="1" className="cancel-default float-right" value={current.props.document_show_mode_add.total} onChange={(e) => this.props.onChangeTotalModeAdd(e)}></input>
+            </div>
+            <div className="grid_2 float-right"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
+          </div>
+          <div className="grid_12">
+            <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
+            <div className="grid_4">
+              <textarea className="edit" name="Text1" cols="40" rows="2" value={current.props.document_show_mode_add.note} onChange={(e) => this.props.onChangeNoteModeAdd(e)}></textarea>
+            </div>
+          </div>
+
+          {/* PopUp เลขที่อะไหล่ */}
+          <div className="modal" id="modalNoPartModeAdd" style={{ display: "none" }}>
+            <div className="gray-board">
+              <p className="head-title-modal edit">ค้นหาเลขที่อะไหล่</p>
+              <div className="container_12 edit-padding">
+
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">เลขที่อะไหล่</p></div>
+                  <div className="grid_8 pull_0">
+                    <input type="text" className="cancel-default grid_3" value={this.props.list_no_part_mode_add} onChange={(e) => this.props.onChangeNoPartModeAdd(e)} />
+                    <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickSearchPopUpNoPartModeAdd(e)}>ค้นหา</button>
+                  </div>
+                </div>
+
+                <div className="grid_12">
+                  <table className="table-many-column mt-3">
+                    <thead>
+                      <tr>
+                        <th className="font" style={{ minWidth: "300px" }}>เลขที่อะไหล่</th>
+                        <th className="font" style={{ minWidth: "450px" }}>ชื่ออะไหล่</th>
+                        <th className="font" style={{ minWidth: "150px" }}>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {this.props.no_part_show_mode_add.map(function (no_part_show_mode_add, index) {
+                        return (
+                          <tr key={index} id={index}>
+                            <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show_mode_add.no_part} </td>
+                            <td className="edit-padding" style={{ minWidth: "300px" }}> {no_part_show_mode_add.name_part} </td>
+                            <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
+                              <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectPopUpNoPartModeAdd(e)} aria-label="Close active modal" aria-controls="modalNoPartModeAdd" id="closeModalNoPart" >เลือก</button>
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="grid_12">
+                  <button className="button-blue float-right grid_1 mr-5" type="button" aria-label="Close active modal" aria-controls="modalNoPartModeAdd" id="closeModalNoPart">กลับ</button>
+                </div>
               </div>
-              <div className="grid_12 top-text">ไม่พบไฟล์เอกสาร</div>
-              <div className="grid_12 top-text">คลิกที่ "+" ในการแนบเอกสาร</div>
             </div>
           </div>
         </>
@@ -164,56 +275,14 @@ class BottomContent extends React.Component {
       <div id="blackground-gray">
         <div className="container_12 clearfix">
           <div className="grid_12 ">
-            {this.checkActionMode(this.props.actionMode)}
-          </div>
-        </div>
-        {/* PopUp เลขที่อะไหล่ */}
-        <div className="modal" id="showModalInventory" style={{ display: "none" }}>
-          <div className="gray-board">
-            <p className="head-title-modal edit">ค้นหาเลขที่เอกสาร</p>
-            <div className="container_12 edit-padding">
-
-              <div className="grid_12">
-                <div className="grid_2"><p className="cancel-default">เลขที่เอกสาร</p></div>
-                <div className="grid_8 pull_0">
-                  <input type="text" className="cancel-default grid_3" value="1" onChange={(e) => this.props.onChangeNoPart(e)} />
-                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchNoPart(e)}>ค้นหา</button>
-                </div>
-              </div>
-
-              <div className="grid_12">
-                <table className="table-many-column mt-3">
-                  <thead>
-                    <tr>
-                      <th className="font" style={{ minWidth: "300px" }}>เลขที่เอกสาร</th>
-                      <th className="font" style={{ minWidth: "450px" }}>ผู้นำเข้า</th>
-                      <th className="font" style={{ minWidth: "150px" }}>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {/* {this.props.document_show_popup.map(function (document_show_popup, index) {
-                      return (
-                        <tr key={index} id={index}>
-                          <td className="edit-padding" style={{ minWidth: "150px" }}> {document_show_popup.no_document} </td>
-                          <td className="edit-padding" style={{ minWidth: "300px" }}> {document_show_popup.name} </td>
-                          <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
-                            <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectNoDocument(e)} aria-label="Close active modal" aria-controls="showModalNoPart" id="closeModalNoPart" >เลือก</button>
-                          </td>
-                        </tr>
-                      )
-                    })} */}
-                  </tbody>
-                </table>
-              </div>
-
-              <div className="grid_12">
-                <button className="button-blue float-right grid_1 mr-5" type="button" aria-label="Close active modal" aria-controls="showModalNoPart" id="closeModalNoPart">กลับ</button>
-              </div>
-
+            <div id="รายการ" className="tabcontent">
+              {this.checkActionMode(this.props.actionMode)}
+            </div>
+            <div id="แนบไฟล์" className="tabcontent">
+              <Files />
             </div>
           </div>
         </div>
-
       </div >
     )
   };
@@ -222,11 +291,40 @@ class BottomContent extends React.Component {
 const mapStateToProps = (state) => ({
   actionMode: state.action,
   document_show: state.document_show,
-  list_show: state.list_show
+  list_show: state.list_show,
+
+  // Mode Edit 
+  list_no_part: state.list_no_part,
+  no_part_show: state.no_part_show,
+
+  // Mode Add
+  list_show_mode_add: state.list_show_mode_add,
+  no_part_show_mode_add: state.no_part_show_mode_add,
+  list_no_part_mode_add: state.list_no_part_mode_add,
+  document_show_mode_add: state.document_show_mode_add
 })
 const mapDispatchToProps = (dispatch) => ({
+  // Mode Edit
   onChangeNoPart: (e) => dispatch(onChangeNoPart(e)),
-  // onClickPopUpSearchNoPart: (e) => dispatch(onClickPopUpSearchNoPart(e)),
+  onChangeNoPartEachRow: (e) => dispatch(onChangeNoPartEachRow(e)),
+  onClickNoPartEachRow: (e) => dispatch(onClickNoPartEachRow(e)),
+  onChangeQuilityEachRow: (e) => dispatch(onChangeQuilityEachRow(e)),
+  onChangeTotalEachRow: (e) => dispatch(onChangeTotalEachRow(e)),
+  onClickSearchPopUpNoPart: (e) => dispatch(onClickSearchPopUpNoPart(e)),
+  onClickSelectPopUpNoPart: (e) => dispatch(onClickSelectPopUpNoPart(e)),
+  onChangeTotal: (e) => dispatch(onChangeTotal(e)),
+  onChangeNote: (e) => dispatch(onChangeNote(e)),
+
+  // Mode Add
+  onChangeNoPartEachRowModeAdd: (e) => dispatch(onChangeNoPartEachRowModeAdd(e)),
+  onClickNoPartEachRowModeAdd: (e) => dispatch(onClickNoPartEachRowModeAdd(e)),
+  onClickSearchPopUpNoPartModeAdd: (e) => dispatch(onClickSearchPopUpNoPartModeAdd(e)),
+  onChangeNoPartModeAdd: (e) => dispatch(onChangeNoPartModeAdd(e)),
+  onClickSelectPopUpNoPartModeAdd: (e) => dispatch(onClickSelectPopUpNoPartModeAdd(e)),
+  onChangeQuilityEachRowModeAdd: (e) => dispatch(onChangeQuilityEachRowModeAdd(e)),
+  onChangeTotalEachRowModeAdd: (e) => dispatch(onChangeTotalEachRowModeAdd(e)),
+  onChangeTotalModeAdd: (e) => dispatch(onChangeTotalModeAdd(e)),
+  onChangeNoteModeAdd: (e) => dispatch(onChangeNoteModeAdd(e))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(BottomContent);
 
@@ -235,11 +333,116 @@ export const onChangeNoPart = (e) => {
   return {
     type: "ON CHANGE NO PART",
     value: e.target.value,
-    // rowIndex: e.target.parentNode.parentNode.parentNode.id
   }
 }
-// export const onClickPopUpSearchNoPart = (e) => {
-//   return {
-//     type: "CLICK SEARCH POPUP NO PART"
-//   }
-// }
+export const onChangeNoPartEachRow = (e) => {
+  return {
+    type: "ON CHANGE NO PART EACH ROW",
+    value: e.target.value,
+    rowIndex: e.target.parentNode.parentNode.parentNode.id
+  }
+}
+export const onClickNoPartEachRow = (e) => {
+  console.log(e.target.parentNode.parentNode.parentNode.parentNode)
+  return {
+    type: "ON CLICK NO PART EACH ROW",
+    rowIndex: e.target.parentNode.parentNode.parentNode.parentNode.id
+  }
+}
+export const onChangeQuilityEachRow = (e) => {
+  return {
+    type: "ON CHANGE QUILITY EACH ROW",
+    value: e.target.value,
+    rowIndex: e.target.parentNode.parentNode.id
+  }
+}
+export const onChangeTotalEachRow = (e) => {
+  return {
+    type: "ON CHANGE TOTAL EACH ROW",
+    value: e.target.value,
+    rowIndex: e.target.parentNode.parentNode.id
+  }
+}
+export const onClickSearchPopUpNoPart = (e) => {
+  return {
+    type: "ON CLICK SEARCH POPUP NO PART",
+  }
+}
+export const onClickSelectPopUpNoPart = (e) => {
+  return {
+    type: "ON CLICK SELECT POPUP NO PART",
+    rowIndex: e.target.parentNode.parentNode.id
+  }
+}
+export const onChangeTotal = (e) => {
+  return {
+    type: "ON CHANGE TOTAL",
+    value: e.target.value
+  }
+}
+export const onChangeNote = (e) => {
+  return {
+    type: "ON CHANGE NOTE",
+    value: e.target.value
+  }
+}
+
+// Mode Add
+export const onChangeNoPartEachRowModeAdd = (e) => {
+  return {
+    type: "ON CHANGE NO PART EACH ROW MODE ADD",
+    value: e.target.value,
+    rowIndex: e.target.parentNode.parentNode.parentNode.id
+  }
+}
+export const onClickNoPartEachRowModeAdd = (e) => {
+  // console.log(e.target.parentNode.parentNode.parentNode.parentNode)
+  return {
+    type: "ON CLICK NO PART EACH ROW MODE ADD",
+    rowIndex: e.target.parentNode.parentNode.parentNode.parentNode.id
+  }
+}
+export const onClickSearchPopUpNoPartModeAdd = (e) => {
+  return {
+    type: "ON CLICK SEARCH POPUP NO PART ADD MODE",
+  }
+}
+export const onChangeNoPartModeAdd = (e) => {
+  return {
+    type: "ON CHANGE NO PART MODE ADD",
+    value: e.target.value,
+  }
+}
+export const onClickSelectPopUpNoPartModeAdd = (e) => {
+  return {
+    type: "ON CLICK SELECT POPUP NO PART MODE ADD",
+    rowIndex: e.target.parentNode.parentNode.id
+  }
+}
+export const onChangeQuilityEachRowModeAdd = (e) => {
+  return {
+    type: "ON CHANGE QUILITY EACH ROW MODE ADD",
+    value: e.target.value,
+    rowIndex: e.target.parentNode.parentNode.id
+  }
+}
+export const onChangeTotalEachRowModeAdd = (e) => {
+  return {
+    type: "ON CHANGE TOTAL EACH ROW MODE ADD",
+    value: e.target.value,
+    rowIndex: e.target.parentNode.parentNode.id
+  }
+}
+export const onChangeTotalModeAdd = (e) => {
+  // console.log(e.target.value)
+  return {
+    type: "ON CHANGE TOTAL MODE ADD",
+    value: e.target.value
+  }
+}
+export const onChangeNoteModeAdd = (e) => {
+  return {
+    type: "ON CHANGE NOTE MODE ADD",
+    value: e.target.value
+  }
+}

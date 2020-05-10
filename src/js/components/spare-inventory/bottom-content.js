@@ -107,7 +107,6 @@ class BottomContent extends React.Component {
                 <input type="text" className="cancel-default font-black" defaultValue={this.props.inventory_show.post_office} disabled="disabled"></input>
               </div>
             </div>
-
           </div>
         </>
       )
@@ -208,6 +207,7 @@ class BottomContent extends React.Component {
               </div>
             </div>
           </div>
+
         </>
       )
     }
@@ -296,16 +296,12 @@ class BottomContent extends React.Component {
       <div id="blackground-gray">
         <div className="container_12 clearfix">
           <div className="grid_12 ">
-
             <div id="ทั่วไป" className="tabcontent">
-              {/* Input in Bottom */}
               {this.checkActionMode(this.props.actionMode)}
             </div>
-
             <div id="แนบไฟล์" className="tabcontent">
               <Files />
             </div>
-
           </div>
         </div>
       </div>

@@ -37,13 +37,7 @@ const initialState = {
   group_unit_part: [
     {
       "id": 1,
-      "unit": "ชิ้น",
-      "stort_unit": "ช."
-    },
-    {
-      "id": 2,
-      "unit": "เครื่อง",
-      "stort_unit": "คร."
+      "unit": "เครื่องกั้น",
     }
   ],
   // ระบบการจัดการ Fist in Fist out

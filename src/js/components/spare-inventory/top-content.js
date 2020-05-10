@@ -35,7 +35,7 @@ class TopContent extends React.Component {
               <div className="grid_2">
                 <div className="p-search-box cancel-margin">
                   <input type="text" className="p-search-box__input cancel-default" value={this.props.no_inventory} onChange={(e) => this.props.onChangeNoInventory(e)} />
-                  <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalInventory" aria-controls="modalInventory"></i></button>
+                  <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalInventory" aria-controls="modalInventory" onClick={(e) => this.props.onClickOpenPopUp(e)}></i></button>
                 </div>
               </div>
               <div className="grid_2 cancel-default text-right">
@@ -67,7 +67,7 @@ class TopContent extends React.Component {
               <div className="grid_2">
                 <div className="p-search-box cancel-margin">
                   <input type="text" className="p-search-box__input cancel-default" value={this.props.no_inventory} onChange={(e) => this.props.onChangeNoInventory(e)} />
-                  <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalInventory" aria-controls="modalInventory"></i></button>
+                  <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalInventory" aria-controls="modalInventory" onClick={(e) => this.props.onClickOpenPopUp(e)}></i></button>
                 </div>
               </div>
               <div className="grid_2 cancel-default text-right">
@@ -209,6 +209,7 @@ const mapDispatchToProps = (dispatch) => ({
   onChangeNoInventory: (e) => dispatch(onChangeNoInventory(e)),
   onClickPopUpSearchNoInventory: (e) => dispatch(onClickPopUpSearchNoInventory(e)),
   onClickSelectNoInventory: (e) => dispatch(onClickSelectNoInventory(e)),
+  onClickOpenPopUp: (e) => dispatch(onClickOpenPopUp(e)),
 
   // Mode Edit
   onChangeFullName: (e) => dispatch(onChangeFullName(e)),
@@ -238,6 +239,11 @@ export const onClickSelectNoInventory = (e) => {
   return {
     type: "CLICK SELECT POPUP NO INVENTORY",
     row_inventory_show_popup: e.target.parentNode.parentNode.id
+  }
+}
+export const onClickOpenPopUp = (e) => {
+  return {
+    type: "CLICK OPEN POPUP"
   }
 }
 

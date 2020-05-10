@@ -113,7 +113,7 @@ const initialState = {
 
   // แนบไฟล์
   files: [],
-  clickable: true,
+  clickable: false,
   accepts: null,
   multiple: true,
   maxFiles: Infinity,
@@ -124,13 +124,19 @@ export default (state = initialState, action) => {
   switch (action.type) {
     // เลืก mode ในการทำงาน ( Search / Create / Edit )
     case "ACTION":
-      // console.log("mode", state.action)
+      console.log("mode", state.action)
       return {
         ...state,
-        action: action.value
+        action: action.value,
+        clickable: action.value === "add" || action.value === "edit" ? true : false
       }
 
     // Mode Search
+    case "CLICK OPEN POPUP":
+      return {
+        ...state,
+        inventory_show_popup: initialState.inventory_show_popup
+      }
     case "ON CHANGE NO INVENTORY":
       return {
         ...state,
