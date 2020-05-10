@@ -17,7 +17,11 @@ import ItemMasterData from './components/spare-item-master-data';
 import SpareGoodReceipt from './components/spare-good-receipt';
 import SpareGoodIssue from './components/spare-good-issue';
 import SpareGoodMaintenace from './components/spare-good-maintenace';
-
+import Track from './components/track-document';
+import Report from './components/report';
+import MaintenanceFixedAsset from './components/maintance-fixed-asset';
+import MaintenanceCustom from './components/maintance-custom';
+import Maintenance from './components/maintance';
 import Test2 from './components/test-components-v2';
 
 class FrontEnd extends React.Component {
@@ -40,8 +44,11 @@ class FrontEnd extends React.Component {
                 <Route exact path="/good-receipt" component={SpareGoodReceipt} />
                 <Route exact path="/good-issue" component={SpareGoodIssue} />
                 <Route exact path="/good-maintenace" component={SpareGoodMaintenace} />
-
-                <Route exact path="/test" component={Test2} />
+                <Route exact path="/track" component={Track} />
+                <Route exact path="/report" component={Report} />
+                <Route exact path="/fixed-asset" component={MaintenanceFixedAsset} />
+                <Route exact path="/custom" component={MaintenanceCustom} />
+                <Route exact path="/maintenance" component={Maintenance} />
             </div>
         );
     }

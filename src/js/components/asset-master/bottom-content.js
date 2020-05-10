@@ -81,6 +81,7 @@ class BottomContent extends React.Component {
                     </select>
                   </div>
                 </div>
+
                 <div className="grid_12 mt-5">
                   <div className="grid_2">
                     <input className="d-inline" type="radio" name="RadioOptions" id="Radio1" value="option1" />
@@ -89,8 +90,8 @@ class BottomContent extends React.Component {
                 </div>
                 <div className="grid_12 ">
                   <div className="grid_2">
-                    <input className="d-inline" type="radio" name="RadioOptions2" id="Radio2" value="option2" />
-                    <label htmlFor="Radio1" className="cancel-default d-inline">ปิดการใช้งาน</label>
+                    <input className="d-inline" type="radio" name="RadioOptions" id="Radio2" value="option2" />
+                    <label htmlFor="Radio2" className="cancel-default d-inline">ปิดการใช้งาน</label>
                   </div>
                 </div>
                 <div className="grid_12 mt-1">
@@ -103,21 +104,35 @@ class BottomContent extends React.Component {
               </div>
 
               <div id="แผนบำรุงรักษา" className="tabcontent">
+
+
+
+
                 <div className="grid_12">
-                  <div className="grid_2 "><p className="cancel-default">กลุ่มของการบำรุงรักษา</p></div>
+                  <div className="grid_2 cancel-default">
+                    <p className="cancel-default">กลุ่มของการบำรุงรักษา  </p>
+                  </div>
                   <div className="grid_3">
-                    <input className="cancel-default grid_2 mt-1 " type="text" />
-                    <button className="button-white edit mt-1 grid_1 float-right" type="button">...</button>
+                    <input type="text" className="cancel-default"></input>
+                  </div>
+                  <div className="grid_1 ml-0">
+                    <button class="p-button--neutral edit">...</button>
                   </div>
                 </div>
 
                 <div className="grid_12">
-                  <div className="grid_2"><p className="cancel-default">ชนิดของการบำรุงรักษา</p></div>
-                  <div className="grid_3 ">
-                    <input className="cancel-default grid_2 mt-1 " type="text" />
-                    <button className="button-white edit mt-1 grid_1 float-right" type="button">...</button>
+                  <div className="grid_2 cancel-default">
+                    <p className="cancel-default">ชนิดของการบำรุงรักษา  </p>
+                  </div>
+                  <div className="grid_3">
+                    <input type="text" className="cancel-default"></input>
+                  </div>
+                  <div className="grid_1 ml-0">
+                    <button class="p-button--neutral edit">...</button>
                   </div>
                 </div>
+
+
 
                 <div className="grid_12 mt-2">
                   <table className="table-many-column">
@@ -180,10 +195,14 @@ class BottomContent extends React.Component {
 
               <div id="รายการสินทรัพย์" className="tabcontent">
                 <div className="grid_12">
-                  <div className="grid_2"><p className="cancel-default">ชื่อย่อหน่วยนับ</p></div>
-                  <div className="grid_3">
-                    <input className="cancel-default grid_2 mt-1 " type="text" />
-                    <button className="button-white edit mt-1 grid_1 float-right" type="button">...</button>
+                  <div className="grid_2 cancel-default">
+                    <p className="cancel-default">ชื่อย่อหน่วยนับ  </p>
+                  </div>
+                  <div className="grid_2">
+                    <input type="text" className="cancel-default"></input>
+                  </div>
+                  <div className="grid_1 ml-0">
+                    <button class="p-button--neutral edit">...</button>
                   </div>
                 </div>
                 <div className="grid_12">
@@ -246,7 +265,7 @@ class BottomContent extends React.Component {
                         <td className="edit-padding text-left" style={{ minWidth: "300px" }}></td>
                       </tr>
                       <tr>
-                      <th className="edit-padding text-center" style={{ minWidth: "30px" }}></th>
+                        <th className="edit-padding text-center" style={{ minWidth: "30px" }}></th>
                         <td className="edit-padding" style={{ minWidth: "130px" }}></td>
                         <td className="edit-padding text-left" style={{ minWidth: "250px" }}></td>
                         <td className="edit-padding text-center" style={{ minWidth: "150px" }}></td>

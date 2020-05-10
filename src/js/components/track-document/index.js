@@ -10,8 +10,9 @@ import BottomContent from './bottom-content';
 import Footer from '../common/footer.js';
 
 const store = createStore(reducers)
-class AssetMaster extends React.Component {
+class Track extends React.Component {
     render() {
+        const type = 'TRACK';
         return (
             <Provider store={store}>
             <NavTopbar />
@@ -26,4 +27,4 @@ class AssetMaster extends React.Component {
     };
 }
 
-export default AssetMaster;
+export default Track;

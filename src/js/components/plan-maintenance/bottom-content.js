@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { connect } from 'react-redux'
 import '../../../css/style.css'
 import '../../../css/tabs.css'
 import '../../../css/grid12.css';
@@ -107,4 +107,15 @@ class BottomContent extends React.Component {
   };
 }
 
-export default BottomContent;
+const mapStateToProps = (state) => ({
+  actionMode: state.action,
+
+
+})
+
+
+const mapDispatchToProps = (dispatch) => ({
+
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(BottomContent);

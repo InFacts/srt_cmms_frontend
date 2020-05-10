@@ -130,6 +130,38 @@ class TopContent extends React.Component {
                 </div>
               </div>
 
+              
+              <table className="table-many-column ">
+                  <thead>
+                    <tr>
+                      <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
+                      <th className="font" style={{ minWidth: "130px" }}>เลขที่อุปกรณ์</th>
+                      <th className="font" style={{ minWidth: "250px" }}>รายละเอียด</th>
+                      <th className="font text-center" style={{ minWidth: "150px" }}>จำนวน</th>
+                      <th className="font text-center" style={{ minWidth: "100px" }}>หน่วย</th>
+                      <th className="font text-center" style={{ minWidth: "500px" }}>หมายเหตุ</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th className="edit-padding text-center" style={{ minWidth: "30px" }}>1</th>
+                      <td className="edit-padding" style={{ minWidth: "130px" }}>tool 223</td>
+                      <td className="edit-padding text-left" style={{ minWidth: "250px" }}>แผนหิน</td>
+                      <td className="edit-padding text-center" style={{ minWidth: "80px" }}>
+                        <select className="edit-select-table">
+                          <option defaultValue="1">1</option>
+                          <option defaultValue="2">2</option>
+                        </select>
+                      </td>
+                      <td className="edit-padding text-center" style={{ minWidth: "100px" }}>
+                        แผ่น
+                      </td>
+                      <td className="edit-padding text-left" style={{ minWidth: "300px" }}></td>
+                    </tr>
+
+                  </tbody>
+                </table>
+
             
               <div className="grid_12 ">
                 <div className="grid_8 pull_0 float-right">

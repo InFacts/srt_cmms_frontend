@@ -114,66 +114,119 @@ class TopContent extends React.Component {
             <div className="container_12 edit-padding">
 
               <div className="grid_12">
-                <div className="grid_2"><p className="cancel-default">เลขที่เอกสาร:</p></div>
-                <div className="grid_8 pull_0">
-                  <input type="text" className="cancel-default grid_3" />
+                <div className="grid_7">
+                  <input className="d-inline" type="radio" name="RadioOptions" id="Radio1" value="เอกสารของฉัน" onChange={(e) => { this.props.onChangeFindTrackDocument(e) }} />
+                  <label htmlFor="Radio1" className="cancel-default d-inline">เอกสารของฉัน</label>
+                  <input className="d-inline ml-3" type="radio" name="RadioOptions" id="Radio2" value="เอกสารทั้งหมด" onChange={(e) => { this.props.onChangeFindTrackDocument(e) }} />
+                  <label htmlFor="Radio2" className="cancel-default d-inline ml-3">เอกสารทั้งหมด</label>
                 </div>
               </div>
 
-              <div className="grid_12">
-                <div className="grid_2"><p className="cancel-default">สถานที่ แขวง:</p></div>
-                <div className="grid_8 pull_0">
-                  <select className="edit-select-top grid_3 " >
-                    <option defaultValue="0"></option>
-                    <option defaultValue="1">Cosmic Cuttlefish</option>
-                    <option defaultValue="2">Bionic Beaver</option>
-                    <option defaultValue="3">Xenial Xerus</option>
+
+              <div className="grid_12 mt-2">
+                <div className="grid_1 cancel-default">
+                  <p className="cancel-default">ประเภทเอกสาร </p>
+                </div>
+                <div className="grid_2">
+                  <select className="edit-select-top grid_2 " >
+
                   </select>
-                  <select className="edit-select-top grid_3 float-right" >
-                    <option defaultValue="0"></option>
-                    <option defaultValue="1">Cosmic Cuttlefish</option>
-                    <option defaultValue="2">Bionic Beaver</option>
-                    <option defaultValue="3">Xenial Xerus</option>
-                  </select>
-                  <p className="cancel-default grid_2 float-right">สถานที่ ตอน:</p>
+                </div>
+                <div className="grid_1  ">
+                  <p className="cancel-default">วันเริ่มต้น </p>
+                </div>
+                <div className="grid_3">
+                  <input type="date" className="cancel-default grid_3 " ></input>
                 </div>
               </div>
+
+
               <div className="grid_12">
-                <div className="grid_2"><p className="cancel-default">วันที่เริ่มต้น:</p></div>
-                <div className="grid_8 pull_0">
+                <div className="grid_1 cancel-default">
+                  <p className="cancel-default">เลขที่เอกสาร </p>
+                </div>
+                <div className="grid_2">
+                  <input type="text" className="cancel-default grid_2 " ></input>
+                </div>
+                <div className="grid_1  ">
+                  <p className="cancel-default">วันสิ้นสุด </p>
+                </div>
+                <div className="grid_3">
                   <input type="date" className="cancel-default grid_3 "></input>
-                  <input type="date" className="cancel-default grid_3 float-right"></input>
-                  <p className="cancel-default grid_2 float-right">วันที่สิ้นสุด:</p>
                 </div>
-                <button className="button-blue edit grid_1 float-right mr-5" type="button">ค้นหา</button>
+                <div className="grid_1  ">
+                  <p className="cancel-default">สถานะเอกสาร </p>
+
+                </div>
+                <div className="grid_2">
+                  <select className="edit-select-top grid_2 " >
+
+                  </select>
+                </div>
               </div>
 
               <div className="grid_12">
-                <table className="table-many-column mt-3">
-                  <thead>
-                    <tr>
-                      <th className="font" style={{ minWidth: "150px" }}>เลขที่เอกสาร</th>
-                      <th className="font" style={{ minWidth: "150px" }}>ชื่องาน</th>
-                      <th className="font" style={{ minWidth: "150px" }}>วันเวลาแจ้งขัดข้อง</th>
-                      <th className="font" style={{ minWidth: "150px" }}>ผู้นำเข้าระบบ</th>
-                      <th className="font" style={{ minWidth: "150px" }}>สถานที่ แขวน/ตอน</th>
-                      <th className="font" style={{ minWidth: "150px" }}></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="edit-padding" style={{ minWidth: "150px", paddingLeft: "50px" }}>1123451</td>
-                      <td className="edit-padding" style={{ minWidth: "150px" }}>รถไฟ</td>
-                      <td className="edit-padding" style={{ minWidth: "150px" }}>14 เมษ 2563</td>
-                      <td className="edit-padding" style={{ minWidth: "150px" }}>นาย ก</td>
-                      <td className="edit-padding" style={{ minWidth: "150px" }}>บางแค</td>
-                      <td className="edit-padding" style={{ minWidth: "150px" }}>
-                        <button className="button-blue">เลือก</button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                <div className="grid_1 cancel-default">
+                  <p className="cancel-default">แขวง </p>
+                </div>
+                <div className="grid_2">
+                  <select className="edit-select-top grid_2 " >
+
+                  </select>
+                </div>
+                <div className="grid_1  ">
+                  <p className="cancel-default">ตอน </p>
+                </div>
+                <div className="grid_3">
+                  <select className="edit-select-top grid_3 " >
+                    <option defaultValue=""></option>
+
+                  </select>
+                </div>
+                <div className="grid_1  ">
+                  <p className="cancel-default">สถานี </p>
+                </div>
+                <div className="grid_2">
+                  <select className="edit-select-top grid_2 ">
+                    <option defaultValue=""></option>
+
+                  </select>
+                </div>
+                <button className="button-blue edit grid_1 float-right mr-5" type="button" >ค้นหา</button>
               </div>
+
+
+              <table className="table-many-column ">
+                <thead>
+                  <tr>
+
+                    <th className="font" style={{ minWidth: "150px" }}>เลขที่เอกสาร</th>
+                    <th className="font" style={{ minWidth: "150px" }}>ชื่องาน</th>
+                    <th className="font" style={{ minWidth: "150px" }}>วันเวลาแจ้งขัดข้อง</th>
+                    <th className="font" style={{ minWidth: "150px" }}>ผู้นำเข้าระบบ</th>
+                    <th className="font" style={{ minWidth: "150px" }}>สถานที่ แขวง/ตอน</th>
+                    <th className="font" style={{ minWidth: "150px" }}></th>
+                  </tr>
+                </thead>
+                <tbody>
+
+
+                  <tr >
+
+                    <td className="edit-padding" style={{ minWidth: "150px", paddingLeft: "50px" }}></td>
+                    <td className="edit-padding" style={{ minWidth: "150px" }}></td>
+                    <td className="edit-padding" style={{ minWidth: "150px" }}></td>
+                    <td className="edit-padding" style={{ minWidth: "150px" }}></td>
+                    <td className="edit-padding" style={{ minWidth: "150px" }}></td>
+                    <td className="edit-padding" style={{ minWidth: "150px" }}>
+                      <button type="button" className="button-blue" >เลือก</button>
+                    </td>
+                  </tr>
+
+
+                </tbody>
+              </table>
+
 
               <div className="grid_12">
                 <button className="button-blue float-right grid_1 mr-5" type="button" aria-label="Close active modal" aria-controls="modal" id="aria-controls">กลับ</button>
@@ -182,7 +235,7 @@ class TopContent extends React.Component {
             </div>
           </div>
         </div>
-       
+
         <div className="modal" id="modal2" style={{ display: "none" }}>
           <div className="gray-board">
             <p className="head-title-modal edit">ค้นหาเอกสารอ้างอิง / ใบสั่งงาน</p>
@@ -250,7 +303,7 @@ class TopContent extends React.Component {
                 </table>
               </div>
 
-              <div className="grid_12">
+              <div className="grid_12 mt-5n">
                 <button className="button-blue float-right grid_1 mr-5" type="button" aria-label="Close active modal" aria-controls="modal2" id="aria-controls">กลับ</button>
               </div>
 

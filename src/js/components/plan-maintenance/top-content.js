@@ -1,15 +1,13 @@
 import React from 'react';
-
+import { connect } from 'react-redux'
 import '../../../css/grid12.css';
 
 class TopContent extends React.Component {
-
-    componentDidMount() {
-        document.getElementById("defaultOpen").click();
-    }
+    // componentDidMount() {
+    //     document.getElementById("defaultOpen").click();
+    //   }
 
     tapChange(evt, cityName) {
-        console.log("hello")
         var i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("tabcontent");
         for (i = 0; i < tabcontent.length; i++) {
@@ -23,63 +21,134 @@ class TopContent extends React.Component {
         evt.currentTarget.className += " active";
     }
 
-    render() {
-        return (
+    checkActionMode = (mode) => {
 
-            <div id="blackground-white">
-                <div className="container_12 clearfix">
-                    <section className="grid_12 ">
-                        <h4 className="head-title">สร้างแผนวาระการซ่อมบำรุงรักษา</h4>
-
-                        <div className="grid_12">
-                            <div className="grid_2"><p className="cancel-default">ชื่อแผนซ่อมบำรุง</p></div>
-                            <div className="grid_7 pull_0">
-                                <div className="p-search-box cancel-margin">
-                                    <input type="search" className="p-search-box__input cancel-default" />
-                                    <button className="p-search-box__button cancel-padding" ><i className="p-icon--external-link" id="showModal" aria-controls="modal"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="grid_12">
-                            <div className="grid_2"><p className="cancel-default">ความถี่การซ่อมบำรุง</p></div>
-                            <div className="grid_7 pull_0">
-                                <input type="text" className="cancel-default grid_3 "></input>
-
-                                <select className="edit-select-top grid_3 float-right" >
-                                    <option defaultValue="0"></option>
-                                    <option defaultValue="1">Cosmic Cuttlefish</option>
-                                    <option defaultValue="2">Bionic Beaver</option>
-                                    <option defaultValue="3">Xenial Xerus</option>
-                                </select>
-
-                                <p className="cancel-default grid_1 float-right">ครั้งต่อ</p>
-                            </div>
-                        </div>
-                        <div className="grid_12">
-                            <div className="grid_2"><p className="cancel-default">แขวง</p></div>
-                            <div className="grid_3 pull_0">
-                                <input className="cancel-default" type="text" />
-                            </div>
-                        </div>
-                        <div className="grid_12">
-                            <div className="grid_2"><p className="cancel-default">รายละเอียดสถานที่</p></div>
-                            <div className="grid_9 pull_0">
-                                <textarea className="edit" name="Text1" cols="40" rows="2"></textarea>
-                            </div>
-                        </div>
-
-                    </section>
-
+        if (mode === "search") {
+            return (
+                <>
                     <div className="grid_12">
-                        <div className="tab grid_6">
-                            <button id="defaultOpen" className="tablinks" onClick={e => this.tapChange(e, "แผนการดำเนินงาน")}>แผนการดำเนินงาน</button>
-                            <button className="tablinks" onClick={e => this.tapChange(e, "อุปกรณ์ที่ต้องนำไปปฎิบัติงาน")}>อุปกรณ์ที่ต้องนำไปปฎิบัติงาน</button>
+                        <div className="grid_2"><p className="cancel-default">ชื่อแผนซ่อมบำรุง</p></div>
+                        <div className="grid_7 pull_0">
+                            <div className="p-search-box cancel-margin">
+                                <input type="search" className="p-search-box__input cancel-default" />
+                                <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showPlan" aria-controls="modalPlan"></i></button>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                {/* PopUp */}
-                <div className="modal" id="modal" style={{ display: "none" }}>
+                    <div className="grid_12">
+                        <div className="grid_2"><p className="cancel-default">ความถี่การซ่อมบำรุง</p></div>
+                        <div className="grid_7 pull_0">
+                            <input type="text" className="cancel-default grid_3 " disabled="disabled"></input>
+
+                            <select className="edit-select-top grid_3 float-right" disabled="disabled">
+                                <option defaultValue="0"></option>
+                                <option defaultValue="1">Cosmic Cuttlefish</option>
+                                <option defaultValue="2">Bionic Beaver</option>
+                                <option defaultValue="3">Xenial Xerus</option>
+                            </select>
+
+                            <p className="cancel-default grid_1 float-right">ครั้งต่อ</p>
+                        </div>
+                    </div>
+
+                    <div className="grid_12">
+                        <div className="grid_2"><p className="cancel-default">แขวง</p></div>
+                        <div className="grid_3 pull_0">
+                            <input className="cancel-default" type="text" disabled="disabled" />
+                        </div>
+                    </div>
+
+                    <div className="grid_12">
+                        <div className="grid_2"><p className="cancel-default">รายละเอียดสถานที่</p></div>
+                        <div className="grid_9 pull_0">
+                            <textarea className="edit" name="Text1" cols="40" rows="2" disabled="disabled"></textarea>
+                        </div>
+                    </div>
+
+                </>
+            )
+        }
+        if (mode === "edit") {
+            return (
+                <>
+                <div className="grid_12">
+                        <div className="grid_2"><p className="cancel-default">ชื่อแผนซ่อมบำรุง</p></div>
+                        <div className="grid_7 pull_0">
+                            <div className="p-search-box cancel-margin">
+                                <input type="search" className="p-search-box__input cancel-default" />
+                                <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showPlan" aria-controls="modalPlan"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="grid_12">
+                        <div className="grid_2"><p className="cancel-default">ความถี่การซ่อมบำรุง</p></div>
+                        <div className="grid_7 pull_0">
+                            <input type="text" className="cancel-default grid_3 " ></input>
+
+                            <select className="edit-select-top grid_3 float-right" >
+                                <option defaultValue="0"></option>
+                                <option defaultValue="1">Cosmic Cuttlefish</option>
+                                <option defaultValue="2">Bionic Beaver</option>
+                                <option defaultValue="3">Xenial Xerus</option>
+                            </select>
+
+                            <p className="cancel-default grid_1 float-right">ครั้งต่อ</p>
+                        </div>
+                    </div>
+
+                    <div className="grid_12">
+                        <div className="grid_2"><p className="cancel-default">แขวง</p></div>
+                        <div className="grid_3 pull_0">
+                            <input className="cancel-default" type="text"  />
+                        </div>
+                    </div>
+
+                    <div className="grid_12">
+                        <div className="grid_2"><p className="cancel-default">รายละเอียดสถานที่</p></div>
+                        <div className="grid_9 pull_0">
+                            <textarea className="edit" name="Text1" cols="40" rows="2" ></textarea>
+                        </div>
+                    </div>
+
+                </>
+            )
+        }
+        if (mode === "add") {
+            return (
+                <>
+
+                </>
+            )
+        }
+
+    }
+
+
+
+    render() {
+        return (
+            <div>
+                <div id="blackground-white">
+                    <div className="container_12 clearfix">
+                        <section className="grid_12 ">
+                            <h4 className="head-title">สร้างแผนวาระการซ่อมบำรุงรักษา</h4>
+                            {this.checkActionMode(this.props.actionMode)}
+
+
+                        </section>
+
+                        <div className="grid_12">
+                            <div className="tab grid_6">
+                                <button id="defaultOpen" className="tablinks" onClick={e => this.tapChange(e, "แผนการดำเนินงาน")}>แผนการดำเนินงาน</button>
+                                <button className="tablinks" onClick={e => this.tapChange(e, "อุปกรณ์ที่ต้องนำไปปฎิบัติงาน")}>อุปกรณ์ที่ต้องนำไปปฎิบัติงาน</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* PopUp */}
+                    {/* <div className="modal" id="modal" style={{ display: "none" }}>
                     <div className="gray-board">
                         <p className="head-title-modal edit">แผนบำรุงรักษา</p>
                         <div className="container_12 edit-padding">
@@ -143,11 +212,21 @@ class TopContent extends React.Component {
                             </div>
                         </div>
                     </div>
+                </div> */}
                 </div>
-
             </div>
         )
     };
 }
 
-export default TopContent;
+
+const mapStateToProps = (state) => ({
+    actionMode: state.action,
+})
+
+
+const mapDispatchToProps = (dispatch) => ({
+
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(TopContent);
