@@ -30,7 +30,7 @@ class BottomContent extends React.Component {
                 {current.props.list_show.map(function (list, index) {
                   return (
                     <tr key={index}>
-                      <th className="edit-padding text-center">{list.id}</th>
+                      <th className="edit-padding text-center">{index+1}</th>
                       <td className="edit-padding">{list.no_part}</td>
                       <td className="edit-padding">{list.name_part}</td>
                       <td className="edit-padding text-center">{list.quility}</td>
@@ -77,10 +77,9 @@ class BottomContent extends React.Component {
               </thead>
               <tbody>
                 {current.props.list_show.map(function (list, index) {
-                  console.log(list.total)
                   return (
                     <tr key={index} id={index}>
-                      <th className="edit-padding text-center">{list.id}</th>
+                      <th className="edit-padding text-center">{index+1}</th>
                       <td className="edit-padding">
                         <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
                           <input type="text" className="p-search-box__input cancel-default-table" value={list.no_part} onChange={(e) => current.props.onChangeNoPartEachRow(e)} />
@@ -92,9 +91,11 @@ class BottomContent extends React.Component {
                         <input type="number" min="1" className="cancel-default float-right" value={list.quility} onChange={(e) => current.props.onChangeQuilityEachRow(e)}></input>
                       </td>
                       <td className="edit-padding text-center">{list.unit}</td>
-                      <td className="edit-padding text-right">{list.unit_per_bath}</td>
                       <td className="edit-padding text-right">
-                        <input type="number" min="1" className="cancel-default float-right" value={list.total} onChange={(e) => current.props.onChangeTotalEachRow(e)}></input>
+                      <input type="number" min="1" className="cancel-default float-right" value={list.unit_per_bath} onChange={(e) => current.props.onChangeUnitPerBathEachRow(e)}></input>
+                      </td>
+                      <td className="edit-padding text-right">{list.total}
+                        {/* <input type="number" min="1" className="cancel-default float-right" value={list.total} onChange={(e) => current.props.onChangeTotalEachRow(e)}></input> */}
                       </td>
                     </tr>
                   )
@@ -104,7 +105,7 @@ class BottomContent extends React.Component {
           </div>
           <div className="grid_12 mt-3">
             <div className="grid_4 float-right">
-              <input type="number" min="1" className="cancel-default float-right" value={current.props.document_show.total} onChange={(e) => this.props.onChangeTotal(e)}></input>
+              <input type="number" min="1" className="cancel-default float-right" value={current.props.document_show.total} onChange={(e) => this.props.onChangeTotal(e)} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
           </div>
@@ -197,9 +198,11 @@ class BottomContent extends React.Component {
                         <input type="number" min="1" className="cancel-default float-right" value={list.quility} onChange={(e) => current.props.onChangeQuilityEachRowModeAdd(e)}></input>
                       </td>
                       <td className="edit-padding text-center">{list.unit}</td>
-                      <td className="edit-padding text-right">{list.unit_per_bath}</td>
                       <td className="edit-padding text-right">
-                        <input type="number" min="1" className="cancel-default float-right" value={list.total} onChange={(e) => current.props.onChangeTotalEachRowModeAdd(e)}></input>
+                      <input type="number" min="1" className="cancel-default float-right" value={list.unit_per_bath} onChange={(e) => current.props.onChangeUnitPerBathEachRowModeAdd(e)}></input>
+                      </td>
+                      <td className="edit-padding text-right">{list.total}
+                        {/* <input type="number" min="1" className="cancel-default float-right" value={list.total} onChange={(e) => current.props.onChangeTotalEachRowModeAdd(e)}></input> */}
                       </td>
                     </tr>
                   )
@@ -209,7 +212,7 @@ class BottomContent extends React.Component {
           </div>
           <div className="grid_12 mt-3">
             <div className="grid_4 float-right">
-              <input type="number" min="1" className="cancel-default float-right" value={current.props.document_show_mode_add.total} onChange={(e) => this.props.onChangeTotalModeAdd(e)}></input>
+              <input type="number" min="1" className="cancel-default float-right" value={current.props.document_show_mode_add.total} onChange={(e) => this.props.onChangeTotalModeAdd(e)} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
           </div>
@@ -309,6 +312,7 @@ const mapDispatchToProps = (dispatch) => ({
   onChangeNoPartEachRow: (e) => dispatch(onChangeNoPartEachRow(e)),
   onClickNoPartEachRow: (e) => dispatch(onClickNoPartEachRow(e)),
   onChangeQuilityEachRow: (e) => dispatch(onChangeQuilityEachRow(e)),
+  onChangeUnitPerBathEachRow: (e) => dispatch(onChangeUnitPerBathEachRow(e)),
   onChangeTotalEachRow: (e) => dispatch(onChangeTotalEachRow(e)),
   onClickSearchPopUpNoPart: (e) => dispatch(onClickSearchPopUpNoPart(e)),
   onClickSelectPopUpNoPart: (e) => dispatch(onClickSelectPopUpNoPart(e)),
@@ -321,6 +325,7 @@ const mapDispatchToProps = (dispatch) => ({
   onClickSearchPopUpNoPartModeAdd: (e) => dispatch(onClickSearchPopUpNoPartModeAdd(e)),
   onChangeNoPartModeAdd: (e) => dispatch(onChangeNoPartModeAdd(e)),
   onClickSelectPopUpNoPartModeAdd: (e) => dispatch(onClickSelectPopUpNoPartModeAdd(e)),
+  onChangeUnitPerBathEachRowModeAdd: (e) => dispatch(onChangeUnitPerBathEachRowModeAdd(e)),
   onChangeQuilityEachRowModeAdd: (e) => dispatch(onChangeQuilityEachRowModeAdd(e)),
   onChangeTotalEachRowModeAdd: (e) => dispatch(onChangeTotalEachRowModeAdd(e)),
   onChangeTotalModeAdd: (e) => dispatch(onChangeTotalModeAdd(e)),
@@ -352,6 +357,13 @@ export const onClickNoPartEachRow = (e) => {
 export const onChangeQuilityEachRow = (e) => {
   return {
     type: "ON CHANGE QUILITY EACH ROW",
+    value: e.target.value,
+    rowIndex: e.target.parentNode.parentNode.id
+  }
+}
+export const onChangeUnitPerBathEachRow = (e) => {
+  return {
+    type: "ON CHANGE UNIT PER BATH EACH ROW",
     value: e.target.value,
     rowIndex: e.target.parentNode.parentNode.id
   }
@@ -422,6 +434,13 @@ export const onClickSelectPopUpNoPartModeAdd = (e) => {
 export const onChangeQuilityEachRowModeAdd = (e) => {
   return {
     type: "ON CHANGE QUILITY EACH ROW MODE ADD",
+    value: e.target.value,
+    rowIndex: e.target.parentNode.parentNode.id
+  }
+}
+export const onChangeUnitPerBathEachRowModeAdd = (e) => {
+  return {
+    type: "ON CHANGE UNIT PER BATH EACH ROW MODE ADD",
     value: e.target.value,
     rowIndex: e.target.parentNode.parentNode.id
   }

@@ -1,589 +1,1331 @@
 const initialState = {
-    headTable:
-        [
-            ["#", "text-center", "30px"],
-            ["เลขที่อะไหล่", "", "130px"],
-            ["ชื่ออะไหล่", "", "250px"],
-            ["คงคลัง", "text-center", "80px"],
-            ["รอส่งมอบ", "text-center", "80px"],
-            ["ระหว่างการจัดซื้อ", "text-center", "80px"],
-            ["จำนวนสุทธิ", "text-center", "80px"],
-            ["สถานะ", "text-center", "80px"],
-            ["จำนวน", "", "100px"],
-            ["หน่วยนับ", "", "80px"],
-            ["ราคาต่อหน่วย", "", "80px"],
-            ["จำนวนเงิน", "", "80px"]
-        ],
-    bodyTable:
-        [
-            [
-                // value, css text center, css gray background, check type
-                ["", "text-center", "disable", ""],
-                ["", "", "", "search"],
-                ["", "", "", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-right", "", "number"],
-                ["", "text-left", "", ""],
-                ["", "text-center", "", ""],
-                ["", "text-right", "", ""]
-            ],
-            [
-                ["", "text-center", "disable", ""],
-                ["", "", "", "search"],
-                ["", "", "", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-right", "", "number"],
-                ["", "text-left", "", ""],
-                ["", "text-center", "", ""],
-                ["", "text-right", "", ""]
-            ],
-            [
-                ["", "text-center", "disable", ""],
-                ["", "", "", "search"],
-                ["", "", "", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-right", "", "number"],
-                ["", "text-left", "", ""],
-                ["", "text-center", "", ""],
-                ["", "text-right", "", ""]
-            ],
-            [
-                ["", "text-center", "disable", ""],
-                ["", "", "", "search"],
-                ["", "", "", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-right", "", "number"],
-                ["", "text-left", "", ""],
-                ["", "text-center", "", ""],
-                ["", "text-right", "", ""]
-            ],
-            [
-                ["", "text-center", "disable", ""],
-                ["", "", "", "search"],
-                ["", "", "", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-right", "", "number"],
-                ["", "text-left", "", ""],
-                ["", "text-center", "", ""],
-                ["", "text-right", "", ""]
-            ],
-            [
-                ["", "text-center", "disable", ""],
-                ["", "", "", "search"],
-                ["", "", "", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-right", "", "number"],
-                ["", "text-left", "", ""],
-                ["", "text-center", "", ""],
-                ["", "text-right", "", ""]
-            ],
-            [
-                ["", "text-center", "disable", ""],
-                ["", "", "", "search"],
-                ["", "", "", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-right", "", "number"],
-                ["", "text-left", "", ""],
-                ["", "text-center", "", ""],
-                ["", "text-right", "", ""]
-            ],
-            [
-                ["", "text-center", "disable", ""],
-                ["", "", "", "search"],
-                ["", "", "", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-right", "", "number"],
-                ["", "text-left", "", ""],
-                ["", "text-center", "", ""],
-                ["", "text-right", "", ""]
-            ],
-            [
-                ["", "text-center", "disable", ""],
-                ["", "", "", "search"],
-                ["", "", "", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-right", "", "number"],
-                ["", "text-left", "", ""],
-                ["", "text-center", "", ""],
-                ["", "text-right", "", ""]
-            ],
-            [
-                ["", "text-center", "disable", ""],
-                ["", "", "", "search"],
-                ["", "", "", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-center", "disable", ""],
-                ["", "text-right", "", "number"],
-                ["", "text-left", "", ""],
-                ["", "text-center", "", ""],
-                ["", "text-right", "", ""]
-            ]
-        ],
+    // ค่าคงที่ต่างๆ
+    // ค่าคงที่เอกสาร
+    document: [
+        {
+            "id": 1,
+            "no_document": "12345",
+            "name": "นายศุภากร ศิริมาลีวัฒนนา",
+            "status": "เปิดสำหรับแก้ไข",
+            "date": "2014-02-09",
+            "from_inventory": "100",
+            "to_inventory": "200",
+            "pick_up": 1,    // 1 รับของเอง  2 ส่งไปยังคลังปลายทาง
+            "account_type": "2031515",
+            "total": 3000,
+            "note": "",
+            "table_part": [
+                {
+                    "id": 1,
+                    "no_part": "SIG 003",
+                    "name_part": "SIG ขนาด 5V.",
+                    "stock": 10,
+                    "wait_sent": 10,
+                    "wait_po": 10,
+                    "real_stock": 10,
+                    "status": "ของใหม่",
+                    "quility": 10,
+                    "unit": "อัน",
+                    "parent_unit": "sig",
+                    "unit_per_bath": 100,
+                    "total": 1000
+                },
+                {
+                    "id": 2,
+                    "no_part": "SIG 004",
+                    "name_part": "SIG ขนาด 5V.",
+                    "stock": 10,
+                    "wait_sent": 10,
+                    "wait_po": 10,
+                    "real_stock": 10,
+                    "status": "ของใหม่",
+                    "quility": 10,
+                    "unit": "อัน",
+                    "parent_unit": "sig",
+                    "unit_per_bath": 100,
+                    "total": 1000
+                },
+                {
+                    "id": 3,
+                    "no_part": "เครื่องกั้นไฟฟ้า",
+                    "name_part": "เครื่องกั้นไฟฟ้า ขนาด 5V.",
+                    "stock": 10,
+                    "wait_sent": 10,
+                    "wait_po": 10,
+                    "real_stock": 10,
+                    "status": "ของใหม่",
+                    "quility": 10,
+                    "unit": "เครื่อง",
+                    "parent_unit": "เครื่องกั้นไฟฟ้า",
+                    "unit_per_bath": 100,
+                    "total": 1000
+                },
+                {
+                    "id": "",
+                    "no_part": "",
+                    "name_part": "",
+                    "stock": "",
+                    "wait_sent": "",
+                    "wait_po": "",
+                    "real_stock": "",
+                    "status": "",
+                    "quility": "",
+                    "unit": "",
+                    "parent_unit": "",
+                    "unit_per_bath": "",
+                    "total": ""
+                },
 
-    // State Table Satus
-    headTableStatus:
-        [
-            ["", "50px"],
-            ["ตำแหน่ง", "100px"],
-            ["หน่วยงาน", "250px"],
-            ["ชื่อผู้ลงนาม", "250px"],
-            ["วันที่ลงนาม", "150px"],
-            ["สถานะ", "110px"]
-        ],
-    bodyTableStatus:
-        [
-            [
-                ["", "50px", "green"],
-                ["ช่างฝีมือ", "100px", ""],
-                ["ตอนหาดใหญ่ (ผู้ขอเบิก)", "250px", ""],
-                ["นายวิชัย ไชยแก้ว", "250px", ""],
-                ["31/07/2018 22:24PM", "150px", ""],
-                ["ลงนามเรียบร้อยแล้ว", "110px", ""]
-            ],
-            [
-                ["", "50px", "gray"],
-                ["ช่างฝีมือ", "100px", ""],
-                ["ตอนหาดใหญ่ (ผู้ขอเบิก)", "250px", ""],
-                ["นายวิชัย ไชยแก้ว", "250px", ""],
-                ["31/07/2018 22:24PM", "150px", ""],
-                ["ลงนามเรียบร้อยแล้ว", "110px", ""]
-            ]
-        ],
+                {
+                    "id": "",
+                    "no_part": "",
+                    "name_part": "",
+                    "stock": "",
+                    "wait_sent": "",
+                    "wait_po": "",
+                    "real_stock": "",
+                    "status": "",
+                    "quility": "",
+                    "unit": "",
+                    "parent_unit": "",
+                    "unit_per_bath": "",
+                    "total": ""
+                },
 
-    // State Table POPUP
-    idPopUpTable: "modalTable",
-    variablePopUp: {
-        head: "เลขที่สิ่งของ",
-        labelFind: "ค้นหาเลขที่สิ่งของ",
-        filterInventoryID: ""
-    },
-    headTablePopUp: [
-        ["เลขที่สิ่งของ", "300px"],
-        ["รายละเอียดสินค้า", "500px"],
-        ["Action", "100px"]
+                {
+                    "id": "",
+                    "no_part": "",
+                    "name_part": "",
+                    "stock": "",
+                    "wait_sent": "",
+                    "wait_po": "",
+                    "real_stock": "",
+                    "status": "",
+                    "quility": "",
+                    "unit": "",
+                    "parent_unit": "",
+                    "unit_per_bath": "",
+                    "total": ""
+                },
+
+                {
+                    "id": "",
+                    "no_part": "",
+                    "name_part": "",
+                    "stock": "",
+                    "wait_sent": "",
+                    "wait_po": "",
+                    "real_stock": "",
+                    "status": "",
+                    "quility": "",
+                    "unit": "",
+                    "parent_unit": "",
+                    "unit_per_bath": "",
+                    "total": ""
+                },
+
+                {
+                    "id": "",
+                    "no_part": "",
+                    "name_part": "",
+                    "stock": "",
+                    "wait_sent": "",
+                    "wait_po": "",
+                    "real_stock": "",
+                    "status": "",
+                    "quility": "",
+                    "unit": "",
+                    "parent_unit": "",
+                    "unit_per_bath": "",
+                    "total": ""
+                },
+
+                {
+                    "id": "",
+                    "no_part": "",
+                    "name_part": "",
+                    "stock": "",
+                    "wait_sent": "",
+                    "wait_po": "",
+                    "real_stock": "",
+                    "status": "",
+                    "quility": "",
+                    "unit": "",
+                    "parent_unit": "",
+                    "unit_per_bath": "",
+                    "total": ""
+                },
+
+                {
+                    "id": "",
+                    "no_part": "",
+                    "name_part": "",
+                    "stock": "",
+                    "wait_sent": "",
+                    "wait_po": "",
+                    "real_stock": "",
+                    "status": "",
+                    "quility": "",
+                    "unit": "",
+                    "parent_unit": "",
+                    "unit_per_bath": "",
+                    "total": ""
+                },
+            ],
+            "table_status": [
+                {
+                    "role": "ช่างฝีมือ 6",
+                    "department": "ตอนหาดใหญ่ (ผู้ขอเบิก)",
+                    "name": "นายวินัย ชัยแก้ว",
+                    "date": "2020-12-01 12:32",
+                    "status": "ลงนามเรียบร้อย"
+                },
+                {
+                    "role": "สสญ.",
+                    "department": "แขวงบำรุงรักษาอาณัติสัญญาณหาดใหญ่",
+                    "name": "นายภาคิน แก้วสองเมือง",
+                    "date": "",
+                    "status": "รอการอนุมัติ"
+                },
+                {
+                    "role": "วศญ.2",
+                    "department": "กองบำรุงรักษาเขต 2",
+                    "name": "นายเฉลียว ฤทธิ",
+                    "date": "",
+                    "status": "รอการอนุมัติ"
+                },
+                {
+                    "role": "วสส.",
+                    "department": "กองอาณัติสัญญาณ",
+                    "name": "นายวิระ สายไหม",
+                    "date": "",
+                    "status": "รอการอนุมัติ"
+                },
+                {
+                    "role": "สสม.",
+                    "department": "งานระบบเครื่องกล",
+                    "name": "นายศิวกร ศิริ",
+                    "date": "",
+                    "status": "รอการอนุมัติ"
+                }
+            ],
+            "raw_no_part": [
+                {
+                    "id": 1,
+                    "no_part": "SIG 003",
+                    "name_part": "SIG ขนาด 5V.",
+                    "stock": 10,
+                    "wait_sent": 10,
+                    "wait_po": 10,
+                    "real_stock": 10,
+                    "status": "ของใหม่",
+                    "parent_unit": "sig",
+                    "unit_per_bath": 100,
+                },
+                {
+                    "id": 2,
+                    "no_part": "เครื่องกั้นไฟฟ้า",
+                    "name_part": "เครื่องกั้นไฟฟ้า ขนาด 5V.",
+                    "stock": 10,
+                    "wait_sent": 10,
+                    "wait_po": 10,
+                    "real_stock": 10,
+                    "status": "ของเก่า",
+                    "parent_unit": "เครื่องกั้น",
+                    "unit_per_bath": 100,
+                },
+                {
+                    "id": 3,
+                    "no_part": "SIG 004",
+                    "name_part": "SIG ขนาด 5V.",
+                    "stock": 10,
+                    "wait_sent": 10,
+                    "wait_po": 10,
+                    "real_stock": 10,
+                    "status": "ของใหม่",
+                    "parent_unit": "sig",
+                    "unit_per_bath": 100,
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "no_document": "6789",
+            "name": "นายสรวิศ ศิริมาลีวัฒนนา",
+            "status": "เปิดสำหรับแก้ไข",
+            "date": "2014-02-09",
+            "from_inventory": "100",
+            "to_inventory": "200",
+            "pick_up": 1,    // 1 รับของเอง  2 ส่งไปยังคลังปลายทาง
+            "account_type": "2031515",
+            "total": 2000,
+            "note": "",
+            "table_part": [
+                {
+                    "id": 1,
+                    "no_part": "SIG 003",
+                    "name_part": "SIG ขนาด 5V.",
+                    "stock": 10,
+                    "wait_sent": 10,
+                    "wait_po": 10,
+                    "real_stock": 10,
+                    "status": "ของใหม่",
+                    "quility": 10,
+                    "unit": "อัน",
+                    "parent_unit": "sig",
+                    "unit_per_bath": 100,
+                    "total": 1000
+                },
+                {
+                    "id": 2,
+                    "no_part": "SIG 004",
+                    "name_part": "SIG ขนาด 5V.",
+                    "stock": 10,
+                    "wait_sent": 10,
+                    "wait_po": 10,
+                    "real_stock": 10,
+                    "status": "ของใหม่",
+                    "quility": 10,
+                    "unit": "อัน",
+                    "parent_unit": "sig",
+                    "unit_per_bath": 100,
+                    "total": 1000
+                },
+                {
+                    "id": "",
+                    "no_part": "",
+                    "name_part": "",
+                    "stock": "",
+                    "wait_sent": "",
+                    "wait_po": "",
+                    "real_stock": "",
+                    "status": "",
+                    "quility": "",
+                    "unit": "",
+                    "parent_unit": "",
+                    "unit_per_bath": "",
+                    "total": ""
+                },
+                {
+                    "id": "",
+                    "no_part": "",
+                    "name_part": "",
+                    "stock": "",
+                    "wait_sent": "",
+                    "wait_po": "",
+                    "real_stock": "",
+                    "status": "",
+                    "quility": "",
+                    "unit": "",
+                    "parent_unit": "",
+                    "unit_per_bath": "",
+                    "total": ""
+                },
+                {
+                    "id": "",
+                    "no_part": "",
+                    "name_part": "",
+                    "stock": "",
+                    "wait_sent": "",
+                    "wait_po": "",
+                    "real_stock": "",
+                    "status": "",
+                    "quility": "",
+                    "unit": "",
+                    "parent_unit": "",
+                    "unit_per_bath": "",
+                    "total": ""
+                },
+
+                {
+                    "id": "",
+                    "no_part": "",
+                    "name_part": "",
+                    "stock": "",
+                    "wait_sent": "",
+                    "wait_po": "",
+                    "real_stock": "",
+                    "status": "",
+                    "quility": "",
+                    "unit": "",
+                    "parent_unit": "",
+                    "unit_per_bath": "",
+                    "total": ""
+                },
+
+                {
+                    "id": "",
+                    "no_part": "",
+                    "name_part": "",
+                    "stock": "",
+                    "wait_sent": "",
+                    "wait_po": "",
+                    "real_stock": "",
+                    "status": "",
+                    "quility": "",
+                    "unit": "",
+                    "parent_unit": "",
+                    "unit_per_bath": "",
+                    "total": ""
+                },
+
+                {
+                    "id": "",
+                    "no_part": "",
+                    "name_part": "",
+                    "stock": "",
+                    "wait_sent": "",
+                    "wait_po": "",
+                    "real_stock": "",
+                    "status": "",
+                    "quility": "",
+                    "unit": "",
+                    "parent_unit": "",
+                    "unit_per_bath": "",
+                    "total": ""
+                },
+
+                {
+                    "id": "",
+                    "no_part": "",
+                    "name_part": "",
+                    "stock": "",
+                    "wait_sent": "",
+                    "wait_po": "",
+                    "real_stock": "",
+                    "status": "",
+                    "quility": "",
+                    "unit": "",
+                    "parent_unit": "",
+                    "unit_per_bath": "",
+                    "total": ""
+                },
+
+                {
+                    "id": "",
+                    "no_part": "",
+                    "name_part": "",
+                    "stock": "",
+                    "wait_sent": "",
+                    "wait_po": "",
+                    "real_stock": "",
+                    "status": "",
+                    "quility": "",
+                    "unit": "",
+                    "parent_unit": "",
+                    "unit_per_bath": "",
+                    "total": ""
+                },
+            ],
+            "table_status": [
+                {
+                    "role": "ช่างฝีมือ 6",
+                    "department": "ตอนหาดใหญ่ (ผู้ขอเบิก)",
+                    "name": "นายวินัย ชัยแก้ว",
+                    "date": "2020-12-01 12:32",
+                    "status": "ลงนามเรียบร้อย"
+                },
+                {
+                    "role": "สสญ.",
+                    "department": "แขวงบำรุงรักษาอาณัติสัญญาณหาดใหญ่",
+                    "name": "นายภาคิน แก้วสองเมือง",
+                    "date": "",
+                    "status": "รอการอนุมัติ"
+                },
+                {
+                    "role": "วศญ.2",
+                    "department": "กองบำรุงรักษาเขต 2",
+                    "name": "นายเฉลียว ฤทธิ",
+                    "date": "",
+                    "status": "รอการอนุมัติ"
+                },
+                {
+                    "role": "วสส.",
+                    "department": "กองอาณัติสัญญาณ",
+                    "name": "นายวิระ สายไหม",
+                    "date": "",
+                    "status": "รอการอนุมัติ"
+                },
+                {
+                    "role": "สสม.",
+                    "department": "งานระบบเครื่องกล",
+                    "name": "นายศิวกร ศิริ",
+                    "date": "",
+                    "status": "รอการอนุมัติ"
+                }
+            ],
+            "raw_no_part": [
+                {
+                    "id": 1,
+                    "no_part": "SIG 003",
+                    "name_part": "SIG ขนาด 5V.",
+                    "stock": 10,
+                    "wait_sent": 10,
+                    "wait_po": 10,
+                    "real_stock": 10,
+                    "status": "ของใหม่",
+                    "parent_unit": "sig",
+                    "unit_per_bath": 100,
+                },
+                {
+                    "id": 2,
+                    "no_part": "เครื่องกั้นไฟฟ้า",
+                    "name_part": "เครื่องกั้นไฟฟ้า ขนาด 5V.",
+                    "stock": 10,
+                    "wait_sent": 10,
+                    "wait_po": 10,
+                    "real_stock": 10,
+                    "status": "ของเก่า",
+                    "parent_unit": "เครื่องกั้น",
+                    "unit_per_bath": 100,
+                },
+                {
+                    "id": 3,
+                    "no_part": "SIG 004",
+                    "name_part": "SIG ขนาด 5V.",
+                    "stock": 10,
+                    "wait_sent": 10,
+                    "wait_po": 10,
+                    "real_stock": 10,
+                    "status": "ของใหม่",
+                    "parent_unit": "sig",
+                    "unit_per_bath": 100,
+                }
+            ]
+        }
     ],
-    bodyTablePopUp:
-        [
-            [
-                // value, css text center, check show or not show, check type text or button
-                ["12", "", "block", false],
-                ["เครืื่องกั้นถนน", "", "block", false],
-                ["", "text-left", "block", true],
-                ["10", "", "display-none", false], //คงคลัง
-                ["10", "", "display-none", false], //รอส่งมอบ 
-                ["10", "", "display-none", false], //ระหว่างการจัดซื้อ	
-                ["10", "", "display-none", false], //จำนวนสุทธิ
-                ["พร้อมใช้งาน", "", "display-none", false], //สถานะ
-                ["ชิ้น", "", "display-none", false], //หน่อยนับ
-                ["100", "", "display-none", false] //ราคาต่อหน่วย
+    inventory: [
+        {
+            "id": "1",
+            "no_inventory": "100",
+            "name": "คลังบางซื่อ",
+            "raw_no_part": [
+                {
+                    "id": 1,
+                    "no_part": "SIG 003",
+                    "name_part": "SIG ขนาด 5V.",
+                    "stock": 10,
+                    "wait_sent": 10,
+                    "wait_po": 10,
+                    "real_stock": 10,
+                    "status": "ของใหม่",
+                    "parent_unit": "sig",
+                    "unit": "ชิ้น",
+                    "unit_per_bath": 100,
+                },
+                {
+                    "id": 2,
+                    "no_part": "เครื่องกั้นไฟฟ้า",
+                    "name_part": "เครื่องกั้นไฟฟ้า ขนาด 5V.",
+                    "stock": 10,
+                    "wait_sent": 10,
+                    "wait_po": 10,
+                    "real_stock": 10,
+                    "status": "ของเก่า",
+                    "parent_unit": "เครื่องกั้น",
+                    "unit": "ชิ้น",
+                    "unit_per_bath": 100,
+                },
+                {
+                    "id": 3,
+                    "no_part": "SIG 004",
+                    "name_part": "SIG ขนาด 5V.",
+                    "stock": 10,
+                    "wait_sent": 10,
+                    "wait_po": 10,
+                    "real_stock": 10,
+                    "status": "ของใหม่",
+                    "parent_unit": "sig",
+                    "unit": "ชิ้น",
+                    "unit_per_bath": 100,
+                }
             ],
-            [
-                ["13", "", "block", false],
-                ["เครืื่องกั้นถนนไฟฟ้า", "", "block", false],
-                ["", "text-left", "block", true],
-                ["20", "", "display-none", false], //คงคลัง
-                ["20", "", "display-none", false], //รอส่งมอบ 
-                ["20", "", "display-none", false], //ระหว่างการจัดซื้อ	
-                ["20", "", "display-none", false], //จำนวนสุทธิ
-                ["พร้อมใช้งาน", "", "display-none", false], //สถานะ
-                ["ชิ้น", "", "display-none", false], //หน่อยนับ
-                ["100", "", "display-none", false] //ราคาต่อหน่วย
+        },
+        {
+            "id": "2",
+            "no_inventory": "200",
+            "name": "คลังลาดกระบัง",
+            "raw_no_part": [
+                {
+                    "id": 1,
+                    "no_part": "SIG 003",
+                    "name_part": "SIG ขนาด 5V.",
+                    "stock": 10,
+                    "wait_sent": 10,
+                    "wait_po": 10,
+                    "real_stock": 10,
+                    "status": "ของใหม่",
+                    "parent_unit": "sig",
+                    "unit": "ชิ้น",
+                    "unit_per_bath": 100,
+                }
             ],
-            [
-                ["33", "", "block", false],
-                ["คลังลาดกรบัง222", "", "block", false],
-                ["", "text-left", "block", true],
-                ["10", "", "display-none", false], //คงคลัง
-                ["10", "", "display-none", false], //รอส่งมอบ 
-                ["10", "", "display-none", false], //ระหว่างการจัดซื้อ	
-                ["10", "", "display-none", false], //จำนวนสุทธิ
-                ["พร้อมใช้งาน", "", "display-none", false], //สถานะ
-                ["ชิ้น", "", "display-none", false], //หน่อยนับ
-                ["100", "", "display-none", false], //ราคาต่อหน่วย
+        }
+    ],
+
+    // ค่าคงที่หน่วยนับ
+    unit: [
+        {
+            "id": 1,
+            "parent_unit": "sig",
+            "child_unit": [
+                {
+                    "id": 1,
+                    "name_unit": "อัน",
+                    "short_name_unit": "อ."
+                },
+                {
+                    "id": 2,
+                    "name_unit": "ชิ้น",
+                    "short_name_unit": "ช."
+                }
             ]
-        ],
-    bodyTablePopUp_Show: [],
+        },
+        {
+            "id": 2,
+            "parent_unit": "เครื่องกั้น",
+            "child_unit": [
+                {
+                    "id": 1,
+                    "name_unit": "เครื่อง",
+                    "short_name_unit": "คร."
+                }
+            ]
+        }
+    ],
 
-    // ROW COLUMN ของ TABLE หลัก
-    rowBodyTable: "",
-    columnBodyTable: "",
+    // Mode การทำงาน
+    action: "search",
+    document_show_popup: [],
+    document_show: [],
+    table_part_show: [], //เปลี่ยนจาก list_show => table_part_show
+    table_status_show: [],
 
-    // FOOTER SHow or Not
-    show_footer: "block",
-
-    // Variable PopUp no document
+    // Mode Search
     no_document: "",
-    headTable_list_no_document:
-        [
-            ["เลขที่เอกสาร", "300px"],
-            ["ผู้เบิก", "500px"],
-            ["Action", "100px"]
-        ],
-    bodyTable_list_no_document:
-        [
+
+    // Mode Edit
+    raw_no_part: [],
+    raw_no_part_show_popup: [],
+    from_inventory_show_popup: [],
+    to_inventory_show_popup: [],
+    table_part_show_row_index: "",
+    table_no_part: "",
+
+    // Mode Add
+    document_show_mode_add:
+    {
+        "id": "",
+        "no_document": "",
+        "name": "",
+        "status": "",
+        "date": "",
+        "from_inventory": "",
+        "to_inventory": "",
+        "pick_up": "",
+        "account_type": "",
+        "total": "",
+        "note": "",
+        "table_part": [
             {
-                variousValues:
-                    [
-                        [
-                            // value, css show dom, ระบุว่าเป็น text หรือ button
-                            ["1", "block", false], //เลขที่เอกสาร
-                            ["นายศุภากร", "block", false], //ผู้เบิก
-                            ["", "block", true], //button ในpopUp
-                            ["เสร็จสิ้น", "display-none", false],  //status
-                            ["2020-05-05", "display-none", false], //date
-                            ["หาดใหญ๋", "display-none", false],  //from_inventory
-                            ["ลาดกระบัง", "display-none", false],  //to_inventory
-                            [1, "display-none", false], //type_pickup
-                            ["เครดิต", "display-none", false], //type_account
-                            ["1000", "display-none", false], //total_money
-                            ["", "display-none", false],  //note
-                        ],
-                        [
-                            // value, css show dom, ระบุว่าเป็น text หรือ button
-                            ["2", "block", false], //เลขที่เอกสาร
-                            ["นายสรวิศ", "block", false], //ผู้เบิก
-                            ["", "block", true], //button ในpopUp
-                            ["เสร็จสิ้น", "display-none", false],  //status
-                            ["2020-10-05", "display-none", false], //date
-                            ["หาดใหญ๋", "display-none", false],  //from_inventory
-                            ["ลาดกระบัง", "display-none", false],  //to_inventory
-                            [1, "display-none", false], //type_pickup
-                            ["เครดิต", "display-none", false], //type_account
-                            ["1000", "display-none", false], //total_money
-                            ["", "display-none", false],  //note
-                        ]
-                    ]
+                "id": "",
+                "no_part": "",
+                "name_part": "",
+                "stock": "",
+                "wait_sent": "",
+                "wait_po": "",
+                "real_stock": "",
+                "status": "",
+                "quility": "",
+                "unit": "",
+                "parent_unit": "",
+                "unit_per_bath": "",
+                "total": ""
             },
             {
-                bodyTable:
-                    [
-                        {
-                            0:
-                                [
-                                    [
-                                        // value, css text center, css gray background, check type
-                                        ["1", "text-center", "disable", ""],
-                                        ["100", "", "", "search"],
-                                        ["เครื่องกั้นไฟฟ้า", "", "", "text"],
-                                        ["10", "text-center", "disable", ""],
-                                        ["10", "text-center", "disable", ""],
-                                        ["10", "text-center", "disable", ""],
-                                        ["10", "text-center", "disable", ""],
-                                        ["10", "text-center", "disable", ""],
-                                        ["5", "text-right", "", "number"],
-                                        ["ชิ้น", "text-left", "", ""],
-                                        ["100", "text-center", "", ""],
-                                        ["500", "text-right", "", ""]
-                                    ],
-                                    [
-                                        // value, css text center, css gray background, check type
-                                        ["2", "text-center", "disable", ""],
-                                        ["200", "", "", "search"],
-                                        ["วิทยุ", "", "", "text"],
-                                        ["20", "text-center", "disable", ""],
-                                        ["20", "text-center", "disable", ""],
-                                        ["20", "text-center", "disable", ""],
-                                        ["20", "text-center", "disable", ""],
-                                        ["20", "text-center", "disable", ""],
-                                        ["10", "text-right", "", "number"],
-                                        ["เครื่อง", "text-left", "", ""],
-                                        ["200", "text-center", "", ""],
-                                        ["1000", "text-right", "", ""]
-                                    ]
-                                ]
-                        },
-                        {
-                            1:
-                                [
-                                    [
-                                        // value, css text center, css gray background, check type
-                                        ["1", "text-center", "disable", ""],
-                                        ["100", "", "", "search"],
-                                        ["เครื่องกั้นไฟฟ้า", "", "", "text"],
-                                        ["10", "text-center", "disable", ""],
-                                        ["10", "text-center", "disable", ""],
-                                        ["10", "text-center", "disable", ""],
-                                        ["10", "text-center", "disable", ""],
-                                        ["10", "text-center", "disable", ""],
-                                        ["5", "text-right", "", "number"],
-                                        ["ชิ้น", "text-left", "", ""],
-                                        ["100", "text-center", "", ""],
-                                        ["500", "text-right", "", ""]
-                                    ]
-                                ]
-                        }
-                    ]
-            }
-
-        ],
-    bodyTable_list_no_document_Show:
-        [
-            {
-                variousValues:
-                    [
-                        []
-                    ]
+                "id": "",
+                "no_part": "",
+                "name_part": "",
+                "stock": "",
+                "wait_sent": "",
+                "wait_po": "",
+                "real_stock": "",
+                "status": "",
+                "quility": "",
+                "unit": "",
+                "parent_unit": "",
+                "unit_per_bath": "",
+                "total": ""
             },
             {
-                bodyTable:
-                    [
-                        // value, css text center, css gray background, check type
-                        ["", "text-center", "disable", ""],
-                        ["", "", "", "search"],
-                        ["", "", "", "text"],
-                        ["", "text-center", "disable", ""],
-                        ["", "text-center", "disable", ""],
-                        ["", "text-center", "disable", ""],
-                        ["", "text-center", "disable", ""],
-                        ["", "text-center", "disable", ""],
-                        ["", "text-right", "", "number"],
-                        ["", "text-left", "", ""],
-                        ["", "text-center", "", ""],
-                        ["", "text-right", "", ""]
-                    ],
-            }
-        ],
+                "id": "",
+                "no_part": "",
+                "name_part": "",
+                "stock": "",
+                "wait_sent": "",
+                "wait_po": "",
+                "real_stock": "",
+                "status": "",
+                "quility": "",
+                "unit": "",
+                "parent_unit": "",
+                "unit_per_bath": "",
+                "total": ""
+            },
+            {
+                "id": "",
+                "no_part": "",
+                "name_part": "",
+                "stock": "",
+                "wait_sent": "",
+                "wait_po": "",
+                "real_stock": "",
+                "status": "",
+                "quility": "",
+                "unit": "",
+                "parent_unit": "",
+                "unit_per_bath": "",
+                "total": ""
+            },
 
-    // Variable Componant
-    name: "",
-    status: "",
-    date: "",
-    from_inventory: "",
-    to_inventory: "",
-    type_pickup: "",  //ยังไม่ได้ใช้
-    type_account: "",
-    total_money: "",
-    note: ""
+            {
+                "id": "",
+                "no_part": "",
+                "name_part": "",
+                "stock": "",
+                "wait_sent": "",
+                "wait_po": "",
+                "real_stock": "",
+                "status": "",
+                "quility": "",
+                "unit": "",
+                "parent_unit": "",
+                "unit_per_bath": "",
+                "total": ""
+            },
+
+            {
+                "id": "",
+                "no_part": "",
+                "name_part": "",
+                "stock": "",
+                "wait_sent": "",
+                "wait_po": "",
+                "real_stock": "",
+                "status": "",
+                "quility": "",
+                "unit": "",
+                "parent_unit": "",
+                "unit_per_bath": "",
+                "total": ""
+            },
+
+            {
+                "id": "",
+                "no_part": "",
+                "name_part": "",
+                "stock": "",
+                "wait_sent": "",
+                "wait_po": "",
+                "real_stock": "",
+                "status": "",
+                "quility": "",
+                "unit": "",
+                "parent_unit": "",
+                "unit_per_bath": "",
+                "total": ""
+            },
+
+            {
+                "id": "",
+                "no_part": "",
+                "name_part": "",
+                "stock": "",
+                "wait_sent": "",
+                "wait_po": "",
+                "real_stock": "",
+                "status": "",
+                "quility": "",
+                "unit": "",
+                "parent_unit": "",
+                "unit_per_bath": "",
+                "total": ""
+            },
+
+            {
+                "id": "",
+                "no_part": "",
+                "name_part": "",
+                "stock": "",
+                "wait_sent": "",
+                "wait_po": "",
+                "real_stock": "",
+                "status": "",
+                "quility": "",
+                "unit": "",
+                "parent_unit": "",
+                "unit_per_bath": "",
+                "total": ""
+            },
+
+            {
+                "id": "",
+                "no_part": "",
+                "name_part": "",
+                "stock": "",
+                "wait_sent": "",
+                "wait_po": "",
+                "real_stock": "",
+                "status": "",
+                "quility": "",
+                "unit": "",
+                "parent_unit": "",
+                "unit_per_bath": "",
+                "total": ""
+            },
+        ],
+        "table_status": [],
+        "raw_no_part": []
+    },
+    from_inventory_show_popup_mode_add: [],
+    to_inventory_show_popup_mode_add: [],
+    table_part_show_mode_add: [
+        {
+            "id": "",
+            "no_part": "",
+            "name_part": "",
+            "stock": "",
+            "wait_sent": "",
+            "wait_po": "",
+            "real_stock": "",
+            "status": "",
+            "quility": "",
+            "unit": "",
+            "parent_unit": "",
+            "unit_per_bath": "",
+            "total": ""
+        },
+        {
+            "id": "",
+            "no_part": "",
+            "name_part": "",
+            "stock": "",
+            "wait_sent": "",
+            "wait_po": "",
+            "real_stock": "",
+            "status": "",
+            "quility": "",
+            "unit": "",
+            "parent_unit": "",
+            "unit_per_bath": "",
+            "total": ""
+        },
+        {
+            "id": "",
+            "no_part": "",
+            "name_part": "",
+            "stock": "",
+            "wait_sent": "",
+            "wait_po": "",
+            "real_stock": "",
+            "status": "",
+            "quility": "",
+            "unit": "",
+            "parent_unit": "",
+            "unit_per_bath": "",
+            "total": ""
+        },
+        {
+            "id": "",
+            "no_part": "",
+            "name_part": "",
+            "stock": "",
+            "wait_sent": "",
+            "wait_po": "",
+            "real_stock": "",
+            "status": "",
+            "quility": "",
+            "unit": "",
+            "parent_unit": "",
+            "unit_per_bath": "",
+            "total": ""
+        },
+
+        {
+            "id": "",
+            "no_part": "",
+            "name_part": "",
+            "stock": "",
+            "wait_sent": "",
+            "wait_po": "",
+            "real_stock": "",
+            "status": "",
+            "quility": "",
+            "unit": "",
+            "parent_unit": "",
+            "unit_per_bath": "",
+            "total": ""
+        },
+
+        {
+            "id": "",
+            "no_part": "",
+            "name_part": "",
+            "stock": "",
+            "wait_sent": "",
+            "wait_po": "",
+            "real_stock": "",
+            "status": "",
+            "quility": "",
+            "unit": "",
+            "parent_unit": "",
+            "unit_per_bath": "",
+            "total": ""
+        },
+
+        {
+            "id": "",
+            "no_part": "",
+            "name_part": "",
+            "stock": "",
+            "wait_sent": "",
+            "wait_po": "",
+            "real_stock": "",
+            "status": "",
+            "quility": "",
+            "unit": "",
+            "parent_unit": "",
+            "unit_per_bath": "",
+            "total": ""
+        },
+
+        {
+            "id": "",
+            "no_part": "",
+            "name_part": "",
+            "stock": "",
+            "wait_sent": "",
+            "wait_po": "",
+            "real_stock": "",
+            "status": "",
+            "quility": "",
+            "unit": "",
+            "parent_unit": "",
+            "unit_per_bath": "",
+            "total": ""
+        },
+
+        {
+            "id": "",
+            "no_part": "",
+            "name_part": "",
+            "stock": "",
+            "wait_sent": "",
+            "wait_po": "",
+            "real_stock": "",
+            "status": "",
+            "quility": "",
+            "unit": "",
+            "parent_unit": "",
+            "unit_per_bath": "",
+            "total": ""
+        },
+
+        {
+            "id": "",
+            "no_part": "",
+            "name_part": "",
+            "stock": "",
+            "wait_sent": "",
+            "wait_po": "",
+            "real_stock": "",
+            "status": "",
+            "quility": "",
+            "unit": "",
+            "parent_unit": "",
+            "unit_per_bath": "",
+            "total": ""
+        },
+    ],
+    table_part_show_row_index_mode_add: "",
+    table_no_part_mode_add: "",
+    raw_no_part_show_popup_mode_add: [],
+
+    // แนบไฟล์
+    files: [],
+    clickable: false,
+    accepts: null,
+    multiple: true,
+    maxFiles: Infinity,
+    maxFileSize: Infinity,
+    minFileSize: 0,
 }
 export default (state = initialState, action) => {
     switch (action.type) {
-        case "CHANGE SEARCH TYPE HAVE WORD":
-            const cloneTableSearch = [...initialState.bodyTable];
-            cloneTableSearch[action.rowBodyTable][action.columnBodyTable][0] = action.value;
-            initialState.variablePopUp.filterInventoryID = action.value;
-            const rowBodyTable = action.rowBodyTable;
-            const columnBodyTable = action.columnBodyTable;
-            console.log(initialState.variablePopUp.filterInventoryID)
+        // เลืก mode ในการทำงาน ( Search / Add / Edit )
+        case "ACTION":
+            console.log("mode", state.action)
             return {
                 ...state,
-                bodyTable: cloneTableSearch,
-                variablePopUp: {
-                    head: initialState.variablePopUp.head,
-                    labelFind: initialState.variablePopUp.labelFind,
-                    filterInventoryID: action.value
-                },
-                rowBodyTable: rowBodyTable,
-                columnBodyTable: columnBodyTable
+                action: action.value,
+                clickable: action.value === "add" || action.value === "edit" ? true : false
             }
-        case "ENTER VALUE IN TABLE":
-            // console.log(action.key)
-            if (action.key === 'Enter') {
-                console.log(action.value);
-                // state.bodyTablePopUp.map(function (bodyTablePopUp, index) {
-                //     console.log("bodyTablePopUp", bodyTablePopUp)
-                // })
-                const cloneBodyTable = [...initialState.bodyTable];
-                state.bodyTablePopUp.map(function (bodyTablePopUp, index) {
-                    // console.log(bodyTablePopUp[0][0])
-                    if (bodyTablePopUp[0][0] === action.value) {
-                        // Array in Javascript cloneBodyTable[ROW][COL]
-                        cloneBodyTable[state.rowBodyTable][1][0] = bodyTablePopUp[0][0];
-                        cloneBodyTable[state.rowBodyTable][2][0] = bodyTablePopUp[1][0];
-                        cloneBodyTable[state.rowBodyTable][3][0] = bodyTablePopUp[3][0];
-                        cloneBodyTable[state.rowBodyTable][4][0] = bodyTablePopUp[4][0];
-                        cloneBodyTable[state.rowBodyTable][5][0] = bodyTablePopUp[5][0];
-                        cloneBodyTable[state.rowBodyTable][6][0] = bodyTablePopUp[6][0];
-                        cloneBodyTable[state.rowBodyTable][7][0] = bodyTablePopUp[7][0];
-                        cloneBodyTable[state.rowBodyTable][9][0] = bodyTablePopUp[8][0];
-                        cloneBodyTable[state.rowBodyTable][10][0] = bodyTablePopUp[9][0];
-                        return null
-                    }
-                    return null
-                    // console.log("AFTER", cloneBodyTable)
-                })
-                return {
-                    ...state,
-                    bodyTable: cloneBodyTable
-                }
-            }
-            else {
-                return state
-            }
-        case "CLICK SEARCH TYPE NO WORD":
-            const cloneTableSearch2 = [...initialState.bodyTable];
-            cloneTableSearch2[action.rowBodyTable][action.columnBodyTable][0] = action.value;
-            initialState.variablePopUp.filterInventoryID = action.value;
-            const rowBodyTable2 = action.rowBodyTable;
-            const columnBodyTable2 = action.columnBodyTable;
-            // console.log(state.rowBodyTable, "and", state.columnBodyTable)
-            return {
-                ...state,
-                bodyTable: cloneTableSearch2,
-                variablePopUp: {
-                    head: initialState.variablePopUp.head,
-                    labelFind: initialState.variablePopUp.labelFind,
-                    filterInventoryID: action.value
-                },
-                rowBodyTable: rowBodyTable2,
-                columnBodyTable: columnBodyTable2
-            }
-        case "TEXT":
-            const cloneTableText = [...initialState.bodyTable];
-            cloneTableText[action.rowBodyTable][[action.columnBodyTable]][0] = action.value;
-            return {
-                ...state,
-                bodyTable: cloneTableText
-            }
-        case "NUMBER":
-            const cloneTableNumber = [...initialState.bodyTable];
-            cloneTableNumber[action.rowBodyTable][[action.columnBodyTable]][0] = action.value;
-            return {
-                ...state,
-                bodyTable: cloneTableNumber
-            }
-        case "SEARCH POPUP":
-            return {
-                ...state,
-                variablePopUp: {
-                    head: initialState.variablePopUp.head,
-                    labelFind: initialState.variablePopUp.labelFind,
-                    filterInventoryID: action.value
-                }
-            }
-        case "SUBMIT SEARCH":
-            return {
-                ...state,
-                bodyTablePopUp_Show: initialState.bodyTablePopUp.filter(function (bodyTablePopUp) {
-                    console.log(bodyTablePopUp[0])
-                    const regex = new RegExp(`${state.variablePopUp.filterInventoryID}`, 'i');
-                    var isMatch = regex.test(bodyTablePopUp[0]);
-                    console.log(state.variablePopUp);
-                    return (isMatch);
-                }),
-            }
-        case "SELECT ROW IN POPUP":
-            /*
-                Parameter
-                ----------
-                cloneBodyTable:        is clone variable from BodyTable --> # Number of column = 12
-                bodyTablePopUp_Show:   is Table in POPUP                --> # Number of column = 10
-                rowBodyTable:             COLUMN INDEX of BodyTable (NOT POPUP) from Search
-                columnBodyTable:             ROW INDEX of BodyTable (NOT POPUP) from Search
-                action.rowIndexPopUp): ROW INDEX of Table in POPUP
-            */
-            // console.log(state.rowBodyTable, "and", state.columnBodyTable);
-            // console.log("rowIndexPopUp", action.rowIndexPopUp);
-            const cloneBodyTable = [...initialState.bodyTable];
 
-            // console.log("DONUT HERE", cloneBodyTable);
-            // console.log("bodyTablePopUp_Show HERE", state.bodyTablePopUp_Show);
-
-            // For loop: find seleted row index of Table in POPUP
-            state.bodyTablePopUp_Show.map(function (bodyTablePopUp_Show, index) {
-                // console.log("TEST INDEX", action.rowIndexPopUp, index, "...", state.rowBodyTable);
-                // console.log("BEFORE", cloneBodyTable);
-                // console.log("TYPE");
-                // console.log(typeof action.rowIndexPopUp);
-                // console.log(typeof index);
-                if (action.rowIndexPopUp === index.toString()) {
-                    // Array in Javascript cloneBodyTable[ROW][COL]
-                    // console.log(">>>bodyTablePopUp_Show", index, bodyTablePopUp_Show, ">>", bodyTablePopUp_Show[2]);
-                    cloneBodyTable[state.rowBodyTable][1][0] = bodyTablePopUp_Show[0][0];
-                    cloneBodyTable[state.rowBodyTable][2][0] = bodyTablePopUp_Show[1][0];
-                    cloneBodyTable[state.rowBodyTable][3][0] = bodyTablePopUp_Show[3][0];
-                    cloneBodyTable[state.rowBodyTable][4][0] = bodyTablePopUp_Show[4][0];
-                    cloneBodyTable[state.rowBodyTable][5][0] = bodyTablePopUp_Show[5][0];
-                    cloneBodyTable[state.rowBodyTable][6][0] = bodyTablePopUp_Show[6][0];
-                    cloneBodyTable[state.rowBodyTable][7][0] = bodyTablePopUp_Show[7][0];
-                    cloneBodyTable[state.rowBodyTable][9][0] = bodyTablePopUp_Show[8][0];
-                    cloneBodyTable[state.rowBodyTable][10][0] = bodyTablePopUp_Show[9][0];
-                    return null;
-                }
-                return null;
-                // console.log("AFTER", cloneBodyTable)
-            })
-            return {
-                ...state,
-                bodyTable: cloneBodyTable
-            }
+        // Mode Search
         case "CHANGE NO DOCUMENT":
             return {
                 ...state,
                 no_document: action.value
             }
-        case "SEARCH NO DOCUMENT":
-            // มี bug ที่เกิดขึ้นคือ ค้นหาเลขที่เอกสารแล้วมันไม่ขึ้น
-            const cloneNewListNoDocument = [...initialState.bodyTable_list_no_document];
-            const filterVariousValues = initialState.bodyTable_list_no_document[0].variousValues.filter(function (cloneListNoDocument) {
-                // console.log(cloneListNoDocument[0][0])
-                const regex = new RegExp(`${state.no_document}`, 'i');
-                var isMatch = regex.test(cloneListNoDocument[0][0]);
-                // console.log(isMatch)
-                return isMatch
-            })
-            // console.log("filter" ,filter)
-            cloneNewListNoDocument[0].variousValues = filterVariousValues;
+        case "CLICK SEARCH POPUP NO DOCUMENT":
             return {
                 ...state,
-                bodyTable_list_no_document_Show: cloneNewListNoDocument
+                document_show_popup: initialState.document.filter(function (document) {
+                    // console.log(inventory.no_inventory)
+                    const regex = new RegExp(`${state.no_document}`, 'i');
+                    var isMatch = regex.test(document.no_document);
+                    return (isMatch);
+                }),
             }
-        case "SELECT NO DOCUMENT IN POPUP":
-            // console.log(state.bodyTable_list_no_document_Show)
-            var clone_bodyTable = [...initialState.bodyTable];
-            clone_bodyTable = state.bodyTable_list_no_document[1].bodyTable[action.rowPopUpDocument][action.rowPopUpDocument]
-            console.log(clone_bodyTable)
+        case "CLICK OPEN POPUP NO DOCUMENT":
             return {
                 ...state,
-                no_document: state.bodyTable_list_no_document_Show[0].variousValues[action.rowPopUpDocument][0][0],
-                name: state.bodyTable_list_no_document_Show[0].variousValues[action.rowPopUpDocument][1][0],
-                status: state.bodyTable_list_no_document_Show[0].variousValues[action.rowPopUpDocument][3][0],
-                date: state.bodyTable_list_no_document_Show[0].variousValues[action.rowPopUpDocument][4][0],
-                from_inventory: state.bodyTable_list_no_document_Show[0].variousValues[action.rowPopUpDocument][5][0],
-                to_inventory: state.bodyTable_list_no_document_Show[0].variousValues[action.rowPopUpDocument][6][0],
-                type_pickup: state.bodyTable_list_no_document_Show[0].variousValues[action.rowPopUpDocument][7][0],  //ยังไม่ได้ใช้
-                type_account: state.bodyTable_list_no_document_Show[0].variousValues[action.rowPopUpDocument][8][0],
-                total_money: state.bodyTable_list_no_document_Show[0].variousValues[action.rowPopUpDocument][9][0],
-                note: state.bodyTable_list_no_document_Show[0].variousValues[action.rowPopUpDocument][10][0],
-                bodyTable: clone_bodyTable
+                document_show_popup: initialState.document_show_popup
+            }
+        case "CLICK SELECT POPUP NO DOCUMENT":
+            return {
+                ...state,
+                no_document: state.document_show_popup[action.row_document_show_popup].no_document,
+                document_show: state.document_show_popup[action.row_document_show_popup],
+                table_part_show: state.document_show_popup[action.row_document_show_popup].table_part,
+                table_status_show: state.document_show_popup[action.row_document_show_popup].table_status,
+                raw_no_part: state.document_show_popup[action.row_document_show_popup].raw_no_part
+            }
+
+        // Mode Edit
+        case "CHANGE NAME":
+            var clone_document_show = { ...state.document_show };
+            clone_document_show.name = action.value;
+            return {
+                ...state,
+                document_show: clone_document_show
+            }
+        case "CHANGE DATE":
+            var clone_document_show = { ...state.document_show };
+            clone_document_show.date = action.value;
+            return {
+                ...state,
+                document_show: clone_document_show
+            }
+        case "CHANGE FROM INVENTORY":
+            var clone_document_show = { ...state.document_show };
+            clone_document_show.from_inventory = action.value;
+            return {
+                ...state,
+                document_show: clone_document_show
+            }
+        case "CLICK FROM INVENTORY":
+            return {
+                ...state,
+                from_inventory_show_popup: initialState.from_inventory_show_popup
+            }
+        case "CLICK SEARCH POPUP FROM INVENTORY":
+            return {
+                ...state,
+                from_inventory_show_popup: initialState.inventory.filter(function (inventory) {
+                    // console.log(inventory.no_inventory)
+                    const regex = new RegExp(`${state.document_show.from_inventory}`, 'i');
+                    var isMatch = regex.test(inventory.no_inventory);
+                    return (isMatch);
+                }),
+            }
+        case "CLICK SELECT POPUP FROM INVENTORY":
+            var clone_document_show = { ...state.document_show };
+            clone_document_show.from_inventory = state.from_inventory_show_popup[action.rowIndex].no_inventory
+            return {
+                ...state,
+                document_show: clone_document_show,
+                raw_no_part: state.from_inventory_show_popup[action.rowIndex].raw_no_part
+            }
+        case "CHANGE TO INVENTORY":
+            var clone_document_show = { ...state.document_show };
+            clone_document_show.to_inventory = action.value;
+            return {
+                ...state,
+                document_show: clone_document_show
+            }
+        case "CLICK TO INVENTORY":
+            return {
+                ...state,
+                to_inventory_show_popup: initialState.to_inventory_show_popup
+            }
+        case "CLICK SEARCH POPUP TO INVENTORY":
+            return {
+                ...state,
+                to_inventory_show_popup: initialState.inventory.filter(function (inventory) {
+                    // console.log(inventory.no_inventory)
+                    const regex = new RegExp(`${state.document_show.to_inventory}`, 'i');
+                    var isMatch = regex.test(inventory.no_inventory);
+                    return (isMatch);
+                }),
+            }
+        case "CLICK SELECT POPUP TO INVENTORY":
+            var clone_document_show = { ...state.document_show };
+            clone_document_show.to_inventory = state.to_inventory_show_popup[action.rowIndex].no_inventory
+            return {
+                ...state,
+                document_show: clone_document_show,
+            }
+        case "ON CHANGE NO PART EACH ROW":
+            var clone_table_part_show = [...state.table_part_show];
+            clone_table_part_show[action.rowIndex].no_part = action.value
+            return {
+                ...state,
+                table_part_show: clone_table_part_show,
+                table_part_show_row_index: action.rowIndex,
+                table_no_part: action.value
+            }
+        case "ON CLICK NO PART EACH ROW":
+            return {
+                ...state,
+                table_part_show_row_index: action.rowIndex,
+                raw_no_part_show_popup: initialState.raw_no_part_show_popup,
+                table_no_part: state.table_part_show[action.rowIndex].no_part
+            }
+        case "ON CHANGE NO PART":
+            return {
+                ...state,
+                table_no_part: action.value
+            }
+        case "ON CLICK SEARCH POPUP NO PART":
+            return {
+                ...state,
+                raw_no_part_show_popup: state.raw_no_part.filter(function (raw_no_part) {
+                    const regex = new RegExp(`${state.table_no_part}`, 'i');
+                    var isMatch = regex.test(raw_no_part.no_part);
+                    return (isMatch);
+                }),
+            }
+        case "ON CLICK SELECT POPUP NO PART":
+            var clone_table_part_show = [...state.table_part_show];
+            clone_table_part_show[state.table_part_show_row_index] = state.raw_no_part_show_popup[action.rowIndex]
+            return {
+                ...state,
+                table_part_show: clone_table_part_show
+            }
+        case "ON CHANGE QUILITY EACH ROW":
+            var clone_table_part_show = [...state.table_part_show];
+            var clone_document_show = { ...state.document_show };
+            // console.log(clone_list_show[action.rowIndex])
+            clone_table_part_show[action.rowIndex].quility = action.value;
+            clone_table_part_show[action.rowIndex].total = clone_table_part_show[action.rowIndex].quility * clone_table_part_show[action.rowIndex].unit_per_bath
+            var sum_real_total = 0;
+            clone_table_part_show.map(function (clone_list_show, index) {
+                sum_real_total = clone_list_show.total + sum_real_total;
+                return sum_real_total;
+            })
+            clone_table_part_show.total = sum_real_total
+            return {
+                ...state,
+                table_part_show: clone_table_part_show,
+                document_show: clone_table_part_show
+            }
+        case "ON CHANGE UNIT PER BATH EACH ROW":
+            var clone_table_part_show = [...state.table_part_show];
+            var clone_document_show = { ...state.document_show };
+            clone_table_part_show[action.rowIndex].unit_per_bath = action.value;
+            clone_table_part_show[action.rowIndex].total = clone_table_part_show[action.rowIndex].quility * clone_table_part_show[action.rowIndex].unit_per_bath
+            var sum_real_total = 0;
+            clone_table_part_show.map(function (clone_list_show, index) {
+                sum_real_total = clone_list_show.total + sum_real_total;
+                return sum_real_total;
+            })
+            clone_table_part_show.total = sum_real_total
+            return {
+                ...state,
+                table_part_show: clone_table_part_show,
+                document_show: clone_table_part_show
+            }
+        case "CHANGE NOTE":
+            var clone_document_show = { ...state.document_show };
+            clone_document_show.note = action.value;
+            return {
+                ...state,
+                document_show: clone_document_show
+            }
+
+        // Mode Add
+        case "ON CHANGE DOCUMENT MODE ADD":
+            var clone_document_show_mode_add = { ...state.document_show_mode_add };
+            clone_document_show_mode_add.no_document = action.value;
+            return {
+                ...state,
+                document_show_mode_add: clone_document_show_mode_add
+            }
+        case "ON CHANGE NAME MODE ADD":
+            var clone_document_show_mode_add = { ...state.document_show_mode_add };
+            clone_document_show_mode_add.name = action.value;
+            return {
+                ...state,
+                document_show_mode_add: clone_document_show_mode_add
+            }
+        case "ON CHANGE DATE MODE ADD":
+            var clone_document_show_mode_add = { ...state.document_show_mode_add };
+            clone_document_show_mode_add.date = action.value;
+            return {
+                ...state,
+                document_show_mode_add: clone_document_show_mode_add
+            }
+        case "CHANGE FROM INVENTORY MODE ADD":
+            var clone_document_show_mode_add = { ...state.document_show_mode_add };
+            clone_document_show_mode_add.from_inventory = action.value;
+            console.log(clone_document_show_mode_add.from_inventory)
+            return {
+                ...state,
+                document_show_mode_add: clone_document_show_mode_add
+            }
+        case "CLICK FROM INVENTORY MODE ADD":
+            return {
+                ...state,
+                from_inventory_show_popup_mode_add: initialState.from_inventory_show_popup_mode_add
+            }
+        case "CLICK SEARCH POPUP FROM INVENTORY MODE ADD":
+            return {
+                ...state,
+                from_inventory_show_popup_mode_add: initialState.inventory.filter(function (inventory) {
+                    // console.log(inventory.no_inventory)
+                    const regex = new RegExp(`${state.document_show_mode_add.from_inventory}`, 'i');
+                    var isMatch = regex.test(inventory.no_inventory);
+                    return (isMatch);
+                }),
+            }
+        case "CLICK SELECT POPUP FROM INVENTORY MODE ADD":
+            var clone_document_show_mode_add = { ...state.document_show_mode_add };
+            clone_document_show_mode_add.from_inventory = state.from_inventory_show_popup_mode_add[action.rowIndex].no_inventory
+            return {
+                ...state,
+                document_show_mode_add: clone_document_show_mode_add,
+                raw_no_part: state.from_inventory_show_popup_mode_add[action.rowIndex].raw_no_part
+            }
+        case "CHANGE TO INVENTORY MODE ADD":
+            var clone_document_show_mode_add = { ...state.document_show_mode_add };
+            clone_document_show_mode_add.to_inventory = action.value;
+            return {
+                ...state,
+                document_show_mode_add: clone_document_show_mode_add
+            }
+        case "CLICK TO INVENTORY MODE ADD":
+            return {
+                ...state,
+                to_inventory_show_popup: initialState.to_inventory_show_popup
+            }
+        case "CLICK SEARCH POPUP TO INVENTORY MODE ADD":
+            return {
+                ...state,
+                to_inventory_show_popup_mode_add: initialState.inventory.filter(function (inventory) {
+                    // console.log(inventory.no_inventory)
+                    const regex = new RegExp(`${state.document_show_mode_add.to_inventory}`, 'i');
+                    var isMatch = regex.test(inventory.no_inventory);
+                    return (isMatch);
+                }),
+            }
+        case "CLICK SELECT POPUP TO INVENTORY MODE ADD":
+            var clone_document_show_mode_add = { ...state.document_show_mode_add };
+            clone_document_show_mode_add.to_inventory = state.to_inventory_show_popup_mode_add[action.rowIndex].no_inventory
+            return {
+                ...state,
+                document_show_mode_add: clone_document_show_mode_add,
+            }
+        case "ON CHANGE NO PART EACH ROW MODE ADD":
+            var clone_table_part_show_mode_add = [...state.table_part_show_mode_add];
+            clone_table_part_show_mode_add[action.rowIndex].no_part = action.value
+            return {
+                ...state,
+                table_part_show_mode_add: clone_table_part_show_mode_add,
+                table_part_show_row_index_mode_add: action.rowIndex,
+                table_no_part_mode_add: action.value
+            }
+        case "ON CLICK NO PART EACH ROW MODE ADD":
+            return {
+                ...state,
+                table_part_show_row_index_mode_add: action.rowIndex,
+                raw_no_part_show_popup_mode_add: initialState.raw_no_part_show_popup_mode_add,
+                table_no_part_mode_add: state.table_part_show_mode_add[action.rowIndex].no_part
+            }
+        case "ON CHANGE NO PART MODE ADD":
+            return {
+                ...state,
+                table_no_part_mode_add: action.value
+            }
+        case "ON CLICK SEARCH POPUP NO PART MODE ADD":
+            return {
+                ...state,
+                raw_no_part_show_popup_mode_add: state.raw_no_part.filter(function (raw_no_part) {
+                    const regex = new RegExp(`${state.table_no_part_mode_add}`, 'i');
+                    var isMatch = regex.test(raw_no_part.no_part);
+                    return (isMatch);
+                }),
+            }
+        case "ON CLICK SELECT POPUP NO PART MODE ADD":
+            var clone_table_part_show_mode_add = [...state.table_part_show_mode_add];
+            clone_table_part_show_mode_add[state.table_part_show_row_index_mode_add] = state.raw_no_part_show_popup_mode_add[action.rowIndex]
+            return {
+                ...state,
+                table_part_show_mode_add: clone_table_part_show_mode_add
+            }
+        case "ON CHANGE QUILITY EACH ROW MODE ADD":
+            var clone_table_part_show_mode_add = [...state.table_part_show_mode_add];
+            var clone_document_show_mode_add = { ...state.document_show_mode_add };
+            // console.log(clone_list_show[action.rowIndex])
+            clone_table_part_show_mode_add[action.rowIndex].quility = action.value;
+            clone_table_part_show_mode_add[action.rowIndex].total = clone_table_part_show_mode_add[action.rowIndex].quility * clone_table_part_show_mode_add[action.rowIndex].unit_per_bath
+
+            var sum_real_total = 0;
+            clone_table_part_show_mode_add.map(function (clone_list_show, index) {
+                sum_real_total = clone_list_show.total + sum_real_total;
+                return sum_real_total;
+            })
+            clone_document_show_mode_add.total = sum_real_total
+            console.log(sum_real_total)
+            return {
+                ...state,
+                table_part_show_mode_add: clone_table_part_show_mode_add,
+                document_show_mode_add: clone_document_show_mode_add
+            }
+        case "ON CHANGE UNIT PER BATH EACH ROW MODE ADD":
+            var clone_table_part_show_mode_add = [...state.table_part_show_mode_add];
+            var clone_document_show_mode_add = { ...state.document_show_mode_add };
+            // console.log(action.value)
+
+            clone_table_part_show_mode_add[action.rowIndex].unit_per_bath = action.value;
+            clone_table_part_show_mode_add[action.rowIndex].total = clone_table_part_show_mode_add[action.rowIndex].quility * clone_table_part_show_mode_add[action.rowIndex].unit_per_bath
+
+            var sum_real_total = 0;
+            clone_table_part_show_mode_add.map(function (clone_list_show, index) {
+                sum_real_total = clone_list_show.total + sum_real_total;
+                return sum_real_total;
+            })
+            clone_document_show_mode_add.total = sum_real_total
+            console.log(sum_real_total)
+            return {
+                ...state,
+                table_part_show_mode_add: clone_table_part_show_mode_add,
+                document_show_mode_add: clone_document_show_mode_add
+            }
+        case "CHANGE NOTE MODE ADD":
+            var clone_document_show_mode_add = { ...state.document_show_mode_add };
+            clone_document_show_mode_add.note = action.value;
+            return {
+                ...state,
+                document_show_mode_add: clone_document_show_mode_add
+            }
+
+
+        // แนบไฟล์
+        case "FILES":
+            return {
+                ...state,
+                files: action.value
             }
         default:
             return state

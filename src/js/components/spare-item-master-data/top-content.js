@@ -25,7 +25,7 @@ class TopContent extends React.Component {
   }
 
   checkActionMode = (mode) => {
-    console.log(mode)
+    const current = this;
     if (mode === "search") {
       return (
         <>
@@ -45,7 +45,7 @@ class TopContent extends React.Component {
               <div className="grid_3 pull_1">
                 <div className="p-search-box cancel-margin">
                   <input type="text" className="p-search-box__input cancel-default" value={this.props.no_part} onChange={(e) => this.props.onChangeNoPart(e)} />
-                  <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalPart" aria-controls="modalPart"></i></button>
+                  <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalPart" aria-controls="modalPart" onClick={(e) => this.props.onClickOpenPopUpNoPart(e)}></i></button>
                 </div>
               </div>
             </div>
@@ -58,7 +58,7 @@ class TopContent extends React.Component {
             <div className="grid_2 pull_1"><h1></h1></div>
             <div className="grid_6">
               <div className="grid_3 pull_1">
-                <input type="text" className="cancel-default" disabled="disabled"></input>
+                <input type="text" className="cancel-default" defaultValue={this.props.info_part_show.description} disabled="disabled"></input>
               </div>
             </div>
           </div>
@@ -73,7 +73,9 @@ class TopContent extends React.Component {
                 <select className="edit-select" style={{ marginTop: "0" }} disabled="disabled">
                   <option defaultValue="0">none</option>
                   {this.props.type_part.map(function (type_part, index) {
-                    return (<option key={index} defaultValue={type_part.type}>{type_part.type}</option>)
+                    if (current.props.info_part_show.type === type_part.type)
+                      return (<option key={index} defaultValue={type_part.type} selected>{type_part.type}</option>)
+                    else return <option key={index} defaultValue={type_part.type}>{type_part.type}</option>
                   })}
                 </select>
               </div>
@@ -90,7 +92,9 @@ class TopContent extends React.Component {
                 <select className="edit-select" style={{ marginTop: "0" }} disabled="disabled">
                   <option defaultValue="0">none</option>
                   {this.props.group_part.map(function (group_part, index) {
-                    return (<option key={index} defaultValue={group_part.group}>{group_part.group}</option>)
+                    if (current.props.info_part_show.group === group_part.group)
+                      return (<option key={index} defaultValue={group_part.group} selected>{group_part.group}</option>)
+                    else return <option key={index} defaultValue={group_part.group}>{group_part.group}</option>
                   })}
                 </select>
               </div>
@@ -106,8 +110,10 @@ class TopContent extends React.Component {
               <div className="grid_3 pull_1">
                 <select className="edit-select" style={{ marginTop: "0" }} disabled="disabled">
                   <option defaultValue="0">none</option>
-                  {this.props.group_unit_part.map(function (group_unit_part, index) {
-                    return (<option key={index} defaultValue={group_unit_part.unit}>{group_unit_part.unit}</option>)
+                  {this.props.parent_unit_part.map(function (parent_unit_part, index) {
+                    if (current.props.info_part_show.parent_unit_part === parent_unit_part.parent_unit)
+                      return (<option key={index} defaultValue={parent_unit_part.parent_unit} selected>{parent_unit_part.parent_unit}</option>)
+                    else return <option key={index} defaultValue={parent_unit_part.parent_unit}>{parent_unit_part.parent_unit}</option>
                   })}
                 </select>
               </div>
@@ -150,7 +156,7 @@ class TopContent extends React.Component {
                 <div className="grid_2"><p className="cancel-default">เลขที่อุปกรณ์</p></div>
                 <div className="grid_8 pull_0">
                   <input type="text" className="cancel-default grid_3" value={this.props.no_part} onChange={(e) => this.props.onChangeNoPart(e)} />
-                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchNoInventory(e)}>ค้นหา</button>
+                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchNoPart(e)}>ค้นหา</button>
                 </div>
               </div>
 
@@ -164,17 +170,17 @@ class TopContent extends React.Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {/* {this.props.inventory_show_popup.map(function (inventory_show_popup, index) {
+                    {this.props.info_part_show_popup.map(function (info_part_show_popup, index) {
                       return (
                         <tr key={index} id={index}>
-                          <td className="edit-padding"> {inventory_show_popup.no_inventory} </td>
-                          <td className="edit-padding"> {inventory_show_popup.full_name} </td>
+                          <td className="edit-padding"> {info_part_show_popup.no_part} </td>
+                          <td className="edit-padding"> {info_part_show_popup.description} </td>
                           <td className="edit-padding text-center">
-                            <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectNoInventory(e)} aria-label="Close active modal" aria-controls="modalPart" id="closeModalInventory" >เลือก</button>
+                            <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectNoPart(e)} aria-label="Close active modal" aria-controls="modalPart" id="closeModalInventory" >เลือก</button>
                           </td>
                         </tr>
                       )
-                    })} */}
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -197,13 +203,18 @@ const mapStateToProps = (state) => ({
   mode_no_part: state.mode_no_part,
   type_part: state.type_part,
   group_part: state.group_part,
-  group_unit_part: state.group_unit_part,
+  parent_unit_part: state.parent_unit_part,
 
   // Mode Search
   no_part: state.no_part,
+  info_part_show_popup: state.info_part_show_popup,
+  info_part_show: state.info_part_show
 })
 const mapDispatchToProps = (dispatch) => ({
-  onChangeNoPart: (e) => dispatch(onChangeNoPart(e))
+  onChangeNoPart: (e) => dispatch(onChangeNoPart(e)),
+  onClickPopUpSearchNoPart: (e) => dispatch(onClickPopUpSearchNoPart(e)),
+  onClickSelectNoPart: (e) => dispatch(onClickSelectNoPart(e)),
+  onClickOpenPopUpNoPart: (e) => dispatch(onClickOpenPopUpNoPart(e)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(TopContent);
 
@@ -214,3 +225,22 @@ export const onChangeNoPart = (e) => {
     value: e.target.value
   }
 }
+export const onClickPopUpSearchNoPart = (e) => {
+  return {
+    type: "ON CLICK POPUP SEARCH NO PART",
+    value: e.target.value
+  }
+}
+export const onClickSelectNoPart = (e) => {
+  console.log(e.target.parentNode.parentNode)
+  return {
+    type: "ON CLICK SELECT NO PART POPUP",
+    rowIndex: e.target.parentNode.parentNode.id
+  }
+}
+export const onClickOpenPopUpNoPart = (e) => {
+  return {
+    type: "ON CLICK OPRN POPUP NO PART"
+  }
+}
+

@@ -96,7 +96,7 @@ class TopContent extends React.Component {
               </div>
             </div>
             <div className="grid_3 float-right">
-              <input type="text" className="cancel-default float-right" value={current.props.document_show.status} onChange={(e) => this.props.onChangeStatus(e)}></input>
+              <input type="text" className="cancel-default float-right" value={current.props.document_show.status} onChange={(e) => this.props.onChangeStatus(e)} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">สถานะ</p>
@@ -121,7 +121,7 @@ class TopContent extends React.Component {
           <div className="grid_12">
             <div className="grid_3 float-right">
               <div className="p-search-box cancel-margin">
-                <input type="text" className="p-search-box__input cancel-default" value={current.props.document_show.my_inventory} onChange={(e) => this.props.onChangeMyInventory(e)} disabled="disabled"/>
+                <input type="text" className="p-search-box__input cancel-default" value={current.props.document_show.my_inventory} onChange={(e) => this.props.onChangeMyInventory(e)} />
               </div>
             </div>
             <div className="grid_2 float-right">
@@ -153,7 +153,7 @@ class TopContent extends React.Component {
               </div>
             </div>
             <div className="grid_3 float-right">
-              <input type="text" className="cancel-default float-right" value={current.props.document_show_mode_add.status} onChange={(e) => this.props.onChangeStatusModeAdd(e)}></input>
+              <input type="text" className="cancel-default float-right" value={current.props.document_show_mode_add.status} onChange={(e) => this.props.onChangeStatusModeAdd(e)} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">สถานะ</p>
@@ -325,7 +325,8 @@ const mapStateToProps = (state) => ({
   document_show_popup: state.document_show_popup,
   document_show: state.document_show,
   document_show_mode_add: state.document_show_mode_add,
-  inventory_show_popup: state.inventory_show_popup
+  inventory_show_popup: state.inventory_show_popup,
+  inventory: state.inventory
 })
 const mapDispatchToProps = (dispatch) => ({
   onChangeNoDocument: (e) => dispatch(onChangeNoDocument(e)),

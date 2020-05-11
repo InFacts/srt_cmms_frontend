@@ -14,7 +14,6 @@ class BottomContent extends React.Component {
           <div className="grid_12 mt-2">
             <div className="grid_4 ml-3">
               {this.props.inventory_show.status === 1 ? <input type="checkbox" id="checkExample2" defaultChecked="selected" disabled="disabled" /> : <input type="checkbox" id="checkExample2" disabled="disabled" />}
-              {/* <input type="checkbox" id="checkExample2" defaultChecked="selected" /> */}
               <label className="cancel-default d-inline ml-2n" htmlFor="checkExample2">ปิดการใช้งาน</label>
             </div>
           </div>
@@ -26,7 +25,6 @@ class BottomContent extends React.Component {
                 <select className="edit-select" disabled="disabled">
                   <option defaultValue="0"> none </option>
                   {this.props.station.map(function (station, index) {
-                    // console.log(current.props.inventory_show.station, "and", station)
                     if (current.props.inventory_show.station === station.name) {
                       return <option defaultValue={station.id} key={index} selected> {station.name} </option>
                     }
@@ -53,7 +51,6 @@ class BottomContent extends React.Component {
                 <select className="edit-select" disabled="disabled">
                   <option value="0"> none </option>
                   {this.props.district.map(function (district, index) {
-                    // return <option value={district.id} key={index}> {district.name} </option>
                     if (current.props.inventory_show.district === district.name) {
                       return <option defaultValue={district.id} key={index} selected> {district.name} </option>
                     }
@@ -104,7 +101,7 @@ class BottomContent extends React.Component {
                 <p className="cancel-default">รหัสไปรษณีย์</p>
               </div>
               <div className="grid_4 pull_0">
-                <input type="text" className="cancel-default font-black" defaultValue={this.props.inventory_show.post_office} disabled="disabled"></input>
+                <input type="number" className="cancel-default font-black" defaultValue={this.props.inventory_show.post_office} disabled="disabled"></input>
               </div>
             </div>
           </div>
@@ -203,7 +200,7 @@ class BottomContent extends React.Component {
                 <p className="cancel-default">รหัสไปรษณีย์</p>
               </div>
               <div className="grid_4 pull_0">
-                <input type="text" className="cancel-default font-black" value={this.props.inventory_show.post_office} onChange={(e) => this.props.onChangePostOffice(e)}></input>
+                <input type="number" className="cancel-default font-black" value={this.props.inventory_show.post_office} onChange={(e) => this.props.onChangePostOffice(e)}></input>
               </div>
             </div>
           </div>
@@ -282,7 +279,7 @@ class BottomContent extends React.Component {
                 <p className="cancel-default">รหัสไปรษณีย์</p>
               </div>
               <div className="grid_4 pull_0">
-                <input type="text" className="cancel-default font-black" value={this.props.post_office_add} onChange={(e) => this.props.onChangePostOfficeAdd(e)}></input>
+                <input type="number" className="cancel-default font-black" value={this.props.post_office_add} onChange={(e) => this.props.onChangePostOfficeAdd(e)}></input>
               </div>
             </div>
           </div>

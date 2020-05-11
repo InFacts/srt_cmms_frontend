@@ -89,7 +89,7 @@ class TopContent extends React.Component {
               </div>
             </div>
             <div className="grid_3 float-right">
-              <input type="text" className="cancel-default float-right" value={this.props.document_show.status} onChange={(e) => this.props.onChangeStatus(e)}></input>
+              <input type="text" className="cancel-default float-right" value={this.props.document_show.status} onChange={(e) => this.props.onChangeStatus(e)} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">สถานะ</p>

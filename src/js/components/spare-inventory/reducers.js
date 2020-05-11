@@ -237,7 +237,8 @@ export default (state = initialState, action) => {
       }
     case "ON CHANGE POST OFFICE":
       var clone_inventory_show = { ...state.inventory_show };
-      clone_inventory_show.post_office = action.value;
+      clone_inventory_show.post_office = action.value.length <= 5 ? action.value : clone_inventory_show.post_office
+      console.log(clone_inventory_show.post_office)
       return {
         ...state,
         inventory_show: clone_inventory_show
@@ -304,7 +305,7 @@ export default (state = initialState, action) => {
     case "ON CHANGE POST OFFICE ADD":
       return {
         ...state,
-        post_office_add: action.value
+        post_office_add: action.value.length <= 5 ? action.value : state.post_office_add
       }
 
     // แนบไฟล์
