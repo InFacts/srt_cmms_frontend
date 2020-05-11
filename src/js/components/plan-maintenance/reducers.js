@@ -1,160 +1,251 @@
 const initialState = {
 
+  document: [
+    {
+      "id": 1,
 
-  // find_document_list: [
-  //   {
-  //     "id": 1,
-  //     "type": "เอกสารของฉัน"
-  //   },
-  //   {
-  //     "id": 2,
-  //     "type": "เอกสารทั้งหมด"
-  //   },
-  // ],
+      "district": "แขวงนครสวรรค์",
+      "zone": "",
+      "date_start": "2020-04-14",
+      "date_end": "2020-04-14",
+      "job_name": "รถไฟชน",
+      "create_name": "นายศิวกร แสงสว่าง",
+      "station": "ตอนบางซื่อ",
 
-  // type_document_list: [
-  //   {
-  //     "id": 1,
-  //     "type": "Work Order"
-  //   },
-  //   {
-  //     "id": 2,
-  //     "type": "สส. 101"
-  //   },
-  // ],
 
-  // status_document_list: [
-  //   {
-  //     "id": 1,
-  //     "status": "เสร็จสมบูรณ์"
-  //   },
-  //   {
-  //     "id": 2,
-  //     "status": "รอการอนุมัติ"
-  //   },
-  // ],
+      "no_document": "12345",
+      "freq": "",
+      "per": "",
+      "detail": "",
 
-  // station_list: [
-  //   {
-  //     "id": 1,
-  //     "name": "คลังบางซื่อ"
-  //   },
-  //   {
-  //     "id": 2,
-  //     "name": "คลังลาดกระบัง"
-  //   },
-  //   {
-  //     "id": 3,
-  //     "name": "คลังหัวตะเข้"
-  //   }
-  // ],
-  // // แขวง
-  // district_list: [
-  //   {
-  //     "id": 1,
-  //     "name": "ลาดยาว"
-  //   },
-  //   {
-  //     "id": 2,
-  //     "name": "จตุจักร"
-  //   },
-  //   {
-  //     "id": 3,
-  //     "name": "ดอนเมือง"
-  //   }
-  // ],
-  // // เขต
-  // zone_list: [
-  //   {
-  //     "id": 1,
-  //     "name": "ลาดยาว"
-  //   },
-  //   {
-  //     "id": 2,
-  //     "name": "จตุจักร"
-  //   },
-  //   {
-  //     "id": 3,
-  //     "name": "ดอนเมือง"
-  //   }
-  // ],
 
-  // // ค่าคงที่ต่างๆ ของแต่ละคลัง
-  // track_document: [
-  //   {
-  //     "id": 1,
-  //     "find_document": "เอกสารของฉัน",
-  //     "no_track_document": "WO-0004",
-  //     "type_document": "Work Order",
-  //     "job_document": "รถไฟชนกัน",
-  //     "create_name": "นายศิวกร แสงสว่าง",
-  //     "status_document": "เสร็จสมบูรณ์",
-  //     "district": "ลาดยาว",
-  //     "zone": "ลาดยาว",
-  //     "station": "คลังบางซื่อ",
-  //     "date_start": "2020-05-09",
-  //     "time_start": "2020-05-09",
-  //     "date_end": "2020-05-09",
-  //     "time_start": "2020-05-09",
-  //   },
-  //   {
-  //     "id": 2,
-  //     "find_document": "เอกสารของฉัน",
-  //     "no_track_document": "WO-0003",
-  //     "type_document": "สส. 101",
-  //     "job_document": "รถยนต์ขับชนไม้กั้น",
-  //     "create_name": "นายศิวกร แสงสว่าง",
-  //     "status_document": "รอการอนุมัติ",
-  //     "district": "ลาดยาว",
-  //     "zone": "ลาดยาว",
-  //     "station": "คลังบางซื่อ",
-  //     "date_start": "2020-05-09",
-  //     "time_start": "2020-05-09",
-  //     "date_end": "2020-05-09",
-  //     "time_start": "2020-05-09",
-  //   },{
-  //     "id": 3,
-  //     "find_document": "เอกสารของฉัน",
-  //     "no_track_document": "WO-00045",
-  //     "type_document": "Work Order",
-  //     "job_document": "รถไฟชนกัน",
-  //     "create_name": "นายศิวกร แสงสว่าง",
-  //     "status_document": "เสร็จสมบูรณ์",
-  //     "district": "ลาดยาว",
-  //     "zone": "ลาดยาว",
-  //     "station": "คลังบางซื่อ",
-  //     "date_start": "2020-05-09",
-  //     "time_start": "2020-05-09",
-  //     "date_end": "2020-05-09",
-  //     "time_start": "2020-05-09",
-  //   },
-  // ],
+
+      "list_main": [
+        {
+          "id": 1,
+          "detail": "",
+          "unit": "",
+          "t1": "",
+          "t2": "",
+          "t3": "",
+          "t4": "",
+          "t5": "",
+          "t6": "",
+          "t7": "",
+
+        },
+      ],
+
+
+
+      "list": [
+        {
+          "id": 1,
+          "no_part": "001",
+          "detail": "",
+          "unit": "",
+          "quility": 10,
+          "note": "",
+        },
+
+
+      ]
+    }
+  ],
+
+  raw_no_part: [
+    {
+      "id": 1,
+      "no_part": "001",
+      "detail": "",
+      "unit": "",
+      "quility": 10,
+      "note": "",
+    },
+  ],
+
+  raw_no_part_main: [
+    {
+      "id": 1,
+      "detail": "",
+      "unit": "",
+      "t1": "",
+      "t2": "",
+      "t3": "",
+      "t4": "",
+      "t5": "",
+      "t6": "",
+      "t7": "",
+    },
+  ],
+
+
+  // แขวง
+  district: [
+    {
+      "id": 1,
+      "name": "แขวงลาดยาว"
+    },
+    {
+      "id": 2,
+      "name": "แขวงจตุจักร"
+    },
+    {
+      "id": 3,
+      "name": "แขวงนครสวรรค์"
+    }
+  ],
+  // เขต
+  zone: [
+    {
+      "id": 1,
+      "name": "ตอนลาดยาว"
+    },
+    {
+      "id": 2,
+      "name": "ตอนจตุจักร"
+    },
+    {
+      "id": 3,
+      "name": "ตอนบางซื่อ"
+    }
+  ],
+
+  station: [
+    {
+      "id": 1,
+      "name": "ตอนลาดยาว"
+    },
+    {
+      "id": 2,
+      "name": "ตอนจตุจักร"
+    },
+    {
+      "id": 3,
+      "name": "ตอนบางซื่อ"
+    }
+
+  ],
+
+  list_per: [
+    {
+      id: 1,
+      status: "เดือน"
+    },
+  ],
+
+  list_status_asset1: [
+    {
+      id: 1,
+      status: "ใช้งานอยู่"
+    },
+  ],
+
+  list_status_asset2: [
+    {
+      id: 1,
+      status: "ใช้งานอยู่"
+    },
+  ],
+  list_unit: [
+    {
+      id: 1,
+      status: "หน่วย"
+    },
+  ],
+
+  list_job: [
+    {
+      id: 1,
+      status: "หน่วย"
+    },
+  ],
+
 
   // Mode การทำงาน
   action: "search",
 
-
-
-
-
   // Mode Search
-  // no_track_document: "",
-  // find_document: "",
-  // type_document: "",
-  // date_start: "",
-  // date_end: "",
-  // status_document: "",
-  // district: "",
-  // zone: "",
-  // station: "",
+  no_document: "",
+  districts: "",
+  zones: "",
+  date_starts: "",
+  date_ends: "",
+
+  document_show_popup: [],
+  document_show: [],
+  list_show: [],
+  list_show_main: [],
+
+  // Mode Edit
+  list_no_part: "",
+  list_show_row_index: "", //ไว้บอกตำแหน่งว่ากด แก้ไข อะไหล่จาก row ไหนใน table
+  no_part_show: [],
+
+  list_no_part_main: "",
+  list_show_row_index_main: "", //ไว้บอกตำแหน่งว่ากด แก้ไข อะไหล่จาก row ไหนใน table
+  no_part_show_main: [],
+
+  // Mode Add
+  list_no_part_mode_add: "",
+  list_no_part_mode_add_main: "",
+
+  document_show_mode_add: {
+    "id": "",
+    "no_document": "12345",
+    "no_document_ref": "",
+    "name_name": "",
+    "status": "",
 
 
-  // track_document_popup: [],
-  // track_document_show: [],
+    "list_main": [],
+
+
+    "list": [],
+
+  },
+
+  list_show_mode_add: [
+    {
+      "id": "",
+      "no_part": "",
+      "detail": "",
+      "unit": "",
+      "quility": "",
+      "note": "",
+    },
+  ],
+  list_show_mode_add_row_index: "",
+  no_part_show_mode_add: [],
+
+
+  list_show_mode_add_main: [
+    {
+      "id": "",
+      "detail": "",
+      "unit": "",
+      "t1": "",
+      "t2": "",
+      "t3": "",
+      "t4": "",
+      "t5": "",
+      "t6": "",
+      "t7": "",
+    },
+  ],
+  list_show_mode_add_row_index_main: "",
+  no_part_show_mode_add_main: [],
 
 
 
-
+  // แนบไฟล์
+  files: [],
+  clickable: true,
+  accepts: null,
+  multiple: true,
+  maxFiles: Infinity,
+  maxFileSize: Infinity,
+  minFileSize: 0,
 
 }
 export default (state = initialState, action) => {
@@ -168,88 +259,496 @@ export default (state = initialState, action) => {
       }
 
     // Mode Search
-    // case "CLICK SEARCH TRACKDOCUMENT":
-    //   const no_track_documentRegex  = new RegExp(`${state.no_track_document}`, "gi");
-    //   const find_documentRegex  = new RegExp(`${state.find_document}`, "gi");
-    //   const type_documentRegex  = new RegExp(`${state.type_document}`, "gi");
-    //   const date_startRegex  = new RegExp(`${state.date_start}`, "gi");
-    //   const date_endRegex  = new RegExp(`${state.date_end}`, "gi");
-    //   const status_documentRegex  = new RegExp(`${state.status_document}`, "gi");
-    //   const districtRegex  = new RegExp(`${state.district}`, "gi");
-    //   const zoneRegex  = new RegExp(`${state.zone}`, "gi");
-    //   const stationRegex  = new RegExp(`${state.station}`, "gi");
-    //   return {
-    //     ...state,
-    //     track_document_popup :initialState.track_document.filter(function (track_document) {
-    //       var isMatch =  (!no_track_documentRegex ||no_track_documentRegex.test(track_document.no_track_document)) &&
-    //       (!find_documentRegex ||find_documentRegex.test(track_document.find_document)) &&
-    //       (!type_documentRegex || type_documentRegex.test(track_document.type_document)) &&
-    //       (!date_startRegex || date_startRegex.test(track_document.date_start)) &&
-    //       (!date_endRegex || date_endRegex.test(track_document.date_end)) &&
-    //       (!status_documentRegex || status_documentRegex.test(track_document.status_document)) &&
-    //       (!districtRegex || districtRegex.test(track_document.district)) &&
-    //       (!zoneRegex || zoneRegex.test(track_document.zone)) &&
-    //       (!stationRegex || stationRegex.test(track_document.station)) 
-    //       return (isMatch);
-    //     }),
-    //   }
+    case "CHANGE NO DOCUMENT":
+      return {
+        ...state,
+        no_document: action.value
+      }
+    case "ON CHANGE DISTRICTS":
+      return {
+        ...state,
+        districts: action.value
+      }
 
-    // case "ON CHANGE NO TRACKDOCUMENT":
-    //   return {
-    //     ...state,
-    //     no_track_document: action.value
-    //   }
+    case "ON CHANGE ZONES":
+      return {
+        ...state,
+        zones: action.value
+      }
 
-    // case "ON CHANGE FIND TRACKDOCUMENT":
-    //   console.log(action.value)
-    //   return {
-    //     ...state,
-    //     find_document: action.value
-    //   }
+    case "ON CHANGE DATE STRARTS":
+      return {
+        ...state,
+        date_starts: action.value
+      }
 
-    // case "ON CHANGE TYPE TRACKDOCUMENT":
-    //   console.log(action.value)
-    //   return {
-    //     ...state,
-    //     type_document: action.value
-    //   }
+    case "ON CHANGE DATE ENDS":
+      return {
+        ...state,
+        date_ends: action.value
+      }
 
-    // case "ON CHANGE DATE START TRACKDOCUMENT":
-    //   console.log(action.value)
-    //   return {
-    //     ...state,
-    //     date_start: action.value
-    //   }
+    case "CLICK OPEN POPUP NO DOCUMENT":
+      return {
+        ...state,
+        document_show_popup: initialState.document_show_popup
+      }
 
-    // case "ON CHANGE DATE END TRACKDOCUMENT":
-    //   return {
-    //     ...state,
-    //     date_end: action.value
-    //   }
+    case "CLICK SEARCH POPUP NO DOCUMENT":
+      const no_document_requestRegex = new RegExp(`${state.no_document}`, "gi");
+      const date_endsRegex = new RegExp(`${state.date_ends}`, "gi");
+      const date_startsRegex = new RegExp(`${state.date_starts}`, "gi");
+      const zonesRegex = new RegExp(`${state.zones}`, "gi");
+      const districtsRegex = new RegExp(`${state.districts}`, "gi");
+      return {
+        ...state,
+        document_show_popup: initialState.document.filter(function (document) {
+          var isMatch = (!no_document_requestRegex || no_document_requestRegex.test(document.no_asset_install)) &&
+            (!date_endsRegex || date_endsRegex.test(document.date_end)) &&
+            (!date_startsRegex || date_startsRegex.test(document.date_start)) &&
+            (!zonesRegex || zonesRegex.test(document.zone)) &&
+            (!districtsRegex || districtsRegex.test(document.district))
+          return (isMatch);
+        }
+        ),
+      }
 
-    // case "ON CHANGE STATUS TRACKDOCUMENT":
-    //   return {
-    //     ...state,
-    //     status: action.value
-    //   }
+    case "CLICK SELECT POPUP NO DOCUMENT":
+      return {
+        ...state,
+        no_document: state.document_show_popup[action.row_document_show_popup].no_document,
+        document_show: state.document_show_popup[action.row_document_show_popup],
+        list_show: state.document_show_popup[action.row_document_show_popup].list,
+        list_show_main: state.document_show_popup[action.row_document_show_popup].list_main,
 
-    // case "ON CHANGE DISTRICT TRACKDOCUMENT":
-    //   return {
-    //     ...state,
-    //     district: action.value
-    //   }
+      }
 
-    // case "ON CHANGE ZONE TRACKDOCUMENT":
-    //   return {
-    //     ...state,
-    //     zone: action.value
-    //   }
 
-    // case "ON CHANGE STATION TRACKDOCUMENT":
-    //   return {
-    //     ...state,
-    //     station: action.value
-    //   }
+    case "CHANGE FREQ":
+      var clone_document_show = { ...state.document_show };
+      clone_document_show.freq = action.value;
+      return {
+        ...state,
+        document_show: clone_document_show
+      }
+
+    case "CHANGE PER":
+      var clone_document_show = { ...state.document_show };
+      clone_document_show.per = action.value;
+      return {
+        ...state,
+        document_show: clone_document_show
+      }
+
+
+    case "CHANGE DISTRICT":
+      var clone_document_show = { ...state.document_show };
+      clone_document_show.district = action.value;
+      return {
+        ...state,
+        document_show: clone_document_show
+      }
+
+
+    case "CHANGE DETAIL":
+      var clone_document_show = { ...state.document_show };
+      clone_document_show.detail = action.value;
+      return {
+        ...state,
+        document_show: clone_document_show
+      }
+
+
+
+    case "CHANGE NO DOCUMENT ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.no_document = action.value;
+      return {
+        ...state,
+        document_show_mode_add: clone_document_show_mode_add
+      }
+
+
+    case "CHANGE FREQ ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.freq = action.value;
+      return {
+        ...state,
+        document_show_mode_add: clone_document_show_mode_add
+      }
+
+    case "CHANGE PER ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.per = action.value;
+      return {
+        ...state,
+        document_show_mode_add: clone_document_show_mode_add
+      }
+
+    case "CHANGE DISTRICT ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.district = action.value;
+      return {
+        ...state,
+        document_show_mode_add: clone_document_show_mode_add
+      }
+
+
+    case "CHANGE DETAIL ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.detail = action.value;
+      return {
+        ...state,
+        document_show_mode_add: clone_document_show_mode_add
+      }
+
+    ////Table/////
+
+    case "ON CHANGE NO PART EACH ROW":
+      var clone_list_show = [...state.list_show];
+      clone_list_show[action.rowIndex].no_part = action.value
+      return {
+        ...state,
+        list_show: clone_list_show,
+        list_show_row_index: action.rowIndex,
+        list_no_part: action.value
+      }
+    case "ON CLICK NO PART EACH ROW":
+      return {
+        ...state,
+        list_show_row_index: action.rowIndex,
+        no_part_show: initialState.no_part_show,
+        list_no_part: state.list_show[action.rowIndex].no_part
+      }
+    case "ON CLICK SEARCH POPUP NO PART":
+      return {
+        ...state,
+        no_part_show: initialState.raw_no_part.filter(function (raw_no_part) {
+          const regex = new RegExp(`${state.list_no_part}`, 'i');
+          var isMatch = regex.test(raw_no_part.no_part);
+          return (isMatch);
+        }),
+      }
+
+    case "ON CHANGE NO PART":
+      return {
+        ...state,
+        list_no_part: action.value
+      }
+
+    case "ON CLICK SELECT POPUP NO PART":
+      // console.log(state.no_part_show[action.rowIndex], "and", state.list_show_row_index)
+      var clone_list_show = [...state.list_show];
+      clone_list_show[state.list_show_row_index] = state.no_part_show[action.rowIndex]
+      return {
+        ...state,
+        list_show: clone_list_show
+      }
+
+    case "ON CHANGE QUILITY EACH ROW":
+      var clone_list_show = [...state.list_show];
+      clone_list_show[action.rowIndex].quility = action.value
+      return {
+        ...state,
+        list_show: clone_list_show
+      }
+
+    case "ON CHANGE NOTE EACH ROW":
+      var clone_list_show = [...state.list_show];
+      clone_list_show[action.rowIndex].note = action.value
+      return {
+        ...state,
+        list_show: clone_list_show
+      }
+
+    case "ON CHANGE UNIT EACH ROW":
+      var clone_list_show = [...state.list_show];
+      clone_list_show[action.rowIndex].unit = action.value
+      return {
+        ...state,
+        list_show: clone_list_show
+      }
+
+    case "ON CHANGE QUILITY EACH ROW MODE ADD":
+      var clone_list_show_mode_add = [...state.list_show_mode_add];
+      // console.log(clone_list_show[action.rowIndex])
+      clone_list_show_mode_add[action.rowIndex].quility = action.value
+      return {
+        ...state,
+        list_show_mode_add: clone_list_show_mode_add
+      }
+
+    case "ON CHANGE NOTE EACH ROW MODE ADD":
+      var clone_list_show_mode_add = [...state.list_show_mode_add];
+      // console.log(clone_list_show[action.rowIndex])
+      clone_list_show_mode_add[action.rowIndex].note = action.value
+      return {
+        ...state,
+        list_show_mode_add: clone_list_show_mode_add
+      }
+
+    case "ON CHANGE UNIT EACH ROW MODE ADD":
+      var clone_list_show_mode_add = [...state.list_show_mode_add];
+      // console.log(clone_list_show[action.rowIndex])
+      clone_list_show_mode_add[action.rowIndex].unit = action.value
+      return {
+        ...state,
+        list_show_mode_add: clone_list_show_mode_add
+      }
+
+    case "ON CHANGE NO PART EACH ROW MODE ADD":
+      var clone_list_show_mode_add = [...state.list_show_mode_add]
+      // console.log(clone_list_show_mode_add[action.rowIndex].no_part, action.value)
+      clone_list_show_mode_add[action.rowIndex].no_part = action.value
+      return {
+        ...state,
+        list_show_mode_add: clone_list_show_mode_add,
+        list_no_part_mode_add: action.value,
+        list_show_mode_add_row_index: action.rowIndex
+      }
+
+
+
+
+
+
+
+    case "ON CLICK NO PART EACH ROW MODE ADD":
+      return {
+        ...state,
+        list_show_mode_add_row_index: action.rowIndex,
+        no_part_show_mode_add: initialState.no_part_show_mode_add,
+        list_no_part_mode_add: state.list_show_mode_add[action.rowIndex].no_part
+      }
+
+    case "ON CLICK SEARCH POPUP NO PART ADD MODE":
+      return {
+        ...state,
+        no_part_show_mode_add: initialState.raw_no_part.filter(function (raw_no_part) {
+          const regex = new RegExp(`${state.list_no_part_mode_add}`, 'i');
+          var isMatch = regex.test(raw_no_part.no_part);
+          return (isMatch);
+        }),
+      }
+
+    case "ON CHANGE NO PART MODE ADD":
+      return {
+        ...state,
+        list_no_part_mode_add: action.value
+      }
+
+    case "ON CLICK SELECT POPUP NO PART MODE ADD":
+      // console.log(state.no_part_show_mode_add[action.rowIndex], "and", state.list_show_mode_add[state.list_show_mode_add_row_index])
+
+      var clone_list_show_mode_add = [...state.list_show_mode_add];
+      clone_list_show_mode_add[state.list_show_mode_add_row_index] = state.no_part_show_mode_add[action.rowIndex]
+
+      return {
+        ...state,
+        list_show_mode_add: clone_list_show_mode_add
+      }
+
+
+
+
+    ///Table main
+
+    case "ON CHANGE NO PART MAIN EACH ROW":
+      var clone_list_show = [...state.list_show_main];
+      clone_list_show[action.rowIndex].no_part = action.value
+      return {
+        ...state,
+        list_show_main: clone_list_show,
+        list_show_row_index_main: action.rowIndex,
+        list_no_part_main: action.value
+      }
+    case "ON CLICK NO PART MAIN EACH ROW":
+      return {
+        ...state,
+        list_show_row_index_main: action.rowIndex,
+        no_part_show_main: initialState.no_part_show_main,
+        list_no_part_main: state.list_show_main[action.rowIndex].no_part
+      }
+    case "ON CLICK SEARCH POPUP NO PART MAIN":
+      return {
+        ...state,
+        no_part_show_main: initialState.raw_no_part_main.filter(function (raw_no_part_main) {
+          const regex = new RegExp(`${state.list_no_part_main}`, 'i');
+          var isMatch = regex.test(raw_no_part_main.no_part);
+          return (isMatch);
+        }),
+      }
+
+    case "ON CHANGE NO PART MAIN":
+      return {
+        ...state,
+        list_no_part_main: action.value
+      }
+
+    case "ON CLICK SELECT POPUP NO PART MAIN":
+      // console.log(state.no_part_show[action.rowIndex], "and", state.list_show_row_index)
+      var clone_list_show = [...state.list_show_main];
+      clone_list_show[state.list_show_row_index_main] = state.no_part_show_main[action.rowIndex]
+      return {
+        ...state,
+        list_show_main: clone_list_show
+      }
+
+    case "ON CHANGE NO PART MAIN EACH ROW MODE ADD":
+      var clone_list_show_mode_add = [...state.list_show_mode_add_main]
+      // console.log(clone_list_show_mode_add[action.rowIndex].no_part, action.value)
+      clone_list_show_mode_add[action.rowIndex].no_part = action.value
+      return {
+        ...state,
+        list_show_mode_add_main: clone_list_show_mode_add,
+        list_no_part_mode_add_main: action.value,
+        list_show_mode_add_row_index_main: action.rowIndex
+      }
+
+
+
+
+
+
+
+
+    case "ON CHANGE DETAIL MAIN EACH ROW":
+      var clone_list_show = [...state.list_show_main];
+      clone_list_show[action.rowIndex].detail = action.value
+      return {
+        ...state,
+        list_show_main: clone_list_show
+      }
+
+    case "ON CHANGE UNIT MAIN EACH ROW":
+      var clone_list_show = [...state.list_show_main];
+      clone_list_show[action.rowIndex].unit = action.value
+      return {
+        ...state,
+        list_show_main: clone_list_show
+      }
+
+    case "ON CHANGE T1 MAIN EACH ROW":
+      var clone_list_show = [...state.list_show_main];
+      clone_list_show[action.rowIndex].t1 = action.value
+      return {
+        ...state,
+        list_show_main: clone_list_show
+      }
+
+    case "ON CHANGE T2 MAIN EACH ROW":
+      var clone_list_show = [...state.list_show_main];
+      clone_list_show[action.rowIndex].t2 = action.value
+      return {
+        ...state,
+        list_show_main: clone_list_show
+      }
+
+    case "ON CHANGE T3 MAIN EACH ROW":
+      var clone_list_show = [...state.list_show_main];
+      clone_list_show[action.rowIndex].t3 = action.value
+      return {
+        ...state,
+        list_show_main: clone_list_show
+      }
+
+    case "ON CHANGE T4 MAIN EACH ROW":
+      var clone_list_show = [...state.list_show_main];
+      clone_list_show[action.rowIndex].t4 = action.value
+      return {
+        ...state,
+        list_show_main: clone_list_show
+      }
+
+    case "ON CHANGE T5 MAIN EACH ROW":
+      var clone_list_show = [...state.list_show_main];
+      clone_list_show[action.rowIndex].t5 = action.value
+      return {
+        ...state,
+        list_show_main: clone_list_show
+      }
+
+    case "ON CHANGE T7 MAIN EACH ROW":
+      var clone_list_show = [...state.list_show_main];
+      clone_list_show[action.rowIndex].t7 = action.value
+      return {
+        ...state,
+        list_show_main: clone_list_show
+      }
+
+
+    case "ON CHANGE DETAIL MAIN EACH ROW MODE ADD":
+      var clone_list_show_mode_add = [...state.list_show_mode_add_main];
+      // console.log(clone_list_show[action.rowIndex])
+      clone_list_show_mode_add[action.rowIndex].detail = action.value
+      return {
+        ...state,
+        list_show_mode_add_main: clone_list_show_mode_add
+      }
+
+
+    case "ON CHANGE UNIT MAIN EACH ROW MODE ADD":
+      var clone_list_show_mode_add = [...state.list_show_mode_add_main];
+      // console.log(clone_list_show[action.rowIndex])
+      clone_list_show_mode_add[action.rowIndex].unit = action.value
+      return {
+        ...state,
+        list_show_mode_add_main: clone_list_show_mode_add
+      }
+
+    case "ON CHANGE T1 MAIN EACH ROW MODE ADD":
+      var clone_list_show_mode_add = [...state.list_show_mode_add_main];
+      // console.log(clone_list_show[action.rowIndex])
+      clone_list_show_mode_add[action.rowIndex].t1 = action.value
+      return {
+        ...state,
+        list_show_mode_add_main: clone_list_show_mode_add
+      }
+
+    case "ON CHANGE T2 MAIN EACH ROW MODE ADD":
+      var clone_list_show_mode_add = [...state.list_show_mode_add_main];
+      // console.log(clone_list_show[action.rowIndex])
+      clone_list_show_mode_add[action.rowIndex].t2 = action.value
+      return {
+        ...state,
+        list_show_mode_add_main: clone_list_show_mode_add
+      }
+
+    case "ON CHANGE T3 MAIN EACH ROW MODE ADD":
+      var clone_list_show_mode_add = [...state.list_show_mode_add_main];
+      // console.log(clone_list_show[action.rowIndex])
+      clone_list_show_mode_add[action.rowIndex].t3 = action.value
+      return {
+        ...state,
+        list_show_mode_add_main: clone_list_show_mode_add
+      }
+
+    case "ON CHANGE T4 MAIN EACH ROW MODE ADD":
+      var clone_list_show_mode_add = [...state.list_show_mode_add_main];
+      // console.log(clone_list_show[action.rowIndex])
+      clone_list_show_mode_add[action.rowIndex].t4 = action.value
+      return {
+        ...state,
+        list_show_mode_add_main: clone_list_show_mode_add
+      }
+
+    case "ON CHANGE T5 MAIN EACH ROW MODE ADD":
+      var clone_list_show_mode_add = [...state.list_show_mode_add_main];
+      // console.log(clone_list_show[action.rowIndex])
+      clone_list_show_mode_add[action.rowIndex].t5 = action.value
+      return {
+        ...state,
+        list_show_mode_add_main: clone_list_show_mode_add
+      }
+
+    case "ON CHANGE T7 MAIN EACH ROW MODE ADD":
+      var clone_list_show_mode_add = [...state.list_show_mode_add_main];
+      // console.log(clone_list_show[action.rowIndex])
+      clone_list_show_mode_add[action.rowIndex].t7 = action.value
+      return {
+        ...state,
+        list_show_mode_add_main: clone_list_show_mode_add
+      }
 
     default:
       return state
