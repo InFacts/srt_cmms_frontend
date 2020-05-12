@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 
-import Login from './components/signin/login.js';
+import Login from './components/signin';
 import Main4Module from './components/main-module';
 import MainSpare from './components/main-spare';
 import MainPmt from './components/main-pmt';
