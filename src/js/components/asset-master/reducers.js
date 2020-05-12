@@ -46,7 +46,7 @@ const initialState = {
 
       "group_maintenance": "",
       "type_maintenance": "",
-      "list_maintenance": [
+      "list_main": [
         {
           "id": 1,
           "no_part": "001",
@@ -80,7 +80,7 @@ const initialState = {
 
 
 
-  raw_no_part_maintenance: [
+  raw_no_part_main: [
     {
       "id": 1,
       "no_part": "001",
@@ -204,20 +204,20 @@ const initialState = {
   document_show_popup: [],
   document_show: [],
   list_show: [],
-  list_maintenance_show: [],
+  list_show_main: [],
 
   // Mode Edit
   list_no_part: "",
   list_show_row_index: "", //ไว้บอกตำแหน่งว่ากด แก้ไข อะไหล่จาก row ไหนใน table
   no_part_show: [],
 
-  list_maintenance_part: "",
-  list_maintenance_row_index: "", //ไว้บอกตำแหน่งว่ากด แก้ไข อะไหล่จาก row ไหนใน table
-  no_part_maintenance_show: [],
+  list_no_part_main: "",
+  list_show_row_index_main: "", //ไว้บอกตำแหน่งว่ากด แก้ไข อะไหล่จาก row ไหนใน table
+  no_part_show_main: [],
 
   // Mode Add
   list_no_part_mode_add: "",
-
+  list_no_part_mode_add_main: "",
 
   document_show_mode_add: {
     "id": "",
@@ -243,7 +243,7 @@ const initialState = {
 
     "group_maintenance": "",
     "type_maintenance": "",
-    "list_maintenance": [],
+    "list_main": [],
   },
 
   list_show_mode_add: [
@@ -263,8 +263,8 @@ const initialState = {
 
 
 
-  list_no_maintenance_mode_add: "",
-  list_maintenance_show_mode_add: [
+
+  list_show_mode_add_main: [
     {
       "id": "",
       "no_part": "",
@@ -277,8 +277,8 @@ const initialState = {
       "per": "",
     },
   ],
-  list_maintenance_show_mode_add_row_index: "",
-  no_part_maintenance_show_mode_add: [],
+  list_show_mode_add_row_index_main: "",
+  no_part_show_mode_add_main: [],
 
 
 
@@ -364,11 +364,11 @@ export default (state = initialState, action) => {
         no_document: state.document_show_popup[action.row_document_show_popup].no_document,
         document_show: state.document_show_popup[action.row_document_show_popup],
         list_show: state.document_show_popup[action.row_document_show_popup].list,
-        list_maintenance_show: state.document_show_popup[action.row_document_show_popup].list_maintenance
+        list_show_main: state.document_show_popup[action.row_document_show_popup].list_main
       }
 
 
-    // Mode Edit
+
     case "CHANGE DETAIL":
       var clone_document_show = { ...state.document_show };
       clone_document_show.detail = action.value;
@@ -409,6 +409,14 @@ export default (state = initialState, action) => {
         document_show: clone_document_show
       }
 
+    case "CHANGE IMPORT NAME ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.import_name = action.value;
+      return {
+        ...state,
+        document_show_mode_add: clone_document_show_mode_add
+      }
+
     case "CHANGE IMPORT QUANTITY":
       var clone_document_show = { ...state.document_show };
       clone_document_show.import_quantity = action.value;
@@ -417,12 +425,29 @@ export default (state = initialState, action) => {
         document_show: clone_document_show
       }
 
+    case "CHANGE IMPORT QUANTITY ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.import_quantity = action.value;
+      return {
+        ...state,
+        document_show_mode_add: clone_document_show_mode_add
+      }
+
+
     case "CHANGE DEPRECIATION PER YEAR":
       var clone_document_show = { ...state.document_show };
       clone_document_show.depreciation_per_year = action.value;
       return {
         ...state,
         document_show: clone_document_show
+      }
+
+    case "CHANGE DEPRECIATION PER YEAR ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.depreciation_per_year = action.value;
+      return {
+        ...state,
+        document_show_mode_add: clone_document_show_mode_add
       }
 
     case "CHANGE DEPRECIATION TYPE":
@@ -433,12 +458,29 @@ export default (state = initialState, action) => {
         document_show: clone_document_show
       }
 
+
+    case "CHANGE DEPRECIATION TYPE ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.depreciation_type = action.value;
+      return {
+        ...state,
+        document_show_mode_add: clone_document_show_mode_add
+      }
+
     case "CHANGE STATUS":
       var clone_document_show = { ...state.document_show };
       clone_document_show.status = action.value;
       return {
         ...state,
         document_show: clone_document_show
+      }
+
+    case "CHANGE STATUS ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.status = action.value;
+      return {
+        ...state,
+        document_show_mode_add: clone_document_show_mode_add
       }
 
     case "CHANGE NOTE":
@@ -449,6 +491,14 @@ export default (state = initialState, action) => {
         document_show: clone_document_show
       }
 
+    case "CHANGE NOTE ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.note = action.value;
+      return {
+        ...state,
+        document_show_mode_add: clone_document_show_mode_add
+      }
+
     case "CHANGE SHORT NAME UNIT":
       var clone_document_show = { ...state.document_show };
       clone_document_show.short_name_unit = action.value;
@@ -456,6 +506,15 @@ export default (state = initialState, action) => {
         ...state,
         document_show: clone_document_show
       }
+
+    case "CHANGE SHORT NAME UNIT ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.short_name_unit = action.value;
+      return {
+        ...state,
+        document_show_mode_add: clone_document_show_mode_add
+      }
+
 
     case "CHANGE NAME UNIT":
       var clone_document_show = { ...state.document_show };
@@ -465,12 +524,29 @@ export default (state = initialState, action) => {
         document_show: clone_document_show
       }
 
+    case "CHANGE NAME UNIT ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.name_unit = action.value;
+      return {
+        ...state,
+        document_show_mode_add: clone_document_show_mode_add
+      }
+
     case "CHANGE TYPE UNIT":
       var clone_document_show = { ...state.document_show };
       clone_document_show.type_unit = action.value;
       return {
         ...state,
         document_show: clone_document_show
+      }
+
+
+    case "CHANGE TYPE UNIT ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.type_unit = action.value;
+      return {
+        ...state,
+        document_show_mode_add: clone_document_show_mode_add
       }
 
     case "CHANGE VALUATION METHOD":
@@ -497,6 +573,44 @@ export default (state = initialState, action) => {
         ...state,
         document_show: clone_document_show
       }
+
+
+    case "CHANGE VALUATION METHOD ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.valuation_method = action.value;
+      return {
+        ...state,
+        document_show_mode_add: clone_document_show_mode_add
+      }
+
+
+    case "CHANGE GROUP MAINTENANCE ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.group_maintenance = action.value;
+      return {
+        ...state,
+        document_show_mode_add: clone_document_show_mode_add
+      }
+
+
+    case "CHANGE TYPE MAINTENANCE ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.type_maintenance = action.value;
+      return {
+        ...state,
+        document_show_mode_add: clone_document_show_mode_add
+      }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -533,13 +647,14 @@ export default (state = initialState, action) => {
       }
 
     case "ON CLICK SELECT POPUP NO PART":
-      // console.log(state.no_part_show[action.rowIndex], "and", state.list_show_row_index)
+      console.log(state.no_part_show[action.rowIndex], "and", state.list_show_row_index)
       var clone_list_show = [...state.list_show];
       clone_list_show[state.list_show_row_index] = state.no_part_show[action.rowIndex]
       return {
         ...state,
         list_show: clone_list_show
       }
+
     case "ON CHANGE STATUS EACH ROW":
       var clone_list_show = [...state.list_show];
       console.log(clone_list_show[action.rowIndex])
@@ -564,111 +679,665 @@ export default (state = initialState, action) => {
         list_show: clone_list_show
       }
 
-
-
-
-
-    case "ON CHANGE NO PART MAINTENANCE EACH ROW":
-      var clone_list_show = [...state.list_maintenance_show];
-      console.log(clone_list_show)
-      console.log(action.rowIndex)
-      clone_list_show[action.rowIndex].no_part = action.value
+    case "ON CHANGE STATUS EACH ROW MODE ADD":
+      var clone_list_show_mode_add = [...state.list_show_mode_add];
+      // console.log(clone_list_show[action.rowIndex])
+      clone_list_show_mode_add[action.rowIndex].status = action.value
       return {
         ...state,
-        list_maintenance_show: clone_list_show,
-        list_maintenance_row_index: action.rowIndex,
-        list_maintenance_part: action.value
+        list_show_mode_add: clone_list_show_mode_add
       }
-    case "ON CLICK NO PART MAINTENANCE EACH ROW":
+
+    case "ON CHANGE QUILITY EACH ROW MODE ADD":
+      var clone_list_show_mode_add = [...state.list_show_mode_add];
+      // console.log(clone_list_show[action.rowIndex])
+      clone_list_show_mode_add[action.rowIndex].quility = action.value
       return {
         ...state,
-        list_maintenance_row_index: action.rowIndex,
-        no_part_maintenance_show: initialState.no_part_maintenance_show,
-        list_maintenance_part: state.list_maintenance_show[action.rowIndex].no_part
+        list_show_mode_add: clone_list_show_mode_add
       }
-    case "ON CLICK SEARCH POPUP NO PART MAINTENANCE":
+
+    case "ON CHANGE NOTE EACH ROW MODE ADD":
+      var clone_list_show_mode_add = [...state.list_show_mode_add];
+      // console.log(clone_list_show[action.rowIndex])
+      clone_list_show_mode_add[action.rowIndex].note = action.value
       return {
         ...state,
-        no_part_maintenance_show: initialState.raw_no_part_maintenance.filter(function (raw_no_part_maintenance) {
-          const regex = new RegExp(`${state.list_maintenance_part}`, 'i');
-          var isMatch = regex.test(raw_no_part_maintenance.no_part);
+        list_show_mode_add: clone_list_show_mode_add
+      }
+
+
+    case "ON CHANGE NO PART EACH ROW MODE ADD":
+      var clone_list_show_mode_add = [...state.list_show_mode_add]
+      // console.log(clone_list_show_mode_add[action.rowIndex].no_part, action.value)
+      clone_list_show_mode_add[action.rowIndex].no_part = action.value
+      return {
+        ...state,
+        list_show_mode_add: clone_list_show_mode_add,
+        list_no_part_mode_add: action.value,
+        list_show_mode_add_row_index: action.rowIndex
+      }
+
+
+
+
+    case "ON CLICK NO PART EACH ROW MODE ADD":
+      return {
+        ...state,
+        list_show_mode_add_row_index: action.rowIndex,
+        no_part_show_mode_add: initialState.no_part_show_mode_add,
+        list_no_part_mode_add: state.list_show_mode_add[action.rowIndex].no_part
+      }
+
+    case "ON CLICK SEARCH POPUP NO PART ADD MODE":
+      return {
+        ...state,
+        no_part_show_mode_add: initialState.raw_no_part.filter(function (raw_no_part) {
+          const regex = new RegExp(`${state.list_no_part_mode_add}`, 'i');
+          var isMatch = regex.test(raw_no_part.no_part);
           return (isMatch);
         }),
       }
 
-    case "ON CHANGE NO PART MAINTENANCE":
+    case "ON CHANGE NO PART MODE ADD":
       return {
         ...state,
-        list_maintenance_part: action.value
+        list_no_part_mode_add: action.value
       }
 
-    case "ON CLICK SELECT POPUP NO PART MAINTENANCE":
-      // console.log(state.no_part_show[action.rowIndex], "and", state.list_show_row_index)
-      var clone_list_show = [...state.list_maintenance_show];
-      clone_list_show[state.list_maintenance_row_index] = state.no_part_maintenance_show[action.rowIndex]
+    case "ON CLICK SELECT POPUP NO PART MODE ADD":
+      console.log(state.no_part_show_mode_add[action.rowIndex], "and", state.list_show_mode_add[state.list_show_mode_add_row_index])
+
+      var clone_list_show_mode_add = [...state.list_show_mode_add];
+      clone_list_show_mode_add[state.list_show_mode_add_row_index] = state.no_part_show_mode_add[action.rowIndex]
+
       return {
         ...state,
-        list_maintenance_show: clone_list_show
+        list_show_mode_add: clone_list_show_mode_add
       }
 
 
 
-    case "ON CHANGE MAINTENANCE DETAIL EACH ROW":
-      var clone_list_show = [...state.list_maintenance_show];
-      // console.log(clone_list_show[action.rowIndex])
-      clone_list_show[action.rowIndex].detail = action.value
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    case "ON CHANGE NO PART MASTER EACH ROW":
+      var clone_list_show = [...state.list_show_main];
+      clone_list_show[action.rowIndex].no_part = action.value
       return {
         ...state,
-        list_maintenance_show: clone_list_show
+        list_show_main: clone_list_show,
+        list_show_row_index_main: action.rowIndex,
+        list_no_part_main: action.value
       }
-
-    case "ON CHANGE MAINTENANCE UNIT EACH ROW":
-      var clone_list_show = [...state.list_maintenance_show];
-      clone_list_show[action.rowIndex].unit = action.value
+    case "ON CLICK NO PART MASTER EACH ROW":
       return {
         ...state,
-        list_maintenance_show: clone_list_show
+        list_show_row_index_main: action.rowIndex,
+        no_part_show_main: initialState.no_part_show_main,
+        list_no_part_main: state.list_show_main[action.rowIndex].no_part
+      }
+    case "ON CLICK SEARCH POPUP NO PART MASTER":
+      return {
+        ...state,
+        no_part_show_main: initialState.raw_no_part_main.filter(function (raw_no_part) {
+          const regex = new RegExp(`${state.list_no_part_main}`, 'i');
+          var isMatch = regex.test(raw_no_part.no_part);
+          return (isMatch);
+        }),
       }
 
-    case "ON CHANGE MAINTENANCE NAME EACH ROW":
-      var clone_list_show = [...state.list_maintenance_show];
+    case "ON CHANGE NO PART MASTER":
+      return {
+        ...state,
+        list_no_part_main: action.value
+      }
+
+    case "ON CLICK SELECT POPUP NO PART MASTER":
+      console.log(state.no_part_show_main[action.rowIndex], "and", state.list_show_row_index_main)
+      var clone_list_show = [...state.list_show];
+      clone_list_show[state.list_show_row_index_main] = state.no_part_show_main[action.rowIndex]
+      return {
+        ...state,
+        list_show_main: clone_list_show
+      }
+
+    case "ON CLICK NO PART MASTER EACH ROW MODE ADD":
+      return {
+        ...state,
+        list_show_mode_add_row_index_main: action.rowIndex,
+        no_part_show_mode_add_main: initialState.no_part_show_mode_add_main,
+        list_no_part_mode_add_main: state.list_show_mode_add_main[action.rowIndex].no_part
+      }
+
+    case "ON CLICK SEARCH POPUP NO PART MASTER ADD MODE":
+      return {
+        ...state,
+        no_part_show_mode_add_main: initialState.raw_no_part_main.filter(function (raw_no_part) {
+          const regex = new RegExp(`${state.list_no_part_mode_add_main}`, 'i');
+          var isMatch = regex.test(raw_no_part.no_part);
+          return (isMatch);
+        }),
+      }
+
+    case "ON CHANGE NO PART MASTER MODE ADD":
+      return {
+        ...state,
+        list_no_part_mode_add_main: action.value
+      }
+
+    case "ON CLICK SELECT POPUP NO PART MASTER MODE ADD":
+      console.log(state.no_part_show_mode_add_main[action.rowIndex], "and", state.list_show_mode_add_main[state.list_show_mode_add_row_index_main])
+
+      var clone_list_show_mode_add = [...state.list_show_mode_add_main];
+      clone_list_show_mode_add[state.list_show_mode_add_row_index_main] = state.no_part_show_mode_add_main[action.rowIndex]
+
+      return {
+        ...state,
+        list_show_mode_add_main: clone_list_show_mode_add
+      }
+
+
+
+
+
+
+    case "ON CHANGE NAME MASTER EACH ROW":
+      var clone_list_show = [...state.list_show_main];
       clone_list_show[action.rowIndex].name = action.value
       return {
         ...state,
-        list_maintenance_show: clone_list_show
+        list_show_main: clone_list_show
       }
 
-    case "ON CHANGE MAINTENANCE FREQ EACH ROW":
-      var clone_list_show = [...state.list_maintenance_show];
+    case "ON CHANGE NAME MASTER EACH ROW MODE ADD":
+      var clone_list_show_mode_add = [...state.list_show_mode_add_main];
+      // console.log(clone_list_show[action.rowIndex])
+      clone_list_show_mode_add[action.rowIndex].name = action.value
+      return {
+        ...state,
+        list_show_mode_add_main: clone_list_show_mode_add
+      }
+
+    case "ON CHANGE FREQ MASTER EACH ROW":
+      var clone_list_show = [...state.list_show_main];
       clone_list_show[action.rowIndex].freq = action.value
       return {
         ...state,
-        list_maintenance_show: clone_list_show
+        list_show_main: clone_list_show
       }
 
-    case "ON CHANGE MAINTENANCE PER EACH ROW":
-      var clone_list_show = [...state.list_maintenance_show];
-      clone_list_show[action.rowIndex].PER = action.value
+    case "ON CHANGE FREQ MASTER EACH ROW MODE ADD":
+      var clone_list_show_mode_add = [...state.list_show_mode_add_main];
+      // console.log(clone_list_show[action.rowIndex])
+      clone_list_show_mode_add[action.rowIndex].freq = action.value
       return {
         ...state,
-        list_maintenance_show: clone_list_show
+        list_show_mode_add_main: clone_list_show_mode_add
       }
 
-    case "ON CHANGE MAINTENANCE QUILITY EACH ROW":
-      var clone_list_show = [...state.list_maintenance_show];
+
+    case "ON CHANGE PER MASTER EACH ROW":
+      var clone_list_show = [...state.list_show_main];
+      clone_list_show[action.rowIndex].per = action.value
+      return {
+        ...state,
+        list_show_main: clone_list_show
+      }
+
+    case "ON CHANGE PER MASTER EACH ROW MODE ADD":
+      var clone_list_show_mode_add = [...state.list_show_mode_add_main];
+      // console.log(clone_list_show[action.rowIndex])
+      clone_list_show_mode_add[action.rowIndex].per = action.value
+      return {
+        ...state,
+        list_show_mode_add_main: clone_list_show_mode_add
+      }
+
+
+    case "ON CHANGE DETAIL MASTER EACH ROW":
+      var clone_list_show = [...state.list_show_main];
+      clone_list_show[action.rowIndex].detail = action.value
+      return {
+        ...state,
+        list_show_main: clone_list_show
+      }
+
+    case "ON CHANGE DETAIL MASTER EACH ROW MODE ADD":
+      var clone_list_show_mode_add = [...state.list_show_mode_add_main];
+      // console.log(clone_list_show[action.rowIndex])
+      clone_list_show_mode_add[action.rowIndex].detail = action.value
+      return {
+        ...state,
+        list_show_mode_add_main: clone_list_show_mode_add
+      }
+
+    case "ON CHANGE UNIT MASTER EACH ROW":
+      var clone_list_show = [...state.list_show_main];
+      clone_list_show[action.rowIndex].unit = action.value
+      return {
+        ...state,
+        list_show_main: clone_list_show
+      }
+
+    case "ON CHANGE UNIT MASTER EACH ROW MODE ADD":
+      var clone_list_show_mode_add = [...state.list_show_mode_add_main];
+      // console.log(clone_list_show[action.rowIndex])
+      clone_list_show_mode_add[action.rowIndex].unit = action.value
+      return {
+        ...state,
+        list_show_mode_add_main: clone_list_show_mode_add
+      }
+
+    case "ON CHANGE QUILITY MASTER EACH ROW":
+      var clone_list_show = [...state.list_show_main];
       clone_list_show[action.rowIndex].quility = action.value
       return {
         ...state,
-        list_maintenance_show: clone_list_show
+        list_show_main: clone_list_show
       }
 
-    case "ON CHANGE MAINTENANCE NOTE EACH ROW":
-      var clone_list_show = [...state.list_maintenance_show];
+    case "ON CHANGE QUILITY MASTER EACH ROW MODE ADD":
+      var clone_list_show_mode_add = [...state.list_show_mode_add_main];
+      // console.log(clone_list_show[action.rowIndex])
+      clone_list_show_mode_add[action.rowIndex].quility = action.value
+      return {
+        ...state,
+        list_show_mode_add_main: clone_list_show_mode_add
+      }
+
+
+    case "ON CHANGE NOTE MASTER EACH ROW":
+      var clone_list_show = [...state.list_show_main];
       clone_list_show[action.rowIndex].note = action.value
       return {
         ...state,
-        list_maintenance_show: clone_list_show
+        list_show_main: clone_list_show
       }
+
+    case "ON CHANGE NOTE MASTER EACH ROW MODE ADD":
+      var clone_list_show_mode_add = [...state.list_show_mode_add_main];
+      // console.log(clone_list_show[action.rowIndex])
+      clone_list_show_mode_add[action.rowIndex].note = action.value
+      return {
+        ...state,
+        list_show_mode_add_main: clone_list_show_mode_add
+      }
+
+
+    // case "ON CHANGE NO PART MAINTENANCE EACH ROW":
+    //   var clone_list_show = [...state.list_maintenance_show];
+    //   console.log(clone_list_show)
+    //   console.log(action.rowIndex)
+    //   clone_list_show[action.rowIndex].no_part = action.value
+    //   return {
+    //     ...state,
+    //     list_maintenance_show: clone_list_show,
+    //     list_maintenance_row_index: action.rowIndex,
+    //     list_maintenance_part: action.value
+    //   }
+    // case "ON CLICK NO PART MAINTENANCE EACH ROW":
+    //   return {
+    //     ...state,
+    //     list_maintenance_row_index: action.rowIndex,
+    //     no_part_maintenance_show: initialState.no_part_maintenance_show,
+    //     list_maintenance_part: state.list_maintenance_show[action.rowIndex].no_part
+    //   }
+    // case "ON CLICK SEARCH POPUP NO PART MAINTENANCE":
+    //   return {
+    //     ...state,
+    //     no_part_maintenance_show: initialState.raw_no_part_maintenance.filter(function (raw_no_part_maintenance) {
+    //       const regex = new RegExp(`${state.list_maintenance_part}`, 'i');
+    //       var isMatch = regex.test(raw_no_part_maintenance.no_part);
+    //       return (isMatch);
+    //     }),
+    //   }
+
+    // case "ON CHANGE NO PART MAINTENANCE":
+    //   return {
+    //     ...state,
+    //     list_maintenance_part: action.value
+    //   }
+
+    // case "ON CLICK SELECT POPUP NO PART MAINTENANCE":
+    //   // console.log(state.no_part_show[action.rowIndex], "and", state.list_show_row_index)
+    //   var clone_list_show = [...state.list_maintenance_show];
+    //   clone_list_show[state.list_maintenance_row_index] = state.no_part_maintenance_show[action.rowIndex]
+    //   return {
+    //     ...state,
+    //     list_maintenance_show: clone_list_show
+    //   }
+
+
+
+    // case "ON CHANGE MAINTENANCE DETAIL EACH ROW":
+    //   var clone_list_show = [...state.list_maintenance_show];
+    //   // console.log(clone_list_show[action.rowIndex])
+    //   clone_list_show[action.rowIndex].detail = action.value
+    //   return {
+    //     ...state,
+    //     list_maintenance_show: clone_list_show
+    //   }
+
+    // case "ON CHANGE MAINTENANCE UNIT EACH ROW":
+    //   var clone_list_show = [...state.list_maintenance_show];
+    //   clone_list_show[action.rowIndex].unit = action.value
+    //   return {
+    //     ...state,
+    //     list_maintenance_show: clone_list_show
+    //   }
+
+    // case "ON CHANGE MAINTENANCE NAME EACH ROW":
+    //   var clone_list_show = [...state.list_maintenance_show];
+    //   clone_list_show[action.rowIndex].name = action.value
+    //   return {
+    //     ...state,
+    //     list_maintenance_show: clone_list_show
+    //   }
+
+    // case "ON CHANGE MAINTENANCE FREQ EACH ROW":
+    //   var clone_list_show = [...state.list_maintenance_show];
+    //   clone_list_show[action.rowIndex].freq = action.value
+    //   return {
+    //     ...state,
+    //     list_maintenance_show: clone_list_show
+    //   }
+
+    // case "ON CHANGE MAINTENANCE PER EACH ROW":
+    //   var clone_list_show = [...state.list_maintenance_show];
+    //   clone_list_show[action.rowIndex].PER = action.value
+    //   return {
+    //     ...state,
+    //     list_maintenance_show: clone_list_show
+    //   }
+
+    // case "ON CHANGE MAINTENANCE QUILITY EACH ROW":
+    //   var clone_list_show = [...state.list_maintenance_show];
+    //   clone_list_show[action.rowIndex].quility = action.value
+    //   return {
+    //     ...state,
+    //     list_maintenance_show: clone_list_show
+    //   }
+
+    // case "ON CHANGE MAINTENANCE NOTE EACH ROW":
+    //   var clone_list_show = [...state.list_maintenance_show];
+    //   clone_list_show[action.rowIndex].note = action.value
+    //   return {
+    //     ...state,
+    //     list_maintenance_show: clone_list_show
+    //   }
+
+
+    // case "ON CHANGE NO PART EACH ROW MODE ADD":
+    //   var clone_list_show_mode_add = [...state.list_show_mode_add]
+    //   // console.log(clone_list_show_mode_add[action.rowIndex].no_part, action.value)
+    //   clone_list_show_mode_add[action.rowIndex].no_part = action.value
+    //   return {
+    //     ...state,
+    //     list_show_mode_add: clone_list_show_mode_add,
+    //     list_no_part_mode_add: action.value,
+    //     list_show_mode_add_row_index: action.rowIndex
+    //   }
+    // case "ON CLICK NO PART EACH ROW MODE ADD":
+    //   return {
+    //     ...state,
+    //     list_show_mode_add_row_index: action.rowIndex,
+    //     no_part_show_mode_add: initialState.no_part_show_mode_add,
+    //     list_no_part_mode_add: state.list_show_mode_add[action.rowIndex].no_part
+    //   }
+    // case "ON CLICK SEARCH POPUP NO PART ADD MODE":
+    //   return {
+    //     ...state,
+    //     no_part_show_mode_add: initialState.raw_no_part.filter(function (raw_no_part) {
+    //       const regex = new RegExp(`${state.list_no_part_mode_add}`, 'i');
+    //       var isMatch = regex.test(raw_no_part.no_part);
+    //       return (isMatch);
+    //     }),
+    //   }
+    // case "ON CHANGE NO PART MODE ADD":
+    //   return {
+    //     ...state,
+    //     list_no_part_mode_add: action.value
+    //   }
+    // case "ON CLICK SELECT POPUP NO PART MODE ADD":
+    //   // console.log(state.no_part_show_mode_add[action.rowIndex], "and", state.list_show_mode_add[state.list_show_mode_add_row_index])
+    //   var clone_list_show_mode_add = [...state.list_show_mode_add];
+    //   clone_list_show_mode_add[state.list_show_mode_add_row_index] = state.no_part_show_mode_add[action.rowIndex]
+    //   return {
+    //     ...state,
+    //     list_show_mode_add: clone_list_show_mode_add
+    //   }
+    // case "ON CHANGE QUILITY EACH ROW MODE ADD":
+    //   var clone_list_show_mode_add = [...state.list_show_mode_add];
+    //   // console.log(clone_list_show[action.rowIndex])
+    //   clone_list_show_mode_add[action.rowIndex].quility = action.value
+    //   return {
+    //     ...state,
+    //     list_show_mode_add: clone_list_show_mode_add
+    //   }
+    // case "ON CHANGE DETAIL EACH ROW MODE ADD":
+    //   var clone_list_show_mode_add = [...state.list_show_mode_add];
+    //   // console.log(clone_list_show[action.rowIndex])
+    //   clone_list_show_mode_add[action.rowIndex].detail = action.value
+    //   return {
+    //     ...state,
+    //     list_show_mode_add: clone_list_show_mode_add
+    //   }
+    // case "ON CHANGE LOCATION EACH ROW MODE ADD":
+    //   var clone_list_show_mode_add = [...state.list_show_mode_add];
+    //   // console.log(clone_list_show[action.rowIndex])
+    //   clone_list_show_mode_add[action.rowIndex].location = action.value
+    //   return {
+    //     ...state,
+    //     list_show_mode_add: clone_list_show_mode_add
+    //   }
+    // case "ON CHANGE STATUS EACH ROW MODE ADD":
+    //   var clone_list_show_mode_add = [...state.list_show_mode_add];
+    //   // console.log(clone_list_show[action.rowIndex])
+    //   clone_list_show_mode_add[action.rowIndex].status = action.value
+    //   return {
+    //     ...state,
+    //     list_show_mode_add: clone_list_show_mode_add
+    //   }
+    // case "ON CHANGE VALUE EACH ROW MODE ADD":
+    //   var clone_list_show_mode_add = [...state.list_show_mode_add];
+    //   // console.log(clone_list_show[action.rowIndex])
+    //   clone_list_show_mode_add[action.rowIndex].value = action.value
+    //   return {
+    //     ...state,
+    //     list_show_mode_add: clone_list_show_mode_add
+    //   }
+    // case "ON CHANGE NOTE EACH ROW MODE ADD":
+    //   var clone_list_show_mode_add = [...state.list_show_mode_add];
+    //   // console.log(clone_list_show[action.rowIndex])
+    //   clone_list_show_mode_add[action.rowIndex].note = action.value
+    //   return {
+    //     ...state,
+    //     list_show_mode_add: clone_list_show_mode_add
+    //   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // case "ON CHANGE NO PART MAINTENANCE EACH ROW MODE ADD":
+    //   var clone_list_show_mode_add = [...state.list_maintenance_show_mode_add]
+    //   // console.log(clone_list_show_mode_add[action.rowIndex].no_part, action.value)
+    //   clone_list_show_mode_add[action.rowIndex].no_part = action.value
+    //   return {
+    //     ...state,
+    //     list_maintenance_show_mode_add: clone_list_show_mode_add,
+    //     list_no_maintenance_mode_add: action.value,
+    //     list_maintenance_show_mode_add_row_index: action.rowIndex
+    //   }
+    // case "ON CLICK NO PART MAINTENANCE EACH ROW MODE ADD":
+    //   return {
+    //     ...state,
+    //     list_maintenance_show_mode_add_row_index: action.rowIndex,
+    //     no_part_maintenance_show_mode_add: initialState.no_part_maintenance_show_mode_add,
+    //     list_maintenance_show_mode_add: state.list_maintenance_show_mode_add[action.rowIndex].no_part
+    //   }
+    // case "ON CLICK SEARCH POPUP NO PART MAINTENANCE ADD MODE":
+    //   return {
+    //     ...state,
+    //     no_part_maintenance_show_mode_add: initialState.raw_no_part_maintenance.filter(function (raw_no_part_maintenance) {
+    //       const regex = new RegExp(`${state.list_no_maintenance_mode_add}`, 'i');
+    //       var isMatch = regex.test(raw_no_part_maintenance.no_part);
+    //       return (isMatch);
+    //     }),
+    //   }
+    // case "ON CHANGE NO PART MAINTENANCE MODE ADD":
+    //   return {
+    //     ...state,
+    //     list_maintenance_show_mode_add: action.value
+    //   }
+    // case "ON CLICK SELECT POPUP NO PART MAINTENANCE MODE ADD":
+    //   // console.log(state.no_part_show_mode_add[action.rowIndex], "and", state.list_show_mode_add[state.list_show_mode_add_row_index])
+    //   var clone_list_show_mode_add = [...state.list_maintenance_show_mode_add];
+    //   clone_list_show_mode_add[state.list_maintenance_show_mode_add_row_index] = state.no_part_maintenance_show_mode_add[action.rowIndex]
+    //   return {
+    //     ...state,
+    //     list_maintenance_show_mode_add: clone_list_show_mode_add
+    //   }
+
+
+
+
+    // case "ON CHANGE QUILITY MAINTENANCE EACH ROW MODE ADD":
+    //   var clone_list_show_mode_add = [...state.list_maintenance_show_mode_add];
+    //   // console.log(clone_list_show[action.rowIndex])
+    //   clone_list_show_mode_add[action.rowIndex].quility = action.value
+    //   return {
+    //     ...state,
+    //     list_maintenance_show_mode_add: clone_list_show_mode_add
+    //   }
+
+    // case "ON CHANGE DETAIL MAINTENANCE EACH ROW MODE ADD":
+    //   var clone_list_show_mode_add = [...state.list_maintenance_show_mode_add];
+    //   // console.log(clone_list_show[action.rowIndex])
+    //   clone_list_show_mode_add[action.rowIndex].detail = action.value
+    //   return {
+    //     ...state,
+    //     list_maintenance_show_mode_add: clone_list_show_mode_add
+    //   }
+
+
+    // case "ON CHANGE UNIT MAINTENANCE EACH ROW MODE ADD":
+    //   var clone_list_show_mode_add = [...state.list_maintenance_show_mode_add];
+    //   // console.log(clone_list_show[action.rowIndex])
+    //   clone_list_show_mode_add[action.rowIndex].unit = action.value
+    //   return {
+    //     ...state,
+    //     list_maintenance_show_mode_add: clone_list_show_mode_add
+    //   }
+
+
+    // case "ON CHANGE NOTE MAINTENANCE EACH ROW MODE ADD":
+    //   var clone_list_show_mode_add = [...state.list_maintenance_show_mode_add];
+    //   // console.log(clone_list_show[action.rowIndex])
+    //   clone_list_show_mode_add[action.rowIndex].note = action.value
+    //   return {
+    //     ...state,
+    //     list_maintenance_show_mode_add: clone_list_show_mode_add
+    //   }
+
+
+    // case "ON CHANGE NAME MAINTENANCE EACH ROW MODE ADD":
+    //   var clone_list_show_mode_add = [...state.list_maintenance_show_mode_add];
+    //   // console.log(clone_list_show[action.rowIndex])
+    //   clone_list_show_mode_add[action.rowIndex].name = action.value
+    //   return {
+    //     ...state,
+    //     list_maintenance_show_mode_add: clone_list_show_mode_add
+    //   }
+
+    // case "ON CHANGE FREQ MAINTENANCE EACH ROW MODE ADD":
+    //   var clone_list_show_mode_add = [...state.list_maintenance_show_mode_add];
+    //   // console.log(clone_list_show[action.rowIndex])
+    //   clone_list_show_mode_add[action.rowIndex].freq = action.value
+    //   return {
+    //     ...state,
+    //     list_maintenance_show_mode_add: clone_list_show_mode_add
+    //   }
+
+    // case "ON CHANGE PER MAINTENANCE EACH ROW MODE ADD":
+    //   var clone_list_show_mode_add = [...state.list_maintenance_show_mode_add];
+    //   // console.log(clone_list_show[action.rowIndex])
+    //   clone_list_show_mode_add[action.rowIndex].per = action.value
+    //   return {
+    //     ...state,
+    //     list_maintenance_show_mode_add: clone_list_show_mode_add
+    //   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -806,213 +1475,6 @@ export default (state = initialState, action) => {
       return {
         ...state,
         document_show_mode_add: clone_document_show_mode_add
-      }
-
-
-
-
-
-
-    case "ON CHANGE NO PART EACH ROW MODE ADD":
-      var clone_list_show_mode_add = [...state.list_show_mode_add]
-      // console.log(clone_list_show_mode_add[action.rowIndex].no_part, action.value)
-      clone_list_show_mode_add[action.rowIndex].no_part = action.value
-      return {
-        ...state,
-        list_show_mode_add: clone_list_show_mode_add,
-        list_no_part_mode_add: action.value,
-        list_show_mode_add_row_index: action.rowIndex
-      }
-    case "ON CLICK NO PART EACH ROW MODE ADD":
-      return {
-        ...state,
-        list_show_mode_add_row_index: action.rowIndex,
-        no_part_show_mode_add: initialState.no_part_show_mode_add,
-        list_no_part_mode_add: state.list_show_mode_add[action.rowIndex].no_part
-      }
-    case "ON CLICK SEARCH POPUP NO PART ADD MODE":
-      return {
-        ...state,
-        no_part_show_mode_add: initialState.raw_no_part.filter(function (raw_no_part) {
-          const regex = new RegExp(`${state.list_no_part_mode_add}`, 'i');
-          var isMatch = regex.test(raw_no_part.no_part);
-          return (isMatch);
-        }),
-      }
-    case "ON CHANGE NO PART MODE ADD":
-      return {
-        ...state,
-        list_no_part_mode_add: action.value
-      }
-    case "ON CLICK SELECT POPUP NO PART MODE ADD":
-      // console.log(state.no_part_show_mode_add[action.rowIndex], "and", state.list_show_mode_add[state.list_show_mode_add_row_index])
-      var clone_list_show_mode_add = [...state.list_show_mode_add];
-      clone_list_show_mode_add[state.list_show_mode_add_row_index] = state.no_part_show_mode_add[action.rowIndex]
-      return {
-        ...state,
-        list_show_mode_add: clone_list_show_mode_add
-      }
-    case "ON CHANGE QUILITY EACH ROW MODE ADD":
-      var clone_list_show_mode_add = [...state.list_show_mode_add];
-      // console.log(clone_list_show[action.rowIndex])
-      clone_list_show_mode_add[action.rowIndex].quility = action.value
-      return {
-        ...state,
-        list_show_mode_add: clone_list_show_mode_add
-      }
-    case "ON CHANGE DETAIL EACH ROW MODE ADD":
-      var clone_list_show_mode_add = [...state.list_show_mode_add];
-      // console.log(clone_list_show[action.rowIndex])
-      clone_list_show_mode_add[action.rowIndex].detail = action.value
-      return {
-        ...state,
-        list_show_mode_add: clone_list_show_mode_add
-      }
-    case "ON CHANGE LOCATION EACH ROW MODE ADD":
-      var clone_list_show_mode_add = [...state.list_show_mode_add];
-      // console.log(clone_list_show[action.rowIndex])
-      clone_list_show_mode_add[action.rowIndex].location = action.value
-      return {
-        ...state,
-        list_show_mode_add: clone_list_show_mode_add
-      }
-    case "ON CHANGE STATUS EACH ROW MODE ADD":
-      var clone_list_show_mode_add = [...state.list_show_mode_add];
-      // console.log(clone_list_show[action.rowIndex])
-      clone_list_show_mode_add[action.rowIndex].status = action.value
-      return {
-        ...state,
-        list_show_mode_add: clone_list_show_mode_add
-      }
-    case "ON CHANGE VALUE EACH ROW MODE ADD":
-      var clone_list_show_mode_add = [...state.list_show_mode_add];
-      // console.log(clone_list_show[action.rowIndex])
-      clone_list_show_mode_add[action.rowIndex].value = action.value
-      return {
-        ...state,
-        list_show_mode_add: clone_list_show_mode_add
-      }
-    case "ON CHANGE NOTE EACH ROW MODE ADD":
-      var clone_list_show_mode_add = [...state.list_show_mode_add];
-      // console.log(clone_list_show[action.rowIndex])
-      clone_list_show_mode_add[action.rowIndex].note = action.value
-      return {
-        ...state,
-        list_show_mode_add: clone_list_show_mode_add
-      }
-
-
-
-
-
-
-    case "ON CHANGE NO PART MAINTENANCE EACH ROW MODE ADD":
-      var clone_list_show_mode_add = [...state.list_maintenance_show_mode_add]
-      // console.log(clone_list_show_mode_add[action.rowIndex].no_part, action.value)
-      clone_list_show_mode_add[action.rowIndex].no_part = action.value
-      return {
-        ...state,
-        list_maintenance_show_mode_add: clone_list_show_mode_add,
-        list_no_maintenance_mode_add: action.value,
-        list_maintenance_show_mode_add_row_index: action.rowIndex
-      }
-    case "ON CLICK NO PART MAINTENANCE EACH ROW MODE ADD":
-      return {
-        ...state,
-        list_maintenance_show_mode_add_row_index: action.rowIndex,
-        no_part_maintenance_show_mode_add: initialState.no_part_maintenance_show_mode_add,
-        list_maintenance_show_mode_add: state.list_maintenance_show_mode_add[action.rowIndex].no_part
-      }
-    case "ON CLICK SEARCH POPUP NO PART MAINTENANCE ADD MODE":
-      return {
-        ...state,
-        no_part_maintenance_show_mode_add: initialState.raw_no_part_maintenance.filter(function (raw_no_part_maintenance) {
-          const regex = new RegExp(`${state.list_no_maintenance_mode_add}`, 'i');
-          var isMatch = regex.test(raw_no_part_maintenance.no_part);
-          return (isMatch);
-        }),
-      }
-    case "ON CHANGE NO PART MAINTENANCE MODE ADD":
-      return {
-        ...state,
-        list_maintenance_show_mode_add: action.value
-      }
-    case "ON CLICK SELECT POPUP NO PART MAINTENANCE MODE ADD":
-      // console.log(state.no_part_show_mode_add[action.rowIndex], "and", state.list_show_mode_add[state.list_show_mode_add_row_index])
-      var clone_list_show_mode_add = [...state.list_maintenance_show_mode_add];
-      clone_list_show_mode_add[state.list_maintenance_show_mode_add_row_index] = state.no_part_maintenance_show_mode_add[action.rowIndex]
-      return {
-        ...state,
-        list_maintenance_show_mode_add: clone_list_show_mode_add
-      }
-
-
-
-
-    case "ON CHANGE QUILITY MAINTENANCE EACH ROW MODE ADD":
-      var clone_list_show_mode_add = [...state.list_maintenance_show_mode_add];
-      // console.log(clone_list_show[action.rowIndex])
-      clone_list_show_mode_add[action.rowIndex].quility = action.value
-      return {
-        ...state,
-        list_maintenance_show_mode_add: clone_list_show_mode_add
-      }
-
-    case "ON CHANGE DETAIL MAINTENANCE EACH ROW MODE ADD":
-      var clone_list_show_mode_add = [...state.list_maintenance_show_mode_add];
-      // console.log(clone_list_show[action.rowIndex])
-      clone_list_show_mode_add[action.rowIndex].detail = action.value
-      return {
-        ...state,
-        list_maintenance_show_mode_add: clone_list_show_mode_add
-      }
-
-
-    case "ON CHANGE UNIT MAINTENANCE EACH ROW MODE ADD":
-      var clone_list_show_mode_add = [...state.list_maintenance_show_mode_add];
-      // console.log(clone_list_show[action.rowIndex])
-      clone_list_show_mode_add[action.rowIndex].unit = action.value
-      return {
-        ...state,
-        list_maintenance_show_mode_add: clone_list_show_mode_add
-      }
-
-
-    case "ON CHANGE NOTE MAINTENANCE EACH ROW MODE ADD":
-      var clone_list_show_mode_add = [...state.list_maintenance_show_mode_add];
-      // console.log(clone_list_show[action.rowIndex])
-      clone_list_show_mode_add[action.rowIndex].note = action.value
-      return {
-        ...state,
-        list_maintenance_show_mode_add: clone_list_show_mode_add
-      }
-
-
-    case "ON CHANGE NAME MAINTENANCE EACH ROW MODE ADD":
-      var clone_list_show_mode_add = [...state.list_maintenance_show_mode_add];
-      // console.log(clone_list_show[action.rowIndex])
-      clone_list_show_mode_add[action.rowIndex].name = action.value
-      return {
-        ...state,
-        list_maintenance_show_mode_add: clone_list_show_mode_add
-      }
-
-    case "ON CHANGE FREQ MAINTENANCE EACH ROW MODE ADD":
-      var clone_list_show_mode_add = [...state.list_maintenance_show_mode_add];
-      // console.log(clone_list_show[action.rowIndex])
-      clone_list_show_mode_add[action.rowIndex].freq = action.value
-      return {
-        ...state,
-        list_maintenance_show_mode_add: clone_list_show_mode_add
-      }
-
-    case "ON CHANGE PER MAINTENANCE EACH ROW MODE ADD":
-      var clone_list_show_mode_add = [...state.list_maintenance_show_mode_add];
-      // console.log(clone_list_show[action.rowIndex])
-      clone_list_show_mode_add[action.rowIndex].per = action.value
-      return {
-        ...state,
-        list_maintenance_show_mode_add: clone_list_show_mode_add
       }
 
     default:

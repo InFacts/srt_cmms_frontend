@@ -5,6 +5,10 @@ import Document from '../../../images/document.svg'
 import '../../../css/style.css'
 
 class BottomContent extends React.Component {
+
+
+
+
   checkActionMode = (mode) => {
     const current = this;
     if (mode === "search") {
@@ -666,7 +670,7 @@ class BottomContent extends React.Component {
             </thead>
             <tbody>
 
-              {current.props.list_show.map(function (list_show, row) {
+              {this.props.list_show.map(function (list_show, row) {
                 return (
                   <tr key={row} id={row}>
                     <th className="edit-padding text-center" style={{ minWidth: "30px" }}>{list_show.id}</th>
@@ -752,6 +756,7 @@ class BottomContent extends React.Component {
 
       return (
         <>
+        <div className="grid_12 mt-2">
           <table className="table-many-column mt-2">
             <thead>
               <tr>
@@ -765,14 +770,14 @@ class BottomContent extends React.Component {
             </thead>
             <tbody>
 
-              {current.props.list_show_mode_add.map(function (list_show, row) {
+              {this.props.list_show_mode_add.map(function (list_show, row) {
                 return (
                   <tr key={row} id={row}>
                     <th className="edit-padding text-center" style={{ minWidth: "30px" }}>{list_show.id}</th>
                     <td className="edit-padding" style={{ minWidth: "130px" }}>
                       <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
                         <input type="text" className="p-search-box__input cancel-default-table" value={list_show.no_part} onChange={(e) => current.props.onChangeNoPartEachRowModeAdd(e)} />
-                        <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPartModeAdd" aria-controls="modalNoPartModeAdd" onChange={(e) => current.props.onChangeNoPartEachRowModeAdd(e)}></i></button>
+                        <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPartModeAdd" aria-controls="modalNoPartModeAdd" onChange={(e) => current.props.onClickNoPartEachRowModeAdd(e)}></i></button>
                       </div>
                     </td>
                     <td className="edit-padding text-left" style={{ minWidth: "250px" }}>{list_show.detail}</td>
@@ -798,10 +803,11 @@ class BottomContent extends React.Component {
               })}
             </tbody>
           </table>
+          </div>
 
-
-          {/* PopUp เลขที่อะไหล่ */}
-          <div className="modal" id="modalNoPartModeAdd" style={{ display: "none" }}>
+          
+           {/* PopUp เลขที่อะไหล่ */}
+           <div className="modal" id="modalNoPartModeAdd" style={{ display: "none" }}>
             <div className="gray-board">
               <p className="head-title-modal edit">ค้นหาเลขที่อะไหล่</p>
               <div className="container_12 edit-padding">
@@ -809,7 +815,7 @@ class BottomContent extends React.Component {
                 <div className="grid_12">
                   <div className="grid_2"><p className="cancel-default">เลขที่อะไหล่</p></div>
                   <div className="grid_8 pull_0">
-                    <input type="text" className="cancel-default grid_3" value={this.props.list_no_part_mode_add} onChange={(e) => this.props.onChangeNoPartModeAdd(e)} />
+                  <input type="text" className="cancel-default grid_3" value={this.props.list_no_part_mode_add} onChange={(e) => this.props.onChangeNoPartModeAdd(e)} />
                     <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickSearchPopUpNoPartModeAdd(e)}>ค้นหา</button>
                   </div>
                 </div>
@@ -885,7 +891,6 @@ const mapStateToProps = (state) => ({
 
   list_no_part: state.list_no_part,
   no_part_show: state.no_part_show,
-
   no_part_show_mode_add: state.no_part_show_mode_add,
   list_show_mode_add: state.list_show_mode_add,
 
@@ -896,6 +901,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
+
   onChangeNoPart: (e) => dispatch(onChangeNoPart(e)),
   onChangeNoPartEachRow: (e) => dispatch(onChangeNoPartEachRow(e)),
   onClickNoPartEachRow: (e) => dispatch(onClickNoPartEachRow(e)),
@@ -960,39 +966,8 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(mapStateToProps, mapDispatchToProps)(BottomContent);
 
 
-export const onClickSearchPopUpNoPart = (e) => {
-  return {
-    type: "ON CLICK SEARCH POPUP NO PART",
-  }
-}
-export const onChangeNoPart = (e) => {
-  return {
-    type: "ON CHANGE NO PART",
-    value: e.target.value,
-  }
-}
-export const onClickSelectPopUpNoPart = (e) => {
-  
-  return {
-    type: "ON CLICK SELECT POPUP NO PART",
-    rowIndex: e.target.parentNode.parentNode.id
-  }
-}
-export const onChangeNoPartEachRow = (e) => {
-  
-  return {
-    type: "ON CHANGE NO PART EACH ROW",
-    value: e.target.value,
-    rowIndex: e.target.parentNode.parentNode.parentNode.id
-  }
-}
-export const onClickNoPartEachRow = (e) => {
-  
-  return {
-    type: "ON CLICK NO PART EACH ROW",
-    rowIndex: e.target.parentNode.parentNode.parentNode.parentNode.id
-  }
-}
+
+
 export const onChangeQuilityEachRow = (e) => {
   
   return {
@@ -1041,10 +1016,45 @@ export const onChangeUnitEachRowAdd = (e) => {
 }
 
 
+export const onClickSearchPopUpNoPart = (e) => {
+  return {
+    type: "ON CLICK SEARCH POPUP NO PART",
+  }
+}
+export const onChangeNoPart = (e) => {
+  return {
+    type: "ON CHANGE NO PART",
+    value: e.target.value,
+  }
+}
+export const onClickSelectPopUpNoPart = (e) => {
+
+  return {
+    type: "ON CLICK SELECT POPUP NO PART",
+    rowIndex: e.target.parentNode.parentNode.id
+  }
+}
+export const onChangeNoPartEachRow = (e) => {
+
+  return {
+    type: "ON CHANGE NO PART EACH ROW",
+    value: e.target.value,
+    rowIndex: e.target.parentNode.parentNode.parentNode.id
+  }
+}
+export const onClickNoPartEachRow = (e) => {
+
+  return {
+    type: "ON CLICK NO PART EACH ROW",
+    rowIndex: e.target.parentNode.parentNode.parentNode.parentNode.id
+  }
+}
+
+
 
 
 export const onChangeNoPartEachRowModeAdd = (e) => {
-  
+  console.log(e.target.parentNode.parentNode.parentNode.id)
   return {
     type: "ON CHANGE NO PART EACH ROW MODE ADD",
     value: e.target.value,

@@ -740,46 +740,7 @@ export default (state = initialState, action) => {
 
     ////Table/////
 
-    case "ON CHANGE NO PART EACH ROW":
-      var clone_list_show = [...state.list_show];
-      clone_list_show[action.rowIndex].no_part = action.value
-      return {
-        ...state,
-        list_show: clone_list_show,
-        list_show_row_index: action.rowIndex,
-        list_no_part: action.value
-      }
-    case "ON CLICK NO PART EACH ROW":
-      return {
-        ...state,
-        list_show_row_index: action.rowIndex,
-        no_part_show: initialState.no_part_show,
-        list_no_part: state.list_show[action.rowIndex].no_part
-      }
-    case "ON CLICK SEARCH POPUP NO PART":
-      return {
-        ...state,
-        no_part_show: initialState.raw_no_part.filter(function (raw_no_part) {
-          const regex = new RegExp(`${state.list_no_part}`, 'i');
-          var isMatch = regex.test(raw_no_part.no_part);
-          return (isMatch);
-        }),
-      }
 
-    case "ON CHANGE NO PART":
-      return {
-        ...state,
-        list_no_part: action.value
-      }
-
-    case "ON CLICK SELECT POPUP NO PART":
-      console.log(state.no_part_show[action.rowIndex], "and", state.list_show_row_index)
-      var clone_list_show = [...state.list_show];
-      clone_list_show[state.list_show_row_index] = state.no_part_show[action.rowIndex]
-      return {
-        ...state,
-        list_show: clone_list_show
-      }
 
     case "ON CHANGE QUILITY EACH ROW":
       var clone_list_show = [...state.list_show];
@@ -832,57 +793,98 @@ export default (state = initialState, action) => {
         list_show_mode_add: clone_list_show_mode_add
       }
 
-    case "ON CHANGE NO PART EACH ROW MODE ADD":
-      var clone_list_show_mode_add = [...state.list_show_mode_add]
-      // console.log(clone_list_show_mode_add[action.rowIndex].no_part, action.value)
-      clone_list_show_mode_add[action.rowIndex].no_part = action.value
-      return {
-        ...state,
-        list_show_mode_add: clone_list_show_mode_add,
-        list_no_part_mode_add: action.value,
-        list_show_mode_add_row_index: action.rowIndex
-      }
 
 
 
+      case "ON CHANGE NO PART EACH ROW":
+        var clone_list_show = [...state.list_show];
+        clone_list_show[action.rowIndex].no_part = action.value
+        return {
+          ...state,
+          list_show: clone_list_show,
+          list_show_row_index: action.rowIndex,
+          list_no_part: action.value
+        }
+      case "ON CLICK NO PART EACH ROW":
+        return {
+          ...state,
+          list_show_row_index: action.rowIndex,
+          no_part_show: initialState.no_part_show,
+          list_no_part: state.list_show[action.rowIndex].no_part
+        }
+      case "ON CLICK SEARCH POPUP NO PART":
+        return {
+          ...state,
+          no_part_show: initialState.raw_no_part.filter(function (raw_no_part) {
+            const regex = new RegExp(`${state.list_no_part}`, 'i');
+            var isMatch = regex.test(raw_no_part.no_part);
+            return (isMatch);
+          }),
+        }
+  
+      case "ON CHANGE NO PART":
+        return {
+          ...state,
+          list_no_part: action.value
+        }
+  
+      case "ON CLICK SELECT POPUP NO PART":
+        console.log(state.no_part_show[action.rowIndex], "and", state.list_show_row_index)
+        var clone_list_show = [...state.list_show];
+        clone_list_show[state.list_show_row_index] = state.no_part_show[action.rowIndex]
+        return {
+          ...state,
+          list_show: clone_list_show
+        }
 
-
-
-
-    case "ON CLICK NO PART EACH ROW MODE ADD":
-      return {
-        ...state,
-        list_show_mode_add_row_index: action.rowIndex,
-        no_part_show_mode_add: initialState.no_part_show_mode_add,
-        list_no_part_mode_add: state.list_show_mode_add[action.rowIndex].no_part
-      }
-
-    case "ON CLICK SEARCH POPUP NO PART ADD MODE":
-      return {
-        ...state,
-        no_part_show_mode_add: initialState.raw_no_part.filter(function (raw_no_part) {
-          const regex = new RegExp(`${state.list_no_part_mode_add}`, 'i');
-          var isMatch = regex.test(raw_no_part.no_part);
-          return (isMatch);
-        }),
-      }
-
-    case "ON CHANGE NO PART MODE ADD":
-      return {
-        ...state,
-        list_no_part_mode_add: action.value
-      }
-
-    case "ON CLICK SELECT POPUP NO PART MODE ADD":
-      console.log(state.no_part_show_mode_add[action.rowIndex], "and", state.list_show_mode_add[state.list_show_mode_add_row_index])
-
-      var clone_list_show_mode_add = [...state.list_show_mode_add];
-      clone_list_show_mode_add[state.list_show_mode_add_row_index] = state.no_part_show_mode_add[action.rowIndex]
-
-      return {
-        ...state,
-        list_show_mode_add: clone_list_show_mode_add
-      }
+        case "ON CLICK SELECT POPUP NO PART MODE ADD":
+          console.log(state.no_part_show_mode_add[action.rowIndex], "and", state.list_show_mode_add[state.list_show_mode_add_row_index])
+    
+          var clone_list_show_mode_add = [...state.list_show_mode_add];
+          clone_list_show_mode_add[state.list_show_mode_add_row_index] = state.no_part_show_mode_add[action.rowIndex]
+    
+          return {
+            ...state,
+            list_show_mode_add: clone_list_show_mode_add
+          }
+    
+    
+    
+    
+        case "ON CLICK NO PART EACH ROW MODE ADD":
+          return {
+            ...state,
+            list_show_mode_add_row_index: action.rowIndex,
+            no_part_show_mode_add: initialState.no_part_show_mode_add,
+            list_no_part_mode_add: state.list_show_mode_add[action.rowIndex].no_part
+          }
+    
+        case "ON CLICK SEARCH POPUP NO PART ADD MODE":
+          return {
+            ...state,
+            no_part_show_mode_add: initialState.raw_no_part.filter(function (raw_no_part) {
+              const regex = new RegExp(`${state.list_no_part_mode_add}`, 'i');
+              var isMatch = regex.test(raw_no_part.no_part);
+              return (isMatch);
+            }),
+          }
+    
+        case "ON CHANGE NO PART MODE ADD":
+          return {
+            ...state,
+            list_no_part_mode_add: action.value
+          }
+    
+        // case "ON CLICK SELECT POPUP NO PART MODE ADD":
+        //   console.log(state.no_part_show_mode_add[action.rowIndex], "and", state.list_show_mode_add[state.list_show_mode_add_row_index])
+    
+        //   var clone_list_show_mode_add = [...state.list_show_mode_add];
+        //   clone_list_show_mode_add[state.list_show_mode_add_row_index] = state.no_part_show_mode_add[action.rowIndex]
+    
+        //   return {
+        //     ...state,
+        //     list_show_mode_add: clone_list_show_mode_add
+        //   }
 
     default:
       return state
