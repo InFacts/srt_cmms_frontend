@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import axios from "axios";
 import { Link } from 'react-router-dom'
+import { API_PORT_DATABASE } from '../../config_port.js';
+import { API_URL_DATABASE } from '../../config_url.js';
 
 import { connect } from 'react-redux'
 
@@ -12,6 +15,31 @@ import logo from '../../../images/logo.png';
 
 class Login extends Component {
 
+  handleSubmit = event => {
+    event.preventDefault();
+    console.log("handleSubmit")
+
+    const user = {
+      "username": this.props.username,
+      // "password": this.state.password
+    };
+    console.log("user", user)
+    var current = this;
+    axios.defaults.withCredentials = false;
+    axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/login-no-password-not-a-good-idea-remind-to-remove-path`, user)
+      .then(res => {
+        console.log(res);
+        // console.log(res.headers['set-cookies']);
+        // console.log(res.headers.get('set-cookie'));
+        // res.headers.get('set-cookie')
+        // console.log(res.data.token);
+        // localStorage.setItem('token_auth', res.data.token)
+        // console.log("token_auth", localStorage.getItem('token_auth'))
+      }).catch(function (err) {
+        console.log(err)
+      })
+  }
+
   render() {
     return (
       <div>
@@ -21,7 +49,8 @@ class Login extends Component {
             <p className="text-signin">ระบบฐานข้อมูลระบบอาณัติสัญญาณเพื่อวิเคราะห์และวางแผนซ่อมบำรุง</p>
             <p className="text-signin">ฝ่ายการอาณัติสัญญาณและโทรคมนาคม</p>
             <h4 className="head-signin">เข้าสู่ระบบ</h4>
-            <form className="from-sigin-input" onSubmit={(e) => this.props.handleSubmit(e)}>
+
+            <form className="from-sigin-input" onSubmit={this.handleSubmit}>
               <label className="input-signin">รหัสพนักงาน</label>
               <input className="cancel-default-signin" type="text" value={this.props.username} onChange={(e) => this.props.onChangeUsername(e)} />
               <label className="input-signin mt-2">รหัสผ่าน</label>
@@ -32,7 +61,8 @@ class Login extends Component {
               <label className="alert-signin float-left mt-1 font-signin">จดจำรหัสผ่าน</label>
               <label className="alert-signin float-right mt-1 font-signin" style={{ marginTop: "9px" }}>ลืมรหัสผ่าน ?</label>
 
-              <Link to="/main"><button className="button-red font-signin" type="submit">เข้าสู่ระบบ</button></Link>
+              {/* <Link to="/main"><button className="button-red font-signin" type="submit">เข้าสู่ระบบ</button></Link> */}
+              <button className="button-red font-signin" type="submit">เข้าสู่ระบบ</button>
             </form>
           </div>
         </div>
@@ -65,27 +95,20 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => ({
   onChangeUsername: (e) => dispatch(onChangeUsername(e)),
-  onChangePassword: (e) => dispatch(onChangePassword(e)),
-  handleSubmit: (e) => dispatch(handleSubmit(e)),
+  onChangePassword: (e) => dispatch(onChangePassword(e))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
 
 export const onChangeUsername = (e) => {
-  return{
+  return {
     type: "ON_CHANGE_USERNAME",
     value: e.target.value
   }
 }
 export const onChangePassword = (e) => {
-  return{
+  return {
     type: "ON_CHANGE_PASSWORD",
-    value: e.target.value
-  }
-}
-export const handleSubmit = (e) => {
-  return{
-    type: "ON_SUBMIT",
     value: e.target.value
   }
 }
