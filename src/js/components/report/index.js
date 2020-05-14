@@ -8,22 +8,22 @@ import Toolbar from '../common/nav-toolbar';
 import TopContent from './top-content';
 import BottomContent from './bottom-content';
 import Footer from '../common/footer.js';
-
 const store = createStore(reducers)
-class AssetMaster extends React.Component {
+class Report extends React.Component {
     render() {
+        const type = 'report';
         return (
             <Provider store={store}>
-            <NavTopbar />
-            <Toolbar />
-            <form>
-                <TopContent />
-                <BottomContent  />
-                <Footer />
-            </form>
-        </Provider>
+                <NavTopbar />
+                <Toolbar />
+                <form>
+                    <TopContent />
+                    <BottomContent  />
+                    <Footer />
+                </form>
+            </Provider>
         )
     };
 }
 
-export default AssetMaster;
+export default Report;

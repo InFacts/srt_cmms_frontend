@@ -1,22 +1,28 @@
 import React from 'react';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import reducers from './reducers';
 
 import NavTopbar from '../nav/nav-top.js';
-import ToolBar from '../nav/nav-toolbar.js';
+import Toolbar from '../common/nav-toolbar';
 import TopContent from './top-content';
 import BottomContent from './bottom-content';
-import NavBottom from '../nav/nav-bottom.js';
+import Footer from '../common/footer.js';
 
+const store = createStore(reducers)
 class WO extends React.Component {
     render() {
         const type = 'WO';
         return (
-            <div>
+            <Provider store={store}>
                 <NavTopbar />
-                <ToolBar />
-                <TopContent />
-                <BottomContent />
-                <NavBottom type={type} />
-            </div>
+                <Toolbar />
+                <form>
+                    <TopContent />
+                    <BottomContent  />
+                    <Footer />
+                </form>
+            </Provider>
         )
     };
 }
