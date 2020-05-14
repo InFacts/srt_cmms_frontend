@@ -169,29 +169,59 @@ export default (state = initialState, action) => {
 
     // Mode Search
     case "CLICK SEARCH TRACKDOCUMENT":
-      const no_track_documentRegex  = new RegExp(`${state.no_track_document}`, "gi");
-      const find_documentRegex  = new RegExp(`${state.find_document}`, "gi");
-      const type_documentRegex  = new RegExp(`${state.type_document}`, "gi");
-      const date_startRegex  = new RegExp(`${state.date_start}`, "gi");
-      const date_endRegex  = new RegExp(`${state.date_end}`, "gi");
-      const status_documentRegex  = new RegExp(`${state.status_document}`, "gi");
-      const districtRegex  = new RegExp(`${state.district}`, "gi");
-      const zoneRegex  = new RegExp(`${state.zone}`, "gi");
-      const stationRegex  = new RegExp(`${state.station}`, "gi");
+      // const no_track_documentRegex  = new RegExp(`${state.no_track_document}`, "gi");
+      // const find_documentRegex  = new RegExp(`${state.find_document}`, "gi");
+      // const type_documentRegex  = new RegExp(`${state.type_document}`, "gi");
+      // const date_startRegex  = new RegExp(`${state.date_start}`, "gi");
+      // const date_endRegex  = new RegExp(`${state.date_end}`, "gi");
+      // const status_documentRegex  = new RegExp(`${state.status_document}`, "gi");
+      // const districtRegex  = new RegExp(`${state.district}`, "gi");
+      // const zoneRegex  = new RegExp(`${state.zone}`, "gi");
+      // const stationRegex  = new RegExp(`${state.station}`, "gi");
       return {
         ...state,
-        track_document_popup :initialState.track_document.filter(function (track_document) {
-          var isMatch =  (!no_track_documentRegex ||no_track_documentRegex.test(track_document.no_track_document)) &&
-          (!find_documentRegex ||find_documentRegex.test(track_document.find_document)) &&
-          (!type_documentRegex || type_documentRegex.test(track_document.type_document)) &&
-          (!date_startRegex || date_startRegex.test(track_document.date_start)) &&
-          (!date_endRegex || date_endRegex.test(track_document.date_end)) &&
-          (!status_documentRegex || status_documentRegex.test(track_document.status_document)) &&
-          (!districtRegex || districtRegex.test(track_document.district)) &&
-          (!zoneRegex || zoneRegex.test(track_document.zone)) &&
-          (!stationRegex || stationRegex.test(track_document.station)) 
-          return (isMatch);
-        }),
+        // track_document_popup :initialState.track_document.filter(function (track_document) {
+        //   var isMatch =  (!no_track_documentRegex ||no_track_documentRegex.test(track_document.no_track_document)) &&
+        //   (!find_documentRegex ||find_documentRegex.test(track_document.find_document)) &&
+        //   (!type_documentRegex || type_documentRegex.test(track_document.type_document)) &&
+        //   (!date_startRegex || date_startRegex.test(track_document.date_start)) &&
+        //   (!date_endRegex || date_endRegex.test(track_document.date_end)) &&
+        //   (!status_documentRegex || status_documentRegex.test(track_document.status_document)) &&
+        //   (!districtRegex || districtRegex.test(track_document.district)) &&
+        //   (!zoneRegex || zoneRegex.test(track_document.zone)) &&
+        //   (!stationRegex || stationRegex.test(track_document.station)) 
+        //   return (isMatch);
+        // }
+        
+        track_document_popup: initialState.track_document.filter(item =>{
+          const query = state.no_track_document.toLowerCase();
+          const query2 = state.date_start.toLowerCase();
+          const query3 = state.date_end.toLowerCase();
+          const query4 = state.zone.toLowerCase();
+          const query5 = state.district.toLowerCase();
+
+          const query6 = state.find_document.toLowerCase();
+          const query7 = state.type_document.toLowerCase();
+          const query8 = state.status_document.toLowerCase();
+          const query9 = state.station.toLowerCase();
+
+
+          return(
+            (item.no_track_document.toLowerCase().indexOf(query) >= 0 || !query )&&
+            (item.zone.toLowerCase().indexOf(query4) >= 0 || !query4 ) &&
+            (item.district.toLowerCase().indexOf(query5) >= 0 || !query5 ) &&
+            (item.date_end.toLowerCase().indexOf(query3) >= 0 || !query3 ) &&
+            (item.date_start.toLowerCase().indexOf(query2) >= 0 || !query2 ) &&
+
+            (item.find_document.toLowerCase().indexOf(query6) >= 0 || !query6 ) &&
+            (item.type_document.toLowerCase().indexOf(query7) >= 0 || !query7 ) &&
+            (item.status_document.toLowerCase().indexOf(query8) >= 0 || !query8 ) &&
+            (item.station.toLowerCase().indexOf(query9) >= 0 || !query9 ) 
+          )
+
+          }
+        
+        ),
       }
 
     case "ON CHANGE NO TRACKDOCUMENT":

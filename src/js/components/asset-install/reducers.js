@@ -153,22 +153,38 @@ export default (state = initialState, action) => {
         no_asset_install: state.no_word_order
       }
     case "CLICK SEARCH POPUP NO ASSETINSTALL":
-      const no_word_requestRegex = new RegExp(`${state.no_asset_install}`, "gi");
-      const date_endsRegex = new RegExp(`${state.date_ends}`, "gi");
-      const date_startsRegex = new RegExp(`${state.date_starts}`, "gi");
-      const zonesRegex = new RegExp(`${state.zones}`, "gi");
-      const districtsRegex = new RegExp(`${state.districts}`, "gi");
+      // const no_word_requestRegex = new RegExp(`${state.no_asset_install}`, "gi");
+      // const date_endsRegex = new RegExp(`${state.date_ends}`, "gi");
+      // const date_startsRegex = new RegExp(`${state.date_starts}`, "gi");
+      // const zonesRegex = new RegExp(`${state.zones}`, "gi");
+      // const districtsRegex = new RegExp(`${state.districts}`, "gi");
       return {
         ...state,
 
-        asset_install_show_popup: initialState.assetinstall.filter(function (assetinstall) {
-          var isMatch = (!no_word_requestRegex || no_word_requestRegex.test(assetinstall.no_asset_install)) &&
-            (!date_endsRegex || date_endsRegex.test(assetinstall.date_end)) &&
-            (!date_startsRegex || date_startsRegex.test(assetinstall.date_start)) &&
-            (!zonesRegex || zonesRegex.test(assetinstall.zone)) &&
-            (!districtsRegex || districtsRegex.test(assetinstall.district))
-          return (isMatch);
-        }
+        // asset_install_show_popup: initialState.assetinstall.filter(function (assetinstall) {
+        //   var isMatch = (!no_word_requestRegex || no_word_requestRegex.test(assetinstall.no_asset_install)) &&
+        //     (!date_endsRegex || date_endsRegex.test(assetinstall.date_end)) &&
+        //     (!date_startsRegex || date_startsRegex.test(assetinstall.date_start)) &&
+        //     (!zonesRegex || zonesRegex.test(assetinstall.zone)) &&
+        //     (!districtsRegex || districtsRegex.test(assetinstall.district))
+        //   return (isMatch);
+        // }
+
+        asset_install_show_popup: initialState.assetinstall.filter(item =>{
+          const query = state.no_asset_install.toLowerCase();
+          const query2 = state.date_starts.toLowerCase();
+          const query3 = state.date_ends.toLowerCase();
+          const query4 = state.zones.toLowerCase();
+          const query5 = state.districts.toLowerCase();
+          return(
+            (item.no_asset_install.toLowerCase().indexOf(query) >= 0 || !query )&&
+            (item.zone.toLowerCase().indexOf(query4) >= 0 || !query4 ) &&
+            (item.district.toLowerCase().indexOf(query5) >= 0 || !query5 ) &&
+            (item.date_end.toLowerCase().indexOf(query3) >= 0 || !query3 ) &&
+            (item.date_start.toLowerCase().indexOf(query2) >= 0 || !query2 ) 
+          )
+
+          }
 
         ),
       }

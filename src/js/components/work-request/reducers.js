@@ -65,7 +65,7 @@ const initialState = {
       "date_end": "2020-04-14",
       "time_end": "04:00",
       "district": "แขวงนครสวรรค์",
-      "zone": "",
+      "zone": "ตอนลาดยาว",
 
     },
     {
@@ -82,7 +82,7 @@ const initialState = {
       "date_end": "2020-04-14",
       "time_end": "04:00",
       "district": "แขวงนครสวรรค์",
-      "zone": "",
+      "zone": "ตอนลาดยาว",
     }
   ],
 
@@ -172,11 +172,6 @@ export default (state = initialState, action) => {
         no_word_request: state.no_word_request
       }
     case "CLICK SEARCH POPUP NO WORKREQUEST":
-      const no_word_requestRegex  = new RegExp(`${state.no_word_request}`, "gi");
-      const date_endsRegex  = new RegExp(`${state.date_ends}`, "gi");
-      const date_startsRegex  = new RegExp(`${state.date_starts}`, "gi");
-      const zonesRegex  = new RegExp(`${state.zones}`, "gi");
-      const districtsRegex  = new RegExp(`${state.districts}`, "gi");
       return {
         ...state,
         // word_request_show_popup: initialState.wordrequest.filter(function (wordrequest) {
@@ -184,14 +179,22 @@ export default (state = initialState, action) => {
         //   var isMatch = regex.test(wordrequest.no_word_request);
         //   return (isMatch);
         // }
-        word_request_show_popup: initialState.wordrequest.filter(function (wordrequest) {
-          var isMatch =  (!no_word_requestRegex ||no_word_requestRegex.test(wordrequest.no_word_request)) &&
-          (!date_endsRegex ||date_endsRegex.test(wordrequest.date_end)) &&
-          (!date_startsRegex ||date_startsRegex.test(wordrequest.date_start)) &&
-          (!zonesRegex ||zonesRegex.test(wordrequest.zone)) &&
-          (!districtsRegex ||districtsRegex.test(wordrequest.district)) 
-          return (isMatch);
-        }
+
+        word_request_show_popup: initialState.wordrequest.filter(item =>{
+          const query = state.no_word_request.toLowerCase();
+          const query2 = state.date_starts.toLowerCase();
+          const query3 = state.date_ends.toLowerCase();
+          const query4 = state.zones.toLowerCase();
+          const query5 = state.districts.toLowerCase();
+          return(
+            (item.no_word_request.toLowerCase().indexOf(query) >= 0 || !query )&&
+            (item.zone.toLowerCase().indexOf(query4) >= 0 || !query4 ) &&
+            (item.district.toLowerCase().indexOf(query5) >= 0 || !query5 ) &&
+            (item.date_end.toLowerCase().indexOf(query3) >= 0 || !query3 ) &&
+            (item.date_start.toLowerCase().indexOf(query2) >= 0 || !query2 ) 
+          )
+
+          }
         ),
       }
 

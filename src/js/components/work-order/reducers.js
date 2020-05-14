@@ -272,22 +272,38 @@ export default (state = initialState, action) => {
         no_word_order: state.no_word_order
       }
     case "CLICK SEARCH POPUP NO WORKORDER":
-      const no_word_requestRegex  = new RegExp(`${state.no_word_order}`, "gi");
-      const date_endsRegex  = new RegExp(`${state.date_ends}`, "gi");
-      const date_startsRegex  = new RegExp(`${state.date_starts}`, "gi");
-      const zonesRegex  = new RegExp(`${state.zones}`, "gi");
-      const districtsRegex  = new RegExp(`${state.districts}`, "gi");
+      // const no_word_requestRegex  = new RegExp(`${state.no_word_order}`, "gi");
+      // const date_endsRegex  = new RegExp(`${state.date_ends}`, "gi");
+      // const date_startsRegex  = new RegExp(`${state.date_starts}`, "gi");
+      // const zonesRegex  = new RegExp(`${state.zones}`, "gi");
+      // const districtsRegex  = new RegExp(`${state.districts}`, "gi");
       return {
         ...state,
       
-        word_order_show_popup: initialState.wordorder.filter(function (wordorder) {
-          var isMatch =  (!no_word_requestRegex ||no_word_requestRegex.test(wordorder.no_word_request)) &&
-          (!date_endsRegex ||date_endsRegex.test(wordorder.date_end)) &&
-          (!date_startsRegex ||date_startsRegex.test(wordorder.date_start)) &&
-          (!zonesRegex ||zonesRegex.test(wordorder.zone)) &&
-          (!districtsRegex ||districtsRegex.test(wordorder.district)) 
-          return (isMatch);
-        }
+        // word_order_show_popup: initialState.wordorder.filter(function (wordorder) {
+        //   var isMatch =  (!no_word_requestRegex ||no_word_requestRegex.test(wordorder.no_word_request)) &&
+        //   (!date_endsRegex ||date_endsRegex.test(wordorder.date_end)) &&
+        //   (!date_startsRegex ||date_startsRegex.test(wordorder.date_start)) &&
+        //   (!zonesRegex ||zonesRegex.test(wordorder.zone)) &&
+        //   (!districtsRegex ||districtsRegex.test(wordorder.district)) 
+        //   return (isMatch);
+        // }
+
+        word_order_show_popup: initialState.wordorder.filter(item =>{
+          const query = state.no_word_order.toLowerCase();
+          const query2 = state.date_starts.toLowerCase();
+          const query3 = state.date_ends.toLowerCase();
+          const query4 = state.zones.toLowerCase();
+          const query5 = state.districts.toLowerCase();
+          return(
+            (item.no_word_order.toLowerCase().indexOf(query) >= 0 || !query )&&
+            (item.zone.toLowerCase().indexOf(query4) >= 0 || !query4 ) &&
+            (item.district.toLowerCase().indexOf(query5) >= 0 || !query5 ) &&
+            (item.date_end.toLowerCase().indexOf(query3) >= 0 || !query3 ) &&
+            (item.date_start.toLowerCase().indexOf(query2) >= 0 || !query2 ) 
+          )
+
+          }
         
         ),
       }
@@ -312,11 +328,11 @@ export default (state = initialState, action) => {
         no_word_order_incident: state.no_word_order_incident
       }
     case "CLICK SEARCH POPUP NO WORKORDERINCIDENT":
-      const no_word_requestRegexw  = new RegExp(`${state.no_word_order_incident}`, "gi");
-      const date_endsRegexw  = new RegExp(`${state.date_ends}`, "gi");
-      const date_startsRegexw  = new RegExp(`${state.date_starts}`, "gi");
-      const zonesRegexw  = new RegExp(`${state.zones}`, "gi");
-      const districtsRegexw  = new RegExp(`${state.districts}`, "gi");
+      // const no_word_requestRegexw  = new RegExp(`${state.no_word_order_incident}`, "gi");
+      // const date_endsRegexw  = new RegExp(`${state.date_ends}`, "gi");
+      // const date_startsRegexw  = new RegExp(`${state.date_starts}`, "gi");
+      // const zonesRegexw  = new RegExp(`${state.zones}`, "gi");
+      // const districtsRegexw  = new RegExp(`${state.districts}`, "gi");
 
 
       return {
@@ -327,14 +343,30 @@ export default (state = initialState, action) => {
         //   return (isMatch);
         // }
 
-        word_order_incident_show_popup: initialState.wordorder_incident.filter(function (wordorder_incident) {
-          var isMatch =  (!no_word_requestRegexw ||no_word_requestRegexw.test(wordorder_incident.no_word_order_incident)) &&
-          (!date_endsRegexw ||date_endsRegexw.test(wordorder_incident.date_end)) &&
-          (!date_startsRegexw ||date_startsRegexw.test(wordorder_incident.date_start)) &&
-          (!zonesRegexw ||zonesRegexw.test(wordorder_incident.zone)) &&
-          (!districtsRegexw ||districtsRegexw.test(wordorder_incident.district)) 
-          return (isMatch);
-        }
+        word_order_incident_show_popup: initialState.wordorder_incident.filter(item =>{
+          const query = state.no_word_order_incident.toLowerCase();
+          const query2 = state.date_starts.toLowerCase();
+          const query3 = state.date_ends.toLowerCase();
+          const query4 = state.zones.toLowerCase();
+          const query5 = state.districts.toLowerCase();
+          return(
+            (item.no_word_order_incident.toLowerCase().indexOf(query) >= 0 || !query )&&
+            (item.zone.toLowerCase().indexOf(query4) >= 0 || !query4 ) &&
+            (item.district.toLowerCase().indexOf(query5) >= 0 || !query5 ) &&
+            (item.date_end.toLowerCase().indexOf(query3) >= 0 || !query3 ) &&
+            (item.date_start.toLowerCase().indexOf(query2) >= 0 || !query2 ) 
+          )
+
+          }
+
+        // word_order_incident_show_popup: initialState.wordorder_incident.filter(function (wordorder_incident) {
+        //   var isMatch =  (!no_word_requestRegexw ||no_word_requestRegexw.test(wordorder_incident.no_word_order_incident)) &&
+        //   (!date_endsRegexw ||date_endsRegexw.test(wordorder_incident.date_end)) &&
+        //   (!date_startsRegexw ||date_startsRegexw.test(wordorder_incident.date_start)) &&
+        //   (!zonesRegexw ||zonesRegexw.test(wordorder_incident.zone)) &&
+        //   (!districtsRegexw ||districtsRegexw.test(wordorder_incident.district)) 
+        //   return (isMatch);
+        // }
         
         ),
       }

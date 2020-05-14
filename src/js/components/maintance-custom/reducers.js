@@ -322,21 +322,36 @@ export default (state = initialState, action) => {
       }
 
     case "CLICK SEARCH POPUP NO DOCUMENT":
-      const no_document_requestRegex = new RegExp(`${state.no_document}`, "gi");
-      const date_endsRegex = new RegExp(`${state.date_ends}`, "gi");
-      const date_startsRegex = new RegExp(`${state.date_starts}`, "gi");
-      const zonesRegex = new RegExp(`${state.zones}`, "gi");
-      const districtsRegex = new RegExp(`${state.districts}`, "gi");
+      // const no_document_requestRegex = new RegExp(`${state.no_document}`, "gi");
+      // const date_endsRegex = new RegExp(`${state.date_ends}`, "gi");
+      // const date_startsRegex = new RegExp(`${state.date_starts}`, "gi");
+      // const zonesRegex = new RegExp(`${state.zones}`, "gi");
+      // const districtsRegex = new RegExp(`${state.districts}`, "gi");
       return {
         ...state,
-        document_show_popup: initialState.document.filter(function (document) {
-          var isMatch = (!no_document_requestRegex || no_document_requestRegex.test(document.no_asset_install)) &&
-            (!date_endsRegex || date_endsRegex.test(document.date_end)) &&
-            (!date_startsRegex || date_startsRegex.test(document.date_start)) &&
-            (!zonesRegex || zonesRegex.test(document.zone)) &&
-            (!districtsRegex || districtsRegex.test(document.district))
-          return (isMatch);
-        }
+        // document_show_popup: initialState.document.filter(function (document) {
+        //   var isMatch = (!no_document_requestRegex || no_document_requestRegex.test(document.no_asset_install)) &&
+        //     (!date_endsRegex || date_endsRegex.test(document.date_end)) &&
+        //     (!date_startsRegex || date_startsRegex.test(document.date_start)) &&
+        //     (!zonesRegex || zonesRegex.test(document.zone)) &&
+        //     (!districtsRegex || districtsRegex.test(document.district))
+        //   return (isMatch);
+        // }
+        document_show_popup: initialState.document.filter(item =>{
+          const query = state.no_document.toLowerCase();
+          const query2 = state.date_starts.toLowerCase();
+          const query3 = state.date_ends.toLowerCase();
+          const query4 = state.zones.toLowerCase();
+          const query5 = state.districts.toLowerCase();
+          return(
+            (item.no_document.toLowerCase().indexOf(query) >= 0 || !query )&&
+            (item.zone.toLowerCase().indexOf(query4) >= 0 || !query4 ) &&
+            (item.district.toLowerCase().indexOf(query5) >= 0 || !query5 ) &&
+            (item.date_end.toLowerCase().indexOf(query3) >= 0 || !query3 ) &&
+            (item.date_start.toLowerCase().indexOf(query2) >= 0 || !query2 ) 
+          )
+
+          }
         ),
       }
 
