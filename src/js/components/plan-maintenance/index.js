@@ -1,23 +1,30 @@
 import React from 'react';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import reducers from './reducers';
 
 import NavTopbar from '../nav/nav-top.js';
-import ToolBar from '../nav/nav-toolbar.js';
+import Toolbar from '../common/nav-toolbar';
 import TopContent from './top-content';
 import BottomContent from './bottom-content';
-import NavBottom from '../nav/nav-bottom.js';
+import Footer from '../common/footer.js';
 
-class Home extends React.Component {
+const store = createStore(reducers)
+class Plan extends React.Component {
     render() {
+        const type = 'CREATE SCHEDULE';
         return (
-            <div>
-                <NavTopbar />
-                <ToolBar />
+            <Provider store={store}>
+            <NavTopbar />
+            <Toolbar />
+            <form>
                 <TopContent />
-                <BottomContent />
-                <NavBottom />
-            </div>
+                <BottomContent  />
+                <Footer />
+            </form>
+        </Provider>
         )
     };
 }
 
-export default Home;
+export default Plan;
