@@ -4,7 +4,7 @@ import { createStore } from 'redux';
 import reducers from './reducers';
 
 import NavTopbar from '../nav/nav-top.js';
-import ToolBar from '../nav/nav-toolbar.js';
+import Toolbar from '../common/nav-toolbar';
 import TopContent from './top-content';
 import BottomContent from './bottom-content';
 import Footer from '../common/footer.js';
@@ -16,12 +16,12 @@ class Home extends React.Component {
         return (
             <Provider store={store}>
                 <NavTopbar />
-                <ToolBar />
-                {/* <form> */}
+                <Toolbar />
+                <form>
                     <TopContent />
-                    <BottomContent />
+                    <BottomContent  />
                     <Footer />
-                {/* </form> */}
+                </form>
             </Provider>
         )
     };

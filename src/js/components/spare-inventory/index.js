@@ -1,38 +1,29 @@
 import React from 'react';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import reducers from './reducers';
 
 import NavTopbar from '../nav/nav-top.js';
-import ToolBar from '../nav/nav-toolbar.js';
+import Toolbar from '../common/nav-toolbar';
 import TopContent from './top-content';
 import BottomContent from './bottom-content';
-import NavBottom from '../nav/nav-bottom.js';
+import Footer from '../common/footer.js';
+
+const store = createStore(reducers)
 
 class Inventory extends React.Component {
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            mockUpData: {}
-        };
-        this.onConfirm = this.onConfirm.bind(this);
-    }
-    onConfirm (order) {
-        this.setState({
-            mockUpData: order
-        })
-    }
-
     render() {
-        const type = 'default';
         return (
-            <div>
+            <Provider store={store}>
                 <NavTopbar />
-                <ToolBar />
+                <Toolbar />
                 <form>
-                    <TopContent confirm={this.onConfirm} />
-                    <BottomContent mockUpData={this.state.mockUpData} />
-                    <NavBottom type={type} />
+                    <TopContent />
+                    <BottomContent  />
+                    <Footer />
                 </form>
-            </div>
+            </Provider>
         )
     };
 }

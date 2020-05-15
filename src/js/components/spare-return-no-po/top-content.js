@@ -25,6 +25,7 @@ class TopContent extends React.Component {
   }
 
   checkActionMode = (mode) => {
+    // console.log(this.props.document_show)
     const current = this;
     if (mode === "search") {
       return (
@@ -73,10 +74,10 @@ class TopContent extends React.Component {
 
           <div className="grid_12">
             <div className="grid_2">
-              <p className="top-text">เลขที่ใบสั่งซื้อ/เลขที่เอกสารอ้างอิง</p>
+              <p className="top-text">เลขที่ใบ ส.16/46</p>
             </div>
             <div className="grid_3 pull_0">
-              <input type="text" className="cancel-default" defaultValue={current.props.document_show.no_po} disabled="disabled"></input>
+              <input type="text" className="cancel-default" defaultValue={current.props.document_show.no_s1646} disabled="disabled"></input>
             </div>
           </div>
         </>
@@ -131,16 +132,21 @@ class TopContent extends React.Component {
 
           <div className="grid_12">
             <div className="grid_2">
-              <p className="top-text">เลขที่ใบสั่งซื้อ/เลขที่เอกสารอ้างอิง</p>
+              <p className="top-text">เลขที่ใบ ส.16/46</p>
             </div>
             <div className="grid_3 pull_0">
-              <input type="text" className="cancel-default" value={current.props.document_show.no_po} onChange={(e) => this.props.onChangeNoPo(e)}></input>
+              <div className="p-search-box cancel-margin">
+                <input type="text" className="p-search-box__input cancel-default" value={current.props.document_show.no_s1646} onChange={(e) => this.props.onChangeNoPo(e)} />
+                <button type="button" className="p-search-box__button cancel-padding hidden"><i className="p-icon--search" id="showModalInventory" aria-controls="modalDocumentSS101"></i></button> {/* onClick={(e) => this.props.onClickOpenPopUpSS101(e)} */}
+              </div>
             </div>
           </div>
         </>
       )
     }
     if (mode === "add") {
+      console.log(this.props.document_show_mode_add)
+
       return (
         <>
           <div className="grid_12">
@@ -178,7 +184,7 @@ class TopContent extends React.Component {
           <div className="grid_12">
             <div className="grid_3 float-right">
               <div className="p-search-box cancel-margin">
-                <input type="text" className="p-search-box__input cancel-default" defaultValue="100" disabled="disabled"/>
+                <input type="text" className="p-search-box__input cancel-default" defaultValue="100" disabled="disabled" />
               </div>
             </div>
             <div className="grid_2 float-right">
@@ -188,10 +194,13 @@ class TopContent extends React.Component {
 
           <div className="grid_12">
             <div className="grid_2">
-              <p className="top-text">เลขที่ใบสั่งซื้อ/เลขที่เอกสารอ้างอิง</p>
+              <p className="top-text">เลขที่ใบ ส.16/46</p>
             </div>
             <div className="grid_3 pull_0">
-              <input type="text" className="cancel-default" value={current.props.document_show_mode_add.no_po} onChange={(e) => this.props.onChangeNoPoModeAdd(e)}></input>
+              <div className="p-search-box cancel-margin">
+                <input type="text" className="p-search-box__input cancel-default" value={current.props.document_show_mode_add.no_s1646} onChange={(e) => this.props.onChangeNoPoModeAdd(e)} />
+                <button type="button" className="p-search-box__button cancel-padding hidden"><i className="p-icon--search" id="showModalInventory" aria-controls="modalDocumentSS101ModeAdd"></i></button>
+              </div>
             </div>
           </div>
         </>
@@ -206,7 +215,7 @@ class TopContent extends React.Component {
         <div id="blackground-white">
           <div className="container_12 clearfix">
             <section className="grid_12 ">
-              <h4 className="head-title">นำอะไหล่เข้า</h4>
+              <h4 className="head-title">คืนอะไหล่/รับคืนอะไหล่ส่งซ่อม</h4>
               {this.checkActionMode(this.props.actionMode)}
             </section>
 
@@ -219,7 +228,7 @@ class TopContent extends React.Component {
 
           </div>
         </div>
-       
+
         {/* PopUp ค้นหาเลขที่เอกสาร */}
         <div className="modal" id="modalDocument" style={{ display: "none" }}>
           <div className="gray-board">
@@ -266,7 +275,7 @@ class TopContent extends React.Component {
             </div>
           </div>
         </div>
-        
+
         {/* PopUp ค้นหาเลขที่คลัง */}
         <div className="modal" id="modalInventory" style={{ display: "none" }}>
           <div className="gray-board">
@@ -314,6 +323,100 @@ class TopContent extends React.Component {
           </div>
         </div>
 
+        {/* PopUp ค้นหาเลขที่เอกสาร สส.101 */}
+        <div className="modal" id="modalDocumentSS101" style={{ display: "none" }}>
+          <div className="gray-board">
+            <p className="head-title-modal edit">ค้นหาเลขที่เอกสาร</p>
+            <div className="container_12 edit-padding">
+
+              <div className="grid_12">
+                <div className="grid_2"><p className="cancel-default">เลขที่เอกสาร</p></div>
+                <div className="grid_8 pull_0">
+                  <input type="text" className="cancel-default grid_3" value={this.props.document_show.no_s1646} onChange={(e) => this.props.onChangeNoPo(e)} />
+                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchNoDocumentSS101(e)}>ค้นหา</button>
+                </div>
+              </div>
+
+              <div className="grid_12">
+                <table className="table-many-column mt-3">
+                  <thead>
+                    <tr>
+                      <th className="font" style={{ minWidth: "300px" }}>เลขที่เอกสาร</th>
+                      <th className="font" style={{ minWidth: "450px" }}>ชื่องาน</th>
+                      <th className="font" style={{ minWidth: "150px" }}>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.props.raw_document_ss101_show_popup.map(function (raw_document_ss101_show_popup, index) {
+                      return (
+                        <tr key={index} id={index}>
+                          <td className="edit-padding" style={{ minWidth: "150px" }}> {raw_document_ss101_show_popup.no_s1646} </td>
+                          <td className="edit-padding" style={{ minWidth: "300px" }}> {raw_document_ss101_show_popup.name} </td>
+                          <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
+                            <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectNoDocumentSS101(e)} aria-label="Close active modal" aria-controls="modalDocumentSS101" id="closeModalInventory" >เลือก</button>
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="grid_12">
+                <button className="button-blue float-right grid_1 mr-5" type="button" aria-label="Close active modal" aria-controls="modalDocumentSS101" id="closeModalInventory">กลับ</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        {/* PopUp ค้นหาเลขที่เอกสาร MODE ADD สส.101 */}
+        <div className="modal" id="modalDocumentSS101ModeAdd" style={{ display: "none" }}>
+          <div className="gray-board">
+            <p className="head-title-modal edit">ค้นหาเลขที่เอกสาร</p>
+            <div className="container_12 edit-padding">
+
+              <div className="grid_12">
+                <div className="grid_2"><p className="cancel-default">เลขที่เอกสาร</p></div>
+                <div className="grid_8 pull_0">
+                  <input type="text" className="cancel-default grid_3" value={this.props.document_show_mode_add.no_s1646} onChange={(e) => this.props.onChangeNoPoModeAdd(e)} />
+                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchNoDocumentSS101ModeAdd(e)}>ค้นหา</button>
+                </div>
+              </div>
+
+              <div className="grid_12">
+                <table className="table-many-column mt-3">
+                  <thead>
+                    <tr>
+                      <th className="font" style={{ minWidth: "300px" }}>เลขที่เอกสาร</th>
+                      <th className="font" style={{ minWidth: "450px" }}>ชื่องาน</th>
+                      <th className="font" style={{ minWidth: "150px" }}>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.props.raw_document_ss101_show_popup_mode_add.map(function (raw_document_ss101_show_popup_mode_add, index) {
+                      return (
+                        <tr key={index} id={index}>
+                          <td className="edit-padding" style={{ minWidth: "150px" }}> {raw_document_ss101_show_popup_mode_add.no_s1646} </td>
+                          <td className="edit-padding" style={{ minWidth: "300px" }}> {raw_document_ss101_show_popup_mode_add.name} </td>
+                          <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
+                            <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectNoDocumentSS101ModeAdd(e)} aria-label="Close active modal" aria-controls="modalDocumentSS101ModeAdd" id="closeModalInventory" >เลือก</button>
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="grid_12">
+                <button className="button-blue float-right grid_1 mr-5" type="button" aria-label="Close active modal" aria-controls="modalDocumentSS101ModeAdd" id="closeModalInventory">กลับ</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
       </div>
     )
   };
@@ -326,7 +429,9 @@ const mapStateToProps = (state) => ({
   document_show: state.document_show,
   document_show_mode_add: state.document_show_mode_add,
   inventory_show_popup: state.inventory_show_popup,
-  inventory: state.inventory
+  inventory: state.inventory,
+  raw_document_ss101_show_popup: state.raw_document_ss101_show_popup,
+  raw_document_ss101_show_popup_mode_add: state.raw_document_ss101_show_popup_mode_add
 })
 const mapDispatchToProps = (dispatch) => ({
   onChangeNoDocument: (e) => dispatch(onChangeNoDocument(e)),
@@ -342,13 +447,17 @@ const mapDispatchToProps = (dispatch) => ({
   onChangeNoPo: (e) => dispatch(onChangeNoPo(e)),
   onClickPopUpSearchInventory: (e) => dispatch(onClickPopUpSearchInventory(e)),
   onClickSelectInventory: (e) => dispatch(onClickSelectInventory(e)),
+  onClickPopUpSearchNoDocumentSS101: (e) => dispatch(onClickPopUpSearchNoDocumentSS101(e)),
+  onClickSelectNoDocumentSS101: (e) => dispatch(onClickSelectNoDocumentSS101(e)),
 
   // Mode Add
   onChangeNoDocumentModeAdd: (e) => dispatch(onChangeNoDocumentModeAdd(e)),
   onChangeStatusModeAdd: (e) => dispatch(onChangeStatusModeAdd(e)),
   onChangeNameModeAdd: (e) => dispatch(onChangeNameModeAdd(e)),
   onChangeDateModeAdd: (e) => dispatch(onChangeDateModeAdd(e)),
-  onChangeNoPoModeAdd: (e) => dispatch(onChangeNoPoModeAdd(e))
+  onChangeNoPoModeAdd: (e) => dispatch(onChangeNoPoModeAdd(e)),
+  onClickPopUpSearchNoDocumentSS101ModeAdd: (e) => dispatch(onClickPopUpSearchNoDocumentSS101ModeAdd(e)),
+  onClickSelectNoDocumentSS101ModeAdd: (e) => dispatch(onClickSelectNoDocumentSS101ModeAdd(e)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(TopContent);
 
@@ -403,12 +512,12 @@ export const onChangeMyInventory = (e) => {
 }
 export const onChangeNoPo = (e) => {
   return {
-    type: "ON CHANGE NO PO",
+    type: "ON CHANGE NO SS101",
     value: e.target.value
   }
 }
 export const onClickPopUpSearchInventory = (e) => {
-  return{
+  return {
     type: "CLICK SEARCH POPUP INVENTORY"
   }
 }
@@ -420,35 +529,58 @@ export const onClickSelectInventory = (e) => {
   }
 }
 
+export const onClickPopUpSearchNoDocumentSS101 = (e) => {
+  return {
+    type: "CLICK_SEARCH_POPUP_SS101"
+  }
+}
+export const onClickSelectNoDocumentSS101 = (e) => {
+  return {
+    type: "CLICK_SELECT_POPUP_SS101",
+    row_document_ss101_show_popup: e.target.parentNode.parentNode.id
+  }
+}
+
 // Mode Add
 export const onChangeNoDocumentModeAdd = (e) => {
   // console.log(e.target.value)
-  return{
+  return {
     type: "ON CHANGE DOCUMENT MODE ADD",
     value: e.target.value
   }
 }
 export const onChangeStatusModeAdd = (e) => {
-  return{
+  return {
     type: "ON CHANGE STATUS MODE ADD",
     value: e.target.value
   }
 }
 export const onChangeNameModeAdd = (e) => {
-  return{
+  return {
     type: "ON CHANGE NAME MODE ADD",
     value: e.target.value
   }
 }
 export const onChangeDateModeAdd = (e) => {
-  return{
+  return {
     type: "ON CHANGE DATE MODE ADD",
     value: e.target.value
   }
 }
 export const onChangeNoPoModeAdd = (e) => {
-  return{
-    type: "ON CHANGE NO PO MODE ADD",
+  return {
+    type: "ON CHANGE NO SS101 MODE ADD",
     value: e.target.value
+  }
+}
+export const onClickPopUpSearchNoDocumentSS101ModeAdd = (e) => {
+  return {
+    type: "CLICK_SEARCH_POPUP_SS101_MODE_ADD"
+  }
+}
+export const onClickSelectNoDocumentSS101ModeAdd = (e) => {
+  return {
+    type: "CLICK_SELECT_POPUP_SS101_MODE_ADD",
+    row_document_ss101_show_popup: e.target.parentNode.parentNode.id
   }
 }
