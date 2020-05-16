@@ -31,11 +31,11 @@ class BottomContent extends React.Component {
                   return (
                     <tr key={index}>
                       <th className="edit-padding text-center">{index+1}</th>
-                      <td className="edit-padding">{list.item_id}</td>
+                      <td className="edit-padding">{list.no_part}</td>
                       <td className="edit-padding">{list.name_part}</td>
-                      <td className="edit-padding text-center">{list.quantity}</td>
-                      <td className="edit-padding text-center">{list.uom_id}</td>
-                      <td className="edit-padding text-right">{list.per_unit_price}</td>
+                      <td className="edit-padding text-center">{list.quility}</td>
+                      <td className="edit-padding text-center">{list.unit}</td>
+                      <td className="edit-padding text-right">{list.unit_per_bath}</td>
                       <td className="edit-padding text-right">{list.total}</td>
                     </tr>
                   )

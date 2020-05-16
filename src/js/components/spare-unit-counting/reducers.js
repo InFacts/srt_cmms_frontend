@@ -409,18 +409,21 @@ export default (state = initialState, action) => {
         no_document: action.value
       }
     case "CLICK SEARCH POPUP NO DOCUMENT":
-      // console.log("reducer", action.value)
       return {
         ...state,
-        document_show_popup: action.value
+        document_show_popup: initialState.document.filter(function (document) {
+          // console.log(inventory.no_inventory)
+          const regex = new RegExp(`${state.no_document}`, 'i');
+          var isMatch = regex.test(document.no_document);
+          return (isMatch);
+        }),
       }
     case "CLICK SELECT POPUP NO DOCUMENT":
-      console.log("reducer", action.value)
       return {
         ...state,
-        no_document: action.value.document.internal_document_id,
-        document_show: action.value.document,
-        list_show: action.value.specific.line_items
+        no_document: state.document_show_popup[action.row_document_show_popup].no_document,
+        document_show: state.document_show_popup[action.row_document_show_popup],
+        list_show: state.document_show_popup[action.row_document_show_popup].list
       }
 
     // Mode Edit
@@ -482,36 +485,36 @@ export default (state = initialState, action) => {
       }
     case "ON CHANGE QUILITY EACH ROW":
       var clone_list_show = [...state.list_show];
-      var clone_document_show = { ...state.document_show };
+      var clone_document_show = {...state.document_show};
       // console.log(clone_list_show[action.rowIndex])
       clone_list_show[action.rowIndex].quility = action.value;
       clone_list_show[action.rowIndex].total = clone_list_show[action.rowIndex].quility * clone_list_show[action.rowIndex].unit_per_bath;
       var sum_real_total = 0;
-      clone_list_show.map(function (clone_list_show, index) {
+      clone_list_show.map(function(clone_list_show,index) {
         sum_real_total = clone_list_show.total + sum_real_total;
         return sum_real_total;
       })
       clone_document_show.total = sum_real_total
       return {
         ...state,
-        list_show: clone_list_show,
+        list_show: clone_list_show, 
         document_show: clone_document_show
       }
     case "ON CHANGE UNIT PER BATH EACH ROW":
       var clone_list_show = [...state.list_show];
-      var clone_document_show = { ...state.document_show };
+      var clone_document_show = {...state.document_show};
       // console.log(clone_list_show[action.rowIndex])
       clone_list_show[action.rowIndex].unit_per_bath = action.value
       clone_list_show[action.rowIndex].total = clone_list_show[action.rowIndex].quility * clone_list_show[action.rowIndex].unit_per_bath;
       var sum_real_total = 0;
-      clone_list_show.map(function (clone_list_show, index) {
+      clone_list_show.map(function(clone_list_show,index) {
         sum_real_total = clone_list_show.total + sum_real_total;
         return sum_real_total;
       })
       clone_document_show.total = sum_real_total
       return {
         ...state,
-        list_show: clone_list_show,
+        list_show: clone_list_show, 
         document_show: clone_document_show
       }
     case "ON CHANGE TOTAL EACH ROW":
@@ -650,12 +653,12 @@ export default (state = initialState, action) => {
       }
     case "ON CHANGE QUILITY EACH ROW MODE ADD":
       var clone_list_show_mode_add = [...state.list_show_mode_add];
-      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      var clone_document_show_mode_add = {...state.document_show_mode_add};
       // console.log(clone_list_show[action.rowIndex])
       clone_list_show_mode_add[action.rowIndex].quility = action.value
       clone_list_show_mode_add[action.rowIndex].total = clone_list_show_mode_add[action.rowIndex].quility * clone_list_show_mode_add[action.rowIndex].unit_per_bath;
       var sum_real_total = 0;
-      clone_list_show_mode_add.map(function (clone_list_show_mode_add, index) {
+      clone_list_show_mode_add.map(function(clone_list_show_mode_add,index) {
         sum_real_total = clone_list_show_mode_add.total + sum_real_total;
         return sum_real_total;
       })
@@ -665,21 +668,21 @@ export default (state = initialState, action) => {
         list_show_mode_add: clone_list_show_mode_add,
         document_show_mode_add: clone_document_show_mode_add
       }
-    case "ON CHANGE UNIT PER BATH EACH ROW MODE ADD":
+      case "ON CHANGE UNIT PER BATH EACH ROW MODE ADD":
       var clone_list_show_mode_add = [...state.list_show_mode_add];
-      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      var clone_document_show_mode_add = {...state.document_show_mode_add};
       // console.log(clone_list_show_mode_add[action.rowIndex])
       clone_list_show_mode_add[action.rowIndex].unit_per_bath = action.value
       clone_list_show_mode_add[action.rowIndex].total = clone_list_show_mode_add[action.rowIndex].quility * clone_list_show_mode_add[action.rowIndex].unit_per_bath;
       var sum_real_total = 0;
-      clone_list_show_mode_add.map(function (clone_list_show_mode_add, index) {
+      clone_list_show_mode_add.map(function(clone_list_show_mode_add,index) {
         sum_real_total = clone_list_show_mode_add.total + sum_real_total;
         return sum_real_total;
       })
       clone_document_show_mode_add.total = sum_real_total
       return {
         ...state,
-        list_show_mode_add: clone_list_show_mode_add,
+        list_show_mode_add: clone_list_show_mode_add, 
         document_show_mode_add: clone_document_show_mode_add
       }
     case "ON CHANGE TOTAL EACH ROW MODE ADD":

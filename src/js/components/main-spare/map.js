@@ -52,7 +52,7 @@ class Map extends React.Component {
                         <h4 className="head-title" style={{ color: "black"}}>ระบบบริหารข้อมูลอะไหล่ - Spare</h4>
                             <div className="ml-3" id="blackground-white" style={{ height: "380px" }}>
                                 <Link to="/good-receipt"><img alt='some value' src={Oneone} className="one-one" /></Link>
-                                <Link to="/good-return"><img alt='some value' src={Onetwo} className="one-two" /></Link>
+                                <img alt='some value' src={Onetwo} className="one-two" />
                                 <Link to="/good-return-no-po"><img alt='some value' src={Onethree} className="one-three" /></Link>
                                 <img alt='some value' src={Arrow1} className="arrow1" />
                                 <img alt='some value' src={Arrow2} className="arrow2" />
@@ -78,7 +78,7 @@ class Map extends React.Component {
                                 <img alt='some value' src={Text8} className="text8" />
                                 <img alt='some value' src={Text9} className="text9" />
                                 <img alt='some value' src={Text10} className="text10" />
-                                <img alt='some value' src={Fourone} className="four-one" />
+                                <Link to="/track"><img alt='some value' src={Fourone} className="four-one" /></Link>
                                 <Link to="/item-master-data"><img alt='some value' src={Fourtwo} className="four-two" /></Link>
                                 <img alt='some value' src={Fourthree} className="four-three" />
                                 <img alt='some value' src={Text11} className="text11" />
@@ -89,9 +89,8 @@ class Map extends React.Component {
                                     <button className="p-contextual-menu__toggle" style={{ border: "none", padding: "0" }} aria-controls="menu-1" aria-expanded="false" aria-haspopup="true"><img alt='some value' src={Dropdown} /></button>
                                     <span className="p-contextual-menu__dropdown" id="menu-1" aria-hidden="true" aria-label="submenu">
                                         <span className="p-contextual-menu__group">
-                                            <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>Commission</Link>
-                                            <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>Aquire</Link>
-                                            <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>Deploy</Link>
+                                            <Link to="/good-return-1" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>คืนอะไหล่</Link>
+                                            <Link to="/good-return-2" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รับคืนอะไหล่ส่งซ่อม</Link>
                                         </span>
                                     </span>
                                 </span>
@@ -99,9 +98,8 @@ class Map extends React.Component {
                                     <button className="p-contextual-menu__toggle" style={{ border: "none", padding: "0" }} aria-controls="menu-2" aria-expanded="false" aria-haspopup="true"><img alt='some value' src={Dropdown} /></button>
                                     <span className="p-contextual-menu__dropdown" id="menu-2" aria-hidden="true" aria-label="submenu">
                                         <span className="p-contextual-menu__group">
-                                            <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>Commission</Link>
-                                            <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>Aquire</Link>
-                                            <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>Deploy</Link>
+                                            <Link to="/unit-count" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>ตรวจนับสินค้า</Link>
+                                            {/* <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>ปรับปรุงจำนวนอะไหล่</Link> */}
                                         </span>
                                     </span>
                                 </span>
@@ -109,9 +107,17 @@ class Map extends React.Component {
                                     <button className="p-contextual-menu__toggle" style={{ border: "none", padding: "0" }} aria-controls="menu-3" aria-expanded="false" aria-haspopup="true"><img alt='some value' src={Dropdown} /></button>
                                     <span className="p-contextual-menu__dropdown" id="menu-3" aria-hidden="true" aria-label="submenu">
                                         <span className="p-contextual-menu__group">
-                                            <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>Commission</Link>
-                                            <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>Aquire</Link>
-                                            <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>Deploy</Link>
+                                            <Link to="/salvage-management-1" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>คืนซากอะไหล่</Link>
+                                            <Link to="/salvage-management-2" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>จำหหน่ายซากอะไหล่</Link>
+                                        </span>
+                                    </span>
+                                </span>
+                                <span className="p-contextual-menu--left drop-dawn4">
+                                    <button className="p-contextual-menu__toggle" style={{ border: "none", padding: "0" }} aria-controls="menu-4" aria-expanded="false" aria-haspopup="true"><img alt='some value' src={Dropdown} /></button>
+                                    <span className="p-contextual-menu__dropdown" id="menu-4" aria-hidden="true" aria-label="submenu">
+                                        <span className="p-contextual-menu__group">
+                                            <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รายงาน บ.22 (Spare6)</Link>
+                                            <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รายงาน ส.1 (Spare7)</Link>
                                         </span>
                                     </span>
                                 </span>

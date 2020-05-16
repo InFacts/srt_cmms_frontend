@@ -9,7 +9,7 @@ const initialState = {
       "status": "เปิดสำหรับแก้ไข",
       "date": "2014-02-09",
       "my_inventory": "100",
-      "no_po": "67890",
+      "no_ss101": "67890",
       "total": "2000",
       "note": "",
       "list": [
@@ -112,7 +112,7 @@ const initialState = {
       "status": "ปิดสำหรับแก้ไข",
       "date": "2014-02-09",
       "my_inventory": "200",
-      "no_po": "67890",
+      "no_ss101": "67890",
       "total": 2000,
       "note": "",
       "list": [
@@ -252,6 +252,105 @@ const initialState = {
       name: "คลังลาดกระบัง"
     }
   ],
+  raw_document_ss101: [
+    {
+      "id": 1,
+      "no_ss101": 99999,
+      "name": "การซ่อมเครื่องกั้นถนน",
+      "list": [
+        {
+          "id": 1,
+          "no_part": "SIG 010",
+          "name_part": "SIG ขนาด 5V.",
+          "quility": "10",
+          "unit": "ชิ้น",
+          "unit_per_bath": "100",
+          "total": 1000
+        },
+        {
+          "id": "",
+          "no_part": "",
+          "name_part": "",
+          "quility": "",
+          "unit": "",
+          "unit_per_bath": "",
+          "total": ""
+        },
+        {
+          "id": "",
+          "no_part": "",
+          "name_part": "",
+          "quility": "",
+          "unit": "",
+          "unit_per_bath": "",
+          "total": ""
+        },
+        {
+          "id": "",
+          "no_part": "",
+          "name_part": "",
+          "quility": "",
+          "unit": "",
+          "unit_per_bath": "",
+          "total": ""
+        },
+        {
+          "id": "",
+          "no_part": "",
+          "name_part": "",
+          "quility": "",
+          "unit": "",
+          "unit_per_bath": "",
+          "total": ""
+        },
+        {
+          "id": "",
+          "no_part": "",
+          "name_part": "",
+          "quility": "",
+          "unit": "",
+          "unit_per_bath": "",
+          "total": ""
+        },
+        {
+          "id": "",
+          "no_part": "",
+          "name_part": "",
+          "quility": "",
+          "unit": "",
+          "unit_per_bath": "",
+          "total": ""
+        },
+        {
+          "id": "",
+          "no_part": "",
+          "name_part": "",
+          "quility": "",
+          "unit": "",
+          "unit_per_bath": "",
+          "total": ""
+        },
+        {
+          "id": "",
+          "no_part": "",
+          "name_part": "",
+          "quility": "",
+          "unit": "",
+          "unit_per_bath": "",
+          "total": ""
+        },
+        {
+          "id": "",
+          "no_part": "",
+          "name_part": "",
+          "quility": "",
+          "unit": "",
+          "unit_per_bath": "",
+          "total": ""
+        },
+      ]
+    }
+  ],
 
   // Mode การทำงาน
   action: "search",
@@ -267,6 +366,7 @@ const initialState = {
   no_part_show: [],
   inventory_show_popup: [],
   list_show_row_index: "", //ไว้บอกตำแหน่งว่ากด แก้ไข อะไหล่จาก row ไหนใน table
+  raw_document_ss101_show_popup: [],
 
   // Mode Add
   list_no_part_mode_add: "",
@@ -277,7 +377,7 @@ const initialState = {
     "status": "",
     "date": "",
     "my_inventory": "",
-    "no_po": "",
+    "no_ss101": "",
     "total": "",
     "note": "",
     "list": []
@@ -376,6 +476,7 @@ const initialState = {
   ],
   list_show_mode_add_row_index: "",
   no_part_show_mode_add: [],
+  raw_document_ss101_show_popup_mode_add: [],
 
   // แนบไฟล์
   files: [],
@@ -409,18 +510,21 @@ export default (state = initialState, action) => {
         no_document: action.value
       }
     case "CLICK SEARCH POPUP NO DOCUMENT":
-      // console.log("reducer", action.value)
       return {
         ...state,
-        document_show_popup: action.value
+        document_show_popup: initialState.document.filter(function (document) {
+          // console.log(inventory.no_inventory)
+          const regex = new RegExp(`${state.no_document}`, 'i');
+          var isMatch = regex.test(document.no_document);
+          return (isMatch);
+        }),
       }
     case "CLICK SELECT POPUP NO DOCUMENT":
-      console.log("reducer", action.value)
       return {
         ...state,
-        no_document: action.value.document.internal_document_id,
-        document_show: action.value.document,
-        list_show: action.value.specific.line_items
+        no_document: state.document_show_popup[action.row_document_show_popup].no_document,
+        document_show: state.document_show_popup[action.row_document_show_popup],
+        list_show: state.document_show_popup[action.row_document_show_popup].list
       }
 
     // Mode Edit
@@ -452,9 +556,9 @@ export default (state = initialState, action) => {
         ...state,
         document_show: clone_document_show
       }
-    case "ON CHANGE NO PO":
+    case "ON CHANGE NO SS101":
       var clone_document_show = { ...state.document_show };
-      clone_document_show.no_po = action.value;
+      clone_document_show.no_ss101 = action.value;
       return {
         ...state,
         document_show: clone_document_show
@@ -571,6 +675,29 @@ export default (state = initialState, action) => {
         document_show: clone_document_show
       }
 
+    case "CLICK_SEARCH_POPUP_SS101":
+      return {
+        ...state,
+        raw_document_ss101_show_popup: initialState.raw_document_ss101.filter(function (raw_document_ss101) {
+          const regex = new RegExp(`${state.document_show.no_ss101}`, 'i');
+          console.log(state.document_show.no_ss101)
+          var isMatch = regex.test(raw_document_ss101.no_ss101);
+          return (isMatch);
+        }),
+      }
+    case "CLICK_SELECT_POPUP_SS101":
+      var clone_document_show = { ...state.document_show };
+      var clone_list_show = { ...state.list_show };
+      // console.log(clone_document_show.my_inventory, "and", state.inventory_show_popup[action.row_inventory_show_popup].no_inventory)
+      // console.log(state.raw_document_ss101_show_popup[action.row_document_ss101_show_popup].list)
+      clone_list_show = state.raw_document_ss101_show_popup[action.row_document_ss101_show_popup].list
+      clone_document_show = state.raw_document_ss101_show_popup[action.row_document_ss101_show_popup].no_ss101
+      return {
+        ...state,
+        list_show: clone_list_show,
+        document_show: clone_document_show
+      }
+
     // Mode Add
     case "ON CHANGE DOCUMENT MODE ADD":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
@@ -600,9 +727,9 @@ export default (state = initialState, action) => {
         ...state,
         document_show_mode_add: clone_document_show_mode_add
       }
-    case "ON CHANGE NO PO MODE ADD":
+    case "ON CHANGE NO SS101 MODE ADD":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
-      clone_document_show_mode_add.no_po = action.value;
+      clone_document_show_mode_add.no_ss101 = action.value;
       return {
         ...state,
         document_show_mode_add: clone_document_show_mode_add
@@ -702,6 +829,29 @@ export default (state = initialState, action) => {
       clone_document_show_mode_add.note = action.value;
       return {
         ...state,
+        document_show_mode_add: clone_document_show_mode_add
+      }
+
+    case "CLICK_SEARCH_POPUP_SS101_MODE_ADD":
+      return {
+        ...state,
+        raw_document_ss101_show_popup_mode_add: initialState.raw_document_ss101.filter(function (raw_document_ss101) {
+          const regex = new RegExp(`${state.document_show_mode_add.no_ss101}`, 'i');
+          // console.log(state.document_show.no_ss101)
+          var isMatch = regex.test(raw_document_ss101.no_ss101);
+          return (isMatch);
+        }),
+      }
+    case "CLICK_SELECT_POPUP_SS101_MODE_ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      var clone_list_show_mode_add = { ...state.list_show_mode_add };
+      // console.log(clone_document_show.my_inventory, "and", state.inventory_show_popup[action.row_inventory_show_popup].no_inventory)
+      // console.log(state.raw_document_ss101_show_popup[action.row_document_ss101_show_popup].list)
+      clone_list_show_mode_add = state.raw_document_ss101_show_popup_mode_add[action.row_document_ss101_show_popup].list
+      clone_document_show_mode_add.no_ss101 = state.raw_document_ss101_show_popup_mode_add[action.row_document_ss101_show_popup].no_ss101
+      return {
+        ...state,
+        list_show_mode_add: clone_list_show_mode_add,
         document_show_mode_add: clone_document_show_mode_add
       }
 
