@@ -354,6 +354,7 @@ const initialState = {
 
   // Mode การทำงาน
   action: "search",
+  fill_data: false,
 
   // Mode Search 
   no_document: "",
@@ -495,7 +496,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         action: action.value,
-        clickable: action.value === "add" || action.value === "edit" ? true : false
+        clickable: action.value === "add" || action.value === "edit" ? true : false,
       }
 
     // Mode Search
@@ -511,20 +512,17 @@ export default (state = initialState, action) => {
       }
     case "CLICK SEARCH POPUP NO DOCUMENT":
       return {
-        ...state,
-        document_show_popup: initialState.document.filter(function (document) {
-          // console.log(inventory.no_inventory)
-          const regex = new RegExp(`${state.no_document}`, 'i');
-          var isMatch = regex.test(document.no_document);
-          return (isMatch);
-        }),
+        ...state, document_show_popup: action.value
+     
       }
     case "CLICK SELECT POPUP NO DOCUMENT":
+      console.log("reducer", action.value)
       return {
         ...state,
-        no_document: state.document_show_popup[action.row_document_show_popup].no_document,
-        document_show: state.document_show_popup[action.row_document_show_popup],
-        list_show: state.document_show_popup[action.row_document_show_popup].list
+        no_document: action.value.document.internal_document_id,
+        document_show: action.value.document,
+        list_show: action.value.specific.line_items,
+        fill_data:true,
       }
 
     // Mode Edit

@@ -17,8 +17,8 @@ class Footer extends React.Component {
         </div>
       )
     }
-    if (mode === "edit" || mode === "add") {
-      // console.log("Edit/Add mode is Action")
+    if (mode === "add" || mode === "edit") {
+      console.log("Edit/Add mode is Action")
       return (
         <div className="grid_12 nav-footer">
           <button type="button" className="p-button--base edit float-right">ยกเลิก</button>

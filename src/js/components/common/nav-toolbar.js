@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
 
-
-
 import { Link } from 'react-router-dom';
 import '../../../vender/fontawesome-free/css/all.css';
 import '../../../css/style-nav.css'
@@ -22,14 +20,14 @@ import SearchDocument from '../../../images/toolbar/search.svg'
 class ToolbarItem extends React.Component{
 
     render(){
-        var {id,alt ,src,select,callback} = this.props;
+        var {id, alt, src, pointer, select, callback} = this.props;
         return(
             
             (select === id)
             ?   
-                <li className="nav-li" ><Link to="#" className="toolbar"><div className="selecting"><img alt={alt} src={src} onClick={()=>{callback(0)}}  className="img-toolbar "  /></div></Link></li>
+                <li className="nav-li" ><Link className="toolbar" style={{pointerEvents: pointer}}><div className="selecting"><img alt={alt} src={src}   className="img-toolbar" /></div></Link></li>
             :
-                <li className="nav-li" ><Link to="#" className="toolbar"><img  alt={alt} src={src} onClick={()=>{callback(id)}} className="img-toolbar" /></Link></li>  
+                <li className="nav-li"  ><Link className="toolbar" style={{pointerEvents: pointer}}><img  alt={alt} src={src} onClick={()=>{callback(id)}} className="img-toolbar" /></Link></li>
             );
     }
 }
@@ -40,69 +38,210 @@ class Toolbar extends React.Component {
         super(props)
        
         this.state = {
-            id: 0,
+            id: 2,
         }
+        this.props.handleAction("search");
     }
 
     render() {
-        var menu, items;
-        menu = [
-            {
-                id:1,
-                alt: "home",
-                src : HomeDocument,
-            },
-            {
-                id:2,
-                alt: "search",
-                src : SearchDocument,
-            },
-            {
-                id:3,
-                alt: "edit",
-                src : EditDocument,
-            },
-            {
-                id:4,
-                alt: "add",
-                src : AddDocument,
-            },
-            {
-                id:5,
-                alt: "copy",
-                src : CopyDocument,
-            },
-            {
-                id:6,
-                alt: "save",
-                src : SaveDocument,
-            },
-            {
-                id:7,
-                alt: "retry",
-                src : RetryDocument,
-            },
-            {
-                id:8,
-                alt: "back",
-                src : BackDocument,
-            },
-            {
-                id:9,
-                alt: "forward",
-                src : ForwardDocument,
-            },
-            {
-                id:10,
-                alt: "pdf",
-                src : PdfDocument,
-            },
-        ]
+        var items,menu;
 
-
+        if(this.props.actionMode === "search" && this.props.fill_data === true ||this.props.actionMode === "edit" ){
+            menu = [
+                {
+                    id:1,
+                    alt: "home",
+                    src : HomeDocument,
+                    pointer: "auto"
+                },
+                {
+                    id:2,
+                    alt: "search",
+                    src : SearchDocument,
+                    pointer: "auto"
+                },
+                {
+                    id:3,
+                    alt: "edit",
+                    src : EditDocument,
+                    pointer: "auto"
+                },
+                {
+                    id:4,
+                    alt: "add",
+                    src : AddDocument,
+                    pointer: "auto"
+                },
+                {
+                    id:5,
+                    alt: "copy",
+                    src : CopyDocument,
+                    pointer: "none"
+                },
+                {
+                    id:6,
+                    alt: "save",
+                    src : SaveDocument,
+                    pointer: "none"
+                },
+                {
+                    id:7,
+                    alt: "retry",
+                    src : RetryDocument,
+                    pointer: "none"
+                },
+                {
+                    id:8,
+                    alt: "back",
+                    src : BackDocument,
+                    pointer: "none"
+                },
+                {
+                    id:9,
+                    alt: "forward",
+                    src : ForwardDocument,
+                    pointer: "none"
+                },
+                {
+                    id:10,
+                    alt: "pdf",
+                    src : PdfDocument,
+                    pointer: "none"
+                },
+            ]
+        }
+        if(this.props.actionMode === "search" && this.props.fill_data === false ){
+            menu = [
+                {
+                    id:1,
+                    alt: "home",
+                    src : HomeDocument,
+                    pointer: "auto"
+                },
+                {
+                    id:2,
+                    alt: "search",
+                    src : SearchDocument,
+                    pointer: "auto"
+                },
+                {
+                    id:3,
+                    alt: "edit",
+                    src : EditDocument,
+                    pointer: "none"
+                },
+                {
+                    id:4,
+                    alt: "add",
+                    src : AddDocument,
+                    pointer: "auto"
+                },
+                {
+                    id:5,
+                    alt: "copy",
+                    src : CopyDocument,
+                    pointer: "none"
+                },
+                {
+                    id:6,
+                    alt: "save",
+                    src : SaveDocument,
+                    pointer: "none"
+                },
+                {
+                    id:7,
+                    alt: "retry",
+                    src : RetryDocument,
+                    pointer: "none"
+                },
+                {
+                    id:8,
+                    alt: "back",
+                    src : BackDocument,
+                    pointer: "none"
+                },
+                {
+                    id:9,
+                    alt: "forward",
+                    src : ForwardDocument,
+                    pointer: "none"
+                },
+                {
+                    id:10,
+                    alt: "pdf",
+                    src : PdfDocument,
+                    pointer: "none"
+                },
+            ]
+        }
+        if(this.props.actionMode === "add" || this.props.actionMode === "home")
+        {
+            menu = [
+                {
+                    id:1,
+                    alt: "home",
+                    src : HomeDocument,
+                    pointer: "auto"
+                },
+                {
+                    id:2,
+                    alt: "search",
+                    src : SearchDocument,
+                    pointer: "auto"
+                },
+                {
+                    id:3,
+                    alt: "edit",
+                    src : EditDocument,
+                    pointer: "none"
+                },
+                {
+                    id:4,
+                    alt: "add",
+                    src : AddDocument,
+                    pointer: "auto"
+                },
+                {
+                    id:5,
+                    alt: "copy",
+                    src : CopyDocument,
+                    pointer: "none"
+                },
+                {
+                    id:6,
+                    alt: "save",
+                    src : SaveDocument,
+                    pointer: "none"
+                },
+                {
+                    id:7,
+                    alt: "retry",
+                    src : RetryDocument,
+                    pointer: "none"
+                },
+                {
+                    id:8,
+                    alt: "back",
+                    src : BackDocument,
+                    pointer: "none"
+                },
+                {
+                    id:9,
+                    alt: "forward",
+                    src : ForwardDocument,
+                    pointer: "none"
+                },
+                {
+                    id:10,
+                    alt: "pdf",
+                    src : PdfDocument,
+                    pointer: "none"
+                },
+            ]
+        }
 
         items = menu.map((item , index) =>
-            <ToolbarItem  key={item.id} id={item.id} alt={item.alt} src={item.src} select={this.state.id} callback={(idx) => {
+            <ToolbarItem  key={item.id} id={item.id} alt={item.alt} src={item.src} pointer={item.pointer} select={this.state.id} callback={(idx) => {
                 this.setState({
                     id:idx,
                 })
@@ -127,6 +266,7 @@ class Toolbar extends React.Component {
 
 const mapStateToProps = (state) => ({
     actionMode: state.action,
+    fill_data:state.fill_data,
 })
 const mapDispatchToProps = (dispatch) => ({
     handleAction: (value) => dispatch(action(value)),
@@ -134,7 +274,6 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(mapStateToProps, mapDispatchToProps)(Toolbar);
 
 export const action = (value) => {
-
     return {
         type: "ACTION",
         value: value

@@ -1,5 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
+import axios from "axios";
+
+import { API_PORT_DATABASE } from '../../config_port.js';
+import { API_URL_DATABASE } from '../../config_url.js';
 
 import '../../../css/style.css'
 import '../../../css/grid12.css';
@@ -27,6 +32,12 @@ class TopContent extends React.Component {
   checkActionMode = (mode) => {
     // console.log(this.props.document_show)
     const current = this;
+
+    if (mode === "home") {
+      return (
+        <Redirect to="/main"></Redirect>
+      ) 
+    }
     if (mode === "search") {
       return (
         <>
@@ -41,7 +52,7 @@ class TopContent extends React.Component {
               </div>
             </div>
             <div className="grid_3 float-right">
-              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.status} disabled="disabled"></input>
+              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.document_status_id} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">สถานะ</p>
@@ -53,10 +64,10 @@ class TopContent extends React.Component {
               <p className="top-text">ผู้นำเข้า</p>
             </div>
             <div className="grid_3 pull_1">
-              <input type="text" className="cancel-default" defaultValue={current.props.document_show.name} disabled="disabled"></input>
+              <input type="text" className="cancel-default" defaultValue={current.props.document_show.created_by_user_id} disabled="disabled"></input>
             </div>
             <div className="grid_3 float-right">
-              <input type="date" className="cancel-default float-right" defaultValue={current.props.document_show.date} disabled="disabled"></input>
+              <input type="datetime-local" className="cancel-default float-right" defaultValue={current.props.document_show.created_on} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">วันที่</p>
@@ -65,7 +76,7 @@ class TopContent extends React.Component {
 
           <div className="grid_12">
             <div className="grid_3 float-right">
-              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.my_inventory} disabled="disabled"></input>
+              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.internal_document_id} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">คลัง</p>
@@ -239,7 +250,7 @@ class TopContent extends React.Component {
                 <div className="grid_2"><p className="cancel-default">เลขที่เอกสาร</p></div>
                 <div className="grid_8 pull_0">
                   <input type="text" className="cancel-default grid_3" value={this.props.no_document} onChange={(e) => this.props.onChangeNoDocument(e)} />
-                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchNoDocument(e)}>ค้นหา</button>
+                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchNoDocument(this.props.no_document)}>ค้นหา</button>
                 </div>
               </div>
 
@@ -256,10 +267,10 @@ class TopContent extends React.Component {
                     {this.props.document_show_popup.map(function (document_show_popup, index) {
                       return (
                         <tr key={index} id={index}>
-                          <td className="edit-padding" style={{ minWidth: "150px" }}> {document_show_popup.no_document} </td>
-                          <td className="edit-padding" style={{ minWidth: "300px" }}> {document_show_popup.name} </td>
+                          <td className="edit-padding" style={{ minWidth: "150px" }}> {document_show_popup.internal_document_id} </td>
+                          <td className="edit-padding" style={{ minWidth: "300px" }}> {document_show_popup.created_on} </td>
                           <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
-                            <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectNoDocument(e)} aria-label="Close active modal" aria-controls="modalDocument" id="closeModalInventory" >เลือก</button>
+                            <button type="button" className="button-blue" onClick={(e,i) => current.props.onClickSelectNoDocument( document_show_popup.document_id, document_show_popup.document_type_id)} aria-label="Close active modal" aria-controls="modalDocument" id="closeModalInventory" >เลือก</button>
                           </td>
                         </tr>
                       )
@@ -436,7 +447,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   onChangeNoDocument: (e) => dispatch(onChangeNoDocument(e)),
   onClickPopUpSearchNoDocument: (e) => dispatch(onClickPopUpSearchNoDocument(e)),
-  onClickSelectNoDocument: (e) => dispatch(onClickSelectNoDocument(e)),
+  onClickSelectNoDocument: (e,i) => dispatch(onClickSelectNoDocument(e,i)),
   onClickOpenPopUp: (e) => dispatch(onClickOpenPopUp(e)),
 
   // Mode Edit
@@ -473,16 +484,28 @@ export const onChangeNoDocument = (e) => {
     value: e.target.value
   }
 }
-export const onClickPopUpSearchNoDocument = (e) => {
-  return {
-    type: "CLICK SEARCH POPUP NO DOCUMENT"
-  }
+export const onClickPopUpSearchNoDocument = (no_document) => {
+  return function (dispatch) {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_id=1021&internal_document_id=${no_document}&page_size=70`).then((res) => {
+      // dispatch
+      dispatch({
+        type: "CLICK SEARCH POPUP NO DOCUMENT",
+        value: res.data.results
+      });
+    });
+  };
 }
-export const onClickSelectNoDocument = (e) => {
-  return {
-    type: "CLICK SELECT POPUP NO DOCUMENT",
-    row_document_show_popup: e.target.parentNode.parentNode.id
-  }
+
+export const onClickSelectNoDocument = (document_id, document_type_id) => {
+  console.log(document_id, document_type_id)
+  return function (dispatch) {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}/${document_type_id}`).then((res) => {
+      dispatch({
+        type: "CLICK SELECT POPUP NO DOCUMENT",
+        value: res.data
+      });
+    });
+  };
 }
 
 // Mode Edit
