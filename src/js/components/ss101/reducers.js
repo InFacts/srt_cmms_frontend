@@ -224,6 +224,7 @@ const initialState = {
 
   // Mode การทำงาน
   action: "search",
+  fill_data: false,
 
   // Mode Search
   no_document: "",
@@ -470,7 +471,7 @@ export default (state = initialState, action) => {
 
         list_show_main: state.document_show_popup[action.row_document_show_popup].list_main,
         list_show_master: state.document_show_popup[action.row_document_show_popup].list_master,
-
+        fill_data: true,
       }
 
     case "CHANGE NO DOCUMENT":

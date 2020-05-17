@@ -67,6 +67,7 @@ const initialState = {
 
   // Mode การทำงาน
   action: "search",
+  fill_data: false,
 
   // Mode Search
   no_asset_install: "",
@@ -194,6 +195,7 @@ export default (state = initialState, action) => {
         ...state,
         no_asset_install: state.asset_install_show_popup[action.row_asset_install_show_popup].no_asset_install,
         asset_install_show: state.asset_install_show_popup[action.row_asset_install_show_popup],
+        fill_data: true,
 
       }
 

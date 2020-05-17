@@ -164,6 +164,7 @@ const initialState = {
 
   // Mode การทำงาน
   action: "search",
+  fill_data: false,
 
   // Mode Search
   no_document: "",
@@ -336,7 +337,7 @@ export default (state = initialState, action) => {
         document_show: state.document_show_popup[action.row_document_show_popup],
         list_show: state.document_show_popup[action.row_document_show_popup].list,
         list_show_main: state.document_show_popup[action.row_document_show_popup].list_main,
-
+        fill_data: true,
       }
 
 

@@ -171,6 +171,7 @@ const initialState = {
 
   // Mode การทำงาน
   action: "search",
+  fill_data: false,
 
   // Mode Search
   no_word_order: "",
@@ -313,7 +314,8 @@ export default (state = initialState, action) => {
         ...state,
         no_word_order: state.word_order_show_popup[action.row_word_order_show_popup].no_word_order,
         word_order_show: state.word_order_show_popup[action.row_word_order_show_popup],
-        list_show: state.word_order_show_popup[action.row_word_order_show_popup].list
+        list_show: state.word_order_show_popup[action.row_word_order_show_popup].list,
+        fill_data: true,
       }
 
 

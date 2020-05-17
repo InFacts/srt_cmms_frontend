@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import '../../../css/grid12.css';
-
+import { Redirect } from 'react-router-dom'
 class TopContent extends React.Component {
 
 
@@ -26,6 +26,11 @@ class TopContent extends React.Component {
 
   checkActionMode = (mode) => {
     const current = this;
+    if (mode === "home") {
+      return (
+          <Redirect to="/main"></Redirect>
+      )
+  }
     if (mode === "search") {
       return (
         <>

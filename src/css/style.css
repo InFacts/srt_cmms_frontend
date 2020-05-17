@@ -566,3 +566,32 @@ input.p-search-box__input:focus + .p-search-box__button.hidden{
 [readonly][type='text'].font-black{
   color: #000000;
 }
+
+.card-profile {        
+  border: 0px solid gray;    
+  border-radius: 2px;                    
+  display: flex;                
+  flex-direction: column;       
+  background-color: white;
+  position: relative;
+  margin-bottom: 10px;
+  width: 100%; 
+  display: inline-block;
+  overflow: hidden;  
+}
+
+.card-profile-header {
+  width: 100%; 
+  font-size: 20px;
+  font-weight: 600;  
+  background-color: rgb(238, 238, 238);
+  padding: 8px 10px;
+}
+
+.card-profile-main {
+  display: flex;              /* Children use Flexbox */
+  flex-direction: column;     /* Rotate Axis to Vertical */
+  /* justify-content: center;    Group Children in Center */
+  /* align-items: center;        Group Children in Center (+axis) */
+  padding: 15px 10px;            /* Add padding to the top/bottom */
+}
