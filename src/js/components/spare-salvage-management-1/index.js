@@ -10,21 +10,21 @@ import BottomContent from './bottom-content';
 import Footer from '../common/footer.js';
 
 const store = createStore(reducers)
-class Track extends React.Component {
+
+class Home extends React.Component {
     render() {
-        const type = 'TRACK';
         return (
             <Provider store={store}>
-            <NavTopbar />
-            <Toolbar />
-            <form>
-                <TopContent />
-                <BottomContent  />
-                <Footer />
-            </form>
-        </Provider>
+                <NavTopbar />
+                <Toolbar />
+                <form>
+                    <TopContent />
+                    <BottomContent  />
+                    <Footer />
+                </form>
+            </Provider>
         )
     };
 }
 
-export default Track;
+export default Home;

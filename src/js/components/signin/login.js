@@ -61,8 +61,8 @@ class Login extends Component {
               <label className="alert-signin float-left mt-1 font-signin">จดจำรหัสผ่าน</label>
               <label className="alert-signin float-right mt-1 font-signin" style={{ marginTop: "9px" }}>ลืมรหัสผ่าน ?</label>
 
-              {/* <Link to="/main"><button className="button-red font-signin" type="submit">เข้าสู่ระบบ</button></Link> */}
-              <button className="button-red font-signin" type="submit">เข้าสู่ระบบ</button>
+              <Link to="/main"><button className="button-red font-signin" type="submit">เข้าสู่ระบบ</button></Link>
+              {/* <button className="button-red font-signin" type="submit">เข้าสู่ระบบ</button> */}
             </form>
           </div>
         </div>

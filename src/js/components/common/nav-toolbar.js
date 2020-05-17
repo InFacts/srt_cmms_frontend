@@ -1,6 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux'
 
+import axios from "axios";
+
+import { API_PORT_DATABASE } from '../../config_port.js';
+import { API_URL_DATABASE } from '../../config_url.js';
+
 import { Link } from 'react-router-dom';
 import '../../../vender/fontawesome-free/css/all.css';
 import '../../../css/style-nav.css'
@@ -309,8 +314,24 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(mapStateToProps, mapDispatchToProps)(Toolbar);
 
 export const action = (value) => {
-    return {
-        type: "ACTION",
-        value: value
+    if (value === "add") {
+        return function (dispatch) {
+            return axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/new/0`).then((res) => {
+                // console.log("add document", res)
+              // dispatch
+              dispatch({
+                type: "POST DOCUMENT",
+                value: value,
+                resPost: res.data
+              });
+            });
+          };
+    }
+    else {
+        console.log("anything")
+        return {
+            type: "ACTION",
+            value: value
+        }
     }
 }

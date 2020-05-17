@@ -8,13 +8,18 @@
 .drop-dawn2{
     position: absolute;
     left: 610px;
-    top: 20px;
+    top: 130px;
 }
 
 .drop-dawn3{
     position: absolute;
-    left: 740px;
-    top: 240px;
+    left: 586px;
+    top: 236px;
+}
+.drop-dawn4{
+    position: absolute;
+    left: 720px;
+    top: 236px;
 }
 
 .one-one{

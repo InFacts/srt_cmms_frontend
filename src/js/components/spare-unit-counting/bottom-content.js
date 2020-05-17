@@ -8,24 +8,6 @@ import '../../../css/table.css';
 
 class BottomContent extends React.Component {
 
-  sumTotalLineItem = (quantity, per_unit_price) => {
-    var sum = 0;
-    sum = quantity * per_unit_price;
-    return sum;
-  }
-
-  sumTotal = () => {
-    var sumTotal = 0;
-    this.props.list_show.map(function (list, index) {
-      var sum = 0;
-      sum = list.quantity * list.per_unit_price;
-      sumTotal = sumTotal + sum;
-      // return sumTotal
-    })
-    // console.log("sum out", sumTotal)
-    return sumTotal
-  }
-
   checkActionMode = (mode) => {
     const current = this;
     if (mode === "search") {
@@ -49,12 +31,12 @@ class BottomContent extends React.Component {
                   return (
                     <tr key={index}>
                       <th className="edit-padding text-center">{index+1}</th>
-                      <td className="edit-padding">{list.item_id}</td>
+                      <td className="edit-padding">{list.no_part}</td>
                       <td className="edit-padding">{list.name_part}</td>
-                      <td className="edit-padding text-center">{list.quantity}</td>
-                      <td className="edit-padding text-center">{list.uom_id}</td>
-                      <td className="edit-padding text-right">{list.per_unit_price}</td>
-                      <td className="edit-padding text-right">{current.sumTotalLineItem(list.quantity, list.per_unit_price)}</td>
+                      <td className="edit-padding text-center">{list.quility}</td>
+                      <td className="edit-padding text-center">{list.unit}</td>
+                      <td className="edit-padding text-right">{list.unit_per_bath}</td>
+                      <td className="edit-padding text-right">{list.total}</td>
                     </tr>
                   )
                 })}
@@ -63,7 +45,7 @@ class BottomContent extends React.Component {
           </div>
           <div className="grid_12 mt-3">
             <div className="grid_4 float-right">
-              <input type="text" className="cancel-default float-right" value={current.sumTotal()} disabled="disabled"></input>
+              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.total} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
           </div>
@@ -100,19 +82,20 @@ class BottomContent extends React.Component {
                       <th className="edit-padding text-center">{index+1}</th>
                       <td className="edit-padding">
                         <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
-                          <input type="text" className="p-search-box__input cancel-default-table" value={list.item_id} onChange={(e) => current.props.onChangeNoPartEachRow(e)} />
+                          <input type="text" className="p-search-box__input cancel-default-table" value={list.no_part} onChange={(e) => current.props.onChangeNoPartEachRow(e)} />
                           <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPart" onClick={(e) => current.props.onClickNoPartEachRow(e)}></i></button>
                         </div>
                       </td>
                       <td className="edit-padding">{list.name_part}</td>
                       <td className="edit-padding text-center">
-                        <input type="number" min="1" className="cancel-default float-right" value={list.quantity} onChange={(e) => current.props.onChangeQuilityEachRow(e)}></input>
+                        <input type="number" min="1" className="cancel-default float-right" value={list.quility} onChange={(e) => current.props.onChangeQuilityEachRow(e)}></input>
                       </td>
-                      <td className="edit-padding text-center">{list.uom_id}</td>
+                      <td className="edit-padding text-center">{list.unit}</td>
                       <td className="edit-padding text-right">
-                      <input type="number" min="1" className="cancel-default float-right" value={list.per_unit_price} onChange={(e) => current.props.onChangeUnitPerBathEachRow(e)}></input>
+                      <input type="number" min="1" className="cancel-default float-right" value={list.unit_per_bath} onChange={(e) => current.props.onChangeUnitPerBathEachRow(e)}></input>
                       </td>
-                      <td className="edit-padding text-right">{current.sumTotalLineItem(list.quantity, list.per_unit_price)}
+                      <td className="edit-padding text-right">{list.total}
+                        {/* <input type="number" min="1" className="cancel-default float-right" value={list.total} onChange={(e) => current.props.onChangeTotalEachRow(e)}></input> */}
                       </td>
                     </tr>
                   )
@@ -122,7 +105,7 @@ class BottomContent extends React.Component {
           </div>
           <div className="grid_12 mt-3">
             <div className="grid_4 float-right">
-              <input type="number" min="1" className="cancel-default float-right" value={current.sumTotal()} onChange={(e) => this.props.onChangeTotal(e)} disabled="disabled"></input>
+              <input type="number" min="1" className="cancel-default float-right" value={current.props.document_show.total} onChange={(e) => this.props.onChangeTotal(e)} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
           </div>
@@ -203,7 +186,7 @@ class BottomContent extends React.Component {
                 {current.props.list_show_mode_add.map(function (list, index) {
                   return (
                     <tr key={index} id={index}>
-                      <th className="edit-padding text-center">{index+1}</th>
+                      <th className="edit-padding text-center">{list.id}</th>
                       <td className="edit-padding">
                         <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
                           <input type="text" className="p-search-box__input cancel-default-table" value={list.no_part} onChange={(e) => current.props.onChangeNoPartEachRowModeAdd(e)} />
@@ -218,7 +201,9 @@ class BottomContent extends React.Component {
                       <td className="edit-padding text-right">
                       <input type="number" min="1" className="cancel-default float-right" value={list.unit_per_bath} onChange={(e) => current.props.onChangeUnitPerBathEachRowModeAdd(e)}></input>
                       </td>
-                      <td className="edit-padding text-right">{current.sumTotalLineItem(list.quantity, list.per_unit_price)}</td>
+                      <td className="edit-padding text-right">{list.total}
+                        {/* <input type="number" min="1" className="cancel-default float-right" value={list.total} onChange={(e) => current.props.onChangeTotalEachRowModeAdd(e)}></input> */}
+                      </td>
                     </tr>
                   )
                 })}
@@ -227,7 +212,7 @@ class BottomContent extends React.Component {
           </div>
           <div className="grid_12 mt-3">
             <div className="grid_4 float-right">
-              <input type="number" min="1" className="cancel-default float-right" value={current.sumTotal()} disabled="disabled"></input>
+              <input type="number" min="1" className="cancel-default float-right" value={current.props.document_show_mode_add.total} onChange={(e) => this.props.onChangeTotalModeAdd(e)} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
           </div>
@@ -331,6 +316,7 @@ const mapDispatchToProps = (dispatch) => ({
   onChangeTotalEachRow: (e) => dispatch(onChangeTotalEachRow(e)),
   onClickSearchPopUpNoPart: (e) => dispatch(onClickSearchPopUpNoPart(e)),
   onClickSelectPopUpNoPart: (e) => dispatch(onClickSelectPopUpNoPart(e)),
+  onChangeTotal: (e) => dispatch(onChangeTotal(e)),
   onChangeNote: (e) => dispatch(onChangeNote(e)),
 
   // Mode Add
@@ -342,6 +328,7 @@ const mapDispatchToProps = (dispatch) => ({
   onChangeUnitPerBathEachRowModeAdd: (e) => dispatch(onChangeUnitPerBathEachRowModeAdd(e)),
   onChangeQuilityEachRowModeAdd: (e) => dispatch(onChangeQuilityEachRowModeAdd(e)),
   onChangeTotalEachRowModeAdd: (e) => dispatch(onChangeTotalEachRowModeAdd(e)),
+  onChangeTotalModeAdd: (e) => dispatch(onChangeTotalModeAdd(e)),
   onChangeNoteModeAdd: (e) => dispatch(onChangeNoteModeAdd(e))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(BottomContent);
@@ -397,6 +384,12 @@ export const onClickSelectPopUpNoPart = (e) => {
   return {
     type: "ON CLICK SELECT POPUP NO PART",
     rowIndex: e.target.parentNode.parentNode.id
+  }
+}
+export const onChangeTotal = (e) => {
+  return {
+    type: "ON CHANGE TOTAL",
+    value: e.target.value
   }
 }
 export const onChangeNote = (e) => {
@@ -457,6 +450,13 @@ export const onChangeTotalEachRowModeAdd = (e) => {
     type: "ON CHANGE TOTAL EACH ROW MODE ADD",
     value: e.target.value,
     rowIndex: e.target.parentNode.parentNode.id
+  }
+}
+export const onChangeTotalModeAdd = (e) => {
+  // console.log(e.target.value)
+  return {
+    type: "ON CHANGE TOTAL MODE ADD",
+    value: e.target.value
   }
 }
 export const onChangeNoteModeAdd = (e) => {

@@ -17,9 +17,14 @@ import ItemMasterData from './components/spare-item-master-data';
 import SpareGoodReceipt from './components/spare-good-receipt';
 import SpareGoodIssue from './components/spare-good-issue';
 import SpareGoodMaintenace from './components/spare-good-maintenace';
-import SpareReturn from './components/spare-return';
+import SpareReturn1 from './components/spare-return-1';
+import SpareReturn2 from './components/spare-return-2';
 import SpareReturnNoPO from './components/spare-return-no-po';
 import SpareTakeOut from './components/spare-take-out';
+import SpareSalvage1 from './components/spare-salvage-management-1';
+import SpareSalvage2 from './components/spare-salvage-management-2';
+import SpareUnitCount from './components/spare-unit-counting';
+
 import Track from './components/track-document';
 import Report from './components/report';
 import MaintenanceFixedAsset from './components/maintance-fixed-asset';
@@ -48,9 +53,13 @@ class FrontEnd extends React.Component {
                 <Route exact path="/good-issue" component={SpareGoodIssue} />
                 <Route exact path="/good-maintenace" component={SpareGoodMaintenace} />
 
-                <Route exact path="/good-return" component={SpareReturn} />
+                <Route exact path="/good-return-1" component={SpareReturn1} />
+                <Route exact path="/good-return-2" component={SpareReturn2} />
                 <Route exact path="/good-return-no-po" component={SpareReturnNoPO} />
                 <Route exact path="/good-take-out" component={SpareTakeOut} />
+                <Route exact path="/salvage-management-1" component={SpareSalvage1} />
+                <Route exact path="/salvage-management-2" component={SpareSalvage2} />
+                <Route exact path="/unit-count" component={SpareUnitCount} />
 
                 <Route exact path="/test" component={Test2} />
           
