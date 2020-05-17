@@ -17,18 +17,24 @@ import HomeDocument from '../../../images/toolbar/home.svg'
 import SearchDocument from '../../../images/toolbar/search.svg'
 
 
-class ToolbarItem extends React.Component{
+class ToolbarItem extends React.Component {
 
-    render(){
-        var {id, alt, src, pointer, select, callback} = this.props;
-        return(
-            
+    render() {
+        var { id, alt, src, pointer, select, disable, callback } = this.props;
+        return (
+
             (select === id)
-            ?   
-                <li className="nav-li" ><Link className="toolbar" style={{pointerEvents: pointer}}><div className="selecting"><img alt={alt} src={src}   className="img-toolbar" /></div></Link></li>
-            :
-                <li className="nav-li"  ><Link className="toolbar" style={{pointerEvents: pointer}}><img  alt={alt} src={src} onClick={()=>{callback(id)}} className="img-toolbar" /></Link></li>
-            );
+                ?
+                <li className="nav-li" ><Link className="toolbar" style={{ pointerEvents: pointer }}><div className="selecting"><img alt={alt} src={src} className="img-toolbar" /></div></Link></li>
+                :
+                ((disable === true)
+                    ?
+                    <li className="nav-li"  ><Link className="toolbar" style={{ pointerEvents: pointer }}><img alt={alt} src={src} onClick={() => { callback(id) }} className="img-toolbar filter-green" /></Link></li>
+                    :
+                    <li className="nav-li"  ><Link className="toolbar" style={{ pointerEvents: pointer }}><img alt={alt} src={src} onClick={() => { callback(id) }} className="img-toolbar" /></Link></li>
+                )
+
+        );
     }
 }
 
@@ -36,7 +42,7 @@ class Toolbar extends React.Component {
 
     constructor(props) {
         super(props)
-       
+
         this.state = {
             id: 2,
         }
@@ -44,215 +50,244 @@ class Toolbar extends React.Component {
     }
 
     render() {
-        var items,menu;
+        var items, menu;
 
-        if(this.props.actionMode === "search" && this.props.fill_data === true ||this.props.actionMode === "edit" ){
+        if (this.props.actionMode === "search" && this.props.fill_data === true || this.props.actionMode === "edit") {
             menu = [
                 {
-                    id:1,
+                    id: 1,
                     alt: "home",
-                    src : HomeDocument,
-                    pointer: "auto"
+                    src: HomeDocument,
+                    pointer: "auto",
+                    disable: false
                 },
                 {
-                    id:2,
+                    id: 2,
                     alt: "search",
-                    src : SearchDocument,
-                    pointer: "auto"
+                    src: SearchDocument,
+                    pointer: "auto",
+                    disable: false
                 },
                 {
-                    id:3,
+                    id: 3,
                     alt: "edit",
-                    src : EditDocument,
-                    pointer: "auto"
+                    src: EditDocument,
+                    pointer: "auto",
+                    disable: false
                 },
                 {
-                    id:4,
+                    id: 4,
                     alt: "add",
-                    src : AddDocument,
-                    pointer: "auto"
+                    src: AddDocument,
+                    pointer: "auto",
+                    disable: false
                 },
                 {
-                    id:5,
+                    id: 5,
                     alt: "copy",
-                    src : CopyDocument,
-                    pointer: "none"
+                    src: CopyDocument,
+                    pointer: "none",
+                    disable: true
                 },
                 {
-                    id:6,
+                    id: 6,
                     alt: "save",
-                    src : SaveDocument,
-                    pointer: "none"
+                    src: SaveDocument,
+                    pointer: "none",
+                    disable: true
                 },
                 {
-                    id:7,
+                    id: 7,
                     alt: "retry",
-                    src : RetryDocument,
-                    pointer: "none"
+                    src: RetryDocument,
+                    pointer: "none",
+                    disable: true
                 },
                 {
-                    id:8,
+                    id: 8,
                     alt: "back",
-                    src : BackDocument,
-                    pointer: "none"
+                    src: BackDocument,
+                    pointer: "none",
+                    disable: true
                 },
                 {
-                    id:9,
+                    id: 9,
                     alt: "forward",
-                    src : ForwardDocument,
-                    pointer: "none"
+                    src: ForwardDocument,
+                    pointer: "none",
+                    disable: true
                 },
                 {
-                    id:10,
+                    id: 10,
                     alt: "pdf",
-                    src : PdfDocument,
-                    pointer: "none"
+                    src: PdfDocument,
+                    pointer: "none",
+                    disable: true
                 },
             ]
         }
-        if(this.props.actionMode === "search" && this.props.fill_data === false ){
+        if (this.props.actionMode === "search" && this.props.fill_data === false) {
             menu = [
                 {
-                    id:1,
+                    id: 1,
                     alt: "home",
-                    src : HomeDocument,
-                    pointer: "auto"
+                    src: HomeDocument,
+                    pointer: "auto",
+                    disable: false
                 },
                 {
-                    id:2,
+                    id: 2,
                     alt: "search",
-                    src : SearchDocument,
-                    pointer: "auto"
+                    src: SearchDocument,
+                    pointer: "auto",
+                    disable: false
                 },
                 {
-                    id:3,
+                    id: 3,
                     alt: "edit",
-                    src : EditDocument,
-                    pointer: "none"
+                    src: EditDocument,
+                    pointer: "none",
+                    disable: true
                 },
                 {
-                    id:4,
+                    id: 4,
                     alt: "add",
-                    src : AddDocument,
-                    pointer: "auto"
+                    src: AddDocument,
+                    pointer: "auto",
+                    disable: false
                 },
                 {
-                    id:5,
+                    id: 5,
                     alt: "copy",
-                    src : CopyDocument,
-                    pointer: "none"
+                    src: CopyDocument,
+                    pointer: "none",
+                    disable: true
                 },
                 {
-                    id:6,
+                    id: 6,
                     alt: "save",
-                    src : SaveDocument,
-                    pointer: "none"
+                    src: SaveDocument,
+                    pointer: "none",
+                    disable: true
                 },
                 {
-                    id:7,
+                    id: 7,
                     alt: "retry",
-                    src : RetryDocument,
-                    pointer: "none"
+                    src: RetryDocument,
+                    pointer: "none",
+                    disable: true
                 },
                 {
-                    id:8,
+                    id: 8,
                     alt: "back",
-                    src : BackDocument,
-                    pointer: "none"
+                    src: BackDocument,
+                    pointer: "none",
+                    disable: true
                 },
                 {
-                    id:9,
+                    id: 9,
                     alt: "forward",
-                    src : ForwardDocument,
-                    pointer: "none"
+                    src: ForwardDocument,
+                    pointer: "none",
+                    disable: true
                 },
                 {
-                    id:10,
+                    id: 10,
                     alt: "pdf",
-                    src : PdfDocument,
-                    pointer: "none"
+                    src: PdfDocument,
+                    pointer: "none",
+                    disable: true
                 },
             ]
         }
-        if(this.props.actionMode === "add" || this.props.actionMode === "home")
-        {
+        if (this.props.actionMode === "add" || this.props.actionMode === "home") {
             menu = [
                 {
-                    id:1,
+                    id: 1,
                     alt: "home",
-                    src : HomeDocument,
-                    pointer: "auto"
+                    src: HomeDocument,
+                    pointer: "auto",
+                    disable: false
                 },
                 {
-                    id:2,
+                    id: 2,
                     alt: "search",
-                    src : SearchDocument,
-                    pointer: "auto"
+                    src: SearchDocument,
+                    pointer: "auto",
+                    disable: false
                 },
                 {
-                    id:3,
+                    id: 3,
                     alt: "edit",
-                    src : EditDocument,
-                    pointer: "none"
+                    src: EditDocument,
+                    pointer: "none",
+                    disable: true
                 },
                 {
-                    id:4,
+                    id: 4,
                     alt: "add",
-                    src : AddDocument,
-                    pointer: "auto"
+                    src: AddDocument,
+                    pointer: "auto",
+                    disable: false
                 },
                 {
-                    id:5,
+                    id: 5,
                     alt: "copy",
-                    src : CopyDocument,
-                    pointer: "none"
+                    src: CopyDocument,
+                    pointer: "none",
+                    disable: true
                 },
                 {
-                    id:6,
+                    id: 6,
                     alt: "save",
-                    src : SaveDocument,
-                    pointer: "none"
+                    src: SaveDocument,
+                    pointer: "none",
+                    disable: true
                 },
                 {
-                    id:7,
+                    id: 7,
                     alt: "retry",
-                    src : RetryDocument,
-                    pointer: "none"
+                    src: RetryDocument,
+                    pointer: "none",
+                    disable: true
                 },
                 {
-                    id:8,
+                    id: 8,
                     alt: "back",
-                    src : BackDocument,
-                    pointer: "none"
+                    src: BackDocument,
+                    pointer: "none",
+                    disable: true
                 },
                 {
-                    id:9,
+                    id: 9,
                     alt: "forward",
-                    src : ForwardDocument,
-                    pointer: "none"
+                    src: ForwardDocument,
+                    pointer: "none",
+                    disable: true
                 },
                 {
-                    id:10,
+                    id: 10,
                     alt: "pdf",
-                    src : PdfDocument,
-                    pointer: "none"
+                    src: PdfDocument,
+                    pointer: "none",
+                    disable: true
                 },
             ]
         }
 
-        items = menu.map((item , index) =>
-            <ToolbarItem  key={item.id} id={item.id} alt={item.alt} src={item.src} pointer={item.pointer} select={this.state.id} callback={(idx) => {
+        items = menu.map((item, index) =>
+            <ToolbarItem key={item.id} id={item.id} alt={item.alt} src={item.src} pointer={item.pointer} select={this.state.id} disable={item.disable} callback={(idx) => {
                 this.setState({
-                    id:idx,
+                    id: idx,
                 })
                 this.props.handleAction(item.alt);
-            }}/>
+            }} />
         );
-       
-        return(
+
+        return (
             <div>
                 <div id="toolbar">
-                    <div className="container_12 clearfix" style={{ marginTop: "3px"}}>
+                    <div className="container_12 clearfix" style={{ marginTop: "3px" }}>
                         <ul className="grid_12 nav-ul ">
                             {items}
                         </ul>
@@ -266,7 +301,7 @@ class Toolbar extends React.Component {
 
 const mapStateToProps = (state) => ({
     actionMode: state.action,
-    fill_data:state.fill_data,
+    fill_data: state.fill_data,
 })
 const mapDispatchToProps = (dispatch) => ({
     handleAction: (value) => dispatch(action(value)),
