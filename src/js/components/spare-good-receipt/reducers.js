@@ -1,258 +1,4 @@
 const initialState = {
-  // ค่าคงที่ต่างๆ
-  // ค่าคงที่เอกสาร
-  document: [
-    {
-      "id": 1,
-      "no_document": "12345",
-      "name": "นายศุภากร ศิริมาลีวัฒนนา",
-      "status": "เปิดสำหรับแก้ไข",
-      "date": "2014-02-09",
-      "my_inventory": "100",
-      "no_po": "67890",
-      "total": "2000",
-      "note": "",
-      "list": [
-        {
-          "id": 1,
-          "no_part": "SIG 003",
-          "name_part": "SIG ขนาด 5V.",
-          "quility": "10",
-          "unit": "ชิ้น",
-          "unit_per_bath": "100",
-          "total": 1000
-        },
-        {
-          "id": 2,
-          "no_part": "SIG 004",
-          "name_part": "SIG ขนาด 5V.",
-          "quility": "10",
-          "unit": "ชิ้น",
-          "unit_per_bath": "100",
-          "total": 1000
-        },
-        {
-          "id": "",
-          "no_part": "",
-          "name_part": "",
-          "quility": "",
-          "unit": "",
-          "unit_per_bath": "",
-          "total": ""
-        },
-        {
-          "id": "",
-          "no_part": "",
-          "name_part": "",
-          "quility": "",
-          "unit": "",
-          "unit_per_bath": "",
-          "total": ""
-        },
-        {
-          "id": "",
-          "no_part": "",
-          "name_part": "",
-          "quility": "",
-          "unit": "",
-          "unit_per_bath": "",
-          "total": ""
-        },
-        {
-          "id": "",
-          "no_part": "",
-          "name_part": "",
-          "quility": "",
-          "unit": "",
-          "unit_per_bath": "",
-          "total": ""
-        },
-        {
-          "id": "",
-          "no_part": "",
-          "name_part": "",
-          "quility": "",
-          "unit": "",
-          "unit_per_bath": "",
-          "total": ""
-        },
-        {
-          "id": "",
-          "no_part": "",
-          "name_part": "",
-          "quility": "",
-          "unit": "",
-          "unit_per_bath": "",
-          "total": ""
-        },
-        {
-          "id": "",
-          "no_part": "",
-          "name_part": "",
-          "quility": "",
-          "unit": "",
-          "unit_per_bath": "",
-          "total": ""
-        },
-        {
-          "id": "",
-          "no_part": "",
-          "name_part": "",
-          "quility": "",
-          "unit": "",
-          "unit_per_bath": "",
-          "total": ""
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "no_document": "6789",
-      "name": "นายสรวิศ ศิริมาลีวัฒนนา",
-      "status": "ปิดสำหรับแก้ไข",
-      "date": "2014-02-09",
-      "my_inventory": "200",
-      "no_po": "67890",
-      "total": 2000,
-      "note": "",
-      "list": [
-        {
-          "id": 1,
-          "no_part": "SIG 003",
-          "name_part": "SIG ขนาด 5V.",
-          "quility": "10",
-          "unit": "ชิ้น",
-          "unit_per_bath": "100",
-          "total": 1000
-        },
-        {
-          "id": 2,
-          "no_part": "SIG 004",
-          "name_part": "SIG ขนาด 5V.",
-          "quility": "10",
-          "unit": "ชิ้น",
-          "unit_per_bath": "100",
-          "total": 1000
-        },
-        {
-          "id": "",
-          "no_part": "",
-          "name_part": "",
-          "quility": "",
-          "unit": "",
-          "unit_per_bath": "",
-          "total": ""
-        },
-        {
-          "id": "",
-          "no_part": "",
-          "name_part": "",
-          "quility": "",
-          "unit": "",
-          "unit_per_bath": "",
-          "total": ""
-        },
-        {
-          "id": "",
-          "no_part": "",
-          "name_part": "",
-          "quility": "",
-          "unit": "",
-          "unit_per_bath": "",
-          "total": ""
-        },
-        {
-          "id": "",
-          "no_part": "",
-          "name_part": "",
-          "quility": "",
-          "unit": "",
-          "unit_per_bath": "",
-          "total": ""
-        },
-        {
-          "id": "",
-          "no_part": "",
-          "name_part": "",
-          "quility": "",
-          "unit": "",
-          "unit_per_bath": "",
-          "total": ""
-        },
-        {
-          "id": "",
-          "no_part": "",
-          "name_part": "",
-          "quility": "",
-          "unit": "",
-          "unit_per_bath": "",
-          "total": ""
-        },
-        {
-          "id": "",
-          "no_part": "",
-          "name_part": "",
-          "quility": "",
-          "unit": "",
-          "unit_per_bath": "",
-          "total": ""
-        },
-        {
-          "id": "",
-          "no_part": "",
-          "name_part": "",
-          "quility": "",
-          "unit": "",
-          "unit_per_bath": "",
-          "total": ""
-        }
-      ]
-    }
-  ],
-  // ค่าคงที่อะไหล่
-  raw_no_part: [
-    {
-      "id": 1,
-      "no_part": "SIG 003",
-      "name_part": "SIG ขนาด 5V.",
-      "quility": "10",
-      "unit": "ชิ้น",
-      "unit_per_bath": "100",
-      "total": "1000"
-    },
-    {
-      "id": 2,
-      "no_part": "SIG 004",
-      "name_part": "SIG ขนาด 5V.",
-      "quility": "10",
-      "unit": "ชิ้น",
-      "unit_per_bath": "100",
-      "total": "1000"
-    },
-    {
-      "id": 3,
-      "no_part": "SIG 005",
-      "name_part": "SIG ขนาด 5V.",
-      "quility": "10",
-      "unit": "ชิ้น",
-      "unit_per_bath": "100",
-      "total": "1000"
-    }
-  ],
-  // ค่าคงที่คลังต่างๆ
-  inventory: [
-    {
-      id: "1",
-      no_inventory: "100",
-      name: "คลังบางซื่อ"
-    },
-    {
-      id: "2",
-      no_inventory: "200",
-      name: "คลังลาดกระบัง"
-    }
-  ],
-
   // Mode การทำงาน
   action: "search",
 
@@ -260,6 +6,7 @@ const initialState = {
   no_document: "",
   document_show_popup: [],
   document_show: [],
+  document_specific_show: [],
   list_show: [], //เอาไว้ clone list ที่อยู่ใน document_show ออกมาแสดงผล
 
   // Mode Edit
@@ -269,16 +16,17 @@ const initialState = {
   list_show_row_index: "", //ไว้บอกตำแหน่งว่ากด แก้ไข อะไหล่จาก row ไหนใน table
 
   // Mode Add
+  document_id: "",
+  document_type_id: "",
   list_no_part_mode_add: "",
   document_show_mode_add: {
     "id": "",
     "no_document": "",
-    "name": "",
+    "created_by_user_id": "",
     "status": "",
-    "date": "",
-    "my_inventory": "",
+    "created_on": "",
+    "src_warehouse_id": "",
     "no_po": "",
-    "total": "",
     "note": "",
     "list": []
   },
@@ -290,7 +38,6 @@ const initialState = {
       "quility": "",
       "unit": "",
       "unit_per_bath": "",
-      "total": ""
     },
     {
       "id": "",
@@ -299,7 +46,6 @@ const initialState = {
       "quility": "",
       "unit": "",
       "unit_per_bath": "",
-      "total": ""
     },
     {
       "id": "",
@@ -308,7 +54,6 @@ const initialState = {
       "quility": "",
       "unit": "",
       "unit_per_bath": "",
-      "total": ""
     },
     {
       "id": "",
@@ -317,7 +62,6 @@ const initialState = {
       "quility": "",
       "unit": "",
       "unit_per_bath": "",
-      "total": ""
     },
     {
       "id": "",
@@ -326,7 +70,6 @@ const initialState = {
       "quility": "",
       "unit": "",
       "unit_per_bath": "",
-      "total": ""
     },
     {
       "id": "",
@@ -335,7 +78,6 @@ const initialState = {
       "quility": "",
       "unit": "",
       "unit_per_bath": "",
-      "total": ""
     },
     {
       "id": "",
@@ -344,7 +86,6 @@ const initialState = {
       "quility": "",
       "unit": "",
       "unit_per_bath": "",
-      "total": ""
     },
     {
       "id": "",
@@ -353,7 +94,6 @@ const initialState = {
       "quility": "",
       "unit": "",
       "unit_per_bath": "",
-      "total": ""
     },
     {
       "id": "",
@@ -362,7 +102,6 @@ const initialState = {
       "quility": "",
       "unit": "",
       "unit_per_bath": "",
-      "total": ""
     },
     {
       "id": "",
@@ -371,7 +110,6 @@ const initialState = {
       "quility": "",
       "unit": "",
       "unit_per_bath": "",
-      "total": ""
     }
   ],
   list_show_mode_add_row_index: "",
@@ -390,7 +128,7 @@ export default (state = initialState, action) => {
   switch (action.type) {
     // เลืก mode ในการทำงาน ( Search / Add / Edit )
     case "ACTION":
-      console.log("mode", state.action)
+      // console.log("mode", action.value)
       return {
         ...state,
         action: action.value,
@@ -420,37 +158,31 @@ export default (state = initialState, action) => {
         ...state,
         no_document: action.value.document.internal_document_id,
         document_show: action.value.document,
+        document_specific_show: action.value.specific,
         list_show: action.value.specific.line_items
       }
 
     // Mode Edit
-    case "ON CHANGE STATUS":
-      var clone_document_show = { ...state.document_show };
-      clone_document_show.status = action.value;
-      return {
-        ...state,
-        document_show: clone_document_show
-      }
     case "ON CHANGE NAME":
       var clone_document_show = { ...state.document_show };
-      clone_document_show.name = action.value;
+      clone_document_show.created_by_user_id = action.value;
       return {
         ...state,
         document_show: clone_document_show
       }
     case "ON CHANGE DATE":
       var clone_document_show = { ...state.document_show };
-      clone_document_show.date = action.value;
+      clone_document_show.created_on = action.value;
       return {
         ...state,
         document_show: clone_document_show
       }
     case "ON CHANGE MY INVENTORY":
-      var clone_document_show = { ...state.document_show };
-      clone_document_show.my_inventory = action.value;
+      var clone_document_specific_show = { ...state.document_specific_show };
+      clone_document_specific_show.src_warehouse_id = action.value;
       return {
         ...state,
-        document_show: clone_document_show
+        document_specific_show: clone_document_specific_show
       }
     case "ON CHANGE NO PO":
       var clone_document_show = { ...state.document_show };
@@ -482,37 +214,18 @@ export default (state = initialState, action) => {
       }
     case "ON CHANGE QUILITY EACH ROW":
       var clone_list_show = [...state.list_show];
-      var clone_document_show = { ...state.document_show };
       // console.log(clone_list_show[action.rowIndex])
       clone_list_show[action.rowIndex].quility = action.value;
-      clone_list_show[action.rowIndex].total = clone_list_show[action.rowIndex].quility * clone_list_show[action.rowIndex].unit_per_bath;
-      var sum_real_total = 0;
-      clone_list_show.map(function (clone_list_show, index) {
-        sum_real_total = clone_list_show.total + sum_real_total;
-        return sum_real_total;
-      })
-      clone_document_show.total = sum_real_total
       return {
         ...state,
         list_show: clone_list_show,
-        document_show: clone_document_show
       }
     case "ON CHANGE UNIT PER BATH EACH ROW":
       var clone_list_show = [...state.list_show];
-      var clone_document_show = { ...state.document_show };
-      // console.log(clone_list_show[action.rowIndex])
       clone_list_show[action.rowIndex].unit_per_bath = action.value
-      clone_list_show[action.rowIndex].total = clone_list_show[action.rowIndex].quility * clone_list_show[action.rowIndex].unit_per_bath;
-      var sum_real_total = 0;
-      clone_list_show.map(function (clone_list_show, index) {
-        sum_real_total = clone_list_show.total + sum_real_total;
-        return sum_real_total;
-      })
-      clone_document_show.total = sum_real_total
       return {
         ...state,
         list_show: clone_list_show,
-        document_show: clone_document_show
       }
     case "ON CHANGE TOTAL EACH ROW":
       var clone_list_show = [...state.list_show];
@@ -542,26 +255,17 @@ export default (state = initialState, action) => {
       return {
         ...state,
         inventory_show_popup: initialState.inventory.filter(function (inventory) {
-          const regex = new RegExp(`${state.document_show.my_inventory}`, 'i');
-          console.log(state.document_show.my_inventory)
+          const regex = new RegExp(`${state.document_specific_show.src_warehouse_id}`, 'i');
           var isMatch = regex.test(inventory.no_inventory);
           return (isMatch);
         }),
       }
     case "CLICK SELECT POPUP INVENTORY":
-      var clone_document_show = { ...state.document_show };
-      console.log(clone_document_show.my_inventory, "and", state.inventory_show_popup[action.row_inventory_show_popup].no_inventory)
-      clone_document_show.my_inventory = state.inventory_show_popup[action.row_inventory_show_popup].no_inventory
+      var clone_document_specific_show = { ...state.document_specific_show };
+      clone_document_specific_show.src_warehouse_id = state.inventory_show_popup[action.row_inventory_show_popup].no_inventory
       return {
         ...state,
         document_show: clone_document_show,
-      }
-    case "ON CHANGE TOTAL":
-      var clone_document_show = { ...state.document_show };
-      clone_document_show.total = action.value;
-      return {
-        ...state,
-        document_show: clone_document_show
       }
     case "ON CHANGE NOTE":
       var clone_document_show = { ...state.document_show };
@@ -579,23 +283,17 @@ export default (state = initialState, action) => {
         ...state,
         document_show_mode_add: clone_document_show_mode_add
       }
-    case "ON CHANGE STATUS MODE ADD":
-      var clone_document_show_mode_add = { ...state.document_show_mode_add };
-      clone_document_show_mode_add.status = action.value;
-      return {
-        ...state,
-        document_show_mode_add: clone_document_show_mode_add
-      }
     case "ON CHANGE NAME MODE ADD":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
-      clone_document_show_mode_add.name = action.value;
+      clone_document_show_mode_add.created_by_user_id = action.value;
       return {
         ...state,
         document_show_mode_add: clone_document_show_mode_add
       }
     case "ON CHANGE DATE MODE ADD":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
-      clone_document_show_mode_add.date = action.value;
+      clone_document_show_mode_add.created_on = action.value;
+      console.log("time", action.value)
       return {
         ...state,
         document_show_mode_add: clone_document_show_mode_add
@@ -650,16 +348,7 @@ export default (state = initialState, action) => {
       }
     case "ON CHANGE QUILITY EACH ROW MODE ADD":
       var clone_list_show_mode_add = [...state.list_show_mode_add];
-      var clone_document_show_mode_add = { ...state.document_show_mode_add };
-      // console.log(clone_list_show[action.rowIndex])
       clone_list_show_mode_add[action.rowIndex].quility = action.value
-      clone_list_show_mode_add[action.rowIndex].total = clone_list_show_mode_add[action.rowIndex].quility * clone_list_show_mode_add[action.rowIndex].unit_per_bath;
-      var sum_real_total = 0;
-      clone_list_show_mode_add.map(function (clone_list_show_mode_add, index) {
-        sum_real_total = clone_list_show_mode_add.total + sum_real_total;
-        return sum_real_total;
-      })
-      clone_document_show_mode_add.total = sum_real_total
       return {
         ...state,
         list_show_mode_add: clone_list_show_mode_add,
@@ -667,20 +356,10 @@ export default (state = initialState, action) => {
       }
     case "ON CHANGE UNIT PER BATH EACH ROW MODE ADD":
       var clone_list_show_mode_add = [...state.list_show_mode_add];
-      var clone_document_show_mode_add = { ...state.document_show_mode_add };
-      // console.log(clone_list_show_mode_add[action.rowIndex])
       clone_list_show_mode_add[action.rowIndex].unit_per_bath = action.value
-      clone_list_show_mode_add[action.rowIndex].total = clone_list_show_mode_add[action.rowIndex].quility * clone_list_show_mode_add[action.rowIndex].unit_per_bath;
-      var sum_real_total = 0;
-      clone_list_show_mode_add.map(function (clone_list_show_mode_add, index) {
-        sum_real_total = clone_list_show_mode_add.total + sum_real_total;
-        return sum_real_total;
-      })
-      clone_document_show_mode_add.total = sum_real_total
       return {
         ...state,
         list_show_mode_add: clone_list_show_mode_add,
-        document_show_mode_add: clone_document_show_mode_add
       }
     case "ON CHANGE TOTAL EACH ROW MODE ADD":
       var clone_list_show_mode_add = [...state.list_show_mode_add];
@@ -690,16 +369,16 @@ export default (state = initialState, action) => {
         ...state,
         list_show_mode_add: clone_list_show_mode_add
       }
-    case "ON CHANGE TOTAL MODE ADD":
+    case "ON CHANGE NOTE MODE ADD":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
-      clone_document_show_mode_add.total = action.value;
+      clone_document_show_mode_add.note = action.value;
       return {
         ...state,
         document_show_mode_add: clone_document_show_mode_add
       }
-    case "ON CHANGE NOTE MODE ADD":
+    case "ON CHANGE MY INVENTORY MODE ADD":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
-      clone_document_show_mode_add.note = action.value;
+      clone_document_show_mode_add.src_warehouse_id = action.value;
       return {
         ...state,
         document_show_mode_add: clone_document_show_mode_add

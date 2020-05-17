@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import axios from "axios";
@@ -30,7 +31,13 @@ class TopContent extends React.Component {
   }
 
   checkActionMode = (mode) => {
+    // console.log(mode)
     const current = this;
+    if (mode === "home") {
+      return (
+        <Redirect to="/main"></Redirect>
+      ) 
+    }
     if (mode === "search") {
       return (
         <>
@@ -69,7 +76,7 @@ class TopContent extends React.Component {
 
           <div className="grid_12">
             <div className="grid_3 float-right">
-              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.my_inventory} disabled="disabled"></input>
+              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_specific_show.src_warehouse_id} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">คลัง</p>
@@ -101,7 +108,7 @@ class TopContent extends React.Component {
               </div>
             </div>
             <div className="grid_3 float-right">
-              <input type="text" className="cancel-default float-right" value={current.props.document_show.status} onChange={(e) => this.props.onChangeStatus(e)} disabled="disabled"></input>
+              <input type="text" className="cancel-default float-right" value={current.props.document_show.document_status_id} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">สถานะ</p>
@@ -113,10 +120,10 @@ class TopContent extends React.Component {
               <p className="top-text">ผู้นำเข้า</p>
             </div>
             <div className="grid_3 pull_1">
-              <input type="text" className="cancel-default" value={current.props.document_show.name} onChange={(e) => this.props.onChangeName(e)}></input>
+              <input type="text" className="cancel-default" value={current.props.document_show.created_by_user_id} onChange={(e) => this.props.onChangeName(e)}></input>
             </div>
             <div className="grid_3 float-right">
-              <input type="date" className="cancel-default float-right" value={current.props.document_show.date} onChange={(e) => this.props.onChangeDate(e)}></input>
+              <input type="datetime" className="cancel-default float-right" value={current.props.document_show.created_on} onChange={(e) => this.props.onChangeDate(e)}></input>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">วันที่</p>
@@ -126,7 +133,7 @@ class TopContent extends React.Component {
           <div className="grid_12">
             <div className="grid_3 float-right">
               <div className="p-search-box cancel-margin">
-                <input type="text" className="p-search-box__input cancel-default" value={current.props.document_show.my_inventory} onChange={(e) => this.props.onChangeMyInventory(e)} />
+                <input type="text" className="p-search-box__input cancel-default" value={current.props.document_specific_show.src_warehouse_id} onChange={(e) => this.props.onChangeMyInventory(e)} />
               </div>
             </div>
             <div className="grid_2 float-right">
@@ -146,6 +153,7 @@ class TopContent extends React.Component {
       )
     }
     if (mode === "add") {
+      // console.log(this.props.document_show_mode_add)
       return (
         <>
           <div className="grid_12">
@@ -153,12 +161,10 @@ class TopContent extends React.Component {
               <p className="top-text">เลขที่เอกสาร</p>
             </div>
             <div className="grid_3 pull_1">
-              <div className="p-search-box cancel-margin">
-                <input type="text" className="p-search-box__input cancel-default" value={this.props.document_show_mode_add.no_document} onChange={(e) => this.props.onChangeNoDocumentModeAdd(e)} />
-              </div>
+              <input type="text" className="p-search-box__input cancel-default" value={this.props.document_show_mode_add.no_document} onChange={(e) => this.props.onChangeNoDocumentModeAdd(e)} required/>
             </div>
             <div className="grid_3 float-right">
-              <input type="text" className="cancel-default float-right" value={current.props.document_show_mode_add.status} onChange={(e) => this.props.onChangeStatusModeAdd(e)} disabled="disabled"></input>
+              <input type="text" className="cancel-default float-right" value={current.props.document_show_mode_add.document_status_id} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">สถานะ</p>
@@ -170,10 +176,10 @@ class TopContent extends React.Component {
               <p className="top-text">ผู้นำเข้า</p>
             </div>
             <div className="grid_3 pull_1">
-              <input type="text" className="cancel-default" value={current.props.document_show_mode_add.name} onChange={(e) => this.props.onChangeNameModeAdd(e)}></input>
+              <input type="text" className="cancel-default" value={current.props.document_show_mode_add.created_by_user_id} onChange={(e) => this.props.onChangeNameModeAdd(e)} required></input>
             </div>
             <div className="grid_3 float-right">
-              <input type="date" className="cancel-default float-right" value={current.props.document_show_mode_add.date} onChange={(e) => this.props.onChangeDateModeAdd(e)}></input>
+              <input type="datetime-local" className="cancel-default float-right" value={current.props.document_show_mode_add.created_on} onChange={(e) => this.props.onChangeDateModeAdd(e)} required></input>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">วันที่</p>
@@ -183,7 +189,8 @@ class TopContent extends React.Component {
           <div className="grid_12">
             <div className="grid_3 float-right">
               <div className="p-search-box cancel-margin">
-                <input type="text" className="p-search-box__input cancel-default" defaultValue="100" disabled="disabled" />
+                <input type="text" className="p-search-box__input cancel-default" value={current.props.document_show_mode_add.src_warehouse_id} onChange={(e) => this.props.onChangeMyInventoryModeAdd(e)} required/>
+                <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalInventory" aria-controls="modalInventory"></i></button>
               </div>
             </div>
             <div className="grid_2 float-right">
@@ -196,7 +203,7 @@ class TopContent extends React.Component {
               <p className="top-text">เลขที่ใบสั่งซื้อ/เลขที่เอกสารอ้างอิง</p>
             </div>
             <div className="grid_3 pull_0">
-              <input type="text" className="cancel-default" value={current.props.document_show_mode_add.no_po} onChange={(e) => this.props.onChangeNoPoModeAdd(e)}></input>
+              <input type="text" className="cancel-default" value={current.props.document_show_mode_add.no_po} onChange={(e) => this.props.onChangeNoPoModeAdd(e)} required></input>
             </div>
           </div>
         </>
@@ -255,7 +262,7 @@ class TopContent extends React.Component {
                           <td className="edit-padding" style={{ minWidth: "150px" }}> {document_show_popup.internal_document_id} </td>
                           <td className="edit-padding" style={{ minWidth: "300px" }}> {document_show_popup.created_on} </td>
                           <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
-                            <button type="button" className="button-blue" onClick={(e,i) => current.props.onClickSelectNoDocument( document_show_popup.document_id, document_show_popup.document_type_id)} aria-label="Close active modal" aria-controls="modalDocument" id="closeModalInventory" >เลือก</button>
+                            <button type="button" className="button-blue" onClick={(e, i) => current.props.onClickSelectNoDocument(document_show_popup.document_id, document_show_popup.document_type_id)} aria-label="Close active modal" aria-controls="modalDocument" id="closeModalInventory" >เลือก</button>
                           </td>
                         </tr>
                       )
@@ -281,7 +288,7 @@ class TopContent extends React.Component {
               <div className="grid_12">
                 <div className="grid_2"><p className="cancel-default">เลขที่คลัง</p></div>
                 <div className="grid_8 pull_0">
-                  <input type="text" className="cancel-default grid_3" value={this.props.document_show.my_inventory} onChange={(e) => this.props.onChangeMyInventory(e)} />
+                  <input type="text" className="cancel-default grid_3" value={this.props.document_show.my_inventory} onChange={(e) => this.props.onChangeMyInventoryMode(e)} />
                   <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchInventory(e)}>ค้นหา</button>
                 </div>
               </div>
@@ -331,16 +338,16 @@ const mapStateToProps = (state) => ({
   document_show: state.document_show,
   document_show_mode_add: state.document_show_mode_add,
   inventory_show_popup: state.inventory_show_popup,
-  inventory: state.inventory
+  inventory: state.inventory,
+  document_specific_show: state.document_specific_show,
 })
 const mapDispatchToProps = (dispatch) => ({
   onChangeNoDocument: (e) => dispatch(onChangeNoDocument(e)),
   onClickPopUpSearchNoDocument: (e) => dispatch(onClickPopUpSearchNoDocument(e)),
-  onClickSelectNoDocument: (e,i) => dispatch(onClickSelectNoDocument(e,i)),
+  onClickSelectNoDocument: (e, i) => dispatch(onClickSelectNoDocument(e, i)),
   onClickOpenPopUp: (e) => dispatch(onClickOpenPopUp(e)),
 
   // Mode Edit
-  onChangeStatus: (e) => dispatch(onChangeStatus(e)),
   onChangeName: (e) => dispatch(onChangeName(e)),
   onChangeDate: (e) => dispatch(onChangeDate(e)),
   onChangeMyInventory: (e) => dispatch(onChangeMyInventory(e)),
@@ -350,10 +357,10 @@ const mapDispatchToProps = (dispatch) => ({
 
   // Mode Add
   onChangeNoDocumentModeAdd: (e) => dispatch(onChangeNoDocumentModeAdd(e)),
-  onChangeStatusModeAdd: (e) => dispatch(onChangeStatusModeAdd(e)),
   onChangeNameModeAdd: (e) => dispatch(onChangeNameModeAdd(e)),
   onChangeDateModeAdd: (e) => dispatch(onChangeDateModeAdd(e)),
-  onChangeNoPoModeAdd: (e) => dispatch(onChangeNoPoModeAdd(e))
+  onChangeNoPoModeAdd: (e) => dispatch(onChangeNoPoModeAdd(e)),
+  onChangeMyInventoryModeAdd: (e) => dispatch(onChangeMyInventoryModeAdd(e)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(TopContent);
 
@@ -390,19 +397,9 @@ export const onClickSelectNoDocument = (document_id, document_type_id) => {
       });
     });
   };
-  // return {
-  //   type: "CLICK SELECT POPUP NO DOCUMENT",
-  //   row_document_show_popup: e.target.parentNode.parentNode.id
-  // }
 }
 
 // Mode Edit
-export const onChangeStatus = (e) => {
-  return {
-    type: "ON CHANGE STATUS",
-    value: e.target.value
-  }
-}
 export const onChangeName = (e) => {
   return {
     type: "ON CHANGE NAME",
@@ -448,12 +445,6 @@ export const onChangeNoDocumentModeAdd = (e) => {
     value: e.target.value
   }
 }
-export const onChangeStatusModeAdd = (e) => {
-  return {
-    type: "ON CHANGE STATUS MODE ADD",
-    value: e.target.value
-  }
-}
 export const onChangeNameModeAdd = (e) => {
   return {
     type: "ON CHANGE NAME MODE ADD",
@@ -469,6 +460,12 @@ export const onChangeDateModeAdd = (e) => {
 export const onChangeNoPoModeAdd = (e) => {
   return {
     type: "ON CHANGE NO PO MODE ADD",
+    value: e.target.value
+  }
+}
+export const onChangeMyInventoryModeAdd = (e) => {
+  return {
+    type: "ON CHANGE MY INVENTORY MODE ADD",
     value: e.target.value
   }
 }
