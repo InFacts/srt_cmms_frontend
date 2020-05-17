@@ -384,6 +384,15 @@ export default (state = initialState, action) => {
         document_show_mode_add: clone_document_show_mode_add
       }
 
+    // POST DOCUMENT
+    case "POST DOCUMENT":
+      console.log("reuducer", action.resPost, "mode", action.value)
+      return {
+        ...state,
+        action: action.value,
+        clickable: action.value === "add" || action.value === "edit" ? true : false
+      }
+
     // แนบไฟล์
     case "FILES":
       return {

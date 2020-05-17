@@ -1,6 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux'
 
+import axios from "axios";
+
+import { API_PORT_DATABASE } from '../../config_port.js';
+import { API_URL_DATABASE } from '../../config_url.js';
+
 import { Link } from 'react-router-dom';
 import '../../../vender/fontawesome-free/css/all.css';
 import '../../../css/style-nav.css'
@@ -17,18 +22,18 @@ import HomeDocument from '../../../images/toolbar/home.svg'
 import SearchDocument from '../../../images/toolbar/search.svg'
 
 
-class ToolbarItem extends React.Component{
+class ToolbarItem extends React.Component {
 
-    render(){
-        var {id, alt, src, pointer, select, callback} = this.props;
-        return(
-            
+    render() {
+        var { id, alt, src, pointer, select, callback } = this.props;
+        return (
+
             (select === id)
-            ?   
-                <li className="nav-li" ><Link className="toolbar" style={{pointerEvents: pointer}}><div className="selecting"><img alt={alt} src={src} onClick={()=>{callback(0)}}  className="img-toolbar" /></div></Link></li>
-            :
-                <li className="nav-li" ><Link className="toolbar" style={{pointerEvents: pointer}}><img  alt={alt} src={src} onClick={()=>{callback(id)}} className="img-toolbar" /></Link></li>
-            );
+                ?
+                <li className="nav-li" ><Link className="toolbar" style={{ pointerEvents: pointer }}><div className="selecting"><img alt={alt} src={src} onClick={() => { callback(0) }} className="img-toolbar" /></div></Link></li>
+                :
+                <li className="nav-li" ><Link className="toolbar" style={{ pointerEvents: pointer }}><img alt={alt} src={src} onClick={() => { callback(id) }} className="img-toolbar" /></Link></li>
+        );
     }
 }
 
@@ -36,92 +41,93 @@ class Toolbar extends React.Component {
 
     constructor(props) {
         super(props)
-       
+
         this.state = {
             id: 0,
         }
     }
 
     render() {
+        const current = this;
         var menu, items;
         menu = [
             {
-                id:1,
+                id: 1,
                 alt: "home",
-                src : HomeDocument,
+                src: HomeDocument,
                 pointer: "auto"
             },
             {
-                id:2,
+                id: 2,
                 alt: "search",
-                src : SearchDocument,
+                src: SearchDocument,
                 pointer: "auto"
             },
             {
-                id:3,
+                id: 3,
                 alt: "edit",
-                src : EditDocument,
+                src: EditDocument,
                 pointer: "auto"
             },
             {
-                id:4,
+                id: 4,
                 alt: "add",
-                src : AddDocument,
+                src: AddDocument,
                 pointer: "auto"
             },
             {
-                id:5,
+                id: 5,
                 alt: "copy",
-                src : CopyDocument,
+                src: CopyDocument,
                 pointer: "none"
             },
             {
-                id:6,
+                id: 6,
                 alt: "save",
-                src : SaveDocument,
+                src: SaveDocument,
                 pointer: "none"
             },
             {
-                id:7,
+                id: 7,
                 alt: "retry",
-                src : RetryDocument,
+                src: RetryDocument,
                 pointer: "none"
             },
             {
-                id:8,
+                id: 8,
                 alt: "back",
-                src : BackDocument,
+                src: BackDocument,
                 pointer: "none"
             },
             {
-                id:9,
+                id: 9,
                 alt: "forward",
-                src : ForwardDocument,
+                src: ForwardDocument,
                 pointer: "none"
             },
             {
-                id:10,
+                id: 10,
                 alt: "pdf",
-                src : PdfDocument,
+                src: PdfDocument,
                 pointer: "none"
             },
         ]
 
+        items = menu.map(function (item, index) {
+            return (
+                <ToolbarItem key={item.id} id={item.id} alt={item.alt} src={item.src} pointer={item.pointer} select={current.state.id} callback={(idx) => {
+                    current.setState({
+                        id: idx,
+                    })
+                    current.props.handleAction(item.alt);
+                }} />
+            )
+        });
 
-
-        items = menu.map((item , index) =>
-            <ToolbarItem  key={item.id} id={item.id} alt={item.alt} src={item.src} pointer={item.pointer} select={this.state.id} callback={(idx) => {
-                this.setState({
-                    id:idx,
-                })
-                this.props.handleAction(item.alt);
-            }}/>
-        );
-       
-        return(
+        return (
             <div>
                 <div id="toolbar">
-                    <div className="container_12 clearfix" style={{ marginTop: "3px"}}>
+                    <div className="container_12 clearfix" style={{ marginTop: "3px" }}>
                         <ul className="grid_12 nav-ul ">
                             {items}
                         </ul>
@@ -142,8 +148,24 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(mapStateToProps, mapDispatchToProps)(Toolbar);
 
 export const action = (value) => {
-    return {
-        type: "ACTION",
-        value: value
+    if (value === "add") {
+        return function (dispatch) {
+            return axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/new/0`).then((res) => {
+                // console.log("add document", res)
+              // dispatch
+              dispatch({
+                type: "POST DOCUMENT",
+                value: value,
+                resPost: res.data
+              });
+            });
+          };
+    }
+    else {
+        console.log("anything")
+        return {
+            type: "ACTION",
+            value: value
+        }
     }
 }

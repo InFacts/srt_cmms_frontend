@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom'
+// import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import axios from "axios";
@@ -33,11 +33,11 @@ class TopContent extends React.Component {
   checkActionMode = (mode) => {
     // console.log(mode)
     const current = this;
-    if (mode === "home") {
-      return (
-        <Redirect to="/main"></Redirect>
-      ) 
-    }
+    // if (mode === "home") {
+    //   return (
+    //     <Redirect to="/main"></Redirect>
+    //   ) 
+    // }
     if (mode === "search") {
       return (
         <>
