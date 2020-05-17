@@ -93,6 +93,7 @@ const initialState = {
 
   // Mode การทำงาน
   action: "search",
+  fill_data: false,
 
   // Mode Search
   no_inventory: "",
@@ -165,7 +166,8 @@ export default (state = initialState, action) => {
       return {
         ...state,
         no_inventory: state.inventory_show_popup[action.row_inventory_show_popup].no_inventory,
-        inventory_show: state.inventory_show_popup[action.row_inventory_show_popup]
+        inventory_show: state.inventory_show_popup[action.row_inventory_show_popup],
+        fill_data: true,
       }
 
     // Mode Edit

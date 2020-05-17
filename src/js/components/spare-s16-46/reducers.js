@@ -596,6 +596,8 @@ const initialState = {
 
     // Mode การทำงาน
     action: "search",
+    fill_data: false,
+
     document_show_popup: [],
     document_show: [],
     table_part_show: [], //เปลี่ยนจาก list_show => table_part_show
@@ -999,7 +1001,8 @@ export default (state = initialState, action) => {
                 document_show: state.document_show_popup[action.row_document_show_popup],
                 table_part_show: state.document_show_popup[action.row_document_show_popup].table_part,
                 table_status_show: state.document_show_popup[action.row_document_show_popup].table_status,
-                raw_no_part: state.document_show_popup[action.row_document_show_popup].raw_no_part
+                raw_no_part: state.document_show_popup[action.row_document_show_popup].raw_no_part,
+                fill_data: true,
             }
 
         // Mode Edit

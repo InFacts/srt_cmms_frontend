@@ -98,6 +98,7 @@ const initialState = {
 
   // Mode การทำงาน
   action: "search",
+  fill_data: false,
 
   // Mode Search 
   no_part: "",
@@ -145,7 +146,8 @@ export default (state = initialState, action) => {
         ...state,
         no_part: state.info_part_show_popup[action.rowIndex].no_part,
         info_part_show: state.info_part_show_popup[action.rowIndex],
-        table_list_show: state.info_part_show_popup[action.rowIndex].table_list
+        table_list_show: state.info_part_show_popup[action.rowIndex].table_list,
+        fill_data: false,
       }
     case "ON CLICK OPRN POPUP NO PART":
       return {

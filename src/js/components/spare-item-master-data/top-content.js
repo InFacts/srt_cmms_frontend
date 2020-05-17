@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import '../../../css/style.css'
@@ -26,6 +27,11 @@ class TopContent extends React.Component {
 
   checkActionMode = (mode) => {
     const current = this;
+    if (mode === "home") {
+      return (
+          <Redirect to="/main"></Redirect>
+      )
+  }
     if (mode === "search") {
       return (
         <>

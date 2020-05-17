@@ -1,6 +1,7 @@
 const initialState = {
   // Mode การทำงาน
   action: "search",
+  fill_data: false,
 
   // Mode Search 
   no_document: "",
@@ -159,7 +160,8 @@ export default (state = initialState, action) => {
         no_document: action.value.document.internal_document_id,
         document_show: action.value.document,
         document_specific_show: action.value.specific,
-        list_show: action.value.specific.line_items
+        list_show: action.value.specific.line_items,
+        fill_data:true,
       }
 
     // Mode Edit

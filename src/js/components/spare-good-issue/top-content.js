@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
 
 import '../../../css/style.css'
 import '../../../css/grid12.css';
@@ -27,6 +28,11 @@ class TopContent extends React.Component {
   checkActionMode = (mode) => {
     const current = this;
     console.log("document_show", this.props.document_show)
+    if (mode === "home") {
+      return (
+        <Redirect to="/main"></Redirect>
+      )
+    }
     if (mode === "search") {
       return (
         <>
@@ -36,7 +42,7 @@ class TopContent extends React.Component {
             </div>
             <div className="grid_3 pull_1">
               <div className="p-search-box cancel-margin">
-                <input type="text" className="p-search-box__input cancel-default" value={this.props.no_document} onChange={(e) => this.props.onChangeNoDocument(e)}/>
+                <input type="text" className="p-search-box__input cancel-default" value={this.props.no_document} onChange={(e) => this.props.onChangeNoDocument(e)} />
                 <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalInventory" aria-controls="modalDocument" onClick={(e) => this.props.onClickOpenPopUpNoDocument(e)}></i></button>
               </div>
             </div>
@@ -89,7 +95,7 @@ class TopContent extends React.Component {
             </div>
             <div className="grid_3 pull_1">
               <div className="p-search-box cancel-margin">
-                <input type="text" className="p-search-box__input cancel-default" value={this.props.no_document} onChange={(e) => this.props.onChangeNoDocument(e)}/>
+                <input type="text" className="p-search-box__input cancel-default" value={this.props.no_document} onChange={(e) => this.props.onChangeNoDocument(e)} />
                 <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalInventory" aria-controls="modalDocument" onClick={(e) => this.props.onClickOpenPopUpNoDocument(e)}></i></button>
               </div>
             </div>
@@ -142,7 +148,7 @@ class TopContent extends React.Component {
             </div>
             <div className="grid_3 pull_1">
               <div className="p-search-box cancel-margin">
-                <input type="text" className="p-search-box__input cancel-default" value={this.props.document_show_mode_add.no_document} onChange={(e) => this.props.onChangeNoDocumentModeAdd(e)}/>
+                <input type="text" className="p-search-box__input cancel-default" value={this.props.document_show_mode_add.no_document} onChange={(e) => this.props.onChangeNoDocumentModeAdd(e)} />
               </div>
             </div>
             <div className="grid_3 float-right">
@@ -252,7 +258,7 @@ class TopContent extends React.Component {
             </div>
           </div>
         </div>
-        
+
       </div>
     )
   };
@@ -260,7 +266,7 @@ class TopContent extends React.Component {
 
 const mapStateToProps = (state) => ({
   actionMode: state.action,
-  
+
   // Mode Search
   no_document: state.no_document,
   document_show_popup: state.document_show_popup,
@@ -281,7 +287,7 @@ const mapDispatchToProps = (dispatch) => ({
   onChangeDate: (e) => dispatch(onChangeDate(e)),
   onChangeMyInventory: (e) => dispatch(onChangeMyInventory(e)),
   onChangeNoRef: (e) => dispatch(onChangeNoRef(e)),
-  
+
   // Mode Add
   onChangeNoDocumentModeAdd: (e) => dispatch(onChangeNoDocumentModeAdd(e)),
   onChangeStatusModeAdd: (e) => dispatch(onChangeStatusModeAdd(e)),
@@ -350,31 +356,31 @@ export const onChangeNoRef = (e) => {
 // Mode Add
 export const onChangeNoDocumentModeAdd = (e) => {
   // console.log(e.target.value)
-  return{
+  return {
     type: "ON CHANGE DOCUMENT MODE ADD",
     value: e.target.value
   }
 }
 export const onChangeStatusModeAdd = (e) => {
-  return{
+  return {
     type: "ON CHANGE STATUS MODE ADD",
     value: e.target.value
   }
 }
 export const onChangeNameModeAdd = (e) => {
-  return{
+  return {
     type: "ON CHANGE NAME MODE ADD",
     value: e.target.value
   }
 }
 export const onChangeDateModeAdd = (e) => {
-  return{
+  return {
     type: "ON CHANGE DATE MODE ADD",
     value: e.target.value
   }
 }
 export const onChangeNoRefModeAdd = (e) => {
-  return{
+  return {
     type: "ON CHANGE NO REF MODE ADD",
     value: e.target.value
   }

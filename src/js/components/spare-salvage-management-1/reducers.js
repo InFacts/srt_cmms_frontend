@@ -598,6 +598,7 @@ const initialState = {
 
     // Mode Search
     no_document: "",
+    fill_data: false,
 
     // Mode Edit
     raw_no_part: [],
@@ -989,7 +990,8 @@ export default (state = initialState, action) => {
                 document_show: state.document_show_popup[action.row_document_show_popup],
                 table_part_show: state.document_show_popup[action.row_document_show_popup].table_part,
                 table_status_show: state.document_show_popup[action.row_document_show_popup].table_status,
-                raw_no_part: state.document_show_popup[action.row_document_show_popup].raw_no_part
+                raw_no_part: state.document_show_popup[action.row_document_show_popup].raw_no_part,
+                fill_data: true,
             }
 
         // Mode Edit
