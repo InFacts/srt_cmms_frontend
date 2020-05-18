@@ -599,6 +599,7 @@ const initialState = {
     // Mode Search
     no_document: "",
     fill_data: false,
+    tool_mode: true,
 
     // Mode Edit
     raw_no_part: [],
