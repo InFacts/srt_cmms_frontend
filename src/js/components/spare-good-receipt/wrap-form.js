@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux'
 
 import TopContent from './top-content';
 import BottomContent from './bottom-content';

@@ -25,6 +25,7 @@ import SpareSalvage1 from './components/spare-salvage-management-1';
 import SpareSalvage2 from './components/spare-salvage-management-2';
 import SpareUnitCount from './components/spare-unit-counting';
 import SpareB22 from './components/spare-b22';
+import SpareS1 from './components/spare-s1';
 
 import Track from './components/track-document';
 import Report from './components/report';
@@ -65,6 +66,7 @@ class FrontEnd extends React.Component {
                 <Route exact path="/salvage-management-2" component={SpareSalvage2} />
                 <Route exact path="/unit-count" component={SpareUnitCount} />
                 <Route exact path="/report-b22" component={SpareB22} />
+                <Route exact path="/report-s1" component={SpareS1} />
 
                 <Route exact path="/test" component={Test2} />
           
