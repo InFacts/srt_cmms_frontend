@@ -33,7 +33,7 @@ class TopContent extends React.Component {
       return (
         <>
           <div className="grid_12">
-            <div className="grid_2"><p className="cancel-default">รายงาน</p></div>
+            <div className="grid_2"><p className="cancel-default">รายงาน ส.1</p></div>
             <div className="grid_3 pull_0">
               <input className="cancel-default " type="text" value={this.props.report} />
             </div>

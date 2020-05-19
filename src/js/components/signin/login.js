@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from "axios";
-import { Link } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import { API_PORT_DATABASE } from '../../config_port.js';
 import { API_URL_DATABASE } from '../../config_url.js';
 
@@ -15,32 +15,36 @@ import logo from '../../../images/logo.png';
 
 class Login extends Component {
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      loggedIn: false,
+    };
+  }
+
   handleSubmit = event => {
     event.preventDefault();
-    console.log("handleSubmit")
 
     const user = {
       "username": this.props.username,
-      // "password": this.state.password
+      "password": this.props.password
     };
     console.log("user", user)
-    var current = this;
-    axios.defaults.withCredentials = false;
-    axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/login-no-password-not-a-good-idea-remind-to-remove-path`, user)
+
+    axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/login`, user)
       .then(res => {
         console.log(res);
-        // console.log(res.headers['set-cookies']);
-        // console.log(res.headers.get('set-cookie'));
-        // res.headers.get('set-cookie')
-        // console.log(res.data.token);
-        // localStorage.setItem('token_auth', res.data.token)
-        // console.log("token_auth", localStorage.getItem('token_auth'))
+        localStorage.setItem('token_auth', res.data.token)
+        this.setState({ loggedIn: true });
       }).catch(function (err) {
         console.log(err)
       })
   }
 
   render() {
+    if (this.state.loggedIn === true) {
+      return <Redirect to='/main' />
+    }
     return (
       <div>
         <div className="container_12 clearfix">
@@ -61,8 +65,8 @@ class Login extends Component {
               <label className="alert-signin float-left mt-1 font-signin">จดจำรหัสผ่าน</label>
               <label className="alert-signin float-right mt-1 font-signin" style={{ marginTop: "9px" }}>ลืมรหัสผ่าน ?</label>
 
-              <Link to="/main"><button className="button-red font-signin" type="submit">เข้าสู่ระบบ</button></Link>
-              {/* <button className="button-red font-signin" type="submit">เข้าสู่ระบบ</button> */}
+              {/* <Link to="/main"><button className="button-red font-signin" type="submit">เข้าสู่ระบบ</button></Link> */}
+              <button className="button-red font-signin" type="submit">เข้าสู่ระบบ</button>
             </form>
           </div>
         </div>
