@@ -10,7 +10,6 @@ class Footer extends React.Component {
   checkActionMode = (mode) => {
     // console.log("hello footer")
     if (mode === "search") {
-      // console.log("Search mode is Action")
       return (
         <div className="grid_12 nav-footer">
           
@@ -18,15 +17,13 @@ class Footer extends React.Component {
       )
     }
     if (mode === "add" || mode === "edit") {
-      console.log("Edit/Add mode is Action")
       return (
         <div className="grid_12 nav-footer">
-          <button type="button" className="p-button--base edit float-right">ยกเลิก</button>
+          <button type="button" className="p-button--base edit float-right" onClick={(e) => { if (window.confirm('คุณต้องการยกเลิกใช่หรือไม่')) this.props.onClickCancle() }}>ยกเลิก</button>
           <button type="submit" className="button-blue edit float-right mr-2">บันทึก</button>
         </div>
       )
     }
-
   }
 
   render() {
@@ -45,5 +42,13 @@ const mapStateToProps = state => {
     actionMode: state.action,
   };
 };
+const mapDispatchToProps = (dispatch) => ({
+  onClickCancle: (e) => dispatch(onClickCancle(e)),
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Footer);
 
-export default connect(mapStateToProps)(Footer);
+export const onClickCancle = (e) => {
+  return {
+    type: "ON CLICK CANCLE"
+  }
+}
