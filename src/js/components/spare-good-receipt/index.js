@@ -6,9 +6,7 @@ import reducers from './reducers';
 
 import NavTopbar from '../nav/nav-top.js';
 import Toolbar from '../common/nav-toolbar';
-import TopContent from './top-content';
-import BottomContent from './bottom-content';
-import Footer from '../common/footer.js';
+import WrapForm from './wrap-form';
 
 const store = createStore(reducers, applyMiddleware(thunk))
 
@@ -19,11 +17,7 @@ class SpareGoodReceipt extends React.Component {
             <Provider store={store}>
                 <NavTopbar />
                 <Toolbar />
-                <form>
-                    <TopContent />
-                    <BottomContent  />
-                    <Footer />
-                </form>
+                <WrapForm />
             </Provider>
         )
     };

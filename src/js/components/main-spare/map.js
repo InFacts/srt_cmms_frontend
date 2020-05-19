@@ -116,7 +116,7 @@ class Map extends React.Component {
                                     <button className="p-contextual-menu__toggle" style={{ border: "none", padding: "0" }} aria-controls="menu-4" aria-expanded="false" aria-haspopup="true"><img alt='some value' src={Dropdown} /></button>
                                     <span className="p-contextual-menu__dropdown" id="menu-4" aria-hidden="true" aria-label="submenu">
                                         <span className="p-contextual-menu__group">
-                                            <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รายงาน บ.22 (Spare6)</Link>
+                                            <Link to="/report-b22" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รายงาน บ.22 (Spare6)</Link>
                                             <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รายงาน ส.1 (Spare7)</Link>
                                         </span>
                                     </span>
