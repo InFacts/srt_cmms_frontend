@@ -81,6 +81,8 @@ const initialState = {
 
   // Mode การทำงาน
   action: "search",
+  fill_data: false,
+  tool_mode: false,
 
   report: "",
   level: "",

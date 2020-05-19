@@ -2,13 +2,21 @@ import React from 'react';
 import { connect } from 'react-redux'
 import '../../../css/style.css'
 import '../../../css/grid12.css';
-
+import { Redirect } from 'react-router-dom'
 class TopContent extends React.Component {
 
 
 
   render() {
     let current = this;
+
+   
+
+    if ( this.props.actionMode === "home") {
+      return (
+          <Redirect to="/main"></Redirect>
+      )
+  }
     return (
       <div>
         <div id="blackground-white">

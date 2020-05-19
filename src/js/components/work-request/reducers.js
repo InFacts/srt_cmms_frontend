@@ -88,6 +88,8 @@ const initialState = {
 
   // Mode การทำงาน
   action: "search",
+  fill_data: false,
+  tool_mode: true,
 
   // Mode Search
   no_word_request: "",
@@ -203,7 +205,8 @@ export default (state = initialState, action) => {
       return {
         ...state,
         no_word_request: state.word_request_show_popup[action.row_word_request_show_popup].no_word_request,
-        word_request_show: state.word_request_show_popup[action.row_word_request_show_popup]
+        word_request_show: state.word_request_show_popup[action.row_word_request_show_popup],
+        fill_data: true,
       }
 
 

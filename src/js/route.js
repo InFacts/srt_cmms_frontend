@@ -31,7 +31,10 @@ import MaintenanceFixedAsset from './components/maintance-fixed-asset';
 import MaintenanceCustom from './components/maintance-custom';
 import Maintenance from './components/maintance';
 import Test2 from './components/test-components-v2';
-
+import UserManagement from './components/user-management'
+import Profile from './components/profile'
+import ActivityLog from './components/activity-log'
+import Register from './components/register'
 class FrontEnd extends React.Component {
     render() {
         return (
@@ -68,6 +71,10 @@ class FrontEnd extends React.Component {
                 <Route exact path="/fixed-asset" component={MaintenanceFixedAsset} />
                 <Route exact path="/custom" component={MaintenanceCustom} />
                 <Route exact path="/maintenance" component={Maintenance} />
+                <Route exact path="/usermanagement" component={UserManagement} />
+                <Route exact path="/profile" component={Profile} />
+                <Route exact path="/activity-log" component={ActivityLog} />
+                <Route exact path="/register" component={Register} />
             </div>
         );
     }
