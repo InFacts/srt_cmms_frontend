@@ -29,6 +29,61 @@ class BottomContent extends React.Component {
     return sumTotal
   }
 
+
+  requiredQuantityModeEdit = (description, quantity) => {
+    if (description !== "") {
+      return (
+        <input type="number" min="1" className="cancel-default float-right" value={quantity} onChange={(e) => this.props.onChangeQuilityEachRow(e)} required></input>
+      )
+    }
+    else {
+      return (
+        <input type="number" min="1" className="cancel-default float-right" value={quantity} onChange={(e) => this.props.onChangeQuilityEachRow(e)}></input>
+      )
+    }
+  }
+
+  requiredPerUnitPriceModeEdit = (description, per_unit_price) => {
+    if (description !== "") {
+      return (
+        <input type="number" min="1" className="cancel-default float-right" value={per_unit_price} onChange={(e) => this.props.onChangeUnitPerBathEachRow(e)} required></input>
+      )
+    }
+    else {
+      return (
+        <input type="number" min="1" className="cancel-default float-right" value={per_unit_price} onChange={(e) => this.props.onChangeUnitPerBathEachRow(e)}></input>
+      )
+    }
+  }
+
+  requiredQuantity = (description, quantity) => {
+    if (description !== "") {
+      console.log("required")
+      return (
+        <input type="number" min="1" className="cancel-default float-right" value={quantity} onChange={(e) => this.props.onChangeQuilityEachRowModeAdd(e)} required></input>
+      )
+    }
+    else {
+      return (
+        <input type="number" min="1" className="cancel-default float-right" value={quantity} onChange={(e) => this.props.onChangeQuilityEachRowModeAdd(e)}></input>
+      )
+    }
+  }
+
+  requiredPerUnitPrice = (description, per_unit_price) => {
+    if (description !== "") {
+      console.log("required")
+      return (
+        <input type="number" min="1" className="cancel-default float-right" value={per_unit_price} onChange={(e) => this.props.onChangeUnitPerBathEachRowModeAdd(e)} required></input>
+      )
+    }
+    else {
+      return (
+        <input type="number" min="1" className="cancel-default float-right" value={per_unit_price} onChange={(e) => this.props.onChangeUnitPerBathEachRowModeAdd(e)}></input>
+      )
+    }
+  }
+
   checkActionMode = (mode) => {
     const current = this;
     if (mode === "search") {
@@ -55,7 +110,14 @@ class BottomContent extends React.Component {
                       <td className="edit-padding">{list.internal_item_id}</td>
                       <td className="edit-padding">{list.description}</td>
                       <td className="edit-padding text-center">{list.quantity}</td>
-                      <td className="edit-padding text-center">{list.unit}</td>
+                      <td className="edit-padding text-center">
+                        {/* {list.unit} */}
+                        <select className="edit-select-top" disabled="disabled">
+                          {list.list_uoms.map(function (list_uoms, index) {
+                            return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
+                          })}
+                        </select>
+                      </td>
                       <td className="edit-padding text-right">{list.per_unit_price}</td>
                       <td className="edit-padding text-right">{current.sumTotalLineItem(list.quantity, list.per_unit_price)}</td>
                     </tr>
@@ -109,11 +171,25 @@ class BottomContent extends React.Component {
                       </td>
                       <td className="edit-padding">{list.description}</td>
                       <td className="edit-padding text-center">
-                        <input type="number" min="1" className="cancel-default float-right" value={list.quantity} onChange={(e) => current.props.onChangeQuilityEachRow(e)}></input>
+                        {current.requiredQuantityModeEdit(list.description, list.quantity)}
+                        {/* <input type="number" min="1" className="cancel-default float-right" value={list.quantity} onChange={(e) => current.props.onChangeQuilityEachRow(e)}></input> */}
                       </td>
-                      <td className="edit-padding text-center">{list.unit}</td>
+                      <td className="edit-padding text-center">
+                        {/* {list.unit} */}
+                        {/* <select className="edit-select-top">
+                          {list.list_uoms.map(function (list_uoms, index) {
+                            return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
+                          })}
+                        </select> */}
+                        <select className="edit-select-top">
+                          {list.list_uoms.map(function (list_uoms, index) {
+                            return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
+                          })}
+                        </select>
+                      </td>
                       <td className="edit-padding text-right">
-                        <input type="number" min="1" className="cancel-default float-right" value={list.per_unit_price} onChange={(e) => current.props.onChangeUnitPerBathEachRow(e)}></input>
+                        {current.requiredPerUnitPriceModeEdit(list.description, list.per_unit_price)}
+                        {/* <input type="number" min="1" className="cancel-default float-right" value={list.per_unit_price} onChange={(e) => current.props.onChangeUnitPerBathEachRow(e)}></input> */}
                       </td>
                       <td className="edit-padding text-right">{current.sumTotalLineItem(list.quantity, list.per_unit_price)}
                       </td>
@@ -215,11 +291,25 @@ class BottomContent extends React.Component {
                       </td>
                       <td className="edit-padding">{list.description}</td>
                       <td className="edit-padding text-center">
-                        <input type="number" min="1" className="cancel-default float-right" value={list.quantity} onChange={(e) => current.props.onChangeQuilityEachRowModeAdd(e)}></input>
+                        {current.requiredQuantity(list.description, list.quantity)}
+                        {/* <input type="number" min="1" className="cancel-default float-right" value={list.quantity} onChange={(e) => current.props.onChangeQuilityEachRowModeAdd(e)}></input> */}
                       </td>
-                      <td className="edit-padding text-center">{list.unit}</td>
+                      <td className="edit-padding text-center">
+                        {/* {list.unit} */}
+                        <select className="edit-select-top">
+                          {list.list_uoms.map(function (list_uoms, index) {
+                            return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
+                          })}
+                        </select>
+                        {/* <select className="edit-select-top">
+                          {list.list_uoms.map(function (list_uoms, index) {
+                            return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
+                          })}
+                        </select> */}
+                      </td>
                       <td className="edit-padding text-right">
-                        <input type="number" min="1" className="cancel-default float-right" value={list.per_unit_price} onChange={(e) => current.props.onChangeUnitPerBathEachRowModeAdd(e)}></input>
+                        {current.requiredPerUnitPrice(list.description, list.per_unit_price)}
+                        {/* <input type="number" min="1" className="cancel-default float-right" value={list.per_unit_price} onChange={(e) => current.props.onChangeUnitPerBathEachRowModeAdd(e)}></input> */}
                       </td>
                       <td className="edit-padding text-right">{current.sumTotalLineItem(list.quantity, list.per_unit_price)}</td>
                     </tr>

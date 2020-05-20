@@ -42,6 +42,7 @@ const initialState = {
       "uom_id": "",
       "unit": "",
       "per_unit_price": "",
+      "list_uoms": []
     },
     {
       "item_id": "",
@@ -51,6 +52,7 @@ const initialState = {
       "uom_id": "",
       "unit": "",
       "per_unit_price": "",
+      "list_uoms": []
     },
     {
       "item_id": "",
@@ -60,6 +62,7 @@ const initialState = {
       "uom_id": "",
       "unit": "",
       "per_unit_price": "",
+      "list_uoms": []
     },
     {
       "item_id": "",
@@ -69,6 +72,7 @@ const initialState = {
       "uom_id": "",
       "unit": "",
       "per_unit_price": "",
+      "list_uoms": []
     },
     {
       "item_id": "",
@@ -78,6 +82,7 @@ const initialState = {
       "uom_id": "",
       "unit": "",
       "per_unit_price": "",
+      "list_uoms": []
     },
     {
       "item_id": "",
@@ -87,6 +92,7 @@ const initialState = {
       "uom_id": "",
       "unit": "",
       "per_unit_price": "",
+      "list_uoms": []
     },
     {
       "item_id": "",
@@ -96,6 +102,7 @@ const initialState = {
       "uom_id": "",
       "unit": "",
       "per_unit_price": "",
+      "list_uoms": []
     },
     {
       "item_id": "",
@@ -105,6 +112,7 @@ const initialState = {
       "uom_id": "",
       "unit": "",
       "per_unit_price": "",
+      "list_uoms": []
     },
     {
       "item_id": "",
@@ -114,6 +122,7 @@ const initialState = {
       "uom_id": "",
       "unit": "",
       "per_unit_price": "",
+      "list_uoms": []
     },
     {
       "item_id": "",
@@ -123,10 +132,114 @@ const initialState = {
       "uom_id": "",
       "unit": "",
       "per_unit_price": "",
+      "list_uoms": []
     },
   ],
   list_show_mode_add_row_index: "",
   no_part_show_mode_add: [],
+
+  list_show_for_clear: [
+    {
+      "item_id": "",
+      "internal_item_id": "",
+      "description": "",
+      "quantity": "",
+      "uom_group_id": "",
+      "unit": "",
+      "per_unit_price": "",
+      "list_uoms": []
+    },
+    {
+      "item_id": "",
+      "internal_item_id": "",
+      "description": "",
+      "quantity": "",
+      "uom_group_id": "",
+      "unit": "",
+      "per_unit_price": "",
+      "list_uoms": []
+    },
+    {
+      "item_id": "",
+      "internal_item_id": "",
+      "description": "",
+      "quantity": "",
+      "uom_group_id": "",
+      "unit": "",
+      "per_unit_price": "",
+      "list_uoms": []
+    },
+    {
+      "item_id": "",
+      "internal_item_id": "",
+      "description": "",
+      "quantity": "",
+      "uom_group_id": "",
+      "unit": "",
+      "per_unit_price": "",
+      "list_uoms": []
+    },
+    {
+      "item_id": "",
+      "internal_item_id": "",
+      "description": "",
+      "quantity": "",
+      "uom_group_id": "",
+      "unit": "",
+      "per_unit_price": "",
+      "list_uoms": []
+    },
+    {
+      "item_id": "",
+      "internal_item_id": "",
+      "description": "",
+      "quantity": "",
+      "uom_group_id": "",
+      "unit": "",
+      "per_unit_price": "",
+      "list_uoms": []
+    },
+    {
+      "item_id": "",
+      "internal_item_id": "",
+      "description": "",
+      "quantity": "",
+      "uom_group_id": "",
+      "unit": "",
+      "per_unit_price": "",
+      "list_uoms": []
+    },
+    {
+      "item_id": "",
+      "internal_item_id": "",
+      "description": "",
+      "quantity": "",
+      "uom_group_id": "",
+      "unit": "",
+      "per_unit_price": "",
+      "list_uoms": []
+    },
+    {
+      "item_id": "",
+      "internal_item_id": "",
+      "description": "",
+      "quantity": "",
+      "uom_group_id": "",
+      "unit": "",
+      "per_unit_price": "",
+      "list_uoms": []
+    },
+    {
+      "item_id": "",
+      "internal_item_id": "",
+      "description": "",
+      "quantity": "",
+      "uom_group_id": "",
+      "unit": "",
+      "per_unit_price": "",
+      "list_uoms": []
+    },
+  ],
 
   // แนบไฟล์
   files: [],
@@ -447,6 +560,24 @@ export default (state = initialState, action) => {
         ...state,
         action: action.value,
         clickable: action.value === "add" || action.value === "edit" ? true : false
+      }
+
+          // Clear State after sumbit
+    case "ON CLEAR STATE MODE ADD":
+      console.log(initialState.no_document)
+      return {
+        ...state,
+        action: initialState.action,
+        fill_data: initialState.fill_data,
+        tool_mode: initialState.tool_mode,
+
+        document_id: initialState.document_id,
+        document_show_mode_add: initialState.document_show_mode_add,
+        list_show_mode_add: state.list_show_for_clear,
+
+        no_document: initialState.no_document,
+        document_show: initialState.document_show,
+        list_show: initialState.list_show,
       }
 
     // แนบไฟล์
