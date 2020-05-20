@@ -12,13 +12,12 @@ import Footer from '../common/footer.js';
 
 class WrapForm extends React.Component {
 
-    handleSubmit = event => {
-        event.preventDefault();
+    packForm = (document_id, document_show, list_show) => {
         const current = this;
         const line_items = [];
         var line_number = 1
         // console.log(list_show_mode_add)
-        this.props.list_show_mode_add.map(function (item, index) {
+        list_show.map(function (item, index) {
             if (item.description !== "") {
                 var myObj = {
                     "document_id": current.props.document_id,
@@ -38,29 +37,38 @@ class WrapForm extends React.Component {
 
         const data = {
             "document": {
-                "document_id": this.props.document_id,
-                "internal_document_id": this.props.document_show_mode_add.internal_document_id,
-                "remark": this.props.document_show_mode_add.remark,
+                "document_id": document_id,
+                "internal_document_id": document_show.internal_document_id,
+                "remark": document_show.remark,
             },
             "specific": {
-                "document_id": this.props.document_id,
-                "dest_warehouse_id": parseInt(this.props.document_show_mode_add.dest_warehouse_id),
+                "document_id": document_id,
+                "dest_warehouse_id": parseInt(document_show.dest_warehouse_id),
                 "src_warehouse_id": 999,
                 "line_items": line_items,
                 "movement": {
-                    "document_id": this.props.document_id,
-                    "po_id": this.props.document_show_mode_add.po_id
+                    "document_id": document_id,
+                    "po_id": document_show.po_id
                 }
             }
         };
-        console.log("data", data)
+        return data;
+    }
 
-        axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_id}/101`, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-            .then(res => {
-                console.log(res);
-            }).catch(function (err) {
-                console.log(err);
-            })
+    handleSubmit = event => {
+        event.preventDefault();
+        const current = this;
+
+        if (this.props.actionMode === "add") {
+            return (
+                axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_id}/101`, this.packForm(this.props.document_id, this.props.document_show_mode_add, this.props.list_show_mode_add), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+                    .then(res => {
+                        console.log(res);
+                    }).catch(function (err) {
+                        console.log(err);
+                    })
+            )
+        }
     }
 
     render() {
