@@ -392,11 +392,11 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(mapStateToProps, mapDispatchToProps)(Toolbar);
 
 export const action = (value) => {
-    console.log("toolBar", value)
+    // console.log("toolBar", value)
     if (value === "add") {
         return function (dispatch) {
             return axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/new/0`, "dataEmtry", { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
-                console.log(res)
+                // console.log(res)
                 dispatch({
                     type: "POST DOCUMENT",
                     value: value,
@@ -408,7 +408,7 @@ export const action = (value) => {
         };
     }
     else {
-        console.log("anything")
+        // console.log("anything")
         return {
             type: "ACTION",
             value: value

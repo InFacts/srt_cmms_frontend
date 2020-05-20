@@ -15,7 +15,10 @@ class BottomContent extends React.Component {
   sumTotalLineItem = (quantity, per_unit_price) => {
     var sum = 0;
     sum = quantity * per_unit_price;
-    return sum;
+    if (sum === 0 || sum == NaN) {
+      return null
+    }
+    else return sum;
   }
 
   sumTotal = (list_show) => {
@@ -30,10 +33,58 @@ class BottomContent extends React.Component {
     return sumTotal
   }
 
-  chooseUnit = (uom_group_id) => {
-    // axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/unit-of-measures?uom_group_id=${uom_group_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
-    //   console.log(res)
-    // });
+  requiredQuantityModeEdit = (description, quantity) => {
+    if (description !== "") {
+      return (
+        <input type="number" min="1" className="cancel-default float-right" value={quantity} onChange={(e) => this.props.onChangeQuilityEachRow(e)} required></input>
+      )
+    }
+    else {
+      return (
+        <input type="number" min="1" className="cancel-default float-right" value={quantity} onChange={(e) => this.props.onChangeQuilityEachRow(e)}></input>
+      )
+    }
+  }
+
+  requiredPerUnitPriceModeEdit = (description, per_unit_price) => {
+    if (description !== "") {
+      return (
+        <input type="number" min="1" className="cancel-default float-right" value={per_unit_price} onChange={(e) => this.props.onChangeUnitPerBathEachRow(e)} required></input>
+      )
+    }
+    else {
+      return (
+          <input type="number" min="1" className="cancel-default float-right" value={per_unit_price} onChange={(e) => this.props.onChangeUnitPerBathEachRow(e)}></input>
+      )
+    }
+  }
+
+  requiredQuantity = (description, quantity) => {
+    if (description !== "") {
+      console.log("required")
+      return (
+        <input type="number" min="1" className="cancel-default float-right" value={quantity} onChange={(e) => this.props.onChangeQuilityEachRowModeAdd(e)} required></input>
+      )
+    }
+    else {
+      return (
+        <input type="number" min="1" className="cancel-default float-right" value={quantity} onChange={(e) => this.props.onChangeQuilityEachRowModeAdd(e)}></input>
+      )
+    }
+  }
+
+  requiredPerUnitPrice = (description, per_unit_price) => {
+    if (description !== "") {
+      console.log("required")
+      return (
+        <input type="number" min="1" className="cancel-default float-right" value={per_unit_price} onChange={(e) => this.props.onChangeUnitPerBathEachRowModeAdd(e)} required></input>
+      )
+    }
+    else {
+      return (
+          <input type="number" min="1" className="cancel-default float-right" value={per_unit_price} onChange={(e) => this.props.onChangeUnitPerBathEachRowModeAdd(e)}></input>
+      )
+    }
   }
 
   checkActionMode = (mode) => {
@@ -62,7 +113,13 @@ class BottomContent extends React.Component {
                       <td className="edit-padding">{list.internal_item_id}</td>
                       <td className="edit-padding">{list.description}</td>
                       <td className="edit-padding text-center">{list.quantity}</td>
-                      <td className="edit-padding text-center">{list.unit}</td>
+                      <td className="edit-padding text-center">
+                      <select className="edit-select-top" disabled="disabled">
+                          {list.list_uoms.map(function (list_uoms, index) {
+                            return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
+                          })}
+                        </select>
+                      </td>
                       <td className="edit-padding text-right">{list.per_unit_price}</td>
                       <td className="edit-padding text-right">{current.sumTotalLineItem(list.quantity, list.per_unit_price)}</td>
                     </tr>
@@ -110,17 +167,23 @@ class BottomContent extends React.Component {
                       <th className="edit-padding text-center">{index + 1}</th>
                       <td className="edit-padding">
                         <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
-                          <input type="text" className="p-search-box__input cancel-default-table" value={list.item_id} onChange={(e) => current.props.onChangeNoPartEachRow(e)} />
+                          <input type="text" className="p-search-box__input cancel-default-table" value={list.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRow(e)} />
                           <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPart" onClick={(e) => current.props.onClickNoPartEachRow(e)}></i></button>
                         </div>
                       </td>
-                      <td className="edit-padding">{list.name_part}</td>
+                      <td className="edit-padding">{list.description}</td>
                       <td className="edit-padding text-center">
-                        <input type="number" min="1" className="cancel-default float-right" value={list.quantity} onChange={(e) => current.props.onChangeQuilityEachRow(e)}></input>
+                        {current.requiredQuantityModeEdit(list.description, list.quantity)}
                       </td>
-                      <td className="edit-padding text-center">{list.uom_id}</td>
+                      <td className="edit-padding text-center">
+                        <select className="edit-select-top">
+                          {list.list_uoms.map(function (list_uoms, index) {
+                            return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
+                          })}
+                        </select>
+                      </td>
                       <td className="edit-padding text-right">
-                        <input type="number" min="1" className="cancel-default float-right" value={list.per_unit_price} onChange={(e) => current.props.onChangeUnitPerBathEachRow(e)}></input>
+                        {current.requiredPerUnitPriceModeEdit(list.description, list.per_unit_price)}
                       </td>
                       <td className="edit-padding text-right">{current.sumTotalLineItem(list.quantity, list.per_unit_price)}
                       </td>
@@ -139,7 +202,7 @@ class BottomContent extends React.Component {
           <div className="grid_12">
             <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
             <div className="grid_4">
-              <textarea className="edit" name="Text1" cols="40" rows="2" value={current.props.document_show.note} onChange={(e) => this.props.onChangeNote(e)}></textarea>
+              <textarea className="edit" name="Text1" cols="40" rows="2" value={current.props.document_show.remark} onChange={(e) => this.props.onChangeNote(e)}></textarea>
             </div>
           </div>
 
@@ -153,7 +216,7 @@ class BottomContent extends React.Component {
                   <div className="grid_2"><p className="cancel-default">เลขที่อะไหล่</p></div>
                   <div className="grid_8 pull_0">
                     <input type="text" className="cancel-default grid_3" value={this.props.list_no_part} onChange={(e) => this.props.onChangeNoPart(e)} />
-                    <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickSearchPopUpNoPart(e)}>ค้นหา</button>
+                    <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickSearchPopUpNoPart(this.props.list_no_part)}>ค้นหา</button>
                   </div>
                 </div>
 
@@ -170,8 +233,8 @@ class BottomContent extends React.Component {
                       {this.props.no_part_show.map(function (no_part_show, index) {
                         return (
                           <tr key={index} id={index}>
-                            <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show.no_part} </td>
-                            <td className="edit-padding" style={{ minWidth: "300px" }}> {no_part_show.name_part} </td>
+                            <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show.internal_item_id} </td>
+                            <td className="edit-padding" style={{ minWidth: "300px" }}> {no_part_show.description} </td>
                             <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
                               <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectPopUpNoPart(e)} aria-label="Close active modal" aria-controls="modalNoPart" id="closeModalNoPart" >เลือก</button>
                             </td>
@@ -183,7 +246,7 @@ class BottomContent extends React.Component {
                 </div>
 
                 <div className="grid_12">
-                  <button className="button-blue float-right grid_1 mr-5" type="button" aria-label="Close active modal" aria-controls="modalNoPart" id="closeModalNoPart">กลับ</button>
+                  <button className="button-blue float-right grid_1 mr-5 mt-3" type="button" aria-label="Close active modal" aria-controls="modalNoPart" id="closeModalNoPart">กลับ</button>
                 </div>
 
               </div>
@@ -193,7 +256,6 @@ class BottomContent extends React.Component {
       )
     }
     if (mode === "add") {
-      // console.log(this.props.list_show_mode_add, "list_show_mode_add>>>>>")
       const current = this;
       return (
         <>
@@ -212,6 +274,7 @@ class BottomContent extends React.Component {
               </thead>
               <tbody>
                 {current.props.list_show_mode_add.map(function (list, index) {
+                  console.log(list, "list")
                   return (
                     <tr key={index} id={index}>
                       <th className="edit-padding text-center">{index + 1}</th>
@@ -223,18 +286,17 @@ class BottomContent extends React.Component {
                       </td>
                       <td className="edit-padding">{list.description}</td>
                       <td className="edit-padding text-center">
-                        <input type="number" min="1" className="cancel-default float-right" value={list.quantity} onChange={(e) => current.props.onChangeQuilityEachRowModeAdd(e)}></input>
+                        {current.requiredQuantity(list.description, list.quantity)}
                       </td>
                       <td className="edit-padding text-center">
-                        {current.chooseUnit(list.uom_group_id)}
-                        {/* <select className="edit-select-top">
-                          {this.props.level_list.map(function (level, index) {
-                            return <option defaultValue={level.id} key={index}> {level.type} </option>
+                        <select className="edit-select-top">
+                          {list.list_uoms.map(function (list_uoms, index) {
+                            return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
                           })}
-                        </select> */}
-                        </td>
+                        </select>
+                      </td>
                       <td className="edit-padding text-right">
-                        <input type="number" min="1" className="cancel-default float-right" value={list.per_unit_price} onChange={(e) => current.props.onChangeUnitPerBathEachRowModeAdd(e)}></input>
+                        {current.requiredPerUnitPrice(list.description, list.per_unit_price)}
                       </td>
                       <td className="edit-padding text-right">{current.sumTotalLineItem(list.quantity, list.per_unit_price)}</td>
                     </tr>
@@ -379,7 +441,7 @@ export const onChangeNoPartEachRow = (e) => {
   }
 }
 export const onClickNoPartEachRow = (e) => {
-  console.log(e.target.parentNode.parentNode.parentNode.parentNode)
+  // console.log(e.target.parentNode.parentNode.parentNode.parentNode)
   return {
     type: "ON CLICK NO PART EACH ROW",
     rowIndex: e.target.parentNode.parentNode.parentNode.parentNode.id
@@ -406,10 +468,17 @@ export const onChangeTotalEachRow = (e) => {
     rowIndex: e.target.parentNode.parentNode.id
   }
 }
-export const onClickSearchPopUpNoPart = (e) => {
-  return {
-    type: "ON CLICK SEARCH POPUP NO PART",
-  }
+export const onClickSearchPopUpNoPart = (list_no_part) => {
+  return function (dispatch) {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items?internal_item_id=${list_no_part}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+      // console.log(res)
+      // dispatch
+      dispatch({
+        type: "ON CLICK SEARCH POPUP NO PART",
+        value: res.data.results
+      });
+    });
+  };
 }
 export const onClickSelectPopUpNoPart = (e) => {
   return {
