@@ -82,7 +82,7 @@ class TopContent extends React.Component {
               <input type="text" className="cancel-default" defaultValue={current.props.document_show.created_by_admin_name_th} disabled="disabled"></input>
             </div>
             <div className="grid_3 float-right">
-              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.dest_warehouse_name} disabled="disabled"></input>
+              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.dest_warehouse_id} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">คลัง</p>
@@ -196,11 +196,11 @@ class TopContent extends React.Component {
               <p className="top-text">ผู้สร้างเอกสาร</p>
             </div>
             <div className="grid_3 pull_1">
-              <input type="text" className="cancel-default" defaultValue={current.props.document_show.created_by_admin_name_th}onChange={(e) => this.props.onChangeByAdminNameModeAdd(e)} required></input>
+              <input type="text" className="cancel-default" value={current.props.document_show.created_by_admin_name_th}onChange={(e) => this.props.onChangeByAdminNameModeAdd(e)} required></input>
             </div>
             <div className="grid_3 float-right">
               <div className="p-search-box cancel-margin">
-                <input type="text" className="p-search-box__input cancel-default" value={current.props.document_show_mode_add.dest_warehouse_name} onChange={(e) => this.props.onChangeMyInventoryModeAdd(e)} required />
+                <input type="text" className="p-search-box__input cancel-default" value={current.props.document_show_mode_add.dest_warehouse_id} onChange={(e) => this.props.onChangeMyInventoryModeAdd(e)} required />
                 <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalInventory" aria-controls="modalInventory"></i></button>
               </div>
             </div>
@@ -299,8 +299,15 @@ class TopContent extends React.Component {
               <div className="grid_12">
                 <div className="grid_2"><p className="cancel-default">เลขที่คลัง</p></div>
                 <div className="grid_8 pull_0">
-                  <input type="text" className="cancel-default grid_3" value={this.props.document_show_mode_add.dest_warehouse_name} onChange={(e) => this.props.onChangeMyInventoryModeAdd(e)} />
-                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchInventory(this.props.document_show_mode_add.dest_warehouse_name)}>ค้นหา</button>
+                  <input type="text" className="cancel-default grid_3" value={this.props.document_show_mode_add.dest_warehouse_id} onChange={(e) => this.props.onChangeMyInventoryModeAdd(e)} />
+                  {/* <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchInventory(this.props.document_show_mode_add.dest_warehouse_id)}>ค้นหา</button> */}
+                </div>
+              </div>
+              <div className="grid_12">
+                <div className="grid_2"><p className="cancel-default">ชื่อคลัง</p></div>
+                <div className="grid_8 pull_0">
+                  <input type="text" className="cancel-default grid_3" value={this.props.document_show_mode_add.dest_warehouse_name} onChange={(e) => this.props.onChangeMyInventoryNameModeAdd(e)} />
+                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchInventory(this.props.document_show_mode_add.dest_warehouse_id, this.props.document_show_mode_add.dest_warehouse_name)}>ค้นหา</button>
                 </div>
               </div>
 
@@ -317,7 +324,7 @@ class TopContent extends React.Component {
                     {this.props.inventory_show_popup.map(function (inventory_show_popup, index) {
                       return (
                         <tr key={index} id={index}>
-                          <td className="edit-padding" style={{ minWidth: "150px" }}> {inventory_show_popup.no_inventory} </td>
+                          <td className="edit-padding" style={{ minWidth: "150px" }}> {inventory_show_popup.warehouse_id} </td>
                           <td className="edit-padding" style={{ minWidth: "300px" }}> {inventory_show_popup.name} </td>
                           <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
                             <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectInventory(e)} aria-label="Close active modal" aria-controls="modalInventory" id="closeModalInventory" >เลือก</button>
@@ -330,7 +337,7 @@ class TopContent extends React.Component {
               </div>
 
               <div className="grid_12">
-                <button className="button-blue float-right grid_1 mr-5" type="button" aria-label="Close active modal" aria-controls="modalInventory" id="closeModalInventory">กลับ</button>
+                <button className="button-blue float-right grid_1 mr-5 mt-3" type="button" aria-label="Close active modal" aria-controls="modalInventory" id="closeModalInventory">กลับ</button>
               </div>
 
             </div>
@@ -363,7 +370,7 @@ const mapDispatchToProps = (dispatch) => ({
   onChangeDate: (e) => dispatch(onChangeDate(e)),
   onChangeMyInventory: (e) => dispatch(onChangeMyInventory(e)),
   onChangeNoPo: (e) => dispatch(onChangeNoPo(e)),
-  onClickPopUpSearchInventory: (e) => dispatch(onClickPopUpSearchInventory(e)),
+  onClickPopUpSearchInventory: (e, i) => dispatch(onClickPopUpSearchInventory(e,i)),
   onClickSelectInventory: (e) => dispatch(onClickSelectInventory(e)),
 
   // Mode Add
@@ -373,6 +380,7 @@ const mapDispatchToProps = (dispatch) => ({
   onChangeDateModeAdd: (e) => dispatch(onChangeDateModeAdd(e)),
   onChangeNoPoModeAdd: (e) => dispatch(onChangeNoPoModeAdd(e)),
   onChangeMyInventoryModeAdd: (e) => dispatch(onChangeMyInventoryModeAdd(e)),
+  onChangeMyInventoryNameModeAdd: (e) => dispatch(onChangeMyInventoryNameModeAdd(e)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(TopContent);
 
@@ -437,9 +445,10 @@ export const onChangeNoPo = (e) => {
     value: e.target.value
   }
 }
-export const onClickPopUpSearchInventory = (dest_warehouse_name) => {
+export const onClickPopUpSearchInventory = (dest_warehouse_id, dest_warehouse_name) => {
+  console.log("dest_warehouse_id",dest_warehouse_id, "dest_warehouse_name",dest_warehouse_name)
   return function (dispatch) {
-    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/warehouses?name=${dest_warehouse_name}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/warehouses?warehouse_id=${dest_warehouse_id}&name=${dest_warehouse_name}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       console.log(res)
       dispatch({
         type: "CLICK SEARCH POPUP INVENTORY",
@@ -491,6 +500,12 @@ export const onChangeNoPoModeAdd = (e) => {
 export const onChangeMyInventoryModeAdd = (e) => {
   return {
     type: "ON CHANGE MY INVENTORY MODE ADD",
+    value: e.target.value
+  }
+}
+export const onChangeMyInventoryNameModeAdd = (e) => {
+  return {
+    type: "ON CHANGE MY INVENTORY NAMAE MODE ADD",
     value: e.target.value
   }
 }

@@ -29,6 +29,7 @@ const initialState = {
     "created_by_admin_name_th": "",
     "document_status_id": "",
     "src_warehouse_id": 999,
+    "dest_warehouse_id": "",
     "dest_warehouse_name": "",
     "po_id": "",
     "line_items": []
@@ -39,7 +40,7 @@ const initialState = {
       "internal_item_id": "",
       "description": "",
       "quantity": "",
-      "uom_id": "",
+      "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
     },
@@ -48,7 +49,7 @@ const initialState = {
       "internal_item_id": "",
       "description": "",
       "quantity": "",
-      "uom_id": "",
+      "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
     },
@@ -57,7 +58,7 @@ const initialState = {
       "internal_item_id": "",
       "description": "",
       "quantity": "",
-      "uom_id": "",
+      "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
     },
@@ -66,7 +67,7 @@ const initialState = {
       "internal_item_id": "",
       "description": "",
       "quantity": "",
-      "uom_id": "",
+      "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
     },
@@ -75,7 +76,7 @@ const initialState = {
       "internal_item_id": "",
       "description": "",
       "quantity": "",
-      "uom_id": "",
+      "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
     },
@@ -84,7 +85,7 @@ const initialState = {
       "internal_item_id": "",
       "description": "",
       "quantity": "",
-      "uom_id": "",
+      "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
     },
@@ -93,7 +94,7 @@ const initialState = {
       "internal_item_id": "",
       "description": "",
       "quantity": "",
-      "uom_id": "",
+      "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
     },
@@ -102,7 +103,7 @@ const initialState = {
       "internal_item_id": "",
       "description": "",
       "quantity": "",
-      "uom_id": "",
+      "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
     },
@@ -111,7 +112,7 @@ const initialState = {
       "internal_item_id": "",
       "description": "",
       "quantity": "",
-      "uom_id": "",
+      "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
     },
@@ -120,7 +121,7 @@ const initialState = {
       "internal_item_id": "",
       "description": "",
       "quantity": "",
-      "uom_id": "",
+      "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
     },
@@ -268,18 +269,14 @@ export default (state = initialState, action) => {
     case "CLICK SEARCH POPUP INVENTORY":
       return {
         ...state,
-        // inventory_show_popup: initialState.inventory.filter(function (inventory) {
-        //   const regex = new RegExp(`${state.document_specific_show.src_warehouse_id}`, 'i');
-        //   var isMatch = regex.test(inventory.no_inventory);
-        //   return (isMatch);
-        // }),
+        inventory_show_popup: action.value.results
       }
     case "CLICK SELECT POPUP INVENTORY":
-      var clone_document_specific_show = { ...state.document_specific_show };
-      clone_document_specific_show.src_warehouse_id = state.inventory_show_popup[action.row_inventory_show_popup].no_inventory
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.dest_warehouse_id = state.inventory_show_popup[action.row_inventory_show_popup].warehouse_id
       return {
         ...state,
-        document_show: clone_document_show,
+        document_show_mode_add: clone_document_show_mode_add,
       }
     case "ON CHANGE NOTE":
       var clone_document_show = { ...state.document_show };
@@ -345,11 +342,7 @@ export default (state = initialState, action) => {
     case "ON CLICK SEARCH POPUP NO PART ADD MODE":
       return {
         ...state,
-        no_part_show_mode_add: initialState.raw_no_part.filter(function (raw_no_part) {
-          const regex = new RegExp(`${state.list_no_part_mode_add}`, 'i');
-          var isMatch = regex.test(raw_no_part.no_part);
-          return (isMatch);
-        }),
+        no_part_show_mode_add: action.value
       }
     case "ON CHANGE NO PART MODE ADD":
       return {
@@ -357,11 +350,12 @@ export default (state = initialState, action) => {
         list_no_part_mode_add: action.value
       }
     case "ON CLICK SELECT POPUP NO PART MODE ADD":
-      // console.log(state.no_part_show_mode_add[action.rowIndex], "and", state.list_show_mode_add[state.list_show_mode_add_row_index])
+      // console.log(state.list_show_mode_add[action.rowIndex], "<<<<<<<<<")
       var clone_list_show_mode_add = [...state.list_show_mode_add];
-      clone_list_show_mode_add[state.list_show_mode_add_row_index] = state.no_part_show_mode_add[action.rowIndex]
-      clone_list_show_mode_add[state.list_show_mode_add_row_index].quility = 1
-      clone_list_show_mode_add[state.list_show_mode_add_row_index].total = 1
+      clone_list_show_mode_add[state.list_show_mode_add_row_index].item_id = state.no_part_show_mode_add[action.rowIndex].item_id
+      clone_list_show_mode_add[state.list_show_mode_add_row_index].internal_item_id = state.no_part_show_mode_add[action.rowIndex].internal_item_id
+      clone_list_show_mode_add[state.list_show_mode_add_row_index].description = state.no_part_show_mode_add[action.rowIndex].description
+      clone_list_show_mode_add[state.list_show_mode_add_row_index].uom_group_id = state.no_part_show_mode_add[action.rowIndex].uom_group_id
       return {
         ...state,
         list_show_mode_add: clone_list_show_mode_add
@@ -371,8 +365,7 @@ export default (state = initialState, action) => {
       clone_list_show_mode_add[action.rowIndex].quantity = action.value
       return {
         ...state,
-        list_show_mode_add: clone_list_show_mode_add,
-        document_show_mode_add: clone_document_show_mode_add
+        list_show_mode_add: clone_list_show_mode_add
       }
     case "ON CHANGE UNIT PER BATH EACH ROW MODE ADD":
       var clone_list_show_mode_add = [...state.list_show_mode_add];
@@ -398,6 +391,13 @@ export default (state = initialState, action) => {
       }
     case "ON CHANGE MY INVENTORY MODE ADD":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.dest_warehouse_id = action.value;
+      return {
+        ...state,
+        document_show_mode_add: clone_document_show_mode_add
+      }
+    case "ON CHANGE MY INVENTORY NAMAE MODE ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
       clone_document_show_mode_add.dest_warehouse_name = action.value;
       return {
         ...state,
@@ -410,6 +410,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         action: action.value,
+        document_id: action.resPost.document_id,
         clickable: action.value === "add" || action.value === "edit" ? true : false
       }
 

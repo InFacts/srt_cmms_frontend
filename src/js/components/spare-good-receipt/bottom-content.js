@@ -1,6 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux'
 
+import axios from "axios";
+import { API_PORT_DATABASE } from '../../config_port.js';
+import { API_URL_DATABASE } from '../../config_url.js';
+
 import Files from '../common/files'
 
 import '../../../css/style.css'
@@ -14,9 +18,9 @@ class BottomContent extends React.Component {
     return sum;
   }
 
-  sumTotal = () => {
+  sumTotal = (list_show) => {
     var sumTotal = 0;
-    this.props.list_show.map(function (list, index) {
+    list_show.map(function (list, index) {
       var sum = 0;
       sum = list.quantity * list.per_unit_price;
       sumTotal = sumTotal + sum;
@@ -24,6 +28,12 @@ class BottomContent extends React.Component {
     })
     // console.log("sum out", sumTotal)
     return sumTotal
+  }
+
+  chooseUnit = (uom_group_id) => {
+    // axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/unit-of-measures?uom_group_id=${uom_group_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+    //   console.log(res)
+    // });
   }
 
   checkActionMode = (mode) => {
@@ -37,7 +47,7 @@ class BottomContent extends React.Component {
                 <tr>
                   <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
                   <th className="font" style={{ minWidth: "130px" }}>เลขที่อะไหล่</th>
-                  <th className="font" style={{ minWidth: "448px" }}>ชื่ออะไหล่</th>
+                  <th className="font" style={{ minWidth: "448px" }}>รายละเอียด</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>หน่วยนับ</th>
                   <th className="font text-right" style={{ minWidth: "80px" }}>ราคาต่อหน่วย</th>
@@ -48,7 +58,7 @@ class BottomContent extends React.Component {
                 {current.props.list_show.map(function (list, index) {
                   return (
                     <tr key={index}>
-                      <th className="edit-padding text-center">{index+1}</th>
+                      <th className="edit-padding text-center">{index + 1}</th>
                       <td className="edit-padding">{list.internal_item_id}</td>
                       <td className="edit-padding">{list.description}</td>
                       <td className="edit-padding text-center">{list.quantity}</td>
@@ -63,7 +73,7 @@ class BottomContent extends React.Component {
           </div>
           <div className="grid_12 mt-3">
             <div className="grid_4 float-right">
-              <input type="text" className="cancel-default float-right" value={current.sumTotal()} disabled="disabled"></input>
+              <input type="text" className="cancel-default float-right" value={current.sumTotal(current.props.list_show)} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
           </div>
@@ -86,7 +96,7 @@ class BottomContent extends React.Component {
                 <tr>
                   <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
                   <th className="font" style={{ minWidth: "130px" }}>เลขที่อะไหล่</th>
-                  <th className="font" style={{ minWidth: "448px" }}>ชื่ออะไหล่</th>
+                  <th className="font" style={{ minWidth: "448px" }}>รายละเอียด</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>หน่วยนับ</th>
                   <th className="font text-right" style={{ minWidth: "80px" }}>ราคาต่อหน่วย</th>
@@ -97,7 +107,7 @@ class BottomContent extends React.Component {
                 {current.props.list_show.map(function (list, index) {
                   return (
                     <tr key={index} id={index}>
-                      <th className="edit-padding text-center">{index+1}</th>
+                      <th className="edit-padding text-center">{index + 1}</th>
                       <td className="edit-padding">
                         <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
                           <input type="text" className="p-search-box__input cancel-default-table" value={list.item_id} onChange={(e) => current.props.onChangeNoPartEachRow(e)} />
@@ -110,7 +120,7 @@ class BottomContent extends React.Component {
                       </td>
                       <td className="edit-padding text-center">{list.uom_id}</td>
                       <td className="edit-padding text-right">
-                      <input type="number" min="1" className="cancel-default float-right" value={list.per_unit_price} onChange={(e) => current.props.onChangeUnitPerBathEachRow(e)}></input>
+                        <input type="number" min="1" className="cancel-default float-right" value={list.per_unit_price} onChange={(e) => current.props.onChangeUnitPerBathEachRow(e)}></input>
                       </td>
                       <td className="edit-padding text-right">{current.sumTotalLineItem(list.quantity, list.per_unit_price)}
                       </td>
@@ -122,7 +132,7 @@ class BottomContent extends React.Component {
           </div>
           <div className="grid_12 mt-3">
             <div className="grid_4 float-right">
-              <input type="number" min="1" className="cancel-default float-right" value={current.sumTotal()} onChange={(e) => this.props.onChangeTotal(e)} disabled="disabled"></input>
+              <input type="number" min="1" className="cancel-default float-right" value={current.sumTotal(current.props.list_show)} onChange={(e) => this.props.onChangeTotal(e)} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
           </div>
@@ -152,7 +162,7 @@ class BottomContent extends React.Component {
                     <thead>
                       <tr>
                         <th className="font" style={{ minWidth: "300px" }}>เลขที่อะไหล่</th>
-                        <th className="font" style={{ minWidth: "450px" }}>ชื่ออะไหล่</th>
+                        <th className="font" style={{ minWidth: "450px" }}>รายละเอียด</th>
                         <th className="font" style={{ minWidth: "150px" }}>Action</th>
                       </tr>
                     </thead>
@@ -183,6 +193,7 @@ class BottomContent extends React.Component {
       )
     }
     if (mode === "add") {
+      // console.log(this.props.list_show_mode_add, "list_show_mode_add>>>>>")
       const current = this;
       return (
         <>
@@ -192,7 +203,7 @@ class BottomContent extends React.Component {
                 <tr>
                   <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
                   <th className="font" style={{ minWidth: "130px" }}>เลขที่อะไหล่</th>
-                  <th className="font" style={{ minWidth: "448px" }}>ชื่ออะไหล่</th>
+                  <th className="font" style={{ minWidth: "448px" }}>รายละเอียด</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>หน่วยนับ</th>
                   <th className="font text-right" style={{ minWidth: "80px" }}>ราคาต่อหน่วย</th>
@@ -203,7 +214,7 @@ class BottomContent extends React.Component {
                 {current.props.list_show_mode_add.map(function (list, index) {
                   return (
                     <tr key={index} id={index}>
-                      <th className="edit-padding text-center">{index+1}</th>
+                      <th className="edit-padding text-center">{index + 1}</th>
                       <td className="edit-padding">
                         <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
                           <input type="text" className="p-search-box__input cancel-default-table" value={list.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRowModeAdd(e)} />
@@ -214,9 +225,16 @@ class BottomContent extends React.Component {
                       <td className="edit-padding text-center">
                         <input type="number" min="1" className="cancel-default float-right" value={list.quantity} onChange={(e) => current.props.onChangeQuilityEachRowModeAdd(e)}></input>
                       </td>
-                      <td className="edit-padding text-center">{list.unit}</td>
+                      <td className="edit-padding text-center">
+                        {current.chooseUnit(list.uom_group_id)}
+                        {/* <select className="edit-select-top">
+                          {this.props.level_list.map(function (level, index) {
+                            return <option defaultValue={level.id} key={index}> {level.type} </option>
+                          })}
+                        </select> */}
+                        </td>
                       <td className="edit-padding text-right">
-                      <input type="number" min="1" className="cancel-default float-right" value={list.per_unit_price} onChange={(e) => current.props.onChangeUnitPerBathEachRowModeAdd(e)}></input>
+                        <input type="number" min="1" className="cancel-default float-right" value={list.per_unit_price} onChange={(e) => current.props.onChangeUnitPerBathEachRowModeAdd(e)}></input>
                       </td>
                       <td className="edit-padding text-right">{current.sumTotalLineItem(list.quantity, list.per_unit_price)}</td>
                     </tr>
@@ -227,7 +245,7 @@ class BottomContent extends React.Component {
           </div>
           <div className="grid_12 mt-3">
             <div className="grid_4 float-right">
-              <input type="number" min="1" className="cancel-default float-right" value={current.sumTotal()} disabled="disabled"></input>
+              <input type="number" min="1" className="cancel-default float-right" value={current.sumTotal(current.props.list_show_mode_add)} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
           </div>
@@ -248,7 +266,7 @@ class BottomContent extends React.Component {
                   <div className="grid_2"><p className="cancel-default">เลขที่อะไหล่</p></div>
                   <div className="grid_8 pull_0">
                     <input type="text" className="cancel-default grid_3" value={this.props.list_no_part_mode_add} onChange={(e) => this.props.onChangeNoPartModeAdd(e)} />
-                    <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickSearchPopUpNoPartModeAdd(e)}>ค้นหา</button>
+                    <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickSearchPopUpNoPartModeAdd(this.props.list_no_part_mode_add)}>ค้นหา</button>
                   </div>
                 </div>
 
@@ -257,7 +275,7 @@ class BottomContent extends React.Component {
                     <thead>
                       <tr>
                         <th className="font" style={{ minWidth: "300px" }}>เลขที่อะไหล่</th>
-                        <th className="font" style={{ minWidth: "450px" }}>ชื่ออะไหล่</th>
+                        <th className="font" style={{ minWidth: "450px" }}>รายละเอียด</th>
                         <th className="font" style={{ minWidth: "150px" }}>Action</th>
                       </tr>
                     </thead>
@@ -265,8 +283,8 @@ class BottomContent extends React.Component {
                       {this.props.no_part_show_mode_add.map(function (no_part_show_mode_add, index) {
                         return (
                           <tr key={index} id={index}>
-                            <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show_mode_add.no_part} </td>
-                            <td className="edit-padding" style={{ minWidth: "300px" }}> {no_part_show_mode_add.name_part} </td>
+                            <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show_mode_add.internal_item_id} </td>
+                            <td className="edit-padding" style={{ minWidth: "300px" }}> {no_part_show_mode_add.description} </td>
                             <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
                               <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectPopUpNoPartModeAdd(e)} aria-label="Close active modal" aria-controls="modalNoPartModeAdd" id="closeModalNoPart" >เลือก</button>
                             </td>
@@ -277,7 +295,7 @@ class BottomContent extends React.Component {
                   </table>
                 </div>
                 <div className="grid_12">
-                  <button className="button-blue float-right grid_1 mr-5" type="button" aria-label="Close active modal" aria-controls="modalNoPartModeAdd" id="closeModalNoPart">กลับ</button>
+                  <button className="button-blue float-right grid_1 mr-5 mt-3" type="button" aria-label="Close active modal" aria-controls="modalNoPartModeAdd" id="closeModalNoPart">กลับ</button>
                 </div>
               </div>
             </div>
@@ -415,16 +433,22 @@ export const onChangeNoPartEachRowModeAdd = (e) => {
   }
 }
 export const onClickNoPartEachRowModeAdd = (e) => {
-  // console.log(e.target.parentNode.parentNode.parentNode.parentNode)
   return {
     type: "ON CLICK NO PART EACH ROW MODE ADD",
     rowIndex: e.target.parentNode.parentNode.parentNode.parentNode.id
   }
 }
-export const onClickSearchPopUpNoPartModeAdd = (e) => {
-  return {
-    type: "ON CLICK SEARCH POPUP NO PART ADD MODE",
-  }
+export const onClickSearchPopUpNoPartModeAdd = (list_no_part_mode_add) => {
+  return function (dispatch) {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items?internal_item_id=${list_no_part_mode_add}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+      // console.log(res)
+      // dispatch
+      dispatch({
+        type: "ON CLICK SEARCH POPUP NO PART ADD MODE",
+        value: res.data.results
+      });
+    });
+  };
 }
 export const onChangeNoPartModeAdd = (e) => {
   return {
@@ -433,6 +457,7 @@ export const onChangeNoPartModeAdd = (e) => {
   }
 }
 export const onClickSelectPopUpNoPartModeAdd = (e) => {
+  // console.log(e.target.parentNode.parentNode)
   return {
     type: "ON CLICK SELECT POPUP NO PART MODE ADD",
     rowIndex: e.target.parentNode.parentNode.id
