@@ -282,7 +282,7 @@ class Toolbar extends React.Component {
                 ]
             }
         }
-        if(this.props.tool_mode === false) {
+        if (this.props.tool_mode === false) {
             menu = [
                 {
                     id: 1,
@@ -392,17 +392,19 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(mapStateToProps, mapDispatchToProps)(Toolbar);
 
 export const action = (value) => {
+    console.log("toolBar", value)
     if (value === "add") {
         return function (dispatch) {
-            return axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/new/0`).then((res) => {
-                // console.log("add document", res)
-                // dispatch
+            return axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/new/0`, "dataEmtry", { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+                console.log(res)
                 dispatch({
                     type: "POST DOCUMENT",
                     value: value,
                     resPost: res.data
                 });
-            });
+            }).catch(function (err) {
+                console.log(err)
+            })
         };
     }
     else {

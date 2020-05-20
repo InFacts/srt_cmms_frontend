@@ -49,10 +49,10 @@ class BottomContent extends React.Component {
                   return (
                     <tr key={index}>
                       <th className="edit-padding text-center">{index+1}</th>
-                      <td className="edit-padding">{list.item_id}</td>
-                      <td className="edit-padding">{list.name_part}</td>
+                      <td className="edit-padding">{list.internal_item_id}</td>
+                      <td className="edit-padding">{list.description}</td>
                       <td className="edit-padding text-center">{list.quantity}</td>
-                      <td className="edit-padding text-center">{list.uom_id}</td>
+                      <td className="edit-padding text-center">{list.unit}</td>
                       <td className="edit-padding text-right">{list.per_unit_price}</td>
                       <td className="edit-padding text-right">{current.sumTotalLineItem(list.quantity, list.per_unit_price)}</td>
                     </tr>
@@ -70,7 +70,7 @@ class BottomContent extends React.Component {
           <div className="grid_12">
             <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
             <div className="grid_4">
-              <textarea className="edit" name="Text1" cols="40" rows="2" defaultValue={current.props.document_show.note} disabled="disabled"></textarea>
+              <textarea className="edit" name="Text1" cols="40" rows="2" defaultValue={current.props.document_show.remark} disabled="disabled"></textarea>
             </div>
           </div>
         </>
@@ -206,17 +206,17 @@ class BottomContent extends React.Component {
                       <th className="edit-padding text-center">{index+1}</th>
                       <td className="edit-padding">
                         <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
-                          <input type="text" className="p-search-box__input cancel-default-table" value={list.no_part} onChange={(e) => current.props.onChangeNoPartEachRowModeAdd(e)} />
+                          <input type="text" className="p-search-box__input cancel-default-table" value={list.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRowModeAdd(e)} />
                           <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPartModeAdd" onClick={(e) => current.props.onClickNoPartEachRowModeAdd(e)}></i></button>
                         </div>
                       </td>
-                      <td className="edit-padding">{list.name_part}</td>
+                      <td className="edit-padding">{list.description}</td>
                       <td className="edit-padding text-center">
-                        <input type="number" min="1" className="cancel-default float-right" value={list.quility} onChange={(e) => current.props.onChangeQuilityEachRowModeAdd(e)}></input>
+                        <input type="number" min="1" className="cancel-default float-right" value={list.quantity} onChange={(e) => current.props.onChangeQuilityEachRowModeAdd(e)}></input>
                       </td>
                       <td className="edit-padding text-center">{list.unit}</td>
                       <td className="edit-padding text-right">
-                      <input type="number" min="1" className="cancel-default float-right" value={list.unit_per_bath} onChange={(e) => current.props.onChangeUnitPerBathEachRowModeAdd(e)}></input>
+                      <input type="number" min="1" className="cancel-default float-right" value={list.per_unit_price} onChange={(e) => current.props.onChangeUnitPerBathEachRowModeAdd(e)}></input>
                       </td>
                       <td className="edit-padding text-right">{current.sumTotalLineItem(list.quantity, list.per_unit_price)}</td>
                     </tr>
@@ -234,7 +234,7 @@ class BottomContent extends React.Component {
           <div className="grid_12">
             <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
             <div className="grid_4">
-              <textarea className="edit" name="Text1" cols="40" rows="2" value={current.props.document_show_mode_add.note} onChange={(e) => this.props.onChangeNoteModeAdd(e)}></textarea>
+              <textarea className="edit" name="Text1" cols="40" rows="2" value={current.props.document_show_mode_add.remark} onChange={(e) => this.props.onChangeNoteModeAdd(e)}></textarea>
             </div>
           </div>
 
