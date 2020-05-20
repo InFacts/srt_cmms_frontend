@@ -394,7 +394,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(Toolbar);
 export const action = (value) => {
     if (value === "add") {
         return function (dispatch) {
-            return axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/new/0`).then((res) => {
+            return axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/new/0`,{},{ headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
                 // console.log("add document", res)
                 // dispatch
                 dispatch({

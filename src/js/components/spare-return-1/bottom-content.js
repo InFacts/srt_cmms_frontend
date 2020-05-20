@@ -2,11 +2,32 @@ import React from 'react';
 import { connect } from 'react-redux'
 
 import Files from '../common/files'
+import axios from "axios";
 
+import { API_PORT_DATABASE } from '../../config_port.js';
+import { API_URL_DATABASE } from '../../config_url.js';
 import '../../../css/style.css'
 import '../../../css/table.css';
 
 class BottomContent extends React.Component {
+
+  sumTotalLineItem = (quantity, per_unit_price) => {
+    var sum = 0;
+    sum = quantity * per_unit_price;
+    return sum;
+  }
+
+  sumTotal = (list_show) => {
+    var sumTotal = 0;
+    list_show.map(function (list, index) {
+      var sum = 0;
+      sum = list.quantity * list.per_unit_price;
+      sumTotal = sumTotal + sum;
+      // return sumTotal
+    })
+    // console.log("sum out", sumTotal)
+    return sumTotal
+  }
 
   checkActionMode = (mode) => {
     const current = this;
@@ -30,13 +51,13 @@ class BottomContent extends React.Component {
                 {current.props.list_show.map(function (list, index) {
                   return (
                     <tr key={index}>
-                      <th className="edit-padding text-center">{index+1}</th>
-                      <td className="edit-padding">{list.item_id}</td>
-                      <td className="edit-padding">{list.name_part}</td>
+                      <th className="edit-padding text-center">{index + 1}</th>
+                      <td className="edit-padding">{list.internal_item_id}</td>
+                      <td className="edit-padding">{list.description}</td>
                       <td className="edit-padding text-center">{list.quantity}</td>
                       <td className="edit-padding text-center">{list.unit}</td>
-                      <td className="edit-padding text-right">{list.unit_per_bath}</td>
-                      <td className="edit-padding text-right">{list.total}</td>
+                      <td className="edit-padding text-right">{list.per_unit_price}</td>
+                      <td className="edit-padding text-right">{current.sumTotalLineItem(list.quantity, list.per_unit_price)}</td>
                     </tr>
                   )
                 })}
@@ -45,14 +66,14 @@ class BottomContent extends React.Component {
           </div>
           <div className="grid_12 mt-3">
             <div className="grid_4 float-right">
-              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.total} disabled="disabled"></input>
+              <input type="text" className="cancel-default float-right" value={current.sumTotal(current.props.list_show)} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
           </div>
           <div className="grid_12">
             <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
             <div className="grid_4">
-              <textarea className="edit" name="Text1" cols="40" rows="2" defaultValue={current.props.document_show.note} disabled="disabled"></textarea>
+              <textarea className="edit" name="Text1" cols="40" rows="2" defaultValue={current.props.document_show.remark} disabled="disabled"></textarea>
             </div>
           </div>
         </>
@@ -79,23 +100,22 @@ class BottomContent extends React.Component {
                 {current.props.list_show.map(function (list, index) {
                   return (
                     <tr key={index} id={index}>
-                      <th className="edit-padding text-center">{index+1}</th>
+                      <th className="edit-padding text-center">{index + 1}</th>
                       <td className="edit-padding">
                         <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
-                          <input type="text" className="p-search-box__input cancel-default-table" value={list.no_part} onChange={(e) => current.props.onChangeNoPartEachRow(e)} />
+                          <input type="text" className="p-search-box__input cancel-default-table" value={list.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRow(e)} />
                           <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPart" onClick={(e) => current.props.onClickNoPartEachRow(e)}></i></button>
                         </div>
                       </td>
-                      <td className="edit-padding">{list.name_part}</td>
+                      <td className="edit-padding">{list.description}</td>
                       <td className="edit-padding text-center">
-                        <input type="number" min="1" className="cancel-default float-right" value={list.quility} onChange={(e) => current.props.onChangeQuilityEachRow(e)}></input>
+                        <input type="number" min="1" className="cancel-default float-right" value={list.quantity} onChange={(e) => current.props.onChangeQuilityEachRow(e)}></input>
                       </td>
                       <td className="edit-padding text-center">{list.unit}</td>
                       <td className="edit-padding text-right">
-                      <input type="number" min="1" className="cancel-default float-right" value={list.unit_per_bath} onChange={(e) => current.props.onChangeUnitPerBathEachRow(e)}></input>
+                        <input type="number" min="1" className="cancel-default float-right" value={list.per_unit_price} onChange={(e) => current.props.onChangeUnitPerBathEachRow(e)}></input>
                       </td>
-                      <td className="edit-padding text-right">{list.total}
-                        {/* <input type="number" min="1" className="cancel-default float-right" value={list.total} onChange={(e) => current.props.onChangeTotalEachRow(e)}></input> */}
+                      <td className="edit-padding text-right">{current.sumTotalLineItem(list.quantity, list.per_unit_price)}
                       </td>
                     </tr>
                   )
@@ -105,14 +125,14 @@ class BottomContent extends React.Component {
           </div>
           <div className="grid_12 mt-3">
             <div className="grid_4 float-right">
-              <input type="number" min="1" className="cancel-default float-right" value={current.props.document_show.total} onChange={(e) => this.props.onChangeTotal(e)} disabled="disabled"></input>
+              <input type="number" min="1" className="cancel-default float-right" value={current.sumTotal(current.props.list_show)} onChange={(e) => this.props.onChangeTotal(e)} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
           </div>
           <div className="grid_12">
             <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
             <div className="grid_4">
-              <textarea className="edit" name="Text1" cols="40" rows="2" value={current.props.document_show.note} onChange={(e) => this.props.onChangeNote(e)}></textarea>
+              <textarea className="edit" name="Text1" cols="40" rows="2" value={current.props.document_show.remark} onChange={(e) => this.props.onChangeNote(e)}></textarea>
             </div>
           </div>
 
@@ -126,7 +146,7 @@ class BottomContent extends React.Component {
                   <div className="grid_2"><p className="cancel-default">เลขที่อะไหล่</p></div>
                   <div className="grid_8 pull_0">
                     <input type="text" className="cancel-default grid_3" value={this.props.list_no_part} onChange={(e) => this.props.onChangeNoPart(e)} />
-                    <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickSearchPopUpNoPart(e)}>ค้นหา</button>
+                    <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickSearchPopUpNoPart(this.props.list_no_part)}>ค้นหา</button>
                   </div>
                 </div>
 
@@ -143,8 +163,8 @@ class BottomContent extends React.Component {
                       {this.props.no_part_show.map(function (no_part_show, index) {
                         return (
                           <tr key={index} id={index}>
-                            <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show.no_part} </td>
-                            <td className="edit-padding" style={{ minWidth: "300px" }}> {no_part_show.name_part} </td>
+                            <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show.item_id} </td>
+                            <td className="edit-padding" style={{ minWidth: "300px" }}> {no_part_show.internal_item_id} </td>
                             <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
                               <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectPopUpNoPart(e)} aria-label="Close active modal" aria-controls="modalNoPart" id="closeModalNoPart" >เลือก</button>
                             </td>
@@ -186,24 +206,22 @@ class BottomContent extends React.Component {
                 {current.props.list_show_mode_add.map(function (list, index) {
                   return (
                     <tr key={index} id={index}>
-                      <th className="edit-padding text-center">{list.id}</th>
+                      <th className="edit-padding text-center">{index + 1}</th>
                       <td className="edit-padding">
                         <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
-                          <input type="text" className="p-search-box__input cancel-default-table" value={list.no_part} onChange={(e) => current.props.onChangeNoPartEachRowModeAdd(e)} />
+                          <input type="text" className="p-search-box__input cancel-default-table" value={list.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRowModeAdd(e)} />
                           <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPartModeAdd" onClick={(e) => current.props.onClickNoPartEachRowModeAdd(e)}></i></button>
                         </div>
                       </td>
-                      <td className="edit-padding">{list.name_part}</td>
+                      <td className="edit-padding">{list.description}</td>
                       <td className="edit-padding text-center">
-                        <input type="number" min="1" className="cancel-default float-right" value={list.quility} onChange={(e) => current.props.onChangeQuilityEachRowModeAdd(e)}></input>
+                        <input type="number" min="1" className="cancel-default float-right" value={list.quantity} onChange={(e) => current.props.onChangeQuilityEachRowModeAdd(e)}></input>
                       </td>
                       <td className="edit-padding text-center">{list.unit}</td>
                       <td className="edit-padding text-right">
-                      <input type="number" min="1" className="cancel-default float-right" value={list.unit_per_bath} onChange={(e) => current.props.onChangeUnitPerBathEachRowModeAdd(e)}></input>
+                        <input type="number" min="1" className="cancel-default float-right" value={list.per_unit_price} onChange={(e) => current.props.onChangeUnitPerBathEachRowModeAdd(e)}></input>
                       </td>
-                      <td className="edit-padding text-right">{list.total}
-                        {/* <input type="number" min="1" className="cancel-default float-right" value={list.total} onChange={(e) => current.props.onChangeTotalEachRowModeAdd(e)}></input> */}
-                      </td>
+                      <td className="edit-padding text-right">{current.sumTotalLineItem(list.quantity, list.per_unit_price)}</td>
                     </tr>
                   )
                 })}
@@ -212,14 +230,14 @@ class BottomContent extends React.Component {
           </div>
           <div className="grid_12 mt-3">
             <div className="grid_4 float-right">
-              <input type="number" min="1" className="cancel-default float-right" value={current.props.document_show_mode_add.total} onChange={(e) => this.props.onChangeTotalModeAdd(e)} disabled="disabled"></input>
+              <input type="number" min="1" className="cancel-default float-right" value={current.sumTotal(current.props.list_show_mode_add)} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
           </div>
           <div className="grid_12">
             <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
             <div className="grid_4">
-              <textarea className="edit" name="Text1" cols="40" rows="2" value={current.props.document_show_mode_add.note} onChange={(e) => this.props.onChangeNoteModeAdd(e)}></textarea>
+              <textarea className="edit" name="Text1" cols="40" rows="2" value={current.props.document_show_mode_add.remark} onChange={(e) => this.props.onChangeNoteModeAdd(e)}></textarea>
             </div>
           </div>
 
@@ -233,7 +251,7 @@ class BottomContent extends React.Component {
                   <div className="grid_2"><p className="cancel-default">เลขที่อะไหล่</p></div>
                   <div className="grid_8 pull_0">
                     <input type="text" className="cancel-default grid_3" value={this.props.list_no_part_mode_add} onChange={(e) => this.props.onChangeNoPartModeAdd(e)} />
-                    <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickSearchPopUpNoPartModeAdd(e)}>ค้นหา</button>
+                    <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickSearchPopUpNoPartModeAdd(this.props.list_no_part_mode_add)}>ค้นหา</button>
                   </div>
                 </div>
 
@@ -250,8 +268,8 @@ class BottomContent extends React.Component {
                       {this.props.no_part_show_mode_add.map(function (no_part_show_mode_add, index) {
                         return (
                           <tr key={index} id={index}>
-                            <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show_mode_add.no_part} </td>
-                            <td className="edit-padding" style={{ minWidth: "300px" }}> {no_part_show_mode_add.name_part} </td>
+                            <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show_mode_add.item_id} </td>
+                            <td className="edit-padding" style={{ minWidth: "300px" }}> {no_part_show_mode_add.internal_item_id} </td>
                             <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
                               <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectPopUpNoPartModeAdd(e)} aria-label="Close active modal" aria-controls="modalNoPartModeAdd" id="closeModalNoPart" >เลือก</button>
                             </td>
@@ -316,7 +334,6 @@ const mapDispatchToProps = (dispatch) => ({
   onChangeTotalEachRow: (e) => dispatch(onChangeTotalEachRow(e)),
   onClickSearchPopUpNoPart: (e) => dispatch(onClickSearchPopUpNoPart(e)),
   onClickSelectPopUpNoPart: (e) => dispatch(onClickSelectPopUpNoPart(e)),
-  onChangeTotal: (e) => dispatch(onChangeTotal(e)),
   onChangeNote: (e) => dispatch(onChangeNote(e)),
 
   // Mode Add
@@ -328,7 +345,6 @@ const mapDispatchToProps = (dispatch) => ({
   onChangeUnitPerBathEachRowModeAdd: (e) => dispatch(onChangeUnitPerBathEachRowModeAdd(e)),
   onChangeQuilityEachRowModeAdd: (e) => dispatch(onChangeQuilityEachRowModeAdd(e)),
   onChangeTotalEachRowModeAdd: (e) => dispatch(onChangeTotalEachRowModeAdd(e)),
-  onChangeTotalModeAdd: (e) => dispatch(onChangeTotalModeAdd(e)),
   onChangeNoteModeAdd: (e) => dispatch(onChangeNoteModeAdd(e))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(BottomContent);
@@ -375,21 +391,25 @@ export const onChangeTotalEachRow = (e) => {
     rowIndex: e.target.parentNode.parentNode.id
   }
 }
-export const onClickSearchPopUpNoPart = (e) => {
-  return {
-    type: "ON CLICK SEARCH POPUP NO PART",
-  }
+export const onClickSearchPopUpNoPart = (item) => {
+  // return {
+  //   type: "ON CLICK SEARCH POPUP NO PART",
+  // }
+
+  return function (dispatch) {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items?internal_item_id=${item}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+      console.log(res)
+      dispatch({
+        type: "ON CLICK SEARCH POPUP NO PART",
+        value: res.data.results
+      });
+    });
+  };
 }
 export const onClickSelectPopUpNoPart = (e) => {
   return {
     type: "ON CLICK SELECT POPUP NO PART",
     rowIndex: e.target.parentNode.parentNode.id
-  }
-}
-export const onChangeTotal = (e) => {
-  return {
-    type: "ON CHANGE TOTAL",
-    value: e.target.value
   }
 }
 export const onChangeNote = (e) => {
@@ -414,10 +434,19 @@ export const onClickNoPartEachRowModeAdd = (e) => {
     rowIndex: e.target.parentNode.parentNode.parentNode.parentNode.id
   }
 }
-export const onClickSearchPopUpNoPartModeAdd = (e) => {
-  return {
-    type: "ON CLICK SEARCH POPUP NO PART ADD MODE",
-  }
+export const onClickSearchPopUpNoPartModeAdd = (item) => {
+  // return {
+  //   type: "ON CLICK SEARCH POPUP NO PART ADD MODE",
+  // }
+  return function (dispatch) {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items?internal_item_id=${item}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+      console.log(res)
+      dispatch({
+        type: "ON CLICK SEARCH POPUP NO PART ADD MODE",
+        value: res.data.results
+      });
+    });
+  };
 }
 export const onChangeNoPartModeAdd = (e) => {
   return {
@@ -450,13 +479,6 @@ export const onChangeTotalEachRowModeAdd = (e) => {
     type: "ON CHANGE TOTAL EACH ROW MODE ADD",
     value: e.target.value,
     rowIndex: e.target.parentNode.parentNode.id
-  }
-}
-export const onChangeTotalModeAdd = (e) => {
-  // console.log(e.target.value)
-  return {
-    type: "ON CHANGE TOTAL MODE ADD",
-    value: e.target.value
   }
 }
 export const onChangeNoteModeAdd = (e) => {
