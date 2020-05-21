@@ -20,10 +20,10 @@ class WrapForm extends React.Component {
         list_show.map(function (item, index) {
             if (item.description !== "") {
                 var myObj = {
-                    "document_id": current.props.document_id,
+                    "document_id": document_id,
                     "line_number": line_number,
                     "quantity": parseInt(item.quantity),
-                    "uom_id": item.uom_id,
+                    "uom_id": item.uom_group_id,
                     "per_unit_price": parseFloat(item.per_unit_price),
                     "item_id": item.item_id,
                     "item_status_id": 1
@@ -39,8 +39,8 @@ class WrapForm extends React.Component {
             "document": {
                 "document_id": document_id,
                 "internal_document_id": document_show.internal_document_id,
-                "refer_to_document": document_show.refer_to_document,
                 "remark": document_show.remark,
+                "refer_to_document": document_show.refer_to_document,
             },
             "specific": {
                 "document_id": document_id,
@@ -49,7 +49,7 @@ class WrapForm extends React.Component {
                 "line_items": line_items,
                 "movement": {
                     "document_id": document_id,
-
+                    
                 }
             }
         };
@@ -61,10 +61,12 @@ class WrapForm extends React.Component {
     handleSubmit = e => {
         e.preventDefault();
         const current = this;
+        
 
         if (this.props.actionMode === "add") {
+            console.log(this.packForm(this.props.document_id, this.props.document_show_mode_add, this.props.list_show_mode_add));
             return (
-                axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_id}/101`, this.packForm(this.props.document_id, this.props.document_show_mode_add, this.props.list_show_mode_add), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+                axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_id}/102`, this.packForm(this.props.document_id, this.props.document_show_mode_add, this.props.list_show_mode_add), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
                     .then(res => {
                         console.log(res);
                         this.props.onClearStateModeAdd()
@@ -74,8 +76,9 @@ class WrapForm extends React.Component {
             )
         }
         if (this.props.actionMode === "edit") {
+            console.log(this.packForm(this.props.document_show.document_id, this.props.document_show, this.props.list_show));
             return (
-                axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_show.document_id}/101`, this.packForm(this.props.document_show.document_id, this.props.document_show, this.props.list_show), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+                axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_show.document_id}/102`, this.packForm(this.props.document_show.document_id, this.props.document_show, this.props.list_show), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
                     .then(res => {
                         console.log(res);
                         this.props.onClearStateModeAdd()

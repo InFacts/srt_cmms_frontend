@@ -104,7 +104,7 @@ class TopContent extends React.Component {
             <div className="grid_3 pull_1">
               <div className="p-search-box cancel-margin">
                 <input type="text" className="p-search-box__input cancel-default" value={this.props.no_document} onChange={(e) => this.props.onChangeNoDocument(e)} />
-                <button type="button" className="p-search-box__button cancel-padding hidden" onClick={(e) => this.props.onClickOpenPopUp(e)}><i className="p-icon--search" id="showModalInventory" aria-controls="modalDocument"></i></button>
+                {/* s<button type="button" className="p-search-box__button cancel-padding hidden" onClick={(e) => this.props.onClickOpenPopUp(e)}><i className="p-icon--search" id="showModalInventory" aria-controls="modalDocument"></i></button> */}
               </div>
             </div>
             <div className="grid_3 float-right">
@@ -316,7 +316,7 @@ class TopContent extends React.Component {
                           <td className="edit-padding" style={{ minWidth: "150px" }}> {inventory_show_popup.warehouse_id} </td>
                           <td className="edit-padding" style={{ minWidth: "300px" }}> {inventory_show_popup.name} </td>
                           <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
-                            <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectInventory(inventory_show_popup.name)} aria-label="Close active modal" aria-controls="modalInventory" id="closeModalInventory" >เลือก</button>
+                            <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectInventory(inventory_show_popup)} aria-label="Close active modal" aria-controls="modalInventory" id="closeModalInventory" >เลือก</button>
                           </td>
                         </tr>
                       )
@@ -364,7 +364,7 @@ class TopContent extends React.Component {
                           <td className="edit-padding" style={{ minWidth: "150px" }}> {inventory_show_popup.warehouse_id} </td>
                           <td className="edit-padding" style={{ minWidth: "300px" }}> {inventory_show_popup.name} </td>
                           <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
-                            <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectInventoryModeAdd(inventory_show_popup.name)} aria-label="Close active modal" aria-controls="modalInventoryAdd" id="closeModalInventoryAdd" >เลือก</button>
+                            <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectInventoryModeAdd(inventory_show_popup)} aria-label="Close active modal" aria-controls="modalInventoryAdd" id="closeModalInventoryAdd" >เลือก</button>
                           </td>
                         </tr>
                       )
@@ -637,10 +637,10 @@ export const onClickPopUpSearchInventory = (dest_warehouse_name) => {
     });
   };
 }
-export const onClickSelectInventory = (name) => {
+export const onClickSelectInventory = (res) => {
   return {
     type: "CLICK SELECT POPUP INVENTORY",
-    value: name
+    value: res
   }
 }
 
@@ -683,9 +683,9 @@ export const onChangeMyInventoryModeAdd = (e) => {
   }
 }
 
-export const onClickSelectInventoryModeAdd = (name) => {
+export const onClickSelectInventoryModeAdd = (res) => {
   return {
     type: "CLICK SELECT POPUP INVENTORY MODE ADD",
-    value: name
+    value: res
   }
 }

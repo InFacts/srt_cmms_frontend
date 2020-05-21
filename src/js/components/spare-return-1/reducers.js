@@ -29,6 +29,7 @@ const initialState = {
     "created_by_admin_name_th": "",
     "document_status_id": "",
     "src_warehouse_id": 999,
+    "dest_warehouse_id": "",
     "dest_warehouse_name": "",
     "refer_to_document": "",
     "line_items": []
@@ -280,6 +281,21 @@ export default (state = initialState, action) => {
       }
     case "CLICK SELECT POPUP NO DOCUMENT":
       console.log("reducer", action.value)
+      var list = {
+        "item_id": "",
+        "internal_item_id": "",
+        "description": "",
+        "quantity": "",
+        "uom_group_id": "",
+        "unit": "",
+        "per_unit_price": "",
+        "list_uoms": []
+      }
+      for (var i = action.value.line_items.length; i <= 9; i++) {
+        action.value.line_items.push(list);
+      }
+
+
       return {
         ...state,
         no_document: action.value.internal_document_id,
@@ -337,7 +353,7 @@ export default (state = initialState, action) => {
         ...state,
         list_show_row_index: action.rowIndex,
         no_part_show: initialState.no_part_show,
-        list_no_part: state.list_show[action.rowIndex].no_part
+        list_no_part: state.list_show[action.rowIndex].internal_item_id
       }
     case "ON CHANGE QUILITY EACH ROW":
       var clone_list_show = [...state.list_show];
@@ -383,7 +399,8 @@ export default (state = initialState, action) => {
       }
     case "CLICK SELECT POPUP INVENTORY":
       var clone_document_show = { ...state.document_show };
-      clone_document_show.dest_warehouse_name = action.value;
+      clone_document_show.dest_warehouse_name = action.value.name;
+      clone_document_show.dest_warehouse_id= action.value.warehouse_id;
       console.log("reducer", action.value)
       return {
         ...state,
@@ -483,10 +500,17 @@ export default (state = initialState, action) => {
       }
     case "ON CLICK SELECT POPUP NO PART MODE ADD":
       // console.log(state.no_part_show_mode_add[action.rowIndex], "and", state.list_show_mode_add[state.list_show_mode_add_row_index])
+      // var clone_list_show_mode_add = [...state.list_show_mode_add];
+      // clone_list_show_mode_add[state.list_show_mode_add_row_index] = state.no_part_show_mode_add[action.rowIndex]
+      // clone_list_show_mode_add[state.list_show_mode_add_row_index].quility = 1
+      // clone_list_show_mode_add[state.list_show_mode_add_row_index].total = 1
+
       var clone_list_show_mode_add = [...state.list_show_mode_add];
-      clone_list_show_mode_add[state.list_show_mode_add_row_index] = state.no_part_show_mode_add[action.rowIndex]
-      clone_list_show_mode_add[state.list_show_mode_add_row_index].quility = 1
-      clone_list_show_mode_add[state.list_show_mode_add_row_index].total = 1
+      clone_list_show_mode_add[state.list_show_mode_add_row_index].item_id = state.no_part_show_mode_add[action.rowIndex].item_id
+      clone_list_show_mode_add[state.list_show_mode_add_row_index].internal_item_id = state.no_part_show_mode_add[action.rowIndex].internal_item_id
+      clone_list_show_mode_add[state.list_show_mode_add_row_index].description = state.no_part_show_mode_add[action.rowIndex].description
+      clone_list_show_mode_add[state.list_show_mode_add_row_index].uom_group_id = state.no_part_show_mode_add[action.rowIndex].uom_group_id
+      clone_list_show_mode_add[state.list_show_mode_add_row_index].list_uoms = state.no_part_show_mode_add[action.rowIndex].list_uoms
       return {
         ...state,
         list_show_mode_add: clone_list_show_mode_add
@@ -531,7 +555,8 @@ export default (state = initialState, action) => {
 
     case "CLICK SELECT POPUP INVENTORY MODE ADD":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
-      clone_document_show_mode_add.dest_warehouse_name = action.value;
+      clone_document_show_mode_add.dest_warehouse_name = action.value.name;
+      clone_document_show_mode_add.dest_warehouse_id = action.value.warehouse_id;
       return {
         ...state,
         document_show_mode_add: clone_document_show_mode_add,
@@ -559,6 +584,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         action: action.value,
+        document_id: action.resPost.document_id,
         clickable: action.value === "add" || action.value === "edit" ? true : false
       }
 
