@@ -307,7 +307,9 @@ class Files extends React.Component {
 
 
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state) => {
+    state = state.temp_reducer;
+    return ({
     files: state.files,
     clickable: state.clickable,
     accepts: state.accepts,
@@ -315,7 +317,7 @@ const mapStateToProps = (state) => ({
     maxFiles: state.maxFiles,
     maxFileSize: state.maxFileSize,
     minFileSize: state.minFileSize,
-})
+})}
 const mapDispatchToProps = (dispatch) => ({
     handleOnFilesChange: (value) => dispatch(onFilesChange(value)),
 })

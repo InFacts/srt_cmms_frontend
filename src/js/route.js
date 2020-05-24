@@ -14,6 +14,8 @@ import AssInt from './components/asset-install';
 import AssMas from './components/asset-master';
 import Inventory from './components/spare-inventory';
 import ItemMasterData from './components/spare-item-master-data';
+import ItemMasterData2 from './components/spare-item-master-data2';
+
 import SpareGoodReceipt from './components/spare-good-receipt';
 import SpareGoodIssue from './components/spare-good-issue';
 import SpareGoodMaintenace from './components/spare-good-maintenace';
@@ -54,6 +56,8 @@ class FrontEnd extends React.Component {
                 <Route exact path="/assmas" component={AssMas} />
                 <Route exact path="/inventory" component={Inventory} />
                 <Route exact path="/item-master-data" component={ItemMasterData} />
+                <Route exact path="/item-master-data2" component={ItemMasterData2} />
+
                 <Route exact path="/good-receipt" component={SpareGoodReceipt} />
                 <Route exact path="/good-issue" component={SpareGoodIssue} />
                 <Route exact path="/good-maintenace" component={SpareGoodMaintenace} />

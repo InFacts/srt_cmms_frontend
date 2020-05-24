@@ -33,13 +33,15 @@ ul.nav-ul {
     text-decoration: none;
   }
   
+  li.nav-li a:visited{
+    color: white;
+  }
+
   a.mt-12{
     margin-top: 12px;
   }
   
-  li.nav-li a:visited{
-    color: white;
-  }
+
   
   .active {
     background-color: #4CAF50;
@@ -69,13 +71,14 @@ ul.nav-ul {
     padding-top: 2px;
   }
 
-  .selecting {
-    background-color: rgb(212, 212, 212);
-    width: 20px;
-    height: 20px;
-    border: 1px 
-  }
+a.disabled {
+  pointer-events: none;
+}
+
+.selecting {
+  background-color: rgb(212, 212, 212);
+}
   
 .filter-green{
   filter :invert(48%) sepia(90%) saturate(0%) hue-rotate(255deg) brightness(118%) contrast(119%);
-  }
+}

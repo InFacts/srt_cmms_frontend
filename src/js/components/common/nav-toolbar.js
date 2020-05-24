@@ -1,417 +1,160 @@
 import React from 'react';
 import { connect } from 'react-redux'
 
-import axios from "axios";
+import {TOOLBAR_MODE, TOOLBAR_ACTIONS, clickHome, clickAdd, clickSave, 
+    clickRefresh, clickBackward, clickForward, clickExportPDF} from '../../redux/modules/toolbar.js';
 
-import { API_PORT_DATABASE } from '../../config_port.js';
-import { API_URL_DATABASE } from '../../config_url.js';
-
-import { Link } from 'react-router-dom';
 import '../../../vender/fontawesome-free/css/all.css';
 import '../../../css/style-nav.css'
 
-import AddDocument from '../../../images/toolbar/add-document.svg'
-import CopyDocument from '../../../images/toolbar/copy-document.svg'
-import EditDocument from '../../../images/toolbar/edit.svg'
-import SaveDocument from '../../../images/toolbar/save.svg'
-import RetryDocument from '../../../images/toolbar/retry.svg'
-import BackDocument from '../../../images/toolbar/back.svg'
-import ForwardDocument from '../../../images/toolbar/forward.svg'
-import PdfDocument from '../../../images/toolbar/pdf.svg'
-import HomeDocument from '../../../images/toolbar/home.svg'
-import SearchDocument from '../../../images/toolbar/search.svg'
+import HomeSvg from '../../../images/toolbar/home.svg'
+import SearchSvg from '../../../images/toolbar/search.svg'
+import AddSvg from '../../../images/toolbar/add-document.svg'
+import SaveSvg from '../../../images/toolbar/save.svg'
+import RefreshSvg from '../../../images/toolbar/retry.svg'
+import BackwardSvg from '../../../images/toolbar/back.svg'
+import ForwardSvg from '../../../images/toolbar/forward.svg'
+import ExportPdfSvg from '../../../images/toolbar/pdf.svg'
+
+const TOOLBAR_ORDER = [TOOLBAR_ACTIONS.HOME, 
+                    TOOLBAR_ACTIONS.SEARCH, 
+                    TOOLBAR_ACTIONS.ADD, 
+                    // TOOLBAR_ACTIONS.SAVE, 
+                    TOOLBAR_ACTIONS.REFRESH, 
+                    TOOLBAR_ACTIONS.BACKWARD, 
+                    TOOLBAR_ACTIONS.FORWARD, 
+                    TOOLBAR_ACTIONS.EXPORT_PDF];
+
+const TOOLBAR_TO_ICON = {
+    [TOOLBAR_ACTIONS.HOME]: HomeSvg,
+    [TOOLBAR_ACTIONS.SEARCH]: SearchSvg,
+    [TOOLBAR_ACTIONS.ADD]: AddSvg, 
+    [TOOLBAR_ACTIONS.SAVE]: SaveSvg, 
+    [TOOLBAR_ACTIONS.REFRESH]: RefreshSvg, 
+    [TOOLBAR_ACTIONS.BACKWARD]: BackwardSvg,
+    [TOOLBAR_ACTIONS.FORWARD]: ForwardSvg, 
+    [TOOLBAR_ACTIONS.EXPORT_PDF]:ExportPdfSvg 
+}
+
+const TOOLBAR_ACTIONS_TO_ACTION_CREATOR = {
+    [TOOLBAR_ACTIONS.HOME]: clickHome,
+    [TOOLBAR_ACTIONS.ADD]: clickAdd, 
+    [TOOLBAR_ACTIONS.SAVE]: clickSave, 
+    [TOOLBAR_ACTIONS.REFRESH]: clickRefresh, 
+    [TOOLBAR_ACTIONS.BACKWARD]: clickBackward,
+    [TOOLBAR_ACTIONS.FORWARD]: clickForward, 
+    [TOOLBAR_ACTIONS.EXPORT_PDF]: clickExportPDF 
+}
+
+const ToolbarItemComponent = (props) => {
+    let {isDisabled, isSelecting, toolbarAction, handleClick} = props;
+    let a_className = "toolbar";
+    let img_className = "img-toolbar"
+    if (isDisabled) {
+        a_className += " disabled";
+        img_className += " filter-green"
+    }
+    if (isSelecting){
+        img_className += " selecting";
+        handleClick = null;
+    }
+    return(
+    <li className="nav-li"><a className={a_className}><img className={img_className} alt={toolbarAction} src={TOOLBAR_TO_ICON[toolbarAction]} onClick={handleClick} /></a></li>
+)};
 
 
-class ToolbarItem extends React.Component {
+const ToolbarComponent = (props) => (
+    <div id="toolbar">
+        <div className="container_12 clearfix" style={{ marginTop: "3px" }}>
+            <ul className="grid_12 nav-ul ">
+                {TOOLBAR_ORDER.map( toolbar_action => (
+                    <ToolbarItemComponent toolbarAction={toolbar_action} isDisabled={props[toolbar_action].isDisabled} 
+                    isSelecting={props[toolbar_action].isSelecting} handleClick={props.handleClick} />
+                ))}
+            </ul>
+        </div>
+    </div>
+);
 
-    render() {
-        var { id, alt, src, pointer, select, disable, callback } = this.props;
-        return (
+const ALL_DISABLED_PROP = {}
+Object.keys(TOOLBAR_ACTIONS).map((key, index) => ALL_DISABLED_PROP[key] = {
+    isDisabled: true,
+    isSelecting: false
+}); 
 
-            (select === id)
-                ?
-                <li className="nav-li" ><Link className="toolbar" style={{ pointerEvents: pointer }}><div className="selecting"><img alt={alt} src={src} className="img-toolbar" /></div></Link></li>
-                :
-                ((disable === true)
-                    ?
-                    <li className="nav-li"  ><Link className="toolbar" style={{ pointerEvents: pointer }}><img alt={alt} src={src} onClick={() => { callback(id) }} className="img-toolbar filter-green" /></Link></li>
-                    :
-                    <li className="nav-li"  ><Link className="toolbar" style={{ pointerEvents: pointer }}><img alt={alt} src={src} onClick={() => { callback(id) }} className="img-toolbar" /></Link></li>
-                )
+function getPropSelectAndEnabled(selectedAction, enabledActions){
+    let toolbarProp = {...ALL_DISABLED_PROP};
+    if(selectedAction !== null){
+        toolbarProp[selectedAction] = {
+            isDisabled: false,
+            isSelecting: true
+        }
+    }
+    enabledActions.map(enabledAction => {
+        toolbarProp[enabledAction] = {
+            isDisabled: false,
+            isSelecting: false
+        }
+    })
+    return toolbarProp
+}
 
-        );
+const mapStateToProps = (state) => {
+    switch(state.toolbar.mode){
+        case TOOLBAR_MODE.NONE:
+            return {...ALL_DISABLED_PROP};
+        case TOOLBAR_MODE.NONE_HOME:
+            return getPropSelectAndEnabled( null, [TOOLBAR_ACTIONS.HOME]);
+        case TOOLBAR_MODE.SEARCH:
+            return getPropSelectAndEnabled(TOOLBAR_ACTIONS.SEARCH, 
+                [TOOLBAR_ACTIONS.HOME, TOOLBAR_ACTIONS.ADD, TOOLBAR_ACTIONS.REFRESH, TOOLBAR_ACTIONS.BACKWARD, TOOLBAR_ACTIONS.FORWARD, TOOLBAR_ACTIONS.EXPORT_PDF]);
+        case TOOLBAR_MODE.ADD:
+            return getPropSelectAndEnabled(TOOLBAR_ACTIONS.ADD, 
+                [TOOLBAR_ACTIONS.HOME, TOOLBAR_ACTIONS.SEARCH, TOOLBAR_ACTIONS.SAVE, TOOLBAR_ACTIONS.REFRESH, TOOLBAR_ACTIONS.BACKWARD, TOOLBAR_ACTIONS.FORWARD]);
+        default:
+            return {...ALL_DISABLED_PROP};
     }
 }
 
-class Toolbar extends React.Component {
-
-    constructor(props) {
-        super(props)
-
-        this.state = {
-            id: 2,
-        }
-        this.props.handleAction("search");
-    }
-
-    render() {
-        var items, menu;
-
-        if (this.props.tool_mode === true) {
-
-            if (this.props.actionMode === "search" && this.props.fill_data === true || this.props.actionMode === "edit") {
-                menu = [
-                    {
-                        id: 1,
-                        alt: "home",
-                        src: HomeDocument,
-                        pointer: "auto",
-                        disable: false
-                    },
-                    {
-                        id: 2,
-                        alt: "search",
-                        src: SearchDocument,
-                        pointer: "auto",
-                        disable: false
-                    },
-                    {
-                        id: 3,
-                        alt: "edit",
-                        src: EditDocument,
-                        pointer: "auto",
-                        disable: false
-                    },
-                    {
-                        id: 4,
-                        alt: "add",
-                        src: AddDocument,
-                        pointer: "auto",
-                        disable: false
-                    },
-                    {
-                        id: 5,
-                        alt: "copy",
-                        src: CopyDocument,
-                        pointer: "none",
-                        disable: true
-                    },
-                    {
-                        id: 6,
-                        alt: "save",
-                        src: SaveDocument,
-                        pointer: "none",
-                        disable: true
-                    },
-                    {
-                        id: 7,
-                        alt: "retry",
-                        src: RetryDocument,
-                        pointer: "none",
-                        disable: true
-                    },
-                    {
-                        id: 8,
-                        alt: "back",
-                        src: BackDocument,
-                        pointer: "none",
-                        disable: true
-                    },
-                    {
-                        id: 9,
-                        alt: "forward",
-                        src: ForwardDocument,
-                        pointer: "none",
-                        disable: true
-                    },
-                    {
-                        id: 10,
-                        alt: "pdf",
-                        src: PdfDocument,
-                        pointer: "none",
-                        disable: true
-                    },
-                ]
-            }
-            if (this.props.actionMode === "search" && this.props.fill_data === false) {
-                menu = [
-                    {
-                        id: 1,
-                        alt: "home",
-                        src: HomeDocument,
-                        pointer: "auto",
-                        disable: false
-                    },
-                    {
-                        id: 2,
-                        alt: "search",
-                        src: SearchDocument,
-                        pointer: "auto",
-                        disable: false
-                    },
-                    {
-                        id: 3,
-                        alt: "edit",
-                        src: EditDocument,
-                        pointer: "none",
-                        disable: true
-                    },
-                    {
-                        id: 4,
-                        alt: "add",
-                        src: AddDocument,
-                        pointer: "auto",
-                        disable: false
-                    },
-                    {
-                        id: 5,
-                        alt: "copy",
-                        src: CopyDocument,
-                        pointer: "none",
-                        disable: true
-                    },
-                    {
-                        id: 6,
-                        alt: "save",
-                        src: SaveDocument,
-                        pointer: "none",
-                        disable: true
-                    },
-                    {
-                        id: 7,
-                        alt: "retry",
-                        src: RetryDocument,
-                        pointer: "none",
-                        disable: true
-                    },
-                    {
-                        id: 8,
-                        alt: "back",
-                        src: BackDocument,
-                        pointer: "none",
-                        disable: true
-                    },
-                    {
-                        id: 9,
-                        alt: "forward",
-                        src: ForwardDocument,
-                        pointer: "none",
-                        disable: true
-                    },
-                    {
-                        id: 10,
-                        alt: "pdf",
-                        src: PdfDocument,
-                        pointer: "none",
-                        disable: true
-                    },
-                ]
-            }
-            if (this.props.actionMode === "add" || this.props.actionMode === "home") {
-                menu = [
-                    {
-                        id: 1,
-                        alt: "home",
-                        src: HomeDocument,
-                        pointer: "auto",
-                        disable: false
-                    },
-                    {
-                        id: 2,
-                        alt: "search",
-                        src: SearchDocument,
-                        pointer: "auto",
-                        disable: false
-                    },
-                    {
-                        id: 3,
-                        alt: "edit",
-                        src: EditDocument,
-                        pointer: "none",
-                        disable: true
-                    },
-                    {
-                        id: 4,
-                        alt: "add",
-                        src: AddDocument,
-                        pointer: "auto",
-                        disable: false
-                    },
-                    {
-                        id: 5,
-                        alt: "copy",
-                        src: CopyDocument,
-                        pointer: "none",
-                        disable: true
-                    },
-                    {
-                        id: 6,
-                        alt: "save",
-                        src: SaveDocument,
-                        pointer: "none",
-                        disable: true
-                    },
-                    {
-                        id: 7,
-                        alt: "retry",
-                        src: RetryDocument,
-                        pointer: "none",
-                        disable: true
-                    },
-                    {
-                        id: 8,
-                        alt: "back",
-                        src: BackDocument,
-                        pointer: "none",
-                        disable: true
-                    },
-                    {
-                        id: 9,
-                        alt: "forward",
-                        src: ForwardDocument,
-                        pointer: "none",
-                        disable: true
-                    },
-                    {
-                        id: 10,
-                        alt: "pdf",
-                        src: PdfDocument,
-                        pointer: "none",
-                        disable: true
-                    },
-                ]
-            }
-        }
-        if (this.props.tool_mode === false) {
-            menu = [
-                {
-                    id: 1,
-                    alt: "home",
-                    src: HomeDocument,
-                    pointer: "auto",
-                    disable: false
-                },
-                {
-                    id: 2,
-                    alt: "search",
-                    src: SearchDocument,
-                    pointer: "auto",
-                    disable: false
-                },
-                {
-                    id: 3,
-                    alt: "edit",
-                    src: EditDocument,
-                    pointer: "none",
-                    disable: true
-                },
-                {
-                    id: 4,
-                    alt: "add",
-                    src: AddDocument,
-                    pointer: "none",
-                    disable: true
-                },
-                {
-                    id: 5,
-                    alt: "copy",
-                    src: CopyDocument,
-                    pointer: "none",
-                    disable: true
-                },
-                {
-                    id: 6,
-                    alt: "save",
-                    src: SaveDocument,
-                    pointer: "none",
-                    disable: true
-                },
-                {
-                    id: 7,
-                    alt: "retry",
-                    src: RetryDocument,
-                    pointer: "none",
-                    disable: true
-                },
-                {
-                    id: 8,
-                    alt: "back",
-                    src: BackDocument,
-                    pointer: "none",
-                    disable: true
-                },
-                {
-                    id: 9,
-                    alt: "forward",
-                    src: ForwardDocument,
-                    pointer: "none",
-                    disable: true
-                },
-                {
-                    id: 10,
-                    alt: "pdf",
-                    src: PdfDocument,
-                    pointer: "none",
-                    disable: true
-                },
-            ]
-        }
-
-        items = menu.map((item, index) =>
-            <ToolbarItem key={item.id} id={item.id} alt={item.alt} src={item.src} pointer={item.pointer} select={this.state.id} disable={item.disable} callback={(idx) => {
-                this.setState({
-                    id: idx,
-                })
-                this.props.handleAction(item.alt);
-            }} />
-        );
-
-        return (
-            <div>
-                <div id="toolbar">
-                    <div className="container_12 clearfix" style={{ marginTop: "3px" }}>
-                        <ul className="grid_12 nav-ul ">
-                            {items}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        )
-    };
-}
-
-
-const mapStateToProps = (state) => ({
-    actionMode: state.action,
-    fill_data: state.fill_data,
-    tool_mode: state.tool_mode,
-})
 const mapDispatchToProps = (dispatch) => ({
-    handleAction: (value) => dispatch(action(value)),
+    handleClick: (e) => {
+        let toolbarAction = e.target.alt;
+        return dispatch(TOOLBAR_ACTIONS_TO_ACTION_CREATOR[toolbarAction]());
+    }
 })
-export default connect(mapStateToProps, mapDispatchToProps)(Toolbar);
 
-export const action = (value) => {
-    // console.log("toolBar", value)
-    if (value === "add") {
-        return function (dispatch) {
-            return axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/new/0`, "dataEmtry", { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
-                // console.log(res)
-                dispatch({
-                    type: "POST DOCUMENT",
-                    value: value,
-                    resPost: res.data
-                });
-            }).catch(function (err) {
-                console.log(err)
-            })
-        };
-    }
-    else {
-        // console.log("anything")
-        return {
-            type: "ACTION",
-            value: value
-        }
-    }
-}
+const Toolbar = connect(
+    mapStateToProps, mapDispatchToProps
+)(ToolbarComponent)
+
+
+export default Toolbar;
+
+
+
+// export default connect(mapStateToProps, mapDispatchToProps)(Toolbar);
+
+// export const action = (value) => {
+//     // console.log("toolBar", value)
+//     if (value === "add") {
+//         return function (dispatch) {
+//             return axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/new/0`, "dataEmtry", { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+//                 // console.log(res)
+//                 dispatch({
+//                     type: "POST DOCUMENT",
+//                     value: value,
+//                     resPost: res.data
+//                 });
+//             }).catch(function (err) {
+//                 console.log(err)
+//             })
+//         };
+//     }
+//     else {
+//         // console.log("anything")
+//         return {
+//             type: "ACTION",
+//             value: value
+//         }
+//     }
+// }
