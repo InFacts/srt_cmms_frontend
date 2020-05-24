@@ -25,40 +25,47 @@ class TopContent extends React.Component {
     evt.currentTarget.className += " active";
   }
 
+  checkAfterSearch = (full_name) => {
+    if (full_name !== undefined) {
+      return <button type="button" className="mb-0" style={{ padding: "0px 10px" }} onClick={(e) => this.props.onClickModeEdit(e)}>แก้ไข</button>
+    }
+  }
+
   checkActionMode = (mode) => {
     if (mode === "home") {
       return (
-          <Redirect to="/main"></Redirect>
+        <Redirect to="/main"></Redirect>
       )
-  }
+    }
     if (mode === "search") {
       // console.log("Search mode is Action")
       return (
         <>
           <div className="grid_12">
             <div className="grid_1"><p className="top-text">เลขที่คลัง</p></div>
-            <div>
               <div className="grid_2">
                 <div className="p-search-box cancel-margin">
                   <input type="text" className="p-search-box__input cancel-default" value={this.props.no_inventory} onChange={(e) => this.props.onChangeNoInventory(e)} />
                   <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalInventory" aria-controls="modalInventory" onClick={(e) => this.props.onClickOpenPopUp(e)}></i></button>
                 </div>
               </div>
-              <div className="grid_2 cancel-default text-right">
-                <p className="cancel-default">ชื่อเต็มคลัง</p>
+              <div className="grid_1">
+                {this.checkAfterSearch(this.props.inventory_show.full_name)}
               </div>
-              <div className="grid_4">
+              <div className="grid_4 float-right">
                 <input type="text" className="cancel-default font-black" defaultValue={this.props.inventory_show.full_name} disabled="disabled"></input>
               </div>
-            </div>
+              <div className="grid_1 cancel-default float-right">
+                <p className="cancel-default">ชื่อเต็มคลัง</p>
+              </div>
           </div>
 
           <div className="grid_12">
-            <div className="grid_5 cancel-default text-right">
-              <p className="cancel-default">ชื่อย่อคลัง</p>
-            </div>
-            <div className="grid_4">
+            <div className="grid_4 float-right">
               <input type="text" className="cancel-default font-black" defaultValue={this.props.inventory_show.short_name} disabled="disabled"></input>
+            </div>
+            <div className="grid_1 cancel-default float-right">
+              <p className="cancel-default">ชื่อย่อคลัง</p>
             </div>
           </div>
         </>

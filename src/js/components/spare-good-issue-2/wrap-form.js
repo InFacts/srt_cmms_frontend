@@ -61,39 +61,37 @@ class WrapForm extends React.Component {
     handleSubmit = (e) => {
         e.preventDefault();
         const current = this;
-        if (this.props.actionMode === "add") {
-            return (
-                axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_id}/101`, this.packForm(this.props.document_id, this.props.document_show_mode_add, this.props.list_show_mode_add), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-                    .then(res => {
-                        console.log(res);
-                        this.props.onClearStateModeAdd()
-                    }).catch(function (err) {
-                        console.log(err);
-                    })
-            )
-        }
-        if (this.props.actionMode === "edit") {
-            return (
-                axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_show.document_id}/101`, this.packForm(this.props.document_show.document_id, this.props.document_show, this.props.list_show), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-                    .then(res => {
-                        console.log(res);
-                        this.props.onClearStateModeAdd()
-                    }).catch(function (err) {
-                        console.log(err);
-                    })
-            )
-        }
+            if (this.props.actionMode === "add") {
+                return (
+                    axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_id}/111`, this.packForm(this.props.document_id, this.props.document_show_mode_add, this.props.list_show_mode_add), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+                        .then(res => {
+                            console.log(res);
+                            this.props.onClearStateModeAdd()
+                        }).catch(function (err) {
+                            console.log(err);
+                        })
+                )
+            }
+            if (this.props.actionMode === "edit") {
+                return (
+                    axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_show.document_id}/111`, this.packForm(this.props.document_show.document_id, this.props.document_show, this.props.list_show), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+                        .then(res => {
+                            console.log(res);
+                            this.props.onClearStateModeAdd()
+                        }).catch(function (err) {
+                            console.log(err);
+                        })
+                )
+            }
     }
 
     render() {
         return (
-            <>
+            <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) this.handleSubmit(e) }}>
                 <TopContent />
                 <BottomContent />
-                <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) this.handleSubmit(e) }}>
-                    <Footer />
-                </form>
-            </>
+                <Footer />
+            </form>
         )
     };
 }

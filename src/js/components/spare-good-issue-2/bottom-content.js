@@ -150,6 +150,13 @@ class BottomContent extends React.Component {
                   <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
                   <th className="font" style={{ minWidth: "130px" }}>เลขที่อะไหล่</th>
                   <th className="font" style={{ minWidth: "448px" }}>รายละเอียด</th>
+
+                  <th className="font text-center" style={{ minWidth: "80px" }}>คงคลัง</th>
+                  <th className="font text-center" style={{ minWidth: "80px" }}>รอส่งมอบ</th>
+                  <th className="font text-center" style={{ minWidth: "80px" }}>ระหว่างการจัดซื้อ</th>
+                  <th className="font text-center" style={{ minWidth: "80px" }}>จำนวนสุทธิ</th>
+                  <th className="font text-center" style={{ minWidth: "100px" }}>สถานะ</th>
+
                   <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>หน่วยนับ</th>
                   <th className="font text-right" style={{ minWidth: "80px" }}>ราคาต่อหน่วย</th>
@@ -163,6 +170,13 @@ class BottomContent extends React.Component {
                       <th className="edit-padding text-center">{index + 1}</th>
                       <td className="edit-padding">{list.internal_item_id}</td>
                       <td className="edit-padding">{list.description}</td>
+
+                      <td className="edit-padding">{list.quantity}</td>
+                      <td className="edit-padding">{list.quantity}</td>
+                      <td className="edit-padding">{list.quantity}</td>
+                      <td className="edit-padding">{list.quantity}</td>
+                      <td className="edit-padding">{list.quantity}</td>
+
                       <td className="edit-padding text-center">{list.quantity}</td>
                       <td className="edit-padding text-center">
                         <select className="edit-select-top" disabled="disabled">
@@ -205,6 +219,13 @@ class BottomContent extends React.Component {
                   <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
                   <th className="font" style={{ minWidth: "130px" }}>เลขที่อะไหล่</th>
                   <th className="font" style={{ minWidth: "448px" }}>รายละเอียด</th>
+
+                  <th className="font text-center" style={{ minWidth: "80px" }}>คงคลัง</th>
+                  <th className="font text-center" style={{ minWidth: "80px" }}>รอส่งมอบ</th>
+                  <th className="font text-center" style={{ minWidth: "80px" }}>ระหว่างการจัดซื้อ</th>
+                  <th className="font text-center" style={{ minWidth: "80px" }}>จำนวนสุทธิ</th>
+                  <th className="font text-center" style={{ minWidth: "100px" }}>สถานะ</th>
+
                   <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>หน่วยนับ</th>
                   <th className="font text-right" style={{ minWidth: "80px" }}>ราคาต่อหน่วย</th>
@@ -219,11 +240,18 @@ class BottomContent extends React.Component {
                       <th className="edit-padding text-center">{index + 1}</th>
                       <td className="edit-padding">
                         <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
-                          <input type="text" className="p-search-box__input cancel-default-table" value={list.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRow(e)} onKeyPress={(e) => current.props.handleKeyPressModeEdit(e)} />
+                          <input type="text" className="p-search-box__input cancel-default-table" value={list.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRow(e)} />
                           <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPart" onClick={(e) => current.props.onClickNoPartEachRow(e)}></i></button>
                         </div>
                       </td>
                       <td className="edit-padding">{list.description}</td>
+
+                      <td className="edit-padding">{list.quantity}</td>
+                      <td className="edit-padding">{list.quantity}</td>
+                      <td className="edit-padding">{list.quantity}</td>
+                      <td className="edit-padding">{list.quantity}</td>
+                      <td className="edit-padding">{list.quantity}</td>
+
                       <td className="edit-padding text-center">
                         {current.requiredQuantityModeEdit(list.description, list.quantity)}
                       </td>
@@ -325,6 +353,13 @@ class BottomContent extends React.Component {
                   <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
                   <th className="font" style={{ minWidth: "130px" }}>เลขที่อะไหล่</th>
                   <th className="font" style={{ minWidth: "448px" }}>รายละเอียด</th>
+
+                  <th className="font text-center" style={{ minWidth: "80px" }}>คงคลัง</th>
+                  <th className="font text-center" style={{ minWidth: "80px" }}>รอส่งมอบ</th>
+                  <th className="font text-center" style={{ minWidth: "80px" }}>ระหว่างการจัดซื้อ</th>
+                  <th className="font text-center" style={{ minWidth: "80px" }}>จำนวนสุทธิ</th>
+                  <th className="font text-center" style={{ minWidth: "100px" }}>สถานะ</th>
+
                   <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>หน่วยนับ</th>
                   <th className="font text-right" style={{ minWidth: "80px" }}>ราคาต่อหน่วย</th>
@@ -343,6 +378,13 @@ class BottomContent extends React.Component {
                         </div>
                       </td>
                       <td className="edit-padding">{list.description}</td>
+
+                      <td className="edit-padding">{list.quantity}</td>
+                      <td className="edit-padding">{list.quantity}</td>
+                      <td className="edit-padding">{list.quantity}</td>
+                      <td className="edit-padding">{list.quantity}</td>
+                      <td className="edit-padding">{list.quantity}</td>
+
                       <td className="edit-padding text-center">
                         {current.requiredQuantity(list.description, list.quantity)}
                       </td>
@@ -480,8 +522,6 @@ const mapDispatchToProps = (dispatch) => ({
   onChangeNote: (e) => dispatch(onChangeNote(e)),
   onChangeDescriptionPart: (e) => dispatch(onChangeDescriptionPart(e)),
 
-  handleKeyPressModeEdit: (e) => dispatch(handleKeyPressModeEdit(e)),
-
   // Mode Add
   onChangeNoPartEachRowModeAdd: (e) => dispatch(onChangeNoPartEachRowModeAdd(e)),
   onClickNoPartEachRowModeAdd: (e) => dispatch(onClickNoPartEachRowModeAdd(e)),
@@ -571,33 +611,6 @@ export const onChangeDescriptionPart = (e) => {
   }
 }
 
-export const handleKeyPressModeEdit = (e) => {
-  if (e.key === 'Enter') {
-    console.log("in enter")
-    let value = e.target.value;
-    let rowIndex = e.target.parentNode.parentNode.parentNode.id;
-    console.log("rowIndex", rowIndex)
-    return function (dispatch) {
-      return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items?internal_item_id=${value}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
-        console.log("pree key down", res)
-        dispatch({
-          type: "KEY PRESS ENTER MODE EDIT",
-          value: value,
-          rowIndex: rowIndex,
-          res: res.data.results
-        });
-      });
-    };
-  }
-  else {
-    console.log("not enter"); 
-    return {
-      type: "NOT ENTER"
-    }
-  }
-}
-
-
 // Mode Add
 export const onChangeNoPartEachRowModeAdd = (e) => {
   return {
@@ -671,14 +684,11 @@ export const onChangeDescriptionPartModeAdd = (e) => {
   }
 }
 
-
-
 export const handleKeyPress = (e) => {
   if (e.key === 'Enter') {
     console.log("in enter")
     let value = e.target.value;
     let rowIndex = e.target.parentNode.parentNode.parentNode.id;
-    console.log("rowIndex", rowIndex)
     return function (dispatch) {
       return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items?internal_item_id=${value}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
         console.log("pree key down", res)
@@ -686,7 +696,7 @@ export const handleKeyPress = (e) => {
           type: "KEY PRESS ENTER",
           value: value,
           rowIndex: rowIndex,
-          res: res.data.results
+          res: res.data.results[0]
         });
       });
     };

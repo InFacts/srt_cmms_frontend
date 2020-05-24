@@ -15,7 +15,10 @@ import AssMas from './components/asset-master';
 import Inventory from './components/spare-inventory';
 import ItemMasterData from './components/spare-item-master-data';
 import SpareGoodReceipt from './components/spare-good-receipt';
+
 import SpareGoodIssue from './components/spare-good-issue';
+import SpareGoodIssue2 from './components/spare-good-issue-2';
+
 import SpareGoodMaintenace from './components/spare-good-maintenace';
 import SpareReturn1 from './components/spare-return-1';
 import SpareReturn2 from './components/spare-return-2';
@@ -56,7 +59,10 @@ class FrontEnd extends React.Component {
                 <Route exact path="/inventory" component={Inventory} />
                 <Route exact path="/item-master-data" component={ItemMasterData} />
                 <Route exact path="/good-receipt" component={SpareGoodReceipt} />
+
                 <Route exact path="/good-issue" component={SpareGoodIssue} />
+                <Route exact path="/good-issue-2" component={SpareGoodIssue2} />
+
                 <Route exact path="/good-maintenace" component={SpareGoodMaintenace} />
 
                 <Route exact path="/good-return-1" component={SpareReturn1} />

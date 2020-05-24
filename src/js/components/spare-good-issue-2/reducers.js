@@ -466,24 +466,6 @@ export default (state = initialState, action) => {
         ...state,
         list_desription_part: action.value
       }
-      case "KEY PRESS ENTER MODE EDIT":
-        if (action.res.length >= 1 && action.value === action.res[0].internal_item_id) {
-
-          var clone_list_show = [...state.list_show];
-          clone_list_show[action.rowIndex].internal_item_id = action.res[0].internal_item_id
-          clone_list_show[action.rowIndex].description = action.res[0].description
-          clone_list_show[action.rowIndex].uom_group_id = action.res[0].uom_group_id
-          clone_list_show[action.rowIndex].list_uoms = action.res[0].list_uoms
-          clone_list_show[action.rowIndex].quantity = 1
-          clone_list_show[action.rowIndex].per_unit_price = "1.0000"
-          return {
-            ...state,
-            list_show: clone_list_show
-          }
-        }
-        else return {
-          ...state,
-        }
 
     // Mode Add
     case "ON CHANGE DOCUMENT MODE ADD":
@@ -634,14 +616,11 @@ export default (state = initialState, action) => {
       }
 
     case "KEY PRESS ENTER":
-      if (action.res.length >= 1 && action.value === action.res[0].internal_item_id) {
+      if (action.value === action.res.internal_item_id) {
         console.log("state.list_show_mode_add", state.list_show_mode_add)
         var clone_list_show_mode_add = [...state.list_show_mode_add];
-        clone_list_show_mode_add[action.rowIndex].internal_item_id = action.res[0].internal_item_id
-        clone_list_show_mode_add[action.rowIndex].description = action.res[0].description
-        clone_list_show_mode_add[action.rowIndex].uom_group_id = action.res[0].uom_group_id
-        clone_list_show_mode_add[action.rowIndex].list_uoms = action.res[0].list_uoms
-        clone_list_show_mode_add[action.rowIndex].quantity = 1
+        clone_list_show_mode_add[action.rowIndex] = action.res.internal_item_id
+        clone_list_show_mode_add[action.rowIndex].quantity = "1"
         clone_list_show_mode_add[action.rowIndex].per_unit_price = "1.0000"
         return {
           ...state,
@@ -658,7 +637,6 @@ export default (state = initialState, action) => {
 
     // POST DOCUMENT
     case "POST DOCUMENT":
-      console.log("action.decoded", action.decoded)
       clone_document_show_mode_add = initialState.document_show_mode_add;
       clone_document_show_mode_add.created_by_admin_name_th = action.decoded.name_th === null ? "" : action.decoded.name_th;
       clone_document_show_mode_add.created_by_admin_id = action.decoded.id === null ? "" : action.decoded.id;

@@ -70,13 +70,13 @@ class TopContent extends React.Component {
 
           <div className="grid_12">
             <div className="grid_2">
-              <p className="top-text">ผู้นำเข้า</p>
+              <p className="top-text">ผู้นำออก</p>
             </div>
             <div className="grid_3 pull_1">
               <input type="text" className="cancel-default" defaultValue={current.props.document_show.created_by_user_name_th} disabled="disabled"></input>
             </div>
             <div className="grid_3 float-right">
-              <input type="datetime-local" className="cancel-default float-right" defaultValue={current.props.document_show.created_on !== undefined ? current.props.document_show.created_on.slice(0, 16) : null} disabled="disabled"></input>
+              <input type="datetime" className="cancel-default float-right" defaultValue={current.props.document_show.created_on} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">วันที่</p>
@@ -138,7 +138,7 @@ class TopContent extends React.Component {
 
           <div className="grid_12">
             <div className="grid_2">
-              <p className="top-text">ผู้นำเข้า</p>
+              <p className="top-text">ผู้นำออก</p>
             </div>
             <div className="grid_3 pull_1">
             <div className="p-search-box cancel-margin">
@@ -209,7 +209,7 @@ class TopContent extends React.Component {
 
           <div className="grid_12">
             <div className="grid_2">
-              <p className="top-text">ผู้นำเข้า</p>
+              <p className="top-text">ผู้นำออก</p>
             </div>
             <div className="grid_3 pull_1">
               <div className="p-search-box cancel-margin">
@@ -269,7 +269,7 @@ class TopContent extends React.Component {
         <div id="blackground-white">
           <div className="container_12 clearfix">
             <section className="grid_12 ">
-              <h4 className="head-title">นำอะไหล่เข้าโดยมีใบสั่งซื้อ</h4>
+              <h4 className="head-title">เบิกอะไหล่ไปใช้งาน</h4>
               {this.checkActionMode(this.props.actionMode)}
             </section>
 
@@ -386,7 +386,7 @@ class TopContent extends React.Component {
         {/* PopUp ค้นหาชื่อพนักงาน MODE EDIT */}
         <div className="modal" id="modalUserNameModeEdit" style={{ display: "none" }}>
           <div className="gray-board">
-            <p className="head-title-modal edit">ค้นหาชื่อผู้นำเข้า</p>
+            <p className="head-title-modal edit">ค้นหาชื่อผู้นำออก</p>
             <div className="container_12 edit-padding">
 
               <div className="grid_12">
@@ -492,7 +492,7 @@ class TopContent extends React.Component {
         {/* PopUp ค้นหาชื่อพนักงาน MODE ADD */}
         <div className="modal" id="modalUserName" style={{ display: "none" }}>
           <div className="gray-board">
-            <p className="head-title-modal edit">ค้นหาชื่อผู้นำเข้า</p>
+            <p className="head-title-modal edit">ค้นหาชื่อผู้นำออก</p>
             <div className="container_12 edit-padding">
 
               <div className="grid_12">
@@ -613,7 +613,7 @@ export const onChangeNoDocument = (e) => {
 }
 export const onClickPopUpSearchNoDocument = (no_document) => {
   return function (dispatch) {
-    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=101&internal_document_id=${no_document}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=111&internal_document_id=${no_document}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       // console.log(res)
       // dispatch
       dispatch({
