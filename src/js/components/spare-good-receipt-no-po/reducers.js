@@ -9,6 +9,7 @@ const initialState = {
   no_document: "",
   document_show_popup: [],
   document_show: [],
+  document_specific_show: [],
   list_show: [], //เอาไว้ clone list ที่อยู่ใน document_show ออกมาแสดงผล
 
   // Mode Edit
@@ -34,7 +35,7 @@ const initialState = {
     "src_warehouse_id": 999,
     "dest_warehouse_id": "",
     "dest_warehouse_name": "",
-    "po_id": "",
+    "refer_to_document": "",
     "line_items": []
   },
   list_show_mode_add: [
@@ -244,6 +245,7 @@ const initialState = {
   ],
   list_show_mode_add_row_index: "",
   no_part_show_mode_add: [],
+  s1646_show_popup: [],
 
   // สำหรับเก็บชื่อพนักงาน
   line_users: [],
@@ -308,13 +310,13 @@ export default (state = initialState, action) => {
       for (var i = action.value.line_items.length; i <= 9; i++) {
         action.value.line_items.push(list);
       }
-      console.log("list_show", action.value.line_items)
+      console.log("list_show", state.list_show)
       return {
         ...state,
         no_document: action.value.internal_document_id,
         document_show: action.value,
         list_show: action.value.line_items,
-        // fill_data: true,
+        fill_data: true,
       }
 
     // Mode Edit
@@ -346,72 +348,6 @@ export default (state = initialState, action) => {
       return {
         ...state,
         document_show: clone_document_show
-      }
-    case "ON CHANGE NO PO":
-      var clone_document_show = { ...state.document_show };
-      clone_document_show.po_id = action.value;
-      return {
-        ...state,
-        document_show: clone_document_show
-      }
-    case "ON CHANGE NO PART":
-      return {
-        ...state,
-        list_no_part: action.value
-      }
-    case "ON CHANGE NO PART EACH ROW":
-      var clone_list_show_test = [...state.list_show];
-      clone_list_show_test[action.rowIndex].internal_item_id = action.value
-      console.log("clone_list_show_test[action.rowIndex]", clone_list_show_test[action.rowIndex])
-      return {
-        ...state,
-        list_show: clone_list_show_test,
-        list_show_row_index: action.rowIndex,
-        list_no_part: action.value
-      }
-    case "ON CLICK NO PART EACH ROW":
-      return {
-        ...state,
-        list_show_row_index: action.rowIndex,
-        no_part_show: initialState.no_part_show,
-        list_no_part: state.list_show[action.rowIndex].internal_item_id
-      }
-    case "ON CHANGE QUILITY EACH ROW":
-      var clone_list_show = [...state.list_show];
-      // console.log(clone_list_show[action.rowIndex])
-      clone_list_show[action.rowIndex].quantity = action.value;
-      return {
-        ...state,
-        list_show: clone_list_show,
-      }
-    case "ON CHANGE UNIT PER BATH EACH ROW":
-      var clone_list_show = [...state.list_show];
-      clone_list_show[action.rowIndex].per_unit_price = action.value
-      return {
-        ...state,
-        list_show: clone_list_show,
-      }
-    case "ON CHANGE TOTAL EACH ROW":
-      var clone_list_show = [...state.list_show];
-      clone_list_show[action.rowIndex].total = action.value
-      return {
-        ...state,
-        list_show: clone_list_show
-      }
-    case "ON CLICK SEARCH POPUP NO PART":
-      return {
-        ...state,
-        no_part_show: action.value
-      }
-    case "ON CLICK SELECT POPUP NO PART":
-      // console.log(state.no_part_show[action.rowIndex], "and", state.list_show_row_index)
-      var clone_list_show = [...state.list_show];
-      clone_list_show[state.list_show_row_index] = state.no_part_show[action.rowIndex]
-      clone_list_show[state.list_show_row_index].quantity = 1
-      clone_list_show[state.list_show_row_index].per_unit_price = "1.0000"
-      return {
-        ...state,
-        list_show: clone_list_show
       }
     case "CLICK SEARCH POPUP INVENTORY":
       return {
@@ -461,11 +397,6 @@ export default (state = initialState, action) => {
         ...state,
         document_show: clone_document_show,
       }
-    case "ON CHANGE DESCRIPTION PART":
-      return {
-        ...state,
-        list_desription_part: action.value
-      }
 
     // Mode Add
     case "ON CHANGE DOCUMENT MODE ADD":
@@ -499,72 +430,10 @@ export default (state = initialState, action) => {
       }
     case "ON CHANGE NO PO MODE ADD":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
-      clone_document_show_mode_add.po_id = action.value;
+      clone_document_show_mode_add.refer_to_document = action.value;
       return {
         ...state,
         document_show_mode_add: clone_document_show_mode_add
-      }
-    case "ON CHANGE NO PART EACH ROW MODE ADD":
-      var clone_list_show_mode_add = [...state.list_show_mode_add]
-      clone_list_show_mode_add[action.rowIndex].internal_item_id = action.value
-      return {
-        ...state,
-        list_show_mode_add: clone_list_show_mode_add,
-        list_no_part_mode_add: action.value,
-        list_show_mode_add_row_index: action.rowIndex
-      }
-    case "ON CLICK NO PART EACH ROW MODE ADD":
-      return {
-        ...state,
-        list_show_mode_add_row_index: action.rowIndex,
-        no_part_show_mode_add: initialState.no_part_show_mode_add,
-        list_no_part_mode_add: state.list_show_mode_add[action.rowIndex].internal_item_id
-      }
-    case "ON CLICK SEARCH POPUP NO PART ADD MODE":
-      return {
-        ...state,
-        no_part_show_mode_add: action.value
-      }
-    case "ON CHANGE NO PART MODE ADD":
-      return {
-        ...state,
-        list_no_part_mode_add: action.value
-      }
-    case "ON CLICK SELECT POPUP NO PART MODE ADD":
-      // console.log(state.list_show_mode_add[action.rowIndex], "<<<<<<<<<")
-      var clone_list_show_mode_add = [...state.list_show_mode_add];
-      clone_list_show_mode_add[state.list_show_mode_add_row_index].item_id = state.no_part_show_mode_add[action.rowIndex].item_id
-      clone_list_show_mode_add[state.list_show_mode_add_row_index].internal_item_id = state.no_part_show_mode_add[action.rowIndex].internal_item_id
-      clone_list_show_mode_add[state.list_show_mode_add_row_index].description = state.no_part_show_mode_add[action.rowIndex].description
-      clone_list_show_mode_add[state.list_show_mode_add_row_index].uom_group_id = state.no_part_show_mode_add[action.rowIndex].uom_group_id
-      clone_list_show_mode_add[state.list_show_mode_add_row_index].list_uoms = state.no_part_show_mode_add[action.rowIndex].list_uoms
-      clone_list_show_mode_add[state.list_show_mode_add_row_index].quantity = 1
-      clone_list_show_mode_add[state.list_show_mode_add_row_index].per_unit_price = "1.0000"
-      return {
-        ...state,
-        list_show_mode_add: clone_list_show_mode_add
-      }
-    case "ON CHANGE QUILITY EACH ROW MODE ADD":
-      var clone_list_show_mode_add = [...state.list_show_mode_add];
-      clone_list_show_mode_add[action.rowIndex].quantity = action.value
-      return {
-        ...state,
-        list_show_mode_add: clone_list_show_mode_add
-      }
-    case "ON CHANGE UNIT PER BATH EACH ROW MODE ADD":
-      var clone_list_show_mode_add = [...state.list_show_mode_add];
-      clone_list_show_mode_add[action.rowIndex].per_unit_price = action.value
-      return {
-        ...state,
-        list_show_mode_add: clone_list_show_mode_add,
-      }
-    case "ON CHANGE TOTAL EACH ROW MODE ADD":
-      var clone_list_show_mode_add = [...state.list_show_mode_add];
-      // console.log(clone_list_show[action.rowIndex])
-      clone_list_show_mode_add[action.rowIndex].total = action.value
-      return {
-        ...state,
-        list_show_mode_add: clone_list_show_mode_add
       }
     case "ON CHANGE NOTE MODE ADD":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
@@ -609,30 +478,32 @@ export default (state = initialState, action) => {
         ...state,
         document_show_mode_add: clone_document_show_mode_add,
       }
-    case "ON CHANGE DESCRIPTION PART MODE ADD":
+    case "CLICK SEARCH POPUP S1646":
+      // console.log("reducer", action.value)
       return {
         ...state,
-        list_desription_part_mode_add: action.value
+        s1646_show_popup: action.value
       }
-
-    case "KEY PRESS ENTER":
-      if (action.value === action.res.internal_item_id) {
-        console.log("state.list_show_mode_add", state.list_show_mode_add)
-        var clone_list_show_mode_add = [...state.list_show_mode_add];
-        clone_list_show_mode_add[action.rowIndex] = action.res.internal_item_id
-        clone_list_show_mode_add[action.rowIndex].quantity = "1"
-        clone_list_show_mode_add[action.rowIndex].per_unit_price = "1.0000"
-        return {
-          ...state,
-          list_show_mode_add: clone_list_show_mode_add
-        }
+    case "CLICK SELECT POPUP S1646":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      var list = {
+        "item_id": "",
+        "internal_item_id": "",
+        "description": "",
+        "quantity": "",
+        "uom_group_id": "",
+        "unit": "",
+        "per_unit_price": "",
+        "list_uoms": []
       }
-      else return {
-        ...state,
+      for (var i = action.value.line_items.length; i <= 9; i++) {
+        action.value.line_items.push(list);
       }
-    case "NOT ENTER":
+      clone_document_show_mode_add.refer_to_document = action.value.internal_document_id
       return {
         ...state,
+        list_show_mode_add: action.value.line_items,
+        document_show_mode_add: clone_document_show_mode_add
       }
 
     // POST DOCUMENT
@@ -658,8 +529,8 @@ export default (state = initialState, action) => {
       return {
         ...state,
         action: initialState.action,
-        // fill_data: initialState.fill_data,
-        // tool_mode: initialState.tool_mode,
+        fill_data: initialState.fill_data,
+        tool_mode: initialState.tool_mode,
 
         document_id: initialState.document_id,
         document_show_mode_add: initialState.document_show_mode_add,
@@ -668,23 +539,6 @@ export default (state = initialState, action) => {
         no_document: initialState.no_document,
         document_show: initialState.document_show,
         list_show: initialState.list_show,
-
-        document_show_popup: initialState.document_show_popup,
-
-        list_no_part: initialState.list_no_part,
-        list_description_part: initialState.list_description_part,
-        no_part_show: initialState.no_part_show,
-        inventory_show_popup: initialState.inventory_show_popup,
-        list_show_row_index: initialState.list_show_row_index,
-
-        document_type_id: initialState.document_type_id,
-        list_no_part_mode_add: initialState.list_no_part_mode_add,
-        list_desription_part_mode_add: initialState.list_desription_part_mode_add,
-
-        list_show_mode_add_row_index: initialState.list_show_mode_add_row_index,
-        no_part_show_mode_add: initialState.no_part_show_mode_add,
-
-        line_users: initialState.line_users,
       }
 
     // แนบไฟล์

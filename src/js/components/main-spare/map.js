@@ -53,7 +53,7 @@ class Map extends React.Component {
                             <div className="ml-3" id="blackground-white" style={{ height: "380px" }}>
                                 <Link to="/good-receipt"><img alt='some value' src={Oneone} className="one-one" /></Link>
                                 <img alt='some value' src={Onetwo} className="one-two" />
-                                <Link to="/good-return-no-po"><img alt='some value' src={Onethree} className="one-three" /></Link>
+                                <Link to="/good-good-issue-no-po"><img alt='some value' src={Onethree} className="one-three" /></Link>
                                 <img alt='some value' src={Arrow1} className="arrow1" />
                                 <img alt='some value' src={Arrow2} className="arrow2" />
                                 <img alt='some value' src={Arrow3} className="arrow3" />

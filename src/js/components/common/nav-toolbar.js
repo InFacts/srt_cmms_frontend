@@ -1,4 +1,6 @@
 import React from 'react';
+import jwt_decode from 'jwt-decode';
+
 import { connect } from 'react-redux'
 
 import axios from "axios";
@@ -75,13 +77,13 @@ class Toolbar extends React.Component {
                         pointer: "auto",
                         disable: false
                     },
-                    {
-                        id: 3,
-                        alt: "edit",
-                        src: EditDocument,
-                        pointer: "auto",
-                        disable: false
-                    },
+                    // {
+                    //     id: 3,
+                    //     alt: "edit",
+                    //     src: EditDocument,
+                    //     pointer: "auto",
+                    //     disable: false
+                    // },
                     {
                         id: 4,
                         alt: "add",
@@ -149,13 +151,13 @@ class Toolbar extends React.Component {
                         pointer: "auto",
                         disable: false
                     },
-                    {
-                        id: 3,
-                        alt: "edit",
-                        src: EditDocument,
-                        pointer: "none",
-                        disable: true
-                    },
+                    // {
+                    //     id: 3,
+                    //     alt: "edit",
+                    //     src: EditDocument,
+                    //     pointer: "none",
+                    //     disable: true
+                    // },
                     {
                         id: 4,
                         alt: "add",
@@ -223,13 +225,13 @@ class Toolbar extends React.Component {
                         pointer: "auto",
                         disable: false
                     },
-                    {
-                        id: 3,
-                        alt: "edit",
-                        src: EditDocument,
-                        pointer: "none",
-                        disable: true
-                    },
+                    // {
+                    //     id: 3,
+                    //     alt: "edit",
+                    //     src: EditDocument,
+                    //     pointer: "none",
+                    //     disable: true
+                    // },
                     {
                         id: 4,
                         alt: "add",
@@ -298,13 +300,13 @@ class Toolbar extends React.Component {
                     pointer: "auto",
                     disable: false
                 },
-                {
-                    id: 3,
-                    alt: "edit",
-                    src: EditDocument,
-                    pointer: "none",
-                    disable: true
-                },
+                // {
+                //     id: 3,
+                //     alt: "edit",
+                //     src: EditDocument,
+                //     pointer: "none",
+                //     disable: true
+                // },
                 {
                     id: 4,
                     alt: "add",
@@ -397,10 +399,13 @@ export const action = (value) => {
         return function (dispatch) {
             return axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/new/0`, "dataEmtry", { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
                 // console.log(res)
+                var token_auth = localStorage.getItem('token_auth');
+                // const decoded = jwt_decode(token_auth);
                 dispatch({
                     type: "POST DOCUMENT",
                     value: value,
-                    resPost: res.data
+                    resPost: res.data,
+                    decoded: jwt_decode(token_auth)
                 });
             }).catch(function (err) {
                 console.log(err)

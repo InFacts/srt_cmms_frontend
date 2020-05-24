@@ -19,7 +19,7 @@ import SpareGoodIssue from './components/spare-good-issue';
 import SpareGoodMaintenace from './components/spare-good-maintenace';
 import SpareReturn1 from './components/spare-return-1';
 import SpareReturn2 from './components/spare-return-2';
-import SpareReturnNoPO from './components/spare-return-no-po';
+import SpareGoodReceiptNoPO from './components/spare-good-receipt-no-po';
 import SpareTakeOut from './components/spare-take-out';
 import SpareSalvage1 from './components/spare-salvage-management-1';
 import SpareSalvage2 from './components/spare-salvage-management-2';
@@ -37,6 +37,7 @@ import UserManagement from './components/user-management'
 import Profile from './components/profile'
 import ActivityLog from './components/activity-log'
 import Register from './components/register'
+
 class FrontEnd extends React.Component {
     render() {
         return (
@@ -60,7 +61,7 @@ class FrontEnd extends React.Component {
 
                 <Route exact path="/good-return-1" component={SpareReturn1} />
                 <Route exact path="/good-return-2" component={SpareReturn2} />
-                <Route exact path="/good-return-no-po" component={SpareReturnNoPO} />
+                <Route exact path="/good-good-issue-no-po" component={SpareGoodReceiptNoPO} />
                 <Route exact path="/good-take-out" component={SpareTakeOut} />
                 <Route exact path="/salvage-management-1" component={SpareSalvage1} />
                 <Route exact path="/salvage-management-2" component={SpareSalvage2} />
