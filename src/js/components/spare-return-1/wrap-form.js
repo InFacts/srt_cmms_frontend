@@ -40,7 +40,9 @@ class WrapForm extends React.Component {
                 "document_id": document_id,
                 "internal_document_id": document_show.internal_document_id,
                 "remark": document_show.remark,
-                "refer_to_document": document_show.refer_to_document,
+                "created_by_admin_id": document_show.created_by_admin_id,
+                "created_by_user_id": document_show.created_by_user_id_database,
+                // "refer_to_document_id": document_show.refer_to_document,
             },
             "specific": {
                 "document_id": document_id,
@@ -49,7 +51,7 @@ class WrapForm extends React.Component {
                 "line_items": line_items,
                 "movement": {
                     "document_id": document_id,
-                    
+
                 }
             }
         };
@@ -61,8 +63,7 @@ class WrapForm extends React.Component {
     handleSubmit = e => {
         e.preventDefault();
         const current = this;
-        
-
+        console.log("this.packForm(this.props.document_id, this.props.document_show_mode_add, this.props.list_show_mode_add)");
         if (this.props.actionMode === "add") {
             console.log(this.packForm(this.props.document_id, this.props.document_show_mode_add, this.props.list_show_mode_add));
             return (
@@ -91,11 +92,13 @@ class WrapForm extends React.Component {
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit}>
+            <div>
                 <TopContent />
                 <BottomContent />
-                <Footer />
-            </form>
+                <form onSubmit={this.handleSubmit}>
+                    <Footer />
+                </form>
+            </div>
         )
     };
 }

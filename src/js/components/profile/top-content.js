@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux'
 import '../../../css/style.css'
 import '../../../css/grid12.css';
-
+import jwt_decode from 'jwt-decode';
 class TopContent extends React.Component {
   componentDidMount() {
     document.getElementById("defaultOpen").click();
@@ -24,7 +24,7 @@ class TopContent extends React.Component {
 
 
   render() {
-
+    // var token_auth = localStorage.getItem('token_auth');
     return (
       <div>
         <div id="blackground-white">
@@ -39,12 +39,12 @@ class TopContent extends React.Component {
                   <p className="top-text mt-1">ตำแหน่งงาน</p>
                   <p className="top-text">สังกัด</p>
                 </div>
-                <div className="grid_3 pull_0">
-                  <p className="top-text">๒๒๒๒๒๒๒๒๒๒๒๒๒๒๒</p>
-                  <p className="top-text" >๒๒๒๒๒๒๒๒๒๒๒๒๒๒๒</p>
-                  <p className="top-text">๒๒๒๒๒๒๒๒๒๒๒๒๒๒๒</p>
+                <div className="grid_8 pull_0">
+                  <p className="top-text">{this.props.profile.firstname_th} {this.props.profile.lastname_th}</p>
+                  <p className="top-text" >{this.props.profile.address}</p>
+                  <p className="top-text">{this.props.profile.address}</p>
                 </div>
-              
+
               </div>
 
 
@@ -66,7 +66,7 @@ class TopContent extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-
+  profile: state.profile,
 })
 
 const mapDispatchToProps = (dispatch) => ({
