@@ -39,66 +39,59 @@ class WrapForm extends React.Component {
             "document": {
                 "document_id": document_id,
                 "internal_document_id": document_show.internal_document_id,
-                "remark": document_show.remark,
                 "created_by_admin_id": document_show.created_by_admin_id,
                 "created_by_user_id": document_show.created_by_user_id_database,
-                // "refer_to_document_id": document_show.refer_to_document,
+                "remark": document_show.remark,
             },
             "specific": {
                 "document_id": document_id,
                 "dest_warehouse_id": parseInt(document_show.dest_warehouse_id),
-                "src_warehouse_id": 999,
+                "src_warehouse_id": parseInt(document_show.src_warehouse_id),
                 "line_items": line_items,
                 "movement": {
                     "document_id": document_id,
-
+                    "transfer_method": document_show.transfer_method
                 }
             }
         };
+        console.log(data)
         return data;
     }
 
-
-
-    handleSubmit = e => {
+    handleSubmit = (e) => {
         e.preventDefault();
         const current = this;
-        console.log("this.packForm(this.props.document_id, this.props.document_show_mode_add, this.props.list_show_mode_add)");
-        if (this.props.actionMode === "add") {
-            console.log(this.packForm(this.props.document_id, this.props.document_show_mode_add, this.props.list_show_mode_add));
-            return (
-                axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_id}/102`, this.packForm(this.props.document_id, this.props.document_show_mode_add, this.props.list_show_mode_add), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-                    .then(res => {
-                        console.log(res);
-                        this.props.onClearStateModeAdd()
-                    }).catch(function (err) {
-                        console.log(err);
-                    })
-            )
-        }
-        if (this.props.actionMode === "edit") {
-            console.log(this.packForm(this.props.document_show.document_id, this.props.document_show, this.props.list_show));
-            return (
-                axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_show.document_id}/102`, this.packForm(this.props.document_show.document_id, this.props.document_show, this.props.list_show), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-                    .then(res => {
-                        console.log(res);
-                        this.props.onClearStateModeAdd()
-                    }).catch(function (err) {
-                        console.log(err);
-                    })
-            )
-        }
+            if (this.props.actionMode === "add") {
+                return (
+                    axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_id}/121`, this.packForm(this.props.document_id, this.props.document_show_mode_add, this.props.list_show_mode_add), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+                        .then(res => {
+                            console.log(res);
+                            this.props.onClearStateModeAdd()
+                        }).catch(function (err) {
+                            console.log(err);
+                        })
+                )
+            }
+            if (this.props.actionMode === "edit") {
+                return (
+                    axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_show.document_id}/121`, this.packForm(this.props.document_show.document_id, this.props.document_show, this.props.list_show), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+                        .then(res => {
+                            console.log(res);
+                            this.props.onClearStateModeAdd()
+                        }).catch(function (err) {
+                            console.log(err);
+                        })
+                )
+            }
     }
 
     render() {
         return (
-            <div>
+            <form onSubmit={(e) => { this.handleSubmit(e) }}>
                 <TopContent />
                 <BottomContent />
-                <form onSubmit={this.handleSubmit}>
-                    <Footer />
-                </form>
-            </div>
+                <Footer />
+            </form>
         )
     };
 }

@@ -1,5 +1,4 @@
 import React from 'react';
-import jwt_decode from 'jwt-decode';
 
 import { connect } from 'react-redux'
 
@@ -398,30 +397,19 @@ export const action = (value) => {
     if (value === "add") {
         return function (dispatch) {
             return axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/new/0`, "dataEmtry", { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
-                // console.log(res)
+                console.log(res)
+                return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/profile`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((resUser) => {
+                    console.log("resUser",resUser)
+                    dispatch({
+                        type: "POST DOCUMENT",
+                        value: value,
+                        resPost: res.data,
+                        decoded: resUser.data
+                    });
+                }).catch(function (err) {
+                    console.log(err)
+                })
 
-                return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/profile`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-                    .then((resUser) => {
-                        dispatch({
-                            type: "POST DOCUMENT",
-                            value: value,
-                            resPost: res.data,
-                            decoded: resUser.data
-                        });
-
-
-                    }).catch(function (err) {
-                        console.log(err)
-                    })
-
-                // var token_auth = localStorage.getItem('token_auth');
-                // // const decoded = jwt_decode(token_auth);
-                // dispatch({
-                //     type: "POST DOCUMENT",
-                //     value: value,
-                //     resPost: res.data,
-                //     decoded: jwt_decode(token_auth)
-                // });
             }).catch(function (err) {
                 console.log(err)
             })

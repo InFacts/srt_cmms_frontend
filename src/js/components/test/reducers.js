@@ -1,4 +1,7 @@
 const initialState = {
+
+    test: "nuk",
+
     count: 0,
     otherState: "",
     text: "nuk",

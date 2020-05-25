@@ -5,7 +5,10 @@ import Login from './components/signin';
 import Main4Module from './components/main-module';
 import MainSpare from './components/main-spare';
 import MainPmt from './components/main-pmt';
-import S1646 from './components/spare-s16-46';
+
+// import S1646 from './components/spare-s16-46';
+import S1646 from './components/spare-s16-46-2';
+
 import SS101 from './components/ss101';
 import WO from './components/work-order';
 import WR from './components/work-request';
@@ -15,11 +18,14 @@ import AssMas from './components/asset-master';
 import Inventory from './components/spare-inventory';
 import ItemMasterData from './components/spare-item-master-data';
 import SpareGoodReceipt from './components/spare-good-receipt';
+
 import SpareGoodIssue from './components/spare-good-issue';
+import SpareGoodIssue2 from './components/spare-good-issue-2';
+
 import SpareGoodMaintenace from './components/spare-good-maintenace';
 import SpareReturn1 from './components/spare-return-1';
 import SpareReturn2 from './components/spare-return-2';
-import SpareReturnNoPO from './components/spare-return-no-po';
+import SpareGoodReceiptNoPO from './components/spare-good-receipt-no-po';
 import SpareTakeOut from './components/spare-take-out';
 import SpareSalvage1 from './components/spare-salvage-management-1';
 import SpareSalvage2 from './components/spare-salvage-management-2';
@@ -37,6 +43,7 @@ import UserManagement from './components/user-management'
 import Profile from './components/profile'
 import ActivityLog from './components/activity-log'
 import Register from './components/register'
+
 class FrontEnd extends React.Component {
     render() {
         return (
@@ -47,6 +54,7 @@ class FrontEnd extends React.Component {
                 <Route exact path="/main-pmt" component={MainPmt} />
                 <Route exact path="/ss101" component={SS101} />
                 <Route exact path="/s1646" component={S1646} />
+                {/* <Route exact path="/s1646-2" component={S16462} /> */}
                 <Route exact path="/wo" component={WO} />
                 <Route exact path="/wr" component={WR} />
                 <Route exact path="/plan" component={Plan} />
@@ -55,12 +63,15 @@ class FrontEnd extends React.Component {
                 <Route exact path="/inventory" component={Inventory} />
                 <Route exact path="/item-master-data" component={ItemMasterData} />
                 <Route exact path="/good-receipt" component={SpareGoodReceipt} />
+
                 <Route exact path="/good-issue" component={SpareGoodIssue} />
+                <Route exact path="/good-issue-2" component={SpareGoodIssue2} />
+
                 <Route exact path="/good-maintenace" component={SpareGoodMaintenace} />
 
                 <Route exact path="/good-return-1" component={SpareReturn1} />
                 <Route exact path="/good-return-2" component={SpareReturn2} />
-                <Route exact path="/good-return-no-po" component={SpareReturnNoPO} />
+                <Route exact path="/good-good-issue-no-po" component={SpareGoodReceiptNoPO} />
                 <Route exact path="/good-take-out" component={SpareTakeOut} />
                 <Route exact path="/salvage-management-1" component={SpareSalvage1} />
                 <Route exact path="/salvage-management-2" component={SpareSalvage2} />

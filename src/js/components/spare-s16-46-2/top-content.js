@@ -36,6 +36,25 @@ class TopContent extends React.Component {
     }
   }
 
+  checkTransfer = (transfer_method) => {
+    if (transfer_method === "รับของเอง") {
+      return (
+        <select className="edit-select-top" onChange={(e) => this.props.onChangeTransfer(e)}>
+          <option value="รับของเอง" selected> รับของเอง </option>
+          <option value="ส่งไปยังคลังปลายทาง"> ส่งไปยังคลังปลายทาง </option>
+        </select>
+      )
+    }
+    else {
+      return (
+        <select className="edit-select-top" onChange={(e) => this.props.onChangeTransfer(e)}>
+          <option value="รับของเอง"> รับของเอง </option>
+          <option value="ส่งไปยังคลังปลายทาง" selected> ส่งไปยังคลังปลายทาง </option>
+        </select>
+      )
+    }
+  }
+
   checkActionMode = (mode) => {
     // console.log(mode)
     const current = this;
@@ -70,7 +89,7 @@ class TopContent extends React.Component {
 
           <div className="grid_12">
             <div className="grid_2">
-              <p className="top-text">ผู้นำเข้า</p>
+              <p className="top-text">ผู้นำออก</p>
             </div>
             <div className="grid_3 pull_1">
               <input type="text" className="cancel-default" defaultValue={current.props.document_show.created_by_user_name_th} disabled="disabled"></input>
@@ -91,25 +110,49 @@ class TopContent extends React.Component {
               <input type="text" className="cancel-default" defaultValue={current.props.document_show.created_by_admin_name_th} disabled="disabled"></input>
             </div>
             <div className="grid_3 float-right">
-              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.dest_warehouse_id} disabled="disabled"></input>
+              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.src_warehouse_id} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right">
-              <p className="top-text float-right">เลขที่คลัง</p>
+              <p className="top-text float-right">เลขที่คลังต้นทาง</p>
             </div>
           </div>
 
           <div className="grid_12">
-            <div className="grid_2">
-              <p className="top-text">เลขที่ใบสั่งซื้อ/เลขที่เอกสารอ้างอิง</p>
+            <div className="grid_3 float-right">
+              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.src_warehouse_name} disabled="disabled"></input>
             </div>
-            <div className="grid_3 pull_0">
-              <input type="text" className="cancel-default" defaultValue={current.props.document_show.po_id} disabled="disabled"></input>
+            <div className="grid_2 float-right">
+              <p className="top-text float-right">ชื่อคลังต้นทาง</p>
             </div>
+          </div>
+
+          <div className="grid_12">
+            <div className="grid_3 float-right">
+              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.dest_warehouse_id} disabled="disabled"></input>
+            </div>
+            <div className="grid_2 float-right">
+              <p className="top-text float-right">เลขที่คลังปลายทาง</p>
+            </div>
+          </div>
+
+          <div className="grid_12">
             <div className="grid_3 float-right">
               <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.dest_warehouse_name} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right">
-              <p className="top-text float-right">ชื่อคลัง</p>
+              <p className="top-text float-right">ชื่อคลังปลายทาง</p>
+            </div>
+          </div>
+
+          <div className="grid_12">
+            <div className="grid_3 float-right">
+              <select className="edit-select-top" disabled="disabled">
+                <option value="รับของเอง" selected> {current.props.document_show.transfer_method} </option>
+                {/* <option value="ส่งไปยังคลังปลายทาง"> ส่งไปยังคลังปลายทาง </option> */}
+              </select>
+            </div>
+            <div className="grid_2 float-right">
+              <p className="top-text float-right">รูปแบบการรับของ</p>
             </div>
           </div>
         </>
@@ -138,10 +181,10 @@ class TopContent extends React.Component {
 
           <div className="grid_12">
             <div className="grid_2">
-              <p className="top-text">ผู้นำเข้า</p>
+              <p className="top-text">ผู้นำออก</p>
             </div>
             <div className="grid_3 pull_1">
-            <div className="p-search-box cancel-margin">
+              <div className="p-search-box cancel-margin">
                 <input type="text" className="p-search-box__input cancel-default" value={current.props.document_show.created_by_user_name_th} onChange={(e) => this.props.onChangeName(e)} required />
                 <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalInventory" aria-controls="modalUserNameModeEdit"></i></button>
               </div>
@@ -163,27 +206,51 @@ class TopContent extends React.Component {
             </div>
             <div className="grid_3 float-right">
               <div className="p-search-box cancel-margin">
+                <input type="text" className="p-search-box__input cancel-default" value={current.props.document_show.src_warehouse_id} onChange={(e) => this.props.onChangeSrcInventory(e)} />
+                <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalInventory" aria-controls="modalSrcInventoryEdit"></i></button>
+              </div>
+            </div>
+            <div className="grid_2 float-right">
+              <p className="top-text float-right">เลขที่คลังต้นทาง</p>
+            </div>
+          </div>
+
+          <div className="grid_12">
+            <div className="grid_3 float-right">
+              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.src_warehouse_name} disabled="disabled"></input>
+            </div>
+            <div className="grid_2 float-right">
+              <p className="top-text float-right">ชื่อคลังต้นทาง</p>
+            </div>
+          </div>
+
+          <div className="grid_12">
+            <div className="grid_3 float-right">
+              <div className="p-search-box cancel-margin">
                 <input type="text" className="p-search-box__input cancel-default" value={current.props.document_show.dest_warehouse_id} onChange={(e) => this.props.onChangeMyInventory(e)} />
                 <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalInventory" aria-controls="modalInventoryEdit"></i></button>
               </div>
             </div>
             <div className="grid_2 float-right">
-              <p className="top-text float-right">เลขที่คลัง</p>
+              <p className="top-text float-right">เลขที่คลังปลายทาง</p>
             </div>
           </div>
 
           <div className="grid_12">
-            <div className="grid_2">
-              <p className="top-text">เลขที่ใบสั่งซื้อ/เลขที่เอกสารอ้างอิง</p>
-            </div>
-            <div className="grid_3 pull_0">
-              <input type="text" className="cancel-default" value={current.props.document_show.po_id} onChange={(e) => this.props.onChangeNoPo(e)}></input>
-            </div>
             <div className="grid_3 float-right">
               <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.dest_warehouse_name} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right">
-              <p className="top-text float-right">ชื่อคลัง</p>
+              <p className="top-text float-right">ชื่อคลังปลายทาง</p>
+            </div>
+          </div>
+
+          <div className="grid_12">
+            <div className="grid_3 float-right">
+              {current.checkTransfer(current.props.document_show.transfer_method)}
+            </div>
+            <div className="grid_2 float-right">
+              <p className="top-text float-right">รูปแบบการรับของ</p>
             </div>
           </div>
         </>
@@ -209,7 +276,7 @@ class TopContent extends React.Component {
 
           <div className="grid_12">
             <div className="grid_2">
-              <p className="top-text">ผู้นำเข้า</p>
+              <p className="top-text">ผู้นำออก</p>
             </div>
             <div className="grid_3 pull_1">
               <div className="p-search-box cancel-margin">
@@ -230,8 +297,30 @@ class TopContent extends React.Component {
               <p className="top-text">ผู้สร้างเอกสาร</p>
             </div>
             <div className="grid_3 pull_1">
-              <input type="text" className="cancel-default" value={current.props.document_show_mode_add.created_by_admin_name_th} disabled="disabled"></input>
+              <input type="text" className="cancel-default" value={current.props.document_show_mode_add.created_by_admin_name_th} onChange={(e) => this.props.onChangeNameByAdmin(e)} disabled="disabled"></input>
             </div>
+            <div className="grid_3 float-right">
+              <div className="p-search-box cancel-margin">
+                <input type="text" className="p-search-box__input cancel-default" value={current.props.document_show_mode_add.src_warehouse_id} onChange={(e) => this.props.onChangeSrcInventoryModeAdd(e)} />
+                <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalInventory" aria-controls="modalSrcInventoryAdd"></i></button>
+              </div>
+            </div>
+            <div className="grid_2 float-right">
+              <p className="top-text float-right">เลขที่คลังต้นทาง</p>
+            </div>
+          </div>
+
+
+          <div className="grid_12">
+            <div className="grid_3 float-right">
+              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show_mode_add.src_warehouse_name} disabled="disabled"></input>
+            </div>
+            <div className="grid_2 float-right">
+              <p className="top-text float-right">ชื่อคลังต้นทาง</p>
+            </div>
+          </div>
+
+          <div className="grid_12">
             <div className="grid_3 float-right">
               <div className="p-search-box cancel-margin">
                 <input type="text" className="p-search-box__input cancel-default" value={current.props.document_show_mode_add.dest_warehouse_id} onChange={(e) => this.props.onChangeMyInventoryModeAdd(e)} required />
@@ -239,22 +328,29 @@ class TopContent extends React.Component {
               </div>
             </div>
             <div className="grid_2 float-right">
-              <p className="top-text float-right">เลขที่คลัง</p>
+              <p className="top-text float-right">เลขที่คลังปลายทาง</p>
             </div>
           </div>
 
           <div className="grid_12">
-            <div className="grid_2">
-              <p className="top-text">เลขที่ใบสั่งซื้อ/เลขที่เอกสารอ้างอิง</p>
-            </div>
-            <div className="grid_3 pull_0">
-              <input type="text" className="cancel-default" value={current.props.document_show_mode_add.po_id} onChange={(e) => this.props.onChangeNoPoModeAdd(e)} required></input>
-            </div>
             <div className="grid_3 float-right">
               <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show_mode_add.dest_warehouse_name} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right">
-              <p className="top-text float-right">ชื่อคลัง</p>
+              <p className="top-text float-right">ชื่อคลังปลายทาง</p>
+            </div>
+          </div>
+
+          <div className="grid_12">
+            <div className="grid_3 float-right">
+            <select className="edit-select-top" onChange={(e) => this.props.onChangeTransferModeAdd(e)}>
+          <option value=""> none </option>
+          <option value="รับของเอง"> รับของเอง </option>
+          <option value="ส่งไปยังคลังปลายทาง"> ส่งไปยังคลังปลายทาง </option>
+        </select>
+            </div>
+            <div className="grid_2 float-right">
+              <p className="top-text float-right">รูปแบบการรับของ</p>
             </div>
           </div>
         </>
@@ -269,7 +365,7 @@ class TopContent extends React.Component {
         <div id="blackground-white">
           <div className="container_12 clearfix">
             <section className="grid_12 ">
-              <h4 className="head-title">นำอะไหล่เข้าโดยมีใบสั่งซื้อ</h4>
+              <h4 className="head-title">เบิก/โอนย้าย อะไหล่/พัสดุ - แบบ ส.16/46</h4>
               {this.checkActionMode(this.props.actionMode)}
             </section>
 
@@ -330,7 +426,60 @@ class TopContent extends React.Component {
           </div>
         </div>
 
-        {/* PopUp ค้นหาเลขที่คลัง MODE EDIT */}
+        {/* PopUp ค้นหาเลขที่คลังต้นทาง MODE EDIT */}
+        <div className="modal" id="modalSrcInventoryEdit" style={{ display: "none" }}>
+          <div className="gray-board">
+            <p className="head-title-modal edit">ค้นหาเลขที่คลัง</p>
+            <div className="container_12 edit-padding">
+
+              <div className="grid_12">
+                <div className="grid_2"><p className="cancel-default">เลขที่คลัง</p></div>
+                <div className="grid_8 pull_0">
+                  <input type="text" className="cancel-default grid_3" value={this.props.document_show.src_warehouse_id} onChange={(e) => this.props.onChangeSrcInventory(e)} />
+                </div>
+              </div>
+              <div className="grid_12">
+                <div className="grid_2"><p className="cancel-default">ชื่อคลัง</p></div>
+                <div className="grid_8 pull_0">
+                  <input type="text" className="cancel-default grid_3" value={this.props.document_show.src_warehouse_name} onChange={(e) => this.props.onChangeSrcInventoryName(e)} />
+                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchInventory(this.props.document_show.src_warehouse_id, this.props.document_show.src_warehouse_name)}>ค้นหา</button>
+                </div>
+              </div>
+
+              <div className="grid_12">
+                <table className="table-many-column mt-3">
+                  <thead>
+                    <tr>
+                      <th className="font" style={{ minWidth: "300px" }}>เลขที่คลัง</th>
+                      <th className="font" style={{ minWidth: "450px" }}>ชื่อคลัง</th>
+                      <th className="font" style={{ minWidth: "150px" }}>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.props.inventory_show_popup.map(function (inventory_show_popup, index) {
+                      return (
+                        <tr key={index} id={index}>
+                          <td className="edit-padding" style={{ minWidth: "150px" }}> {inventory_show_popup.warehouse_id} </td>
+                          <td className="edit-padding" style={{ minWidth: "300px" }}> {inventory_show_popup.name} </td>
+                          <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
+                            <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectSrcInventoryModeEdit(e)} aria-label="Close active modal" aria-controls="modalSrcInventoryEdit" id="closeModalInventory" >เลือก</button>
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="grid_12">
+                <button className="button-blue float-right grid_1 mr-5 mt-3" type="button" aria-label="Close active modal" aria-controls="modalSrcInventoryEdit" id="closeModalInventory">กลับ</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        {/* PopUp ค้นหาเลขที่คลังปลายทาง MODE EDIT */}
         <div className="modal" id="modalInventoryEdit" style={{ display: "none" }}>
           <div className="gray-board">
             <p className="head-title-modal edit">ค้นหาเลขที่คลัง</p>
@@ -382,11 +531,11 @@ class TopContent extends React.Component {
             </div>
           </div>
         </div>
-        
+
         {/* PopUp ค้นหาชื่อพนักงาน MODE EDIT */}
         <div className="modal" id="modalUserNameModeEdit" style={{ display: "none" }}>
           <div className="gray-board">
-            <p className="head-title-modal edit">ค้นหาชื่อผู้นำเข้า</p>
+            <p className="head-title-modal edit">ค้นหาชื่อผู้นำออก</p>
             <div className="container_12 edit-padding">
 
               <div className="grid_12">
@@ -398,8 +547,8 @@ class TopContent extends React.Component {
               <div className="grid_12">
                 <div className="grid_2"><p className="cancel-default">รหัสพนักงาน</p></div>
                 <div className="grid_8 pull_0">
-                  <input type="text" className="cancel-default grid_3" value={this.props.document_show.employee_id} onChange={(e) => this.props.onChangeNameId(e)} />
-                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchUserModeEdit(this.props.document_show.created_by_user_name_th, this.props.document_show.employee_id)}>ค้นหา</button>
+                  <input type="text" className="cancel-default grid_3" value={this.props.document_show.created_by_user_id} onChange={(e) => this.props.onChangeNameId(e)} />
+                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchUserModeEdit(this.props.document_show.created_by_user_name_th, this.props.document_show.created_by_user_id)}>ค้นหา</button>
                 </div>
               </div>
 
@@ -436,7 +585,60 @@ class TopContent extends React.Component {
           </div>
         </div>
 
-        {/* PopUp ค้นหาเลขที่คลัง MODE ADD */}
+        {/* PopUp ค้นหาเลขที่คลังต้นทาง MODE ADD */}
+        <div className="modal" id="modalSrcInventoryAdd" style={{ display: "none" }}>
+          <div className="gray-board">
+            <p className="head-title-modal edit">ค้นหาเลขที่คลัง</p>
+            <div className="container_12 edit-padding">
+
+              <div className="grid_12">
+                <div className="grid_2"><p className="cancel-default">เลขที่คลัง</p></div>
+                <div className="grid_8 pull_0">
+                  <input type="text" className="cancel-default grid_3" value={this.props.document_show_mode_add.src_warehouse_id} onChange={(e) => this.props.onChangeSrcInventoryModeAdd(e)} />
+                </div>
+              </div>
+              <div className="grid_12">
+                <div className="grid_2"><p className="cancel-default">ชื่อคลัง</p></div>
+                <div className="grid_8 pull_0">
+                  <input type="text" className="cancel-default grid_3" value={this.props.document_show_mode_add.src_warehouse_name} onChange={(e) => this.props.onChangeSrcInventoryNameModeAdd(e)} />
+                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchInventoryModeAdd(this.props.document_show_mode_add.src_warehouse_id, this.props.document_show_mode_add.src_warehouse_name)}>ค้นหา</button>
+                </div>
+              </div>
+
+              <div className="grid_12">
+                <table className="table-many-column mt-3">
+                  <thead>
+                    <tr>
+                      <th className="font" style={{ minWidth: "300px" }}>เลขที่คลัง</th>
+                      <th className="font" style={{ minWidth: "450px" }}>ชื่อคลัง</th>
+                      <th className="font" style={{ minWidth: "150px" }}>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.props.inventory_show_popup.map(function (inventory_show_popup, index) {
+                      return (
+                        <tr key={index} id={index}>
+                          <td className="edit-padding" style={{ minWidth: "150px" }}> {inventory_show_popup.warehouse_id} </td>
+                          <td className="edit-padding" style={{ minWidth: "300px" }}> {inventory_show_popup.name} </td>
+                          <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
+                            <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectSrcInventoryModeAdd(e)} aria-label="Close active modal" aria-controls="modalSrcInventoryAdd" id="closeModalInventory" >เลือก</button>
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="grid_12">
+                <button className="button-blue float-right grid_1 mr-5 mt-3" type="button" aria-label="Close active modal" aria-controls="modalSrcInventoryAdd" id="closeModalInventory">กลับ</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        {/* PopUp ค้นหาเลขที่คลังปลายทาง MODE ADD */}
         <div className="modal" id="modalInventory" style={{ display: "none" }}>
           <div className="gray-board">
             <p className="head-title-modal edit">ค้นหาเลขที่คลัง</p>
@@ -492,7 +694,7 @@ class TopContent extends React.Component {
         {/* PopUp ค้นหาชื่อพนักงาน MODE ADD */}
         <div className="modal" id="modalUserName" style={{ display: "none" }}>
           <div className="gray-board">
-            <p className="head-title-modal edit">ค้นหาชื่อผู้นำเข้า</p>
+            <p className="head-title-modal edit">ค้นหาชื่อผู้นำออก</p>
             <div className="container_12 edit-padding">
 
               <div className="grid_12">
@@ -504,8 +706,8 @@ class TopContent extends React.Component {
               <div className="grid_12">
                 <div className="grid_2"><p className="cancel-default">รหัสพนักงาน</p></div>
                 <div className="grid_8 pull_0">
-                  <input type="text" className="cancel-default grid_3" value={this.props.document_show_mode_add.employee_id} onChange={(e) => this.props.onChangeNameIdModeAdd(e)} />
-                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchUser(this.props.document_show_mode_add.created_by_user_name_th, this.props.document_show_mode_add.employee_id)}>ค้นหา</button>
+                  <input type="text" className="cancel-default grid_3" value={this.props.document_show_mode_add.created_by_user_id} onChange={(e) => this.props.onChangeNameIdModeAdd(e)} />
+                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchUser(this.props.document_show_mode_add.created_by_user_name_th, this.props.document_show_mode_add.created_by_user_id)}>ค้นหา</button>
                 </div>
               </div>
 
@@ -561,7 +763,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   onChangeNoDocument: (e) => dispatch(onChangeNoDocument(e)),
   onClickPopUpSearchNoDocument: (e) => dispatch(onClickPopUpSearchNoDocument(e)),
-  onClickSelectNoDocument: (e, i) => dispatch(onClickSelectNoDocument(e, i)),
+  onClickSelectNoDocument: (e) => dispatch(onClickSelectNoDocument(e)),
   onClickOpenPopUp: (e) => dispatch(onClickOpenPopUp(e)),
 
   onClickModeEdit: (e) => dispatch(onClickModeEdit(e)),
@@ -571,25 +773,32 @@ const mapDispatchToProps = (dispatch) => ({
   onChangeNameByAdmin: (e) => dispatch(onChangeNameByAdmin(e)),
   onChangeDate: (e) => dispatch(onChangeDate(e)),
   onChangeMyInventory: (e) => dispatch(onChangeMyInventory(e)),
-  onChangeNoPo: (e) => dispatch(onChangeNoPo(e)),
   onClickPopUpSearchInventory: (e, i) => dispatch(onClickPopUpSearchInventory(e, i)),
   onClickSelectInventory: (e) => dispatch(onClickSelectInventory(e)),
   onChangeMyInventoryName: (e) => dispatch(onChangeMyInventoryName(e)),
+  onChangeSrcInventoryName: (e) => dispatch(onChangeSrcInventoryName(e)),
   onClickSelectInventoryModeEdit: (e) => dispatch(onClickSelectInventoryModeEdit(e)),
   onChangeNameId: (e) => dispatch(onChangeNameId(e)),
   onClickPopUpSearchUserModeEdit: (e, i) => dispatch(onClickPopUpSearchUserModeEdit(e, i)),
   onClickSelectUserModeEdit: (e) => dispatch(onClickSelectUserModeEdit(e)),
+  onChangeSrcInventory: (e) => dispatch(onChangeSrcInventory(e)),
+  onClickSelectSrcInventoryModeEdit: (e) => dispatch(onClickSelectSrcInventoryModeEdit(e)),
+  onChangeTransfer: (e) => dispatch(onChangeTransfer(e)),
 
   // Mode Add
   onChangeNoDocumentModeAdd: (e) => dispatch(onChangeNoDocumentModeAdd(e)),
   onChangeNameModeAdd: (e) => dispatch(onChangeNameModeAdd(e)),
   onChangeNameIdModeAdd: (e) => dispatch(onChangeNameIdModeAdd(e)),
   onChangeDateModeAdd: (e) => dispatch(onChangeDateModeAdd(e)),
-  onChangeNoPoModeAdd: (e) => dispatch(onChangeNoPoModeAdd(e)),
   onChangeMyInventoryModeAdd: (e) => dispatch(onChangeMyInventoryModeAdd(e)),
   onChangeMyInventoryNameModeAdd: (e) => dispatch(onChangeMyInventoryNameModeAdd(e)),
   onClickPopUpSearchUser: (e, i) => dispatch(onClickPopUpSearchUser(e, i)),
   onClickSelectUser: (e) => dispatch(onClickSelectUser(e)),
+  onChangeSrcInventoryModeAdd: (e) => dispatch(onChangeSrcInventoryModeAdd(e)),
+  onChangeSrcInventoryNameModeAdd: (e) => dispatch(onChangeSrcInventoryNameModeAdd(e)),
+  onClickSelectSrcInventoryModeAdd: (e) => dispatch(onClickSelectSrcInventoryModeAdd(e)),
+  onClickPopUpSearchInventoryModeAdd: (e, i) => dispatch(onClickPopUpSearchInventoryModeAdd(e, i)),
+  onChangeTransferModeAdd: (e) => dispatch(onChangeTransferModeAdd(e)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(TopContent);
 
@@ -613,7 +822,7 @@ export const onChangeNoDocument = (e) => {
 }
 export const onClickPopUpSearchNoDocument = (no_document) => {
   return function (dispatch) {
-    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=101&internal_document_id=${no_document}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=121&internal_document_id=${no_document}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       // console.log(res)
       // dispatch
       dispatch({
@@ -660,12 +869,6 @@ export const onChangeMyInventory = (e) => {
     value: e.target.value
   }
 }
-export const onChangeNoPo = (e) => {
-  return {
-    type: "ON CHANGE NO PO",
-    value: e.target.value
-  }
-}
 export const onClickPopUpSearchInventory = (dest_warehouse_id, dest_warehouse_name) => {
   console.log("dest_warehouse_id", dest_warehouse_id, "dest_warehouse_name", dest_warehouse_name)
   return function (dispatch) {
@@ -691,10 +894,23 @@ export const onChangeMyInventoryName = (e) => {
     value: e.target.value
   }
 }
+export const onChangeSrcInventoryName = (e) => {
+  return {
+    type: "ON CHANGE SRC INVENTORY NAMAE",
+    value: e.target.value
+  }
+}
 export const onClickSelectInventoryModeEdit = (e) => {
   console.log(e.target.parentNode.parentNode)
   return {
     type: "CLICK SELECT POPUP INVENTORY MODE EDIT",
+    row_inventory_show_popup: e.target.parentNode.parentNode.id
+  }
+}
+export const onClickSelectSrcInventoryModeEdit = (e) => {
+  console.log(e.target.parentNode.parentNode)
+  return {
+    type: "CLICK SELECT POPUP SRC INVENTORY MODE EDIT",
     row_inventory_show_popup: e.target.parentNode.parentNode.id
   }
 }
@@ -704,13 +920,13 @@ export const onChangeNameId = (e) => {
     value: e.target.value
   }
 }
-export const onClickPopUpSearchUserModeEdit = (created_by_user_name_th, employee_id) => {
-  console.log("created_by_user_name_th",created_by_user_name_th, "employee_id",employee_id)
+export const onClickPopUpSearchUserModeEdit = (created_by_user_name_th, created_by_user_id) => {
+  console.log("created_by_user_name_th", created_by_user_name_th, "created_by_user_id", created_by_user_id)
   return function (dispatch) {
     var space = created_by_user_name_th.indexOf(" ");
     var firstname = created_by_user_name_th.slice(0, space);
-    var lastname = created_by_user_name_th.slice(space+1, created_by_user_name_th.length);
-    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&lastname_th=${lastname}&employee_id=${employee_id === undefined ? "" : employee_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+    var lastname = created_by_user_name_th.slice(space + 1, created_by_user_name_th.length);
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&lastname_th=${lastname}&employee_id=${created_by_user_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       console.log(">>>>", res)
       dispatch({
         type: "CLICK SEARCH POPUP USER MODE EDIT",
@@ -726,8 +942,26 @@ export const onClickSelectUserModeEdit = (e) => {
     row_inventory_show_popup: e.target.parentNode.parentNode.id
   }
 }
+export const onChangeSrcInventory = (e) => {
+  return {
+    type: "ON CHANGE SRC INVENTORY",
+    value: e.target.value
+  }
+}
+export const onChangeTransfer = (e) => {
+  return {
+    type: "ON CHANGE TRANFER",
+    value: e.target.value
+  }
+}
 
 // Mode Add
+export const onChangeSrcInventoryModeAdd = (e) => {
+  return {
+    type: "ON CHANGE SRC INVENTORY MODE ADD",
+    value: e.target.value
+  }
+}
 export const onChangeNoDocumentModeAdd = (e) => {
   // console.log(e.target.value)
   return {
@@ -753,12 +987,6 @@ export const onChangeDateModeAdd = (e) => {
     value: e.target.value
   }
 }
-export const onChangeNoPoModeAdd = (e) => {
-  return {
-    type: "ON CHANGE NO PO MODE ADD",
-    value: e.target.value
-  }
-}
 export const onChangeMyInventoryModeAdd = (e) => {
   return {
     type: "ON CHANGE MY INVENTORY MODE ADD",
@@ -771,13 +999,13 @@ export const onChangeMyInventoryNameModeAdd = (e) => {
     value: e.target.value
   }
 }
-export const onClickPopUpSearchUser = (created_by_user_name_th, employee_id) => {
-  console.log("created_by_user_name_th",created_by_user_name_th, "employee_id",employee_id)
+export const onClickPopUpSearchUser = (created_by_user_name_th, created_by_user_id) => {
+  console.log("created_by_user_name_th", created_by_user_name_th, "created_by_user_id", created_by_user_id)
   return function (dispatch) {
     var space = created_by_user_name_th.indexOf(" ");
     var firstname = created_by_user_name_th.slice(0, space);
-    var lastname = created_by_user_name_th.slice(space+1, created_by_user_name_th.length);
-    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&lastname_th=${lastname}&employee_id=${employee_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+    var lastname = created_by_user_name_th.slice(space + 1, created_by_user_name_th.length);
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&lastname_th=${lastname}&employee_id=${created_by_user_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       console.log(res)
       dispatch({
         type: "CLICK SEARCH POPUP USER",
@@ -791,5 +1019,36 @@ export const onClickSelectUser = (e) => {
   return {
     type: "CLICK SELECT POPUP USER",
     row_inventory_show_popup: e.target.parentNode.parentNode.id
+  }
+}
+export const onChangeSrcInventoryNameModeAdd = (e) => {
+  return {
+    type: "ON CHANGE SRC INVENTORY NAMAE MODE ADD",
+    value: e.target.value
+  }
+}
+export const onClickSelectSrcInventoryModeAdd = (e) => {
+  console.log(e.target.parentNode.parentNode)
+  return {
+    type: "CLICK SELECT POPUP SRC INVENTORY MODE ADD",
+    row_inventory_show_popup: e.target.parentNode.parentNode.id
+  }
+}
+export const onClickPopUpSearchInventoryModeAdd = (dest_warehouse_id, dest_warehouse_name) => {
+  console.log("dest_warehouse_id", dest_warehouse_id, "dest_warehouse_name", dest_warehouse_name)
+  return function (dispatch) {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/warehouses?warehouse_id=${dest_warehouse_id}&name=${dest_warehouse_name}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+      console.log(res)
+      dispatch({
+        type: "CLICK SEARCH POPUP INVENTORY",
+        value: res.data
+      });
+    });
+  };
+}
+export const onChangeTransferModeAdd = (e) => {
+  return {
+    type: "ON CHANGE TRANFER MODE ADD",
+    value: e.target.value
   }
 }
