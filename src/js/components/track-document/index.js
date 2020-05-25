@@ -1,20 +1,12 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import reducers from './reducers';
-
 import NavTopbar from '../nav/nav-top.js';
 import Toolbar from '../common/nav-toolbar';
 import TopContent from './top-content';
 import BottomContent from './bottom-content';
 import Footer from '../common/footer.js';
-
-const store = createStore(reducers)
-class Track extends React.Component {
-    render() {
-        const type = 'TRACK';
-        return (
-            <Provider store={store}>
+const Track = () => {
+    return (
+        <>
             <NavTopbar />
             <Toolbar />
             <form>
@@ -22,9 +14,8 @@ class Track extends React.Component {
                 <BottomContent  />
                 <Footer />
             </form>
-        </Provider>
-        )
-    };
+        </>
+    )
 }
 
 export default Track;

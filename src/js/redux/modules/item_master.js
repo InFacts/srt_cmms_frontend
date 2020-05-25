@@ -126,15 +126,15 @@ const initialState = {
 
 
 function fields(state = {}, action){
-    switch(action.type){
-      //nite
-      case('CHANGE_FORM'):
-        // ES6 computed property syntax https://redux.js.org/advanced/async-actions
-        return {...state, [action.field] : action.value};
-      default:
-        return state
-    }
+  switch(action.type){
+    //nite
+    case('CHANGE_FORM'):
+      // ES6 computed property syntax https://redux.js.org/advanced/async-actions
+      return {...state, [action.field] : action.value};
+    default:
+      return state
   }
+}
   
 const temp_reducer = (state = initialState.temp_reducer, action) => {
     switch (action.type) {
