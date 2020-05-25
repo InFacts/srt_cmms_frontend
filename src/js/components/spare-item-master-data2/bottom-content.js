@@ -5,22 +5,23 @@ import Files from '../common/files'
 import '../../../css/style.css'
 import '../../../css/table.css';
 
-class BottomContent extends React.Component {
 
-  checkActionMode = (mode) => {
-    const current = this;
-    if (mode === "search") {
-      return (
-        <>
-          <div id="ทั่วไป" className="tabcontent">
+const BottomContent = (props) => (
+  <>
+  {/* THIS MAKES THE BACKGROUND NOT GRAY!! NEEDS TO FIX */}
+  <div id="blackground-gray">
+        {/* <div className="container_12 clearfix"> */}
+          <div className="grid_12 ">
+            {/* General Tab */}
+          <div id="general_content" className="tabcontent">
             <div className="grid_12 mt-3">
               <div className="grid_2 cancel-default">
                 <p className="cancel-default">ชื่อย่อหน่วยนับการนำเข้า </p>
               </div>
               <div className="grid_2">
                 <input type="text" className="cancel-default" disabled="disabled" defaultValue={
-                  this.props.parent_unit_part.map(function (parent_unit_part, index) {
-                    if (parent_unit_part.parent_unit === current.props.info_part_show.parent_unit_part)
+                  props.parent_unit_part.map(function (parent_unit_part, index) {
+                    if (parent_unit_part.parent_unit === props.info_part_show.parent_unit_part)
                       return parent_unit_part.child_unit[0].short_name
                   })
                 }>
@@ -35,7 +36,7 @@ class BottomContent extends React.Component {
                   <p className="cancel-default">ขั้นต่ำการสั่งซื้อ</p>
                 </div>
                 <div className="grid_2 pull_0">
-                  <input type="text" className="cancel-default" defaultValue={current.props.info_part_show.low_po} disabled="disabled"></input>
+                  <input type="text" className="cancel-default" defaultValue={props.info_part_show.low_po} disabled="disabled"></input>
                 </div>
                 <div className="grid_1 ml-0 pull_0">
 
@@ -49,8 +50,8 @@ class BottomContent extends React.Component {
               </div>
               <div className="grid_2">
                 <input type="text" className="cancel-default" disabled="disabled" defaultValue={
-                  this.props.parent_unit_part.map(function (parent_unit_part, index) {
-                    if (parent_unit_part.parent_unit === current.props.info_part_show.parent_unit_part)
+                  props.parent_unit_part.map(function (parent_unit_part, index) {
+                    if (parent_unit_part.parent_unit === props.info_part_show.parent_unit_part)
                       return parent_unit_part.child_unit[0].child_unit
                   })
                 }></input>
@@ -61,7 +62,7 @@ class BottomContent extends React.Component {
                   <p className="cancel-default">Lead Time</p>
                 </div>
                 <div className="grid_2 pull_0">
-                  <input type="text" className="cancel-default" defaultValue={current.props.info_part_show.lead_time} disabled="disabled"></input>
+                  <input type="text" className="cancel-default" defaultValue={props.info_part_show.lead_time} disabled="disabled"></input>
                 </div>
                 <div className="grid_1 ml-0 pull_0">
                   <p className="cancel-default">วัน </p>
@@ -74,12 +75,12 @@ class BottomContent extends React.Component {
                 <p className="cancel-default">จำนวนต่อหน่วยนำเข้า </p>
               </div>
               <div className="grid_2">
-                <input type="text" className="cancel-default" defaultValue={current.props.info_part_show.quality_into} disabled="disabled"></input>
+                <input type="text" className="cancel-default" defaultValue={props.info_part_show.quality_into} disabled="disabled"></input>
               </div>
               <div className="grid_1 ml-0">
                 <p className="cancel-default">
-                  {this.props.parent_unit_part.map(function (parent_unit_part, index) {
-                    if (parent_unit_part.parent_unit === current.props.info_part_show.parent_unit_part)
+                  {props.parent_unit_part.map(function (parent_unit_part, index) {
+                    if (parent_unit_part.parent_unit === props.info_part_show.parent_unit_part)
                       return parent_unit_part.child_unit[0].child_unit
                   })}
                 </p>
@@ -90,7 +91,7 @@ class BottomContent extends React.Component {
                   <p className="cancel-default">Tolerance Days </p>
                 </div>
                 <div className="grid_2 pull_0">
-                  <input type="text" className="cancel-default" defaultValue={current.props.info_part_show.tolerance_day} disabled="disabled"></input>
+                  <input type="text" className="cancel-default" defaultValue={props.info_part_show.tolerance_day} disabled="disabled"></input>
                 </div>
                 <div className="grid_1 ml-0 pull_0">
                   <p className="cancel-default">วัน </p>
@@ -114,13 +115,14 @@ class BottomContent extends React.Component {
             <div className="grid_12 mt-3">
               <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
               <div className="grid_">
-                <textarea className="edit" name="Text1" cols="40" rows="2" defaultValue={current.props.info_part_show.note} disabled="disabled"></textarea>
+                <textarea className="edit" name="Text1" cols="40" rows="2" defaultValue={props.info_part_show.note} disabled="disabled"></textarea>
               </div>
             </div>
 
           </div>
-
-          <div id="คลัง" className="tabcontent">
+          
+          {/* Warehouse Tab  */}
+          <div id="warehouse_content" className="tabcontent">
 
             <div className="grid_12 mt-3">
               <div className="grid_2 cancel-default">
@@ -128,8 +130,8 @@ class BottomContent extends React.Component {
               </div>
               <div className="grid_2 pull_0">
                 <input type="text" className="cancel-default" disabled="disabled" defaultValue={
-                  this.props.parent_unit_part.map(function (parent_unit_part, index) {
-                    if (parent_unit_part.parent_unit === current.props.info_part_show.parent_unit_part)
+                  props.parent_unit_part.map(function (parent_unit_part, index) {
+                    if (parent_unit_part.parent_unit === props.info_part_show.parent_unit_part)
                       return parent_unit_part.child_unit[0].short_name
                   })}>
                 </input>
@@ -157,8 +159,8 @@ class BottomContent extends React.Component {
               </div>
               <div className="grid_2 pull_0">
                 <input type="text" className="cancel-default" disabled="disabled" defaultValue={
-                  this.props.parent_unit_part.map(function (parent_unit_part, index) {
-                    if (parent_unit_part.parent_unit === current.props.info_part_show.parent_unit_part)
+                  props.parent_unit_part.map(function (parent_unit_part, index) {
+                    if (parent_unit_part.parent_unit === props.info_part_show.parent_unit_part)
                       return parent_unit_part.child_unit[0].child_unit
                   })
                 }></input>
@@ -171,7 +173,7 @@ class BottomContent extends React.Component {
                   <p className="cancel-default">จำนวนที่ต้องการ</p>
                 </div>
                 <div className="grid_2 pull_0">
-                  <input type="text" className="cancel-default" defaultValue={current.props.info_part_show.stock_need} disabled="disabled"></input>
+                  <input type="text" className="cancel-default" defaultValue={props.info_part_show.stock_need} disabled="disabled"></input>
                 </div>
                 <div className="grid_1 ml-0 pull_0">
 
@@ -185,7 +187,7 @@ class BottomContent extends React.Component {
                   <p className="cancel-default">จำนวนต่ำสุด</p>
                 </div>
                 <div className="grid_2 pull_0">
-                  <input type="text" className="cancel-default" defaultValue={current.props.info_part_show.stock_min} disabled="disabled"></input>
+                  <input type="text" className="cancel-default" defaultValue={props.info_part_show.stock_min} disabled="disabled"></input>
                 </div>
                 <div className="grid_1 ml-0 pull_0">
 
@@ -199,7 +201,7 @@ class BottomContent extends React.Component {
                   <p className="cancel-default">จำนวนสูงสุด</p>
                 </div>
                 <div className="grid_2 pull_0">
-                  <input type="text" className="cancel-default" defaultValue={current.props.info_part_show.stock_max} disabled="disabled"></input>
+                  <input type="text" className="cancel-default" defaultValue={props.info_part_show.stock_max} disabled="disabled"></input>
                 </div>
                 <div className="grid_1 ml-0 pull_0">
 
@@ -213,7 +215,7 @@ class BottomContent extends React.Component {
               </div>
               <div className="grid_3 pull_0">
                 <select className="edit-select" style={{ marginTop: "0" }} disabled="disabled">
-                  <option defaultValue={current.props.info_part_show.valuation_method}>{current.props.info_part_show.valuation_method}</option>
+                  <option defaultValue={props.info_part_show.valuation_method}>{props.info_part_show.valuation_method}</option>
                 </select>
               </div>
             </div>
@@ -236,7 +238,7 @@ class BottomContent extends React.Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {current.props.table_list_show.map(function (table_list_show, index) {
+                  {props.table_list_show.map(function (table_list_show, index) {
                     return (
                       <tr>
                         <th className="edit-padding text-center">{index+1}</th>
@@ -263,30 +265,19 @@ class BottomContent extends React.Component {
 
           </div>
 
-          <div id="แนบไฟล์" className="tabcontent">
+          {/* Attachment Tab */}
+          <div id="attachment_content" className="tabcontent">
             <Files />
           </div>
-        </>
-      )
-    }
-  }
-
-  render() {
-    return (
-      <div id="blackground-gray">
-        <div className="container_12 clearfix">
-          <div className="grid_12 ">
-            {this.checkActionMode(this.props.actionMode)}
           </div>
         </div>
-      </div >
-    )
-  };
-}
+       {/* </div > */}
+    </>
+)
 
 const mapStateToProps = (state) => {
-  var action = state.mode.action;
-  state = state.temp_reducer;
+  var action = state.toolbar.mode;
+  state = state.item_master.temp_reducer;
   return ({
   actionMode: action,
   info_part_show: state.info_part_show,

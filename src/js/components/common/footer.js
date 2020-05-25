@@ -5,41 +5,23 @@ import '../../../vender/fontawesome-free/css/all.css';
 import '../../../css/style-nav.css'
 import '../../../css/style.css'
 
-class Footer extends React.Component {
 
-  checkActionMode = (mode) => {
-    // console.log("hello footer")
-    if (mode === "search") {
-      return (
+const Footer = (props) => {
+  return (
+    <div id="footer">
+      <div className="container_12 clearfix">
         <div className="grid_12 nav-footer">
-          
-        </div>
-      )
-    }
-    if (mode === "add" || mode === "edit") {
-      return (
-        <div className="grid_12 nav-footer">
-          <button type="button" className="p-button--base edit float-right" onClick={(e) => { if (window.confirm('คุณต้องการยกเลิกใช่หรือไม่')) this.props.onClickCancle() }}>ยกเลิก</button>
+          <button type="button" className="p-button--base edit float-right" onClick={(e) => { if (window.confirm('คุณต้องการยกเลิกใช่หรือไม่')) props.onClickCancle() }}>ยกเลิก</button>
           <button type="submit" className="button-blue edit float-right mr-2">บันทึก</button>
         </div>
-      )
-    }
-  }
-
-  render() {
-    return (
-      <div id="footer">
-        <div className="container_12 clearfix">
-          {this.checkActionMode(this.props.actionMode)}
-        </div>
       </div>
-    )
-  };
+    </div>
+  )
 }
 
 const mapStateToProps = state => {
   return {
-    actionMode: state.action,
+    actionMode: state.toolbar.mode,
   };
 };
 const mapDispatchToProps = (dispatch) => ({

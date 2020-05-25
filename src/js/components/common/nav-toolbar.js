@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux'
 
 import {TOOLBAR_MODE, TOOLBAR_ACTIONS, clickHome, clickAdd, clickSave, 
-    clickRefresh, clickBackward, clickForward, clickExportPDF} from '../../redux/modules/toolbar.js';
+    clickRefresh, clickBackward, clickForward, clickExportPDF, toModeSearch} from '../../redux/modules/toolbar.js';
+    
 
 import '../../../vender/fontawesome-free/css/all.css';
 import '../../../css/style-nav.css'
@@ -38,6 +39,7 @@ const TOOLBAR_TO_ICON = {
 
 const TOOLBAR_ACTIONS_TO_ACTION_CREATOR = {
     [TOOLBAR_ACTIONS.HOME]: clickHome,
+    [TOOLBAR_ACTIONS.SEARCH]: toModeSearch,
     [TOOLBAR_ACTIONS.ADD]: clickAdd, 
     [TOOLBAR_ACTIONS.SAVE]: clickSave, 
     [TOOLBAR_ACTIONS.REFRESH]: clickRefresh, 
