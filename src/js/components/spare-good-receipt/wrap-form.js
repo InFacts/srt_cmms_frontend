@@ -109,15 +109,17 @@ class WrapForm extends React.Component {
             <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) this.handleSubmit(e) }}> 
                 <TopContent />
                 <BottomContent />
-                <Footer />
-            </form>
+                <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) this.handleSubmit(e) }}>
+                    <Footer />
+                </form>
+
         )
     };
 }
 
 const mapStateToProps = (state) => ({
     actionMode: state.action,
-
+    files: state.files,
     // Mode Edit
     no_document: state.no_document,
     document_show: state.document_show,

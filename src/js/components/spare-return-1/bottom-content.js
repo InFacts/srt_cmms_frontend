@@ -14,7 +14,29 @@ class BottomContent extends React.Component {
   sumTotalLineItem = (quantity, per_unit_price) => {
     var sum = 0;
     sum = quantity * per_unit_price;
-    return sum;
+    if (sum === 0 || sum == NaN) {
+      return null
+    }
+    else {
+      var s = sum.toString();
+      var n = s.indexOf(".")
+      // console.log(n, "s>>>>", s)
+      if (n == -1) {
+        s = s + ".00"
+        return s;
+      }
+      else {
+        s = s.slice(0, n + 3)
+        var c = s.length - n;
+        // console.log(c, "s.length", s.length, "n", n )
+        if (c === 2) {
+          return s + "0";
+        }
+        else {
+          return s;
+        }
+      }
+    }
   }
 
   sumTotal = (list_show) => {
@@ -25,10 +47,30 @@ class BottomContent extends React.Component {
       sumTotal = sumTotal + sum;
       // return sumTotal
     })
-    // console.log("sum out", sumTotal)
-    return sumTotal
+    var s = sumTotal.toString();
+    var n = s.indexOf(".")
+    if (n == -1) {
+      s = s + ".00"
+      return s;
+    }
+    else {
+      s = s.slice(0, n + 3)
+      return s;
+    }
   }
 
+  perUnitPriceModeSearch = (description, per_unit_price) => {
+    if (description !== "") {
+    var s = per_unit_price.toString();
+      var n = s.indexOf(".")
+      if (n == -1) {
+        s = s + ".0000"
+        return s;
+      }
+      return per_unit_price
+    }
+    else return per_unit_price
+  }
 
   requiredQuantityModeEdit = (description, quantity) => {
     if (description !== "") {
@@ -45,20 +87,26 @@ class BottomContent extends React.Component {
 
   requiredPerUnitPriceModeEdit = (description, per_unit_price) => {
     if (description !== "") {
+      var s = per_unit_price.toString();
+      var n = s.indexOf(".")
+      if (n == -1) {
+        s = s + ".0000"
+        return <input type="number" step="0.0001" min="1" className="cancel-default float-right" style={{ paddingRight: "10px" }} value={s} onChange={(e) => this.props.onChangeUnitPerBathEachRow(e)} required></input>;
+      }
       return (
-        <input type="number" min="1" className="cancel-default float-right" value={per_unit_price} onChange={(e) => this.props.onChangeUnitPerBathEachRow(e)} required></input>
+        <input type="number" step="0.0001" min="1" className="cancel-default float-right" style={{ paddingRight: "10px" }} value={per_unit_price} onChange={(e) => this.props.onChangeUnitPerBathEachRow(e)} required></input>
       )
     }
     else {
       return (
-        <input type="number" min="1" className="cancel-default float-right" value={per_unit_price} onChange={(e) => this.props.onChangeUnitPerBathEachRow(e)}></input>
+        <input type="number" step="0.0001" min="1" className="cancel-default float-right" style={{ paddingRight: "10px" }} value={per_unit_price} onChange={(e) => this.props.onChangeUnitPerBathEachRow(e)}></input>
       )
     }
+
   }
 
   requiredQuantity = (description, quantity) => {
     if (description !== "") {
-      console.log("required")
       return (
         <input type="number" min="1" className="cancel-default float-right" value={quantity} onChange={(e) => this.props.onChangeQuilityEachRowModeAdd(e)} required></input>
       )
@@ -72,14 +120,19 @@ class BottomContent extends React.Component {
 
   requiredPerUnitPrice = (description, per_unit_price) => {
     if (description !== "") {
-      console.log("required")
+      var s = per_unit_price.toString();
+      var n = s.indexOf(".")
+      if (n == -1) {
+        s = s + ".0000"
+        return <input type="number" step="0.0001" min="1" className="cancel-default float-right" style={{ paddingRight: "10px" }} value={s} onChange={(e) => this.props.onChangeUnitPerBathEachRowModeAdd(e)} required></input>;
+      }
       return (
-        <input type="number" min="1" className="cancel-default float-right" value={per_unit_price} onChange={(e) => this.props.onChangeUnitPerBathEachRowModeAdd(e)} required></input>
+        <input type="number" step="0.0001" min="1" className="cancel-default float-right" style={{ paddingRight: "10px" }} value={per_unit_price} onChange={(e) => this.props.onChangeUnitPerBathEachRowModeAdd(e)} required></input>
       )
     }
     else {
       return (
-        <input type="number" min="1" className="cancel-default float-right" value={per_unit_price} onChange={(e) => this.props.onChangeUnitPerBathEachRowModeAdd(e)}></input>
+        <input type="number" step="0.0001" min="1" className="cancel-default float-right" style={{ paddingRight: "10px" }} value={per_unit_price} onChange={(e) => this.props.onChangeUnitPerBathEachRowModeAdd(e)}></input>
       )
     }
   }
@@ -118,7 +171,7 @@ class BottomContent extends React.Component {
                           })}
                         </select>
                       </td>
-                      <td className="edit-padding text-right">{list.per_unit_price}</td>
+                      <td className="edit-padding text-right">{current.perUnitPriceModeSearch(list.description, list.per_unit_price)}</td>
                       <td className="edit-padding text-right">{current.sumTotalLineItem(list.quantity, list.per_unit_price)}</td>
                     </tr>
                   )
@@ -165,7 +218,7 @@ class BottomContent extends React.Component {
                       <th className="edit-padding text-center">{index + 1}</th>
                       <td className="edit-padding">
                         <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
-                          <input type="text" className="p-search-box__input cancel-default-table" value={list.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRow(e)} />
+                          <input type="text" className="p-search-box__input cancel-default-table" value={list.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRow(e)} onKeyPress={(e) => current.props.handleKeyPressModeEdit(e)} />
                           <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPart" onClick={(e) => current.props.onClickNoPartEachRow(e)}></i></button>
                         </div>
                       </td>
@@ -222,6 +275,14 @@ class BottomContent extends React.Component {
                   <div className="grid_2"><p className="cancel-default">เลขที่อะไหล่</p></div>
                   <div className="grid_8 pull_0">
                     <input type="text" className="cancel-default grid_3" value={this.props.list_no_part} onChange={(e) => this.props.onChangeNoPart(e)} />
+                    {/* <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickSearchPopUpNoPart(this.props.list_no_part)}>ค้นหา</button> */}
+                  </div>
+                </div>
+
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">รายละเอียด</p></div>
+                  <div className="grid_8 pull_0">
+                    <input type="text" className="cancel-default grid_3" value={this.props.list_description_part} onChange={(e) => this.props.onChangeDescriptionPart(e)} />
                     <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickSearchPopUpNoPart(this.props.list_no_part)}>ค้นหา</button>
                   </div>
                 </div>
@@ -231,7 +292,7 @@ class BottomContent extends React.Component {
                     <thead>
                       <tr>
                         <th className="font" style={{ minWidth: "300px" }}>เลขที่อะไหล่</th>
-                        <th className="font" style={{ minWidth: "450px" }}>ชื่ออะไหล่</th>
+                        <th className="font" style={{ minWidth: "450px" }}>รายละเอียด</th>
                         <th className="font" style={{ minWidth: "150px" }}>Action</th>
                       </tr>
                     </thead>
@@ -239,8 +300,8 @@ class BottomContent extends React.Component {
                       {this.props.no_part_show.map(function (no_part_show, index) {
                         return (
                           <tr key={index} id={index}>
-                            <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show.item_id} </td>
-                            <td className="edit-padding" style={{ minWidth: "300px" }}> {no_part_show.internal_item_id} </td>
+                            <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show.internal_item_id} </td>
+                            <td className="edit-padding" style={{ minWidth: "300px" }}> {no_part_show.description} </td>
                             <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
                               <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectPopUpNoPart(e)} aria-label="Close active modal" aria-controls="modalNoPart" id="closeModalNoPart" >เลือก</button>
                             </td>
@@ -285,7 +346,7 @@ class BottomContent extends React.Component {
                       <th className="edit-padding text-center">{index + 1}</th>
                       <td className="edit-padding">
                         <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
-                          <input type="text" className="p-search-box__input cancel-default-table" value={list.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRowModeAdd(e)} />
+                          <input type="text" className="p-search-box__input cancel-default-table" value={list.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRowModeAdd(e)} onKeyPress={(e) => current.props.handleKeyPress(e)} />
                           <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPartModeAdd" onClick={(e) => current.props.onClickNoPartEachRowModeAdd(e)}></i></button>
                         </div>
                       </td>
@@ -341,7 +402,15 @@ class BottomContent extends React.Component {
                   <div className="grid_2"><p className="cancel-default">เลขที่อะไหล่</p></div>
                   <div className="grid_8 pull_0">
                     <input type="text" className="cancel-default grid_3" value={this.props.list_no_part_mode_add} onChange={(e) => this.props.onChangeNoPartModeAdd(e)} />
-                    <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickSearchPopUpNoPartModeAdd(this.props.list_no_part_mode_add)}>ค้นหา</button>
+                    {/* <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickSearchPopUpNoPartModeAdd(this.props.list_no_part_mode_add)}>ค้นหา</button> */}
+                  </div>
+                </div>
+
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">รายละเอียด</p></div>
+                  <div className="grid_8 pull_0">
+                    <input type="text" className="cancel-default grid_3" value={this.props.list_desription_part_mode_add} onChange={(e) => this.props.onChangeDescriptionPartModeAdd(e)} />
+                    <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickSearchPopUpNoPartModeAdd(this.props.list_no_part_mode_add,this.props.list_desription_part_mode_add)}>ค้นหา</button>
                   </div>
                 </div>
 
@@ -350,7 +419,7 @@ class BottomContent extends React.Component {
                     <thead>
                       <tr>
                         <th className="font" style={{ minWidth: "300px" }}>เลขที่อะไหล่</th>
-                        <th className="font" style={{ minWidth: "450px" }}>ชื่ออะไหล่</th>
+                        <th className="font" style={{ minWidth: "450px" }}>รายละเอียด</th>
                         <th className="font" style={{ minWidth: "150px" }}>Action</th>
                       </tr>
                     </thead>
@@ -358,8 +427,8 @@ class BottomContent extends React.Component {
                       {this.props.no_part_show_mode_add.map(function (no_part_show_mode_add, index) {
                         return (
                           <tr key={index} id={index}>
-                            <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show_mode_add.item_id} </td>
-                            <td className="edit-padding" style={{ minWidth: "300px" }}> {no_part_show_mode_add.internal_item_id} </td>
+                            <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show_mode_add.internal_item_id} </td>
+                            <td className="edit-padding" style={{ minWidth: "300px" }}> {no_part_show_mode_add.description} </td>
                             <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
                               <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectPopUpNoPartModeAdd(e)} aria-label="Close active modal" aria-controls="modalNoPartModeAdd" id="closeModalNoPart" >เลือก</button>
                             </td>
@@ -407,12 +476,14 @@ const mapStateToProps = (state) => ({
   // Mode Edit 
   list_no_part: state.list_no_part,
   no_part_show: state.no_part_show,
+  list_description_part: state.list_description_part,
 
   // Mode Add
   list_show_mode_add: state.list_show_mode_add,
   no_part_show_mode_add: state.no_part_show_mode_add,
   list_no_part_mode_add: state.list_no_part_mode_add,
-  document_show_mode_add: state.document_show_mode_add
+  document_show_mode_add: state.document_show_mode_add,
+  list_desription_part_mode_add: state.list_desription_part_mode_add
 })
 const mapDispatchToProps = (dispatch) => ({
   // Mode Edit
@@ -425,17 +496,22 @@ const mapDispatchToProps = (dispatch) => ({
   onClickSearchPopUpNoPart: (e) => dispatch(onClickSearchPopUpNoPart(e)),
   onClickSelectPopUpNoPart: (e) => dispatch(onClickSelectPopUpNoPart(e)),
   onChangeNote: (e) => dispatch(onChangeNote(e)),
+  onChangeDescriptionPart: (e) => dispatch(onChangeDescriptionPart(e)),
 
   // Mode Add
   onChangeNoPartEachRowModeAdd: (e) => dispatch(onChangeNoPartEachRowModeAdd(e)),
   onClickNoPartEachRowModeAdd: (e) => dispatch(onClickNoPartEachRowModeAdd(e)),
-  onClickSearchPopUpNoPartModeAdd: (e) => dispatch(onClickSearchPopUpNoPartModeAdd(e)),
+  onClickSearchPopUpNoPartModeAdd: (e,i) => dispatch(onClickSearchPopUpNoPartModeAdd(e,i)),
   onChangeNoPartModeAdd: (e) => dispatch(onChangeNoPartModeAdd(e)),
   onClickSelectPopUpNoPartModeAdd: (e) => dispatch(onClickSelectPopUpNoPartModeAdd(e)),
   onChangeUnitPerBathEachRowModeAdd: (e) => dispatch(onChangeUnitPerBathEachRowModeAdd(e)),
   onChangeQuilityEachRowModeAdd: (e) => dispatch(onChangeQuilityEachRowModeAdd(e)),
   onChangeTotalEachRowModeAdd: (e) => dispatch(onChangeTotalEachRowModeAdd(e)),
-  onChangeNoteModeAdd: (e) => dispatch(onChangeNoteModeAdd(e))
+  onChangeNoteModeAdd: (e) => dispatch(onChangeNoteModeAdd(e)),
+  onChangeDescriptionPartModeAdd: (e) => dispatch(onChangeDescriptionPartModeAdd(e)),
+
+  handleKeyPress: (e) => dispatch(handleKeyPress(e)),
+  handleKeyPressModeEdit: (e) => dispatch(handleKeyPressModeEdit(e)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(BottomContent);
 
@@ -508,6 +584,12 @@ export const onChangeNote = (e) => {
     value: e.target.value
   }
 }
+export const onChangeDescriptionPart = (e) => {
+  return {
+    type: "ON CHANGE DESCRIPTION PART",
+    value: e.target.value,
+  }
+}
 
 // Mode Add
 export const onChangeNoPartEachRowModeAdd = (e) => {
@@ -524,12 +606,11 @@ export const onClickNoPartEachRowModeAdd = (e) => {
     rowIndex: e.target.parentNode.parentNode.parentNode.parentNode.id
   }
 }
-export const onClickSearchPopUpNoPartModeAdd = (item) => {
-  // return {
-  //   type: "ON CLICK SEARCH POPUP NO PART ADD MODE",
-  // }
+export const onClickSearchPopUpNoPartModeAdd = (list_no_part_mode_add, list_desription_part_mode_add) => {
+  console.log(list_no_part_mode_add)
+  console.log(list_desription_part_mode_add)
   return function (dispatch) {
-    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items?internal_item_id=${item}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items?internal_item_id=${list_no_part_mode_add}&description=${list_desription_part_mode_add}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       console.log(res)
       dispatch({
         type: "ON CLICK SEARCH POPUP NO PART ADD MODE",
@@ -575,5 +656,66 @@ export const onChangeNoteModeAdd = (e) => {
   return {
     type: "ON CHANGE NOTE MODE ADD",
     value: e.target.value
+  }
+}
+
+
+export const onChangeDescriptionPartModeAdd = (e) => {
+  return {
+    type: "ON CHANGE DESCRIPTION PART MODE ADD",
+    value: e.target.value,
+  }
+}
+
+export const handleKeyPress = (e) => {
+  if (e.key === 'Enter') {
+    console.log("in enter")
+    let value = e.target.value;
+    let rowIndex = e.target.parentNode.parentNode.parentNode.id;
+    console.log("rowIndex", rowIndex)
+    return function (dispatch) {
+      return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items?internal_item_id=${value}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+        console.log("pree key down", res)
+        dispatch({
+          type: "KEY PRESS ENTER",
+          value: value,
+          rowIndex: rowIndex,
+          res: res.data.results
+        });
+      });
+    };
+  }
+  else {
+    console.log("not enter"); 
+    return {
+      type: "NOT ENTER"
+    }
+  }
+}
+
+
+export const handleKeyPressModeEdit = (e) => {
+  if (e.key === 'Enter') {
+    console.log("in enter")
+    let value = e.target.value;
+    let rowIndex = e.target.parentNode.parentNode.parentNode.id;
+    console.log("rowIndex", rowIndex)
+    return function (dispatch) {
+      return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items?internal_item_id=${value}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+        console.log("pree key down", res)
+        dispatch({
+          type: "KEY PRESS ENTER MODE EDIT",
+          value: value,
+          rowIndex: rowIndex,
+          res: res.data.results
+        });
+      });
+    };
+  }
+  else {
+    console.log("not enter"); 
+    return {
+      type: "NOT ENTER"
+    }
   }
 }

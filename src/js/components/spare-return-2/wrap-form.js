@@ -42,7 +42,7 @@ class WrapForm extends React.Component {
                 "remark": document_show.remark,
                 "created_by_admin_id": document_show.created_by_admin_id,
                 "created_by_user_id": document_show.created_by_user_id_database,
-                // "refer_to_document_id": document_show.refer_to_document,
+                "refer_to_document_id": document_show.refer_to_document_id,
             },
             "specific": {
                 "document_id": document_id,
@@ -51,7 +51,7 @@ class WrapForm extends React.Component {
                 "line_items": line_items,
                 "movement": {
                     "document_id": document_id,
-
+                    
                 }
             }
         };
@@ -63,11 +63,12 @@ class WrapForm extends React.Component {
     handleSubmit = e => {
         e.preventDefault();
         const current = this;
-        console.log("this.packForm(this.props.document_id, this.props.document_show_mode_add, this.props.list_show_mode_add)");
+        
+
         if (this.props.actionMode === "add") {
             console.log(this.packForm(this.props.document_id, this.props.document_show_mode_add, this.props.list_show_mode_add));
             return (
-                axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_id}/102`, this.packForm(this.props.document_id, this.props.document_show_mode_add, this.props.list_show_mode_add), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+                axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_id}/131`, this.packForm(this.props.document_id, this.props.document_show_mode_add, this.props.list_show_mode_add), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
                     .then(res => {
                         console.log(res);
                         this.props.onClearStateModeAdd()
@@ -79,7 +80,7 @@ class WrapForm extends React.Component {
         if (this.props.actionMode === "edit") {
             console.log(this.packForm(this.props.document_show.document_id, this.props.document_show, this.props.list_show));
             return (
-                axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_show.document_id}/102`, this.packForm(this.props.document_show.document_id, this.props.document_show, this.props.list_show), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+                axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_show.document_id}/131`, this.packForm(this.props.document_show.document_id, this.props.document_show, this.props.list_show), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
                     .then(res => {
                         console.log(res);
                         this.props.onClearStateModeAdd()
