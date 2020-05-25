@@ -40,52 +40,46 @@ class WrapForm extends React.Component {
                 "document_id": document_id,
                 "internal_document_id": document_show.internal_document_id,
                 "remark": document_show.remark,
+                "created_by_admin_id": document_show.created_by_admin_id,
+                "created_by_user_id": document_show.created_by_user_id_database,
+                // "refer_to_document_id": document_show.refer_to_document_id,
             },
             "specific": {
                 "document_id": document_id,
-                "dest_warehouse_id": parseInt(document_show.dest_warehouse_id),
-                "src_warehouse_id": 999,
+                "dest_warehouse_id": 999,
+                "src_warehouse_id": parseInt(document_show.src_warehouse_id),
                 "line_items": line_items,
                 "movement": {
                     "document_id": document_id,
-                    "po_id": document_show.po_id
+
                 }
             }
         };
         return data;
     }
 
-    handleSubmit = (e) => {
+
+
+    handleSubmit = e => {
         e.preventDefault();
         const current = this;
-
+        console.log(this.props.document_id,this.props.document_show.document_id)
         if (this.props.actionMode === "add") {
-            const formData = new FormData();
-            formData.append('file', this.props.files);
-            const requestOne = axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_id}/101`, this.packForm(this.props.document_id, this.props.document_show_mode_add, this.props.list_show_mode_add), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-            const requestTwo = axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/tester/upload-files`, formData)
+            console.log(this.packForm(this.props.document_id, this.props.document_show_mode_add, this.props.list_show_mode_add));
             return (
-
-                axios.all([requestOne, requestTwo])
-                    .then(axios.spread((...responses) => {
-                        console.log(responses);
+                axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_id}/151`, this.packForm(this.props.document_id, this.props.document_show_mode_add, this.props.list_show_mode_add), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+                    .then(res => {
+                        console.log(res);
                         this.props.onClearStateModeAdd()
-                    })).catch(err => {
+                    }).catch(function (err) {
                         console.log(err);
                     })
-
-                // axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_id}/101`, this.packForm(this.props.document_id, this.props.document_show_mode_add, this.props.list_show_mode_add), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-                //     .then(res => {
-                //         console.log(res);
-                //         this.props.onClearStateModeAdd()
-                //     }).catch(function (err) {
-                //         console.log(err);
-                //     })
             )
         }
         if (this.props.actionMode === "edit") {
+            console.log(this.packForm(this.props.document_show.document_id, this.props.document_show, this.props.list_show));
             return (
-                axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_show.document_id}/101`, this.packForm(this.props.document_show.document_id, this.props.document_show, this.props.list_show), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+                axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_show.document_id}/151`, this.packForm(this.props.document_show.document_id, this.props.document_show, this.props.list_show), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
                     .then(res => {
                         console.log(res);
                         this.props.onClearStateModeAdd()
@@ -101,18 +95,17 @@ class WrapForm extends React.Component {
             <div>
                 <TopContent />
                 <BottomContent />
-                <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) this.handleSubmit(e) }}>
+                <form onSubmit={this.handleSubmit}>
                     <Footer />
                 </form>
             </div>
-
         )
     };
 }
 
 const mapStateToProps = (state) => ({
     actionMode: state.action,
-    files: state.files,
+
     // Mode Edit
     no_document: state.no_document,
     document_show: state.document_show,

@@ -32,7 +32,7 @@ import Report from './components/report';
 import MaintenanceFixedAsset from './components/maintance-fixed-asset';
 import MaintenanceCustom from './components/maintance-custom';
 import Maintenance from './components/maintance';
-import Test2 from './components/test-components-v2';
+import Test2 from './components/test';
 import UserManagement from './components/user-management'
 import Profile from './components/profile'
 import ActivityLog from './components/activity-log'

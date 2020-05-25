@@ -38,6 +38,7 @@ class Login extends Component {
         this.setState({ loggedIn: true });
       }).catch(function (err) {
         console.log(err)
+        alert(err);
       })
   }
 
@@ -56,13 +57,13 @@ class Login extends Component {
 
             <form className="from-sigin-input" onSubmit={this.handleSubmit}>
               <label className="input-signin">รหัสพนักงาน</label>
-              <input className="cancel-default-signin" type="text" value={this.props.username} onChange={(e) => this.props.onChangeUsername(e)} />
+              <input className="cancel-default-signin" type="text" value={this.props.username} onChange={(e) => this.props.onChangeUsername(e)} required/>
               <label className="input-signin mt-2">รหัสผ่าน</label>
-              <input className="cancel-default-signin" type="password" id="exampleInputPassword1" value={this.props.password} onChange={(e) => this.props.onChangePassword(e)} />
-              <input type="checkbox" id="checkExample1" ></input>
+              <input className="cancel-default-signin" type="password" id="exampleInputPassword1" value={this.props.password} onChange={(e) => this.props.onChangePassword(e)} required/>
+              {/* <input type="checkbox" id="checkExample1" ></input> */}
 
-              <input type="checkbox" id="checkExample2" />
-              <label className="alert-signin float-left mt-1 font-signin">จดจำรหัสผ่าน</label>
+              {/* <input type="checkbox" id="checkExample2" /> */}
+              {/* <label className="alert-signin float-left mt-1 font-signin">จดจำรหัสผ่าน</label> */}
               <label className="alert-signin float-right mt-1 font-signin" style={{ marginTop: "9px" }}>ลืมรหัสผ่าน ?</label>
 
               {/* <Link to="/main"><button className="button-red font-signin" type="submit">เข้าสู่ระบบ</button></Link> */}

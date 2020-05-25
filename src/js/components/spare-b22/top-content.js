@@ -26,7 +26,7 @@ class TopContent extends React.Component {
     const current = this;
     if (mode === "home") {
       return (
-          <Redirect to="/main"></Redirect>
+          <Redirect to="/main-spare"></Redirect>
       )
   }
     if (mode === "search") {

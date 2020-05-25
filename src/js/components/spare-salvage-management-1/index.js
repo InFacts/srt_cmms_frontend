@@ -1,30 +1,26 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from "redux-thunk";
 import reducers from './reducers';
 
 import NavTopbar from '../nav/nav-top.js';
 import Toolbar from '../common/nav-toolbar';
-import TopContent from './top-content';
-import BottomContent from './bottom-content';
-import Footer from '../common/footer.js';
+import WrapForm from './wrap-form';
 
-const store = createStore(reducers)
+const store = createStore(reducers, applyMiddleware(thunk))
 
-class Home extends React.Component {
+class SpareGoodReceipt extends React.Component {
+
     render() {
         return (
             <Provider store={store}>
                 <NavTopbar />
                 <Toolbar />
-                <form>
-                    <TopContent />
-                    <BottomContent  />
-                    <Footer />
-                </form>
+                <WrapForm />
             </Provider>
         )
     };
 }
 
-export default Home;
+export default SpareGoodReceipt;
