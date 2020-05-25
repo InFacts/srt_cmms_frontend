@@ -59,7 +59,7 @@ class WrapForm extends React.Component {
     }
 
     handleSubmit = (e) => {
-        
+        e.preventDefault();
         const current = this;
         // if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) {
             if (this.props.actionMode === "add") {
@@ -90,26 +90,26 @@ class WrapForm extends React.Component {
     render() {
         return (
             // <form onSubmit={(e) => { e.preventDefault(); }}>
-            <form onSubmit={(e) => { 
-                console.log("e.keyCode", e )
-                if(e.keyCode == 13) {
-                    e.preventDefault();
-                    return false;
-                }
-                else {
-                    console.log("else", e )
-                    e.preventDefault();
-                    // this.handleSubmit(e) 
-                }
-                e.preventDefault();
+            // <form onSubmit={(e) => { 
+            //     console.log("e.keyCode", window.event.keyCode )
+                
+            //     if(e.keyCode == 13) {
+            //         e.preventDefault();
+            //         return false;
+            //     }
+            //     else {
+            //         console.log("else", e )
+            //         e.preventDefault();
+            //         // this.handleSubmit(e) 
+            //     }
+            //     e.preventDefault();
 
                
-            }}>
-            {/* <> */}
+            // }}>
+            <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) this.handleSubmit(e) }}> 
                 <TopContent />
                 <BottomContent />
                 <Footer />
-            {/* </> */}
             </form>
         )
     };

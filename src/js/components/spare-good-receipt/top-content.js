@@ -264,7 +264,6 @@ class TopContent extends React.Component {
 
   render() {
     const current = this;
-    console.log(this.props.document_show_mode_add, "this.props.document_show_mode_add")
     return (
       <div>
         <div id="blackground-white">

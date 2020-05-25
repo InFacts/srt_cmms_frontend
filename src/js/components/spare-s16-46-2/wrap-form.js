@@ -49,7 +49,8 @@ class WrapForm extends React.Component {
                 "src_warehouse_id": parseInt(document_show.src_warehouse_id),
                 "line_items": line_items,
                 "movement": {
-                    "document_id": document_id
+                    "document_id": document_id,
+                    "transfer_method": document_show.transfer_method
                 }
             }
         };

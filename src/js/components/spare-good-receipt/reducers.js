@@ -538,6 +538,7 @@ export default (state = initialState, action) => {
         ...state,
         list_show_mode_add_row_index: action.rowIndex,
         no_part_show_mode_add: initialState.no_part_show_mode_add,
+        list_desription_part_mode_add: initialState.list_desription_part_mode_add,
         list_no_part_mode_add: state.list_show_mode_add[action.rowIndex].internal_item_id
       }
     case "ON CLICK SEARCH POPUP NO PART ADD MODE":

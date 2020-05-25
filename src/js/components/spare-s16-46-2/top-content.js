@@ -36,6 +36,25 @@ class TopContent extends React.Component {
     }
   }
 
+  checkTransfer = (transfer_method) => {
+    if (transfer_method === "รับของเอง") {
+      return (
+        <select className="edit-select-top" onChange={(e) => this.props.onChangeTransfer(e)}>
+          <option value="รับของเอง" selected> รับของเอง </option>
+          <option value="ส่งไปยังคลังปลายทาง"> ส่งไปยังคลังปลายทาง </option>
+        </select>
+      )
+    }
+    else {
+      return (
+        <select className="edit-select-top" onChange={(e) => this.props.onChangeTransfer(e)}>
+          <option value="รับของเอง"> รับของเอง </option>
+          <option value="ส่งไปยังคลังปลายทาง" selected> ส่งไปยังคลังปลายทาง </option>
+        </select>
+      )
+    }
+  }
+
   checkActionMode = (mode) => {
     // console.log(mode)
     const current = this;
@@ -122,6 +141,18 @@ class TopContent extends React.Component {
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">ชื่อคลังปลายทาง</p>
+            </div>
+          </div>
+
+          <div className="grid_12">
+            <div className="grid_3 float-right">
+              <select className="edit-select-top" disabled="disabled">
+                <option value="รับของเอง" selected> {current.props.document_show.transfer_method} </option>
+                {/* <option value="ส่งไปยังคลังปลายทาง"> ส่งไปยังคลังปลายทาง </option> */}
+              </select>
+            </div>
+            <div className="grid_2 float-right">
+              <p className="top-text float-right">รูปแบบการรับของ</p>
             </div>
           </div>
         </>
@@ -213,6 +244,15 @@ class TopContent extends React.Component {
               <p className="top-text float-right">ชื่อคลังปลายทาง</p>
             </div>
           </div>
+
+          <div className="grid_12">
+            <div className="grid_3 float-right">
+              {current.checkTransfer(current.props.document_show.transfer_method)}
+            </div>
+            <div className="grid_2 float-right">
+              <p className="top-text float-right">รูปแบบการรับของ</p>
+            </div>
+          </div>
         </>
       )
     }
@@ -298,6 +338,19 @@ class TopContent extends React.Component {
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">ชื่อคลังปลายทาง</p>
+            </div>
+          </div>
+
+          <div className="grid_12">
+            <div className="grid_3 float-right">
+            <select className="edit-select-top" onChange={(e) => this.props.onChangeTransferModeAdd(e)}>
+          <option value=""> none </option>
+          <option value="รับของเอง"> รับของเอง </option>
+          <option value="ส่งไปยังคลังปลายทาง"> ส่งไปยังคลังปลายทาง </option>
+        </select>
+            </div>
+            <div className="grid_2 float-right">
+              <p className="top-text float-right">รูปแบบการรับของ</p>
             </div>
           </div>
         </>
@@ -730,6 +783,7 @@ const mapDispatchToProps = (dispatch) => ({
   onClickSelectUserModeEdit: (e) => dispatch(onClickSelectUserModeEdit(e)),
   onChangeSrcInventory: (e) => dispatch(onChangeSrcInventory(e)),
   onClickSelectSrcInventoryModeEdit: (e) => dispatch(onClickSelectSrcInventoryModeEdit(e)),
+  onChangeTransfer: (e) => dispatch(onChangeTransfer(e)),
 
   // Mode Add
   onChangeNoDocumentModeAdd: (e) => dispatch(onChangeNoDocumentModeAdd(e)),
@@ -744,6 +798,7 @@ const mapDispatchToProps = (dispatch) => ({
   onChangeSrcInventoryNameModeAdd: (e) => dispatch(onChangeSrcInventoryNameModeAdd(e)),
   onClickSelectSrcInventoryModeAdd: (e) => dispatch(onClickSelectSrcInventoryModeAdd(e)),
   onClickPopUpSearchInventoryModeAdd: (e, i) => dispatch(onClickPopUpSearchInventoryModeAdd(e, i)),
+  onChangeTransferModeAdd: (e) => dispatch(onChangeTransferModeAdd(e)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(TopContent);
 
@@ -893,6 +948,12 @@ export const onChangeSrcInventory = (e) => {
     value: e.target.value
   }
 }
+export const onChangeTransfer = (e) => {
+  return {
+    type: "ON CHANGE TRANFER",
+    value: e.target.value
+  }
+}
 
 // Mode Add
 export const onChangeSrcInventoryModeAdd = (e) => {
@@ -984,4 +1045,10 @@ export const onClickPopUpSearchInventoryModeAdd = (dest_warehouse_id, dest_wareh
       });
     });
   };
+}
+export const onChangeTransferModeAdd = (e) => {
+  return {
+    type: "ON CHANGE TRANFER MODE ADD",
+    value: e.target.value
+  }
 }
