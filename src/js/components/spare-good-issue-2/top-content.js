@@ -76,7 +76,7 @@ class TopContent extends React.Component {
               <input type="text" className="cancel-default" defaultValue={current.props.document_show.created_by_user_name_th} disabled="disabled"></input>
             </div>
             <div className="grid_3 float-right">
-              <input type="datetime" className="cancel-default float-right" defaultValue={current.props.document_show.created_on} disabled="disabled"></input>
+              <input type="datetime" className="cancel-default float-right" defaultValue={current.props.document_show.created_on !== undefined ? current.props.document_show.created_on.slice(0, 16) : null} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">วันที่</p>

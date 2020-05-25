@@ -30,6 +30,7 @@ const initialState = {
     "remark": "",
     "created_by_user_name_th": "",
     "created_by_user_id": "",
+    "employee_id": "",
     "created_by_admin_name_th": "",
     "document_status_id": "",
     "src_warehouse_id": 999,
@@ -310,13 +311,13 @@ export default (state = initialState, action) => {
       for (var i = action.value.line_items.length; i <= 9; i++) {
         action.value.line_items.push(list);
       }
-      console.log("list_show", state.list_show)
+      console.log("document_show", action.value)
       return {
         ...state,
         no_document: action.value.internal_document_id,
         document_show: action.value,
         list_show: action.value.line_items,
-        fill_data: true,
+        // fill_data: true,
       }
 
     // Mode Edit
@@ -378,7 +379,7 @@ export default (state = initialState, action) => {
       }
     case "ON CHANGE NAME ID":
       var clone_document_show = { ...state.document_show };
-      clone_document_show.created_by_user_id = action.value;
+      clone_document_show.employee_id = action.value;
       return {
         ...state,
         document_show: clone_document_show
@@ -391,8 +392,8 @@ export default (state = initialState, action) => {
     case "CLICK SELECT POPUP USER MODE EDIT":
       var clone_document_show = { ...state.document_show };
       clone_document_show.created_by_user_name_th = state.line_users[action.row_inventory_show_popup].firstname_th + " " + state.line_users[action.row_inventory_show_popup].lastname_th
-      clone_document_show.created_by_user_id = state.line_users[action.row_inventory_show_popup].employee_id
-      clone_document_show.created_by_user_id_database = state.line_users[action.row_inventory_show_popup].user_id
+      clone_document_show.employee_id = state.line_users[action.row_inventory_show_popup].employee_id
+      clone_document_show.created_by_user_id = state.line_users[action.row_inventory_show_popup].user_id
       return {
         ...state,
         document_show: clone_document_show,
@@ -472,8 +473,8 @@ export default (state = initialState, action) => {
     case "CLICK SELECT POPUP USER":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
       clone_document_show_mode_add.created_by_user_name_th = state.line_users[action.row_inventory_show_popup].firstname_th + " " + state.line_users[action.row_inventory_show_popup].lastname_th
-      clone_document_show_mode_add.created_by_user_id = state.line_users[action.row_inventory_show_popup].employee_id
-      clone_document_show_mode_add.created_by_user_id_database = state.line_users[action.row_inventory_show_popup].user_id
+      clone_document_show_mode_add.employee_id = state.line_users[action.row_inventory_show_popup].employee_id
+      clone_document_show_mode_add.created_by_user_id = state.line_users[action.row_inventory_show_popup].user_id
       return {
         ...state,
         document_show_mode_add: clone_document_show_mode_add,
@@ -500,6 +501,7 @@ export default (state = initialState, action) => {
         action.value.line_items.push(list);
       }
       clone_document_show_mode_add.refer_to_document = action.value.internal_document_id
+      clone_document_show_mode_add.refer_to_document_id = action.value.document_id
       return {
         ...state,
         list_show_mode_add: action.value.line_items,
@@ -509,8 +511,8 @@ export default (state = initialState, action) => {
     // POST DOCUMENT
     case "POST DOCUMENT":
       clone_document_show_mode_add = initialState.document_show_mode_add;
-      clone_document_show_mode_add.created_by_admin_name_th = action.decoded.name_th === null ? "" : action.decoded.name_th;
-      clone_document_show_mode_add.created_by_admin_id = action.decoded.id === null ? "" : action.decoded.id;
+      clone_document_show_mode_add.created_by_admin_name_th = action.decoded.firstname_th === null ? "" : action.decoded.firstname_th + " " + action.decoded.lastname_th;
+      clone_document_show_mode_add.created_by_admin_id = action.decoded.user_id === null ? "" : action.decoded.user_id;
 
       clone_document_show_mode_add.dest_warehouse_id = action.decoded.list_positions[0].warehouse_id === null ? "" : action.decoded.list_positions[0].warehouse_id;
       clone_document_show_mode_add.dest_warehouse_name = action.decoded.list_positions[0].warehouse_name === null ? "" : action.decoded.list_positions[0].warehouse_name;
@@ -523,14 +525,47 @@ export default (state = initialState, action) => {
         document_show_mode_add: clone_document_show_mode_add
       }
 
+      case "ON CLICK CANCLE":
+        return {
+          ...state,
+          action: initialState.action,
+          // fill_data: initialState.fill_data,
+          // tool_mode: initialState.tool_mode,
+  
+          document_id: initialState.document_id,
+          document_show_mode_add: initialState.document_show_mode_add,
+          list_show_mode_add: state.list_show_for_clear,
+  
+          no_document: initialState.no_document,
+          document_show: initialState.document_show,
+          list_show: initialState.list_show,
+  
+          document_show_popup: initialState.document_show_popup,
+  
+          list_no_part: initialState.list_no_part,
+          list_description_part: initialState.list_description_part,
+          no_part_show: initialState.no_part_show,
+          inventory_show_popup: initialState.inventory_show_popup,
+          list_show_row_index: initialState.list_show_row_index,
+  
+          document_type_id: initialState.document_type_id,
+          list_no_part_mode_add: initialState.list_no_part_mode_add,
+          list_desription_part_mode_add: initialState.list_desription_part_mode_add,
+  
+          list_show_mode_add_row_index: initialState.list_show_mode_add_row_index,
+          no_part_show_mode_add: initialState.no_part_show_mode_add,
+  
+          line_users: initialState.line_users,
+        }
+
     // Clear State after sumbit
     case "ON CLEAR STATE MODE ADD":
       console.log(initialState.no_document)
       return {
         ...state,
         action: initialState.action,
-        fill_data: initialState.fill_data,
-        tool_mode: initialState.tool_mode,
+        // fill_data: initialState.fill_data,
+        // tool_mode: initialState.tool_mode,
 
         document_id: initialState.document_id,
         document_show_mode_add: initialState.document_show_mode_add,
@@ -539,6 +574,23 @@ export default (state = initialState, action) => {
         no_document: initialState.no_document,
         document_show: initialState.document_show,
         list_show: initialState.list_show,
+
+        document_show_popup: initialState.document_show_popup,
+
+        list_no_part: initialState.list_no_part,
+        list_description_part: initialState.list_description_part,
+        no_part_show: initialState.no_part_show,
+        inventory_show_popup: initialState.inventory_show_popup,
+        list_show_row_index: initialState.list_show_row_index,
+
+        document_type_id: initialState.document_type_id,
+        list_no_part_mode_add: initialState.list_no_part_mode_add,
+        list_desription_part_mode_add: initialState.list_desription_part_mode_add,
+
+        list_show_mode_add_row_index: initialState.list_show_mode_add_row_index,
+        no_part_show_mode_add: initialState.no_part_show_mode_add,
+
+        line_users: initialState.line_users,
       }
 
     // แนบไฟล์

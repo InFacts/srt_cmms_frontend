@@ -40,7 +40,7 @@ class WrapForm extends React.Component {
                 "document_id": document_id,
                 "internal_document_id": document_show.internal_document_id,
                 "created_by_admin_id": document_show.created_by_admin_id,
-                "created_by_user_id": document_show.created_by_user_id_database,
+                "created_by_user_id": document_show.created_by_user_id,
                 "remark": document_show.remark,
             },
             "specific": {
@@ -59,41 +59,58 @@ class WrapForm extends React.Component {
     }
 
     handleSubmit = (e) => {
-        e.preventDefault();
+        
         const current = this;
-        if (this.props.actionMode === "add") {
-            return (
-                axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_id}/101`, this.packForm(this.props.document_id, this.props.document_show_mode_add, this.props.list_show_mode_add), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-                    .then(res => {
-                        console.log(res);
-                        this.props.onClearStateModeAdd()
-                    }).catch(function (err) {
-                        console.log(err);
-                    })
-            )
-        }
-        if (this.props.actionMode === "edit") {
-            return (
-                axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_show.document_id}/101`, this.packForm(this.props.document_show.document_id, this.props.document_show, this.props.list_show), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-                    .then(res => {
-                        console.log(res);
-                        this.props.onClearStateModeAdd()
-                    }).catch(function (err) {
-                        console.log(err);
-                    })
-            )
+        // if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) {
+            if (this.props.actionMode === "add") {
+                return (
+                    axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_id}/101`, this.packForm(this.props.document_id, this.props.document_show_mode_add, this.props.list_show_mode_add), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+                        .then(res => {
+                            console.log(res);
+                            this.props.onClearStateModeAdd()
+                        }).catch(function (err) {
+                            console.log(err);
+                        })
+                )
+            }
+            if (this.props.actionMode === "edit") {
+                return (
+                    axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_show.document_id}/101`, this.packForm(this.props.document_show.document_id, this.props.document_show, this.props.list_show), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+                        .then(res => {
+                            console.log(res);
+                            this.props.onClearStateModeAdd()
+                        }).catch(function (err) {
+                            console.log(err);
+                        })
+                )
+            // }
         }
     }
 
     render() {
         return (
-            <>
+            // <form onSubmit={(e) => { e.preventDefault(); }}>
+            <form onSubmit={(e) => { 
+                console.log("e.keyCode", e )
+                if(e.keyCode == 13) {
+                    e.preventDefault();
+                    return false;
+                }
+                else {
+                    console.log("else", e )
+                    e.preventDefault();
+                    // this.handleSubmit(e) 
+                }
+                e.preventDefault();
+
+               
+            }}>
+            {/* <> */}
                 <TopContent />
                 <BottomContent />
-                <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) this.handleSubmit(e) }}>
-                    <Footer />
-                </form>
-            </>
+                <Footer />
+            {/* </> */}
+            </form>
         )
     };
 }

@@ -31,10 +31,10 @@ const initialState = {
     "created_by_user_id": "",
     "created_by_admin_name_th": "",
     "document_status_id": "",
-    "src_warehouse_id": 999,
+    "src_warehouse_id": "",
+    "src_warehouse_name": "",
     "dest_warehouse_id": "",
     "dest_warehouse_name": "",
-    "po_id": "",
     "line_items": []
   },
   list_show_mode_add: [
@@ -304,11 +304,11 @@ export default (state = initialState, action) => {
             "uom_group_id": "",
             "unit": "",
             "per_unit_price": "",
-            "list_uoms": []
+            "list_uoms": [],
+            "at_source": []
           }
         );
       }
-      console.log("list_show", action.value.line_items)
       return {
         ...state,
         no_document: action.value.internal_document_id,
@@ -347,13 +347,13 @@ export default (state = initialState, action) => {
         ...state,
         document_show: clone_document_show
       }
-    case "ON CHANGE NO PO":
-      var clone_document_show = { ...state.document_show };
-      clone_document_show.po_id = action.value;
-      return {
-        ...state,
-        document_show: clone_document_show
-      }
+      case "ON CHANGE SRC INVENTORY":
+        var clone_document_show = { ...state.document_show };
+        clone_document_show.src_warehouse_id = action.value;
+        return {
+          ...state,
+          document_show: clone_document_show
+        }
     case "ON CHANGE NO PART":
       return {
         ...state,
@@ -404,11 +404,13 @@ export default (state = initialState, action) => {
         no_part_show: action.value
       }
     case "ON CLICK SELECT POPUP NO PART":
-      // console.log(state.no_part_show[action.rowIndex], "and", state.list_show_row_index)
+      console.log(clone_list_show[state.list_show_row_index])
       var clone_list_show = [...state.list_show];
       clone_list_show[state.list_show_row_index] = state.no_part_show[action.rowIndex]
       clone_list_show[state.list_show_row_index].quantity = 1
       clone_list_show[state.list_show_row_index].per_unit_price = "1.0000"
+      clone_list_show[state.list_show_row_index].at_source[0].current_unit_count = action.resStatistic[0].current_unit_count
+      clone_list_show[state.list_show_row_index].at_source[0].item_status.description_th = action.resStatistic[0].description_th
       return {
         ...state,
         list_show: clone_list_show
@@ -426,6 +428,14 @@ export default (state = initialState, action) => {
         ...state,
         document_show: clone_document_show,
       }
+      case "CLICK SELECT POPUP SRC INVENTORY MODE EDIT":
+        var clone_document_show = { ...state.document_show };
+        clone_document_show.src_warehouse_id = state.inventory_show_popup[action.row_inventory_show_popup].warehouse_id
+        clone_document_show.src_warehouse_name = state.inventory_show_popup[action.row_inventory_show_popup].name
+        return {
+          ...state,
+          document_show: clone_document_show,
+        }
     case "ON CHANGE NOTE":
       var clone_document_show = { ...state.document_show };
       clone_document_show.remark = action.value;
@@ -436,6 +446,13 @@ export default (state = initialState, action) => {
     case "ON CHANGE MY INVENTORY NAMAE":
       var clone_document_show = { ...state.document_show };
       clone_document_show.dest_warehouse_name = action.value;
+      return {
+        ...state,
+        document_show: clone_document_show
+      }
+      case "ON CHANGE SRC INVENTORY NAMAE":
+      var clone_document_show = { ...state.document_show };
+      clone_document_show.src_warehouse_name = action.value;
       return {
         ...state,
         document_show: clone_document_show
@@ -468,6 +485,13 @@ export default (state = initialState, action) => {
       }
 
     // Mode Add
+    case "ON CHANGE SRC INVENTORY MODE ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.src_warehouse_id = action.value;
+      return {
+        ...state,
+        document_show_mode_add: clone_document_show_mode_add
+      }
     case "ON CHANGE DOCUMENT MODE ADD":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
       clone_document_show_mode_add.internal_document_id = action.value;
@@ -493,13 +517,6 @@ export default (state = initialState, action) => {
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
       clone_document_show_mode_add.created_on = action.value;
       console.log("time", action.value)
-      return {
-        ...state,
-        document_show_mode_add: clone_document_show_mode_add
-      }
-    case "ON CHANGE NO PO MODE ADD":
-      var clone_document_show_mode_add = { ...state.document_show_mode_add };
-      clone_document_show_mode_add.po_id = action.value;
       return {
         ...state,
         document_show_mode_add: clone_document_show_mode_add
@@ -540,6 +557,8 @@ export default (state = initialState, action) => {
       clone_list_show_mode_add[state.list_show_mode_add_row_index].list_uoms = state.no_part_show_mode_add[action.rowIndex].list_uoms
       clone_list_show_mode_add[state.list_show_mode_add_row_index].quantity = 1
       clone_list_show_mode_add[state.list_show_mode_add_row_index].per_unit_price = "1.0000"
+      clone_list_show_mode_add[state.list_show_row_index].current_unit_count = action.resStatistic[0].current_unit_count
+      clone_list_show_mode_add[state.list_show_row_index].description_th = action.resStatistic[0].description_th
       return {
         ...state,
         list_show_mode_add: clone_list_show_mode_add
@@ -566,6 +585,14 @@ export default (state = initialState, action) => {
         ...state,
         list_show_mode_add: clone_list_show_mode_add
       }
+      case "CLICK SELECT POPUP SRC INVENTORY MODE ADD":
+        var clone_document_show_mode_add = { ...state.document_show_mode_add };
+        clone_document_show_mode_add.src_warehouse_id = state.inventory_show_popup[action.row_inventory_show_popup].warehouse_id
+        clone_document_show_mode_add.src_warehouse_name = state.inventory_show_popup[action.row_inventory_show_popup].name
+        return {
+          ...state,
+          document_show_mode_add: clone_document_show_mode_add,
+        }
     case "ON CHANGE NOTE MODE ADD":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
       clone_document_show_mode_add.remark = action.value;
@@ -587,6 +614,13 @@ export default (state = initialState, action) => {
         ...state,
         document_show_mode_add: clone_document_show_mode_add
       }
+      case "ON CHANGE SRC INVENTORY NAMAE MODE ADD":
+        var clone_document_show_mode_add = { ...state.document_show_mode_add };
+        clone_document_show_mode_add.src_warehouse_name = action.value;
+        return {
+          ...state,
+          document_show_mode_add: clone_document_show_mode_add
+        }
     case "CLICK SELECT POPUP INVENTORY":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
       clone_document_show_mode_add.dest_warehouse_id = state.inventory_show_popup[action.row_inventory_show_popup].warehouse_id
