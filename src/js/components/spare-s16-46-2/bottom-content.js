@@ -319,7 +319,7 @@ class BottomContent extends React.Component {
                   <div className="grid_2"><p className="cancel-default">รายละเอียด</p></div>
                   <div className="grid_8 pull_0">
                     <input type="text" className="cancel-default grid_3" value={this.props.list_description_part} onChange={(e) => this.props.onChangeDescriptionPart(e)} />
-                    <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickSearchPopUpNoPart(this.props.list_no_part)}>ค้นหา</button>
+                    <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickSearchPopUpNoPart(this.props.list_no_part, this.props.list_description_part)}>ค้นหา</button>
                   </div>
                 </div>
 
@@ -533,7 +533,7 @@ const mapDispatchToProps = (dispatch) => ({
   onChangeQuilityEachRow: (e) => dispatch(onChangeQuilityEachRow(e)),
   onChangeUnitPerBathEachRow: (e) => dispatch(onChangeUnitPerBathEachRow(e)),
   onChangeTotalEachRow: (e) => dispatch(onChangeTotalEachRow(e)),
-  onClickSearchPopUpNoPart: (e) => dispatch(onClickSearchPopUpNoPart(e)),
+  onClickSearchPopUpNoPart: (e,i) => dispatch(onClickSearchPopUpNoPart(e, i)),
   onClickSelectPopUpNoPart: (e, i, o) => dispatch(onClickSelectPopUpNoPart(e, i, o)),
   onChangeNote: (e) => dispatch(onChangeNote(e)),
   onChangeDescriptionPart: (e) => dispatch(onChangeDescriptionPart(e)),
@@ -596,9 +596,9 @@ export const onChangeTotalEachRow = (e) => {
     rowIndex: e.target.parentNode.parentNode.id
   }
 }
-export const onClickSearchPopUpNoPart = (list_no_part) => {
+export const onClickSearchPopUpNoPart = (list_no_part, list_desription_part) => {
   return function (dispatch) {
-    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items?internal_item_id=${list_no_part}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items?internal_item_id=${list_no_part}&description=${list_desription_part}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       // console.log(res)
       // dispatch
       dispatch({

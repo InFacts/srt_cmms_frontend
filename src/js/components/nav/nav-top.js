@@ -195,7 +195,7 @@ and setting aria-hidden attribute on dropdown contents.
                                 </Link>
                                 <ul className="p-subnav__items--right" id="account-menu" aria-hidden="true">
                                     <li>
-                                        <Link to="#" className="p-subnav__item sub">Sign out</Link>
+                                        {/* <Link to="#" className="p-subnav__item sub">Sign out</Link> */}
                                     </li>
                                 </ul>
                             </li>
@@ -208,7 +208,7 @@ and setting aria-hidden attribute on dropdown contents.
                                         <Link to="/profile" className="p-subnav__item sub">โปรไฟล์</Link>
                                     </li>
                                     <li>
-                                        <Link to="/" className="p-subnav__item sub">Sign out</Link>
+                                        <Link to="/" className="p-subnav__item sub">ออกจากระบบ</Link>
                                     </li>
                                 </ul>
                             </li>

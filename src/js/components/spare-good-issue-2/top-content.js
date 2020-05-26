@@ -99,12 +99,12 @@ class TopContent extends React.Component {
           </div>
 
           <div className="grid_12">
-            <div className="grid_2">
+            {/* <div className="grid_2">
               <p className="top-text">เลขที่ใบสั่งซื้อ/เลขที่เอกสารอ้างอิง</p>
             </div>
             <div className="grid_3 pull_0">
               <input type="text" className="cancel-default" defaultValue={current.props.document_show.po_id} disabled="disabled"></input>
-            </div>
+            </div> */}
             <div className="grid_3 float-right">
               <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.dest_warehouse_name} disabled="disabled"></input>
             </div>
@@ -173,12 +173,12 @@ class TopContent extends React.Component {
           </div>
 
           <div className="grid_12">
-            <div className="grid_2">
+            {/* <div className="grid_2">
               <p className="top-text">เลขที่ใบสั่งซื้อ/เลขที่เอกสารอ้างอิง</p>
             </div>
             <div className="grid_3 pull_0">
               <input type="text" className="cancel-default" value={current.props.document_show.po_id} onChange={(e) => this.props.onChangeNoPo(e)}></input>
-            </div>
+            </div> */}
             <div className="grid_3 float-right">
               <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.dest_warehouse_name} disabled="disabled"></input>
             </div>
@@ -244,12 +244,12 @@ class TopContent extends React.Component {
           </div>
 
           <div className="grid_12">
-            <div className="grid_2">
+            {/* <div className="grid_2">
               <p className="top-text">เลขที่ใบสั่งซื้อ/เลขที่เอกสารอ้างอิง</p>
             </div>
             <div className="grid_3 pull_0">
               <input type="text" className="cancel-default" value={current.props.document_show_mode_add.po_id} onChange={(e) => this.props.onChangeNoPoModeAdd(e)} required></input>
-            </div>
+            </div> */}
             <div className="grid_3 float-right">
               <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show_mode_add.dest_warehouse_name} disabled="disabled"></input>
             </div>

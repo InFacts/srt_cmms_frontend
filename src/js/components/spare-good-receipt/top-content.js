@@ -9,6 +9,7 @@ import { API_URL_DATABASE } from '../../config_url.js';
 
 import '../../../css/style.css'
 import '../../../css/grid12.css';
+import '../../../css/modal.css';
 
 class TopContent extends React.Component {
 

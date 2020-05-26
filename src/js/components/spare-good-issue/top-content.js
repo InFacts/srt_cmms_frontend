@@ -75,14 +75,14 @@ class TopContent extends React.Component {
               <p className="top-text float-right">คลัง</p>
             </div>
           </div>
-          <div className="grid_12">
+          {/* <div className="grid_12">
             <div className="grid_2">
               <p className="top-text">เลขที่เอกสารอ้างอิง</p>
             </div>
             <div className="grid_3 pull_0">
               <input type="text" className="cancel-default" defaultValue={this.props.document_show.no_ref} disabled="disabled"></input>
             </div>
-          </div>
+          </div> */}
         </>
       )
     }
@@ -128,14 +128,14 @@ class TopContent extends React.Component {
               <p className="top-text float-right">คลัง</p>
             </div>
           </div>
-          <div className="grid_12">
+          {/* <div className="grid_12">
             <div className="grid_2">
               <p className="top-text">เลขที่เอกสารอ้างอิง</p>
             </div>
             <div className="grid_3 pull_0">
               <input type="text" className="cancel-default" value={this.props.document_show.no_ref} onChange={(e) => this.props.onChangeNoRef(e)}></input>
             </div>
-          </div>
+          </div> */}
         </>
       )
     }
@@ -180,14 +180,14 @@ class TopContent extends React.Component {
               <p className="top-text float-right">คลัง</p>
             </div>
           </div>
-          <div className="grid_12">
+          {/* <div className="grid_12">
             <div className="grid_2">
               <p className="top-text">เลขที่เอกสารอ้างอิง</p>
             </div>
             <div className="grid_3 pull_0">
               <input type="text" className="cancel-default" value={this.props.document_show_mode_add.no_ref} onChange={(e) => this.props.onChangeNoRefModeAdd(e)}></input>
             </div>
-          </div>
+          </div> */}
         </>
       )
     }
