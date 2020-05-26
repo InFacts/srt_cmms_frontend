@@ -1,5 +1,6 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Router, Route } from 'react-router-dom';
+import history from './history'
 
 import Login from './components/signin';
 import Main4Module from './components/main-module';
@@ -42,7 +43,7 @@ import Register from './components/register'
 class FrontEnd extends React.Component {
     render() {
         return (
-            <div>
+            <Router history={history}>
                 <Route exact path="/" component={Login} />
                 <Route exact path="/main" component={Main4Module} />
                 <Route exact path="/main-spare" component={MainSpare} />
@@ -83,7 +84,7 @@ class FrontEnd extends React.Component {
                 <Route exact path="/profile" component={Profile} />
                 <Route exact path="/activity-log" component={ActivityLog} />
                 <Route exact path="/register" component={Register} />
-            </div>
+            </Router>
         );
     }
 }

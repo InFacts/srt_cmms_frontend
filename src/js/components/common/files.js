@@ -308,7 +308,7 @@ class Files extends React.Component {
 
 
 const mapStateToProps = (state) => {
-    state = state.temp_reducer;
+    state = state.item_master.temp_reducer;
     return ({
     files: state.files,
     clickable: state.clickable,

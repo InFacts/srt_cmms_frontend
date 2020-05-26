@@ -1,3 +1,7 @@
+import history from '../../history' 
+import {makeActionCreator} from './generate_action_creator'
+
+// Constants
 export const TOOLBAR_MODE = {
     NONE: "NONE",
     NONE_HOME: "NONE_HOME",
@@ -173,18 +177,7 @@ export default function reducer(state = initialState, action){
     }
 }
 
-// Action Creators 
-// Reducing Boilerplate with makeActionCreator https://redux.js.org/recipes/reducing-boilerplate#generating-action-creators
-function makeActionCreator(type, ...argNames) {
-    return function (...args) {
-      const action = { type }
-      argNames.forEach((arg, index) => {
-        action[argNames[index]] = args[index]
-      })
-      return action;
-    }
-}
-
+// Action Creators
 export const toModeNone = makeActionCreator(TO_MODE_NONE);
 export const toModeNoneHome = makeActionCreator(TO_MODE_NONE_HOME);
 export const toModeSearch = makeActionCreator(TO_MODE_SEARCH);
@@ -205,3 +198,10 @@ export const handleClickRefresh = makeActionCreator(HANDLE_CLICK_REFRESH);
 export const handleClickBackward = makeActionCreator(HANDLE_CLICK_BACKWARD);
 export const handleClickForward = makeActionCreator(HANDLE_CLICK_FORWARD);
 export const handleClickExportPDF = makeActionCreator(HANDLE_CLICK_EXPORT_PDF);
+
+export const handleClickHomeToSpareMain = () => {
+    return (dispatch) => {
+        dispatch(handleClickHome());
+        history.push('/main-spare');
+    };
+}

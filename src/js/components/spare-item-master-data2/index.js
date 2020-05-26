@@ -1,67 +1,58 @@
-import React, {useState} from 'react';
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import reducers from './reducers';
+import React, {useEffect} from 'react';
+import { connect } from 'react-redux'
 
 import NavTopbar from '../nav/nav-top.js';
 import Toolbar from '../common/nav-toolbar';
+import Footer from '../common/footer';
 import TopContent from './top-content';
-import BottomContent from './bottom-content';
-import Footer from '../common/footer.js';
-import { composeWithDevTools } from 'redux-devtools-extension';
-// import TabDocument from '../common/tab-bar.js';
-// const store = createStore(reducers, composeWithDevTools())
+import { TOOLBAR_ACTIONS, handleClickHomeToSpareMain, toModeSearch } from '../../redux/modules/toolbar.js';
 
-const TestBottomContent = () => {
-    const [count1, setCount1] = useState(0);
-    const [count, setCount] = useState(0);
+const ItemMasterDataComponent = (props) => {
+    
+    // Run only once with checking nothing []
+    // 1. Change Toolbar to Mode Search
+    useEffect(()=>{
+        props.toModeSearch();
+    }, []);
+
+    // Handle home button, only re-subscribe if requiresHandleClick of HOME changes
+    useEffect(()=> {
+        if (props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.HOME]){
+            props.handleClickHomeToSpareMain();
+        }
+    }, [props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.HOME]]);
+    
     return (
-        <>
-            <div className="tabcontent" id="listReport_content" >
-                <h3>London</h3>
-                <p>London is the capital city of England.</p>
-                <p>You clicked {count1} times</p>
-                <button onClick={() => setCount1(count1 + 1)}>
-                    Click me
-                </button>
-            </div>
-            <div className="tabcontent" id="attachment_content" >
-                <p>You clicked {count} times</p>
-                <button onClick={() => setCount(count + 1)}>
-                    Click me
-                </button>
-            </div>
-        </>
-    )
-}
-const ItemMasterData2 = () => {
-    const [tabNames, setTabNames] = useState([
-        {id:"attachment", name:"แนบไฟล์"},
-        {id:"listReport", name:"รายการ"}
-    ]);
-        return (
-            <>
-                <NavTopbar />
-                <Toolbar />
-                
-                <form>
-                    <TopContent />
-                    {/* <TabDocument tabNames={tabNames}>
-                    <TestBottomContent />
-                    </TabDocument> */}
-                </form>
-            </>
-            // <Provider store={store}>
-            //     <NavTopbar />
-            //     <Toolbar />
-            //     <form>
-            //         <TopContent />
-            //         <BottomContent />
-            //         <Footer />
-            //     </form>
-            // </Provider>
-        )
+    <>
+        <NavTopbar />
+        <Toolbar />   
+        
+        <form>
+            <TopContent />
+            {/* <TabDocument tabNames={tabNames}>
+            <TestBottomContent />
+            </TabDocument> */}
+            <Footer />
+        </form>
+    </>
+    // <Provider store={store}>
+    //     <NavTopbar />
+    //     <Toolbar />
+    //     <form>
+    //         <TopContent />
+    //         <BottomContent />
+    //         <Footer />
+    //     </form>
+    // </Provider>
+)}
 
+const mapStateToProps = (state) => ({
+    toolbar: state.toolbar
+})
+
+const mapDispatchToProps = {
+    handleClickHomeToSpareMain, toModeSearch
 }
 
-export default ItemMasterData2;
+
+export default connect(mapStateToProps, mapDispatchToProps)(ItemMasterDataComponent);

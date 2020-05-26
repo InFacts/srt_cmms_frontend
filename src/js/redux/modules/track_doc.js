@@ -1,204 +1,42 @@
-import { combineReducers } from 'redux';
+import axios from "axios";
+import { API_PORT_DATABASE } from '../../config_port.js';
+import { API_URL_DATABASE } from '../../config_url.js';
 
 const initialState = {
-    temp_reducer: {
-        find_document_list: [
-        {
-            "id": 1,
-            "type": "เอกสารของฉัน"
-        },
-        {
-            "id": 2,
-            "type": "เอกสารทั้งหมด"
-        },
-        ],
-    
-        type_document_list: [
-        {
-            "id": 1,
-            "type": "Work Order"
-        },
-        {
-            "id": 2,
-            "type": "สส. 101"
-        },
-        ],
-    
-        status_document_list: [
-        {
-            "id": 1,
-            "status": "เสร็จสมบูรณ์"
-        },
-        {
-            "id": 2,
-            "status": "รอการอนุมัติ"
-        },
-        ],
-    
-        station_list: [
-        {
-            "id": 1,
-            "name": "คลังบางซื่อ"
-        },
-        {
-            "id": 2,
-            "name": "คลังลาดกระบัง"
-        },
-        {
-            "id": 3,
-            "name": "คลังหัวตะเข้"
-        }
-        ],
-        // แขวง
-        district_list: [
-        {
-            "id": 1,
-            "name": "ลาดยาว"
-        },
-        {
-            "id": 2,
-            "name": "จตุจักร"
-        },
-        {
-            "id": 3,
-            "name": "ดอนเมือง"
-        }
-        ],
-        // เขต
-        zone_list: [
-        {
-            "id": 1,
-            "name": "ลาดยาว"
-        },
-        {
-            "id": 2,
-            "name": "จตุจักร"
-        },
-        {
-            "id": 3,
-            "name": "ดอนเมือง"
-        }
-        ],
-    
-        // ค่าคงที่ต่างๆ ของแต่ละคลัง
-        track_document: [
-        {
-            "id": 1,
-            "find_document": "เอกสารของฉัน",
-            "no_track_document": "WO-0004",
-            "type_document": "Work Order",
-            "job_document": "รถไฟชนกัน",
-            "create_name": "นายศิวกร แสงสว่าง",
-            "status_document": "เสร็จสมบูรณ์",
-            "district": "ลาดยาว",
-            "zone": "ลาดยาว",
-            "station": "คลังบางซื่อ",
-            "date_start": "2020-05-09",
-            "time_start": "2020-05-09",
-            "date_end": "2020-05-09",
-            "time_start": "2020-05-09",
-        },
-        {
-            "id": 2,
-            "find_document": "เอกสารของฉัน",
-            "no_track_document": "WO-0003",
-            "type_document": "สส. 101",
-            "job_document": "รถยนต์ขับชนไม้กั้น",
-            "create_name": "นายศิวกร แสงสว่าง",
-            "status_document": "รอการอนุมัติ",
-            "district": "ลาดยาว",
-            "zone": "ลาดยาว",
-            "station": "คลังบางซื่อ",
-            "date_start": "2020-05-09",
-            "time_start": "2020-05-09",
-            "date_end": "2020-05-09",
-            "time_start": "2020-05-09",
-        },{
-            "id": 3,
-            "find_document": "เอกสารของฉัน",
-            "no_track_document": "WO-00045",
-            "type_document": "Work Order",
-            "job_document": "รถไฟชนกัน",
-            "create_name": "นายศิวกร แสงสว่าง",
-            "status_document": "เสร็จสมบูรณ์",
-            "district": "ลาดยาว",
-            "zone": "ลาดยาว",
-            "station": "คลังบางซื่อ",
-            "date_start": "2020-05-09",
-            "time_start": "2020-05-09",
-            "date_end": "2020-05-09",
-            "time_start": "2020-05-09",
-        },
-        ],
-    
-        // Mode Search
-        no_track_document: "",
-        find_document: "",
-        type_document: "",
-        date_start: "",
-        date_end: "",
-        status_document: "",
-        district: "",
-        zone: "",
-        station: "",
 
-        track_document_popup: [],
-        track_document_show: [],
+    find_document_list: [
+    {
+        "id": 1,
+        "type": "เอกสารของฉัน"
     },
-
-    mode: {
-        // Mode การทำงาน
-        action: "search",
-        fill_data: false,
-        tool_mode: false,
+    {
+        "id": 2,
+        "type": "เอกสารทั้งหมด"
     },
+    ],
 
-    //Donut
-    fields: {}
+    // Mode Search
+    no_track_document: "", //Document ID
+    find_document: "2", // my docs/all docs
+    type_document: "", //document type
+    date_start: "", 
+    date_end: "",
+    status_document: "", 
+    district: "",
+    zone: "",
+    station: "",
+
+    track_document_show: [],
 }
 
-function mode(state=initialState.mode, action){
-    switch(action.type){
-      // เลืก mode ในการทำงาน ( Search / Create / Edit )
-      case "ACTION":
-        // console.log("mode", state.action)
-        return {
-          ...state,
-          action: action.value,
-          clickable: action.value === "add" || action.value === "edit" ? true : false
-        }
-      default:
-          return state
-    }
-  }
 
-
-function fields(state = {}, action){
-    switch(action.type){
-      //nite
-      case('CHANGE_FORM'):
-        // ES6 computed property syntax https://redux.js.org/advanced/async-actions
-        return {...state, [action.field] : action.value};
-      default:
-        return state
-    }
-}
-
-const temp_reducer = (state = initialState.temp_reducer, action) => {
+export default function reducer(state = initialState, action) {
     switch (action.type) {
-        // เลืก mode ในการทำงาน ( Search / Create / Edit )
-        case "ACTION":
-            // console.log("mode", state.action)
-            return {
-                ...state,
-                action: action.value
-            }
-  
         // Mode Search
         case "CLICK SEARCH TRACKDOCUMENT":
             return {
             ...state,
-                track_document_popup: initialState.temp_reducer.track_document.filter(item =>{
+            track_document_show: initialState.track_document.filter(item =>{
                     const query = state.no_track_document.toLowerCase();
                     const query2 = state.date_start.toLowerCase();
                     const query3 = state.date_end.toLowerCase();
@@ -257,7 +95,7 @@ const temp_reducer = (state = initialState.temp_reducer, action) => {
         case "ON CHANGE STATUS TRACKDOCUMENT":
             return {
                 ...state,
-                status: action.value
+                status_document: action.value
             }
   
         case "ON CHANGE DISTRICT TRACKDOCUMENT":
@@ -277,16 +115,137 @@ const temp_reducer = (state = initialState.temp_reducer, action) => {
                 ...state,
                 station: action.value
             }
+        case "SEARCH SUCCESS":
+            return{
+                ...state,
+                track_document_show: action.items
+            }
    
         default:
             return state
     }
 }
 
-const trackDoc = combineReducers({
-    fields,
-    temp_reducer,
-    mode
-});
+// Action creators
+function receiveDocuments(data){
+    return {
+        type: "SEARCH SUCCESS",
+        items: data.results
+    }
+}
+
+function getQueryString(state){
+    let queryString = "?";
+    let mapStateToQuery = {
+        no_track_document: "document_id",  // TODO NEED TO CHANGE TO INTERNAL LATER
+        // find_document: "", 
+        type_document: "document_type_id",
+        // date_start: "", 
+        // date_end: "",
+        status_document: "document_status_id",
+        // district: "", 
+        // zone: "",
+        // station: ""
+    }
+    Object.keys(mapStateToQuery).map((key) => {
+        
+        if (state[key]){
+            if (queryString !== "?"){
+                queryString += '&'
+            }
+            queryString += `${mapStateToQuery[key]}=${state[key]}`;
+        }
+    });
+    console.log("QRUERYSAD", queryString)
+    return queryString
+}
+
+export function fetchDocuments(){
+    return (dispatch, getState) => {
+
+        // TODO: dispatch fetching
+        let queryString = getQueryString(getState().track_doc);
+
+        return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search${queryString}`, 
+        { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+            console.log(res)
+            if(res.status === 200){
+                dispatch(receiveDocuments(res.data))
+            }else{
+                // dispatch(receiveFailure(factName))
+            }
+        })
+    }
+}
+
+
+
+
+export const onClickSearchTrackDocument = (e) => {
+    return {
+      type: "CLICK SEARCH TRACKDOCUMENT"
+    }
+  }
   
-export default trackDoc;
+  export const onChangeNoTrackDocument = (e) => {
+    return {
+      type: "ON CHANGE NO TRACKDOCUMENT",
+      value: e.target.value
+    }
+  }
+  
+  export const onChangeFindTrackDocument = (e) => {
+    return {
+      type: "ON CHANGE FIND TRACKDOCUMENT",
+      value: e.target.value
+    }
+  }
+  
+  export const onChangeTypeTrackDocument = (e) => {
+    return {
+      type: "ON CHANGE TYPE TRACKDOCUMENT",
+      value: e.target.value
+    }
+  }
+  
+  export const onChangeDateStartTrackDocument = (e) => {
+    return {
+      type: "ON CHANGE DATE START TRACKDOCUMENT",
+      value: e.target.value
+    }
+  }
+  
+  export const onChangeDateEndTrackDocument = (e) => {
+    return {
+      type: "ON CHANGE DATE END TRACKDOCUMENT",
+      value: e.target.value
+    }
+  }
+  
+  export const onChangeStatusTrackDocument = (e) => {
+    return {
+      type: "ON CHANGE STATUS TRACKDOCUMENT",
+      value: e.target.value
+    }
+  }
+  
+  export const onChangeDistrictTrackDocument = (e) => {
+    return {
+      type: "ON CHANGE DISTRICT TRACKDOCUMENT",
+      value: e.target.value
+    }
+  }
+  
+  export const onChangeZoneTrackDocument = (e) => {
+    return {
+      type: "ON CHANGE ZONE TRACKDOCUMENT",
+      value: e.target.value
+    }
+  }
+  
+  export const onChangeStationTrackDocument = (e) => {
+    return {
+      type: "ON CHANGE STATION TRACKDOCUMENT",
+      value: e.target.value
+    }
+  }
