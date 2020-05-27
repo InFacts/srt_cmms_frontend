@@ -230,7 +230,7 @@ class TopContent extends React.Component {
         <div id="blackground-white">
           <div className="container_12 clearfix">
             <section className="grid_12 ">
-              <h4 className="head-title">คืนอะไหล่</h4>
+              <h4 className="head-title">จำหน่ายซากอะไหล่</h4>
               {this.checkActionMode(this.props.actionMode)}
             </section>
 

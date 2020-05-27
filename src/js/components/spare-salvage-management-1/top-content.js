@@ -231,7 +231,7 @@ class TopContent extends React.Component {
         <div id="blackground-white">
           <div className="container_12 clearfix">
             <section className="grid_12 ">
-              <h4 className="head-title">คืนซากอะไหล่เพื่อรอตัดสินทรัพย์</h4>
+              <h4 className="head-title">คืนซากอะไหล่</h4>
               {this.checkActionMode(this.props.actionMode)}
             </section>
 
