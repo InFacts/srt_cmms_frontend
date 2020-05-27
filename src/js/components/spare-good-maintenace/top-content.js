@@ -590,17 +590,17 @@ export const onClickPopUpSearchNoDocument = (no_document) => {
     });
   };
 }
-export const onClickSelectNoDocument = (document_id) => {
-  return function (dispatch) {
-    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
-      console.log(res)
-      dispatch({
-        type: "CLICK SELECT POPUP NO DOCUMENT",
-        value: res.data
-      });
-    });
-  };
-}
+// export const onClickSelectNoDocument = (document_id) => {
+//   return function (dispatch) {
+//     return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+//       console.log(res)
+//       dispatch({
+//         type: "CLICK SELECT POPUP NO DOCUMENT",
+//         value: res.data
+//       });
+//     });
+//   };
+// }
 // export const onClickSelectNoDocument = (document_id) => {
 //   return function (dispatch) {
 //     return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
@@ -629,6 +629,47 @@ export const onClickSelectNoDocument = (document_id) => {
 //     });
 //   };
 // }
+
+export const onClickSelectNoDocument = (document_id) => {
+  return function (dispatch) {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+      return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${document_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((resImg) => {
+        console.log(res)
+        console.log(resImg.data)
+        var files = [];
+        var data = {
+          "id":"",
+          "sizeReadable":0,
+          "preview":{"url":""},
+          "name":""
+        }
+        resImg.data.results.map((e) => {
+          axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${document_id}/download/${e.id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+            .then((detail) => {
+              console.log(detail)
+              let file = data
+              file.id = 'files-' + e.id
+              file.name = e.filename
+              file.sizeReadable = 0
+              file.preview.url = `data:image/jpeg;base64,${detail.data}`
+              files.push(file)
+              dispatch({
+                type: "ON CHANGE FILE",
+                files: files,
+              });
+            })
+        })
+        dispatch({
+          type: "CLICK SELECT POPUP NO DOCUMENT",
+          value: res.data,
+          // files: files
+        });
+      }).catch(function (err) {
+        console.log(err)
+      })
+    });
+  };
+}
 
 // Mode Edit
 export const onChangeName = (e) => {

@@ -47,7 +47,8 @@ class WrapForm extends React.Component {
             "specific": {
                 "document_id": document_id,
                 "dest_warehouse_id": 999,
-                "src_warehouse_id": parseInt(document_show.src_warehouse_id),
+                // "src_warehouse_id": parseInt(document_show.src_warehouse_id),
+                "src_warehouse_id": 100,
                 "line_items": line_items,
                 "movement": {
                     "document_id": document_id,
@@ -76,6 +77,27 @@ class WrapForm extends React.Component {
             //     }).catch((err) => {
             //         console.log(err)
             //     });
+
+            const formData = new FormData();
+            
+            
+            
+            if(this.props.files != []){
+                this.props.files.map((file) => {
+                    formData.append('file', JSON.stringify({ "testjson": "hellow" }));
+                    formData.append('file', file);
+                })
+                axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${this.props.document_id}`,
+                    formData
+                    , { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+                    .then((resImg) => {
+                        console.log(resImg)
+                    }).catch((err) => {
+                        console.log(err)
+                    });
+            }else{
+                console.log("Em")
+            }
             return (
                 axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_id}/152`, this.packForm(this.props.document_id, this.props.document_show_mode_add, this.props.list_show_mode_add), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
                     .then(res => {

@@ -212,7 +212,7 @@ class TopContent extends React.Component {
             </div>
           </div>
 
-         
+
 
           <div className="grid_12">
             <div className="grid_2">
@@ -614,17 +614,29 @@ export const onClickSelectNoDocument = (document_id) => {
       return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${document_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((resImg) => {
         console.log(res)
         console.log(resImg.data)
-        // var files = [];
-        // resImg.data.results.map((file) =>{
-        //   axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${document_id}/${file.id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-        //   .then((detail) => {
-        //     files.push(detail.data)
-        //     dispatch({
-        //       type: "ON CHANGE FILE",
-        //       files: files,
-        //     });
-        //   })
-        // })
+        var files = [];
+        var data = {
+          "id":"",
+          "sizeReadable":0,
+          "preview":{"url":""},
+          "name":""
+        }
+        resImg.data.results.map((e) => {
+          axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${document_id}/download/${e.id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+            .then((detail) => {
+              console.log(detail)
+              let file = data
+              file.id = 'files-' + e.id
+              file.name = e.filename
+              file.sizeReadable = 0
+              file.preview.url = `data:image/jpeg;base64,${detail.data}`
+              files.push(file)
+              dispatch({
+                type: "ON CHANGE FILE",
+                files: files,
+              });
+            })
+        })
         dispatch({
           type: "CLICK SELECT POPUP NO DOCUMENT",
           value: res.data,
@@ -695,11 +707,11 @@ export const onChangeNameId = (e) => {
   }
 }
 export const onClickPopUpSearchUserModeEdit = (created_by_user_name_th, employee_id) => {
-  console.log("created_by_user_name_th",created_by_user_name_th, "employee_id",employee_id)
+  console.log("created_by_user_name_th", created_by_user_name_th, "employee_id", employee_id)
   return function (dispatch) {
     var space = created_by_user_name_th.indexOf(" ");
     var firstname = created_by_user_name_th.slice(0, space);
-    var lastname = created_by_user_name_th.slice(space+1, created_by_user_name_th.length);
+    var lastname = created_by_user_name_th.slice(space + 1, created_by_user_name_th.length);
     return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&lastname_th=${lastname}&employee_id=${employee_id === undefined ? "" : employee_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       console.log(">>>>", res)
       dispatch({
@@ -774,11 +786,11 @@ export const onChangeMyInventoryNameModeAdd = (e) => {
 }
 
 export const onClickPopUpSearchUser = (created_by_user_name_th, employee_id) => {
-  console.log("created_by_user_name_th",created_by_user_name_th, "employee_id",employee_id)
+  console.log("created_by_user_name_th", created_by_user_name_th, "employee_id", employee_id)
   return function (dispatch) {
     var space = created_by_user_name_th.indexOf(" ");
     var firstname = created_by_user_name_th.slice(0, space);
-    var lastname = created_by_user_name_th.slice(space+1, created_by_user_name_th.length);
+    var lastname = created_by_user_name_th.slice(space + 1, created_by_user_name_th.length);
     return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&lastname_th=${lastname}&employee_id=${employee_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       console.log(res)
       dispatch({

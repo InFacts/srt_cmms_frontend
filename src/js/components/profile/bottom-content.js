@@ -154,7 +154,7 @@ class BottomContent extends React.Component {
                         <label className="cancel-default " for="change">เปลี่ยนแปลงรหัสผ่าน</label>
                       </div> */}
                       <div className="grid_2 pull_0 float-right ">
-                        <button className="button-blue edit   mr-5" type="button" onClick={(e) => {if (window.confirm('คุณต้องการแก้ไขข้อมูลส่วนตัวหรือไม่'))current.props.onSaveProfile(this.props.profile.firstname_th, this.props.profile.lastname_th, this.props.profile.email, this.props.profile.user_id)}}>บันทึก</button>
+                        <button className="button-blue edit   mr-5" type="button" onClick={(e) => { if (window.confirm('คุณต้องการแก้ไขข้อมูลส่วนตัวหรือไม่')) current.props.onSaveProfile(this.props.profile.firstname_th, this.props.profile.lastname_th, this.props.profile.email, this.props.profile.user_id) }}>บันทึก</button>
                       </div>
                     </div>
 
@@ -176,16 +176,16 @@ class BottomContent extends React.Component {
                     <div className="grid_12">
                       <div className="grid_2"><p className="cancel-default">รหัสผ่านใหม่</p></div>
                       <div className="grid_3 pull_0">
-                        <input className="cancel-default " type="text" value={this.props.pass_new}onChange={(e) => this.props.onChangeNewPass(e)} />
+                        <input className="cancel-default " type="text" value={this.props.pass_new} onChange={(e) => this.props.onChangeNewPass(e)} />
                       </div>
                     </div>
                     <div className="grid_12">
                       <div className="grid_2"><p className="cancel-default">ยืนยันรหัสผ่านใหม่</p></div>
                       <div className="grid_3 pull_0">
-                        <input className="cancel-default " type="text" value={this.props.pass_con}onChange={(e) => this.props.onChangeConfileNewPass(e)} />
+                        <input className="cancel-default " type="text" value={this.props.pass_con} onChange={(e) => this.props.onChangeConfileNewPass(e)} />
                       </div>
                       <div className="grid_2 pull_0 float-right ">
-                        <button className="button-blue edit   mr-5" type="button" onClick={(e) =>{if (window.confirm('คุณต้องการแก้ไขรหัสผ่านหรือไม่')) current.props.onSavePass(this.props.pass_con, this.props.profile.user_id)}}>บันทึก</button>
+                        <button className="button-blue edit   mr-5" type="button" onClick={(e) => { if (window.confirm('คุณต้องการแก้ไขรหัสผ่านหรือไม่')) current.props.onSavePass(this.props.pass,this.props.pass_new, this.props.profile.user_id) }}>บันทึก</button>
                       </div>
                     </div>
 
@@ -201,10 +201,10 @@ class BottomContent extends React.Component {
                     <div className="grid_12">
                       <div className="grid_2"><p className="cancel-default">ศูนย์</p></div>
                       <div className="grid_3 pull_0">
-                        <select className="edit-select-top">
-                          {/* {list.list_uoms.map(function (list_uoms, index) {
-                            return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
-                          })} */}
+                        <select className="edit-select-top" disabled="disabled">
+
+                          <option> </option>
+
                         </select>
                       </div>
                     </div>
@@ -212,10 +212,11 @@ class BottomContent extends React.Component {
                     <div className="grid_12">
                       <div className="grid_2"><p className="cancel-default">กอง</p></div>
                       <div className="grid_3 pull_0">
-                        <select className="edit-select-top">
+                        <select className="edit-select-top" disabled="disabled">
                           {/* {list.list_uoms.map(function (list_uoms, index) {
                             return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
                           })} */}
+                          <option> </option>
                         </select>
                       </div>
                     </div>
@@ -223,10 +224,21 @@ class BottomContent extends React.Component {
                     <div className="grid_12">
                       <div className="grid_2"><p className="cancel-default">หน่วยงาน/แขวง</p></div>
                       <div className="grid_3 pull_0">
-                        <select className="edit-select-top">
-                          {/* {list.list_uoms.map(function (list_uoms, index) {
-                            return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
-                          })} */}
+                        <select className="edit-select-top" disabled="disabled" onChange={(e) => this.props.onChangeDepartment(e)}>
+                          {/* {this.props.location_document_show != []
+                            ?
+                            this.props.location_document_show.map(function (location_document_show, index) {
+                              if (this.props.department === location_document_show.district_name) {
+                                return <option defaultValue={location_document_show.district_name} key={index} selected> {location_document_show.district_name} </option>
+                              }
+                              else {
+                                return <option value={location_document_show.district_name} key={index}> {location_document_show.district_name} </option>
+                              }
+                            })
+                            :
+                            <option> </option>
+                          } */}
+                         
                         </select>
                       </div>
                     </div>
@@ -234,14 +246,15 @@ class BottomContent extends React.Component {
                     <div className="grid_12">
                       <div className="grid_2"><p className="cancel-default">ตอน</p></div>
                       <div className="grid_3 pull_0">
-                        <select className="edit-select-top">
+                        <select className="edit-select-top" disabled="disabled">
                           {/* {list.list_uoms.map(function (list_uoms, index) {
                             return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
                           })} */}
+                          <option> </option>
                         </select>
                       </div>
                       <div className="grid_2 pull_0 float-right ">
-                        <button className="button-blue edit   mr-5" type="button">บันทึก</button>
+                        <button className="button-blue edit   mr-5" type="button" disabled="disabled" onClick={(e) => { if (window.confirm('คุณต้องการแก้ไขรหัสผ่านหรือไม่')) current.props.onSaveLocation(this.props.profile.user_id) }}>บันทึก</button>
                       </div>
                     </div>
 
@@ -304,6 +317,12 @@ const mapStateToProps = (state) => ({
   working_document_show: state.working_document_show,
   history_document_show: state.history_document_show,
   complete_document_show: state.complete_document_show,
+  center: state.center,
+  team: state.team,
+  department: state.department,
+  place: state.place,
+  location_document_show: state.location_document_show,
+  location_warehouses_show: state.location_warehouses_show,
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -318,8 +337,8 @@ const mapDispatchToProps = (dispatch) => ({
   onChangeDepartment: (e) => dispatch(onChangeDepartment(e)),
   onChangePlace: (e) => dispatch(onChangePlace(e)),
 
-  onSaveProfile: (e) => dispatch(onSaveProfile(e)),
-  onSavePass: (e) => dispatch(onSavePass(e)),
+  onSaveProfile: (u, p, e, user_id) => dispatch(onSaveProfile(u, p, e, user_id)),
+  onSavePass: (o,u, user_id) => dispatch(onSavePass(o,u, user_id)),
   onSaveLocation: (e) => dispatch(onSaveLocation(e)),
 
 })
@@ -408,10 +427,11 @@ export const onSaveProfile = (u, p, e, user_id) => {
 }
 
 
-export const onSavePass = (u, user_id) => {
+export const onSavePass = (o,u, user_id) => {
   return function (dispatch) {
     return axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/profile`, {
-     
+      "password_old": o,
+      "password_new": u
     }, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/profile?user_id=${user_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((resDoc) => {
@@ -426,9 +446,24 @@ export const onSavePass = (u, user_id) => {
 }
 
 export const onSaveLocation = (e) => {
-  return {
-    type: "CLICK SAVE LOCATION",
-    value: e.target.value
-  }
+
+  // return function (dispatch) {
+  //   return axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/profile`, {
+
+  //   }, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+  //     return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/profile?user_id=${user_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+  //       .then((resDoc) => {
+  //         alert("บันทึกข้อมูลสำเร็จ")
+  //         dispatch({
+  //           type: "CLICK SAVE LOCATION",
+  //           value: resDoc.data,
+  //         });
+  //       })
+  //   });
+  // };
+  // return {
+  //   type: "CLICK SAVE LOCATION",
+  //   value: e.target.value
+  // }
 }
 

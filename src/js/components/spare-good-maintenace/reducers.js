@@ -582,19 +582,34 @@ export default (state = initialState, action) => {
         no_part_show: action.value,
       }
     case "ON CLICK SELECT POPUP NO PART":
-      console.log(state.no_part_show[action.rowIndex], "and", state.list_show_row_index)
+      // console.log(state.no_part_show[action.rowIndex], "and", state.list_show_row_index)
+      // var clone_list_show = [...state.list_show];
+      // clone_list_show[state.list_show_row_index] = state.no_part_show[action.rowIndex]
+      // clone_list_show[state.list_show_row_index].quantity = 1
+      // clone_list_show[state.list_show_row_index].per_unit_price = "1.0000"
+      // console.log(clone_list_show[state.list_show_row_index].at_source[0])
+      // clone_list_show[state.list_show_row_index].at_source[0].current_unit_count = action.resStatistic[0].current_unit_count
+      // clone_list_show[state.list_show_row_index].at_source[0].item_status.description_th = action.resStatistic[0].description_th
+      // return {
+      //   ...state,
+      //   list_show: clone_list_show
+      // }
       var clone_list_show = [...state.list_show];
-      clone_list_show[state.list_show_row_index] = state.no_part_show[action.rowIndex]
+
+      clone_list_show[state.list_show_row_index].item_id = state.no_part_show[action.rowIndex].item_id
+      clone_list_show[state.list_show_row_index].internal_item_id = state.no_part_show[action.rowIndex].internal_item_id
+      clone_list_show[state.list_show_row_index].description = state.no_part_show[action.rowIndex].description
+      clone_list_show[state.list_show_row_index].list_uoms = state.no_part_show[action.rowIndex].list_uoms
+      clone_list_show[state.list_show_row_index].uom_group_id = state.no_part_show[action.rowIndex].uom_group_id
+
       clone_list_show[state.list_show_row_index].quantity = 1
       clone_list_show[state.list_show_row_index].per_unit_price = "1.0000"
-      console.log(clone_list_show[state.list_show_row_index].at_source[0])
       clone_list_show[state.list_show_row_index].at_source[0].current_unit_count = action.resStatistic[0].current_unit_count
       clone_list_show[state.list_show_row_index].at_source[0].item_status.description_th = action.resStatistic[0].description_th
       return {
         ...state,
         list_show: clone_list_show
       }
-
     case "CLICK SEARCH POPUP INVENTORY":
       console.log("reducer", action.value)
       return {
