@@ -31,9 +31,9 @@ const initialState = {
     "created_by_user_id": "",
     "created_by_admin_name_th": "",
     "document_status_id": "",
-    "src_warehouse_id": 999,
-    "dest_warehouse_id": "",
-    "dest_warehouse_name": "",
+    "dest_warehouse_id": 999,
+    "src_warehouse_id": "",
+    "src_warehouse_name": "",
     "po_id": "",
     "line_items": []
   },
@@ -342,7 +342,7 @@ export default (state = initialState, action) => {
     case "ON CHANGE MY INVENTORY":
       var clone_document_show = { ...state.document_show };
       console.log(state.document_show)
-      clone_document_show.dest_warehouse_id = action.value;
+      clone_document_show.src_warehouse_id = action.value;
       return {
         ...state,
         document_show: clone_document_show
@@ -420,8 +420,8 @@ export default (state = initialState, action) => {
       }
     case "CLICK SELECT POPUP INVENTORY MODE EDIT":
       var clone_document_show = { ...state.document_show };
-      clone_document_show.dest_warehouse_id = state.inventory_show_popup[action.row_inventory_show_popup].warehouse_id
-      clone_document_show.dest_warehouse_name = state.inventory_show_popup[action.row_inventory_show_popup].name
+      clone_document_show.src_warehouse_id = state.inventory_show_popup[action.row_inventory_show_popup].warehouse_id
+      clone_document_show.src_warehouse_name = state.inventory_show_popup[action.row_inventory_show_popup].name
       return {
         ...state,
         document_show: clone_document_show,
@@ -435,7 +435,7 @@ export default (state = initialState, action) => {
       }
     case "ON CHANGE MY INVENTORY NAMAE":
       var clone_document_show = { ...state.document_show };
-      clone_document_show.dest_warehouse_name = action.value;
+      clone_document_show.src_warehouse_name = action.value;
       return {
         ...state,
         document_show: clone_document_show
@@ -540,6 +540,8 @@ export default (state = initialState, action) => {
       clone_list_show_mode_add[state.list_show_mode_add_row_index].list_uoms = state.no_part_show_mode_add[action.rowIndex].list_uoms
       clone_list_show_mode_add[state.list_show_mode_add_row_index].quantity = 1
       clone_list_show_mode_add[state.list_show_mode_add_row_index].per_unit_price = "1.0000"
+      clone_list_show_mode_add[state.list_show_mode_add_row_index].current_unit_count = action.resStatistic[0].current_unit_count
+      clone_list_show_mode_add[state.list_show_mode_add_row_index].description_th = action.resStatistic[0].description_th
       return {
         ...state,
         list_show_mode_add: clone_list_show_mode_add
@@ -575,22 +577,22 @@ export default (state = initialState, action) => {
       }
     case "ON CHANGE MY INVENTORY MODE ADD":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
-      clone_document_show_mode_add.dest_warehouse_id = action.value;
+      clone_document_show_mode_add.src_warehouse_id = action.value;
       return {
         ...state,
         document_show_mode_add: clone_document_show_mode_add
       }
     case "ON CHANGE MY INVENTORY NAMAE MODE ADD":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
-      clone_document_show_mode_add.dest_warehouse_name = action.value;
+      clone_document_show_mode_add.src_warehouse_name = action.value;
       return {
         ...state,
         document_show_mode_add: clone_document_show_mode_add
       }
     case "CLICK SELECT POPUP INVENTORY":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
-      clone_document_show_mode_add.dest_warehouse_id = state.inventory_show_popup[action.row_inventory_show_popup].warehouse_id
-      clone_document_show_mode_add.dest_warehouse_name = state.inventory_show_popup[action.row_inventory_show_popup].name
+      clone_document_show_mode_add.src_warehouse_id = state.inventory_show_popup[action.row_inventory_show_popup].warehouse_id
+      clone_document_show_mode_add.src_warehouse_name = state.inventory_show_popup[action.row_inventory_show_popup].name
       return {
         ...state,
         document_show_mode_add: clone_document_show_mode_add,
@@ -641,8 +643,8 @@ export default (state = initialState, action) => {
       clone_document_show_mode_add.created_by_admin_name_th = action.decoded.firstname_th === null ? "" : action.decoded.firstname_th + " " + action.decoded.lastname_th;
       clone_document_show_mode_add.created_by_admin_id = action.decoded.user_id === null ? "" : action.decoded.user_id;
 
-      clone_document_show_mode_add.dest_warehouse_id = action.decoded.list_positions[0].warehouse_id === null ? "" : action.decoded.list_positions[0].warehouse_id;
-      clone_document_show_mode_add.dest_warehouse_name = action.decoded.list_positions[0].warehouse_name === null ? "" : action.decoded.list_positions[0].warehouse_name;
+      clone_document_show_mode_add.src_warehouse_id = action.decoded.list_positions[0].warehouse_id === null ? "" : action.decoded.list_positions[0].warehouse_id;
+      clone_document_show_mode_add.src_warehouse_name = action.decoded.list_positions[0].warehouse_name === null ? "" : action.decoded.list_positions[0].warehouse_name;
 
       return {
         ...state,
@@ -655,6 +657,38 @@ export default (state = initialState, action) => {
     // Clear State after sumbit
     case "ON CLEAR STATE MODE ADD":
       console.log(initialState.no_document)
+      return {
+        ...state,
+        action: initialState.action,
+        // fill_data: initialState.fill_data,
+        // tool_mode: initialState.tool_mode,
+
+        document_id: initialState.document_id,
+        document_show_mode_add: initialState.document_show_mode_add,
+        list_show_mode_add: state.list_show_for_clear,
+
+        no_document: initialState.no_document,
+        document_show: initialState.document_show,
+        list_show: initialState.list_show,
+
+        document_show_popup: initialState.document_show_popup,
+
+        list_no_part: initialState.list_no_part,
+        list_description_part: initialState.list_description_part,
+        no_part_show: initialState.no_part_show,
+        inventory_show_popup: initialState.inventory_show_popup,
+        list_show_row_index: initialState.list_show_row_index,
+
+        document_type_id: initialState.document_type_id,
+        list_no_part_mode_add: initialState.list_no_part_mode_add,
+        list_desription_part_mode_add: initialState.list_desription_part_mode_add,
+
+        list_show_mode_add_row_index: initialState.list_show_mode_add_row_index,
+        no_part_show_mode_add: initialState.no_part_show_mode_add,
+
+        line_users: initialState.line_users,
+      }
+    case "ON CLICK CANCLE":
       return {
         ...state,
         action: initialState.action,

@@ -77,7 +77,7 @@ class TopContent extends React.Component {
               <input type="text" className="cancel-default" defaultValue={current.props.document_show.created_by_user_name_th} disabled="disabled"></input>
             </div>
             <div className="grid_3 float-right">
-              <input type="datetime-local" className="cancel-default float-right" defaultValue={current.props.document_show.created_on !== undefined ? current.props.document_show.created_on.slice(0, 16) : null} disabled="disabled"></input>
+              <input type="date" className="cancel-default float-right" defaultValue={current.props.document_show.created_on !== undefined ? current.props.document_show.created_on.slice(0, 10) : null} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">วันที่</p>
@@ -148,7 +148,7 @@ class TopContent extends React.Component {
               </div>
             </div>
             <div className="grid_3 float-right">
-              <input type="datetime-local" className="cancel-default float-right" value={current.props.document_show.created_on.slice(0, 16)} onChange={(e) => this.props.onChangeDate(e)}></input>
+              <input type="date" className="cancel-default float-right" value={current.props.document_show.created_on.slice(0, 10)} onChange={(e) => this.props.onChangeDate(e)}></input>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">วันที่</p>
@@ -219,7 +219,7 @@ class TopContent extends React.Component {
               </div>
             </div>
             <div className="grid_3 float-right">
-              <input type="datetime-local" className="cancel-default float-right" value={current.props.document_show_mode_add.created_on} onChange={(e) => this.props.onChangeDateModeAdd(e)} required></input>
+              <input type="date" className="cancel-default float-right" value={current.props.document_show_mode_add.created_on} onChange={(e) => this.props.onChangeDateModeAdd(e)} required></input>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">วันที่</p>

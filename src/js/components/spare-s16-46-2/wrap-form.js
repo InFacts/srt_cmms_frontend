@@ -87,7 +87,7 @@ class WrapForm extends React.Component {
 
     render() {
         return (
-            <form onSubmit={(e) => { this.handleSubmit(e) }}>
+            <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) {return this.handleSubmit(e) }else { e.preventDefault(); }}}>
                 <TopContent />
                 <BottomContent />
                 <Footer />

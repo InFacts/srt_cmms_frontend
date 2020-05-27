@@ -51,7 +51,7 @@ const initialState = {
         {
           "current_unit_count": "",
           "item_status": {
-            "description_th": ""
+          "description_th": ""
           }
         }
       ]
@@ -69,7 +69,7 @@ const initialState = {
         {
           "current_unit_count": "",
           "item_status": {
-            "description_th": ""
+          "description_th": ""
           }
         }
       ]
@@ -733,8 +733,9 @@ export default (state = initialState, action) => {
         list_no_part_mode_add: action.value
       }
     case "ON CLICK SELECT POPUP NO PART MODE ADD":
-      // console.log(state.list_show_mode_add[action.rowIndex], "<<<<<<<<<")
       var clone_list_show_mode_add = [...state.list_show_mode_add];
+      console.log(clone_list_show_mode_add[state.list_show_mode_add_row_index], "<<<<<<<<<")
+
       clone_list_show_mode_add[state.list_show_mode_add_row_index].item_id = state.no_part_show_mode_add[action.rowIndex].item_id
       clone_list_show_mode_add[state.list_show_mode_add_row_index].internal_item_id = state.no_part_show_mode_add[action.rowIndex].internal_item_id
       clone_list_show_mode_add[state.list_show_mode_add_row_index].description = state.no_part_show_mode_add[action.rowIndex].description
@@ -833,13 +834,13 @@ export default (state = initialState, action) => {
         ...state,
         list_desription_part_mode_add: action.value
       }
-      case "ON CHANGE TRANFER MODE ADD":
-        var clone_document_show_mode_add = { ...state.document_show_mode_add };
-        clone_document_show_mode_add.transfer_method = action.value;
-        return {
-          ...state,
-          document_show_mode_add: clone_document_show_mode_add
-        }
+    case "ON CHANGE TRANFER MODE ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.transfer_method = action.value;
+      return {
+        ...state,
+        document_show_mode_add: clone_document_show_mode_add
+      }
 
     case "KEY PRESS ENTER":
       if (action.value === action.res.internal_item_id) {
@@ -881,6 +882,38 @@ export default (state = initialState, action) => {
     // Clear State after sumbit
     case "ON CLEAR STATE MODE ADD":
       console.log(initialState.no_document)
+      return {
+        ...state,
+        action: initialState.action,
+        // fill_data: initialState.fill_data,
+        // tool_mode: initialState.tool_mode,
+
+        document_id: initialState.document_id,
+        document_show_mode_add: initialState.document_show_mode_add,
+        list_show_mode_add: state.list_show_for_clear,
+
+        no_document: initialState.no_document,
+        document_show: initialState.document_show,
+        list_show: initialState.list_show,
+
+        document_show_popup: initialState.document_show_popup,
+
+        list_no_part: initialState.list_no_part,
+        list_description_part: initialState.list_description_part,
+        no_part_show: initialState.no_part_show,
+        inventory_show_popup: initialState.inventory_show_popup,
+        list_show_row_index: initialState.list_show_row_index,
+
+        document_type_id: initialState.document_type_id,
+        list_no_part_mode_add: initialState.list_no_part_mode_add,
+        list_desription_part_mode_add: initialState.list_desription_part_mode_add,
+
+        list_show_mode_add_row_index: initialState.list_show_mode_add_row_index,
+        no_part_show_mode_add: initialState.no_part_show_mode_add,
+
+        line_users: initialState.line_users,
+      }
+    case "ON CLICK CANCLE":
       return {
         ...state,
         action: initialState.action,
