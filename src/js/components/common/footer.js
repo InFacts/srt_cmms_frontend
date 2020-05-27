@@ -9,21 +9,21 @@ class Footer extends React.Component {
 
   checkActionMode = (mode) => {
     // console.log("hello footer")
-    if (mode === "search") {
-      return (
-        <div className="grid_12 nav-footer">
+    // if (mode === "search") {
+    //   return (
+    //     <div className="grid_12 nav-footer">
           
-        </div>
-      )
-    }
-    if (mode === "add" || mode === "edit") {
+    //     </div>
+    //   )
+    // }
+    // if (mode === "add" || mode === "edit") {
       return (
         <div className="grid_12 nav-footer">
           <button type="button" className="p-button--base edit float-right" onClick={(e) => { if (window.confirm('คุณต้องการยกเลิกใช่หรือไม่')) this.props.onClickCancle() }}>ยกเลิก</button>
           <button type="submit" className="button-blue edit float-right mr-2">บันทึก</button>
         </div>
       )
-    }
+    // }
   }
 
   render() {

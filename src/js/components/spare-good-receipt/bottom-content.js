@@ -7,9 +7,32 @@ import { API_URL_DATABASE } from '../../config_url.js';
 
 import Files from '../common/files'
 
+import {
+  // Mode Edit
+  onChangeNoPart,
+  onChangeNoPartEachRow,
+  onClickNoPartEachRow,
+  onChangeQuilityEachRow,
+  onChangeUnitPerBathEachRow,
+  onChangeTotalEachRow,
+  onClickSearchPopUpNoPart,
+  onClickSelectPopUpNoPart,
+  onChangeNote,
+
+  // Mode Add
+  onChangeNoPartEachRowModeAdd,
+  onClickNoPartEachRowModeAdd,
+  onClickSearchPopUpNoPartModeAdd,
+  onChangeNoPartModeAdd,
+  onClickSelectPopUpNoPartModeAdd,
+  onChangeUnitPerBathEachRowModeAdd,
+  onChangeQuilityEachRowModeAdd,
+  onChangeTotalEachRowModeAdd,
+  onChangeNoteModeAdd
+} from '../../redux/modules/goods_receipt.js';
+
 import '../../../css/style.css'
 import '../../../css/table.css';
-
 class BottomContent extends React.Component {
 
   sumTotalLineItem = (quantity, per_unit_price) => {
@@ -18,7 +41,26 @@ class BottomContent extends React.Component {
     if (sum === 0 || sum == NaN) {
       return null
     }
-    else return sum;
+    else {
+      var s = sum.toString();
+      var n = s.indexOf(".")
+      // console.log(n, "s>>>>", s)
+      if (n == -1) {
+        s = s + ".00"
+        return s;
+      }
+      else {
+        s = s.slice(0, n + 3)
+        var c = s.length - n;
+        // console.log(c, "s.length", s.length, "n", n )
+        if (c === 2) {
+          return s + "0";
+        }
+        else {
+          return s;
+        }
+      }
+    }
   }
 
   sumTotal = (list_show) => {
@@ -29,8 +71,29 @@ class BottomContent extends React.Component {
       sumTotal = sumTotal + sum;
       // return sumTotal
     })
-    // console.log("sum out", sumTotal)
-    return sumTotal
+    var s = sumTotal.toString();
+    var n = s.indexOf(".")
+    if (n == -1) {
+      s = s + ".00"
+      return s;
+    }
+    else {
+      s = s.slice(0, n + 3)
+      return s;
+    }
+  }
+
+  perUnitPriceModeSearch = (description, per_unit_price) => {
+    if (description !== "") {
+    var s = per_unit_price.toString();
+      var n = s.indexOf(".")
+      if (n == -1) {
+        s = s + ".0000"
+        return s;
+      }
+      return per_unit_price
+    }
+    else return per_unit_price
   }
 
   requiredQuantityModeEdit = (description, quantity) => {
@@ -48,20 +111,26 @@ class BottomContent extends React.Component {
 
   requiredPerUnitPriceModeEdit = (description, per_unit_price) => {
     if (description !== "") {
+      var s = per_unit_price.toString();
+      var n = s.indexOf(".")
+      if (n == -1) {
+        s = s + ".0000"
+        return <input type="number" step="0.0001" min="1" className="cancel-default float-right" style={{ paddingRight: "10px" }} value={s} onChange={(e) => this.props.onChangeUnitPerBathEachRow(e)} required></input>;
+      }
       return (
-        <input type="number" min="1" className="cancel-default float-right" value={per_unit_price} onChange={(e) => this.props.onChangeUnitPerBathEachRow(e)} required></input>
+        <input type="number" step="0.0001" min="1" className="cancel-default float-right" style={{ paddingRight: "10px" }} value={per_unit_price} onChange={(e) => this.props.onChangeUnitPerBathEachRow(e)} required></input>
       )
     }
     else {
       return (
-          <input type="number" min="1" className="cancel-default float-right" value={per_unit_price} onChange={(e) => this.props.onChangeUnitPerBathEachRow(e)}></input>
+        <input type="number" step="0.0001" min="1" className="cancel-default float-right" style={{ paddingRight: "10px" }} value={per_unit_price} onChange={(e) => this.props.onChangeUnitPerBathEachRow(e)}></input>
       )
     }
+
   }
 
   requiredQuantity = (description, quantity) => {
     if (description !== "") {
-      console.log("required")
       return (
         <input type="number" min="1" className="cancel-default float-right" value={quantity} onChange={(e) => this.props.onChangeQuilityEachRowModeAdd(e)} required></input>
       )
@@ -75,14 +144,19 @@ class BottomContent extends React.Component {
 
   requiredPerUnitPrice = (description, per_unit_price) => {
     if (description !== "") {
-      console.log("required")
+      var s = per_unit_price.toString();
+      var n = s.indexOf(".")
+      if (n == -1) {
+        s = s + ".0000"
+        return <input type="number" step="0.0001" min="1" className="cancel-default float-right" style={{ paddingRight: "10px" }} value={s} onChange={(e) => this.props.onChangeUnitPerBathEachRowModeAdd(e)} required></input>;
+      }
       return (
-        <input type="number" min="1" className="cancel-default float-right" value={per_unit_price} onChange={(e) => this.props.onChangeUnitPerBathEachRowModeAdd(e)} required></input>
+        <input type="number" step="0.0001" min="1" className="cancel-default float-right" style={{ paddingRight: "10px" }} value={per_unit_price} onChange={(e) => this.props.onChangeUnitPerBathEachRowModeAdd(e)} required></input>
       )
     }
     else {
       return (
-          <input type="number" min="1" className="cancel-default float-right" value={per_unit_price} onChange={(e) => this.props.onChangeUnitPerBathEachRowModeAdd(e)}></input>
+        <input type="number" step="0.0001" min="1" className="cancel-default float-right" style={{ paddingRight: "10px" }} value={per_unit_price} onChange={(e) => this.props.onChangeUnitPerBathEachRowModeAdd(e)}></input>
       )
     }
   }
@@ -114,13 +188,13 @@ class BottomContent extends React.Component {
                       <td className="edit-padding">{list.description}</td>
                       <td className="edit-padding text-center">{list.quantity}</td>
                       <td className="edit-padding text-center">
-                      <select className="edit-select-top" disabled="disabled">
+                        <select className="edit-select-top" disabled="disabled">
                           {list.list_uoms.map(function (list_uoms, index) {
                             return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
                           })}
                         </select>
                       </td>
-                      <td className="edit-padding text-right">{list.per_unit_price}</td>
+                      <td className="edit-padding text-right">{current.perUnitPriceModeSearch(list.description, list.per_unit_price)}</td>
                       <td className="edit-padding text-right">{current.sumTotalLineItem(list.quantity, list.per_unit_price)}</td>
                     </tr>
                   )
@@ -161,6 +235,7 @@ class BottomContent extends React.Component {
                 </tr>
               </thead>
               <tbody>
+                {console.log(current.props.list_show, "<<<list_show")}
                 {current.props.list_show.map(function (list, index) {
                   return (
                     <tr key={index} id={index}>
@@ -168,6 +243,7 @@ class BottomContent extends React.Component {
                       <td className="edit-padding">
                         <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
                           <input type="text" className="p-search-box__input cancel-default-table" value={list.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRow(e)} />
+                          {/* <input type="text" className="p-search-box__input cancel-default-table" value={list.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRow(e)} onKeyPress={(e) => current.props.handleKeyPressModeEdit(e)} /> */}
                           <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPart" onClick={(e) => current.props.onClickNoPartEachRow(e)}></i></button>
                         </div>
                       </td>
@@ -216,6 +292,13 @@ class BottomContent extends React.Component {
                   <div className="grid_2"><p className="cancel-default">เลขที่อะไหล่</p></div>
                   <div className="grid_8 pull_0">
                     <input type="text" className="cancel-default grid_3" value={this.props.list_no_part} onChange={(e) => this.props.onChangeNoPart(e)} />
+                  </div>
+                </div>
+
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">รายละเอียด</p></div>
+                  <div className="grid_8 pull_0">
+                    <input type="text" className="cancel-default grid_3" value={this.props.list_description_part} onChange={(e) => this.props.onChangeDescriptionPart(e)} />
                     <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickSearchPopUpNoPart(this.props.list_no_part)}>ค้นหา</button>
                   </div>
                 </div>
@@ -274,13 +357,13 @@ class BottomContent extends React.Component {
               </thead>
               <tbody>
                 {current.props.list_show_mode_add.map(function (list, index) {
-                  console.log(list, "list")
                   return (
                     <tr key={index} id={index}>
                       <th className="edit-padding text-center">{index + 1}</th>
                       <td className="edit-padding">
                         <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
                           <input type="text" className="p-search-box__input cancel-default-table" value={list.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRowModeAdd(e)} />
+                          {/* <input type="text" className="p-search-box__input cancel-default-table" value={list.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRowModeAdd(e)} onKeyPress={(e) => current.props.handleKeyPress(e)}/> */}
                           <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPartModeAdd" onClick={(e) => current.props.onClickNoPartEachRowModeAdd(e)}></i></button>
                         </div>
                       </td>
@@ -328,7 +411,13 @@ class BottomContent extends React.Component {
                   <div className="grid_2"><p className="cancel-default">เลขที่อะไหล่</p></div>
                   <div className="grid_8 pull_0">
                     <input type="text" className="cancel-default grid_3" value={this.props.list_no_part_mode_add} onChange={(e) => this.props.onChangeNoPartModeAdd(e)} />
-                    <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickSearchPopUpNoPartModeAdd(this.props.list_no_part_mode_add)}>ค้นหา</button>
+                  </div>
+                </div>
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">รายละเอียด</p></div>
+                  <div className="grid_8 pull_0">
+                    <input type="text" className="cancel-default grid_3" value={this.props.list_desription_part_mode_add} onChange={(e) => this.props.onChangeDescriptionPartModeAdd(e)} />
+                    <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickSearchPopUpNoPartModeAdd(this.props.list_no_part_mode_add, this.props.list_desription_part_mode_add)}>ค้นหา</button>
                   </div>
                 </div>
 
@@ -386,7 +475,10 @@ class BottomContent extends React.Component {
   };
 }
 
-const mapStateToProps = (state) => ({
+
+const mapStateToProps = (state) => {
+  state = state.goods_receipt;
+  return ({
   actionMode: state.action,
   document_show: state.document_show,
   list_show: state.list_show,
@@ -401,161 +493,28 @@ const mapStateToProps = (state) => ({
   list_no_part_mode_add: state.list_no_part_mode_add,
   document_show_mode_add: state.document_show_mode_add
 })
-const mapDispatchToProps = (dispatch) => ({
+}
+const mapDispatchToProps = {
   // Mode Edit
-  onChangeNoPart: (e) => dispatch(onChangeNoPart(e)),
-  onChangeNoPartEachRow: (e) => dispatch(onChangeNoPartEachRow(e)),
-  onClickNoPartEachRow: (e) => dispatch(onClickNoPartEachRow(e)),
-  onChangeQuilityEachRow: (e) => dispatch(onChangeQuilityEachRow(e)),
-  onChangeUnitPerBathEachRow: (e) => dispatch(onChangeUnitPerBathEachRow(e)),
-  onChangeTotalEachRow: (e) => dispatch(onChangeTotalEachRow(e)),
-  onClickSearchPopUpNoPart: (e) => dispatch(onClickSearchPopUpNoPart(e)),
-  onClickSelectPopUpNoPart: (e) => dispatch(onClickSelectPopUpNoPart(e)),
-  onChangeNote: (e) => dispatch(onChangeNote(e)),
+  onChangeNoPart,
+  onChangeNoPartEachRow,
+  onClickNoPartEachRow,
+  onChangeQuilityEachRow,
+  onChangeUnitPerBathEachRow,
+  onChangeTotalEachRow,
+  onClickSearchPopUpNoPart,
+  onClickSelectPopUpNoPart,
+  onChangeNote,
 
   // Mode Add
-  onChangeNoPartEachRowModeAdd: (e) => dispatch(onChangeNoPartEachRowModeAdd(e)),
-  onClickNoPartEachRowModeAdd: (e) => dispatch(onClickNoPartEachRowModeAdd(e)),
-  onClickSearchPopUpNoPartModeAdd: (e) => dispatch(onClickSearchPopUpNoPartModeAdd(e)),
-  onChangeNoPartModeAdd: (e) => dispatch(onChangeNoPartModeAdd(e)),
-  onClickSelectPopUpNoPartModeAdd: (e) => dispatch(onClickSelectPopUpNoPartModeAdd(e)),
-  onChangeUnitPerBathEachRowModeAdd: (e) => dispatch(onChangeUnitPerBathEachRowModeAdd(e)),
-  onChangeQuilityEachRowModeAdd: (e) => dispatch(onChangeQuilityEachRowModeAdd(e)),
-  onChangeTotalEachRowModeAdd: (e) => dispatch(onChangeTotalEachRowModeAdd(e)),
-  onChangeNoteModeAdd: (e) => dispatch(onChangeNoteModeAdd(e))
-})
+  onChangeNoPartEachRowModeAdd,
+  onClickNoPartEachRowModeAdd,
+  onClickSearchPopUpNoPartModeAdd,
+  onChangeNoPartModeAdd,
+  onClickSelectPopUpNoPartModeAdd,
+  onChangeUnitPerBathEachRowModeAdd,
+  onChangeQuilityEachRowModeAdd,
+  onChangeTotalEachRowModeAdd,
+  onChangeNoteModeAdd
+}
 export default connect(mapStateToProps, mapDispatchToProps)(BottomContent);
-
-// Mode Edit
-export const onChangeNoPart = (e) => {
-  return {
-    type: "ON CHANGE NO PART",
-    value: e.target.value,
-  }
-}
-export const onChangeNoPartEachRow = (e) => {
-  return {
-    type: "ON CHANGE NO PART EACH ROW",
-    value: e.target.value,
-    rowIndex: e.target.parentNode.parentNode.parentNode.id
-  }
-}
-export const onClickNoPartEachRow = (e) => {
-  // console.log(e.target.parentNode.parentNode.parentNode.parentNode)
-  return {
-    type: "ON CLICK NO PART EACH ROW",
-    rowIndex: e.target.parentNode.parentNode.parentNode.parentNode.id
-  }
-}
-export const onChangeQuilityEachRow = (e) => {
-  return {
-    type: "ON CHANGE QUILITY EACH ROW",
-    value: e.target.value,
-    rowIndex: e.target.parentNode.parentNode.id
-  }
-}
-export const onChangeUnitPerBathEachRow = (e) => {
-  return {
-    type: "ON CHANGE UNIT PER BATH EACH ROW",
-    value: e.target.value,
-    rowIndex: e.target.parentNode.parentNode.id
-  }
-}
-export const onChangeTotalEachRow = (e) => {
-  return {
-    type: "ON CHANGE TOTAL EACH ROW",
-    value: e.target.value,
-    rowIndex: e.target.parentNode.parentNode.id
-  }
-}
-export const onClickSearchPopUpNoPart = (list_no_part) => {
-  return function (dispatch) {
-    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items?internal_item_id=${list_no_part}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
-      // console.log(res)
-      // dispatch
-      dispatch({
-        type: "ON CLICK SEARCH POPUP NO PART",
-        value: res.data.results
-      });
-    });
-  };
-}
-export const onClickSelectPopUpNoPart = (e) => {
-  return {
-    type: "ON CLICK SELECT POPUP NO PART",
-    rowIndex: e.target.parentNode.parentNode.id
-  }
-}
-export const onChangeNote = (e) => {
-  return {
-    type: "ON CHANGE NOTE",
-    value: e.target.value
-  }
-}
-
-// Mode Add
-export const onChangeNoPartEachRowModeAdd = (e) => {
-  return {
-    type: "ON CHANGE NO PART EACH ROW MODE ADD",
-    value: e.target.value,
-    rowIndex: e.target.parentNode.parentNode.parentNode.id
-  }
-}
-export const onClickNoPartEachRowModeAdd = (e) => {
-  return {
-    type: "ON CLICK NO PART EACH ROW MODE ADD",
-    rowIndex: e.target.parentNode.parentNode.parentNode.parentNode.id
-  }
-}
-export const onClickSearchPopUpNoPartModeAdd = (list_no_part_mode_add) => {
-  return function (dispatch) {
-    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items?internal_item_id=${list_no_part_mode_add}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
-      // console.log(res)
-      // dispatch
-      dispatch({
-        type: "ON CLICK SEARCH POPUP NO PART ADD MODE",
-        value: res.data.results
-      });
-    });
-  };
-}
-export const onChangeNoPartModeAdd = (e) => {
-  return {
-    type: "ON CHANGE NO PART MODE ADD",
-    value: e.target.value,
-  }
-}
-export const onClickSelectPopUpNoPartModeAdd = (e) => {
-  // console.log(e.target.parentNode.parentNode)
-  return {
-    type: "ON CLICK SELECT POPUP NO PART MODE ADD",
-    rowIndex: e.target.parentNode.parentNode.id
-  }
-}
-export const onChangeQuilityEachRowModeAdd = (e) => {
-  return {
-    type: "ON CHANGE QUILITY EACH ROW MODE ADD",
-    value: e.target.value,
-    rowIndex: e.target.parentNode.parentNode.id
-  }
-}
-export const onChangeUnitPerBathEachRowModeAdd = (e) => {
-  return {
-    type: "ON CHANGE UNIT PER BATH EACH ROW MODE ADD",
-    value: e.target.value,
-    rowIndex: e.target.parentNode.parentNode.id
-  }
-}
-export const onChangeTotalEachRowModeAdd = (e) => {
-  return {
-    type: "ON CHANGE TOTAL EACH ROW MODE ADD",
-    value: e.target.value,
-    rowIndex: e.target.parentNode.parentNode.id
-  }
-}
-export const onChangeNoteModeAdd = (e) => {
-  return {
-    type: "ON CHANGE NOTE MODE ADD",
-    value: e.target.value
-  }
-}
