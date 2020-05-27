@@ -56,7 +56,6 @@ class BottomContent extends React.Component {
                         </tr>
                       </thead>
                       <tbody>
-
                         {current.props.working_document_show.map(function (list, index) {
                           return (
                             <tr key={index} id={index}>
@@ -70,7 +69,6 @@ class BottomContent extends React.Component {
                             </tr>
                           )
                         })}
-
                       </tbody>
                     </table>
                   </div>
@@ -156,7 +154,7 @@ class BottomContent extends React.Component {
                         <label className="cancel-default " for="change">เปลี่ยนแปลงรหัสผ่าน</label>
                       </div> */}
                       <div className="grid_2 pull_0 float-right ">
-                        <button className="button-blue edit   mr-5" type="button" onClick={(e) => current.props.onSaveProfile(this.props.profile.firstname_th, this.props.profile.lastname_th, this.props.profile.email, this.props.profile.user_id)}>บันทึก</button>
+                        <button className="button-blue edit   mr-5" type="button" onClick={(e) => {if (window.confirm('คุณต้องการแก้ไขข้อมูลส่วนตัวหรือไม่'))current.props.onSaveProfile(this.props.profile.firstname_th, this.props.profile.lastname_th, this.props.profile.email, this.props.profile.user_id)}}>บันทึก</button>
                       </div>
                     </div>
 
@@ -187,7 +185,7 @@ class BottomContent extends React.Component {
                         <input className="cancel-default " type="text" value={this.props.pass_con}onChange={(e) => this.props.onChangeConfileNewPass(e)} />
                       </div>
                       <div className="grid_2 pull_0 float-right ">
-                        <button className="button-blue edit   mr-5" type="button" onClick={(e) => current.props.onSavePass(this.props.pass_con, this.props.profile.user_id)}>บันทึก</button>
+                        <button className="button-blue edit   mr-5" type="button" onClick={(e) =>{if (window.confirm('คุณต้องการแก้ไขรหัสผ่านหรือไม่')) current.props.onSavePass(this.props.pass_con, this.props.profile.user_id)}}>บันทึก</button>
                       </div>
                     </div>
 
@@ -399,6 +397,7 @@ export const onSaveProfile = (u, p, e, user_id) => {
     }, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/profile?user_id=${user_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((resDoc) => {
+          alert("บันทึกข้อมูลสำเร็จ")
           dispatch({
             type: "CLICK SAVE PROFILE",
             value: resDoc.data,
@@ -416,6 +415,7 @@ export const onSavePass = (u, user_id) => {
     }, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/profile?user_id=${user_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((resDoc) => {
+          alert("บันทึกข้อมูลสำเร็จ")
           dispatch({
             type: "CLICK SAVE PASS",
             value: resDoc.data,

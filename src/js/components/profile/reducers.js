@@ -12,11 +12,21 @@ export default (state = initialState, action) => {
 
     case "PROFILE":
       console.log("reducer", action.value)
+      // console.log("reducer", action.resDoc.results)
       return {
         ...state,
         profile: action.value,
-        working_document_show: action.resDoc.results,
-        complete_document_show: action.resDoc.results,
+        
+        working_document_show : action.resDoc.results.filter(item =>{
+          if(item.is_document_on_going === 1){
+            return(item)
+          }
+        }),
+        complete_document_show : action.resDoc.results.filter(item =>{
+          if(item.is_document_on_going === 0){
+            return(item)
+          }
+        }),
         history_document_show: action.resDoc.results,
       }
 

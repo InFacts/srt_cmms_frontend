@@ -197,7 +197,10 @@ class BottomContent extends React.Component {
             </table>
           </div>
           <div className="grid_12 mt-3">
-            <div className="grid_4 float-right">
+            <div className="grid_1 float-right">
+              <p className="cancel-default float-right">บาท</p>
+            </div>
+            <div className="grid_3 float-right">
               <input type="text" className="cancel-default float-right" value={current.sumTotal(current.props.list_show)} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
@@ -235,49 +238,93 @@ class BottomContent extends React.Component {
               </thead>
               <tbody>
                 {current.props.list_show.map(function (list_show, index) {
-                  return (
-                    <tr key={index} id={index}>
-                      <th className="edit-padding text-center">{index + 1}</th>
-                      <td className="edit-padding">
-                        <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
-                          <input type="text" className="p-search-box__input cancel-default-table" value={list_show.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRow(e)} onKeyPress={(e) => current.props.handleKeyPressModeEdit(e)} />
-                          <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPart" onClick={(e) => current.props.onClickNoPartEachRow(e)}></i></button>
-                        </div>
-                      </td>
-                      <td className="edit-padding">{list_show.description}</td>
-                      <td className="edit-padding text-center disable">
-                        {list_show.at_source.map(function (at_source, index) {
-                          return at_source.current_unit_count
-                        })}
-                      </td>
-                      <td className="edit-padding text-center disable">{list_show.quantity}</td>
-                      <td className="edit-padding text-center disable">{list_show.quantity}</td>
-                      <td className="edit-padding text-center disable">{list_show.quantity}</td>
-                      <td className="edit-padding text-center disable">
-                        {list_show.at_source.map(function (at_source, index) {
-                          return at_source.item_status.description_th
-                        })}</td>
-                      <td className="edit-padding text-right">
-                        {current.requiredQuantityModeEdit(list_show.description, list_show.quantity)}
-                      </td>
-                      <td className="edit-padding text-left">
-                        <select className="edit-select-top" >
-                          {list_show.list_uoms.map(function (list_uoms, index) {
-                            return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
+                  if (index === 0) {
+                    return (
+                      <tr key={index} id={index}>
+                        <th className="edit-padding text-center">{index + 1}</th>
+                        <td className="edit-padding">
+                          <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
+                            <input type="text" className="p-search-box__input cancel-default-table" value={list_show.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRow(e)} onKeyPress={(e) => current.props.handleKeyPressModeEdit(e)} required />
+                            <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPart" onClick={(e) => current.props.onClickNoPartEachRow(e)}></i></button>
+                          </div>
+                        </td>
+                        <td className="edit-padding">{list_show.description}</td>
+                        <td className="edit-padding text-center disable">
+                          {list_show.at_source.map(function (at_source, index) {
+                            return at_source.current_unit_count
                           })}
-                        </select>
-                      </td>
-                      <td className="edit-padding text-right">
-                        {current.requiredPerUnitPriceModeEdit(list_show.description, list_show.per_unit_price)}</td>
-                      <td className="edit-padding text-right">{current.sumTotalLineItem(list_show.quantity, list_show.per_unit_price)}</td>
-                    </tr>
-                  )
+                        </td>
+                        <td className="edit-padding text-center disable">{list_show.quantity}</td>
+                        <td className="edit-padding text-center disable">{list_show.quantity}</td>
+                        <td className="edit-padding text-center disable">{list_show.quantity}</td>
+                        <td className="edit-padding text-center disable">
+                          {list_show.at_source.map(function (at_source, index) {
+                            return at_source.item_status.description_th
+                          })}</td>
+                        <td className="edit-padding text-right">
+                          {current.requiredQuantityModeEdit(list_show.description, list_show.quantity)}
+                        </td>
+                        <td className="edit-padding text-left">
+                          <select className="edit-select-top" >
+                            {list_show.list_uoms.map(function (list_uoms, index) {
+                              return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
+                            })}
+                          </select>
+                        </td>
+                        <td className="edit-padding text-right">
+                          {current.requiredPerUnitPriceModeEdit(list_show.description, list_show.per_unit_price)}</td>
+                        <td className="edit-padding text-right">{current.sumTotalLineItem(list_show.quantity, list_show.per_unit_price)}</td>
+                      </tr>
+                    )
+                  } else {
+                    return (
+                      <tr key={index} id={index}>
+                        <th className="edit-padding text-center">{index + 1}</th>
+                        <td className="edit-padding">
+                          <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
+                            <input type="text" className="p-search-box__input cancel-default-table" value={list_show.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRow(e)} onKeyPress={(e) => current.props.handleKeyPressModeEdit(e)} />
+                            <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPart" onClick={(e) => current.props.onClickNoPartEachRow(e)}></i></button>
+                          </div>
+                        </td>
+                        <td className="edit-padding">{list_show.description}</td>
+                        <td className="edit-padding text-center disable">
+                          {list_show.at_source.map(function (at_source, index) {
+                            return at_source.current_unit_count
+                          })}
+                        </td>
+                        <td className="edit-padding text-center disable">{list_show.quantity}</td>
+                        <td className="edit-padding text-center disable">{list_show.quantity}</td>
+                        <td className="edit-padding text-center disable">{list_show.quantity}</td>
+                        <td className="edit-padding text-center disable">
+                          {list_show.at_source.map(function (at_source, index) {
+                            return at_source.item_status.description_th
+                          })}</td>
+                        <td className="edit-padding text-right">
+                          {current.requiredQuantityModeEdit(list_show.description, list_show.quantity)}
+                        </td>
+                        <td className="edit-padding text-left">
+                          <select className="edit-select-top" >
+                            {list_show.list_uoms.map(function (list_uoms, index) {
+                              return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
+                            })}
+                          </select>
+                        </td>
+                        <td className="edit-padding text-right">
+                          {current.requiredPerUnitPriceModeEdit(list_show.description, list_show.per_unit_price)}</td>
+                        <td className="edit-padding text-right">{current.sumTotalLineItem(list_show.quantity, list_show.per_unit_price)}</td>
+                      </tr>
+                    )
+                  }
+
                 })}
               </tbody>
             </table>
           </div>
           <div className="grid_12 mt-3">
-            <div className="grid_4 float-right">
+            <div className="grid_1 float-right">
+              <p className="cancel-default float-right">บาท</p>
+            </div>
+            <div className="grid_3 float-right">
               <input type="number" min="1" className="cancel-default float-right" value={current.sumTotal(current.props.list_show)} onChange={(e) => this.props.onChangeTotal(e)} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
@@ -370,43 +417,81 @@ class BottomContent extends React.Component {
               </thead>
               <tbody>
                 {current.props.list_show_mode_add.map(function (list_show, index) {
-                  return (
-                    <tr key={index} id={index}>
-                      <th className="edit-padding text-center">{index + 1}</th>
-                      <td className="edit-padding">
-                        <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
-                          <input type="text" className="p-search-box__input cancel-default-table" value={list_show.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRowModeAdd(e)} onKeyPress={(e) => current.props.handleKeyPress(e)} />
-                          <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPartAdd" aria-controls="modalNoPartModeAdd" onClick={(e) => current.props.onClickNoPartEachRowModeAdd(e)}></i></button>
-                        </div>
-                      </td>
-                      <td className="edit-padding">{list_show.description}</td>
-                      <td className="edit-padding text-center disable">{list_show.current_unit_count}</td>
-                      <td className="edit-padding text-center disable">{list_show.quantity}</td>
-                      <td className="edit-padding text-center disable">{list_show.quantity}</td>
-                      <td className="edit-padding text-center disable">{list_show.quantity}</td>
-                      <td className="edit-padding text-center disable">{list_show.description_th}</td>
-                      <td className="edit-padding text-right">
-                        {current.requiredQuantity(list_show.description, list_show.quantity)}
-                      </td>
-                      <td className="edit-padding text-left">
-                        <select className="edit-select-top" >
-                          {list_show.list_uoms.map(function (list_uoms, index) {
-                            return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
-                          })}
-                        </select>
-                      </td>
-                      <td className="edit-padding text-right">
-                        {current.requiredPerUnitPrice(list_show.description, list_show.per_unit_price)}
-                      </td>
-                      <td className="edit-padding text-right">{current.sumTotalLineItem(list_show.quantity, list_show.per_unit_price)}</td>
-                    </tr>
-                  )
+                  if (index === 0) {
+                    return (
+                      <tr key={index} id={index}>
+                        <th className="edit-padding text-center">{index + 1}</th>
+                        <td className="edit-padding">
+                          <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
+                            <input type="text" className="p-search-box__input cancel-default-table" value={list_show.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRowModeAdd(e)} onKeyPress={(e) => current.props.handleKeyPress(e)} required />
+                            <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPartAdd" aria-controls="modalNoPartModeAdd" onClick={(e) => current.props.onClickNoPartEachRowModeAdd(e)}></i></button>
+                          </div>
+                        </td>
+                        <td className="edit-padding">{list_show.description}</td>
+                        <td className="edit-padding text-center disable">{list_show.current_unit_count}</td>
+                        <td className="edit-padding text-center disable">{list_show.quantity}</td>
+                        <td className="edit-padding text-center disable">{list_show.quantity}</td>
+                        <td className="edit-padding text-center disable">{list_show.quantity}</td>
+                        <td className="edit-padding text-center disable">{list_show.description_th}</td>
+                        <td className="edit-padding text-right">
+                          {current.requiredQuantity(list_show.description, list_show.quantity)}
+                        </td>
+                        <td className="edit-padding text-left">
+                          <select className="edit-select-top" >
+                            {list_show.list_uoms.map(function (list_uoms, index) {
+                              return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
+                            })}
+                          </select>
+                        </td>
+                        <td className="edit-padding text-right">
+                          {current.requiredPerUnitPrice(list_show.description, list_show.per_unit_price)}
+                        </td>
+                        <td className="edit-padding text-right">{current.sumTotalLineItem(list_show.quantity, list_show.per_unit_price)}</td>
+                      </tr>
+                    )
+                  } else {
+                    return (
+                      <tr key={index} id={index}>
+                        <th className="edit-padding text-center">{index + 1}</th>
+                        <td className="edit-padding">
+                          <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
+                            <input type="text" className="p-search-box__input cancel-default-table" value={list_show.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRowModeAdd(e)} onKeyPress={(e) => current.props.handleKeyPress(e)} />
+                            <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPartAdd" aria-controls="modalNoPartModeAdd" onClick={(e) => current.props.onClickNoPartEachRowModeAdd(e)}></i></button>
+                          </div>
+                        </td>
+                        <td className="edit-padding">{list_show.description}</td>
+                        <td className="edit-padding text-center disable">{list_show.current_unit_count}</td>
+                        <td className="edit-padding text-center disable">{list_show.quantity}</td>
+                        <td className="edit-padding text-center disable">{list_show.quantity}</td>
+                        <td className="edit-padding text-center disable">{list_show.quantity}</td>
+                        <td className="edit-padding text-center disable">{list_show.description_th}</td>
+                        <td className="edit-padding text-right">
+                          {current.requiredQuantity(list_show.description, list_show.quantity)}
+                        </td>
+                        <td className="edit-padding text-left">
+                          <select className="edit-select-top" >
+                            {list_show.list_uoms.map(function (list_uoms, index) {
+                              return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
+                            })}
+                          </select>
+                        </td>
+                        <td className="edit-padding text-right">
+                          {current.requiredPerUnitPrice(list_show.description, list_show.per_unit_price)}
+                        </td>
+                        <td className="edit-padding text-right">{current.sumTotalLineItem(list_show.quantity, list_show.per_unit_price)}</td>
+                      </tr>
+                    )
+                  }
+
                 })}
               </tbody>
             </table>
           </div>
           <div className="grid_12 mt-3">
-            <div className="grid_4 float-right">
+            <div className="grid_1 float-right">
+              <p className="cancel-default float-right">บาท</p>
+            </div>
+            <div className="grid_3 float-right">
               <input type="number" min="1" className="cancel-default float-right" value={current.sumTotal(current.props.list_show_mode_add)} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>

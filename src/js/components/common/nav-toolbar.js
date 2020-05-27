@@ -53,6 +53,7 @@ class Toolbar extends React.Component {
             id: 2,
         }
         this.props.handleAction("search");
+        this.props.handleActionId(2);
     }
 
     render() {
@@ -359,10 +360,11 @@ class Toolbar extends React.Component {
         }
 
         items = menu.map((item, index) =>
-            <ToolbarItem key={item.id} id={item.id} alt={item.alt} src={item.src} pointer={item.pointer} select={this.state.id} disable={item.disable} callback={(idx) => {
-                this.setState({
-                    id: idx,
-                })
+            <ToolbarItem key={item.id} id={item.id} alt={item.alt} src={item.src} pointer={item.pointer} select={this.props.actionModeId} disable={item.disable} callback={(idx) => {
+                // this.setState({
+                //     id: idx,
+                // })
+                this.props.handleActionId(idx);
                 this.props.handleAction(item.alt);
             }} />
         );
@@ -384,11 +386,13 @@ class Toolbar extends React.Component {
 
 const mapStateToProps = (state) => ({
     actionMode: state.action,
+    actionModeId: state.actionId,
     fill_data: state.fill_data,
     tool_mode: state.tool_mode,
 })
 const mapDispatchToProps = (dispatch) => ({
     handleAction: (value) => dispatch(action(value)),
+    handleActionId: (value) => dispatch(actionId(value)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Toolbar);
 
@@ -421,5 +425,12 @@ export const action = (value) => {
             type: "ACTION",
             value: value
         }
+    }
+}
+
+export const actionId = (value) => {
+    return {
+        type: "ACTIONID",
+        value: value
     }
 }
