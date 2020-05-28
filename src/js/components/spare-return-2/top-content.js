@@ -91,11 +91,18 @@ class TopContent extends React.Component {
             <div className="grid_3 pull_1">
               <input type="text" className="cancel-default" defaultValue={current.props.document_show.created_by_admin_name_th} disabled="disabled"></input>
             </div>
-            <div className="grid_3 float-right">
+            {/* <div className="grid_3 float-right">
               <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.dest_warehouse_name} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">คลัง</p>
+            </div> */}
+
+            <div className="grid_3 float-right">
+              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.dest_warehouse_id} disabled="disabled"></input>
+            </div>
+            <div className="grid_2 float-right">
+              <p className="top-text float-right">เลขที่คลัง</p>
             </div>
           </div>
 
@@ -105,6 +112,13 @@ class TopContent extends React.Component {
             </div>
             <div className="grid_3 pull_0">
               <input type="text" className="cancel-default" defaultValue={current.props.document_show.refer_to_document_id} disabled="disabled"></input>
+            </div>
+
+            <div className="grid_3 float-right">
+              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.dest_warehouse_name} disabled="disabled"></input>
+            </div>
+            <div className="grid_2 float-right">
+              <p className="top-text float-right">ชื่อคลัง</p>
             </div>
           </div>
         </>
@@ -156,7 +170,7 @@ class TopContent extends React.Component {
             <div className="grid_3 pull_1">
               <input type="text" className="cancel-default" value={current.props.document_show.created_by_admin_name_th} onChange={(e) => this.props.onChangeNameByAdmin(e)} disabled="disabled"></input>
             </div>
-            <div className="grid_3 float-right">
+            {/* <div className="grid_3 float-right">
               <div className="p-search-box cancel-margin">
                 <input type="text" className="p-search-box__input cancel-default float-right" value={current.props.document_show.dest_warehouse_name} onChange={(e) => this.props.onChangeMyInventory(e)}></input>
                 <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalInventory" aria-controls="modalInventory"></i></button>
@@ -164,6 +178,16 @@ class TopContent extends React.Component {
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">คลัง</p>
+            </div> */}
+
+            <div className="grid_3 float-right">
+              <div className="p-search-box cancel-margin">
+                <input type="text" className="p-search-box__input cancel-default" value={current.props.document_show.dest_warehouse_id} onChange={(e) => this.props.onChangeMyInventory(e)} />
+                <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalInventory" aria-controls="modalInventoryEdit"></i></button>
+              </div>
+            </div>
+            <div className="grid_2 float-right">
+              <p className="top-text float-right">เลขที่คลัง</p>
             </div>
           </div>
 
@@ -176,6 +200,13 @@ class TopContent extends React.Component {
                 <input type="text" className="p-search-box__input cancel-default" value={current.props.document_show.refer_to_document_id} />
                 <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalSS101" aria-controls="modalSS101"></i></button>
               </div>
+            </div>
+
+            <div className="grid_3 float-right">
+              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.dest_warehouse_name} disabled="disabled"></input>
+            </div>
+            <div className="grid_2 float-right">
+              <p className="top-text float-right">ชื่อคลัง</p>
             </div>
           </div>
         </>
@@ -218,13 +249,13 @@ class TopContent extends React.Component {
           </div>
 
           <div className="grid_12">
-          <div className="grid_2">
+            <div className="grid_2">
               <p className="top-text">ผู้สร้างเอกสาร</p>
             </div>
             <div className="grid_3 pull_1">
               <input type="text" className="cancel-default" value={current.props.document_show_mode_add.created_by_admin_name_th} disabled="disabled"></input>
             </div>
-            <div className="grid_3 float-right">
+            {/* <div className="grid_3 float-right">
               <div className="p-search-box cancel-margin">
                 <input type="text" className="p-search-box__input cancel-default" value={current.props.document_show_mode_add.dest_warehouse_name} onChange={(e) => this.props.onChangeMyInventoryModeAdd(e)} required />
                 <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalInventoryAdd" aria-controls="modalInventoryAdd"></i></button>
@@ -232,6 +263,16 @@ class TopContent extends React.Component {
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">คลัง</p>
+            </div> */}
+
+            <div className="grid_3 float-right">
+              <div className="p-search-box cancel-margin">
+                <input type="text" className="p-search-box__input cancel-default" value={current.props.document_show_mode_add.dest_warehouse_id} onChange={(e) => this.props.onChangeMyInventoryModeAdd(e)} required />
+                <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalInventory" aria-controls="modalInventory"></i></button>
+              </div>
+            </div>
+            <div className="grid_2 float-right">
+              <p className="top-text float-right">เลขที่คลัง</p>
             </div>
           </div>
 
@@ -244,6 +285,14 @@ class TopContent extends React.Component {
                 <input type="text" className="p-search-box__input cancel-default" value={current.props.document_show_mode_add.refer_to_document_id} />
                 <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalSS101Add" aria-controls="modalSS101Add"></i></button>
               </div>
+            </div>
+
+            
+            <div className="grid_3 float-right">
+              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show_mode_add.dest_warehouse_name} disabled="disabled"></input>
+            </div>
+            <div className="grid_2 float-right">
+              <p className="top-text float-right">ชื่อคลัง</p>
             </div>
           </div>
         </>
@@ -320,7 +369,7 @@ class TopContent extends React.Component {
         </div>
 
         {/* PopUp ค้นหาเลขที่คลัง */}
-        <div className="modal" id="modalInventory" style={{ display: "none" }}>
+        {/* <div className="modal" id="modalInventory" style={{ display: "none" }}>
           <div className="gray-board">
             <p className="head-title-modal edit">ค้นหาเลขที่คลัง</p>
             <div className="container_12 edit-padding">
@@ -372,11 +421,11 @@ class TopContent extends React.Component {
 
             </div>
           </div>
-        </div>
+        </div> */}
 
 
         {/* PopUp ADD ค้นหาเลขที่คลัง */}
-        <div className="modal" id="modalInventoryAdd" style={{ display: "none" }}>
+        {/* <div className="modal" id="modalInventoryAdd" style={{ display: "none" }}>
           <div className="gray-board">
             <p className="head-title-modal edit">ค้นหาเลขที่คลัง</p>
             <div className="container_12 edit-padding">
@@ -428,7 +477,7 @@ class TopContent extends React.Component {
 
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* PopUp ค้นหาเลขที่เอกสาร SS101 */}
         <div className="modal" id="modalSS101" style={{ display: "none" }}>
@@ -524,7 +573,7 @@ class TopContent extends React.Component {
           </div>
         </div>
 
-        
+
         {/* PopUp ค้นหาชื่อพนักงาน MODE EDIT */}
         <div className="modal" id="modalUserNameModeEdit" style={{ display: "none" }}>
           <div className="gray-board">
@@ -627,6 +676,113 @@ class TopContent extends React.Component {
 
               <div className="grid_12">
                 <button className="button-blue float-right grid_1 mr-5 mt-3" type="button" aria-label="Close active modal" aria-controls="modalUserName" id="closeModalInventory">กลับ</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+          {/* PopUp ค้นหาเลขที่คลัง MODE EDIT */}
+          <div className="modal" id="modalInventoryEdit" style={{ display: "none" }}>
+          <div className="gray-board">
+            <p className="head-title-modal edit">ค้นหาเลขที่คลัง</p>
+            <div className="container_12 edit-padding">
+
+              <div className="grid_12">
+                <div className="grid_2"><p className="cancel-default">เลขที่คลัง</p></div>
+                <div className="grid_8 pull_0">
+                  <input type="text" className="cancel-default grid_3" value={this.props.document_show.dest_warehouse_id} onChange={(e) => this.props.onChangeMyInventory(e)} />
+                </div>
+              </div>
+              <div className="grid_12">
+                <div className="grid_2"><p className="cancel-default">ชื่อคลัง</p></div>
+                <div className="grid_8 pull_0">
+                  <input type="text" className="cancel-default grid_3" value={this.props.document_show.dest_warehouse_name} onChange={(e) => this.props.onChangeMyInventoryName(e)} />
+                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchInventory(this.props.document_show.dest_warehouse_id, this.props.document_show.dest_warehouse_name)}>ค้นหา</button>
+                </div>
+              </div>
+
+              <div className="grid_12">
+                <table className="table-many-column mt-3">
+                  <thead>
+                    <tr>
+                      <th className="font" style={{ minWidth: "300px" }}>เลขที่คลัง</th>
+                      <th className="font" style={{ minWidth: "450px" }}>ชื่อคลัง</th>
+                      <th className="font" style={{ minWidth: "150px" }}>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.props.inventory_show_popup.map(function (inventory_show_popup, index) {
+                      return (
+                        <tr key={index} id={index}>
+                          <td className="edit-padding" style={{ minWidth: "150px" }}> {inventory_show_popup.warehouse_id} </td>
+                          <td className="edit-padding" style={{ minWidth: "300px" }}> {inventory_show_popup.name} </td>
+                          <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
+                            <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectInventoryModeEdit(e)} aria-label="Close active modal" aria-controls="modalInventoryEdit" id="closeModalInventory" >เลือก</button>
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="grid_12">
+                <button className="button-blue float-right grid_1 mr-5 mt-3" type="button" aria-label="Close active modal" aria-controls="modalInventoryEdit" id="closeModalInventory">กลับ</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        {/* PopUp ค้นหาเลขที่คลัง MODE ADD */}
+        <div className="modal" id="modalInventory" style={{ display: "none" }}>
+          <div className="gray-board">
+            <p className="head-title-modal edit">ค้นหาเลขที่คลัง</p>
+            <div className="container_12 edit-padding">
+
+              <div className="grid_12">
+                <div className="grid_2"><p className="cancel-default">เลขที่คลัง</p></div>
+                <div className="grid_8 pull_0">
+                  <input type="text" className="cancel-default grid_3" value={this.props.document_show_mode_add.dest_warehouse_id} onChange={(e) => this.props.onChangeMyInventoryModeAdd(e)} />
+                </div>
+              </div>
+              <div className="grid_12">
+                <div className="grid_2"><p className="cancel-default">ชื่อคลัง</p></div>
+                <div className="grid_8 pull_0">
+                  <input type="text" className="cancel-default grid_3" value={this.props.document_show_mode_add.dest_warehouse_name} onChange={(e) => this.props.onChangeMyInventoryNameModeAdd(e)} />
+                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchInventory(this.props.document_show_mode_add.dest_warehouse_id, this.props.document_show_mode_add.dest_warehouse_name)}>ค้นหา</button>
+                </div>
+              </div>
+
+              <div className="grid_12">
+                <table className="table-many-column mt-3">
+                  <thead>
+                    <tr>
+                      <th className="font" style={{ minWidth: "300px" }}>เลขที่คลัง</th>
+                      <th className="font" style={{ minWidth: "450px" }}>ชื่อคลัง</th>
+                      <th className="font" style={{ minWidth: "150px" }}>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.props.inventory_show_popup.map(function (inventory_show_popup, index) {
+                      return (
+                        <tr key={index} id={index}>
+                          <td className="edit-padding" style={{ minWidth: "150px" }}> {inventory_show_popup.warehouse_id} </td>
+                          <td className="edit-padding" style={{ minWidth: "300px" }}> {inventory_show_popup.name} </td>
+                          <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
+                            <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectInventory(e)} aria-label="Close active modal" aria-controls="modalInventory" id="closeModalInventory" >เลือก</button>
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="grid_12">
+                <button className="button-blue float-right grid_1 mr-5 mt-3" type="button" aria-label="Close active modal" aria-controls="modalInventory" id="closeModalInventory">กลับ</button>
               </div>
 
             </div>
@@ -767,10 +923,10 @@ export const onClickSelectNoDocument = (document_id) => {
         console.log(resImg.data)
         var files = [];
         var data = {
-          "id":"",
-          "sizeReadable":0,
-          "preview":{"url":""},
-          "name":""
+          "id": "",
+          "sizeReadable": 0,
+          "preview": { "url": "" },
+          "name": ""
         }
         resImg.data.results.map((e) => {
           axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${document_id}/download/${e.id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
@@ -910,11 +1066,11 @@ export const onChangeNameId = (e) => {
   }
 }
 export const onClickPopUpSearchUserModeEdit = (created_by_user_name_th, employee_id) => {
-  console.log("created_by_user_name_th",created_by_user_name_th, "employee_id",employee_id)
+  console.log("created_by_user_name_th", created_by_user_name_th, "employee_id", employee_id)
   return function (dispatch) {
     var space = created_by_user_name_th.indexOf(" ");
     var firstname = created_by_user_name_th.slice(0, space);
-    var lastname = created_by_user_name_th.slice(space+1, created_by_user_name_th.length);
+    var lastname = created_by_user_name_th.slice(space + 1, created_by_user_name_th.length);
     return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&lastname_th=${lastname}&employee_id=${employee_id === undefined ? "" : employee_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       console.log(">>>>", res)
       dispatch({
@@ -996,11 +1152,11 @@ export const onChangeMyInventoryNameModeAdd = (e) => {
 }
 
 export const onClickPopUpSearchUser = (created_by_user_name_th, employee_id) => {
-  console.log("created_by_user_name_th",created_by_user_name_th, "employee_id",employee_id)
+  console.log("created_by_user_name_th", created_by_user_name_th, "employee_id", employee_id)
   return function (dispatch) {
     var space = created_by_user_name_th.indexOf(" ");
     var firstname = created_by_user_name_th.slice(0, space);
-    var lastname = created_by_user_name_th.slice(space+1, created_by_user_name_th.length);
+    var lastname = created_by_user_name_th.slice(space + 1, created_by_user_name_th.length);
     return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&lastname_th=${lastname}&employee_id=${employee_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       console.log(res)
       dispatch({

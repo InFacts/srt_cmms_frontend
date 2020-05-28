@@ -652,7 +652,7 @@ export default (state = initialState, action) => {
 
     case "ON CHANGE NAME ID":
       var clone_document_show = { ...state.document_show };
-      clone_document_show.created_by_user_id = action.value;
+      clone_document_show.employee_id = action.value;
       return {
         ...state,
         document_show: clone_document_show
@@ -665,8 +665,8 @@ export default (state = initialState, action) => {
     case "CLICK SELECT POPUP USER MODE EDIT":
       var clone_document_show = { ...state.document_show };
       clone_document_show.created_by_user_name_th = state.line_users[action.row_inventory_show_popup].firstname_th + " " + state.line_users[action.row_inventory_show_popup].lastname_th
-      clone_document_show.created_by_user_id = state.line_users[action.row_inventory_show_popup].employee_id
-      clone_document_show.created_by_user_id_database = state.line_users[action.row_inventory_show_popup].user_id
+      clone_document_show.employee_id = state.line_users[action.row_inventory_show_popup].employee_id
+      clone_document_show.created_by_user_id = state.line_users[action.row_inventory_show_popup].user_id
       console.log(clone_document_show.created_by_user_id)
       return {
         ...state,
@@ -681,7 +681,7 @@ export default (state = initialState, action) => {
     // Mode Add
     case "ON CHANGE NAME ID MODE ADD":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
-      clone_document_show_mode_add.created_by_user_id = action.value;
+      clone_document_show_mode_add.employee_id = action.value;
       return {
         ...state,
         document_show_mode_add: clone_document_show_mode_add
@@ -812,8 +812,8 @@ export default (state = initialState, action) => {
     case "CLICK SELECT POPUP USER":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
       clone_document_show_mode_add.created_by_user_name_th = state.line_users[action.row_inventory_show_popup].firstname_th + " " + state.line_users[action.row_inventory_show_popup].lastname_th
-      clone_document_show_mode_add.created_by_user_id = state.line_users[action.row_inventory_show_popup].employee_id
-      clone_document_show_mode_add.created_by_user_id_database = state.line_users[action.row_inventory_show_popup].user_id
+      clone_document_show_mode_add.employee_id = state.line_users[action.row_inventory_show_popup].employee_id
+      clone_document_show_mode_add.created_by_user_id = state.line_users[action.row_inventory_show_popup].user_id
       return {
         ...state,
         document_show_mode_add: clone_document_show_mode_add,
