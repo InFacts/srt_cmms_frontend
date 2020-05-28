@@ -1,24 +1,63 @@
 const initialState = {
-  pass:"",
-  pass_new:"",
-  pass_con:"",
+  pass: "",
+  pass_new: "",
+  pass_con: "",
   profile: [],
   working_document_show: [],
   complete_document_show: [],
   history_document_show: [],
+
+  location_document_show: [],
+  location_warehouses_show: [],
+
+  center: "",
+  team:"",
+  department:"",
+  place:""
 }
 export default (state = initialState, action) => {
   switch (action.type) {
 
     case "PROFILE":
       console.log("reducer", action.value)
+      // console.log("reducer", action.resDoc.results)
       return {
         ...state,
         profile: action.value,
-        working_document_show: action.resDoc.results,
-        complete_document_show: action.resDoc.results,
+
+        working_document_show: action.resDoc.results.filter(item => {
+          if (item.is_document_on_going === 1) {
+            return (item)
+          }
+        }),
+        complete_document_show: action.resDoc.results.filter(item => {
+          if (item.is_document_on_going === 0) {
+            return (item)
+          }
+        }),
         history_document_show: action.resDoc.results,
       }
+
+    case "WAREHOUSES":
+      console.log("reducer", action.value)
+      return {
+        ...state,
+        location_warehouses_show: action.value,
+      }
+
+    case "LOCATIONS":
+      console.log("reducer", action.value)
+      return {
+        ...state,
+        location_document_show: action.value,
+      }
+
+    // case "WAREHOUSESUSER":
+    //   console.log("reducer", action.value)
+    //   return {
+    //     ...state,
+    //     warehouses_show: action.value,
+    //   }
 
     case "WORKING":
       return {
@@ -87,35 +126,35 @@ export default (state = initialState, action) => {
       }
 
     case "ON CHANGE CENTER":
-      var clone_profile_show = { ...state.profile };
+      // var clone_profile_show = { ...state.profile };
       // clone_document_show.created_by_user_name_th = action.value;
       return {
         ...state,
-        profile: clone_profile_show
+        center: action.value
       }
 
     case "ON CHANGE TEAM":
-      var clone_profile_show = { ...state.profile };
+      // var clone_profile_show = { ...state.profile };
       // clone_document_show.created_by_user_name_th = action.value;
       return {
         ...state,
-        profile: clone_profile_show
+        team: action.value
       }
 
     case "ON CHANGE DEPARTMENT":
-      var clone_profile_show = { ...state.profile };
+      // var clone_profile_show = { ...state.profile };
       // clone_document_show.created_by_user_name_th = action.value;
       return {
         ...state,
-        profile: clone_profile_show
+        department: action.value
       }
 
     case "ON CHANGE PLACE":
-      var clone_profile_show = { ...state.profile };
+      // var clone_profile_show = { ...state.profile };
       // clone_document_show.created_by_user_name_th = action.value;
       return {
         ...state,
-        profile: clone_profile_show
+        place: action.value
       }
 
 

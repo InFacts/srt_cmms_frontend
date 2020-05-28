@@ -53,7 +53,9 @@ class ButtonFile extends React.Component {
             if (this.fileTypeAcceptable(file) && this.fileSizeAcceptable(file)) {
                 files.push(file)
             }
+            console.log(Object.keys(file))
         }
+        
 
 
         this.setState({

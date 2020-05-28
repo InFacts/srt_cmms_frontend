@@ -41,7 +41,7 @@ class WrapForm extends React.Component {
                 "internal_document_id": document_show.internal_document_id,
                 "remark": document_show.remark,
                 "created_by_admin_id": document_show.created_by_admin_id,
-                "created_by_user_id": document_show.created_by_user_id_database,
+                "created_by_user_id": document_show.created_by_user_id,
                 "refer_to_document_id": document_show.refer_to_document_id,
             },
             "specific": {
@@ -51,7 +51,7 @@ class WrapForm extends React.Component {
                 "line_items": line_items,
                 "movement": {
                     "document_id": document_id,
-                    
+
                 }
             }
         };
@@ -63,10 +63,40 @@ class WrapForm extends React.Component {
     handleSubmit = e => {
         e.preventDefault();
         const current = this;
-        
+
 
         if (this.props.actionMode === "add") {
             console.log(this.packForm(this.props.document_id, this.props.document_show_mode_add, this.props.list_show_mode_add));
+            // const formData = new FormData();
+            // this.props.files.map((file) => {
+            //     formData.append('file', file);
+            // })
+            // axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${this.props.document_id}`, formData, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+            //     .then((resImg) => {
+            //         console.log(resImg)
+            //     }).catch((err) => {
+            //         console.log(err)
+            //     });
+            const formData = new FormData();
+                        
+            
+            
+            if(this.props.files != []){
+                this.props.files.map((file) => {
+                    formData.append('file', JSON.stringify({ "testjson": "hellow" }));
+                    formData.append('file', file);
+                })
+                axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${this.props.document_id}`,
+                    formData
+                    , { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+                    .then((resImg) => {
+                        console.log(resImg)
+                    }).catch((err) => {
+                        console.log(err)
+                    });
+            }else{
+                console.log("Em")
+            }
             return (
                 axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${this.props.document_id}/131`, this.packForm(this.props.document_id, this.props.document_show_mode_add, this.props.list_show_mode_add), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
                     .then(res => {
@@ -93,20 +123,26 @@ class WrapForm extends React.Component {
 
     render() {
         return (
-            <div>
+            // <div>
+            //     <TopContent />
+            //     <BottomContent />
+            //     <form onSubmit={this.handleSubmit}>
+            //         <Footer />
+            //     </form>
+            // </div>
+
+            <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) { return this.handleSubmit(e) } else { e.preventDefault(); } }}>
                 <TopContent />
                 <BottomContent />
-                <form onSubmit={this.handleSubmit}>
-                    <Footer />
-                </form>
-            </div>
+                <Footer />
+            </form>
         )
     };
 }
 
 const mapStateToProps = (state) => ({
     actionMode: state.action,
-
+    files: state.files,
     // Mode Edit
     no_document: state.no_document,
     document_show: state.document_show,

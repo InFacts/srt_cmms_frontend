@@ -25,6 +25,7 @@ class TopContent extends React.Component {
 
   render() {
     // var token_auth = localStorage.getItem('token_auth');
+    
     return (
       <div>
         <div id="blackground-white">
@@ -40,9 +41,20 @@ class TopContent extends React.Component {
                   <p className="top-text">สังกัด</p>
                 </div>
                 <div className="grid_8 pull_0">
+
                   <p className="top-text">{this.props.profile.firstname_th} {this.props.profile.lastname_th}</p>
-                  <p className="top-text" >{this.props.profile.address}</p>
-                  <p className="top-text">{this.props.profile.address}</p>
+                  {this.props.profile.has_positions != null
+                    ? 
+                      <p className="top-text" >{this.props.profile.has_positions[0].name}</p>
+                    : 
+                      <p className="top-text" >{""}</p>
+                  }
+                  {this.props.profile.has_positions != null
+                    ? 
+                      <p className="top-text">{this.props.profile.has_positions[0].abbreviation}</p>
+                    : 
+                      <p className="top-text">{""}</p>
+                  }
                 </div>
 
               </div>
