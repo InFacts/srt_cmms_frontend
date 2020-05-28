@@ -264,6 +264,7 @@ class TopContent extends React.Component {
 
   render() {
     const current = this;
+    console.log("document_show", this.props.document_show)
     return (
       <div>
         <div id="blackground-white">
@@ -398,8 +399,8 @@ class TopContent extends React.Component {
               <div className="grid_12">
                 <div className="grid_2"><p className="cancel-default">รหัสพนักงาน</p></div>
                 <div className="grid_8 pull_0">
-                  <input type="text" className="cancel-default grid_3" value={this.props.document_show.created_by_user_id} onChange={(e) => this.props.onChangeNameId(e)} />
-                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchUserModeEdit(this.props.document_show.created_by_user_name_th, this.props.document_show.created_by_user_id)}>ค้นหา</button>
+                  <input type="text" className="cancel-default grid_3" value={this.props.document_show.employee_id} onChange={(e) => this.props.onChangeNameId(e)} />
+                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchUserModeEdit(this.props.document_show.created_by_user_name_th, this.props.document_show.employee_id)}>ค้นหา</button>
                 </div>
               </div>
 
@@ -504,8 +505,8 @@ class TopContent extends React.Component {
               <div className="grid_12">
                 <div className="grid_2"><p className="cancel-default">รหัสพนักงาน</p></div>
                 <div className="grid_8 pull_0">
-                  <input type="text" className="cancel-default grid_3" value={this.props.document_show_mode_add.created_by_user_id} onChange={(e) => this.props.onChangeNameIdModeAdd(e)} />
-                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchUser(this.props.document_show_mode_add.created_by_user_name_th, this.props.document_show_mode_add.created_by_user_id)}>ค้นหา</button>
+                  <input type="text" className="cancel-default grid_3" value={this.props.document_show_mode_add.employee_id} onChange={(e) => this.props.onChangeNameIdModeAdd(e)} />
+                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchUser(this.props.document_show_mode_add.created_by_user_name_th, this.props.document_show_mode_add.employee_id)}>ค้นหา</button>
                 </div>
               </div>
 
@@ -704,13 +705,13 @@ export const onChangeNameId = (e) => {
     value: e.target.value
   }
 }
-export const onClickPopUpSearchUserModeEdit = (created_by_user_name_th, created_by_user_id) => {
-  console.log("created_by_user_name_th",created_by_user_name_th, "created_by_user_id",created_by_user_id)
+export const onClickPopUpSearchUserModeEdit = (created_by_user_name_th, employee_id) => {
+  console.log("created_by_user_name_th",created_by_user_name_th, "employee_id",employee_id)
   return function (dispatch) {
     var space = created_by_user_name_th.indexOf(" ");
     var firstname = created_by_user_name_th.slice(0, space);
     var lastname = created_by_user_name_th.slice(space+1, created_by_user_name_th.length);
-    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&lastname_th=${lastname}&employee_id=${created_by_user_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&lastname_th=${lastname}&employee_id=${employee_id === undefined ? "" : employee_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       console.log(">>>>", res)
       dispatch({
         type: "CLICK SEARCH POPUP USER MODE EDIT",
@@ -771,13 +772,13 @@ export const onChangeMyInventoryNameModeAdd = (e) => {
     value: e.target.value
   }
 }
-export const onClickPopUpSearchUser = (created_by_user_name_th, created_by_user_id) => {
-  console.log("created_by_user_name_th",created_by_user_name_th, "created_by_user_id",created_by_user_id)
+export const onClickPopUpSearchUser = (created_by_user_name_th, employee_id) => {
+  console.log("created_by_user_name_th",created_by_user_name_th, "employee_id",employee_id)
   return function (dispatch) {
     var space = created_by_user_name_th.indexOf(" ");
     var firstname = created_by_user_name_th.slice(0, space);
     var lastname = created_by_user_name_th.slice(space+1, created_by_user_name_th.length);
-    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&lastname_th=${lastname}&employee_id=${created_by_user_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&lastname_th=${lastname}&employee_id=${employee_id === undefined ? "" : employee_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       console.log(res)
       dispatch({
         type: "CLICK SEARCH POPUP USER",

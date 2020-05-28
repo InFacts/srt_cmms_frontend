@@ -38,43 +38,6 @@ class TopContent extends React.Component {
     if (mode === "search") {
       return (
         <>
-
-          {/* <div className="grid_12">
-            <div className="grid_2">
-              <p className="top-text">แขวง</p>
-            </div>
-            <div className="grid_3 pull_1">
-              <div className="p-search-box cancel-margin">
-                <input type="text" className="p-search-box__input cancel-default" value={this.props.districts} onChange={(e) => this.props.onChangeDistricts(e)} />
-                <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalDistricts"></i></button>
-              </div>
-            </div>
-            <div className="grid_3 float-right">
-              <input type="text" className="cancel-default float-right"></input>
-            </div>
-            <div className="grid_2 float-right">
-              <p className="top-text float-right">ปี</p>
-            </div>
-          </div>
-
-          <div className="grid_12">
-            <div className="grid_2">
-              <p className="top-text">ตอน</p>
-            </div>
-            <div className="grid_3 pull_1">
-            <div className="p-search-box cancel-margin">
-                <input type="text" className="p-search-box__input cancel-default" value={this.props.node} onChange={(e) => this.props.onChangeNode(e)} />
-                <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNode"></i></button>
-              </div>
-            </div>
-            <div className="grid_3 float-right">
-              <input type="text" className="cancel-default float-right"></input>
-            </div>
-            <div className="grid_2 float-right">
-              <p className="top-text float-right">เดือน</p>
-            </div>
-          </div> */}
-
           <div className="grid_12">
             <div className="grid_2">
               <p className="top-text">เลขที่คลัง</p>
@@ -109,6 +72,42 @@ class TopContent extends React.Component {
             <div className="grid_2 float-right">
               <p className="top-text float-right">รายการสิ่งของ</p>
             </div> */}
+          </div>
+
+          <div className="grid_12">
+            {/* <div className="grid_2">
+              <p className="top-text">แขวง</p>
+            </div>
+            <div className="grid_3 pull_1">
+              <div className="p-search-box cancel-margin">
+                <input type="text" className="p-search-box__input cancel-default" value={this.props.districts} onChange={(e) => this.props.onChangeDistricts(e)} />
+                <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalDistricts"></i></button>
+              </div>
+            </div> */}
+            <div className="grid_3 float-right">
+              <input type="text" className="cancel-default float-right"></input>
+            </div>
+            <div className="grid_2 float-right">
+              <p className="top-text float-right">ปี</p>
+            </div>
+          </div>
+
+          <div className="grid_12">
+            {/* <div className="grid_2">
+              <p className="top-text">ตอน</p>
+            </div>
+            <div className="grid_3 pull_1">
+            <div className="p-search-box cancel-margin">
+                <input type="text" className="p-search-box__input cancel-default" value={this.props.node} onChange={(e) => this.props.onChangeNode(e)} />
+                <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNode"></i></button>
+              </div>
+            </div> */}
+            <div className="grid_3 float-right">
+              <input type="text" className="cancel-default float-right"></input>
+            </div>
+            <div className="grid_2 float-right">
+              <p className="top-text float-right">เดือน</p>
+            </div>
           </div>
 
           <div className="grid_12">

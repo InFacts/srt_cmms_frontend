@@ -1,8 +1,9 @@
-import axios from "axios";
-
 const initialState = {
     username: "",
-    password: ""
+    password: "",
+
+    new_password: "",
+    submitForget: false
 }
 export default (state = initialState, action) => {
     switch (action.type) {
@@ -16,6 +17,13 @@ export default (state = initialState, action) => {
                 ...state,
                 password: action.value
             }
+        case "SUBMIT":
+            return {
+                ...state,
+                submitForget: true,
+                new_password: action.value
+            }
+
         default:
             return state
     }

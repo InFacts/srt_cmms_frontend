@@ -192,8 +192,9 @@ and setting aria-hidden attribute on dropdown contents.
                 <Link to="#" className="p-subnav__item sub_notify" onClick={(e) => this.props.readNotify(e)} >
                     <div>
                         <i className="fas fa-file-alt float-left" style={{ fontSize: "30px", "marginTop": "16px", "marginLeft": "10px" }}></i>
-                        <p className="cancel-default_notify">02 มกราคม 2563 เวลา 14:32 น.</p>
-                        <p className="cancel-default_notify">สส.101 เลขที่ ตช.04/2563</p>
+                        <p className="cancel-default_notify">{notify.created_on.replace("T", " เวลา ").slice(0, 21) + " น."}</p>
+                        <p className="cancel-default_notify">ประเภท: {notify.document_type_name}</p>
+                        <p className="cancel-default_notify">เลขที่: {notify.internal_document_id}</p>
                         <p className="cancel-default_notify">{notify.action_document}</p>
                         {/* <p className="cancel-default_notify">ได้รับการอนุมัติจากหัวหน้าแขวงแล้ว - สสญ.</p> */}
                     </div>
@@ -205,8 +206,9 @@ and setting aria-hidden attribute on dropdown contents.
                 <Link to="#" className="p-subnav__item sub_notify" onClick={(e) => this.props.readNotify(e)} style={{ backgroundColor: "#edf2fa" }}>
                     <div>
                         <i className="fas fa-file-alt float-left" style={{ fontSize: "30px", "marginTop": "16px", "marginLeft": "10px" }}></i>
-                        <p className="cancel-default_notify">02 มกราคม 2563 เวลา 14:32 น.</p>
-                        <p className="cancel-default_notify">สส.101 เลขที่ ตช.04/2563</p>
+                        <p className="cancel-default_notify">{notify.created_on.replace("T", " เวลา ").slice(0, 21) + " น."}</p>
+                        <p className="cancel-default_notify">ประเภท: {notify.document_type_name}</p>
+                        <p className="cancel-default_notify">เลขที่: {notify.internal_document_id}</p>
                         <p className="cancel-default_notify">{notify.action_document}</p>
                         {/* <p className="cancel-default_notify">ได้รับการอนุมัติจากหัวหน้าแขวงแล้ว - สสญ.</p> */}
                     </div>
@@ -229,7 +231,7 @@ and setting aria-hidden attribute on dropdown contents.
         }
         else {
             return (
-                <ul className="p-subnav__items--right" id="account-menu" aria-hidden="true" style={{ overflowY: "auto", whiteSpace: "nowrap", height: "270px", backgroundColor: "white" }}>
+                <ul className="p-subnav__items--right" id="account-menu" aria-hidden="true" style={{ overflowY: "auto", overflowX: "hidden", whiteSpace: "nowrap", height: "270px", backgroundColor: "white" }}>
                     {notify.map(function (notify, index) {
                         return (
                             <li key={notify.notification_id} id={notify.notification_id}>
@@ -307,7 +309,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(NavTop);
 
 export const loadNotify = (e) => {
     return function (dispatch) {
-        return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/notifications`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+        return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/notification/plus`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
             // console.log(res)
             dispatch({
                 type: "LOAD NOTIFY",
@@ -333,6 +335,7 @@ export const readNotify = (e) => {
     };
 }
 export const logOut = (e) => {
+    localStorage.removeItem('token_auth');
     const data = {
 
     }

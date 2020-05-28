@@ -15,51 +15,14 @@ import logo from '../../../images/logo.png';
 
 class Login extends Component {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      submitForget: false,
-    };
-  }
-
-  handleSubmit = event => {
-    event.preventDefault();
-
-    const user = {
-      "username": this.props.username,
-      // "password": this.props.password
-    };
-    console.log("user", user)
-
-    // axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/login`, user)
-    //   .then(res => {
-    //     console.log(res);
-    //     localStorage.setItem('token_auth', res.data.token)
-    //     this.setState({ submitForget: true });
-    //   }).catch(function (err) {
-    //     console.log(err)
-    //     alert(err);
-    //   })
-  }
-
   checkMode = () => {
-    if (this.state.submitForget === false) {
+    if (this.props.submitForget === false) {
       return (
         <>
           <h4 className="head-signin">ลืมรหัสผ่าน</h4>
-          <form className="from-sigin-input" onSubmit={this.handleSubmit}>
+          <form className="from-sigin-input" onSubmit={(e) => this.props.handleSubmit(e, this.props.username)}>
             <label className="input-signin">รหัสพนักงาน</label>
             <input className="cancel-default-signin" type="text" value={this.props.username} onChange={(e) => this.props.onChangeUsername(e)} required />
-            {/* <label className="input-signin mt-2">รหัสผ่าน</label>
-              <input className="cancel-default-signin" type="password" id="exampleInputPassword1" value={this.props.password} onChange={(e) => this.props.onChangePassword(e)} required/> */}
-            {/* <input type="checkbox" id="checkExample1" ></input> */}
-
-            {/* <input type="checkbox" id="checkExample2" /> */}
-            {/* <label className="alert-signin float-left mt-1 font-signin">จดจำรหัสผ่าน</label> */}
-            {/* <label className="alert-signin float-right mt-1 font-signin" style={{ marginTop: "9px" }}>ลืมรหัสผ่าน ?</label> */}
-
-            {/* <Link to="/main"><button className="button-red font-signin" type="submit">เข้าสู่ระบบ</button></Link> */}
-           
             <button className="button-red font-signin" type="submit">ยืนยัน</button>
             <Link to="/"><button className="button-red font-signin" type="button">กลับ</button></Link>
           </form>
@@ -71,7 +34,7 @@ class Login extends Component {
         <>
           <h4 className="head-signin">ลืมรหัสผ่าน</h4>
           <form className="from-sigin-input">
-            <label className="input-signin">รหัสผ่านใหม่ของคุณคือ: fnrie333fnej</label>
+            <label className="input-signin">รหัสผ่านใหม่ของคุณคือ: {this.props.new_password}</label>
             <Link to="/"><button className="button-red font-signin" type="submit">ไปหน้าเข้าสู้ระบบ</button></Link>
           </form>
         </>
@@ -114,12 +77,15 @@ const mapStateToProps = state => {
   return {
     username: state.username,
     password: state.password,
+    submitForget: state.submitForget,
+    new_password: state.new_password
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
   onChangeUsername: (e) => dispatch(onChangeUsername(e)),
-  onChangePassword: (e) => dispatch(onChangePassword(e))
+  onChangePassword: (e) => dispatch(onChangePassword(e)),
+  handleSubmit: (e, i) => dispatch(handleSubmit(e, i)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
@@ -135,4 +101,20 @@ export const onChangePassword = (e) => {
     type: "ON_CHANGE_PASSWORD",
     value: e.target.value
   }
+}
+export const handleSubmit = (e, username) => {
+  e.preventDefault();
+  const user = {
+    "employee_id": username
+  };
+  console.log("user", user)
+  return function (dispatch) {
+    return axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/auth/reset-password`, user).then((res) => {
+      console.log(res)
+      dispatch({
+        type: "SUBMIT",
+        value: res.data.generated_password
+      });
+    });
+  };
 }

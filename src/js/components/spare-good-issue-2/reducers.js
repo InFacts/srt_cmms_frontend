@@ -29,6 +29,7 @@ const initialState = {
     "remark": "",
     "created_by_user_name_th": "",
     "created_by_user_id": "",
+    "employee_id": "",
     "created_by_admin_name_th": "",
     "document_status_id": "",
     "dest_warehouse_id": 999,
@@ -46,7 +47,15 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "at_source": [
+        {
+          "current_unit_count": "",
+          "item_status": {
+            "description_th": ""
+          }
+        }
+      ]
     },
     {
       "item_id": "",
@@ -56,7 +65,15 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "at_source": [
+        {
+          "current_unit_count": "",
+          "item_status": {
+            "description_th": ""
+          }
+        }
+      ]
     },
     {
       "item_id": "",
@@ -66,7 +83,15 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "at_source": [
+        {
+          "current_unit_count": "",
+          "item_status": {
+            "description_th": ""
+          }
+        }
+      ]
     },
     {
       "item_id": "",
@@ -76,7 +101,15 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "at_source": [
+        {
+          "current_unit_count": "",
+          "item_status": {
+            "description_th": ""
+          }
+        }
+      ]
     },
     {
       "item_id": "",
@@ -86,7 +119,15 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "at_source": [
+        {
+          "current_unit_count": "",
+          "item_status": {
+            "description_th": ""
+          }
+        }
+      ]
     },
     {
       "item_id": "",
@@ -96,7 +137,15 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "at_source": [
+        {
+          "current_unit_count": "",
+          "item_status": {
+            "description_th": ""
+          }
+        }
+      ]
     },
     {
       "item_id": "",
@@ -106,7 +155,15 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "at_source": [
+        {
+          "current_unit_count": "",
+          "item_status": {
+            "description_th": ""
+          }
+        }
+      ]
     },
     {
       "item_id": "",
@@ -116,7 +173,15 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "at_source": [
+        {
+          "current_unit_count": "",
+          "item_status": {
+            "description_th": ""
+          }
+        }
+      ]
     },
     {
       "item_id": "",
@@ -126,7 +191,15 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "at_source": [
+        {
+          "current_unit_count": "",
+          "item_status": {
+            "description_th": ""
+          }
+        }
+      ]
     },
     {
       "item_id": "",
@@ -136,7 +209,15 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "at_source": [
+        {
+          "current_unit_count": "",
+          "item_status": {
+            "description_th": ""
+          }
+        }
+      ]
     },
   ],
 
@@ -149,7 +230,15 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "at_source": [
+        {
+          "current_unit_count": "",
+          "item_status": {
+            "description_th": ""
+          }
+        }
+      ]
     },
     {
       "item_id": "",
@@ -159,7 +248,15 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "at_source": [
+        {
+          "current_unit_count": "",
+          "item_status": {
+            "description_th": ""
+          }
+        }
+      ]
     },
     {
       "item_id": "",
@@ -169,7 +266,15 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "at_source": [
+        {
+          "current_unit_count": "",
+          "item_status": {
+            "description_th": ""
+          }
+        }
+      ]
     },
     {
       "item_id": "",
@@ -179,7 +284,15 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "at_source": [
+        {
+          "current_unit_count": "",
+          "item_status": {
+            "description_th": ""
+          }
+        }
+      ]
     },
     {
       "item_id": "",
@@ -189,7 +302,15 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "at_source": [
+        {
+          "current_unit_count": "",
+          "item_status": {
+            "description_th": ""
+          }
+        }
+      ]
     },
     {
       "item_id": "",
@@ -199,7 +320,15 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "at_source": [
+        {
+          "current_unit_count": "",
+          "item_status": {
+            "description_th": ""
+          }
+        }
+      ]
     },
     {
       "item_id": "",
@@ -209,7 +338,15 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "at_source": [
+        {
+          "current_unit_count": "",
+          "item_status": {
+            "description_th": ""
+          }
+        }
+      ]
     },
     {
       "item_id": "",
@@ -219,7 +356,15 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "at_source": [
+        {
+          "current_unit_count": "",
+          "item_status": {
+            "description_th": ""
+          }
+        }
+      ]
     },
     {
       "item_id": "",
@@ -229,7 +374,15 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "at_source": [
+        {
+          "current_unit_count": "",
+          "item_status": {
+            "description_th": ""
+          }
+        }
+      ]
     },
     {
       "item_id": "",
@@ -239,7 +392,15 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "at_source": [
+        {
+          "current_unit_count": "",
+          "item_status": {
+            "description_th": ""
+          }
+        }
+      ]
     },
   ],
   list_show_mode_add_row_index: "",
@@ -304,7 +465,26 @@ export default (state = initialState, action) => {
             "uom_group_id": "",
             "unit": "",
             "per_unit_price": "",
-            "list_uoms": []
+            "list_uoms": [],
+            "at_source": [
+              {
+                "adjustment_unit_count": "",
+                "begin_unit_count": "",
+                "current_unit_count": "",
+                "in_unit_count": "",
+                "issue_unit_count": "",
+                "item_id": "",
+                "item_status": {
+                  "item_status_id": "",
+                  "description": "",
+                  "description_th": ""
+                },
+                "item_status_id": "",
+                "out_unit_count": "",
+                "receive_unit_count": "",
+                "warehouse_id": ""
+              }
+            ]
           }
         );
       }
@@ -404,11 +584,18 @@ export default (state = initialState, action) => {
         no_part_show: action.value
       }
     case "ON CLICK SELECT POPUP NO PART":
-      // console.log(state.no_part_show[action.rowIndex], "and", state.list_show_row_index)
       var clone_list_show = [...state.list_show];
-      clone_list_show[state.list_show_row_index] = state.no_part_show[action.rowIndex]
+
+      clone_list_show[state.list_show_row_index].item_id = state.no_part_show[action.rowIndex].item_id
+      clone_list_show[state.list_show_row_index].internal_item_id = state.no_part_show[action.rowIndex].internal_item_id
+      clone_list_show[state.list_show_row_index].description = state.no_part_show[action.rowIndex].description
+      clone_list_show[state.list_show_row_index].list_uoms = state.no_part_show[action.rowIndex].list_uoms
+      clone_list_show[state.list_show_row_index].uom_group_id = state.no_part_show[action.rowIndex].uom_group_id
+
       clone_list_show[state.list_show_row_index].quantity = 1
       clone_list_show[state.list_show_row_index].per_unit_price = "1.0000"
+      clone_list_show[state.list_show_row_index].at_source[0].current_unit_count = action.resStatistic[0].current_unit_count
+      clone_list_show[state.list_show_row_index].at_source[0].item_status.description_th = action.resStatistic[0].description_th
       return {
         ...state,
         list_show: clone_list_show
@@ -442,7 +629,7 @@ export default (state = initialState, action) => {
       }
     case "ON CHANGE NAME ID":
       var clone_document_show = { ...state.document_show };
-      clone_document_show.created_by_user_id = action.value;
+      clone_document_show.employee_id = action.value;
       return {
         ...state,
         document_show: clone_document_show
@@ -455,8 +642,8 @@ export default (state = initialState, action) => {
     case "CLICK SELECT POPUP USER MODE EDIT":
       var clone_document_show = { ...state.document_show };
       clone_document_show.created_by_user_name_th = state.line_users[action.row_inventory_show_popup].firstname_th + " " + state.line_users[action.row_inventory_show_popup].lastname_th
-      clone_document_show.created_by_user_id = state.line_users[action.row_inventory_show_popup].employee_id
-      clone_document_show.created_by_user_id_database = state.line_users[action.row_inventory_show_popup].user_id
+      clone_document_show.employee_id = state.line_users[action.row_inventory_show_popup].employee_id
+      clone_document_show.created_by_user_id = state.line_users[action.row_inventory_show_popup].user_id
       return {
         ...state,
         document_show: clone_document_show,
@@ -484,7 +671,7 @@ export default (state = initialState, action) => {
       }
     case "ON CHANGE NAME ID MODE ADD":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
-      clone_document_show_mode_add.created_by_user_id = action.value;
+      clone_document_show_mode_add.employee_id = action.value;
       return {
         ...state,
         document_show_mode_add: clone_document_show_mode_add
@@ -605,8 +792,8 @@ export default (state = initialState, action) => {
     case "CLICK SELECT POPUP USER":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
       clone_document_show_mode_add.created_by_user_name_th = state.line_users[action.row_inventory_show_popup].firstname_th + " " + state.line_users[action.row_inventory_show_popup].lastname_th
-      clone_document_show_mode_add.created_by_user_id = state.line_users[action.row_inventory_show_popup].employee_id
-      clone_document_show_mode_add.created_by_user_id_database = state.line_users[action.row_inventory_show_popup].user_id
+      clone_document_show_mode_add.employee_id = state.line_users[action.row_inventory_show_popup].employee_id
+      clone_document_show_mode_add.created_by_user_id = state.line_users[action.row_inventory_show_popup].user_id
       return {
         ...state,
         document_show_mode_add: clone_document_show_mode_add,

@@ -386,6 +386,24 @@ class BottomContent extends React.Component {
               </thead>
               <tbody>
                 {current.props.list_show_mode_add.map(function (list, index) {
+                  if (current.props.document_show_mode_add.src_warehouse_id === ""){
+                    return (
+                      <tr key={index} id={index}>
+                        <th className="edit-padding text-center">{index + 1}</th>
+                        <td className="edit-padding"></td>
+                        <td className="edit-padding"></td>
+                        <td className="edit-padding text-center"></td>
+                        <td className="edit-padding text-center"></td>
+                        <td className="edit-padding text-center"></td>
+                        <td className="edit-padding text-center"></td>
+                        <td className="edit-padding text-center"></td>
+                        <td className="edit-padding text-center"></td>
+                        <td className="edit-padding text-center"></td>
+                        <td className="edit-padding text-right"></td>
+                        <td className="edit-padding text-right"></td>
+                      </tr>
+                    )
+                  }
                   if (index === 0) {
                     return (
                       <tr key={index} id={index}>

@@ -171,11 +171,19 @@ class BottomContent extends React.Component {
                       <td className="edit-padding">{list.internal_item_id}</td>
                       <td className="edit-padding">{list.description}</td>
 
+                      <td className="edit-padding text-center">
+                        {list.at_source.map(function (at_source, index) {
+                          return at_source.current_unit_count
+                        })}
+                      </td>
                       <td className="edit-padding">{list.quantity}</td>
                       <td className="edit-padding">{list.quantity}</td>
                       <td className="edit-padding">{list.quantity}</td>
-                      <td className="edit-padding">{list.quantity}</td>
-                      <td className="edit-padding">{list.quantity}</td>
+                      <td className="edit-padding text-center">
+                        {list.at_source.map(function (at_source, index) {
+                          return at_source.item_status.description_th
+                        })}
+                      </td>
 
                       <td className="edit-padding text-center">{list.quantity}</td>
                       <td className="edit-padding text-center">
@@ -247,11 +255,19 @@ class BottomContent extends React.Component {
                       </td>
                       <td className="edit-padding">{list.description}</td>
 
+                      <td className="edit-padding text-center">
+                        {list.at_source.map(function (at_source, index) {
+                          return at_source.current_unit_count
+                        })}
+                      </td>
                       <td className="edit-padding">{list.quantity}</td>
                       <td className="edit-padding">{list.quantity}</td>
                       <td className="edit-padding">{list.quantity}</td>
-                      <td className="edit-padding">{list.quantity}</td>
-                      <td className="edit-padding">{list.quantity}</td>
+                      <td className="edit-padding text-center">
+                        {list.at_source.map(function (at_source, index) {
+                          return at_source.item_status.description_th
+                        })}
+                      </td>
 
                       <td className="edit-padding text-center">
                         {current.requiredQuantityModeEdit(list.description, list.quantity)}
@@ -325,7 +341,7 @@ class BottomContent extends React.Component {
                             <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show.internal_item_id} </td>
                             <td className="edit-padding" style={{ minWidth: "300px" }}> {no_part_show.description} </td>
                             <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
-                              <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectPopUpNoPart(e)} aria-label="Close active modal" aria-controls="modalNoPart" id="closeModalNoPart" >เลือก</button>
+                              <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectPopUpNoPart(e, no_part_show.item_id, current.props.document_show.src_warehouse_id)} aria-label="Close active modal" aria-controls="modalNoPart" id="closeModalNoPart" >เลือก</button>
                             </td>
                           </tr>
                         )
@@ -559,7 +575,7 @@ const mapDispatchToProps = (dispatch) => ({
   onChangeUnitPerBathEachRow: (e) => dispatch(onChangeUnitPerBathEachRow(e)),
   onChangeTotalEachRow: (e) => dispatch(onChangeTotalEachRow(e)),
   onClickSearchPopUpNoPart: (e) => dispatch(onClickSearchPopUpNoPart(e)),
-  onClickSelectPopUpNoPart: (e) => dispatch(onClickSelectPopUpNoPart(e)),
+  onClickSelectPopUpNoPart: (e, i, o) => dispatch(onClickSelectPopUpNoPart(e, i, o)),
   onChangeNote: (e) => dispatch(onChangeNote(e)),
   onChangeDescriptionPart: (e) => dispatch(onChangeDescriptionPart(e)),
 
@@ -633,11 +649,19 @@ export const onClickSearchPopUpNoPart = (list_no_part) => {
     });
   };
 }
-export const onClickSelectPopUpNoPart = (e) => {
-  return {
-    type: "ON CLICK SELECT POPUP NO PART",
-    rowIndex: e.target.parentNode.parentNode.id
-  }
+export const onClickSelectPopUpNoPart = (e, item_id, src_warehouse_id) => {
+  var rowIndex = e.target.parentNode.parentNode.id
+  return function (dispatch) {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-onhand/plus?warehouse_id=${src_warehouse_id}&item_id=${item_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+      console.log(res)
+      // dispatch
+      dispatch({
+        type: "ON CLICK SELECT POPUP NO PART",
+        resStatistic: res.data.results,
+        rowIndex: rowIndex
+      });
+    });
+  };
 }
 export const onChangeNote = (e) => {
   return {

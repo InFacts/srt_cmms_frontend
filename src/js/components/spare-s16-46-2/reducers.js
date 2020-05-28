@@ -30,6 +30,7 @@ const initialState = {
     "created_by_user_name_th": "",
     "created_by_user_id": "",
     "created_by_admin_name_th": "",
+    "employee_id": "",
     "document_status_id": "",
     "src_warehouse_id": "",
     "src_warehouse_name": "",
@@ -583,8 +584,13 @@ export default (state = initialState, action) => {
       }
     case "ON CLICK SELECT POPUP NO PART":
       var clone_list_show = [...state.list_show];
-      console.log("state.list_show", state.list_show)
-      clone_list_show[state.list_show_row_index] = state.no_part_show[action.rowIndex]
+      
+      clone_list_show[state.list_show_row_index].item_id = state.no_part_show[action.rowIndex].item_id
+      clone_list_show[state.list_show_row_index].internal_item_id = state.no_part_show[action.rowIndex].internal_item_id
+      clone_list_show[state.list_show_row_index].description = state.no_part_show[action.rowIndex].description
+      clone_list_show[state.list_show_row_index].list_uoms = state.no_part_show[action.rowIndex].list_uoms
+      clone_list_show[state.list_show_row_index].uom_group_id = state.no_part_show[action.rowIndex].uom_group_id
+
       clone_list_show[state.list_show_row_index].quantity = 1
       clone_list_show[state.list_show_row_index].per_unit_price = "1.0000"
       clone_list_show[state.list_show_row_index].at_source[0].current_unit_count = action.resStatistic[0].current_unit_count
@@ -637,7 +643,7 @@ export default (state = initialState, action) => {
       }
     case "ON CHANGE NAME ID":
       var clone_document_show = { ...state.document_show };
-      clone_document_show.created_by_user_id = action.value;
+      clone_document_show.employee_id = action.value;
       return {
         ...state,
         document_show: clone_document_show
@@ -655,10 +661,11 @@ export default (state = initialState, action) => {
         line_users: action.value
       }
     case "CLICK SELECT POPUP USER MODE EDIT":
+      console.log("state.line_users[action.row_inventory_show_popup].user_id", state.line_users[action.row_inventory_show_popup].user_id)
       var clone_document_show = { ...state.document_show };
       clone_document_show.created_by_user_name_th = state.line_users[action.row_inventory_show_popup].firstname_th + " " + state.line_users[action.row_inventory_show_popup].lastname_th
-      clone_document_show.created_by_user_id = state.line_users[action.row_inventory_show_popup].employee_id
-      clone_document_show.created_by_user_id_database = state.line_users[action.row_inventory_show_popup].user_id
+      clone_document_show.employee_id = state.line_users[action.row_inventory_show_popup].employee_id
+      clone_document_show.created_by_user_id = state.line_users[action.row_inventory_show_popup].user_id
       return {
         ...state,
         document_show: clone_document_show,
@@ -693,7 +700,7 @@ export default (state = initialState, action) => {
       }
     case "ON CHANGE NAME ID MODE ADD":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
-      clone_document_show_mode_add.created_by_user_id = action.value;
+      clone_document_show_mode_add.employee_id = action.value;
       return {
         ...state,
         document_show_mode_add: clone_document_show_mode_add
@@ -823,8 +830,8 @@ export default (state = initialState, action) => {
     case "CLICK SELECT POPUP USER":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
       clone_document_show_mode_add.created_by_user_name_th = state.line_users[action.row_inventory_show_popup].firstname_th + " " + state.line_users[action.row_inventory_show_popup].lastname_th
-      clone_document_show_mode_add.created_by_user_id = state.line_users[action.row_inventory_show_popup].employee_id
-      clone_document_show_mode_add.created_by_user_id_database = state.line_users[action.row_inventory_show_popup].user_id
+      clone_document_show_mode_add.employee_id = state.line_users[action.row_inventory_show_popup].employee_id
+      clone_document_show_mode_add.created_by_user_id = state.line_users[action.row_inventory_show_popup].user_id
       return {
         ...state,
         document_show_mode_add: clone_document_show_mode_add,

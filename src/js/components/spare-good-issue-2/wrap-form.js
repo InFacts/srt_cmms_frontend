@@ -40,7 +40,7 @@ class WrapForm extends React.Component {
                 "document_id": document_id,
                 "internal_document_id": document_show.internal_document_id,
                 "created_by_admin_id": document_show.created_by_admin_id,
-                "created_by_user_id": document_show.created_by_user_id_database,
+                "created_by_user_id": document_show.created_by_user_id,
                 "remark": document_show.remark,
             },
             "specific": {
