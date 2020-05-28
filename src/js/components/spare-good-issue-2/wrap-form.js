@@ -40,17 +40,16 @@ class WrapForm extends React.Component {
                 "document_id": document_id,
                 "internal_document_id": document_show.internal_document_id,
                 "created_by_admin_id": document_show.created_by_admin_id,
-                "created_by_user_id": document_show.created_by_user_id_database,
+                "created_by_user_id": document_show.created_by_user_id,
                 "remark": document_show.remark,
             },
             "specific": {
                 "document_id": document_id,
-                "dest_warehouse_id": parseInt(document_show.dest_warehouse_id),
-                "src_warehouse_id": 999,
+                "dest_warehouse_id": 999,
+                "src_warehouse_id": parseInt(document_show.src_warehouse_id),
                 "line_items": line_items,
                 "movement": {
                     "document_id": document_id,
-                    "po_id": document_show.po_id
                 }
             }
         };
@@ -87,7 +86,7 @@ class WrapForm extends React.Component {
 
     render() {
         return (
-            <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) this.handleSubmit(e) }}>
+            <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) {return this.handleSubmit(e) }else { e.preventDefault(); } }}>
                 <TopContent />
                 <BottomContent />
                 <Footer />

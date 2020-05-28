@@ -76,7 +76,7 @@ class TopContent extends React.Component {
               <input type="text" className="cancel-default" defaultValue={current.props.document_show.created_by_user_name_th} disabled="disabled"></input>
             </div>
             <div className="grid_3 float-right">
-              <input type="datetime" className="cancel-default float-right" defaultValue={current.props.document_show.created_on !== undefined ? current.props.document_show.created_on.slice(0, 16) : null} disabled="disabled"></input>
+              <input type="date" className="cancel-default float-right" defaultValue={current.props.document_show.created_on !== undefined ? current.props.document_show.created_on.slice(0, 10) : null} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">วันที่</p>
@@ -91,7 +91,7 @@ class TopContent extends React.Component {
               <input type="text" className="cancel-default" defaultValue={current.props.document_show.created_by_admin_name_th} disabled="disabled"></input>
             </div>
             <div className="grid_3 float-right">
-              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.dest_warehouse_id} disabled="disabled"></input>
+              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.src_warehouse_id} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">เลขที่คลัง</p>
@@ -106,7 +106,7 @@ class TopContent extends React.Component {
               <input type="text" className="cancel-default" defaultValue={current.props.document_show.po_id} disabled="disabled"></input>
             </div> */}
             <div className="grid_3 float-right">
-              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.dest_warehouse_name} disabled="disabled"></input>
+              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.src_warehouse_name} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">ชื่อคลัง</p>
@@ -147,7 +147,7 @@ class TopContent extends React.Component {
               </div>
             </div>
             <div className="grid_3 float-right">
-              <input type="datetime-local" className="cancel-default float-right" value={current.props.document_show.created_on.slice(0, 16)} onChange={(e) => this.props.onChangeDate(e)}></input>
+              <input type="date" className="cancel-default float-right" value={current.props.document_show.created_on.slice(0, 10)} onChange={(e) => this.props.onChangeDate(e)}></input>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">วันที่</p>
@@ -163,7 +163,7 @@ class TopContent extends React.Component {
             </div>
             <div className="grid_3 float-right">
               <div className="p-search-box cancel-margin">
-                <input type="text" className="p-search-box__input cancel-default" value={current.props.document_show.dest_warehouse_id} onChange={(e) => this.props.onChangeMyInventory(e)} />
+                <input type="text" className="p-search-box__input cancel-default" value={current.props.document_show.src_warehouse_id} onChange={(e) => this.props.onChangeMyInventory(e)} />
                 <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalInventory" aria-controls="modalInventoryEdit"></i></button>
               </div>
             </div>
@@ -180,7 +180,7 @@ class TopContent extends React.Component {
               <input type="text" className="cancel-default" value={current.props.document_show.po_id} onChange={(e) => this.props.onChangeNoPo(e)}></input>
             </div> */}
             <div className="grid_3 float-right">
-              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.dest_warehouse_name} disabled="disabled"></input>
+              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.src_warehouse_name} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">ชื่อคลัง</p>
@@ -218,7 +218,7 @@ class TopContent extends React.Component {
               </div>
             </div>
             <div className="grid_3 float-right">
-              <input type="datetime-local" className="cancel-default float-right" value={current.props.document_show_mode_add.created_on} onChange={(e) => this.props.onChangeDateModeAdd(e)} required></input>
+              <input type="date" className="cancel-default float-right" value={current.props.document_show_mode_add.created_on} onChange={(e) => this.props.onChangeDateModeAdd(e)} required></input>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">วันที่</p>
@@ -234,7 +234,7 @@ class TopContent extends React.Component {
             </div>
             <div className="grid_3 float-right">
               <div className="p-search-box cancel-margin">
-                <input type="text" className="p-search-box__input cancel-default" value={current.props.document_show_mode_add.dest_warehouse_id} onChange={(e) => this.props.onChangeMyInventoryModeAdd(e)} required />
+                <input type="text" className="p-search-box__input cancel-default" value={current.props.document_show_mode_add.src_warehouse_id} onChange={(e) => this.props.onChangeMyInventoryModeAdd(e)} required />
                 <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalInventory" aria-controls="modalInventory"></i></button>
               </div>
             </div>
@@ -251,7 +251,7 @@ class TopContent extends React.Component {
               <input type="text" className="cancel-default" value={current.props.document_show_mode_add.po_id} onChange={(e) => this.props.onChangeNoPoModeAdd(e)} required></input>
             </div> */}
             <div className="grid_3 float-right">
-              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show_mode_add.dest_warehouse_name} disabled="disabled"></input>
+              <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show_mode_add.src_warehouse_name} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">ชื่อคลัง</p>
@@ -264,6 +264,7 @@ class TopContent extends React.Component {
 
   render() {
     const current = this;
+    console.log("document_show", this.props.document_show)
     return (
       <div>
         <div id="blackground-white">
@@ -339,14 +340,14 @@ class TopContent extends React.Component {
               <div className="grid_12">
                 <div className="grid_2"><p className="cancel-default">เลขที่คลัง</p></div>
                 <div className="grid_8 pull_0">
-                  <input type="text" className="cancel-default grid_3" value={this.props.document_show.dest_warehouse_id} onChange={(e) => this.props.onChangeMyInventory(e)} />
+                  <input type="text" className="cancel-default grid_3" value={this.props.document_show.src_warehouse_id} onChange={(e) => this.props.onChangeMyInventory(e)} />
                 </div>
               </div>
               <div className="grid_12">
                 <div className="grid_2"><p className="cancel-default">ชื่อคลัง</p></div>
                 <div className="grid_8 pull_0">
-                  <input type="text" className="cancel-default grid_3" value={this.props.document_show.dest_warehouse_name} onChange={(e) => this.props.onChangeMyInventoryName(e)} />
-                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchInventory(this.props.document_show.dest_warehouse_id, this.props.document_show.dest_warehouse_name)}>ค้นหา</button>
+                  <input type="text" className="cancel-default grid_3" value={this.props.document_show.src_warehouse_name} onChange={(e) => this.props.onChangeMyInventoryName(e)} />
+                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchInventory(this.props.document_show.src_warehouse_id, this.props.document_show.src_warehouse_name)}>ค้นหา</button>
                 </div>
               </div>
 
@@ -398,8 +399,8 @@ class TopContent extends React.Component {
               <div className="grid_12">
                 <div className="grid_2"><p className="cancel-default">รหัสพนักงาน</p></div>
                 <div className="grid_8 pull_0">
-                  <input type="text" className="cancel-default grid_3" value={this.props.document_show.created_by_user_id} onChange={(e) => this.props.onChangeNameId(e)} />
-                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchUserModeEdit(this.props.document_show.created_by_user_name_th, this.props.document_show.created_by_user_id)}>ค้นหา</button>
+                  <input type="text" className="cancel-default grid_3" value={this.props.document_show.employee_id} onChange={(e) => this.props.onChangeNameId(e)} />
+                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchUserModeEdit(this.props.document_show.created_by_user_name_th, this.props.document_show.employee_id)}>ค้นหา</button>
                 </div>
               </div>
 
@@ -445,14 +446,14 @@ class TopContent extends React.Component {
               <div className="grid_12">
                 <div className="grid_2"><p className="cancel-default">เลขที่คลัง</p></div>
                 <div className="grid_8 pull_0">
-                  <input type="text" className="cancel-default grid_3" value={this.props.document_show_mode_add.dest_warehouse_id} onChange={(e) => this.props.onChangeMyInventoryModeAdd(e)} />
+                  <input type="text" className="cancel-default grid_3" value={this.props.document_show_mode_add.src_warehouse_id} onChange={(e) => this.props.onChangeMyInventoryModeAdd(e)} />
                 </div>
               </div>
               <div className="grid_12">
                 <div className="grid_2"><p className="cancel-default">ชื่อคลัง</p></div>
                 <div className="grid_8 pull_0">
-                  <input type="text" className="cancel-default grid_3" value={this.props.document_show_mode_add.dest_warehouse_name} onChange={(e) => this.props.onChangeMyInventoryNameModeAdd(e)} />
-                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchInventory(this.props.document_show_mode_add.dest_warehouse_id, this.props.document_show_mode_add.dest_warehouse_name)}>ค้นหา</button>
+                  <input type="text" className="cancel-default grid_3" value={this.props.document_show_mode_add.src_warehouse_name} onChange={(e) => this.props.onChangeMyInventoryNameModeAdd(e)} />
+                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchInventory(this.props.document_show_mode_add.src_warehouse_id, this.props.document_show_mode_add.src_warehouse_name)}>ค้นหา</button>
                 </div>
               </div>
 
@@ -504,8 +505,8 @@ class TopContent extends React.Component {
               <div className="grid_12">
                 <div className="grid_2"><p className="cancel-default">รหัสพนักงาน</p></div>
                 <div className="grid_8 pull_0">
-                  <input type="text" className="cancel-default grid_3" value={this.props.document_show_mode_add.created_by_user_id} onChange={(e) => this.props.onChangeNameIdModeAdd(e)} />
-                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchUser(this.props.document_show_mode_add.created_by_user_name_th, this.props.document_show_mode_add.created_by_user_id)}>ค้นหา</button>
+                  <input type="text" className="cancel-default grid_3" value={this.props.document_show_mode_add.employee_id} onChange={(e) => this.props.onChangeNameIdModeAdd(e)} />
+                  <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickPopUpSearchUser(this.props.document_show_mode_add.created_by_user_name_th, this.props.document_show_mode_add.employee_id)}>ค้นหา</button>
                 </div>
               </div>
 
@@ -666,10 +667,10 @@ export const onChangeNoPo = (e) => {
     value: e.target.value
   }
 }
-export const onClickPopUpSearchInventory = (dest_warehouse_id, dest_warehouse_name) => {
-  console.log("dest_warehouse_id", dest_warehouse_id, "dest_warehouse_name", dest_warehouse_name)
+export const onClickPopUpSearchInventory = (src_warehouse_id, src_warehouse_name) => {
+  console.log("src_warehouse_id", src_warehouse_id, "src_warehouse_name", src_warehouse_name)
   return function (dispatch) {
-    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/warehouses?warehouse_id=${dest_warehouse_id}&name=${dest_warehouse_name}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/warehouses?warehouse_id=${src_warehouse_id}&name=${src_warehouse_name}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       console.log(res)
       dispatch({
         type: "CLICK SEARCH POPUP INVENTORY",
@@ -704,13 +705,13 @@ export const onChangeNameId = (e) => {
     value: e.target.value
   }
 }
-export const onClickPopUpSearchUserModeEdit = (created_by_user_name_th, created_by_user_id) => {
-  console.log("created_by_user_name_th",created_by_user_name_th, "created_by_user_id",created_by_user_id)
+export const onClickPopUpSearchUserModeEdit = (created_by_user_name_th, employee_id) => {
+  console.log("created_by_user_name_th",created_by_user_name_th, "employee_id",employee_id)
   return function (dispatch) {
     var space = created_by_user_name_th.indexOf(" ");
     var firstname = created_by_user_name_th.slice(0, space);
     var lastname = created_by_user_name_th.slice(space+1, created_by_user_name_th.length);
-    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&lastname_th=${lastname}&employee_id=${created_by_user_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&lastname_th=${lastname}&employee_id=${employee_id === undefined ? "" : employee_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       console.log(">>>>", res)
       dispatch({
         type: "CLICK SEARCH POPUP USER MODE EDIT",
@@ -771,13 +772,13 @@ export const onChangeMyInventoryNameModeAdd = (e) => {
     value: e.target.value
   }
 }
-export const onClickPopUpSearchUser = (created_by_user_name_th, created_by_user_id) => {
-  console.log("created_by_user_name_th",created_by_user_name_th, "created_by_user_id",created_by_user_id)
+export const onClickPopUpSearchUser = (created_by_user_name_th, employee_id) => {
+  console.log("created_by_user_name_th",created_by_user_name_th, "employee_id",employee_id)
   return function (dispatch) {
     var space = created_by_user_name_th.indexOf(" ");
     var firstname = created_by_user_name_th.slice(0, space);
     var lastname = created_by_user_name_th.slice(space+1, created_by_user_name_th.length);
-    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&lastname_th=${lastname}&employee_id=${created_by_user_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&lastname_th=${lastname}&employee_id=${employee_id === undefined ? "" : employee_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       console.log(res)
       dispatch({
         type: "CLICK SEARCH POPUP USER",

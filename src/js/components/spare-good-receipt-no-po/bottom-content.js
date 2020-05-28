@@ -176,6 +176,7 @@ class BottomContent extends React.Component {
             </table>
           </div>
           <div className="grid_12 mt-3">
+          <div className="grid_1 float-right pull_0"><p className="cancel-default float-right">บาท</p></div>
             <div className="grid_4 float-right">
               <input type="text" className="cancel-default float-right" value={current.sumTotal(current.props.list_show)} disabled="disabled"></input>
             </div>
@@ -241,6 +242,7 @@ class BottomContent extends React.Component {
             </table>
           </div>
           <div className="grid_12 mt-3">
+          <div className="grid_1 float-right pull_0"><p className="cancel-default float-right">บาท</p></div>
             <div className="grid_4 float-right">
               <input type="number" min="1" className="cancel-default float-right" value={current.sumTotal(current.props.list_show)} onChange={(e) => this.props.onChangeTotal(e)} disabled="disabled"></input>
             </div>
@@ -304,6 +306,7 @@ class BottomContent extends React.Component {
             </table>
           </div>
           <div className="grid_12 mt-3">
+          <div className="grid_1 float-right pull_0"><p className="cancel-default float-right">บาท</p></div>
             <div className="grid_4 float-right">
               <input type="number" min="1" className="cancel-default float-right" value={current.sumTotal(current.props.list_show_mode_add)} disabled="disabled"></input>
             </div>

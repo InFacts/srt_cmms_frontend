@@ -4,22 +4,18 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from "redux-thunk";
 import reducers from './reducers';
 
-import NavTopbar from '../nav/nav-top-connect-api.js';
-import ToolBar from '../nav/nav-toolbar.js';
-import TopContent from './top-content';
+import Login from './forgot.js';
 
 const store = createStore(reducers, applyMiddleware(thunk))
 
-class MainModule extends React.Component {
+class Home extends React.Component {
     render() {
         return (
             <Provider store={store}>
-                <NavTopbar />
-                <ToolBar />
-                <TopContent />
+                <Login />
             </Provider>
         )
     };
 }
 
-export default MainModule;
+export default Home;

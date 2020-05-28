@@ -202,6 +202,7 @@ class BottomContent extends React.Component {
             </table>
           </div>
           <div className="grid_12 mt-3">
+            <div className="grid_1 float-right pull_0"><p className="cancel-default float-right">บาท</p></div>
             <div className="grid_4 float-right">
               <input type="text" className="cancel-default float-right" value={current.sumTotal(current.props.list_show)} disabled="disabled"></input>
             </div>
@@ -290,6 +291,7 @@ class BottomContent extends React.Component {
             </table>
           </div>
           <div className="grid_12 mt-3">
+            <div className="grid_1 float-right pull_0"><p className="cancel-default float-right">บาท</p></div>
             <div className="grid_4 float-right">
               <input type="number" min="1" className="cancel-default float-right" value={current.sumTotal(current.props.list_show)} onChange={(e) => this.props.onChangeTotal(e)} disabled="disabled"></input>
             </div>
@@ -384,44 +386,101 @@ class BottomContent extends React.Component {
               </thead>
               <tbody>
                 {current.props.list_show_mode_add.map(function (list, index) {
-                  return (
-                    <tr key={index} id={index}>
-                      <th className="edit-padding text-center">{index + 1}</th>
-                      <td className="edit-padding">
-                        <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
-                          <input type="text" className="p-search-box__input cancel-default-table" value={list.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRowModeAdd(e)} onKeyPress={(e) => current.props.handleKeyPress(e)} />
-                          <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPartModeAdd" onClick={(e) => current.props.onClickNoPartEachRowModeAdd(e)}></i></button>
-                        </div>
-                      </td>
-                      <td className="edit-padding">{list.description}</td>
+                  if (current.props.document_show_mode_add.src_warehouse_id === ""){
+                    return (
+                      <tr key={index} id={index}>
+                        <th className="edit-padding text-center">{index + 1}</th>
+                        <td className="edit-padding"></td>
+                        <td className="edit-padding"></td>
+                        <td className="edit-padding text-center"></td>
+                        <td className="edit-padding text-center"></td>
+                        <td className="edit-padding text-center"></td>
+                        <td className="edit-padding text-center"></td>
+                        <td className="edit-padding text-center"></td>
+                        <td className="edit-padding text-center"></td>
+                        <td className="edit-padding text-center"></td>
+                        <td className="edit-padding text-right"></td>
+                        <td className="edit-padding text-right"></td>
+                      </tr>
+                    )
+                  }
+                  if (index === 0) {
+                    return (
+                      <tr key={index} id={index}>
+                        <th className="edit-padding text-center">{index + 1}</th>
+                        <td className="edit-padding">
+                          <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
+                            <input type="text" className="p-search-box__input cancel-default-table" value={list.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRowModeAdd(e)} required />
+                            {/* <input type="text" className="p-search-box__input cancel-default-table" value={list.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRowModeAdd(e)} onKeyPress={(e) => current.props.handleKeyPress(e)} /> */}
+                            <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPartModeAdd" onClick={(e) => current.props.onClickNoPartEachRowModeAdd(e)}></i></button>
+                          </div>
+                        </td>
+                        <td className="edit-padding">{list.description}</td>
 
-                      <td className="edit-padding text-center">{list.current_unit_count}</td>
-                      <td className="edit-padding text-center">{list.quantity}</td>
-                      <td className="edit-padding text-center">{list.quantity}</td>
-                      <td className="edit-padding text-center">{list.quantity}</td>
-                      <td className="edit-padding text-center">{list.description_th}</td>
+                        <td className="edit-padding text-center">{list.current_unit_count}</td>
+                        <td className="edit-padding text-center">{list.quantity}</td>
+                        <td className="edit-padding text-center">{list.quantity}</td>
+                        <td className="edit-padding text-center">{list.quantity}</td>
+                        <td className="edit-padding text-center">{list.description_th}</td>
 
-                      <td className="edit-padding text-center">
-                        {current.requiredQuantity(list.description, list.quantity)}
-                      </td>
-                      <td className="edit-padding text-center">
-                        <select className="edit-select-top">
-                          {list.list_uoms.map(function (list_uoms, index) {
-                            return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
-                          })}
-                        </select>
-                      </td>
-                      <td className="edit-padding text-right">
-                        {current.requiredPerUnitPrice(list.description, list.per_unit_price)}
-                      </td>
-                      <td className="edit-padding text-right">{current.sumTotalLineItem(list.quantity, list.per_unit_price)}</td>
-                    </tr>
-                  )
+                        <td className="edit-padding text-center">
+                          {current.requiredQuantity(list.description, list.quantity)}
+                        </td>
+                        <td className="edit-padding text-center">
+                          <select className="edit-select-top">
+                            {list.list_uoms.map(function (list_uoms, index) {
+                              return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
+                            })}
+                          </select>
+                        </td>
+                        <td className="edit-padding text-right">
+                          {current.requiredPerUnitPrice(list.description, list.per_unit_price)}
+                        </td>
+                        <td className="edit-padding text-right">{current.sumTotalLineItem(list.quantity, list.per_unit_price)}</td>
+                      </tr>
+                    )
+                  }
+                  else {
+                    return (
+                      <tr key={index} id={index}>
+                        <th className="edit-padding text-center">{index + 1}</th>
+                        <td className="edit-padding">
+                          <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
+                            <input type="text" className="p-search-box__input cancel-default-table" value={list.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRowModeAdd(e)} onKeyPress={(e) => current.props.handleKeyPress(e)} />
+                            <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPartModeAdd" onClick={(e) => current.props.onClickNoPartEachRowModeAdd(e)}></i></button>
+                          </div>
+                        </td>
+                        <td className="edit-padding">{list.description}</td>
+
+                        <td className="edit-padding text-center">{list.current_unit_count}</td>
+                        <td className="edit-padding text-center">{list.quantity}</td>
+                        <td className="edit-padding text-center">{list.quantity}</td>
+                        <td className="edit-padding text-center">{list.quantity}</td>
+                        <td className="edit-padding text-center">{list.description_th}</td>
+
+                        <td className="edit-padding text-center">
+                          {current.requiredQuantity(list.description, list.quantity)}
+                        </td>
+                        <td className="edit-padding text-center">
+                          <select className="edit-select-top">
+                            {list.list_uoms.map(function (list_uoms, index) {
+                              return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
+                            })}
+                          </select>
+                        </td>
+                        <td className="edit-padding text-right">
+                          {current.requiredPerUnitPrice(list.description, list.per_unit_price)}
+                        </td>
+                        <td className="edit-padding text-right">{current.sumTotalLineItem(list.quantity, list.per_unit_price)}</td>
+                      </tr>
+                    )
+                  }
                 })}
               </tbody>
             </table>
           </div>
           <div className="grid_12 mt-3">
+            <div className="grid_1 float-right pull_0"><p className="cancel-default float-right">บาท</p></div>
             <div className="grid_4 float-right">
               <input type="number" min="1" className="cancel-default float-right" value={current.sumTotal(current.props.list_show_mode_add)} disabled="disabled"></input>
             </div>
@@ -533,7 +592,7 @@ const mapDispatchToProps = (dispatch) => ({
   onChangeQuilityEachRow: (e) => dispatch(onChangeQuilityEachRow(e)),
   onChangeUnitPerBathEachRow: (e) => dispatch(onChangeUnitPerBathEachRow(e)),
   onChangeTotalEachRow: (e) => dispatch(onChangeTotalEachRow(e)),
-  onClickSearchPopUpNoPart: (e,i) => dispatch(onClickSearchPopUpNoPart(e, i)),
+  onClickSearchPopUpNoPart: (e, i) => dispatch(onClickSearchPopUpNoPart(e, i)),
   onClickSelectPopUpNoPart: (e, i, o) => dispatch(onClickSelectPopUpNoPart(e, i, o)),
   onChangeNote: (e) => dispatch(onChangeNote(e)),
   onChangeDescriptionPart: (e) => dispatch(onChangeDescriptionPart(e)),

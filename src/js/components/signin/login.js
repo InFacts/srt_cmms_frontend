@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from "axios";
-import { Redirect } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { API_PORT_DATABASE } from '../../config_port.js';
 import { API_URL_DATABASE } from '../../config_url.js';
 
@@ -64,7 +64,7 @@ class Login extends Component {
 
               {/* <input type="checkbox" id="checkExample2" /> */}
               {/* <label className="alert-signin float-left mt-1 font-signin">จดจำรหัสผ่าน</label> */}
-              <label className="alert-signin float-right mt-1 font-signin" style={{ marginTop: "9px" }}>ลืมรหัสผ่าน ?</label>
+              <Link to="forgot-password"><label className="alert-signin float-right mt-1 font-signin" style={{ marginTop: "9px" }}>ลืมรหัสผ่าน ?</label></Link>
 
               {/* <Link to="/main"><button className="button-red font-signin" type="submit">เข้าสู่ระบบ</button></Link> */}
               <button className="button-red font-signin" type="submit">เข้าสู่ระบบ</button>

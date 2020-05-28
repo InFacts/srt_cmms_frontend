@@ -2,6 +2,7 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 
 import Login from './components/signin';
+import ForgotPassword from './components/forgot-password';
 import Main4Module from './components/main-module';
 import MainSpare from './components/main-spare';
 import MainPmt from './components/main-pmt';
@@ -49,6 +50,7 @@ class FrontEnd extends React.Component {
         return (
             <div>
                 <Route exact path="/" component={Login} />
+                <Route exact path="/forgot-password" component={ForgotPassword} />
                 <Route exact path="/main" component={Main4Module} />
                 <Route exact path="/main-spare" component={MainSpare} />
                 <Route exact path="/main-pmt" component={MainPmt} />

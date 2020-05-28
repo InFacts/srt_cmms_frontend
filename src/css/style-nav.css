@@ -1,4 +1,10 @@
 /* NavTop */
+.p-subnav.is-active.a::after {
+  display: none;
+}
+.p-subnav.a::after {
+  display: none;
+}
 ul.nav-ul {
     font-family: Anakotmai-Light;
     list-style-type: none;
@@ -28,9 +34,28 @@ ul.nav-ul {
     display: block;
     font-size: 14px;
     color: white;
-    text-align: center;
-    padding: 10px 40px 10px 40px;
+    padding: 10px 20px 10px 20px;
     text-decoration: none;
+  }
+
+  li.nav-li a.sub_notify {
+    width: 280px;
+    text-align: left;
+    font-family: Anakotmai-Light;
+    display: block;
+    font-size: 14px;
+    color: white;
+    padding: 5px 10px;
+    text-decoration: none;
+  }
+
+  p.cancel-default_notify{
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 0;
+    margin-left: 50px;
+    padding-top: 5px;
   }
   
   a.mt-12{
