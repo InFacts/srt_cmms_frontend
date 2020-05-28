@@ -902,6 +902,7 @@ export default (state = initialState, action) => {
 
         line_users: initialState.line_users,
         files: initialState.files,
+        clickable:initialState.clickable
       }
 
     case "ON CHANGE MY INVENTORY NAMAE MODE ADD":
@@ -965,6 +966,7 @@ export default (state = initialState, action) => {
 
         line_users: initialState.line_users,
         files: initialState.files,
+        clickable:initialState.clickable
       }
 
     // แนบไฟล์
