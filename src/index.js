@@ -3,11 +3,16 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import './styles.scss';
 
+import './css/style.css';
+import './css/grid12.css';
+import './css/modal.css';
+import './css/style-list.css';
+import './css/table.css';
+import './css/tabs.css';
+
 import store from './js/redux/store.js'
 import { Provider } from 'react-redux';
 
-//Temporary solving reducers and nested stores
-// const GlobalContext = React.createContext();
 
 ReactDOM.render(
   <React.StrictMode>

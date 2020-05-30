@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import '../../../vender/fontawesome-free/css/all.css';
 import '../../../css/style-nav.css'
-import '../../../css/style.css'
+// import '../../../css/style.css'
 
 class Footer extends React.Component {
 
