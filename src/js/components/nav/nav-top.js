@@ -184,7 +184,7 @@ and setting aria-hidden attribute on dropdown contents.
                 <div id="header">
                     <div className="container_12 clearfix">
 
-                        <ul className="p-navigation__items grid_12" role="menu">
+                        <ul className="p-navigation__items" role="menu">
                             <li className="nav-li"><Link to="/main">
                                 <img src={logo} alt="logo" width="160px" />
                             </Link></li>
