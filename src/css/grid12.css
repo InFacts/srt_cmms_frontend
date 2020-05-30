@@ -65,6 +65,21 @@ body {
   position: relative;
 }
 
+.grid_1.float-right,
+.grid_2.float-right,
+.grid_3.float-right,
+.grid_4.float-right,
+.grid_5.float-right,
+.grid_6.float-right,
+.grid_7.float-right,
+.grid_8.float-right,
+.grid_9.float-right,
+.grid_10.float-right,
+.grid_11.float-right,
+.grid_12.float-right {
+  float: right;
+}
+
 /* `Grid >> Children (Alpha ~ First, Omega ~ Last)
 ----------------------------------------------------------------------------------------------------*/
 
