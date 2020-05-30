@@ -44,9 +44,9 @@ const PopupModalInventory = ({props}) =>(<div className="modal" id="modalInvento
       </table>
     </div>
 
-    <div className="grid_12">
+    {/* <div className="grid_12"> */}
       <button className="button-blue float-right grid_1 mr-5 mt-3" type="button" aria-label="Close active modal" aria-controls="modalInventory" id="closeModalInventory">กลับ</button>
-    </div>
+    {/* </div> */}
 
   </div>
 </div>

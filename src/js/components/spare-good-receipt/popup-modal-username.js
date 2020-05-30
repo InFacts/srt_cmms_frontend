@@ -5,7 +5,7 @@ return(
 <div className="modal" id="modalUserName" style={{ display: "none" }}>
 <div className="gray-board">
   <p className="head-title-modal edit">ค้นหาชื่อผู้นำเข้า</p>
-  <div className="container_12 edit-padding">
+  <div className="grid_12 edit-padding">
 
     <div className="grid_12">
       <div className="grid_2"><p className="cancel-default">ชื่อพนักงาน</p></div>
@@ -46,9 +46,9 @@ return(
       </table>
     </div>
 
-    <div className="grid_12">
+    {/* <div className="grid_12"> */}
       <button className="button-blue float-right grid_1 mr-5 mt-3" type="button" aria-label="Close active modal" aria-controls="modalUserName" id="closeModalInventory">กลับ</button>
-    </div>
+    {/* </div> */}
 
   </div>
 </div>

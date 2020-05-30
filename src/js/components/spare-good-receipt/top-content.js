@@ -79,7 +79,7 @@ const TopContent = (props) => {
   const checkActionMode = (mode) => {
     return (
       <>
-        <div className="grid_12">
+        <div className="container_12">
           <div className="grid_2">
             <p className="top-text">เลขที่เอกสาร</p>
           </div>
@@ -103,23 +103,25 @@ const TopContent = (props) => {
               {checkAfterSearch(props.document_show.created_by_user_name_th)}
             </div>
           }
-          <div className="grid_3 float-right">
+          <div className="float-right">
+          <div className="grid_2">
+            <p className="top-text float-right">สถานะ</p>
+          </div>
+          <div className="grid_3">
             {
               mode === "search" 
-              ? <input type="text" className="cancel-default float-right" defaultValue={props.document_show.status_name_th} disabled="disabled"></input>
+              ? <input type="text" className="cancel-default" defaultValue={props.document_show.status_name_th} disabled="disabled"></input>
               : (
                 mode === "edit"
-                ?<input type="text" className="cancel-default float-right" value={props.document_show.status_name_th} disabled="disabled"></input>
-                : <input type="text" className="cancel-default float-right" value={props.document_show_mode_add.document_status_id} disabled="disabled"></input>
+                ?<input type="text" className="cancel-default" value={props.document_show.status_name_th} disabled="disabled"></input>
+                : <input type="text" className="cancel-default" value={props.document_show_mode_add.document_status_id} disabled="disabled"></input>
               )
             }
           </div>
-          <div className="grid_2 float-right">
-            <p className="top-text float-right">สถานะ</p>
           </div>
         </div>
 
-        <div className="grid_12">
+        <div className="container_12">
           <div className="grid_2">
             <p className="top-text">ผู้นำเข้า</p>
           </div>
@@ -143,23 +145,24 @@ const TopContent = (props) => {
             }
             
           </div>
-          <div className="grid_3 float-right">
+          <div className="float-right">
+          <div className="grid_2">
+            <p className="top-text float-right">วันที่</p>
+          </div>
+          <div className="grid_3">
             {
               mode === "search" 
-              ? <input type="datetime-local" className="cancel-default float-right" defaultValue={props.document_show.created_on !== undefined ? props.document_show.created_on.slice(0, 16) : null} disabled="disabled"></input>
+              ? <input type="datetime-local" className="cancel-default" defaultValue={props.document_show.created_on !== undefined ? props.document_show.created_on.slice(0, 16) : null} disabled="disabled"></input>
               : 
                 mode === "edit"
-                ? <input type="datetime-local" className="cancel-default float-right" value={props.document_show.created_on.slice(0, 16)} onChange={props.onChangeDate}></input>
-                : <input type="datetime-local" className="cancel-default float-right" value={props.document_show_mode_add.created_on} onChange={props.onChangeDateModeAdd} required></input>
+                ? <input type="datetime-local" className="cancel-default" value={props.document_show.created_on.slice(0, 16)} onChange={props.onChangeDate}></input>
+                : <input type="datetime-local" className="cancel-default" value={props.document_show_mode_add.created_on} onChange={props.onChangeDateModeAdd} required></input>
             }
-            
           </div>
-          <div className="grid_2 float-right">
-            <p className="top-text float-right">วันที่</p>
           </div>
         </div>
 
-        <div className="grid_12">
+        <div className="container_12">
           <div className="grid_2">
             <p className="top-text">ผู้สร้างเอกสาร</p>
           </div>
@@ -174,10 +177,14 @@ const TopContent = (props) => {
             }
             
           </div>
-          <div className="grid_3 float-right">
+          <div className="float-right">
+          <div className="grid_2">
+            <p className="top-text float-right">เลขที่คลัง</p>
+          </div>
+          <div className="grid_3">
             {
               mode === "search" 
-              ? <input type="text" className="cancel-default float-right" defaultValue={props.document_show.dest_warehouse_id} disabled="disabled"></input>
+              ? <input type="text" className="cancel-default" defaultValue={props.document_show.dest_warehouse_id} disabled="disabled"></input>
               : 
                 mode === "edit"
                 ? (<div className="p-search-box cancel-margin">
@@ -191,12 +198,10 @@ const TopContent = (props) => {
             }
             
           </div>
-          <div className="grid_2 float-right">
-            <p className="top-text float-right">เลขที่คลัง</p>
           </div>
         </div>
 
-        <div className="grid_12">
+        <div className="container_12">
           <div className="grid_2">
             <p className="top-text">เลขที่ใบสั่งซื้อ/เลขที่เอกสารอ้างอิง</p>
           </div>
@@ -211,16 +216,18 @@ const TopContent = (props) => {
             }
             
           </div>
-          <div className="grid_3 float-right">
+          <div className="float-right">
+          <div className="grid_2">
+            <p className="top-text float-right">ชื่อคลัง</p>
+          </div>
+          <div className="grid_3">
             {
               mode === "add"
-              ? <input type="text" className="cancel-default float-right" defaultValue={props.document_show_mode_add.dest_warehouse_name} disabled="disabled"></input>
-              : <input type="text" className="cancel-default float-right" defaultValue={props.document_show.dest_warehouse_name} disabled="disabled"></input>
+              ? <input type="text" className="cancel-default" defaultValue={props.document_show_mode_add.dest_warehouse_name} disabled="disabled"></input>
+              : <input type="text" className="cancel-default" defaultValue={props.document_show.dest_warehouse_name} disabled="disabled"></input>
             }
             
           </div>
-          <div className="grid_2 float-right">
-            <p className="top-text float-right">ชื่อคลัง</p>
           </div>
         </div>
       </>
@@ -231,12 +238,12 @@ const TopContent = (props) => {
     <div>
         <div id="blackground-white">
           <div className="container_12 clearfix">
-            <section className="grid_12 ">
+            <section className="container_12 ">
               <h4 className="head-title">นำอะไหล่เข้าโดยมีใบสั่งซื้อ</h4>
               {checkActionMode(props.actionMode)}
             </section>
 
-            <div className="grid_12">
+            <div className="container_12">
               <div className="tab grid_11">
                 <button type="button" id="defaultOpen" className="tablinks" onClick={e => tapChange(e, "รายการ")}>รายการ</button>
                 <button type="button" className="tablinks" onClick={e => tapChange(e, "แนบไฟล์")}>แนบไฟล์</button>

@@ -35,9 +35,9 @@ const TopContent = (props) => {
     return (
         <div id="blackground-white">
           <div className="container_12 clearfix">
-            <section className="grid_12 ">
+            <section className="container_12 ">
               <h4 className="head-title">รายการติดตามเอกสาร</h4>
-              <div className="grid_12">
+              <div className="container_12">
                 <div className="grid_11"><p className="cancel-default">ค้นหาข้อมูล</p></div>
                 <div className="grid_7">
                   <input className="d-inline" type="radio" name="RadioOptions" id="Radio1" value="1" onChange={props.onChangeFindTrackDocument}  />
@@ -47,7 +47,7 @@ const TopContent = (props) => {
                 </div>
               </div>
 
-              <div className="grid_12 mt-2">
+              <div className="container_12 mt-2">
                 <div className="grid_1 cancel-default">
                   <p className="cancel-default">ประเภทเอกสาร </p>
                 </div>
@@ -62,7 +62,7 @@ const TopContent = (props) => {
                   <input type="date" className="cancel-default grid_3 " value={props.date_start} onChange={props.onChangeDateStartTrackDocument}></input>
                 </div>
               </div>
-              <div className="grid_12">
+              <div className="container_12">
                 <div className="grid_1 cancel-default">
                   <p className="cancel-default">เลขที่เอกสาร </p>
                 </div>
@@ -83,7 +83,7 @@ const TopContent = (props) => {
                     idName="document_status_id" descriptionName="status" gridClass="grid_2"/>
                 </div>
             </div>
-            <div className="grid_12">
+            <div className="container_12">
               <div className="grid_1 cancel-default">
                 <p className="cancel-default">แขวง </p>
               </div>

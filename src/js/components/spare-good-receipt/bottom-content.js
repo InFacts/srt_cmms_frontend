@@ -166,7 +166,7 @@ class BottomContent extends React.Component {
     if (mode === "search") {
       return (
         <>
-          <div className="grid_12 mt-1" style={{ paddingRight: "10px" }}>
+          <div className="container_12 mt-1" style={{ paddingRight: "10px" }}>
             <table className="table-many-column">
               <thead>
                 <tr>
@@ -202,13 +202,13 @@ class BottomContent extends React.Component {
               </tbody>
             </table>
           </div>
-          <div className="grid_12 mt-3">
+          <div className="container_12 mt-3">
             <div className="grid_4 float-right">
               <input type="text" className="cancel-default float-right" value={current.sumTotal(current.props.list_show)} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
           </div>
-          <div className="grid_12">
+          <div className="container_12">
             <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
             <div className="grid_4">
               <textarea className="edit" name="Text1" cols="40" rows="2" defaultValue={current.props.document_show.remark} disabled="disabled"></textarea>
@@ -221,7 +221,7 @@ class BottomContent extends React.Component {
       const current = this;
       return (
         <>
-          <div className="grid_12 mt-1" style={{ paddingRight: "10px" }}>
+          <div className="container_12 mt-1" style={{ paddingRight: "10px" }}>
             <table className="table-many-column">
               <thead>
                 <tr>
@@ -269,13 +269,13 @@ class BottomContent extends React.Component {
               </tbody>
             </table>
           </div>
-          <div className="grid_12 mt-3">
+          <div className="container_12 mt-3">
             <div className="grid_4 float-right">
               <input type="number" min="1" className="cancel-default float-right" value={current.sumTotal(current.props.list_show)} onChange={(e) => this.props.onChangeTotal(e)} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
           </div>
-          <div className="grid_12">
+          <div className="container_12">
             <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
             <div className="grid_4">
               <textarea className="edit" name="Text1" cols="40" rows="2" value={current.props.document_show.remark} onChange={(e) => this.props.onChangeNote(e)}></textarea>
@@ -288,14 +288,14 @@ class BottomContent extends React.Component {
               <p className="head-title-modal edit">ค้นหาเลขที่อะไหล่</p>
               <div className="container_12 edit-padding">
 
-                <div className="grid_12">
+                <div className="container_12">
                   <div className="grid_2"><p className="cancel-default">เลขที่อะไหล่</p></div>
                   <div className="grid_8 pull_0">
                     <input type="text" className="cancel-default grid_3" value={this.props.list_no_part} onChange={(e) => this.props.onChangeNoPart(e)} />
                   </div>
                 </div>
 
-                <div className="grid_12">
+                <div className="container_12">
                   <div className="grid_2"><p className="cancel-default">รายละเอียด</p></div>
                   <div className="grid_8 pull_0">
                     <input type="text" className="cancel-default grid_3" value={this.props.list_description_part} onChange={(e) => this.props.onChangeDescriptionPart(e)} />
@@ -303,7 +303,7 @@ class BottomContent extends React.Component {
                   </div>
                 </div>
 
-                <div className="grid_12">
+                <div className="container_12">
                   <table className="table-many-column mt-3">
                     <thead>
                       <tr>
@@ -328,7 +328,7 @@ class BottomContent extends React.Component {
                   </table>
                 </div>
 
-                <div className="grid_12">
+                <div className="container_12">
                   <button className="button-blue float-right grid_1 mr-5 mt-3" type="button" aria-label="Close active modal" aria-controls="modalNoPart" id="closeModalNoPart">กลับ</button>
                 </div>
 
@@ -342,7 +342,7 @@ class BottomContent extends React.Component {
       const current = this;
       return (
         <>
-          <div className="grid_12 mt-1" style={{ paddingRight: "10px" }}>
+          <div className="container_12 mt-1" style={{ paddingRight: "10px" }}>
             <table className="table-many-column">
               <thead>
                 <tr>
@@ -388,13 +388,13 @@ class BottomContent extends React.Component {
               </tbody>
             </table>
           </div>
-          <div className="grid_12 mt-3">
+          <div className="container_12 mt-3">
             <div className="grid_4 float-right">
               <input type="number" min="1" className="cancel-default float-right" value={current.sumTotal(current.props.list_show_mode_add)} disabled="disabled"></input>
             </div>
             <div className="grid_2 float-right"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
           </div>
-          <div className="grid_12">
+          <div className="container_12">
             <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
             <div className="grid_4">
               <textarea className="edit" name="Text1" cols="40" rows="2" value={current.props.document_show_mode_add.remark} onChange={(e) => this.props.onChangeNoteModeAdd(e)}></textarea>
@@ -407,13 +407,13 @@ class BottomContent extends React.Component {
               <p className="head-title-modal edit">ค้นหาเลขที่อะไหล่</p>
               <div className="container_12 edit-padding">
 
-                <div className="grid_12">
+                <div className="container_12">
                   <div className="grid_2"><p className="cancel-default">เลขที่อะไหล่</p></div>
                   <div className="grid_8 pull_0">
                     <input type="text" className="cancel-default grid_3" value={this.props.list_no_part_mode_add} onChange={(e) => this.props.onChangeNoPartModeAdd(e)} />
                   </div>
                 </div>
-                <div className="grid_12">
+                <div className="container_12">
                   <div className="grid_2"><p className="cancel-default">รายละเอียด</p></div>
                   <div className="grid_8 pull_0">
                     <input type="text" className="cancel-default grid_3" value={this.props.list_desription_part_mode_add} onChange={(e) => this.props.onChangeDescriptionPartModeAdd(e)} />
@@ -421,7 +421,7 @@ class BottomContent extends React.Component {
                   </div>
                 </div>
 
-                <div className="grid_12">
+                <div className="container_12">
                   <table className="table-many-column mt-3">
                     <thead>
                       <tr>
@@ -445,7 +445,7 @@ class BottomContent extends React.Component {
                     </tbody>
                   </table>
                 </div>
-                <div className="grid_12">
+                <div className="container_12">
                   <button className="button-blue float-right grid_1 mr-5 mt-3" type="button" aria-label="Close active modal" aria-controls="modalNoPartModeAdd" id="closeModalNoPart">กลับ</button>
                 </div>
               </div>
@@ -461,7 +461,7 @@ class BottomContent extends React.Component {
     return (
       <div id="blackground-gray">
         <div className="container_12 clearfix">
-          <div className="grid_12 ">
+          <div className="container_12 ">
             <div id="รายการ" className="tabcontent">
               {this.checkActionMode(this.props.actionMode)}
             </div>

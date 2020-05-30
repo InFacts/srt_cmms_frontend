@@ -18,8 +18,8 @@ const BottomContent = (props) => {
     <>
       <div id="blackground-gray">
         <div className="container_12 clearfix">
-          <div className="grid_12 ">
-            <div className="grid_12">
+          <div className="container_12 ">
+            <div className="container_12">
               <table className="table-many-column mt-3">
                 <thead>
                   <tr>
