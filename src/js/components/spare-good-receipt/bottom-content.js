@@ -31,8 +31,8 @@ import {
   onChangeNoteModeAdd
 } from '../../redux/modules/goods_receipt.js';
 
-import '../../../css/style.css'
-import '../../../css/table.css';
+// import '../../../css/style.css'
+// import '../../../css/table.css';
 class BottomContent extends React.Component {
 
   sumTotalLineItem = (quantity, per_unit_price) => {

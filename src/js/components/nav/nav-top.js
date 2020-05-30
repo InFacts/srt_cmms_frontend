@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../../../images/logo.png';
 
-import '../../../vender/fontawesome-free/css/all.css';
-import '../../../css/style-nav.css'
+// import '../../../vender/fontawesome-free/css/all.css';
+// import '../../../css/style-nav.css'
 
 class NavTop extends React.Component {
 

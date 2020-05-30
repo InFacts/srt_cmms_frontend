@@ -41,9 +41,9 @@ import {
   onClickSelectUser,
 } from '../../redux/modules/goods_receipt.js';
 
-import '../../../css/style.css'
-import '../../../css/grid12.css';
-import '../../../css/modal.css';
+// import '../../../css/style.css'
+// import '../../../css/grid12.css';
+// import '../../../css/modal.css';
 
 import PopupModalDocument from './popup-modal-document'
 import PopupModalInventoryEdit from './popup-modal-inventory-edit'

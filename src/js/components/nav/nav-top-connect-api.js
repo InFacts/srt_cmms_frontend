@@ -9,9 +9,9 @@ import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
 import { API_URL_DATABASE } from '../../config_url.js';
 
-import '../../../vender/fontawesome-free/css/all.css';
-import '../../../css/style-nav.css'
-import '../../../css/notification.css'
+// import '../../../vender/fontawesome-free/css/all.css';
+// import '../../../css/style-nav.css'
+// import '../../../css/notification.css'
 
 class NavTop extends React.Component {
 

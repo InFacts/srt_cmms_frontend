@@ -8,8 +8,8 @@ import BottomContent from './bottom-content';
 
 import {TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
 
-import '../../../css/style.css'
-import '../../../css/grid12.css';
+// import '../../../css/style.css'
+// import '../../../css/grid12.css';
 
 const FormLabel = ({children}) => (
   <div className="grid_2">

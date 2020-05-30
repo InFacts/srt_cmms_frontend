@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import '../../../css/style.css'
-import '../../../css/grid12.css';
+// import '../../../css/style.css'
+// import '../../../css/grid12.css';
 
 import RedHouse from '../../../images/red-house.svg';
 import Icon from '../../../images/icon-main-module.svg';

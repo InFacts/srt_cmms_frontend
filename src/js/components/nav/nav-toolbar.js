@@ -13,7 +13,7 @@ import ForwardDocument from '../../../images/toolbar/forward.svg'
 import PdfDocument from '../../../images/toolbar/pdf.svg'
 
 import '../../../vender/fontawesome-free/css/all.css';
-import '../../../css/style-nav.css'
+// import '../../../css/style-nav.css'
 
 class NavTop extends React.Component {
     render() {

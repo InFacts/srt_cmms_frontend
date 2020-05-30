@@ -1,11 +1,11 @@
 import React, {useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import '../../../css/style.css';
-import '../../../css/grid12.css';
-import '../../../css/modal.css';
-import '../../../css/style-list.css';
-import '../../../css/table.css';
-import '../../../css/tabs.css';
+// import '../../../css/style.css';
+// import '../../../css/grid12.css';
+// import '../../../css/modal.css';
+// import '../../../css/style-list.css';
+// import '../../../css/table.css';
+// import '../../../css/tabs.css';
 
 import {fetchDocuments, onChangeNoTrackDocument,
   onChangeFindTrackDocument,

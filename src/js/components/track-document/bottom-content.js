@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import Document from '../../../images/document.svg'
 import {FACTS} from '../../redux/modules/api/fact.js'
 
-import '../../../css/style.css'
+// import '../../../css/style.css'
 
 const formatDate = (dateISOString) => {
   let date = new Date(dateISOString);

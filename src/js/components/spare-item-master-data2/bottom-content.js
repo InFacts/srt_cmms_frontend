@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux'
 import Files from '../common/files'
 
-import '../../../css/style.css'
-import '../../../css/table.css';
+// import '../../../css/style.css'
+// import '../../../css/table.css';
 
 
 const BottomContent = (props) => (
