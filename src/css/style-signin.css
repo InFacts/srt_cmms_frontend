@@ -53,3 +53,10 @@ input.cancel-default-signin{
   margin-left: auto;
   font-size: 14px;
 }
+.alert_error_input {
+  color: red;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-weight: bold;
+  font-family: Anakotmai-Light;
+}

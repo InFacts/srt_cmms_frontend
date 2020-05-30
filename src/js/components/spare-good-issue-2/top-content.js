@@ -13,6 +13,15 @@ import '../../../css/grid12.css';
 class TopContent extends React.Component {
 
   componentDidMount() {
+    let url = window.location.search;
+    const urlParams = new URLSearchParams(url);
+    const document_id = urlParams.get('document_id')
+    console.log(document_id);
+    if (document_id !== "") {
+      console.log(document_id);
+      this.props.approvalMode(document_id)
+      // action_approval
+    }
     document.getElementById("defaultOpen").click();
   }
 
@@ -30,8 +39,8 @@ class TopContent extends React.Component {
     evt.currentTarget.className += " active";
   }
 
-  checkAfterSearch = (created_by_user_name_th) => {
-    if (created_by_user_name_th !== undefined) {
+  checkAfterSearch = (created_by_user_name_th, document_status_id) => {
+    if (created_by_user_name_th !== undefined && document_status_id === 1) {
       return <button type="button" className="mb-0" style={{ padding: "0px 10px" }} onClick={(e) => this.props.onClickModeEdit(e)}>แก้ไข</button>
     }
   }
@@ -58,7 +67,7 @@ class TopContent extends React.Component {
               </div>
             </div>
             <div className="grid_1 pull_1">
-              {current.checkAfterSearch(current.props.document_show.created_by_user_name_th)}
+              {current.checkAfterSearch(current.props.document_show.created_by_user_name_th, current.props.document_show.document_status_id)}
             </div>
             <div className="grid_3 float-right">
               <input type="text" className="cancel-default float-right" defaultValue={current.props.document_show.status_name_th} disabled="disabled"></input>
@@ -278,6 +287,7 @@ class TopContent extends React.Component {
               <div className="tab grid_11">
                 <button type="button" id="defaultOpen" className="tablinks" onClick={e => this.tapChange(e, "รายการ")}>รายการ</button>
                 <button type="button" className="tablinks" onClick={e => this.tapChange(e, "แนบไฟล์")}>แนบไฟล์</button>
+                <button type="button" className="tablinks" onClick={e => this.tapChange(e, "สถานะเอกสาร")}>สถานะเอกสาร</button>
               </div>
             </div>
 
@@ -560,6 +570,9 @@ const mapStateToProps = (state) => ({
   line_users: state.line_users
 })
 const mapDispatchToProps = (dispatch) => ({
+  // Approval
+  approvalMode: (e) => dispatch(approvalMode(e)),
+
   onChangeNoDocument: (e) => dispatch(onChangeNoDocument(e)),
   onClickPopUpSearchNoDocument: (e) => dispatch(onClickPopUpSearchNoDocument(e)),
   onClickSelectNoDocument: (e, i) => dispatch(onClickSelectNoDocument(e, i)),
@@ -594,6 +607,18 @@ const mapDispatchToProps = (dispatch) => ({
 })
 export default connect(mapStateToProps, mapDispatchToProps)(TopContent);
 
+export const approvalMode = (document_id) => {
+  return function (dispatch) {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+      console.log(res)
+      dispatch({
+        type: "APPROVAL MODE",
+        value: res.data
+      });
+    });
+  };
+}
+
 export const onClickModeEdit = (e) => {
   return {
     type: "CLICK MODE EDIT"
@@ -627,10 +652,14 @@ export const onClickPopUpSearchNoDocument = (no_document) => {
 export const onClickSelectNoDocument = (document_id) => {
   return function (dispatch) {
     return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
-      console.log(res)
-      dispatch({
-        type: "CLICK SELECT POPUP NO DOCUMENT",
-        value: res.data
+      return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/latest/plus`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((resApprove) => {
+        console.log("res", res)
+        console.log("resApprove", resApprove.data)
+        dispatch({
+          type: "CLICK SELECT POPUP NO DOCUMENT",
+          value: res.data,
+          resApprove: resApprove.data
+        });
       });
     });
   };
@@ -711,7 +740,7 @@ export const onClickPopUpSearchUserModeEdit = (created_by_user_name_th, employee
     var space = created_by_user_name_th.indexOf(" ");
     var firstname = created_by_user_name_th.slice(0, space);
     var lastname = created_by_user_name_th.slice(space+1, created_by_user_name_th.length);
-    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&lastname_th=${lastname}&employee_id=${employee_id === undefined ? "" : employee_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&employee_id=${employee_id === undefined ? "" : employee_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       console.log(">>>>", res)
       dispatch({
         type: "CLICK SEARCH POPUP USER MODE EDIT",
@@ -778,7 +807,7 @@ export const onClickPopUpSearchUser = (created_by_user_name_th, employee_id) => 
     var space = created_by_user_name_th.indexOf(" ");
     var firstname = created_by_user_name_th.slice(0, space);
     var lastname = created_by_user_name_th.slice(space+1, created_by_user_name_th.length);
-    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&lastname_th=${lastname}&employee_id=${employee_id === undefined ? "" : employee_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&employee_id=${employee_id === undefined ? "" : employee_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       console.log(res)
       dispatch({
         type: "CLICK SEARCH POPUP USER",

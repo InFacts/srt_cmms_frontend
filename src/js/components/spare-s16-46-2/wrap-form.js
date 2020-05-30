@@ -26,7 +26,7 @@ class WrapForm extends React.Component {
                     "uom_id": item.uom_group_id,
                     "per_unit_price": parseFloat(item.per_unit_price),
                     "item_id": item.item_id,
-                    "item_status_id": 1
+                    "item_status_id": 2
                 };
                 line_number = line_number + 1;
                 return (
@@ -60,6 +60,7 @@ class WrapForm extends React.Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
+        console.log(">>>>>> test <<<<<<<<")
         const current = this;
             if (this.props.actionMode === "add") {
                 return (
@@ -83,6 +84,81 @@ class WrapForm extends React.Component {
                         })
                 )
             }
+            if (this.props.actionApproval === "check & approval") {
+                console.log(">>>>>> approval <<<<<<<<")
+                return (
+                    // GET http://43.229.79.36:60013/approval/{document_id}/latest
+                    // POST http://43.229.79.36:60013/approval/{document_id}/{approval_process_id}/approve
+                    // "user_id": 1,
+                    // "employee_id": "1203829",
+                    // "username": "thanapapas",
+                    // "email": "thanapapas@hotmail.com",
+                    // "national_id": "1101700225444",
+                    // "firstname_en": "Knight++",
+                    // "lastname_en": "Horsuwan",
+                    // "firstname_th": "ธนปภัส",
+                    // "lastname_th": "หอสุวรรณ",
+                    // "address": "250/107 Mooban Sammakorn Ramkhamhaeng 112 Sapansoong Bangkok 10240, Thailand",
+                    // "birthdate": "1997-04-03T00:00:00.000Z",
+                    // "phone": "+66806111234",
+                    // "created_at": "2020-05-19T08:35:20.000Z",
+                    // "updated_at": "2020-05-26T19:12:51.000Z",
+                    // "is_approved": {
+                    //     "type": "Buffer",
+                    //     "data": [
+                    //         1
+                    //     ]
+                    // },
+                    // "active": {
+                    //     "type": "Buffer",
+                    //     "data": [
+                    //         1
+                    //     ]
+                    // },
+                    // "gender_id": 1,
+                    // "title_id": 1,
+                    // "level_id": 16
+                    // "has_positions": [
+                    //     {
+                    //         "position_id": 33,
+                    //         "name": "สารวัตรงานบำรุงรักษาอาณัติสัญญาณแขวงนครสวรรค์",
+                    //         "abbreviation": "สสญ.นว.",
+                    //         "position_group_id": 3,
+                    //         "warehouse_id": null
+                    //     }
+                    // ],
+                    // console.log(">>>>", this.props.approval_step_action_id)
+                    axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/profile`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((resUser) => {
+                        axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${this.props.document_show.document_id}/latest/step`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+                        .then(res => {
+                            
+                            let obj_body = {
+                                "step_number": res.data.waiting_step,
+                                "user_id": resUser.data.user_id,
+                                "approval_process_id": res.data.approval_process_id,
+                                "approval_status_id": this.props.approval_step_action_id,
+                                "position_group_id": resUser.data.has_positions[0].position_group_id,
+                                "remark": "demo body"
+                            }
+                            console.log("obj_body", obj_body)
+                            // /approval/{document_id}/{approval_process_id}/approve
+                            // console.log(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${this.props.document_show.document_id}/${obj_body.approval_process_id}/approve`)
+                            axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${this.props.document_show.document_id}/${obj_body.approval_process_id}/approve`, obj_body, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+                                .then(res => {
+                                    console.log(res);
+                                }).catch(function (err) {
+                                    console.log(err);
+                                })
+                                
+                        }).catch(function (err) {
+                            console.log(err);
+                        })
+                    }).catch(function (err) {
+                        console.log(err)
+                    })
+                    
+                )
+            }
     }
 
     render() {
@@ -97,7 +173,9 @@ class WrapForm extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+    actionApproval: state.action_approval,
     actionMode: state.action,
+    approval_step_action_id: state.approval_step_action_id,
 
     // Mode Edit
     no_document: state.no_document,

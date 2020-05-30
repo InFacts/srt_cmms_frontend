@@ -1,4 +1,6 @@
 const initialState = {
+  resApprove: [],
+  action_approval: "",
 
   // Mode การทำงาน
   action: "search",
@@ -420,6 +422,69 @@ const initialState = {
 }
 export default (state = initialState, action) => {
   switch (action.type) {
+    case "APPROVAL MODE":
+      for (var i = action.value.line_items.length; i <= 9; i++) {
+        action.value.line_items.push(
+          {
+            "item_id": "",
+            "internal_item_id": "",
+            "description": "",
+            "quantity": "",
+            "uom_group_id": "",
+            "unit": "",
+            "per_unit_price": "",
+            "list_uoms": [],
+            "at_source": [
+              {
+                "adjustment_unit_count": "",
+                "begin_unit_count": "",
+                "current_unit_count": "",
+                "in_unit_count": "",
+                "issue_unit_count": "",
+                "item_id": "",
+                "item_status": {
+                  "item_status_id": "",
+                  "description": "",
+                  "description_th": ""
+                },
+                "item_status_id": "",
+                "out_unit_count": "",
+                "receive_unit_count": "",
+                "warehouse_id": ""
+              }
+            ]
+          }
+        );
+      }
+      // console.log("list_show", action.value.line_items)
+      let action_type = ""
+      // console.log("action.user_position_id", action.user_position_id);
+      // console.log("action.approval_step_position_id", action.approval_step_position_id);
+      if (action.user_position_id === action.approval_step_position_id && (action.approval_step_action_id === 1 || action.approval_step_action_id === 2)) {
+        // 1 ตรวจสอบและรับทราบลงนาม -> ลงนาม ตีกลับ ยกเลิก
+        // 2 รับทราบลงนาม -> ลงนาม ตีกลับ ยกเลิก
+        action_type = "check & approval";
+      }
+      else if (action.user_position_id === action.approval_step_position_id && action.approval_step_action_id === 3) {
+        action_type = "got it"; // 4 ลงนามเรียบแล้ว -> ลงนามเรียบแล้ว
+      }
+      else {
+        action_type = "check & approval"
+        // action_type = "view"; // 5 ดูรายละเอียด
+      }
+
+      return {
+        ...state,
+        no_document: action.value.internal_document_id,
+        document_show: action.value,
+        list_show: action.value.line_items,
+
+        // Check approval_step_action
+        action_approval: action_type,
+        approval_step_action_id: action.approval_step_action_id,
+        resApprove: action.resApprove
+      }
+
     case "CLICK MODE EDIT":
       return {
         ...state,
@@ -493,6 +558,7 @@ export default (state = initialState, action) => {
         no_document: action.value.internal_document_id,
         document_show: action.value,
         list_show: action.value.line_items,
+        resApprove: action.resApprove
         // fill_data: true,
       }
 
@@ -593,11 +659,20 @@ export default (state = initialState, action) => {
 
       clone_list_show[state.list_show_row_index].quantity = 1
       clone_list_show[state.list_show_row_index].per_unit_price = "1.0000"
-      clone_list_show[state.list_show_row_index].at_source[0].current_unit_count = action.resStatistic[0].current_unit_count
-      clone_list_show[state.list_show_row_index].at_source[0].item_status.description_th = action.resStatistic[0].description_th
-      return {
-        ...state,
-        list_show: clone_list_show
+
+      if (action.resStatistic.length === 0) {
+        return {
+          ...state,
+          list_show: clone_list_show
+        }
+      }
+      else {
+        clone_list_show[state.list_show_row_index].at_source[0].current_unit_count = action.resStatistic[0].current_unit_count
+        clone_list_show[state.list_show_row_index].at_source[0].item_status.description_th = action.resStatistic[0].description_th
+        return {
+          ...state,
+          list_show: clone_list_show
+        }
       }
     case "CLICK SEARCH POPUP INVENTORY":
       return {
@@ -663,7 +738,7 @@ export default (state = initialState, action) => {
     case "CLICK SELECT POPUP USER MODE EDIT":
       console.log("state.line_users[action.row_inventory_show_popup].user_id", state.line_users[action.row_inventory_show_popup].user_id)
       var clone_document_show = { ...state.document_show };
-      clone_document_show.created_by_user_name_th = state.line_users[action.row_inventory_show_popup].firstname_th + " " + state.line_users[action.row_inventory_show_popup].lastname_th
+      clone_document_show.created_by_user_name_th = state.line_users[action.row_inventory_show_popup].firstname_th + " " + `${state.line_users[action.row_inventory_show_popup].lastname_th === null ? "" : state.line_users[action.row_inventory_show_popup].lastname_th}`
       clone_document_show.employee_id = state.line_users[action.row_inventory_show_popup].employee_id
       clone_document_show.created_by_user_id = state.line_users[action.row_inventory_show_popup].user_id
       return {
@@ -750,12 +825,22 @@ export default (state = initialState, action) => {
       clone_list_show_mode_add[state.list_show_mode_add_row_index].list_uoms = state.no_part_show_mode_add[action.rowIndex].list_uoms
       clone_list_show_mode_add[state.list_show_mode_add_row_index].quantity = 1
       clone_list_show_mode_add[state.list_show_mode_add_row_index].per_unit_price = "1.0000"
-      clone_list_show_mode_add[state.list_show_mode_add_row_index].current_unit_count = action.resStatistic[0].current_unit_count
-      clone_list_show_mode_add[state.list_show_mode_add_row_index].description_th = action.resStatistic[0].description_th
-      return {
-        ...state,
-        list_show_mode_add: clone_list_show_mode_add
+
+      if (action.resStatistic.length === 0) {
+        return {
+          ...state,
+          list_show_mode_add: clone_list_show_mode_add
+        }
       }
+      else {
+        clone_list_show_mode_add[state.list_show_mode_add_row_index].at_source[0].current_unit_count = action.resStatistic[0].current_unit_count
+        clone_list_show_mode_add[state.list_show_mode_add_row_index].at_source[0].item_status.description_th = action.resStatistic[0].description_th
+        return {
+          ...state,
+          list_show_mode_add: clone_list_show_mode_add
+        }
+      }
+      
     case "ON CHANGE QUILITY EACH ROW MODE ADD":
       var clone_list_show_mode_add = [...state.list_show_mode_add];
       clone_list_show_mode_add[action.rowIndex].quantity = action.value
@@ -829,7 +914,8 @@ export default (state = initialState, action) => {
       }
     case "CLICK SELECT POPUP USER":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
-      clone_document_show_mode_add.created_by_user_name_th = state.line_users[action.row_inventory_show_popup].firstname_th + " " + state.line_users[action.row_inventory_show_popup].lastname_th
+      clone_document_show_mode_add.created_by_user_name_th = state.line_users[action.row_inventory_show_popup].firstname_th + " " + `${state.line_users[action.row_inventory_show_popup].lastname_th === null ? "" : state.line_users[action.row_inventory_show_popup].lastname_th}`
+      console.log("clone_document_show_mode_add.created_by_user_name_th", clone_document_show_mode_add.created_by_user_name_th)
       clone_document_show_mode_add.employee_id = state.line_users[action.row_inventory_show_popup].employee_id
       clone_document_show_mode_add.created_by_user_id = state.line_users[action.row_inventory_show_popup].user_id
       return {
@@ -919,6 +1005,7 @@ export default (state = initialState, action) => {
         no_part_show_mode_add: initialState.no_part_show_mode_add,
 
         line_users: initialState.line_users,
+        resApprove: initialState.resApprove
       }
     case "ON CLICK CANCLE":
       return {
@@ -951,6 +1038,7 @@ export default (state = initialState, action) => {
         no_part_show_mode_add: initialState.no_part_show_mode_add,
 
         line_users: initialState.line_users,
+        resApprove: initialState.resApprove
       }
 
     // แนบไฟล์

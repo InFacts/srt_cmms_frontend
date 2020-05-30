@@ -67,10 +67,12 @@ class TopContent extends React.Component {
                     <img src={Icon} alt="Generic placeholder thumbnail" />
                   </div>
                   <div className="content ">
+                    <a href="http://vanilla-erp.com:50000/track">
                     <div className="card-body">สถานะรอการอนุมัติ</div>
                     <div className="card-footer ">
                       ระบบบริหารข้อมูลอะไหล่สำหรับซ่อมบำรุง
                             </div>
+                            </a>
                   </div>
                   <span className="p-tooltip__message" role="tooltip" id="btm-cntr">สถานะรอการอนุมัติ</span>
                 </div>

@@ -23,6 +23,7 @@ class Login extends Component {
           <form className="from-sigin-input" onSubmit={(e) => this.props.handleSubmit(e, this.props.username)}>
             <label className="input-signin">รหัสพนักงาน</label>
             <input className="cancel-default-signin" type="text" value={this.props.username} onChange={(e) => this.props.onChangeUsername(e)} required />
+            {this.props.alert !== "" && <label className="float-right alert_error_input">{this.props.alert}</label>}
             <button className="button-red font-signin" type="submit">ยืนยัน</button>
             <Link to="/"><button className="button-red font-signin" type="button">กลับ</button></Link>
           </form>
@@ -78,7 +79,8 @@ const mapStateToProps = state => {
     username: state.username,
     password: state.password,
     submitForget: state.submitForget,
-    new_password: state.new_password
+    new_password: state.new_password,
+    alert: state.alert
   };
 };
 
@@ -110,11 +112,20 @@ export const handleSubmit = (e, username) => {
   console.log("user", user)
   return function (dispatch) {
     return axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/auth/reset-password`, user).then((res) => {
-      console.log(res)
-      dispatch({
-        type: "SUBMIT",
-        value: res.data.generated_password
-      });
+      console.log(res.data.msg)
+      if (res.data.msg === "no such employee id") {
+        console.log("no such employee id")
+        dispatch({
+          type: "NO ID",
+          value: res.data.msg
+        });
+      }
+      else {
+        dispatch({
+          type: "SUBMIT",
+          value: res.data.generated_password
+        });
+      }
     });
   };
 }

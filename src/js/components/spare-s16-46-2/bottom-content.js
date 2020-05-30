@@ -155,7 +155,7 @@ class BottomContent extends React.Component {
                   <th className="font text-center" style={{ minWidth: "80px" }}>รอส่งมอบ</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>ระหว่างการจัดซื้อ</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>จำนวนสุทธิ</th>
-                  <th className="font text-center" style={{ minWidth: "100px" }}>สถานะ</th>
+                  {/* <th className="font text-center" style={{ minWidth: "100px" }}>สถานะ</th> */}
 
                   <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>หน่วยนับ</th>
@@ -165,6 +165,7 @@ class BottomContent extends React.Component {
               </thead>
               <tbody>
                 {current.props.list_show.map(function (list, index) {
+                  console.log(list,"list")
                   return (
                     <tr key={index}>
                       <th className="edit-padding text-center">{index + 1}</th>
@@ -176,14 +177,18 @@ class BottomContent extends React.Component {
                           return at_source.current_unit_count
                         })}
                       </td>
-                      <td className="edit-padding text-center">{list.quantity}</td>
-                      <td className="edit-padding text-center">{list.quantity}</td>
-                      <td className="edit-padding text-center">{list.quantity}</td>
-                      <td className="edit-padding text-center">
-                        {list.at_source.map(function (at_source, index) {
-                          return at_source.item_status.description_th
+                      <td className="edit-padding">
+                      {list.at_source.map(function (at_source, index) {
+                          return at_source.committed_unit_count
                         })}
                       </td>
+                      <td className="edit-padding"></td>
+                      <td className="edit-padding">
+                      
+                      </td>
+                      {/* <td className="edit-padding text-center">
+                          {list.item_status.description_th}
+                      </td> */}
 
                       <td className="edit-padding text-center">{list.quantity}</td>
                       <td className="edit-padding text-center">
@@ -257,7 +262,7 @@ class BottomContent extends React.Component {
 
                       <td className="edit-padding text-center">
                         {list.at_source.map(function (at_source, index) {
-                          return at_source.current_unit_count
+                          return at_source.current_unit_count === "" && list.description !== "" ? 0 : at_source.current_unit_count
                         })}
                       </td>
                       <td className="edit-padding text-center">{list.quantity}</td>
@@ -265,7 +270,7 @@ class BottomContent extends React.Component {
                       <td className="edit-padding text-center">{list.quantity}</td>
                       <td className="edit-padding text-center">
                         {list.at_source.map(function (at_source, index) {
-                          return at_source.item_status.description_th
+                          return at_source.item_status.description_th === "" && list.description !== "" ? "none" : at_source.item_status.description_th
                         })}
                       </td>
 
@@ -376,7 +381,7 @@ class BottomContent extends React.Component {
                   <th className="font text-center" style={{ minWidth: "80px" }}>รอส่งมอบ</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>ระหว่างการจัดซื้อ</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>จำนวนสุทธิ</th>
-                  <th className="font text-center" style={{ minWidth: "100px" }}>สถานะ</th>
+                  {/* <th className="font text-center" style={{ minWidth: "100px" }}>สถานะ</th> */}
 
                   <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>หน่วยนับ</th>
@@ -386,7 +391,7 @@ class BottomContent extends React.Component {
               </thead>
               <tbody>
                 {current.props.list_show_mode_add.map(function (list, index) {
-                  if (current.props.document_show_mode_add.src_warehouse_id === ""){
+                  if (current.props.document_show_mode_add.src_warehouse_id === "") {
                     return (
                       <tr key={index} id={index}>
                         <th className="edit-padding text-center">{index + 1}</th>
@@ -397,7 +402,7 @@ class BottomContent extends React.Component {
                         <td className="edit-padding text-center"></td>
                         <td className="edit-padding text-center"></td>
                         <td className="edit-padding text-center"></td>
-                        <td className="edit-padding text-center"></td>
+                        {/* <td className="edit-padding text-center"></td> */}
                         <td className="edit-padding text-center"></td>
                         <td className="edit-padding text-right"></td>
                         <td className="edit-padding text-right"></td>
@@ -417,11 +422,23 @@ class BottomContent extends React.Component {
                         </td>
                         <td className="edit-padding">{list.description}</td>
 
-                        <td className="edit-padding text-center">{list.current_unit_count}</td>
-                        <td className="edit-padding text-center">{list.quantity}</td>
-                        <td className="edit-padding text-center">{list.quantity}</td>
-                        <td className="edit-padding text-center">{list.quantity}</td>
-                        <td className="edit-padding text-center">{list.description_th}</td>
+                        <td className="edit-padding text-center">
+                        {list.at_source.map(function (at_source, index) {
+                          return at_source.current_unit_count === "" && list.description !== "" ? 0 : at_source.current_unit_count
+                        })}
+                      </td>
+                      <td className="edit-padding text-center">
+                      
+                      </td>
+                      <td className="edit-padding text-center">
+                      
+                      </td>
+                      <td className="edit-padding text-center"></td>
+                      {/* <td className="edit-padding text-center">
+                        {list.at_source.map(function (at_source, index) {
+                          return at_source.item_status.description_th === "" && list.description !== "" ? "none" : at_source.item_status.description_th
+                        })}
+                      </td> */}
 
                         <td className="edit-padding text-center">
                           {current.requiredQuantity(list.description, list.quantity)}
@@ -452,11 +469,19 @@ class BottomContent extends React.Component {
                         </td>
                         <td className="edit-padding">{list.description}</td>
 
-                        <td className="edit-padding text-center">{list.current_unit_count}</td>
-                        <td className="edit-padding text-center">{list.quantity}</td>
-                        <td className="edit-padding text-center">{list.quantity}</td>
-                        <td className="edit-padding text-center">{list.quantity}</td>
-                        <td className="edit-padding text-center">{list.description_th}</td>
+                        <td className="edit-padding text-center">
+                        {list.at_source.map(function (at_source, index) {
+                          return at_source.current_unit_count === "" && list.description !== "" ? 0 : at_source.current_unit_count
+                        })}
+                      </td>
+                      <td className="edit-padding text-center"></td>
+                      <td className="edit-padding text-center"></td>
+                      <td className="edit-padding text-center"></td>
+                      {/* <td className="edit-padding text-center">
+                        {list.at_source.map(function (at_source, index) {
+                          return at_source.item_status.description_th === "" && list.description !== "" ? "none" : at_source.item_status.description_th
+                        })}
+                      </td> */}
 
                         <td className="edit-padding text-center">
                           {current.requiredQuantity(list.description, list.quantity)}
@@ -560,6 +585,52 @@ class BottomContent extends React.Component {
             <div id="แนบไฟล์" className="tabcontent">
               <Files />
             </div>
+
+            <div id="สถานะเอกสาร" className="tabcontent">
+              <h4 className="head-title-bottom mt-2">สถานะของเอกสาร</h4>
+              <table className="cancel-border">
+                <thead>
+                  <tr>
+                    <th className="font-for-status" style={{ width: "50px" }}></th>
+                    <th className="font-for-status">ตำแหน่ง</th>
+                    <th className="font-for-status">หน่วยงาน</th>
+                    <th className="font-for-status">ชื่อผู้ลงนาม</th>
+                    <th className="font-for-status">วันที่ลงนาม</th>
+                    <th className="font-for-status">สถานะ</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.props.resApprove.approval_step === undefined ? "" : this.props.resApprove.approval_step.map(function (resApprove, index) {
+                   if (resApprove.position.length !== 0 && resApprove.position[0].name !== "This") {
+                   return (
+                      <tr key={index}>
+                        <td className="font-for-status" style={{ width: "50px" }}>
+                          {resApprove.approval_by.length === 0 ?  <i className="fas fa-check-circle" style={{ color: "gray" }}></i> : <i className="fas fa-check-circle" style={{ color: "green" }}></i> }
+                        </td>
+                        <td className="font-for-status">{resApprove.position_group.name}</td>
+                        <td className="font-for-status">{resApprove.position.length === 0 ? "" : resApprove.position[0].name}</td>
+                        <td className="font-for-status">{resApprove.approval_by.length === 0 ? "-" : resApprove.approval_by[0].user.firstname_th + " " + resApprove.approval_by[0].user.lastname_th}</td>
+                        <td className="font-for-status">{resApprove.approval_by.length === 0 ? "-" : resApprove.approval_by[0].approved_on.slice(0, 10)}</td>
+                        <td className="font-for-status">{resApprove.approval_by.length === 0 ? "รอการลงนาม" : "อนุมัติเรียบร้อย" }</td>
+                      </tr>
+                    )
+                  }
+                  else return (
+                    <tr key={index}>
+                        <td className="font-for-status" style={{ width: "50px" }}>
+                          {resApprove.approval_by.length === 0 ?  <i className="fas fa-check-circle" style={{ color: "gray" }}></i> : <i className="fas fa-check-circle" style={{ color: "green" }}></i> }
+                        </td>
+                        <td className="font-for-status">{resApprove.position_group.name}</td>
+                        <td className="font-for-status">{resApprove.position.length === 0 ? "" : resApprove.position[0].name}</td>
+                        <td className="font-for-status">{resApprove.approval_by.length === 0 ? "-" : resApprove.approval_by[0].user.firstname_th + " " + resApprove.approval_by[0].user.lastname_th}</td>
+                        <td className="font-for-status">{resApprove.approval_by.length === 0 ? "-" : resApprove.approval_by[0].approved_on.slice(0, 10)}</td>
+                        <td className="font-for-status">{resApprove.approval_by.length === 0 ? "รอการลงนาม" : "อนุมัติเรียบร้อย" }</td>
+                      </tr>
+                  )
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div >
@@ -582,7 +653,9 @@ const mapStateToProps = (state) => ({
   no_part_show_mode_add: state.no_part_show_mode_add,
   list_no_part_mode_add: state.list_no_part_mode_add,
   document_show_mode_add: state.document_show_mode_add,
-  list_desription_part_mode_add: state.list_desription_part_mode_add
+  list_desription_part_mode_add: state.list_desription_part_mode_add,
+
+  resApprove: state.resApprove
 })
 const mapDispatchToProps = (dispatch) => ({
   // Mode Edit

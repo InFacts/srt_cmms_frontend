@@ -1,4 +1,7 @@
 const initialState = {
+  resApprove: [],
+  // Approval
+  action_approval: "",
 
   // Mode การทำงาน
   action: "search",
@@ -36,7 +39,12 @@ const initialState = {
     "dest_warehouse_id": "",
     "dest_warehouse_name": "",
     "po_id": "",
-    "line_items": []
+    "line_items": [],
+    "item_status": {
+      "description": "",
+      "description_th": "",
+      "item_status_id": ""
+    }
   },
   list_show_mode_add: [
     {
@@ -47,7 +55,12 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -57,7 +70,12 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -67,7 +85,12 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -77,7 +100,12 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -87,7 +115,12 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -97,7 +130,12 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -107,7 +145,12 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -117,7 +160,12 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -127,7 +175,12 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -137,7 +190,12 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
   ],
 
@@ -150,7 +208,12 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -160,7 +223,12 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -170,7 +238,12 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -180,7 +253,12 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -190,7 +268,12 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -200,7 +283,12 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -210,7 +298,12 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -220,7 +313,12 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -230,7 +328,12 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -240,7 +343,12 @@ const initialState = {
       "uom_group_id": "",
       "unit": "",
       "per_unit_price": "",
-      "list_uoms": []
+      "list_uoms": [],
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
   ],
   list_show_mode_add_row_index: "",
@@ -248,6 +356,7 @@ const initialState = {
 
   // สำหรับเก็บชื่อพนักงาน
   line_users: [],
+  status_item: [],
 
   // แนบไฟล์
   files: [],
@@ -260,10 +369,59 @@ const initialState = {
 }
 export default (state = initialState, action) => {
   switch (action.type) {
+    case "APPROVAL MODE":
+      for (var i = action.value.line_items.length; i <= 9; i++) {
+        action.value.line_items.push(
+          {
+            "item_id": "",
+            "internal_item_id": "",
+            "description": "",
+            "quantity": "",
+            "uom_group_id": "",
+            "unit": "",
+            "per_unit_price": "",
+            "list_uoms": [],
+            "item_status": {
+              "description": "",
+              "description_th": "",
+              "item_status_id": ""
+            }
+          }
+        );
+      }
+      console.log("list_show", action.value.line_items)
+      let action_type = ""
+      console.log("action.user_position_id", action.user_position_id);
+      console.log("action.approval_step_position_id", action.approval_step_position_id);
+      if (action.user_position_id === action.approval_step_position_id && (action.approval_step_action_id === 1 || action.approval_step_action_id === 2)) {
+        // 1 ตรวจสอบและรับทราบลงนาม -> ลงนาม ตีกลับ ยกเลิก
+        // 2 รับทราบลงนาม -> ลงนาม ตีกลับ ยกเลิก
+        action_type = "check & approval";
+      }
+      else if (action.user_position_id === action.approval_step_position_id && action.approval_step_action_id === 3) {
+        action_type = "got it"; // 4 ลงนามเรียบแล้ว -> ลงนามเรียบแล้ว
+      }
+      else {
+        action_type = "check & approval"
+        // action_type = "view"; // 5 ดูรายละเอียด
+      }
+
+      return {
+        ...state,
+        no_document: action.value.internal_document_id,
+        document_show: action.value,
+        list_show: action.value.line_items,
+
+        // Check approval_step_action
+        action_approval: action_type,
+        approval_step_action_id: action.approval_step_action_id,
+        resApprove: action.resApprove
+      }
     case "CLICK MODE EDIT":
       return {
         ...state,
-        action: "edit"
+        action: "edit",
+        action_approval: ""
       }
     // เลืก mode ในการทำงาน ( Search / Add / Edit )
     case "ACTION":
@@ -315,6 +473,7 @@ export default (state = initialState, action) => {
         no_document: action.value.internal_document_id,
         document_show: action.value,
         list_show: action.value.line_items,
+        resApprove: action.resApprove
         // fill_data: true,
       }
 
@@ -399,6 +558,14 @@ export default (state = initialState, action) => {
         ...state,
         list_show: clone_list_show
       }
+      case "ON CHANGE STATUS PART":
+        var clone_list_show = [...state.list_show];
+        clone_list_show[action.rowIndex].item_status.item_status_id = action.value
+        console.log("clone_list_show[action.rowIndex].item_status.item_status_id", clone_list_show[action.rowIndex].item_status.item_status_id)
+        return {
+          ...state,
+          list_show: clone_list_show,
+        }
     case "ON CLICK SEARCH POPUP NO PART":
       return {
         ...state,
@@ -455,7 +622,7 @@ export default (state = initialState, action) => {
       }
     case "CLICK SELECT POPUP USER MODE EDIT":
       var clone_document_show = { ...state.document_show };
-      clone_document_show.created_by_user_name_th = state.line_users[action.row_inventory_show_popup].firstname_th + " " + state.line_users[action.row_inventory_show_popup].lastname_th
+      clone_document_show.created_by_user_name_th = state.line_users[action.row_inventory_show_popup].firstname_th + " " + `${state.line_users[action.row_inventory_show_popup].lastname_th === null ? "" : state.line_users[action.row_inventory_show_popup].lastname_th}`
       clone_document_show.employee_id = state.line_users[action.row_inventory_show_popup].employee_id
       clone_document_show.created_by_user_id = state.line_users[action.row_inventory_show_popup].user_id
       return {
@@ -587,6 +754,14 @@ export default (state = initialState, action) => {
         ...state,
         list_show_mode_add: clone_list_show_mode_add
       }
+      case "ON CHANGE STATUS PART MODE ADD":
+        var clone_list_show_mode_add = [...state.list_show_mode_add];
+        clone_list_show_mode_add[action.rowIndex].item_status.item_status_id = action.value
+        console.log("clone_list_show_mode_add[action.rowIndex].item_status.item_status_id", clone_list_show_mode_add[action.rowIndex].item_status.item_status_id)
+        return {
+          ...state,
+          list_show_mode_add: clone_list_show_mode_add,
+        }
     case "ON CHANGE NOTE MODE ADD":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
       clone_document_show_mode_add.remark = action.value;
@@ -623,7 +798,7 @@ export default (state = initialState, action) => {
       }
     case "CLICK SELECT POPUP USER":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
-      clone_document_show_mode_add.created_by_user_name_th = state.line_users[action.row_inventory_show_popup].firstname_th + " " + state.line_users[action.row_inventory_show_popup].lastname_th
+      clone_document_show_mode_add.created_by_user_name_th = state.line_users[action.row_inventory_show_popup].firstname_th + " " + `${state.line_users[action.row_inventory_show_popup].lastname_th === null ? "" : state.line_users[action.row_inventory_show_popup].lastname_th}`
       clone_document_show_mode_add.employee_id = state.line_users[action.row_inventory_show_popup].employee_id
       clone_document_show_mode_add.created_by_user_id = state.line_users[action.row_inventory_show_popup].user_id
       return {
@@ -635,6 +810,7 @@ export default (state = initialState, action) => {
         ...state,
         list_desription_part_mode_add: action.value
       }
+      
 
     case "KEY PRESS ENTER":
       if (action.res.length >= 1 && action.value === action.res[0].internal_item_id) {
@@ -666,8 +842,8 @@ export default (state = initialState, action) => {
       clone_document_show_mode_add.created_by_admin_name_th = action.decoded.firstname_th === null ? "" : action.decoded.firstname_th + " " + action.decoded.lastname_th;
       clone_document_show_mode_add.created_by_admin_id = action.decoded.user_id === null ? "" : action.decoded.user_id;
 
-      clone_document_show_mode_add.dest_warehouse_id = action.decoded.list_positions[0].warehouse_id === null ? "" : action.decoded.list_positions[0].warehouse_id;
-      clone_document_show_mode_add.dest_warehouse_name = action.decoded.list_positions[0].warehouse_name === null ? "" : action.decoded.list_positions[0].warehouse_name;
+      clone_document_show_mode_add.dest_warehouse_id = action.decoded.has_positions[0].warehouse_id === null ? "" : action.decoded.has_positions[0].warehouse_id;
+      clone_document_show_mode_add.dest_warehouse_name = action.decoded.has_positions[0].warehouse_name === null ? "" : action.decoded.has_positions[0].warehouse_name;
 
       console.log("action.decoded", clone_document_show_mode_add)
       return {
@@ -744,6 +920,13 @@ export default (state = initialState, action) => {
 
         line_users: initialState.line_users,
       }
+
+    case "LOAD STATUS ITEM": {
+      return {
+        ...state,
+        status_item: action.value
+      }
+    }
 
     // แนบไฟล์
     case "FILES":

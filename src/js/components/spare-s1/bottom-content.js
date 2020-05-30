@@ -30,12 +30,12 @@ class BottomContent extends React.Component {
                       return (
                         <tr key={index}>
                           <th className="edit-padding text-center">{index + 1}</th>
-                      <td className="edit-padding">{line_item_s1.description}</td>
+                      <td className="edit-padding">{line_item_s1.description} {line_item_s1.item_status_id === 1 ? "สถานะของใหม่" : "สถานะรอส่งมอบ"}</td>
                           <td className="edit-padding">{line_item_s1.internal_item_id}</td>
                           <td className="edit-padding text-center">{line_item_s1.uom_name}</td>
-                          <td className="edit-padding text-center">{line_item_s1.ending_unit_count}</td>
-                          <td className="edit-padding text-center"></td>
-                          <td className="edit-padding text-center"></td>
+                          <td className="edit-padding text-center">{line_item_s1.ending_unit_count === undefined ? line_item_s1.current_unit_count : line_item_s1.ending_unit_count}</td>
+                          <td className="edit-padding text-center">-</td>
+                          <td className="edit-padding text-center">-</td>
                         </tr>
                       )
                     })}

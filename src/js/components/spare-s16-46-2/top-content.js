@@ -11,8 +11,53 @@ import '../../../css/style.css'
 import '../../../css/grid12.css';
 
 class TopContent extends React.Component {
-
+  // export const onClickSelectNoDocument = (document_id) => {
+  //   return function (dispatch) {
+  //     return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+  //       return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/latest/plus`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((resApprove) => {
+  //         console.log("res", res)
+  //         console.log("resApprove", resApprove.data)
+  //         dispatch({
+  //           type: "CLICK SELECT POPUP NO DOCUMENT",
+  //           value: res.data,
+  //           resApprove: resApprove.data
+  //         });
+  //       });
+  //     });
+  //   };
+  // }
   componentDidMount() {
+    let url = window.location.search;
+    const urlParams = new URLSearchParams(url);
+    const document_id = urlParams.get('document_id')
+    console.log(">>>>>>", document_id);
+    console.log(">>", `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/latest/step`)
+    if (document_id !== null) {
+      console.log("GET approval")
+      axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/profile`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then(resUser => {
+          axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/latest/step`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+            .then(res => {
+              console.log("Dispatch user_position_id", resUser.data.has_positions[0].position_id)
+              console.log("Dispatch approval_step_position_group_id", res.data.position[0].position_group_id)
+              console.log("Dispatch approval_step_position_id", res.data.position[0].position_id)
+              console.log("res.msg", res.data.position.length)
+              let u_position_id, approval_position_group_id, approval_position_id, approval_approval_step_action_id = -1
+              if (res.data.msg === undefined && res.data.position.length !== 0) {
+                u_position_id = resUser.data.has_positions[0].position_id
+                approval_position_group_id = res.data.position[0].position_group_id
+                approval_position_id = res.data.position[0].position_id
+                approval_approval_step_action_id = res.data.approval_step_action_id
+              }
+              this.props.approvalMode(document_id, u_position_id, approval_position_group_id, approval_position_id, approval_approval_step_action_id)
+            }).catch(function (err) {
+                console.log(err);
+            })
+        }).catch(function (err) {
+            console.log(err);
+        })
+      // action_approval
+    }
     document.getElementById("defaultOpen").click();
   }
 
@@ -343,11 +388,11 @@ class TopContent extends React.Component {
 
           <div className="grid_12">
             <div className="grid_3 float-right">
-            <select className="edit-select-top" onChange={(e) => this.props.onChangeTransferModeAdd(e)}>
-          <option value=""> none </option>
-          <option value="รับของเอง"> รับของเอง </option>
-          <option value="ส่งไปยังคลังปลายทาง"> ส่งไปยังคลังปลายทาง </option>
-        </select>
+              <select className="edit-select-top" onChange={(e) => this.props.onChangeTransferModeAdd(e)}>
+                <option value=""> none </option>
+                <option value="รับของเอง"> รับของเอง </option>
+                <option value="ส่งไปยังคลังปลายทาง"> ส่งไปยังคลังปลายทาง </option>
+              </select>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">รูปแบบการรับของ</p>
@@ -373,6 +418,7 @@ class TopContent extends React.Component {
               <div className="tab grid_11">
                 <button type="button" id="defaultOpen" className="tablinks" onClick={e => this.tapChange(e, "รายการ")}>รายการ</button>
                 <button type="button" className="tablinks" onClick={e => this.tapChange(e, "แนบไฟล์")}>แนบไฟล์</button>
+                <button type="button" className="tablinks" onClick={e => this.tapChange(e, "สถานะเอกสาร")}>สถานะเอกสาร</button>
               </div>
             </div>
 
@@ -409,7 +455,7 @@ class TopContent extends React.Component {
                           <td className="edit-padding" style={{ minWidth: "150px" }}> {document_show_popup.internal_document_id} </td>
                           <td className="edit-padding" style={{ minWidth: "300px" }}> {document_show_popup.created_on.replace("T", " เวลา ").slice(0, 21) + " น."} </td>
                           <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
-                            <button type="button" className="button-blue" onClick={(e, i) => current.props.onClickSelectNoDocument(document_show_popup.document_id)} aria-label="Close active modal" aria-controls="modalDocument" id="closeModalInventory" >เลือก</button>
+                            <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectNoDocument(document_show_popup.document_id)} aria-label="Close active modal" aria-controls="modalDocument" id="closeModalInventory" >เลือก</button>
                           </td>
                         </tr>
                       )
@@ -761,6 +807,9 @@ const mapStateToProps = (state) => ({
   line_users: state.line_users
 })
 const mapDispatchToProps = (dispatch) => ({
+  // Approval
+  approvalMode: (e, i, o, p, q) => dispatch(approvalMode(e, i, o, p, q)),
+
   onChangeNoDocument: (e) => dispatch(onChangeNoDocument(e)),
   onClickPopUpSearchNoDocument: (e) => dispatch(onClickPopUpSearchNoDocument(e)),
   onClickSelectNoDocument: (e) => dispatch(onClickSelectNoDocument(e)),
@@ -802,6 +851,31 @@ const mapDispatchToProps = (dispatch) => ({
 })
 export default connect(mapStateToProps, mapDispatchToProps)(TopContent);
 
+export const approvalMode = (document_id, user_position_id, approval_step_position_group_id, approval_step_position_id, approval_step_action_id) => {
+  console.log("Dispatch document_id", document_id)
+  console.log("Dispatch user_position_id", user_position_id)
+  console.log("Dispatch approval_step_position_group_id", approval_step_position_group_id)
+  console.log("Dispatch approval_step_position_id", approval_step_position_id)
+  console.log("Dispatch approval_step_action_id", approval_step_action_id)
+  return function (dispatch) {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+      return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/latest/plus`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((resApprove) => {
+        console.log("res", res)
+        console.log("resApprove", resApprove.data)
+        dispatch({
+          type: "APPROVAL MODE",
+          value: res.data,
+          user_position_id: user_position_id,
+          approval_step_position_group_id: approval_step_position_group_id,
+          approval_step_position_id: approval_step_position_id,
+          approval_step_action_id: approval_step_action_id,
+          resApprove: resApprove.data
+        });
+      });
+    });
+  };
+}
+
 export const onClickModeEdit = (e) => {
   return {
     type: "CLICK MODE EDIT"
@@ -835,10 +909,14 @@ export const onClickPopUpSearchNoDocument = (no_document) => {
 export const onClickSelectNoDocument = (document_id) => {
   return function (dispatch) {
     return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
-      console.log(res)
-      dispatch({
-        type: "CLICK SELECT POPUP NO DOCUMENT",
-        value: res.data
+      return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/latest/plus`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((resApprove) => {
+        console.log("res", res)
+        console.log("resApprove", resApprove.data)
+        dispatch({
+          type: "CLICK SELECT POPUP NO DOCUMENT",
+          value: res.data,
+          resApprove: resApprove.data
+        });
       });
     });
   };
@@ -926,7 +1004,7 @@ export const onClickPopUpSearchUserModeEdit = (created_by_user_name_th, employee
     var space = created_by_user_name_th.indexOf(" ");
     var firstname = created_by_user_name_th.slice(0, space);
     var lastname = created_by_user_name_th.slice(space + 1, created_by_user_name_th.length);
-    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&lastname_th=${lastname}&employee_id=${employee_id === undefined ? "" : employee_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&employee_id=${employee_id === undefined ? "" : employee_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       console.log(">>>>", res)
       dispatch({
         type: "CLICK SEARCH POPUP USER MODE EDIT",
@@ -1005,7 +1083,7 @@ export const onClickPopUpSearchUser = (created_by_user_name_th, employee_id) => 
     var space = created_by_user_name_th.indexOf(" ");
     var firstname = created_by_user_name_th.slice(0, space);
     var lastname = created_by_user_name_th.slice(space + 1, created_by_user_name_th.length);
-    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&lastname_th=${lastname}&employee_id=${employee_id === undefined ? "" : employee_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&employee_id=${employee_id === undefined ? "" : employee_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       console.log(res)
       dispatch({
         type: "CLICK SEARCH POPUP USER",

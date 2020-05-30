@@ -1,5 +1,6 @@
 const initialState = {
-
+  resApprove: [],
+  
   // Mode การทำงาน
   action: "search",
   fill_data: false,
@@ -317,6 +318,7 @@ export default (state = initialState, action) => {
         no_document: action.value.internal_document_id,
         document_show: action.value,
         list_show: action.value.line_items,
+        resApprove: action.resApprove
         // fill_data: true,
       }
 
@@ -416,7 +418,7 @@ export default (state = initialState, action) => {
       }
     case "ON CHANGE NAME ID MODE ADD":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
-      clone_document_show_mode_add.created_by_user_id = action.value;
+      clone_document_show_mode_add.employee_id = action.value;
       return {
         ...state,
         document_show_mode_add: clone_document_show_mode_add

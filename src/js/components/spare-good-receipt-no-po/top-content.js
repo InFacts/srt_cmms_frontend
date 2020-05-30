@@ -280,6 +280,7 @@ class TopContent extends React.Component {
               <div className="tab grid_11">
                 <button type="button" id="defaultOpen" className="tablinks" onClick={e => this.tapChange(e, "รายการ")}>รายการ</button>
                 <button type="button" className="tablinks" onClick={e => this.tapChange(e, "แนบไฟล์")}>แนบไฟล์</button>
+                <button type="button" className="tablinks" onClick={e => this.tapChange(e, "สถานะเอกสาร")}>สถานะเอกสาร</button>
               </div>
             </div>
 
@@ -678,10 +679,14 @@ export const onClickPopUpSearchNoDocument = (no_document) => {
 export const onClickSelectNoDocument = (document_id) => {
   return function (dispatch) {
     return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
-      console.log(res)
-      dispatch({
-        type: "CLICK SELECT POPUP NO DOCUMENT",
-        value: res.data
+      return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/latest/plus`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((resApprove) => {
+        console.log("res", res)
+        console.log("resApprove", resApprove.data)
+        dispatch({
+          type: "CLICK SELECT POPUP NO DOCUMENT",
+          value: res.data,
+          resApprove: resApprove.data
+        });
       });
     });
   };
@@ -756,7 +761,7 @@ export const onClickPopUpSearchUserModeEdit = (created_by_user_name_th, employee
     var space = created_by_user_name_th.indexOf(" ");
     var firstname = created_by_user_name_th.slice(0, space);
     var lastname = created_by_user_name_th.slice(space + 1, created_by_user_name_th.length);
-    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&lastname_th=${lastname}&employee_id=${employee_id === undefined ? "" : employee_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&employee_id=${employee_id === undefined ? "" : employee_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       console.log(">>>>", res)
       dispatch({
         type: "CLICK SEARCH POPUP USER MODE EDIT",
@@ -823,7 +828,7 @@ export const onClickPopUpSearchUser = (created_by_user_name_th, employee_id) => 
     var space = created_by_user_name_th.indexOf(" ");
     var firstname = created_by_user_name_th.slice(0, space);
     var lastname = created_by_user_name_th.slice(space + 1, created_by_user_name_th.length);
-    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&lastname_th=${lastname}&employee_id=${employee_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&employee_id=${employee_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       console.log(res)
       dispatch({
         type: "CLICK SEARCH POPUP USER",

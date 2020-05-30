@@ -26,7 +26,7 @@ class WrapForm extends React.Component {
                     "uom_id": item.uom_group_id,
                     "per_unit_price": parseFloat(item.per_unit_price),
                     "item_id": item.item_id,
-                    "item_status_id": 1
+                    "item_status_id": item.item_status.item_status_id
                 };
                 line_number = line_number + 1;
                 return (

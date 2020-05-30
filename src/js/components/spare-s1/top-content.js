@@ -85,7 +85,14 @@ class TopContent extends React.Component {
               </div>
             </div> */}
             <div className="grid_3 float-right">
-              <input type="text" className="cancel-default float-right"></input>
+              <select className="edit-select-top" onChange={(e) => this.props.onChangeYear(e)}>
+                <option value="0"> none </option>
+                {this.props.year.map(function (year, index) {
+                  return (
+                    <option key={index} value={year.year_id}> {year.name} </option>
+                  )
+                })}
+              </select>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">ปี</p>
@@ -103,7 +110,14 @@ class TopContent extends React.Component {
               </div>
             </div> */}
             <div className="grid_3 float-right">
-              <input type="text" className="cancel-default float-right"></input>
+              <select className="edit-select-top" onChange={(e) => this.props.onChangeMonth(e)}>
+                <option value="0"> none </option>
+                {this.props.month.map(function (month, index) {
+                  return (
+                    <option key={index} value={month.month_id}> {month.name} </option>
+                  )
+                })}
+              </select>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">เดือน</p>
@@ -111,7 +125,9 @@ class TopContent extends React.Component {
           </div>
 
           <div className="grid_12">
-            <button className="button-blue float-right grid_1 mr-5 mt-3" type="button" onClick={(e) => this.props.onClickSearchS1(this.props.inventory_id, this.props.no_item)}>ค้นหา</button>
+            {
+              this.props.inventory_id !== "" && this.props.month_id !== "0" && this.props.year_id !== "0" ? <button className="button-blue float-right grid_1 mt-3" type="button" onClick={(e) => this.props.onClickSearchS1(this.props.inventory_id, this.props.no_item, this.props.month_id, this.props.year_id)}>ค้นหา</button> : <button className="button-blue float-right grid_1 mt-3" type="button">ค้นหา</button>
+            }
           </div>
         </>
       )
@@ -272,7 +288,7 @@ class TopContent extends React.Component {
                     {current.props.districts_pop_up.map(function (districts_pop_up, index) {
                       return (
                         <tr key={index} id={index}>
-                          <td className="edit-padding">{index+1}</td>
+                          <td className="edit-padding">{index + 1}</td>
                           <td className="edit-padding">{districts_pop_up.name}</td>
                           <td className="edit-padding text-center">
                             <button type="button" className="button-blue" aria-label="Close active modal" aria-controls="modalDistricts" id="closeModalInventory" onClick={(e) => current.props.onClickPopUpSelectDistricts(e)}>เลือก</button>
@@ -292,8 +308,8 @@ class TopContent extends React.Component {
           </div>
         </div>
 
-       {/* PopUp ค้นหาตอน */}
-       <div className="modal" id="modalNode" style={{ display: "none" }}>
+        {/* PopUp ค้นหาตอน */}
+        <div className="modal" id="modalNode" style={{ display: "none" }}>
           <div className="gray-board">
             <p className="head-title-modal edit">ค้นหาตอน</p>
             <div className="container_12 edit-padding">
@@ -319,7 +335,7 @@ class TopContent extends React.Component {
                     {current.props.node_pop_up.map(function (node_pop_up, index) {
                       return (
                         <tr key={index} id={index}>
-                          <td className="edit-padding">{index+1}</td>
+                          <td className="edit-padding">{index + 1}</td>
                           <td className="edit-padding">{node_pop_up.name}</td>
                           <td className="edit-padding text-center">
                             <button type="button" className="button-blue" aria-label="Close active modal" aria-controls="modalNode" id="closeModalInventory" onClick={(e) => current.props.onClickPopUpSelectNode(e)}>เลือก</button>
@@ -358,6 +374,11 @@ const mapStateToProps = (state) => ({
   node: state.node,
   node_pop_up: state.node_pop_up,
   districts_id: state.districts_id,
+  year: state.year,
+  month: state.month,
+
+  year_id: state.year_id,
+  month_id: state.month_id
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -373,9 +394,11 @@ const mapDispatchToProps = (dispatch) => ({
   onClickPopUpSearchDistricts: (e) => dispatch(onClickPopUpSearchDistricts(e)),
   onClickPopUpSelectDistricts: (e) => dispatch(onClickPopUpSelectDistricts(e)),
   onChangeNode: (e) => dispatch(onChangeNode(e)),
-  onClickPopUpSearchNode: (e, i) => dispatch(onClickPopUpSearchNode(e ,i)),
+  onClickPopUpSearchNode: (e, i) => dispatch(onClickPopUpSearchNode(e, i)),
   onClickPopUpSelectNode: (e) => dispatch(onClickPopUpSelectNode(e)),
-  onClickSearchS1: (e, i) => dispatch(onClickSearchS1(e, i)),
+  onClickSearchS1: (e, i, o, u) => dispatch(onClickSearchS1(e, i, o, u)),
+  onChangeYear: (e) => dispatch(onChangeYear(e)),
+  onChangeMonth: (e) => dispatch(onChangeMonth(e))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TopContent);
@@ -491,14 +514,41 @@ export const onClickPopUpSelectNode = (e) => {
     rowIndex: rowIndex
   };
 }
-export const onClickSearchS1 = (inventory_id, no_item) => {
-  return function (dispatch) {
-    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-monthly-summary/plus?warehouse_id=${inventory_id}&internal_item_id=${no_item}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
-      console.log(res)
-      dispatch({
-        type: "CLICK SEARCH POPUP S1",
-        value: res.data.results
+export const onClickSearchS1 = (inventory_id, no_item, month_id, year_id) => {
+  if (month_id === "05" && year_id === "2020") {
+    var endMonth = parseInt(month_id) + parseInt("01");
+    return function (dispatch) {
+      return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-onhand/plus?warehouse_id=${inventory_id}&internal_item_id=${no_item === null ? "" : no_item}&start_date=2020-05-1&end_date=2020-06-1`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+        console.log(res)
+        dispatch({
+          type: "CLICK SEARCH POPUP S1",
+          value: res.data.results
+        });
       });
-    });
-  };
+    }; 
+  }
+  else {
+    var endMonth = parseInt(month_id) + parseInt("01");
+    return function (dispatch) {
+      return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-monthly-summary/plus?warehouse_id=${inventory_id}&internal_item_id=${no_item === null ? "" : no_item}&start_date=${year_id+`-`+month_id+`-`+1}&end_date=${`${endMonth === 13 ? parseInt(year_id) + parseInt("1") : year_id}`+`-`+ `${endMonth === 13 ? 1 : endMonth}` +`-`+1}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+        console.log(res)
+        dispatch({
+          type: "CLICK SEARCH POPUP S1",
+          value: res.data.results
+        });
+      });
+    }; 
+  }
+}
+export const onChangeYear = (e) => {
+  return {
+    type: "ON CHANGE YEAR",
+    value: e.target.value
+  }
+}
+export const onChangeMonth = (e) => {
+  return {
+    type: "ON CHANGE MONTH",
+    value: e.target.value
+  }
 }

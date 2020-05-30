@@ -19,11 +19,13 @@ class Login extends Component {
     super(props)
     this.state = {
       loggedIn: false,
+      checkIdPassword: true
     };
   }
 
   handleSubmit = event => {
     event.preventDefault();
+    const current = this;
 
     const user = {
       "username": this.props.username,
@@ -38,7 +40,7 @@ class Login extends Component {
         this.setState({ loggedIn: true });
       }).catch(function (err) {
         console.log(err)
-        alert(err);
+        current.setState({ checkIdPassword: false });
       })
   }
 
@@ -56,10 +58,11 @@ class Login extends Component {
             <h4 className="head-signin">เข้าสู่ระบบ</h4>
 
             <form className="from-sigin-input" onSubmit={this.handleSubmit}>
-              <label className="input-signin">รหัสพนักงาน</label>
+              <label className="input-signin">ชื่อผู้ใช้</label>
               <input className="cancel-default-signin" type="text" value={this.props.username} onChange={(e) => this.props.onChangeUsername(e)} required/>
               <label className="input-signin mt-2">รหัสผ่าน</label>
               <input className="cancel-default-signin" type="password" id="exampleInputPassword1" value={this.props.password} onChange={(e) => this.props.onChangePassword(e)} required/>
+              {this.state.checkIdPassword === false && <label className="float-left alert_error_input">ชื่อผู้ใช้งาน หรือรหัสผ่านไม่ถูกต้อง</label>}
               {/* <input type="checkbox" id="checkExample1" ></input> */}
 
               {/* <input type="checkbox" id="checkExample2" /> */}

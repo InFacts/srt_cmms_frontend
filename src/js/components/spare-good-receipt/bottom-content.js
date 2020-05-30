@@ -12,6 +12,11 @@ import '../../../css/table.css';
 
 class BottomContent extends React.Component {
 
+  componentDidMount() {
+    this.props.loadStatusItem();
+    console.log("componentDidMount >>")
+  }
+
   sumTotalLineItem = (quantity, per_unit_price) => {
     var sum = 0;
     sum = quantity * per_unit_price;
@@ -149,9 +154,10 @@ class BottomContent extends React.Component {
                 <tr>
                   <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
                   <th className="font" style={{ minWidth: "130px" }}>เลขที่อะไหล่</th>
-                  <th className="font" style={{ minWidth: "448px" }}>รายละเอียด</th>
+                  <th className="font" style={{ minWidth: "368px" }}>รายละเอียด</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>หน่วยนับ</th>
+                  <th className="font text-center" style={{ minWidth: "80px" }}>สถานะ</th>
                   <th className="font text-right" style={{ minWidth: "80px" }}>ราคาต่อหน่วย</th>
                   <th className="font text-right" style={{ minWidth: "80px" }}>จำนวนเงิน</th>
                 </tr>
@@ -171,6 +177,7 @@ class BottomContent extends React.Component {
                           })}
                         </select>
                       </td>
+                      <td className="edit-padding text-center">{list.item_status === undefined ? "" : list.item_status.description_th}</td>
                       <td className="edit-padding text-right">{current.perUnitPriceModeSearch(list.description, list.per_unit_price)}</td>
                       <td className="edit-padding text-right">{current.sumTotalLineItem(list.quantity, list.per_unit_price)}</td>
                     </tr>
@@ -205,9 +212,10 @@ class BottomContent extends React.Component {
                 <tr>
                   <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
                   <th className="font" style={{ minWidth: "130px" }}>เลขที่อะไหล่</th>
-                  <th className="font" style={{ minWidth: "448px" }}>รายละเอียด</th>
+                  <th className="font" style={{ minWidth: "368px" }}>รายละเอียด</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>หน่วยนับ</th>
+                  <th className="font text-center" style={{ minWidth: "80px" }}>สถานะ</th>
                   <th className="font text-right" style={{ minWidth: "80px" }}>ราคาต่อหน่วย</th>
                   <th className="font text-right" style={{ minWidth: "80px" }}>จำนวนเงิน</th>
                 </tr>
@@ -233,6 +241,23 @@ class BottomContent extends React.Component {
                         <select className="edit-select-top">
                           {list.list_uoms.map(function (list_uoms, index) {
                             return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
+                          })}
+                        </select>
+                      </td>
+                      <td className="edit-padding text-center">
+                        <select className="edit-select-top" onChange={(e) => current.props.onChangeStatus(e)}>
+                          {current.props.status_item.map(function (status_item, index) {
+
+                            if (list.item_status === undefined) {
+                              return null
+                            }
+                            else {
+                              if (list.description != "" && list.item_status.description_th === status_item.description_th)
+                                return <option value={status_item.item_status_id} key={index} selected>{status_item.description_th}</option>
+                              if (list.description != "" && list.item_status.description_th !== status_item.description_th)
+                                return <option value={status_item.item_status_id} key={index}>{status_item.description_th}</option>
+                              else return null
+                            }
                           })}
                         </select>
                       </td>
@@ -327,9 +352,10 @@ class BottomContent extends React.Component {
                 <tr>
                   <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
                   <th className="font" style={{ minWidth: "130px" }}>เลขที่อะไหล่</th>
-                  <th className="font" style={{ minWidth: "448px" }}>รายละเอียด</th>
+                  <th className="font" style={{ minWidth: "368px" }}>รายละเอียด</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>หน่วยนับ</th>
+                  <th className="font text-center" style={{ minWidth: "80px" }}>สถานะ</th>
                   <th className="font text-right" style={{ minWidth: "80px" }}>ราคาต่อหน่วย</th>
                   <th className="font text-right" style={{ minWidth: "80px" }}>จำนวนเงิน</th>
                 </tr>
@@ -355,6 +381,14 @@ class BottomContent extends React.Component {
                           <select className="edit-select-top">
                             {list.list_uoms.map(function (list_uoms, index) {
                               return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
+                            })}
+                          </select>
+                        </td>
+                        <td className="edit-padding text-center">
+                          <select className="edit-select-top" onChange={(e) => current.props.onChangeStatusModeAdd(e)} required>
+                            <option value="" key={index}>none</option>
+                            {current.props.status_item.map(function (status_item, index) {
+                              return <option value={status_item.item_status_id} key={index}>{status_item.description_th}</option>
                             })}
                           </select>
                         </td>
@@ -386,6 +420,15 @@ class BottomContent extends React.Component {
                               return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
                             })}
                           </select>
+                        </td>
+                        <td className="edit-padding text-center">
+                          {list.description === "" ? <select className="edit-select-top"></select> :
+                            <select className="edit-select-top" onChange={(e) => current.props.onChangeStatusModeAdd(e)} required>
+                              <option value="" key={index}>none</option>
+                              {current.props.status_item.map(function (status_item, index) {
+                                return <option value={status_item.item_status_id} key={index}>{status_item.description_th}</option>
+                              })}
+                            </select>}
                         </td>
                         <td className="edit-padding text-right">
                           {current.requiredPerUnitPrice(list.description, list.per_unit_price)}
@@ -479,6 +522,53 @@ class BottomContent extends React.Component {
             <div id="แนบไฟล์" className="tabcontent">
               <Files />
             </div>
+
+            <div id="สถานะเอกสาร" className="tabcontent">
+              <h4 className="head-title-bottom mt-2">สถานะของเอกสาร</h4>
+              <table className="cancel-border">
+                <thead>
+                  <tr>
+                    <th className="font-for-status" style={{ width: "50px" }}></th>
+                    <th className="font-for-status">ตำแหน่ง</th>
+                    <th className="font-for-status">หน่วยงาน</th>
+                    <th className="font-for-status">ชื่อผู้ลงนาม</th>
+                    <th className="font-for-status">วันที่ลงนาม</th>
+                    <th className="font-for-status">สถานะ</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.props.resApprove.approval_step === undefined ? "" : this.props.resApprove.approval_step.map(function (resApprove, index) {
+                    if (resApprove.position.length === 0 ? "" : resApprove.position[0].name !== "This") {
+                      return (
+                        <tr key={index}>
+                          <td className="font-for-status" style={{ width: "50px" }}>
+                            {resApprove.approval_by.length === 0 ? <i className="fas fa-check-circle" style={{ color: "gray" }}></i> : <i className="fas fa-check-circle" style={{ color: "green" }}></i>}
+                          </td>
+                          <td className="font-for-status">{resApprove.position_group.name}</td>
+                          <td className="font-for-status">{resApprove.position.length === 0 ? "" : resApprove.position[0].name}</td>
+                          <td className="font-for-status">{resApprove.approval_by.length === 0 ? "-" : resApprove.approval_by[0].user.firstname_th + " " + resApprove.approval_by[0].user.lastname_th}</td>
+                          <td className="font-for-status">{resApprove.approval_by.length === 0 ? "-" : resApprove.approval_by[0].approved_on.slice(0, 10)}</td>
+                          <td className="font-for-status">{resApprove.approval_by.length === 0 ? "รอการลงนาม" : "อนุมัติเรียบร้อย"}</td>
+                        </tr>
+                      )
+                    }
+                    else return (
+                      <tr key={index}>
+                        <td className="font-for-status" style={{ width: "50px" }}>
+                          {resApprove.approval_by.length === 0 ?  <i className="fas fa-check-circle" style={{ color: "gray" }}></i> : <i className="fas fa-check-circle" style={{ color: "green" }}></i> }
+                        </td>
+                        <td className="font-for-status">{resApprove.position_group.name}</td>
+                        <td className="font-for-status">{resApprove.position.length === 0 ? "" : resApprove.position[0].name}</td>
+                        <td className="font-for-status">{resApprove.approval_by.length === 0 ? "-" : resApprove.approval_by[0].user.firstname_th + " " + resApprove.approval_by[0].user.lastname_th}</td>
+                        <td className="font-for-status">{resApprove.approval_by.length === 0 ? "-" : resApprove.approval_by[0].approved_on.slice(0, 10)}</td>
+                        <td className="font-for-status">{resApprove.approval_by.length === 0 ? "รอการลงนาม" : "อนุมัติเรียบร้อย" }</td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
+            
           </div>
         </div>
       </div >
@@ -501,7 +591,10 @@ const mapStateToProps = (state) => ({
   no_part_show_mode_add: state.no_part_show_mode_add,
   list_no_part_mode_add: state.list_no_part_mode_add,
   document_show_mode_add: state.document_show_mode_add,
-  list_desription_part_mode_add: state.list_desription_part_mode_add
+  list_desription_part_mode_add: state.list_desription_part_mode_add,
+
+  status_item: state.status_item,
+  resApprove: state.resApprove
 })
 const mapDispatchToProps = (dispatch) => ({
   // Mode Edit
@@ -515,7 +608,7 @@ const mapDispatchToProps = (dispatch) => ({
   onClickSelectPopUpNoPart: (e) => dispatch(onClickSelectPopUpNoPart(e)),
   onChangeNote: (e) => dispatch(onChangeNote(e)),
   onChangeDescriptionPart: (e) => dispatch(onChangeDescriptionPart(e)),
-
+  onChangeStatus: (e) => dispatch(onChangeStatus(e)),
   handleKeyPressModeEdit: (e) => dispatch(handleKeyPressModeEdit(e)),
 
   // Mode Add
@@ -529,8 +622,10 @@ const mapDispatchToProps = (dispatch) => ({
   onChangeTotalEachRowModeAdd: (e) => dispatch(onChangeTotalEachRowModeAdd(e)),
   onChangeNoteModeAdd: (e) => dispatch(onChangeNoteModeAdd(e)),
   onChangeDescriptionPartModeAdd: (e) => dispatch(onChangeDescriptionPartModeAdd(e)),
+  onChangeStatusModeAdd: (e) => dispatch(onChangeStatusModeAdd(e)),
 
-  handleKeyPress: (e) => dispatch(handleKeyPress(e))
+  handleKeyPress: (e) => dispatch(handleKeyPress(e)),
+  loadStatusItem: (e) => dispatch(loadStatusItem(e)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(BottomContent);
 
@@ -604,6 +699,14 @@ export const onChangeDescriptionPart = (e) => {
   return {
     type: "ON CHANGE DESCRIPTION PART",
     value: e.target.value,
+  }
+}
+export const onChangeStatus = (e) => {
+  console.log(e.target.parentNode.parentNode.id)
+  return {
+    type: "ON CHANGE STATUS PART",
+    value: e.target.value,
+    rowIndex: e.target.parentNode.parentNode.id
   }
 }
 
@@ -732,5 +835,28 @@ export const handleKeyPress = (e) => {
     return {
       type: "NOT ENTER"
     }
+  }
+}
+
+
+export const loadStatusItem = (e) => {
+  return function (dispatch) {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/item-status`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+      console.log(res)
+      dispatch({
+        type: "LOAD STATUS ITEM",
+        value: res.data.results
+      })
+
+    });
+  };
+}
+
+export const onChangeStatusModeAdd = (e) => {
+  console.log(e.target.parentNode.parentNode.id)
+  return {
+    type: "ON CHANGE STATUS PART MODE ADD",
+    value: e.target.value,
+    rowIndex: e.target.parentNode.parentNode.id
   }
 }

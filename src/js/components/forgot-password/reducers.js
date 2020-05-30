@@ -3,6 +3,7 @@ const initialState = {
     password: "",
 
     new_password: "",
+    alert: "",
     submitForget: false
 }
 export default (state = initialState, action) => {
@@ -22,6 +23,11 @@ export default (state = initialState, action) => {
                 ...state,
                 submitForget: true,
                 new_password: action.value
+            }
+        case "NO ID":
+            return {
+                ...state,
+                alert: "ไม่มีรหัสพนักงานในระบบ"
             }
 
         default:

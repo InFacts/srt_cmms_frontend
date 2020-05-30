@@ -890,7 +890,7 @@ export const onClickPopUpSearchUserModeEdit = (created_by_user_name_th, created_
     var space = created_by_user_name_th.indexOf(" ");
     var firstname = created_by_user_name_th.slice(0, space);
     var lastname = created_by_user_name_th.slice(space + 1, created_by_user_name_th.length);
-    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&lastname_th=${lastname}&employee_id=${created_by_user_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&employee_id=${created_by_user_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       console.log(">>>>", res)
       dispatch({
         type: "CLICK SEARCH POPUP USER MODE EDIT",
@@ -969,7 +969,7 @@ export const onClickPopUpSearchUser = (created_by_user_name_th, created_by_user_
     var space = created_by_user_name_th.indexOf(" ");
     var firstname = created_by_user_name_th.slice(0, space);
     var lastname = created_by_user_name_th.slice(space + 1, created_by_user_name_th.length);
-    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&lastname_th=${lastname}&employee_id=${created_by_user_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${firstname}&employee_id=${created_by_user_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
       console.log(res)
       dispatch({
         type: "CLICK SEARCH POPUP USER",

@@ -1,4 +1,9 @@
 const initialState = {
+  resApprove: [],
+  status_item: [],
+  
+  // Approval
+  action_approval: "",
 
   // Mode การทำงาน
   action: "search",
@@ -36,7 +41,12 @@ const initialState = {
     "src_warehouse_id": "",
     "src_warehouse_name": "",
     "po_id": "",
-    "line_items": []
+    "line_items": [],
+    "item_status": {
+      "description": "",
+      "description_th": "",
+      "item_status_id": ""
+    }
   },
   list_show_mode_add: [
     {
@@ -48,14 +58,11 @@ const initialState = {
       "unit": "",
       "per_unit_price": "",
       "list_uoms": [],
-      "at_source": [
-        {
-          "current_unit_count": "",
-          "item_status": {
-            "description_th": ""
-          }
-        }
-      ]
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -66,14 +73,11 @@ const initialState = {
       "unit": "",
       "per_unit_price": "",
       "list_uoms": [],
-      "at_source": [
-        {
-          "current_unit_count": "",
-          "item_status": {
-            "description_th": ""
-          }
-        }
-      ]
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -84,14 +88,11 @@ const initialState = {
       "unit": "",
       "per_unit_price": "",
       "list_uoms": [],
-      "at_source": [
-        {
-          "current_unit_count": "",
-          "item_status": {
-            "description_th": ""
-          }
-        }
-      ]
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -102,14 +103,11 @@ const initialState = {
       "unit": "",
       "per_unit_price": "",
       "list_uoms": [],
-      "at_source": [
-        {
-          "current_unit_count": "",
-          "item_status": {
-            "description_th": ""
-          }
-        }
-      ]
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -120,14 +118,11 @@ const initialState = {
       "unit": "",
       "per_unit_price": "",
       "list_uoms": [],
-      "at_source": [
-        {
-          "current_unit_count": "",
-          "item_status": {
-            "description_th": ""
-          }
-        }
-      ]
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -138,14 +133,11 @@ const initialState = {
       "unit": "",
       "per_unit_price": "",
       "list_uoms": [],
-      "at_source": [
-        {
-          "current_unit_count": "",
-          "item_status": {
-            "description_th": ""
-          }
-        }
-      ]
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -156,14 +148,11 @@ const initialState = {
       "unit": "",
       "per_unit_price": "",
       "list_uoms": [],
-      "at_source": [
-        {
-          "current_unit_count": "",
-          "item_status": {
-            "description_th": ""
-          }
-        }
-      ]
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -174,14 +163,11 @@ const initialState = {
       "unit": "",
       "per_unit_price": "",
       "list_uoms": [],
-      "at_source": [
-        {
-          "current_unit_count": "",
-          "item_status": {
-            "description_th": ""
-          }
-        }
-      ]
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -192,14 +178,11 @@ const initialState = {
       "unit": "",
       "per_unit_price": "",
       "list_uoms": [],
-      "at_source": [
-        {
-          "current_unit_count": "",
-          "item_status": {
-            "description_th": ""
-          }
-        }
-      ]
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -210,14 +193,11 @@ const initialState = {
       "unit": "",
       "per_unit_price": "",
       "list_uoms": [],
-      "at_source": [
-        {
-          "current_unit_count": "",
-          "item_status": {
-            "description_th": ""
-          }
-        }
-      ]
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
   ],
 
@@ -231,14 +211,11 @@ const initialState = {
       "unit": "",
       "per_unit_price": "",
       "list_uoms": [],
-      "at_source": [
-        {
-          "current_unit_count": "",
-          "item_status": {
-            "description_th": ""
-          }
-        }
-      ]
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -249,14 +226,11 @@ const initialState = {
       "unit": "",
       "per_unit_price": "",
       "list_uoms": [],
-      "at_source": [
-        {
-          "current_unit_count": "",
-          "item_status": {
-            "description_th": ""
-          }
-        }
-      ]
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -267,14 +241,11 @@ const initialState = {
       "unit": "",
       "per_unit_price": "",
       "list_uoms": [],
-      "at_source": [
-        {
-          "current_unit_count": "",
-          "item_status": {
-            "description_th": ""
-          }
-        }
-      ]
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -285,14 +256,11 @@ const initialState = {
       "unit": "",
       "per_unit_price": "",
       "list_uoms": [],
-      "at_source": [
-        {
-          "current_unit_count": "",
-          "item_status": {
-            "description_th": ""
-          }
-        }
-      ]
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -303,14 +271,11 @@ const initialState = {
       "unit": "",
       "per_unit_price": "",
       "list_uoms": [],
-      "at_source": [
-        {
-          "current_unit_count": "",
-          "item_status": {
-            "description_th": ""
-          }
-        }
-      ]
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -321,14 +286,11 @@ const initialState = {
       "unit": "",
       "per_unit_price": "",
       "list_uoms": [],
-      "at_source": [
-        {
-          "current_unit_count": "",
-          "item_status": {
-            "description_th": ""
-          }
-        }
-      ]
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -339,14 +301,11 @@ const initialState = {
       "unit": "",
       "per_unit_price": "",
       "list_uoms": [],
-      "at_source": [
-        {
-          "current_unit_count": "",
-          "item_status": {
-            "description_th": ""
-          }
-        }
-      ]
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -357,14 +316,11 @@ const initialState = {
       "unit": "",
       "per_unit_price": "",
       "list_uoms": [],
-      "at_source": [
-        {
-          "current_unit_count": "",
-          "item_status": {
-            "description_th": ""
-          }
-        }
-      ]
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -375,14 +331,11 @@ const initialState = {
       "unit": "",
       "per_unit_price": "",
       "list_uoms": [],
-      "at_source": [
-        {
-          "current_unit_count": "",
-          "item_status": {
-            "description_th": ""
-          }
-        }
-      ]
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
     {
       "item_id": "",
@@ -393,14 +346,11 @@ const initialState = {
       "unit": "",
       "per_unit_price": "",
       "list_uoms": [],
-      "at_source": [
-        {
-          "current_unit_count": "",
-          "item_status": {
-            "description_th": ""
-          }
-        }
-      ]
+      "item_status": {
+        "description": "",
+        "description_th": "",
+        "item_status_id": ""
+      }
     },
   ],
   list_show_mode_add_row_index: "",
@@ -420,6 +370,52 @@ const initialState = {
 }
 export default (state = initialState, action) => {
   switch (action.type) {
+    case "APPROVAL MODE":
+      for (var i = action.value.line_items.length; i <= 9; i++) {
+        action.value.line_items.push(
+          {
+            "item_id": "",
+            "internal_item_id": "",
+            "description": "",
+            "quantity": "",
+            "uom_group_id": "",
+            "unit": "",
+            "per_unit_price": "",
+            "list_uoms": [],
+            "at_source": [
+              {
+                "adjustment_unit_count": "",
+                "begin_unit_count": "",
+                "current_unit_count": "",
+                "in_unit_count": "",
+                "issue_unit_count": "",
+                "item_id": "",
+                "item_status": {
+                  "item_status_id": "",
+                  "description": "",
+                  "description_th": ""
+                },
+                "item_status_id": "",
+                "out_unit_count": "",
+                "receive_unit_count": "",
+                "warehouse_id": ""
+              }
+            ]
+          }
+        );
+      }
+      console.log("list_show", action.value.line_items)
+      return {
+        ...state,
+        no_document: action.value.internal_document_id,
+        document_show: action.value,
+        list_show: action.value.line_items,
+        action_approval: "check & approval", // 1 ตรวจสอบและรับทราบลงนาม -> ลงนาม ตีกลับ ยกเลิก
+        // action_approval: "approval", // 2 รับทราบลงนาม -> ลงนาม ตีกลับ ยกเลิก
+        // action_approval: "got it", // 3 รับทราบ -> ลงนาม ยกเลิก
+        // action_approval: "got it", // 4 ลงนามเรียบแล้ว -> ลงนามเรียบแล้ว
+        // 5 ผู้สร้างเอกสาร -> ยกเลิกเอกสาร ยกเลิก
+      }
     case "CLICK MODE EDIT":
       return {
         ...state,
@@ -494,6 +490,7 @@ export default (state = initialState, action) => {
         no_document: action.value.internal_document_id,
         document_show: action.value,
         list_show: action.value.line_items,
+        resApprove: action.resApprove
         // fill_data: true,
       }
 
@@ -591,14 +588,22 @@ export default (state = initialState, action) => {
       clone_list_show[state.list_show_row_index].description = state.no_part_show[action.rowIndex].description
       clone_list_show[state.list_show_row_index].list_uoms = state.no_part_show[action.rowIndex].list_uoms
       clone_list_show[state.list_show_row_index].uom_group_id = state.no_part_show[action.rowIndex].uom_group_id
-
       clone_list_show[state.list_show_row_index].quantity = 1
       clone_list_show[state.list_show_row_index].per_unit_price = "1.0000"
-      clone_list_show[state.list_show_row_index].at_source[0].current_unit_count = action.resStatistic[0].current_unit_count
-      clone_list_show[state.list_show_row_index].at_source[0].item_status.description_th = action.resStatistic[0].description_th
-      return {
-        ...state,
-        list_show: clone_list_show
+
+      if (action.resStatistic.length === 0) {
+        return {
+          ...state,
+          list_show: clone_list_show
+        }
+      }
+      else {
+        clone_list_show[state.list_show_row_index].at_source[0].current_unit_count = action.resStatistic[0].current_unit_count
+        clone_list_show[state.list_show_row_index].at_source[0].item_status.description_th = action.resStatistic[0].description_th
+        return {
+          ...state,
+          list_show: clone_list_show
+        }
       }
     case "CLICK SEARCH POPUP INVENTORY":
       return {
@@ -641,7 +646,7 @@ export default (state = initialState, action) => {
       }
     case "CLICK SELECT POPUP USER MODE EDIT":
       var clone_document_show = { ...state.document_show };
-      clone_document_show.created_by_user_name_th = state.line_users[action.row_inventory_show_popup].firstname_th + " " + state.line_users[action.row_inventory_show_popup].lastname_th
+      clone_document_show.created_by_user_name_th = state.line_users[action.row_inventory_show_popup].firstname_th + " " + `${state.line_users[action.row_inventory_show_popup].lastname_th === null ? "" : state.line_users[action.row_inventory_show_popup].lastname_th}`
       clone_document_show.employee_id = state.line_users[action.row_inventory_show_popup].employee_id
       clone_document_show.created_by_user_id = state.line_users[action.row_inventory_show_popup].user_id
       return {
@@ -727,12 +732,22 @@ export default (state = initialState, action) => {
       clone_list_show_mode_add[state.list_show_mode_add_row_index].list_uoms = state.no_part_show_mode_add[action.rowIndex].list_uoms
       clone_list_show_mode_add[state.list_show_mode_add_row_index].quantity = 1
       clone_list_show_mode_add[state.list_show_mode_add_row_index].per_unit_price = "1.0000"
-      clone_list_show_mode_add[state.list_show_mode_add_row_index].current_unit_count = action.resStatistic[0].current_unit_count
-      clone_list_show_mode_add[state.list_show_mode_add_row_index].description_th = action.resStatistic[0].description_th
-      return {
-        ...state,
-        list_show_mode_add: clone_list_show_mode_add
+
+      if (action.resStatistic.length === 0) {
+        return {
+          ...state,
+          list_show_mode_add: clone_list_show_mode_add
+        }
       }
+      else {
+        clone_list_show_mode_add[state.list_show_mode_add_row_index].current_unit_count = action.resStatistic[0].current_unit_count
+        clone_list_show_mode_add[state.list_show_mode_add_row_index].description_th = action.resStatistic[0].description_th
+        return {
+          ...state,
+          list_show_mode_add: clone_list_show_mode_add
+        }
+      }
+
     case "ON CHANGE QUILITY EACH ROW MODE ADD":
       var clone_list_show_mode_add = [...state.list_show_mode_add];
       clone_list_show_mode_add[action.rowIndex].quantity = action.value
@@ -791,7 +806,7 @@ export default (state = initialState, action) => {
       }
     case "CLICK SELECT POPUP USER":
       var clone_document_show_mode_add = { ...state.document_show_mode_add };
-      clone_document_show_mode_add.created_by_user_name_th = state.line_users[action.row_inventory_show_popup].firstname_th + " " + state.line_users[action.row_inventory_show_popup].lastname_th
+      clone_document_show_mode_add.created_by_user_name_th = state.line_users[action.row_inventory_show_popup].firstname_th + " " + `${state.line_users[action.row_inventory_show_popup].lastname_th === null ? "" : state.line_users[action.row_inventory_show_popup].lastname_th}`
       clone_document_show_mode_add.employee_id = state.line_users[action.row_inventory_show_popup].employee_id
       clone_document_show_mode_add.created_by_user_id = state.line_users[action.row_inventory_show_popup].user_id
       return {
@@ -823,6 +838,22 @@ export default (state = initialState, action) => {
       return {
         ...state,
       }
+      case "ON CHANGE STATUS PART MODE ADD":
+        var clone_list_show_mode_add = [...state.list_show_mode_add];
+        clone_list_show_mode_add[action.rowIndex].item_status.item_status_id = action.value
+        console.log("clone_list_show_mode_add[action.rowIndex].item_status.item_status_id", clone_list_show_mode_add[action.rowIndex].item_status.item_status_id)
+        return {
+          ...state,
+          list_show_mode_add: clone_list_show_mode_add,
+        }
+
+      case "LOAD STATUS ITEM": {
+        return {
+          ...state,
+          status_item: action.value
+        }
+      }
+  
 
     // POST DOCUMENT
     case "POST DOCUMENT":
@@ -830,8 +861,8 @@ export default (state = initialState, action) => {
       clone_document_show_mode_add.created_by_admin_name_th = action.decoded.firstname_th === null ? "" : action.decoded.firstname_th + " " + action.decoded.lastname_th;
       clone_document_show_mode_add.created_by_admin_id = action.decoded.user_id === null ? "" : action.decoded.user_id;
 
-      clone_document_show_mode_add.src_warehouse_id = action.decoded.list_positions[0].warehouse_id === null ? "" : action.decoded.list_positions[0].warehouse_id;
-      clone_document_show_mode_add.src_warehouse_name = action.decoded.list_positions[0].warehouse_name === null ? "" : action.decoded.list_positions[0].warehouse_name;
+      clone_document_show_mode_add.src_warehouse_id = action.decoded.has_positions[0].warehouse_id === null ? "" : action.decoded.has_positions[0].warehouse_id;
+      clone_document_show_mode_add.src_warehouse_name = action.decoded.has_positions[0].warehouse_name === null ? "" : action.decoded.has_positions[0].warehouse_name;
 
       return {
         ...state,
