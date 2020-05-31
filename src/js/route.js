@@ -12,6 +12,9 @@ import ItemMasterData2 from './components/spare-item-master-data2';
 import SpareGoodReceipt from './components/spare-good-receipt';
 import SpareGoodReceipt2 from './components/spare-good-receipt2';
 import Track from './components/track-document';
+
+import TestTabbar from './components/test-tabbar';
+
 class FrontEnd extends React.Component {
     render() {
         return (
@@ -25,6 +28,8 @@ class FrontEnd extends React.Component {
                 <Route exact path="/good-receipt" component={SpareGoodReceipt} />
                 <Route exact path="/good-receipt2" component={SpareGoodReceipt2} />
                 <Route exact path="/track" component={Track} />
+
+                <Route exact path="/test-tab-document" component={TestTabbar} />
             </Router>
         );
     }
