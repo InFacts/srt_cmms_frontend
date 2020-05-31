@@ -1,8 +1,8 @@
 import React, {useEffect} from 'react';
 import { connect } from 'react-redux';
+import { useFormik , withFormik } from 'formik';
 
-import NavTopbar from '../nav/nav-top.js';
-import Toolbar from '../common/nav-toolbar';
+
 import { TOOLBAR_ACTIONS, handleClickHomeToSpareMain, toModeSearch } from '../../redux/modules/toolbar.js';
 import { onClearStateModeAdd} from '../../redux/modules/goods_receipt.js';
 
@@ -62,6 +62,7 @@ const packForm = (document_id, document_show, list_show) => {
 
 const GoodsReceiptComponent = (props) => {
 
+
     // Run only once with checking nothing []
     // 1. Change Toolbar to Mode Search
     useEffect(()=>{
@@ -74,6 +75,8 @@ const GoodsReceiptComponent = (props) => {
             props.handleClickHomeToSpareMain();
         }
     }, [props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.HOME]]);
+
+
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -104,9 +107,8 @@ const GoodsReceiptComponent = (props) => {
 
     return (
         <>
-            <NavTopbar />
-            <Toolbar />
-            <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) handleSubmit(e) }}>
+            {/* <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) handleSubmit(e) }}> */}
+            <form onSubmit={props.handleSubmit}>
                 <TopContent />
                 <BottomContent />
                 <Footer />
@@ -114,6 +116,25 @@ const GoodsReceiptComponent = (props) => {
         </>
     )
 }
+
+
+const EnhancedGoodsReceiptComponent = withFormik({
+    mapPropsToValues: () => ({ internal_document_id: '' }),
+    validate: values => {
+        const errors = {};
+
+        if (!values.internal_document_id) {
+          errors.internal_document_id = 'Required';
+        }
+    
+        return errors;
+    },
+    handleSubmit: values => {
+        alert(JSON.stringify(values, null, 2));
+      },    
+})(GoodsReceiptComponent);
+
+
 
 const mapStateToProps = (state) => ({
     toolbar: state.toolbar,
@@ -135,4 +156,4 @@ const mapDispatchToProps = {
     handleClickHomeToSpareMain, toModeSearch, onClearStateModeAdd
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(GoodsReceiptComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(EnhancedGoodsReceiptComponent);

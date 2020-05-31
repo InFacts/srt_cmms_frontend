@@ -17,10 +17,4 @@ export default function reducer(state = {}, action){
 }
 
 // Action Creators
-export function handleChange(field, value){
-    return {
-        type: CHANGE_FORM,
-        field,
-        value
-    }
-}
+export const handleChange = makeActionCreator(CHANGE_FORM, 'field', 'value');
