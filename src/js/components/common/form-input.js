@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux'
 import { handleChange } from '../../redux/modules/form_data.js'
 
-const FormInputComponent = ({className, value, handleChange}) => (
-    <input type='text' className={className} value={value} onChange={handleChange} />
+const FormInputComponent = ({className, value, handleChange, handleBlur}) => (
+    <input type='text' className={className} value={value} onChange={handleChange} onBlur={handleBlur}/>
 );
 
 const mapStateToProps = (state, ownProps) => ({

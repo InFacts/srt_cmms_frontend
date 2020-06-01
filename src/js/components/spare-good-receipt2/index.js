@@ -1,9 +1,8 @@
 import React, {useEffect} from 'react';
 import { connect } from 'react-redux';
+import { useFormik , withFormik ,useFormikContext} from 'formik';
 
-import NavTopbar from '../nav/nav-top.js';
-import Toolbar from '../common/nav-toolbar';
-import { TOOLBAR_ACTIONS, handleClickHomeToSpareMain, toModeSearch } from '../../redux/modules/toolbar.js';
+import { TOOLBAR_ACTIONS, handleClickHomeToSpareMain, toModeSearch, handleClickAdd, TOOLBAR_MODE } from '../../redux/modules/toolbar.js';
 import { onClearStateModeAdd} from '../../redux/modules/goods_receipt.js';
 
 import axios from "axios";
@@ -60,7 +59,12 @@ const packForm = (document_id, document_show, list_show) => {
     return data;
 }
 
+
+
+
 const GoodsReceiptComponent = (props) => {
+
+    const {resetForm, setValues} = useFormikContext();
 
     // Run only once with checking nothing []
     // 1. Change Toolbar to Mode Search
@@ -74,6 +78,17 @@ const GoodsReceiptComponent = (props) => {
             props.handleClickHomeToSpareMain();
         }
     }, [props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.HOME]]);
+
+    // Handle toolbar mode change: ADD, SEARCH
+    useEffect(()=> {
+        if (props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]){
+            props.handleClickAdd(); // make handle click False
+            resetForm();
+        }
+        if (props.toolbar.mode === TOOLBAR_MODE.SEARCH){
+            resetForm();
+        }
+    }, [props.toolbar.mode]);
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -103,17 +118,73 @@ const GoodsReceiptComponent = (props) => {
     }
 
     return (
-        <>
-            <NavTopbar />
-            <Toolbar />
-            <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) handleSubmit(e) }}>
-                <TopContent />
-                <BottomContent />
-                <Footer />
-            </form>
-        </>
+        <form onSubmit={props.handleSubmit}>
+        {/* <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) handleSubmit(e) }}> */}
+            <TopContent />
+            <BottomContent />
+            <Footer />
+        </form>
+
     )
 }
+
+const initialForm = { 
+    // Field ที่ให้ User กรอก
+    internal_document_id: '',
+    document_date: '',
+
+    dest_warehouse_id: '',
+    created_by_user_employee_id: '',
+
+    po_id: '',
+
+    remark: '',
+
+    line_items: [],
+
+    //Field ที่ไม่ได้กรอก
+    document_id: '',
+    created_on: '',
+    status_name_th: '',
+    document_status_id: '',
+    created_by_admin_employee_id: '',
+
+    dest_warehouse_name: '',
+}
+
+const initialLineItem = {
+    quantity: '',
+    uom_id: '',
+    per_unit_price: '',
+    item_id: '',
+    item_status_id: '',
+    //Field ที่ไม่ได้กรอก
+    line_number: '',
+    document_id: '',
+}
+
+const EnhancedGoodsReceiptComponent = withFormik({
+    mapPropsToValues: () => initialForm,
+    validate: values => new Promise( resolve => {
+        const errors = {};
+
+        if (!values.internal_document_id) {
+          errors.internal_document_id = 'Required';
+          
+        }
+        resolve(errors)
+        // console.log("I COME OUT")
+        // resolve(errors)
+
+    }),
+    handleSubmit: values => {
+        console.log("i am submitting", values)
+        alert(JSON.stringify(values, null, 2));
+      },    
+    validateOnChange: false,
+})(GoodsReceiptComponent);
+
+
 
 const mapStateToProps = (state) => ({
     toolbar: state.toolbar,
@@ -132,7 +203,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = {
-    handleClickHomeToSpareMain, toModeSearch, onClearStateModeAdd
+    handleClickHomeToSpareMain, toModeSearch, onClearStateModeAdd, handleClickAdd
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(GoodsReceiptComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(EnhancedGoodsReceiptComponent);
