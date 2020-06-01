@@ -14,6 +14,9 @@ import TopContent from './top-content';
 import BottomContent from './bottom-content';
 import Footer from '../common/footer.js';
 
+import {fetchFactIfNeeded , FACTS} from '../../redux/modules/api/fact';
+
+
 const packForm = (document_id, document_show, list_show) => {
     const line_items = [];
     var line_number = 1
@@ -86,6 +89,13 @@ const GoodsReceiptComponent = (props) => {
             resetForm();
         }
     }, [props.toolbar.mode]);
+
+    // Fetch Fact If needed
+    useEffect(() => {
+        for (const factName of Object.values(FACTS)){
+            props.fetchFactIfNeeded(factName);
+        }
+    }, []);
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -200,7 +210,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = {
-    handleClickHomeToSpareMain, toModeSearch, onClearStateModeAdd, handleClickAdd
+    handleClickHomeToSpareMain, toModeSearch, onClearStateModeAdd, handleClickAdd, fetchFactIfNeeded
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EnhancedGoodsReceiptComponent);

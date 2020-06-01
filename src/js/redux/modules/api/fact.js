@@ -88,6 +88,16 @@ function receiveFact(factName, data){
     }
 }
 
+function shouldFetchFact(state, factName){
+    const fact = state.api.fact[factName];
+    if (fact.lastUpdated < 0){
+        return true;
+    } else if (fact.isFetching){
+        return false;
+    } else {
+        return fact.didInvalidate;
+    }
+}
 
 export function fetchFact(factName){
     return (dispatch) => {
@@ -101,5 +111,17 @@ export function fetchFact(factName){
                 dispatch(receiveFailure(factName))
             }
         })
+    }
+}
+
+export function fetchFactIfNeeded(factName){
+    return (dispatch, getState) => {
+        if (shouldFetchFact(getState(), factName)) {
+            // Dispatch a thunk from thunk!
+            return dispatch(fetchFact(factName));
+        } else{
+            // Let the calling code know there's nothing to wait for.
+            return Promise.resolve();
+        }
     }
 }
