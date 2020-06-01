@@ -68,6 +68,7 @@ const responseToFormState = (data) => {
   }
   return {
       internal_document_id: data.internal_document_id,
+      created_by_user_employee_id: data.created_by_user_employee_id,
       created_on: data.created_on.split(".")[0],
       line_items: data.line_items,
       dest_warehouse_id: data.dest_warehouse_id,
@@ -76,7 +77,6 @@ const responseToFormState = (data) => {
   }
 
 }
-
 
 const TopContent = (props) => {
   useEffect(() => {
@@ -98,7 +98,6 @@ const TopContent = (props) => {
     document.getElementById(cityName).style.display = "block";
     evt.currentTarget.className += " active";
   }
-
 
   const validateInternalDocumentIDField = internal_document_id => new Promise(resolve => {
     if (!internal_document_id) {
@@ -124,9 +123,9 @@ const TopContent = (props) => {
   return (
     <div id="blackground-white">
       <div className="container_12 clearfix">
-        <section className="grid_12 ">
+        <section className="container_12 ">
           <h4 className="head-title">นำอะไหล่เข้าโดยมีใบสั่งซื้อ</h4>
-          <div className="grid_12">
+          <div className="container_12">
 
           {/* Document ID */}
           <div className="grid_2">
@@ -146,7 +145,7 @@ const TopContent = (props) => {
           </div>
         </div>
 
-        <div className="grid_12">
+        <div className="container_12">
           {/* Created by User */}
           <div className="grid_2">
             <p className="top-text">ผู้นำเข้า</p>
@@ -155,22 +154,19 @@ const TopContent = (props) => {
             {/* Q: If this is user name in thai, how do we get ID? */}
             <TextInput name="created_by_user_employee_id" disabled={props.actionMode === TOOLBAR_MODE.SEARCH} 
               searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName" tabIndex="2"/>
-
           </div>
 
           {/* Created On */}
           <div className="grid_3 float-right">
-            <DateTimeInput name="created_on" disabled={props.actionMode === TOOLBAR_MODE.SEARCH}/>
+  <DateTimeInput name="created_on" /*validate={validateCreateOnField */
+            disabled={props.actionMode === TOOLBAR_MODE.SEARCH}/>
           </div>
           <div className="grid_2 float-right">
             <p className="top-text float-right">วันที่</p>
           </div>
         </div>
-        
-
        
-        <div className="grid_12">
-
+        <div className="container_12">
           {/* Admin Name */}
           <div className="grid_2">
             <p className="top-text">ผู้สร้างเอกสาร</p>
@@ -178,7 +174,6 @@ const TopContent = (props) => {
           <div className="grid_3 pull_1">
             <TextInput name="created_by_admin_name_th" disabled />
           </div>
-
 
           {/* Dest Warehouse ID */}
           <div className="grid_3 float-right">
@@ -192,7 +187,7 @@ const TopContent = (props) => {
         </div>
 
         {/* PO ID */}
-        <div className="grid_12">
+        <div className="container_12">
           <div className="grid_2">
             <p className="top-text">เลขที่ใบสั่งซื้อ/เลขที่เอกสารอ้างอิง</p>
           </div>
@@ -210,7 +205,7 @@ const TopContent = (props) => {
         </div>
       </section>
 
-      <div className="grid_12">
+      <div className="container_12">
         <div className="tab grid_11">
           <button type="button" id="defaultOpen" className="tablinks" onClick={e => tapChange(e, "รายการ")}>รายการ</button>
           <button type="button" className="tablinks" onClick={e => tapChange(e, "แนบไฟล์")}>แนบไฟล์</button>
