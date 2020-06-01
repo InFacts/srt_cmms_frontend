@@ -1,21 +1,27 @@
-import React from 'react';
-
-import NavTopbar from '../nav/nav-top.js';
-import ToolBar from '../nav/nav-toolbar.js';
+import React, { useEffect } from 'react';
+import ToolBar from '../common/nav-toolbar';
+import NavTopbar from '../nav/nav-top2';
 import Map from './map';
 
-import '../../../css/style.css'
+import { connect } from 'react-redux'
 
-class MainModule extends React.Component {
-    render() {
-        return (
-            <div>
-                <NavTopbar />
-                <ToolBar />
-                <Map />
-            </div>
-        )
-    };
+const MainModuleSpare = (props) => {
+
+    return (
+        <>
+            <NavTopbar />
+            <ToolBar />
+            <Map />
+        </>
+    )
 }
 
-export default MainModule;
+const mapStateToProps = (state) => ({
+
+});
+
+const mapDispatchToProps = {
+
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainModuleSpare);

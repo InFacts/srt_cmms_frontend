@@ -9,10 +9,6 @@ import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
 import { API_URL_DATABASE } from '../../config_url.js';
 
-// import '../../../vender/fontawesome-free/css/all.css';
-// import '../../../css/style-nav.css'
-// import '../../../css/notification.css'
-
 class NavTop extends React.Component {
 
     constructor(props) {
@@ -34,8 +30,7 @@ class NavTop extends React.Component {
     componentDidMount() {
         this.setupAllContextualMenus('.p-contextual-menu__toggle');
         this.setupAllSubNav();
-
-        this.props.loadNotify();
+        // this.props.loadNotify();
     }
 
     // Function DropDawn
@@ -270,9 +265,9 @@ and setting aria-hidden attribute on dropdown contents.
                             <li className="p-navigation__item p-subnav a nav-li" style={{ marginRight: "0", marginLeft: "auto" }} role="menuitem" id="link-1">
                                 <Link to="#" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu" style={{ paddingRight: "10px" }} >
                                     <i className="fas fa-bell" style={{ fontSize: "22px", color: "white" }}></i>
-                                    {this.countNotify(this.props.not_read_count)}
+                                    {/* {this.countNotify(this.props.not_read_count)} */}
                                 </Link>
-                                {this.checkZeroNotify(this.props.notify)}
+                                {/* {this.checkZeroNotify(this.props.notify)} */}
                             </li>
                             <li className="p-navigation__item p-subnav a nav-li" role="menuitem" id="link-1">
                                 <Link to="#" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu">
@@ -301,50 +296,50 @@ const mapStateToProps = (state) => ({
     not_read_count: state.not_read_count
 })
 const mapDispatchToProps = (dispatch) => ({
-    loadNotify: (e) => dispatch(loadNotify(e)),
-    readNotify: (e) => dispatch(readNotify(e)),
-    logOut: (e) => dispatch(logOut(e)),
+    // loadNotify: (e) => dispatch(loadNotify(e)),
+    // readNotify: (e) => dispatch(readNotify(e)),
+    // logOut: (e) => dispatch(logOut(e)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(NavTop);
 
-export const loadNotify = (e) => {
-    return function (dispatch) {
-        return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/notification/plus`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
-            // console.log(res)
-            dispatch({
-                type: "LOAD NOTIFY",
-                value: res.data.results
-            })
+// export const loadNotify = (e) => {
+//     return function (dispatch) {
+//         return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/notification/plus`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+//             // console.log(res)
+//             dispatch({
+//                 type: "LOAD NOTIFY",
+//                 value: res.data.results
+//             })
 
-        });
-    };
-}
-export const readNotify = (e) => {
-    const data = {
-        "notification_id": e.target.parentNode.parentNode.parentNode.id,
-        "is_read": true
-    }
-    console.log("data", data)
-    return function (dispatch) {
-        return axios.patch(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/notifications`, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
-            console.log(res)
-            dispatch({
-                type: "",
-            })
-        });
-    };
-}
-export const logOut = (e) => {
-    localStorage.removeItem('token_auth');
-    const data = {
+//         });
+//     };
+// }
+// export const readNotify = (e) => {
+//     const data = {
+//         "notification_id": e.target.parentNode.parentNode.parentNode.id,
+//         "is_read": true
+//     }
+//     console.log("data", data)
+//     return function (dispatch) {
+//         return axios.patch(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/notifications`, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+//             console.log(res)
+//             dispatch({
+//                 type: "",
+//             })
+//         });
+//     };
+// }
+// export const logOut = (e) => {
+//     localStorage.removeItem('token_auth');
+//     const data = {
 
-    }
-    return function (dispatch) {
-        return axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/logout`, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
-            console.log(res)
-            dispatch({
-                type: "",
-            })
-        });
-    };
-}
+//     }
+//     return function (dispatch) {
+//         return axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/logout`, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+//             console.log(res)
+//             dispatch({
+//                 type: "",
+//             })
+//         });
+//     };
+// }

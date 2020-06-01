@@ -7,8 +7,7 @@ import { API_URL_DATABASE } from '../../config_url.js';
 import { connect } from 'react-redux'
 
 import '../../../vender/fontawesome-free/css/all.css';
-// import '../../../css/grid12.css';
-// import '../../../css/style-signin.css';
+import '../../../css/style-signin.css';
 
 import RedHouse from '../../../images/red-house.svg';
 import logo from '../../../images/logo.png';

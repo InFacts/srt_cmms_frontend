@@ -9,6 +9,10 @@ import './css/modal.css';
 import './css/style-list.css';
 import './css/table.css';
 import './css/tabs.css';
+import './css/style-register.css';
+import './css/style-signin.css';
+import './css/notification.css';
+import './css/style-nav.css';
 
 import store from './js/redux/store.js'
 import { Provider } from 'react-redux';

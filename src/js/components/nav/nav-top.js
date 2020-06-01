@@ -65,21 +65,21 @@ class NavTop extends React.Component {
 
             this.setupContextualMenu(toggles[i]);
         }
-
-        document.addEventListener('click', function (event) {
-            for (var i = 0, l = toggles.length; i < l; i++) {
-
-                // var toggle = toggles[i];
-                // var contextualMenu = document.getElementById(toggle.getAttribute('aria-controls'));
-
-                // var clickOutside = !(toggle.contains(event.target) || contextualMenu.contains(event.target));
-
-                // if (clickOutside) {
-                //     this.toggleMenu(toggle, false);
-                // }
-            }
-        });
         var curent = this;
+        document.addEventListener('click', function (event) {
+            
+            // for (var i = 0, l = toggles.length; i < l; i++) {
+
+            //     var toggle = toggles[i];
+            //     var contextualMenu = document.getElementById(toggle.getAttribute('aria-controls'));
+
+            //     var clickOutside = !(toggle.contains(event.target) || contextualMenu.contains(event.target));
+
+            //     if (clickOutside) {
+            //         curent.toggleMenu(toggle, false);
+            //     }
+            // }
+        });
         document.addEventListener('keydown', function (e) {
             e = e || window.event;
 
