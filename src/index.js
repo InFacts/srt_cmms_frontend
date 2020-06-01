@@ -7,8 +7,9 @@ import './css/style.css';
 import './css/grid12.css';
 import './css/modal.css';
 import './css/style-list.css';
-import './css/table.css';
+
 import './css/tabs.css';
+import './css/table.css';
 
 import store from './js/redux/store.js'
 import { Provider } from 'react-redux';

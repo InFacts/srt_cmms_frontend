@@ -4,13 +4,14 @@ import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
 import { API_URL_DATABASE } from '../../config_url.js';
 
-import {handleChange} from '../../redux/modules/form_data.js';
+// import {handleChange} from '../../redux/modules/form_data.js';
+import { useFormikContext } from 'formik';
 
-
-const PopupModalDocument = (props) => {
+const PopupModalDocument = () => {
     const [data, setData] = useState([]);
     const [documentID, setDocumentID] = useState("");
     const [url, setUrl] = useState(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=101&internal_document_id=${documentID}`)
+    const {setFieldValue} = useFormikContext();
 
     useEffect(() => {
         const fetchData = () => {
@@ -22,10 +23,10 @@ const PopupModalDocument = (props) => {
         fetchData();
     }, [url]);
 
-    useEffect(()=> {
-        console.log(documentID)
-        console.log(url)
-    })
+    function onClickSelect(e) {
+        e.preventDefault()
+        setFieldValue('internal_document_id', document.internal_document_id, true); // Force Trigger Validation onClick
+    }
 
     return (
     <div className="modal" id="modalDocument" style={{ display: "none" }}>
@@ -57,7 +58,9 @@ const PopupModalDocument = (props) => {
                         <td className="edit-padding" style={{ minWidth: "150px" }}> {document.internal_document_id} </td>
                         <td className="edit-padding" style={{ minWidth: "300px" }}> {document.created_on.replace("T", " เวลา ").slice(0, 21) + " น."} </td>
                         <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
-                        <button type="button" className="button-blue" onClick={() => props.handleChange("document_id", document.document_id)} aria-label="Close active modal" aria-controls="modalDocument" id="closeModalInventory" >เลือก</button>
+                        {/* <button type="button" className="button-blue" onClick={() => props.handleChange("document_id", document.document_id)} aria-label="Close active modal" aria-controls="modalDocument" id="closeModalInventory" >เลือก</button> */}
+                        {/* <button type="button" className="button-blue" onClick={() => setFieldValue('internal_document_id', document.internal_document_id, true)} aria-label="Close active modal" aria-controls="modalDocument" >เลือก</button> */}
+                        <button type="button" className="button-blue" onClick={onClickSelect} aria-label="Close active modal" aria-controls="modalDocument" >เลือก</button>
                         </td>
                     </tr>
                     )
@@ -67,7 +70,7 @@ const PopupModalDocument = (props) => {
             </div>
 
             <div className="container_12">
-            <button className="button-blue float-right grid_1 mr-5 mt-3" type="button" aria-label="Close active modal" aria-controls="modalDocument" id="closeModalInventory">กลับ</button>
+            <button className="button-blue float-right grid_1 mr-5 mt-3" type="button" aria-label="Close active modal" aria-controls="modalDocument">กลับ</button>
             </div>
 
         </div>
@@ -76,9 +79,9 @@ const PopupModalDocument = (props) => {
 )
 }
 
-const mapStateToProps = null; 
+// const mapStateToProps = null; 
 
-const mapDispatchToProps = {
-    handleChange
-}
-export default connect(mapStateToProps, mapDispatchToProps)(PopupModalDocument);
+// const mapDispatchToProps = {
+//     handleChange
+// }
+export default PopupModalDocument;

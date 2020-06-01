@@ -40,36 +40,42 @@ import {
 } from '../../redux/modules/goods_receipt.js';
 
 import FormInput from '../common/form-input'
+import TextInput from '../common/formik-text-input'
+import DateTimeInput from '../common/formik-datetime-input'
+
 import { useFormikContext , useField} from 'formik';
 
 import PopupModalDocument from '../common/popup-modal-document'
-import PopupModalInventoryEdit from './popup-modal-inventory-edit'
-import PopupModalUsernameEdit from './popup-modal-username-edit'
 import PopupModalInventory from './popup-modal-inventory'
-import PopupModalUsername from './popup-modal-username'
+import PopupModalUsername from '../common/popup-modal-username'
 import {TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
 
 
-const TextInput = ({ ...props }) => {
-  // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
-  // which we can spread on <input> and also replace ErrorMessage entirely.
-  const [field, meta] = useField(props);
-  return (
-    <>
-      <div className="p-search-box cancel-margin">
-        <input type='text' className='p-search-box__input cancel-default' {...field} {...props}/>
-        {props.searchable &&
-          <button type="button" className="p-search-box__button cancel-padding hidden" >
-            <i className="p-icon--search" aria-controls={props.ariaControls} />
-          </button>
+const responseToFormState = (data) => {
+  for (var i = data.line_items.length; i <= 9; i++) {
+    data.line_items.push(
+        {
+        "item_id": "",
+        "internal_item_id": "",
+        "description": "",
+        "quantity": "",
+        "uom_group_id": "",
+        "unit": "",
+        "per_unit_price": "",
+        "list_uoms": []
         }
-      </div>
-      {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
-      ) : null}
-    </>
-  );
-};
+    );
+  }
+  return {
+      internal_document_id: data.internal_document_id,
+      created_on: data.created_on.split(".")[0],
+      line_items: data.line_items,
+      dest_warehouse_id: data.dest_warehouse_id,
+      remark: data.remark,
+      status_name_th: data.status_name,
+  }
+
+}
 
 
 const TopContent = (props) => {
@@ -77,7 +83,7 @@ const TopContent = (props) => {
     document.getElementById("defaultOpen").click();
   }, []);
 
-  const {values, errors, handleChange, getFieldProps} = useFormikContext();
+  const {values, errors, handleChange, handleBlur, getFieldProps, setValues} = useFormikContext();
 
   function tapChange(evt, cityName) {
     var i, tabcontent, tablinks;
@@ -93,24 +99,27 @@ const TopContent = (props) => {
     evt.currentTarget.className += " active";
   }
 
-  function checkInternalDocumentID(e) {
-    e.preventDefault();
-    const documentID = e.target.value;
-    const target = e.currentTarget;
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=101&internal_document_id=${documentID}`;
-    
+
+  const validateInternalDocumentIDField = internal_document_id => new Promise(resolve => {
+    if (!internal_document_id) {
+      return resolve(); // Resolve doesn't return
+    }
+    let error;
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/internal_document_id/${internal_document_id}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
       .then((res) => {
-          console.log(res.data);
-          if (res.data.results[0] && res.data.results[0].internal_document_id === documentID){ // check if First Item exact match
-            e.target.checkValidity();
+          if (res.data.internal_document_id === internal_document_id){ // check if First Item exact match
+            setValues({...values, ...responseToFormState(res.data)}, false); //Setvalues and don't validate
           }else{
-            setTimeout(() => target.focus()); //Omitted delay , execute on next tick
+            console.log("INVALID DOCUMENT ID")
+            error = 'Invalid Document ID'
           }
+      })
+      .finally(() => {
+        resolve(error)
+        console.log(' i run after solve')
       });
-
-    
-  }
+  });
 
   return (
     <div id="blackground-white">
@@ -124,29 +133,13 @@ const TopContent = (props) => {
             <p className="top-text">เลขที่เอกสาร</p>
           </div>
           <div className="grid_3 pull_1">
-            <TextInput name='internal_document_id' searchable={props.actionMode === TOOLBAR_MODE.SEARCH} ariaControls="modalDocument"/>
-            {/* <div className="p-search-box cancel-margin">
-              <FormInput field="internal_document_id" className="p-search-box__input cancel-default" 
-                handleBlur={checkInternalDocumentID} required/> 
-              <input type='text' name='internal_document_id' className='p-search-box__input cancel-default' 
-                {...getFieldProps('internal_document_id')}/>
-                
-
-              {props.actionMode === TOOLBAR_MODE.SEARCH &&
-                <button type="button" className="p-search-box__button cancel-padding hidden" >
-                  <i className="p-icon--search" id="showModalInventory" aria-controls="modalDocument" onClick={props.onClickOpenPopUp}></i>
-                </button>
-              }
-            </div>
-            {<div>{errors.internal_document_id}</div>} */}
+            <TextInput name='internal_document_id' validate={validateInternalDocumentIDField}
+              searchable={props.actionMode === TOOLBAR_MODE.SEARCH} ariaControls="modalDocument" tabIndex="1"/>
           </div>
 
           {/* Document Status  */}
           <div className="grid_3 float-right">
             <TextInput name="status_name_th" disabled />
-            {/* <FormInput field="status_name_th" className="cancel-default" disabled /> */}
-            {/* <input type='text' name='status_name_th' className='cancel-default' 
-                {...getFieldProps('status_name_th')} disabled/> */}
           </div>
           <div className="grid_2 float-right">
             <p className="top-text float-right">สถานะ</p>
@@ -160,23 +153,14 @@ const TopContent = (props) => {
           </div>
           <div className="grid_3 pull_1">
             {/* Q: If this is user name in thai, how do we get ID? */}
-            <TextInput name="created_by_user_name_th" disabled={props.actionMode === TOOLBAR_MODE.SEARCH} 
-              searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"/>
-          {/* <div className="p-search-box cancel-margin"> */}
-            {/* <FormInput field="created_by_user_name_th" className={'p-search-box__input  cancel-default'}
-              disabled={props.actionMode === TOOLBAR_MODE.SEARCH} required/>
-            {props.actionMode !== TOOLBAR_MODE.SEARCH &&
-              <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalInventory" aria-controls="modalUserName"></i></button>
-            }
-            </div>   */}
+            <TextInput name="created_by_user_employee_id" disabled={props.actionMode === TOOLBAR_MODE.SEARCH} 
+              searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName" tabIndex="2"/>
 
           </div>
 
           {/* Created On */}
           <div className="grid_3 float-right">
-            <input type="datetime-local" className="cancel-default" 
-              value={props.document_show.created_on !== undefined ? props.document_show.created_on.slice(0, 16) : null} 
-              disabled={props.actionMode === TOOLBAR_MODE.SEARCH} onChange={props.onChangeDate} required></input>
+            <DateTimeInput name="created_on" disabled={props.actionMode === TOOLBAR_MODE.SEARCH}/>
           </div>
           <div className="grid_2 float-right">
             <p className="top-text float-right">วันที่</p>
@@ -193,7 +177,6 @@ const TopContent = (props) => {
           </div>
           <div className="grid_3 pull_1">
             <TextInput name="created_by_admin_name_th" disabled />
-            {/* <FormInput field="created_by_admin_name_th" className="cancel-default" disabled /> */}
           </div>
 
 
@@ -201,17 +184,6 @@ const TopContent = (props) => {
           <div className="grid_3 float-right">
             <TextInput name="dest_warehouse_id" disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
               searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalInventory"/>
-
-
-          {/* <div className="p-search-box cancel-margin">
-            <FormInput field="dest_warehouse_id" className="p-search-box__input cancel-default"
-              disabled={props.actionMode === TOOLBAR_MODE.SEARCH} required/>
-            { props.actionMode === TOOLBAR_MODE.SEARCH &&
-              <button type="button" className="p-search-box__button cancel-padding hidden" >
-                <i className="p-icon--search" id="showModalInventory" aria-controls="modalInventory"></i>
-              </button>
-            }
-            </div> */}
           </div>
           <div className="grid_2 float-right">
             <p className="top-text float-right">เลขที่คลัง</p>
@@ -226,13 +198,11 @@ const TopContent = (props) => {
           </div>
           <div className="grid_3 pull_0">
             <TextInput name="po_id" disabled={props.actionMode === TOOLBAR_MODE.SEARCH} />
-            {/* <FormInput field="po_id" className="cancel-default" disabled={props.actionMode === TOOLBAR_MODE.SEARCH} required/> */}
           </div>
 
           {/* Dest Warehouse Name */}
           <div className="grid_3 float-right">
             <TextInput name="dest_warehouse_name" disabled/>
-            {/* <FormInput field="dest_warehouse_name" className="cancel-default float-right" disabled/> */}
           </div>
           <div className="grid_2 float-right">
             <p className="top-text float-right">ชื่อคลัง</p>
@@ -250,14 +220,7 @@ const TopContent = (props) => {
     </div>
 
     {/* PopUp ค้นหาเลขที่เอกสาร */}
-    <PopupModalDocument {...props}/>
-
-    {/* PopUp ค้นหาเลขที่คลัง MODE EDIT */}
-    <PopupModalInventoryEdit {...props}/>
-    
-    {/* PopUp ค้นหาชื่อพนักงาน MODE EDIT */}
-    <PopupModalUsernameEdit {...props}/>
-    
+    <PopupModalDocument />
 
     {/* PopUp ค้นหาเลขที่คลัง MODE ADD */}
     <PopupModalInventory {...props}/>
