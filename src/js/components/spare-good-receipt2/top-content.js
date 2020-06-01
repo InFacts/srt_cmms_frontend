@@ -109,6 +109,18 @@ const TopContent = (props) => {
       });
   });
 
+  const validateEmployeeIDField = employee_id => {
+    employee_id = employee_id.split('\\')[0]; // Escape Character USERNAME CANT HAVE ESCAPE CHARACTER!
+    let users = props.fact.users.items;
+    let user = users.find(user => user.employee_id === employee_id); // Returns undefined if not found
+    if(user){
+      setFieldValue("created_by_user_employee_id", `${employee_id}\\${user.firstname_th} ${user.lastname_th}`, false);
+      return;
+    }else{
+      return 'Invalid Employee ID';
+    }
+  };
+
   return (
     <div id="blackground-white">
       <div className="container_12 clearfix">
@@ -141,7 +153,7 @@ const TopContent = (props) => {
           </div>
           <div className="grid_3 pull_1">
             {/* Q: If this is user name in thai, how do we get ID? */}
-            <TextInput name="created_by_user_employee_id" disabled={props.actionMode === TOOLBAR_MODE.SEARCH} 
+            <TextInput name="created_by_user_employee_id" validate={validateEmployeeIDField} disabled={props.actionMode === TOOLBAR_MODE.SEARCH} 
               searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName" tabIndex="2"/>
 
           </div>
