@@ -104,7 +104,7 @@ function shouldFetchFact(state, factName){
 export function fetchFact(factName){
     return (dispatch) => {
         dispatch(requestFact(factName));
-        return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/${factName}`, 
+        return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/${factName}?page_size=1000`, 
         { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
             console.log(res)
             if(res.status === 200){

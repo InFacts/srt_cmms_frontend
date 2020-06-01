@@ -152,7 +152,7 @@ const setupAllSubNav = () => {
 const MainModule = (props) => {
     // Load Notify
     useEffect(() => {
-        props.loadNotify();
+        // props.loadNotify();
         // Setup DropDawn
         setupAllContextualMenus('.p-contextual-menu__toggle');
         // Setup SubNav

@@ -178,6 +178,8 @@ const EnhancedGoodsReceiptComponent = withFormik({
         created_by_admin_employee_id: '',
     
         dest_warehouse_name: '',
+
+        firstPosted: false
     }),
     validate: (values, props) => {
         const errors = {};

@@ -15,10 +15,24 @@ import { useFormikContext, useField } from 'formik';
 import PopupModalDocument from '../common/popup-modal-document'
 import PopupModalInventory from './popup-modal-inventory'
 import PopupModalUsername from '../common/popup-modal-username'
-import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
+import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 
 
-const responseToFormState = (data) => {
+function getEmployeeIDFromUserID(userFact, userID) {
+  let users = userFact.items;
+  if (users && users.length > 0) {
+    let user = users.find(user => `${user.user_id}` === `${userID}`)
+    if (userID === 0){
+      return "Server"
+    }
+    if (user) {
+      return user.employee_id;
+    }
+  }
+  return null;
+}
+
+const responseToFormState = (userFact, data) => {
   for (var i = data.line_items.length; i <= 9; i++) {
     data.line_items.push(
       {
@@ -35,42 +49,35 @@ const responseToFormState = (data) => {
   }
   return {
     internal_document_id: data.internal_document_id,
-    created_by_user_employee_id: data.created_by_user_employee_id,
-    created_on: data.created_on.split(".")[0],
+    created_by_user_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_user_id) || '',
+    created_by_admin_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_admin_id) || '',
+    created_on: data.created_on.split("T")[0],
     line_items: data.line_items,
     dest_warehouse_id: data.dest_warehouse_id,
     remark: data.remark,
     status_name_th: data.status_name,
+    po_id: data.po_id,
   }
 
 }
 
 
-function getEmployeeIDFromUserID(userFact, userID) {
-  let users = userFact.items;
-  if (users && users.length > 0) {
-    let user = users.find(user => user.user_id === userID)
-    if (user) {
-      return user.employee_id;
-    }
-  }
-  return null;
-}
+
 
 const TopContent = (props) => {
   useEffect(() => {
     document.getElementById("defaultOpen").click();
   }, []);
 
-  const {values, errors,setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField} = useFormikContext();
+  const {values, errors,setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm} = useFormikContext();
 
   // Fill Default Forms
   useEffect(() => {
-    if(props.actionMode === TOOLBAR_MODE.ADD){
+    if(props.toolbar.mode === TOOLBAR_MODE.ADD){
       setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(props.fact.users, props.decoded_token.id));
-      validateField("created_by_admin_employee_id");
+      // validateField("created_by_admin_employee_id");
     }
-  }, [props.decoded_token, props.fact.users, props.actionMode])
+  }, [props.decoded_token, props.fact.users, props.toolbar.mode])
 
 
   function tapChange(evt, cityName) {
@@ -96,16 +103,25 @@ const TopContent = (props) => {
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
       .then((res) => {
         if (res.data.internal_document_id === internal_document_id) { // If input document ID exists
-          if (props.actionMode === TOOLBAR_MODE.SEARCH) { //If Mode Search, needs to set value
-            setValues({ ...values, ...responseToFormState(res.data) }, false); //Setvalues and don't validate
+          if (props.toolbar.mode === TOOLBAR_MODE.SEARCH && !props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value
+            console.log(" I AM STILL IN MODE SEARCH AND SET VALUE")
+            setValues({ ...values, ...responseToFormState(props.fact.users, res.data) }, false); //Setvalues and don't validate
+            validateField("dest_warehouse_id");
+            // validateForm();
+            return resolve();
           } else { //If Mode add, need to error duplicate Document ID
             error = 'Duplicate Document ID';
           }
         } else { // If input Document ID doesn't exists
-          if (props.actionMode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
+          if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
             error = 'Invalid Document ID';
           }//If mode add, ok
         }
+      })
+      .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
+        if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
+          error = 'Invalid Document ID';
+        }//If mode add, ok
       })
       .finally(() => {
         resolve(error)
@@ -128,9 +144,9 @@ const TopContent = (props) => {
   const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", ...args);
   
   const validateWarehouseIDField = (fieldName, warehouse_id) => {
-    warehouse_id = warehouse_id.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
+    warehouse_id = `${warehouse_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
     let warehouses = props.fact.warehouses.items;
-    let warehouse = warehouses.find(warehouse => `${warehouse.warehouse_id}` === warehouse_id); // Returns undefined if not found
+    let warehouse = warehouses.find(warehouse => `${warehouse.warehouse_id}` === `${warehouse_id}`); // Returns undefined if not found
     if(warehouse){
       setFieldValue(fieldName, `${warehouse_id}\\[${warehouse.abbreviation}] ${warehouse.name}`, false);
       return;
@@ -153,7 +169,7 @@ const TopContent = (props) => {
             </div>
             <div className="grid_3 pull_1">
               <TextInput name='internal_document_id' validate={validateInternalDocumentIDField}
-                searchable={props.actionMode === TOOLBAR_MODE.SEARCH} ariaControls="modalDocument" tabIndex="1" />
+                searchable={props.toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalDocument" tabIndex="1" />
             </div>
 
             {/* Document Status  */}
@@ -173,14 +189,14 @@ const TopContent = (props) => {
             <div className="grid_3 pull_1">
               {/* Q: If this is user name in thai, how do we get ID? */}
               <TextInput name="created_by_user_employee_id" validate={validateUserEmployeeIDField} 
-                disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-                searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName" tabIndex="2" />
+                disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                searchable={props.toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName" tabIndex="2" />
             </div>
 
             {/* Created On */}
             <div className="grid_3 float-right">
               <DateTimeInput name="created_on" /*validate={validateCreateOnField */
-                disabled={props.actionMode === TOOLBAR_MODE.SEARCH} />
+                disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} />
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">วันที่</p>
@@ -199,8 +215,8 @@ const TopContent = (props) => {
             {/* Dest Warehouse ID */}
             <div className="grid_3 float-right">
               <TextInput name="dest_warehouse_id" validate={validateDestWarehouseIDField} 
-                disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-                searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalInventory" />
+                disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                searchable={props.toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalInventory" />
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">เลขที่คลัง</p>
@@ -214,7 +230,7 @@ const TopContent = (props) => {
               <p className="top-text">เลขที่ใบสั่งซื้อ/เลขที่เอกสารอ้างอิง</p>
             </div>
             <div className="grid_3 pull_0">
-              <TextInput name="po_id" disabled={props.actionMode === TOOLBAR_MODE.SEARCH} />
+              <TextInput name="po_id" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} />
             </div>
 
             {/* Dest Warehouse Name */}
@@ -251,7 +267,7 @@ const TopContent = (props) => {
 }
 const mapStateToProps = (state) => ({
   fact: state.api.fact,
-  actionMode: state.toolbar.mode,
+  toolbar: state.toolbar,
   decoded_token: state.token.decoded_token,
 })
 
