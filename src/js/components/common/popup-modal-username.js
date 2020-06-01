@@ -1,14 +1,9 @@
 import React, {useState, useEffect } from 'react';
 import { connect } from 'react-redux'
-import axios from "axios";
-import { API_PORT_DATABASE } from '../../config_port.js';
-import { API_URL_DATABASE } from '../../config_url.js';
-
 import { useFormikContext } from 'formik';
 
 const PopupModalUsername = (props) => {
   const [data, setData] = useState([]);
-  // const [createdByUserNameTH, setUserNameTH] = useState("");
   const [currentQueryString, setCurrentQueryString] = useState("");
   const [queryString, setQueryString] = useState("")
   const { setFieldValue } = useFormikContext();
@@ -18,14 +13,14 @@ const PopupModalUsername = (props) => {
       console.log("filterDataOnCurrentQueryString")
         // currentQueryString
         setData(props.users.filter(function (users) {
-          const regex = new RegExp(`${currentQueryString}`, 'i');
-          var isMatch = regex.test(users.employee_id);
-          // console.log(regex.lastIndex);
+          var removeSpaces = currentQueryString.replace(/\s/g, '');
+          console.log(removeSpaces, "removeSpaces")
+          const regex = new RegExp(`${removeSpaces}`, 'i');
+          var isMatch = regex.test(users.employee_id) || regex.test(users.firstname_th);
           console.log("isMatch", isMatch)
           return (isMatch);
         }));
         // setData corresponding to currentQueryString
-        // props.users);
     };
     filterDataOnCurrentQueryString();
   }, [currentQueryString, props.users]);
@@ -35,13 +30,6 @@ const PopupModalUsername = (props) => {
       <div className="gray-board">
         <p className="head-title-modal edit">ค้นหาชื่อผู้นำเข้า</p>
         <div className="container_12 edit-padding">
-
-          {/* <div className="container_12">
-            <div className="grid_2"><p className="cancel-default">ชื่อพนักงาน</p></div>
-            <div className="grid_8 pull_0">
-              <input type="text" className="cancel-default grid_3" value={queryString} onChange={e => setQueryString(e.target.value)} />
-            </div>
-          </div> */}
           <div className="container_12">
             <div className="grid_2"><p className="cancel-default">ค้นหาพนักงาน</p></div>
             <div className="grid_8 pull_0">

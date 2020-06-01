@@ -9,11 +9,11 @@ import * as reducers from './modules/index.js'
 // export each reducer function, and use import * as reducers to get them as an object with their names as the keys:
 const rootReducer = combineReducers(reducers);
 
-const middlewares = [loggerMiddleware, thunkMiddleware]
-const middlewareEnhancer = applyMiddleware(...middlewares)
+// const middlewares = [loggerMiddleware, thunkMiddleware]
+// const middlewareEnhancer = applyMiddleware(...middlewares)
 
-const enhancers = [middlewareEnhancer]
-const composedEnhancers = composeWithDevTools(...enhancers)
+// const enhancers = [middlewareEnhancer]
+// const composedEnhancers = composeWithDevTools(...enhancers)
 
 // const store = createStore(reducer, applyMiddleware(logger, composeWithDevTools));
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(loggerMiddleware, thunkMiddleware)));

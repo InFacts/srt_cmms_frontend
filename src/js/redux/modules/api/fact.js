@@ -13,7 +13,9 @@ export const FACTS = {
     DISTRICTS: "districts",
     DOCUMENT_TYPE_GROUPS: "document-type-groups",
     DOCUMENT_STATUS: "document-status",
-    USERS: "users"
+    USERS: "users",
+    WAREHOUSES: "warehouses",
+
 }
 
 

@@ -15,6 +15,7 @@ import BottomContent from './bottom-content';
 import Footer from '../common/footer.js';
 
 import {fetchFactIfNeeded , FACTS} from '../../redux/modules/api/fact';
+import {decodeTokenIfNeeded} from '../../redux/modules/token';
 
 
 const packForm = (document_id, document_show, list_show) => {
@@ -63,9 +64,11 @@ const packForm = (document_id, document_show, list_show) => {
 }
 
 const GoodsReceiptComponent = (props) => {
-
+    
     const {resetForm, setValues} = useFormikContext();
 
+
+    // Initializer
     // Run only once with checking nothing []
     // 1. Change Toolbar to Mode Search
     useEffect(()=>{
@@ -95,6 +98,10 @@ const GoodsReceiptComponent = (props) => {
         for (const factName of Object.values(FACTS)){
             props.fetchFactIfNeeded(factName);
         }
+    }, []);
+    // Decode Token If needed
+    useEffect(() => {
+        props.decodeTokenIfNeeded();
     }, []);
 
     function handleSubmit(e) {
@@ -135,29 +142,7 @@ const GoodsReceiptComponent = (props) => {
     )
 }
 
-const initialForm = { 
-    // Field ที่ให้ User กรอก
-    internal_document_id: '',
-    document_date: '',
-
-    dest_warehouse_id: '',
-    created_by_user_employee_id: '',
-
-    po_id: '',
-
-    remark: '',
-
-    line_items: [],
-
-    //Field ที่ไม่ได้กรอก
-    document_id: '',
-    created_on: '',
-    status_name_th: '',
-    document_status_id: '',
-    created_by_admin_employee_id: '',
-
-    dest_warehouse_name: '',
-}
+// const initialForm = 
 
 const initialLineItem = {
     quantity: '',
@@ -171,19 +156,39 @@ const initialLineItem = {
 }
 
 const EnhancedGoodsReceiptComponent = withFormik({
-    mapPropsToValues: () => initialForm,
-    validate: values => new Promise( resolve => {
+    mapPropsToValues: (props) => ({ 
+        // Field ที่ให้ User กรอก
+        internal_document_id: '',
+        document_date: '',
+    
+        dest_warehouse_id: '',
+        created_by_user_employee_id: '',
+    
+        po_id: '',
+    
+        remark: '',
+    
+        line_items: [],
+    
+        //Field ที่ไม่ได้กรอก
+        document_id: '',
+        created_on: '',
+        status_name_th: '',
+        document_status_id: '',
+        created_by_admin_employee_id: '',
+    
+        dest_warehouse_name: '',
+    }),
+    validate: (values, props) => {
         const errors = {};
 
         if (!values.internal_document_id) {
           errors.internal_document_id = 'Required';
-          
         }
-        resolve(errors)
-        // console.log("I COME OUT")
-        // resolve(errors)
 
-    }),
+
+        return errors;
+    },
     handleSubmit: values => {
         console.log("i am submitting", values)
         alert(JSON.stringify(values, null, 2));
@@ -195,22 +200,12 @@ const EnhancedGoodsReceiptComponent = withFormik({
 
 const mapStateToProps = (state) => ({
     toolbar: state.toolbar,
-
+    decoded_token: state.token.decoded_token,
     actionMode: state.goods_receipt.action,
-
-    // Mode Edit
-    no_document: state.goods_receipt.no_document,
-    document_show: state.goods_receipt.document_show,
-    list_show: state.goods_receipt.list_show,
-
-    // Mode add
-    document_id: state.goods_receipt.document_id,
-    document_show_mode_add: state.goods_receipt.document_show_mode_add,
-    list_show_mode_add: state.goods_receipt.list_show_mode_add
 })
 
 const mapDispatchToProps = {
-    handleClickHomeToSpareMain, toModeSearch, onClearStateModeAdd, handleClickAdd, fetchFactIfNeeded
+    handleClickHomeToSpareMain, toModeSearch, onClearStateModeAdd, handleClickAdd, fetchFactIfNeeded, decodeTokenIfNeeded
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EnhancedGoodsReceiptComponent);
