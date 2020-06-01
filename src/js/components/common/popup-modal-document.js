@@ -60,7 +60,7 @@ const PopupModalDocument = () => {
                         <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
                         {/* <button type="button" className="button-blue" onClick={() => props.handleChange("document_id", document.document_id)} aria-label="Close active modal" aria-controls="modalDocument" id="closeModalInventory" >เลือก</button> */}
                         {/* <button type="button" className="button-blue" onClick={() => setFieldValue('internal_document_id', document.internal_document_id, true)} aria-label="Close active modal" aria-controls="modalDocument" >เลือก</button> */}
-                        <button type="button" className="button-blue" onClick={onClickSelect} aria-label="Close active modal" aria-controls="modalDocument" >เลือก</button>
+                        <button type="button" className="button-blue" onClick={() => setFieldValue('internal_document_id', document.internal_document_id, true)} aria-label="Close active modal" aria-controls="modalDocument" >เลือก</button>
                         </td>
                     </tr>
                     )
