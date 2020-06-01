@@ -62,12 +62,15 @@ const TopContent = (props) => {
     document.getElementById("defaultOpen").click();
   }, []);
 
-  const {values, errors,setFieldValue, handleChange, handleBlur, getFieldProps, setValues} = useFormikContext();
+  const {values, errors,setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField} = useFormikContext();
 
   // Fill Default Forms
   useEffect(() => {
-    setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(props.fact.users, props.decoded_token.id));
-  }, [props.decoded_token, props.fact.users])
+    if(props.actionMode === TOOLBAR_MODE.ADD){
+      setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(props.fact.users, props.decoded_token.id));
+      validateField("created_by_admin_employee_id");
+    }
+  }, [props.decoded_token, props.fact.users, props.actionMode])
 
 
   function tapChange(evt, cityName) {
@@ -109,17 +112,20 @@ const TopContent = (props) => {
       });
   });
 
-  const validateEmployeeIDField = employee_id => {
+  const validateEmployeeIDField = (fieldName, employee_id) => {
     employee_id = employee_id.split('\\')[0]; // Escape Character USERNAME CANT HAVE ESCAPE CHARACTER!
     let users = props.fact.users.items;
     let user = users.find(user => user.employee_id === employee_id); // Returns undefined if not found
     if(user){
-      setFieldValue("created_by_user_employee_id", `${employee_id}\\${user.firstname_th} ${user.lastname_th}`, false);
+      setFieldValue(fieldName, `${employee_id}\\${user.firstname_th} ${user.lastname_th}`, false);
       return;
     }else{
       return 'Invalid Employee ID';
     }
   };
+
+  const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", ...args);
+  const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", ...args);
 
   return (
     <div id="blackground-white">
@@ -153,7 +159,7 @@ const TopContent = (props) => {
           </div>
           <div className="grid_3 pull_1">
             {/* Q: If this is user name in thai, how do we get ID? */}
-            <TextInput name="created_by_user_employee_id" validate={validateEmployeeIDField} disabled={props.actionMode === TOOLBAR_MODE.SEARCH} 
+            <TextInput name="created_by_user_employee_id" validate={validateUserEmployeeIDField} disabled={props.actionMode === TOOLBAR_MODE.SEARCH} 
               searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName" tabIndex="2"/>
           </div>
 
@@ -173,7 +179,7 @@ const TopContent = (props) => {
             <p className="top-text">ผู้สร้างเอกสาร</p>
           </div>
           <div className="grid_3 pull_1">
-            <TextInput name="created_by_admin_employee_id" disabled />
+            <TextInput name="created_by_admin_employee_id" validate={validateAdminEmployeeIDField} disabled />
           </div>
 
           {/* Dest Warehouse ID */}
@@ -222,7 +228,7 @@ const TopContent = (props) => {
     {/* <PopupModalInventory {...props}/> */}
 
     {/* PopUp ค้นหาชื่อพนักงาน MODE ADD */}
-    {/* <PopupModalUsername {...props}/>   */}
+    <PopupModalUsername />  
 
   </div>
   )

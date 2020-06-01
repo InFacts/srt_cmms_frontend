@@ -193,7 +193,7 @@ const EnhancedGoodsReceiptComponent = withFormik({
         console.log("i am submitting", values)
         alert(JSON.stringify(values, null, 2));
       },    
-    validateOnChange: false,
+    // validateOnChange: false,
 })(GoodsReceiptComponent);
 
 
