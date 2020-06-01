@@ -5,39 +5,6 @@ import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
 import { API_URL_DATABASE } from '../../config_url.js';
 
-import {
-  onChangeNoDocument,
-  onClickPopUpSearchNoDocument,
-  onClickSelectNoDocument,
-  onClickOpenPopUp,
-
-  onClickModeEdit,
-
-  // Mode Edit
-  onChangeName,
-  onChangeNameByAdmin,
-  onChangeDate,
-  onChangeMyInventory,
-  onChangeNoPo,
-  onClickPopUpSearchInventory,
-  onClickSelectInventory,
-  onChangeMyInventoryName,
-  onClickSelectInventoryModeEdit,
-  onChangeNameId,
-  onClickPopUpSearchUserModeEdit,
-  onClickSelectUserModeEdit,
-
-  // Mode Add
-  onChangeNoDocumentModeAdd,
-  onChangeNameModeAdd,
-  onChangeNameIdModeAdd,
-  onChangeDateModeAdd,
-  onChangeNoPoModeAdd,
-  onChangeMyInventoryModeAdd,
-  onChangeMyInventoryNameModeAdd,
-  onClickPopUpSearchUser,
-  onClickSelectUser,
-} from '../../redux/modules/goods_receipt.js';
 
 import FormInput from '../common/form-input'
 import TextInput from '../common/formik-text-input'
@@ -78,12 +45,29 @@ const responseToFormState = (data) => {
 }
 
 
+function getEmployeeIDFromUserID(userFact, userID){
+  let users = userFact.items;
+  if(users && users.length > 0){
+    let user = users.find(user => user.user_id === userID)
+    if (user){
+      return user.employee_id;
+    }
+  }
+  return null;
+}
+
 const TopContent = (props) => {
   useEffect(() => {
     document.getElementById("defaultOpen").click();
   }, []);
 
-  const {values, errors, handleChange, handleBlur, getFieldProps, setValues} = useFormikContext();
+  const {values, errors,setFieldValue, handleChange, handleBlur, getFieldProps, setValues} = useFormikContext();
+
+  // Fill Default Forms
+  useEffect(() => {
+    setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(props.fact.users, props.decoded_token.id));
+  }, [props.decoded_token, props.fact.users])
+
 
   function tapChange(evt, cityName) {
     var i, tabcontent, tablinks;
@@ -180,7 +164,7 @@ const TopContent = (props) => {
             <p className="top-text">ผู้สร้างเอกสาร</p>
           </div>
           <div className="grid_3 pull_1">
-            <TextInput name="created_by_admin_name_th" disabled />
+            <TextInput name="created_by_admin_employee_id" disabled />
           </div>
 
 
@@ -227,62 +211,23 @@ const TopContent = (props) => {
     <PopupModalDocument />
 
     {/* PopUp ค้นหาเลขที่คลัง MODE ADD */}
-    <PopupModalInventory {...props}/>
+    {/* <PopupModalInventory {...props}/> */}
 
     {/* PopUp ค้นหาชื่อพนักงาน MODE ADD */}
-    <PopupModalUsername {...props}/>
+    {/* <PopupModalUsername {...props}/>   */}
 
   </div>
   )
 
 }
-const mapStateToProps = (state) => {
-  var action = state.toolbar.mode;
-  state = state.goods_receipt
-  return ({
-    actionMode: action,
-    no_document: state.no_document,
-    document_show_popup: state.document_show_popup,
-    document_show: state.document_show,
-    document_show_mode_add: state.document_show_mode_add,
-    inventory_show_popup: state.inventory_show_popup,
-    inventory: state.inventory,
-    document_specific_show: state.document_specific_show,
-    line_users: state.line_users
-  })
-}
+const mapStateToProps = (state) => ({
+    fact: state.api.fact,
+    actionMode: state.toolbar.mode,
+    decoded_token: state.token.decoded_token,
+})
+
 const mapDispatchToProps = {
-  onChangeNoDocument,
-  onClickPopUpSearchNoDocument,
-  onClickSelectNoDocument,
-  onClickOpenPopUp,
-
-  onClickModeEdit,
-
-  // Mode Edit
-  onChangeName,
-  onChangeNameByAdmin,
-  onChangeDate,
-  onChangeMyInventory,
-  onChangeNoPo,
-  onClickPopUpSearchInventory,
-  onClickSelectInventory,
-  onChangeMyInventoryName,
-  onClickSelectInventoryModeEdit,
-  onChangeNameId,
-  onClickPopUpSearchUserModeEdit,
-  onClickSelectUserModeEdit,
-
-  // Mode Add
-  onChangeNoDocumentModeAdd,
-  onChangeNameModeAdd,
-  onChangeNameIdModeAdd,
-  onChangeDateModeAdd,
-  onChangeNoPoModeAdd,
-  onChangeMyInventoryModeAdd,
-  onChangeMyInventoryNameModeAdd,
-  onClickPopUpSearchUser,
-  onClickSelectUser,
+  
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TopContent);
