@@ -7,7 +7,7 @@ const DateTimeInput = ({ ...props }) => {
     const [field, meta] = useField(props);
     return (
       <>
-        <input type="datetime-local" className="cancel-default" {...field} {...props}></input>
+        <input type="date" className="cancel-default" {...field} {...props}></input>
         {meta.touched && meta.error ? (
           <div className="error">{meta.error}</div>
         ) : null}

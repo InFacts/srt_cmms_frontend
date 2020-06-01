@@ -69,9 +69,7 @@ const PopupModalDocument = () => {
             </table>
             </div>
 
-            <div className="container_12">
             <button className="button-blue float-right grid_1 mr-5 mt-3" type="button" aria-label="Close active modal" aria-controls="modalDocument">กลับ</button>
-            </div>
 
         </div>
         </div>

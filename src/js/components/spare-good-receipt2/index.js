@@ -63,9 +63,6 @@ const packForm = (document_id, document_show, list_show) => {
     return data;
 }
 
-
-
-
 const GoodsReceiptComponent = (props) => {
     
     const {resetForm, setValues} = useFormikContext();
