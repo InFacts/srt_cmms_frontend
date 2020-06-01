@@ -126,6 +126,19 @@ const TopContent = (props) => {
 
   const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", ...args);
   const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", ...args);
+  
+  const validateWarehouseIDField = (fieldName, warehouse_id) => {
+    warehouse_id = warehouse_id.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
+    let warehouses = props.fact.warehouses.items;
+    let warehouse = warehouses.find(warehouse => `${warehouse.warehouse_id}` === warehouse_id); // Returns undefined if not found
+    if(warehouse){
+      setFieldValue(fieldName, `${warehouse_id}\\[${warehouse.abbreviation}] ${warehouse.name}`, false);
+      return;
+    }else{
+      return 'Invalid Warehouse ID';
+    }
+  }
+  const validateDestWarehouseIDField = (...args) => validateWarehouseIDField("dest_warehouse_id", ...args);
 
   return (
     <div id="blackground-white">
@@ -185,7 +198,8 @@ const TopContent = (props) => {
 
             {/* Dest Warehouse ID */}
             <div className="grid_3 float-right">
-              <TextInput name="dest_warehouse_id" disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
+              <TextInput name="dest_warehouse_id" validate={validateDestWarehouseIDField} 
+                disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
                 searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalInventory" />
             </div>
             <div className="grid_2 float-right">
