@@ -108,16 +108,20 @@ const TopContent = (props) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/internal_document_id/${internal_document_id}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
       .then((res) => {
-          if (res.data.internal_document_id === internal_document_id){ // check if First Item exact match
-            setValues({...values, ...responseToFormState(res.data)}, false); //Setvalues and don't validate
-          }else{
-            console.log("INVALID DOCUMENT ID")
-            error = 'Invalid Document ID'
+          if (res.data.internal_document_id === internal_document_id){ // If input document ID exists
+            if (props.actionMode === TOOLBAR_MODE.SEARCH){ //If Mode Search, needs to set value
+              setValues({...values, ...responseToFormState(res.data)}, false); //Setvalues and don't validate
+            }else{ //If Mode add, need to error duplicate Document ID
+              error = 'Duplicate Document ID';
+            }
+          }else{ // If input Document ID doesn't exists
+            if (props.actionMode === TOOLBAR_MODE.SEARCH){ //If Mode Search, invalid Document ID
+              error = 'Invalid Document ID';
+            }//If mode add, ok
           }
       })
       .finally(() => {
         resolve(error)
-        console.log(' i run after solve')
       });
   });
 
