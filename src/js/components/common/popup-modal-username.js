@@ -8,20 +8,27 @@ import { useFormikContext } from 'formik';
 
 const PopupModalUsername = (props) => {
   const [data, setData] = useState([]);
-  const [createdByUserNameTH, setUserNameTH] = useState("");
-  const [employeeID, setEmplyeeID] = useState("");
-  const [url, setUrl] = useState(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users`)
+  // const [createdByUserNameTH, setUserNameTH] = useState("");
+  const [currentQueryString, setCurrentQueryString] = useState("");
+  const [queryString, setQueryString] = useState("")
   const { setFieldValue } = useFormikContext();
 
   useEffect(() => {
-    const fetchData = () => {
-      axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-        .then((res) => {
-          setData(res.data.results);
-        })
+    const filterDataOnCurrentQueryString = () => {
+      console.log("filterDataOnCurrentQueryString")
+        // currentQueryString
+        setData(props.users.filter(function (users) {
+          const regex = new RegExp(`${currentQueryString}`, 'i');
+          var isMatch = regex.test(users.employee_id);
+          // console.log(regex.lastIndex);
+          console.log("isMatch", isMatch)
+          return (isMatch);
+        }));
+        // setData corresponding to currentQueryString
+        // props.users);
     };
-    fetchData();
-  }, [url]);
+    filterDataOnCurrentQueryString();
+  }, [currentQueryString, props.users]);
 
   return (
     <div className="modal" id="modalUserName" style={{ display: "none" }}>
@@ -29,17 +36,17 @@ const PopupModalUsername = (props) => {
         <p className="head-title-modal edit">ค้นหาชื่อผู้นำเข้า</p>
         <div className="container_12 edit-padding">
 
-          <div className="container_12">
+          {/* <div className="container_12">
             <div className="grid_2"><p className="cancel-default">ชื่อพนักงาน</p></div>
             <div className="grid_8 pull_0">
-              <input type="text" className="cancel-default grid_3" value={createdByUserNameTH} onChange={e => setUserNameTH(e.target.value)} />
+              <input type="text" className="cancel-default grid_3" value={queryString} onChange={e => setQueryString(e.target.value)} />
             </div>
-          </div>
+          </div> */}
           <div className="container_12">
-            <div className="grid_2"><p className="cancel-default">รหัสพนักงาน</p></div>
+            <div className="grid_2"><p className="cancel-default">ค้นหาพนักงาน</p></div>
             <div className="grid_8 pull_0">
-              <input type="text" className="cancel-default grid_3" value={employeeID} onChange={e => setEmplyeeID(e.target.value)} />
-              <button className="button-blue edit grid_1 mr-5" type="button" onClick={() => setUrl(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?firstname_th=${createdByUserNameTH}&employee_id=${employeeID}`)}>ค้นหา</button>
+              <input type="text" className="cancel-default grid_3" value={queryString} onChange={e => setQueryString(e.target.value)} />
+              <button className="button-blue edit grid_1 mr-5" type="button" onClick={() => setCurrentQueryString(queryString)}>ค้นหา</button>
             </div>
           </div>
 
@@ -75,4 +82,12 @@ const PopupModalUsername = (props) => {
     </div>)
 }
 
-export default PopupModalUsername;
+const mapStateToProps = (state) => ({
+  users: state.api.fact.users.items,
+})
+
+const mapDispatchToProps = {
+
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PopupModalUsername);

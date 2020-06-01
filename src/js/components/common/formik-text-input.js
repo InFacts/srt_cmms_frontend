@@ -6,7 +6,6 @@ const TextInput = ({ ...props }) => {
     // which we can spread on <input> and also replace ErrorMessage entirely.
     //     props.name
     const [field, meta] = useField(props);
-    console.log(meta, "meta")
     return (
       <>
         <div className="p-search-box cancel-margin">
