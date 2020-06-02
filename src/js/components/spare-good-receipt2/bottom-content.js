@@ -72,68 +72,51 @@ const BottomContent = (props) => {
     }
   }
 
-  const perUnitPriceModeSearch = (description, per_unit_price, index) => {
-    // TODO description !== undefined ถ้าเชื่อม Bottom เข้ากับ Formix หมดแล้วเด่วกลับมาเช็ค
-    if (description !== undefined) {
-      if (description !== "") {
-        var s = per_unit_price.toString();
-        var n = s.indexOf(".")
-        if (n == -1) {
-          s = s + ".0000"
-          return (
-            <NumberInput name={`line_items[${index}].per_unit_price`} value={s}
-              disabled={props.actionMode === TOOLBAR_MODE.SEARCH} />
-          );
-        }
-        else return (
-          <NumberInput name={`line_items[${index}].per_unit_price`} value={per_unit_price}
-            disabled={props.actionMode === TOOLBAR_MODE.SEARCH} />
-        )
-        // per_unit_price
-      }
-      else {
-        return (
-          <NumberInput name={`line_items[${index}].per_unit_price`} value={per_unit_price}
-            disabled={props.actionMode === TOOLBAR_MODE.SEARCH} />
-        )
-      }
-    }
-    else {
-      return null
-    }
-  }
+  // const perUnitPriceModeSearch = (description, per_unit_price, index) => {
+  //   // TODO description !== undefined ถ้าเชื่อม Bottom เข้ากับ Formix หมดแล้วเด่วกลับมาเช็ค
+  //   if (description !== "" && per_unit_price !== undefined) {
+  //     console.log("per_unit_price", per_unit_price)
+  //     var s = per_unit_price.toString();
+  //     var n = s.indexOf(".")
+  //     if (n == -1) {
+  //       s = s + ".0000"
+  //       return (
+  //         <NumberInput step={0.0001} name={`line_items[${index}].per_unit_price`}
+  //           disabled={props.actionMode === TOOLBAR_MODE.SEARCH} />
+  //       );
+  //     }
+  //     else return (
+  //       <NumberInput step={0.0001} name={`line_items[${index}].per_unit_price`}
+  //         disabled={props.actionMode === TOOLBAR_MODE.SEARCH} />
+  //     )
+  //   }
+  //   else {
+  //     console.log("hello")
+  //     return (
+  //       <NumberInput step={0.0001} name={`line_items[${index}].per_unit_price`}
+  //         disabled={props.actionMode === TOOLBAR_MODE.SEARCH} />
+  //     )
+  //   }
+  // }
 
   const validateItemDescriptionField = (fieldName, internal_item_id) => {
     internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
     let items = props.fact.items.items;
     let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
 
-    // console.log("item.internal_item_id", item.internal_item_id, "internal_item_id", internal_item_id)
-    // console.log("item", item)
     if (item) {
-      setFieldValue(fieldName, `${item.description}`, false);
+      setFieldValue(fieldName + `.description`, `${item.description}`, false);
+      setFieldValue(fieldName + `.quantity`, item.quantity, false);
+      setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+      setFieldValue(fieldName + `.per_unit_price`, item.per_unit_price, false);
       return;
     } else {
       return 'Invalid Item ID';
     }
   }
-  const validateInternalItemIDField = (...args) => validateItemDescriptionField(`line_items[${lineNumber - 1}].description`, ...args);
+  const validateInternalItemIDField = (...args) => validateItemDescriptionField(`line_items[${lineNumber - 1}]`, ...args);
 
-
-  const validateItemUomField = (fieldName, internal_item_id) => {  
-    internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
-    let items = props.fact.items.items;
-    let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
-
-    if (item) {
-      setFieldValue(fieldName, `${item.list_uoms}`, false);
-      return;
-    } else {
-      return 'Invalid UOM ID';
-    }
-  }
-  const validateItemUomGroupField = (...args) => validateItemUomField(`line_items[${lineNumber - 1}].list_uoms`, ...args);
-
+  console.log("values.line_items", values.line_items)
   return (
     <div id="blackground-gray">
       <div className="container_12 clearfix">
@@ -160,7 +143,8 @@ const BottomContent = (props) => {
                         <th className="edit-padding text-center">{line_number}</th>
                         <td className="edit-padding">
                           <TextInput name={`line_items[${index}].internal_item_id`}
-                            validate={validateInternalItemIDField} tabIndex="6"
+                            validate={validateInternalItemIDField}
+                            tabIndex="6"
                             disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
                             searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart"
                             handleModalClick={() => setLineNumber(line_number)}
@@ -174,12 +158,14 @@ const BottomContent = (props) => {
 
                         <td className="edit-padding text-center">
                           <SelectInput name={`line_items[${index}].list_uoms`} listUoms={list.list_uoms}
-                          validate={validateItemUomGroupField} 
-                          tabIndex="8"
+                            tabIndex="8"
                             disabled={props.actionMode === TOOLBAR_MODE.SEARCH} />
                         </td>
 
-                        <td className="edit-padding text-right">{perUnitPriceModeSearch(list.description, list.per_unit_price, index)}</td>
+                        <td className="edit-padding text-right">
+                          <NumberInput step={0.0001} name={`line_items[${index}].per_unit_price`}
+                            disabled={props.actionMode === TOOLBAR_MODE.SEARCH} />
+                        </td>
                         <td className="edit-padding text-right">{sumTotalLineItem(list.quantity, list.per_unit_price)}</td>
                       </tr>
                     )

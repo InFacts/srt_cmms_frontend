@@ -7,7 +7,7 @@ const NumberInput = ({ ...props }) => {
     const [field, meta] = useField(props);
     return (
       <>
-        <input type="number" className="cancel-default" {...field} {...props}></input>
+        <input type="number" min="0" step={props.step} className="cancel-default" {...field} {...props}></input>
         {meta.touched && meta.error ? (
           <div className="error">{meta.error}</div>
         ) : null}
