@@ -52,7 +52,7 @@ const responseToFormState = (userFact, data) => {
     internal_document_id: data.internal_document_id,
     created_by_user_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_user_id) || '',
     created_by_admin_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_admin_id) || '',
-    created_on: data.created_on.split("T")[0],
+    created_on: data.created_on,
     line_items: data.line_items,
     dest_warehouse_id: data.dest_warehouse_id,
     remark: data.remark,
@@ -72,6 +72,7 @@ const TopContent = (props) => {
     if(props.toolbar.mode === TOOLBAR_MODE.ADD){
       setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(props.fact.users, props.decoded_token.id));
       setFieldValue("status_name_th","ยังไม่ได้รับการบันทึก");
+      setFieldValue("created_on", new Date().toISOString().slice(0, 16));
       // validateField("created_by_admin_employee_id");
     }
   }, [props.decoded_token, props.fact.users, props.toolbar.mode])
@@ -196,7 +197,7 @@ const TopContent = (props) => {
 
             {/* Document date */}
             <div className="grid_3 float-right">
-              <DateInput name="document_date" /*validate={validateCreateOnField */
+              <DateInput name="document_date" 
                 disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="3"/>
             </div>
             <div className="grid_2 float-right">

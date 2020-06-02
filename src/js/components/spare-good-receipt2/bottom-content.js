@@ -71,11 +71,11 @@ const BottomContent = (props) => {
   }
 
   const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => {
-    // internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
-    if (values.line_items[index].internal_item_id === internal_item_id) {
-      return;
-    }
+
+    // if (values.line_items[index].internal_item_id === internal_item_id) {
+    //   return;
+    // }
     if (internal_item_id === "") {
       setFieldValue(fieldName + `.description`, '', false);
       setFieldValue(fieldName + `.quantity`, '', false);
@@ -83,17 +83,18 @@ const BottomContent = (props) => {
       setFieldValue(fieldName + `.per_unit_price`, '', false);
       return;
     }
-
     let items = props.fact.items.items;
     let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
 
     if (item) {
+      // console.log("if")
       setFieldValue(fieldName + `.description`, `${item.description}`, false);
       setFieldValue(fieldName + `.quantity`, 0, false);
       setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
       setFieldValue(fieldName + `.per_unit_price`, 0, false);
       return;
     } else {
+      // console.log("else")
       return 'Invalid Number ID';
     }
   }
@@ -101,10 +102,13 @@ const BottomContent = (props) => {
   const validateLineNumberQuatityItemIDField = (fieldName, quantity, index) => {
     // internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
-    if (values.line_items[index].quantity === quantity) {
+    // if (values.line_items[index].quantity === quantity) {
+    //   return;
+    // }
+    if (quantity === "") {
       return;
     }
-    console.log(" I AM CHECKING ", quantity)
+
     if (quantity !== 0) {
       setFieldValue(fieldName, quantity, false);
       return;
@@ -116,10 +120,13 @@ const BottomContent = (props) => {
   const validateLineNumberPerUnitPriceItemIDField = (fieldName, per_unit_price, index) => {
     // internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
-    if (values.line_items[index].per_unit_price === per_unit_price) {
+    // if (values.line_items[index].per_unit_price === per_unit_price) {
+    //   return;
+    // }
+    if (per_unit_price === "") {
       return;
     }
-    console.log(" I AM CHECKING ", per_unit_price)
+
     if (per_unit_price !== 0) {
       setFieldValue(fieldName, per_unit_price, false);
       return;
@@ -181,6 +188,7 @@ const BottomContent = (props) => {
                         <td className="edit-padding text-center">
                           <SelectInput name={`line_items[${index}].item_status_id`} listProps={props.fact['item-status'].items}
                             tabIndex="8" disabled={props.actionMode === TOOLBAR_MODE.SEARCH} 
+                            checkDescription = {list.description}
                             optionValue='item_status_id' optionName='description_th'
                             />
                         </td>
