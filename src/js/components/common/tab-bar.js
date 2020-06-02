@@ -11,7 +11,6 @@ const TabBar = (props) => {
   // 1. Check Tabbar is_active
   useEffect(()=>{
     actionTabDocument();
-    console.log("><>>>>>>>>>>>>")
   }, []);
 
   // Clear & Check initial Tabbar is_active
