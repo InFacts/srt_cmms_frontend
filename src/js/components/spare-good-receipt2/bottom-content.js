@@ -11,30 +11,6 @@ import Files from '../common/files'
 
 import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
 
-import {
-  // Mode Edit
-  onChangeNoPart,
-  onChangeNoPartEachRow,
-  onClickNoPartEachRow,
-  onChangeQuilityEachRow,
-  onChangeUnitPerBathEachRow,
-  onChangeTotalEachRow,
-  onClickSearchPopUpNoPart,
-  onClickSelectPopUpNoPart,
-  onChangeNote,
-
-  // Mode Add
-  onChangeNoPartEachRowModeAdd,
-  onClickNoPartEachRowModeAdd,
-  onClickSearchPopUpNoPartModeAdd,
-  onChangeNoPartModeAdd,
-  onClickSelectPopUpNoPartModeAdd,
-  onChangeUnitPerBathEachRowModeAdd,
-  onChangeQuilityEachRowModeAdd,
-  onChangeTotalEachRowModeAdd,
-  onChangeNoteModeAdd
-} from '../../redux/modules/goods_receipt.js';
-
 import { useFormikContext } from 'formik';
 
 import '../../../css/table.css';
@@ -136,18 +112,21 @@ const BottomContent = (props) => {
                       <tr key={index}>
                         <th className="edit-padding text-center">{index + 1}</th>
                         <td className="edit-padding">
-                          {props.actionMode === TOOLBAR_MODE.SEARCH
+                          {/* {props.actionMode === TOOLBAR_MODE.SEARCH
                             ?
                             list.internal_item_id
                             //  <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}> 
                             //  <input type="text" className="p-search-box__input cancel-default-table" value={list.internal_item_id} onChange={(e) => props.onChangeNoPartEachRow(e)} />
-                            //   <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPart" onClick={(e) => props.onClickNoPartEachRow(e)}></i></button> */}
-                            // {/* </div> 
+                            //   <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPart" onClick={(e) => props.onClickNoPartEachRow(e)}></i></button> 
+                            // </div> 
                             :
                             <TextInput name={`internal_item_id_${index}`}
                               disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
                               searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart" tabIndex="1" />
-                          }
+                          } */}
+                          <TextInput name={`line_items[${index}].internal_item_id`}
+                              disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
+                              searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart" />
                         </td>
                         <td className="edit-padding">{list.description}</td>
                         <td className="edit-padding text-center">
@@ -226,26 +205,6 @@ const mapStateToProps = (state) => ({
   list_show: state.list_show
 })
 const mapDispatchToProps = {
-  // Mode Edit
-  onChangeNoPart,
-  onChangeNoPartEachRow,
-  onClickNoPartEachRow,
-  onChangeQuilityEachRow,
-  onChangeUnitPerBathEachRow,
-  onChangeTotalEachRow,
-  onClickSearchPopUpNoPart,
-  onClickSelectPopUpNoPart,
-  onChangeNote,
 
-  // Mode Add
-  onChangeNoPartEachRowModeAdd,
-  onClickNoPartEachRowModeAdd,
-  onClickSearchPopUpNoPartModeAdd,
-  onChangeNoPartModeAdd,
-  onClickSelectPopUpNoPartModeAdd,
-  onChangeUnitPerBathEachRowModeAdd,
-  onChangeQuilityEachRowModeAdd,
-  onChangeTotalEachRowModeAdd,
-  onChangeNoteModeAdd
 }
 export default connect(mapStateToProps, mapDispatchToProps)(BottomContent);
