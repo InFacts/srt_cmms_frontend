@@ -2,10 +2,10 @@ import React, {useState, useEffect} from 'react';
 import { connect } from 'react-redux';
 import { useFormik , withFormik ,useFormikContext} from 'formik';
 
-import { TOOLBAR_ACTIONS, handleClickHomeToSpareMain, handleClickRefresh, toModeSearch, handleClickAdd, 
-    handleClickForward, handleClickBackward, TOOLBAR_MODE } from '../../redux/modules/toolbar.js';
-import { onClearStateModeAdd} from '../../redux/modules/goods_receipt.js';
+
+
 import TabBar, {TAB_BAR_ACTIVE} from '../common/tab-bar';
+
 
 import axios from "axios";
 
@@ -16,21 +16,18 @@ import TopContent from './top-content';
 import BottomContent from './bottom-content';
 import Footer from '../common/footer.js';
 
+import { TOOLBAR_ACTIONS, handleClickHomeToSpareMain, handleClickRefresh, toModeSearch, handleClickAdd, 
+    handleClickForward, handleClickBackward, TOOLBAR_MODE } from '../../redux/modules/toolbar.js';
+import { onClearStateModeAdd} from '../../redux/modules/goods_receipt.js';
 import {fetchFactIfNeeded , FACTS} from '../../redux/modules/api/fact';
 import {decodeTokenIfNeeded} from '../../redux/modules/token';
 import DateTimeInput from '../common/formik-datetime-input.js';
 
-const DOCUMENT_TYPE_ID = {
-    GOODS_RECEIPT_PO: 101,
-}
+import {getUserIDFromEmployeeID, DOCUMENT_SCHEMA, ICD_SCHEMA, ICD_LINE_ITEM_SCHEMA, DOCUMENT_TYPE_ID} from '../common/helper';
 
-const fetchDocumentData = (document_id) => new Promise((resolve) =>{
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}`;
-    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-        .then((res) => {
-            resolve(res.data);
-        })
-});
+
+
+
 const fetchLastestInternalDocumentID = (document_type_group_id) => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=${document_type_group_id}`
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
@@ -40,6 +37,32 @@ const fetchLastestInternalDocumentID = (document_type_group_id) => new Promise((
                 resolve(results[0].internal_document_id);
             }else{
                 reject('No Results in fetchLastestInternalDocumentID');
+            }
+        })
+});
+
+
+const createDocumentEmptyRow = () => new Promise((resolve) => {
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/new/0`;
+    axios.post(url, null, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((res) => {
+            resolve({
+                internal_document_id: res.data.internal_document_id, //"draft-bea9f75d-23db-49ae-a8d5-385121fb0234",
+                document_id: res.data.document_id,  //"document_id": 14
+            });
+        })
+});
+
+
+
+const editDocument = (document_id, document_type_group_id, data) => new Promise((resolve, reject) => {
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/new/0`;
+    axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((res) => {
+            if(res.status === 200){
+                resolve(res.data);
+            }else{
+                reject(res);
             }
         })
 });
@@ -214,7 +237,7 @@ const initialLineItem = {
     //Field ที่ไม่ได้กรอก
     description: '',
     line_number: '',
-    document_id: '', // maybe not needed
+    // document_id: '', // maybe not needed
     list_uoms: [],
 
     //Field ที่กรอกแต่ไม่ใช้เป็น dummy
@@ -238,7 +261,8 @@ const EnhancedGoodsReceiptComponent = withFormik({
         internal_document_id: '',
         document_date: '',
     
-        dest_warehouse_id: '',
+        dest_warehouse_id: '', // Need to fill for user's own WH
+        src_warehouse_id: 999, // for Goods Receipt
         created_by_user_employee_id: '',
     
         po_id: '',
@@ -254,9 +278,9 @@ const EnhancedGoodsReceiptComponent = withFormik({
         document_status_id: '',
         created_by_admin_employee_id: '',
     
-        dest_warehouse_name: '',
+        // dest_warehouse_name: '',
 
-        firstPosted: false
+        // firstPosted: false
     }),
     validate: (values, props) => {
         const errors = {};

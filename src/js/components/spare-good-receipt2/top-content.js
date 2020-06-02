@@ -17,34 +17,21 @@ import PopupModalDocument from '../common/popup-modal-document'
 import PopupModalInventory from '../common/popup-modal-inventory'
 import PopupModalUsername from '../common/popup-modal-username'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
+import {getEmployeeIDFromUserID} from '../common/helper';
 
-
-function getEmployeeIDFromUserID(userFact, userID) {
-  let users = userFact.items;
-  if (users && users.length > 0) {
-    let user = users.find(user => `${user.user_id}` === `${userID}`)
-    if (userID === 0){
-      return "Server"
-    }
-    if (user) {
-      return user.employee_id;
-    }
-  }
-  return null;
-}
 
 const responseToFormState = (userFact, data) => {
   for (var i = data.line_items.length; i <= 9; i++) {
     data.line_items.push(
       {
-        "item_id": "",
-        "internal_item_id": "",
-        "description": "",
-        "quantity": "",
-        "uom_group_id": "",
-        "unit": "",
-        "per_unit_price": "",
-        "list_uoms": []
+        item_id: "",
+        internal_item_id: "",
+        description: "",
+        quantity: "",
+        uom_group_id: "",
+        unit: "",
+        per_unit_price: "",
+        list_uoms: []
       }
     );
   }
@@ -83,7 +70,8 @@ const TopContent = (props) => {
         //  ie. GR-PYO-2563/0001
     console.log("I am validating doucment id")
     let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS)-[A-Z]{3}-\d{4}\/\d{4}$/g
-    let draftInternalDocumentIDRegex= /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
+    // let draftInternalDocumentIDRegex= /^heh\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
+    let draftInternalDocumentIDRegex = /^heh/g
     if (!values.internal_document_id) {
         return resolve('Required');
     }else if (!internalDocumentIDRegex.test(values.internal_document_id) && !draftInternalDocumentIDRegex.test(values.internal_document_id)){ //
