@@ -2,7 +2,8 @@ import React, {useState, useEffect} from 'react';
 import { connect } from 'react-redux';
 import { useFormik , withFormik ,useFormikContext} from 'formik';
 
-import { TOOLBAR_ACTIONS, handleClickHomeToSpareMain, handleClickRefresh, toModeSearch, handleClickAdd, TOOLBAR_MODE } from '../../redux/modules/toolbar.js';
+import { TOOLBAR_ACTIONS, handleClickHomeToSpareMain, handleClickRefresh, toModeSearch, handleClickAdd, 
+    handleClickForward, handleClickBackward, TOOLBAR_MODE } from '../../redux/modules/toolbar.js';
 import { onClearStateModeAdd} from '../../redux/modules/goods_receipt.js';
 import TabBar, {TAB_BAR_ACTIVE} from '../common/tab-bar';
 
@@ -18,6 +19,29 @@ import Footer from '../common/footer.js';
 import {fetchFactIfNeeded , FACTS} from '../../redux/modules/api/fact';
 import {decodeTokenIfNeeded} from '../../redux/modules/token';
 
+const DOCUMENT_TYPE_ID = {
+    GOODS_RECEIPT_PO: 101,
+}
+
+const fetchDocumentData = (document_id) => new Promise((resolve) =>{
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}`;
+    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((res) => {
+            resolve(res.data);
+        })
+});
+const fetchLastestInternalDocumentID = (document_type_group_id) => new Promise((resolve, reject) => {
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=${document_type_group_id}`
+    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((res) => {
+            let results = res.data.results;
+            if(results){
+                resolve(results[0].internal_document_id);
+            }else{
+                reject('No Results in fetchLastestInternalDocumentID');
+            }
+        })
+});
 
 const packForm = (document_id, document_show, list_show) => {
     const line_items = [];
@@ -66,7 +90,7 @@ const packForm = (document_id, document_show, list_show) => {
 
 const GoodsReceiptComponent = (props) => {
     
-    const {resetForm, setValues} = useFormikContext();
+    const {resetForm, setFieldValue, setValues, values} = useFormikContext();
 
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
@@ -100,6 +124,28 @@ const GoodsReceiptComponent = (props) => {
             props.handleClickRefresh(); // make handle click False
             resetForm();
         }
+        if (props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.FORWARD]){
+            props.handleClickForward(); // make handle click False
+            if(values.document_id){ // If there is document ID
+
+            }else{ // If there is not document ID
+                console.log("I HAVE NO DOC ID")
+                
+            }
+        }
+        if (props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.BACKWARD]){
+            props.handleClickBackward(); // make handle click False
+            if(values.document_id){ // If there is document ID
+
+            }else{ // If there is not document ID
+                console.log("I HAVE NO DOC ID")
+                fetchLastestInternalDocumentID(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO)
+                .then(internal_document_id => {
+                    setFieldValue('internal_document_id', internal_document_id, true);
+                })
+            }
+        }
+        
     }, [props.toolbar]);
 
 
@@ -233,7 +279,8 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = {
-    handleClickHomeToSpareMain, toModeSearch, onClearStateModeAdd, handleClickAdd, fetchFactIfNeeded, decodeTokenIfNeeded, handleClickRefresh
+    handleClickHomeToSpareMain, toModeSearch, onClearStateModeAdd, handleClickAdd, fetchFactIfNeeded, 
+    decodeTokenIfNeeded, handleClickRefresh, handleClickForward, handleClickBackward
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EnhancedGoodsReceiptComponent);
