@@ -18,6 +18,7 @@ import Footer from '../common/footer.js';
 
 import {fetchFactIfNeeded , FACTS} from '../../redux/modules/api/fact';
 import {decodeTokenIfNeeded} from '../../redux/modules/token';
+import DateTimeInput from '../common/formik-datetime-input.js';
 
 const DOCUMENT_TYPE_ID = {
     GOODS_RECEIPT_PO: 101,
@@ -208,7 +209,8 @@ const initialLineItem = {
     uom_id: '',
     per_unit_price: '',
     item_id: '',
-    item_status_id: '',
+    item_status_id: 1,
+    
     //Field ที่ไม่ได้กรอก
     description: '',
     line_number: '',

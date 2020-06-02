@@ -9,9 +9,11 @@ const TextInput = ({ ...props }) => {
   return (
     <>
       <select className="edit-select-top" {...field} {...props}>
-        {props.listProps.map(function (list_uoms, index) {
-          return <option value={list_uoms[props.optionValue]} key={index}>{list_uoms[props.optionName]}</option>
-        })}
+        {props.checkDescription !== '' &&
+          props.listProps.map(function (list_uoms, index) {
+            return <option value={list_uoms[props.optionValue]} key={index}>{list_uoms[props.optionName]}</option>
+          })
+        }
       </select>
       {meta.touched && meta.error ? (
         <div className="error">{meta.error}</div>
