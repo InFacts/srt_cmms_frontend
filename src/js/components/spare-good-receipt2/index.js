@@ -1,9 +1,10 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import { connect } from 'react-redux';
 import { useFormik , withFormik ,useFormikContext} from 'formik';
 
 import { TOOLBAR_ACTIONS, handleClickHomeToSpareMain, handleClickRefresh, toModeSearch, handleClickAdd, TOOLBAR_MODE } from '../../redux/modules/toolbar.js';
 import { onClearStateModeAdd} from '../../redux/modules/goods_receipt.js';
+import TabBar, {TAB_BAR_ACTIVE} from '../common/tab-bar';
 
 import axios from "axios";
 
@@ -67,6 +68,12 @@ const GoodsReceiptComponent = (props) => {
     
     const {resetForm, setValues} = useFormikContext();
 
+    // Initial tabbar & set default active
+    const [tabNames, setTabNames] = useState([
+        {id:"listItem", name:"รายการ", is_active: TAB_BAR_ACTIVE.ACTIVE},
+        {id:"attachment", name:"แนบไฟล์", is_active: TAB_BAR_ACTIVE.INACTIVE},
+    ]);
+    const [initialTabbar, setInitialTabbar] = useState(true);
 
     // Initializer
     // Run only once with checking nothing []
@@ -137,8 +144,13 @@ const GoodsReceiptComponent = (props) => {
     return (
         <form onSubmit={props.handleSubmit}>
         {/* <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) handleSubmit(e) }}> */}
-            <TopContent />
+            {/* <TopContent />
             <BottomContent />
+            <Footer /> */}
+            <TopContent />
+            <TabBar tabNames={tabNames} initialTabbar={initialTabbar} setInitialTabbar={setInitialTabbar}>
+                <BottomContent />
+            </TabBar>
             <Footer />
         </form>
 

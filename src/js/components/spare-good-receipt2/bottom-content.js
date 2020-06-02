@@ -92,7 +92,7 @@ const BottomContent = (props) => {
     <div id="blackground-gray">
       <div className="container_12 clearfix">
         <div className="container_12 ">
-          <div id="รายการ" className="tabcontent">
+          <div id="listItem_content" className="tabcontent">
             <div className="container_12 mt-1" style={{ paddingRight: "10px" }}>
               <table className="table-many-column">
                 <thead>
@@ -153,22 +153,8 @@ const BottomContent = (props) => {
                 </tbody>
               </table>
             </div>
-            {/* <div className="container_12 mt-3">
-              <div className="grid_4 float-right">
-                <input type="number" min="1" className="cancel-default float-right" value={sumTotal(props.list_show)} onChange={(e) => props.onChangeTotal(e)} disabled="disabled"></input>
-              </div>
-              <div className="grid_2 float-right"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
-            </div>
-            <div className="container_12">
-              <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
-              <div className="grid_4">
-                <textarea className="edit" name="Text1" cols="40" rows="2" value={props.document_show.remark} onChange={(e) => props.onChangeNote(e)}></textarea>
-              </div>
-            </div> */}
-
-
           </div>
-          <div id="แนบไฟล์" className="tabcontent">
+          <div id="attachment_content" className="tabcontent">
             <Files />
           </div>
         </div>
