@@ -167,7 +167,10 @@ const initialLineItem = {
     description: '',
     line_number: '',
     document_id: '', // maybe not needed
-    list_uoms: []
+    list_uoms: [],
+
+    //Field ที่กรอกแต่ไม่ใช้เป็น dummy
+    list_uom: ''
 }
 const initialRows = (n=10) => {
     let rows = [];
