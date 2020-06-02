@@ -65,34 +65,16 @@ const responseToFormState = (userFact, data) => {
 
 
 const TopContent = (props) => {
-  useEffect(() => {
-    document.getElementById("defaultOpen").click();
-  }, []);
-
   const {values, errors,setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm} = useFormikContext();
 
   // Fill Default Forms
   useEffect(() => {
     if(props.toolbar.mode === TOOLBAR_MODE.ADD){
       setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(props.fact.users, props.decoded_token.id));
+      setFieldValue("status_name_th","ยังไม่ได้รับการบันทึก");
       // validateField("created_by_admin_employee_id");
     }
   }, [props.decoded_token, props.fact.users, props.toolbar.mode])
-
-
-  function tapChange(evt, cityName) {
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-      tabcontent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-      tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-    document.getElementById(cityName).style.display = "block";
-    evt.currentTarget.className += " active";
-  }
 
   const validateInternalDocumentIDField = internal_document_id => new Promise(resolve => {
     if (!internal_document_id) {
@@ -124,7 +106,7 @@ const TopContent = (props) => {
         }//If mode add, ok
       })
       .finally(() => {
-        resolve(error)
+        return resolve(error)
       });
   });
 
@@ -243,14 +225,6 @@ const TopContent = (props) => {
             </div>
           </div>
         </section>
-
-        <div className="container_12">
-          <div className="tab grid_11">
-            <button type="button" id="defaultOpen" className="tablinks" onClick={e => tapChange(e, "รายการ")}>รายการ</button>
-            <button type="button" className="tablinks" onClick={e => tapChange(e, "แนบไฟล์")}>แนบไฟล์</button>
-          </div>
-        </div>
-
       </div>
 
       {/* PopUp ค้นหาเลขที่เอกสาร */}

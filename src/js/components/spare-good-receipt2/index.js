@@ -1,9 +1,10 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import { connect } from 'react-redux';
 import { useFormik , withFormik ,useFormikContext} from 'formik';
 
-import { TOOLBAR_ACTIONS, handleClickHomeToSpareMain, toModeSearch, handleClickAdd, TOOLBAR_MODE } from '../../redux/modules/toolbar.js';
+import { TOOLBAR_ACTIONS, handleClickHomeToSpareMain, handleClickRefresh, toModeSearch, handleClickAdd, TOOLBAR_MODE } from '../../redux/modules/toolbar.js';
 import { onClearStateModeAdd} from '../../redux/modules/goods_receipt.js';
+import TabBar, {TAB_BAR_ACTIVE} from '../common/tab-bar';
 
 import axios from "axios";
 
@@ -67,6 +68,12 @@ const GoodsReceiptComponent = (props) => {
     
     const {resetForm, setValues} = useFormikContext();
 
+    // Initial tabbar & set default active
+    const [tabNames, setTabNames] = useState([
+        {id:"listItem", name:"รายการ", is_active: TAB_BAR_ACTIVE.ACTIVE},
+        {id:"attachment", name:"แนบไฟล์", is_active: TAB_BAR_ACTIVE.INACTIVE},
+    ]);
+    const [initialTabbar, setInitialTabbar] = useState(true);
 
     // Initializer
     // Run only once with checking nothing []
@@ -75,23 +82,26 @@ const GoodsReceiptComponent = (props) => {
         props.toModeSearch();
     }, []);
 
-    // Handle home button, only re-subscribe if requiresHandleClick of HOME changes
+    // Handles all state.toolbar mode and requiresHandleClick Changes
     useEffect(()=> {
+        // Handle toolbar mode change: SEARCH
+        if (props.toolbar.mode === TOOLBAR_MODE.SEARCH){
+            resetForm();
+        }
+        // Handle home button, only re-subscribe if requiresHandleClick of HOME changes
         if (props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.HOME]){
             props.handleClickHomeToSpareMain();
         }
-    }, [props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.HOME]]);
-
-    // Handle toolbar mode change: ADD, SEARCH
-    useEffect(()=> {
         if (props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]){
             props.handleClickAdd(); // make handle click False
             resetForm();
         }
-        if (props.toolbar.mode === TOOLBAR_MODE.SEARCH){
+        if (props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.REFRESH]){
+            props.handleClickRefresh(); // make handle click False
             resetForm();
         }
-    }, [props.toolbar.mode]);
+    }, [props.toolbar]);
+
 
     // Fetch Fact If needed
     useEffect(() => {
@@ -134,34 +144,40 @@ const GoodsReceiptComponent = (props) => {
     return (
         <form onSubmit={props.handleSubmit}>
         {/* <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) handleSubmit(e) }}> */}
-            <TopContent />
+            {/* <TopContent />
             <BottomContent />
+            <Footer /> */}
+            <TopContent />
+            <TabBar tabNames={tabNames} initialTabbar={initialTabbar} setInitialTabbar={setInitialTabbar}>
+                <BottomContent />
+            </TabBar>
             <Footer />
         </form>
 
     )
 }
-
-// const initialForm = 
-const initialRow = (n=10) => {
-    const initialLineItem = {
-        internal_item_id: '',
-        quantity: '',
-        uom_id: '',
-        per_unit_price: '',
-        item_id: '',
-        item_status_id: '',
-        //Field ที่ไม่ได้กรอก
-        line_number: '',
-        document_id: '',
-        list_uoms: [],
-        description: ""
+const initialLineItem = {
+    internal_item_id: '',
+    quantity: '',
+    uom_id: '',
+    per_unit_price: '',
+    item_id: '',
+    item_status_id: '',
+    //Field ที่ไม่ได้กรอก
+    description: '',
+    line_number: '',
+    document_id: '', // maybe not needed
+    list_uoms: []
+}
+const initialRows = (n=10) => {
+    let rows = [];
+    for (var i = 1; i <= n; i++) {
+        rows.push({
+            ...initialLineItem, 
+            line_number: i
+        });
     }
-    let initialRows =[]
-    for (var i = 0; i < n; i++) {
-        initialRows.push(initialLineItem);
-    }
-    return initialRows
+    return rows;
 }
 
 
@@ -178,7 +194,7 @@ const EnhancedGoodsReceiptComponent = withFormik({
     
         remark: '',
     
-        line_items: initialRow(),
+        line_items: initialRows(),
     
         //Field ที่ไม่ได้กรอก
         document_id: '',
@@ -217,7 +233,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = {
-    handleClickHomeToSpareMain, toModeSearch, onClearStateModeAdd, handleClickAdd, fetchFactIfNeeded, decodeTokenIfNeeded
+    handleClickHomeToSpareMain, toModeSearch, onClearStateModeAdd, handleClickAdd, fetchFactIfNeeded, decodeTokenIfNeeded, handleClickRefresh
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EnhancedGoodsReceiptComponent);
