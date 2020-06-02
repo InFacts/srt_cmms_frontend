@@ -25,85 +25,15 @@ const BottomContent = (props) => {
   const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
   const sumTotalLineItem = (quantity, per_unit_price) => {
-    var sum = 0;
-    sum = quantity * per_unit_price;
-    if (sum === 0 || sum == NaN) {
-      return null
-    }
-    else {
-      var s = sum.toString();
-      var n = s.indexOf(".")
-      // console.log(n, "s>>>>", s)
-      if (n == -1) {
-        s = s + ".00"
-        return s;
-      }
-      else {
-        s = s.slice(0, n + 3)
-        var c = s.length - n;
-        // console.log(c, "s.length", s.length, "n", n )
-        if (c === 2) {
-          return s + "0";
-        }
-        else {
-          return s;
-        }
-      }
-    }
+    let sumValueInLineItem = 0;
+    // console.log("quantity", quantity, "per_unit_price", per_unit_price)
+    sumValueInLineItem = quantity + per_unit_price;
+    return sumValueInLineItem;
   }
-
-  const sumTotal = (list_show) => {
-    var sumTotal = 0;
-    list_show.map(function (list, index) {
-      var sum = 0;
-      sum = list.quantity * list.per_unit_price;
-      sumTotal = sumTotal + sum;
-      // return sumTotal
-    })
-    var s = sumTotal.toString();
-    var n = s.indexOf(".")
-    if (n == -1) {
-      s = s + ".00"
-      return s;
-    }
-    else {
-      s = s.slice(0, n + 3)
-      return s;
-    }
-  }
-
-  // const perUnitPriceModeSearch = (description, per_unit_price, index) => {
-  //   // TODO description !== undefined ถ้าเชื่อม Bottom เข้ากับ Formix หมดแล้วเด่วกลับมาเช็ค
-  //   if (description !== "" && per_unit_price !== undefined) {
-  //     console.log("per_unit_price", per_unit_price)
-  //     var s = per_unit_price.toString();
-  //     var n = s.indexOf(".")
-  //     if (n == -1) {
-  //       s = s + ".0000"
-  //       return (
-  //         <NumberInput step={0.0001} name={`line_items[${index}].per_unit_price`}
-  //           disabled={props.actionMode === TOOLBAR_MODE.SEARCH} />
-  //       );
-  //     }
-  //     else return (
-  //       <NumberInput step={0.0001} name={`line_items[${index}].per_unit_price`}
-  //         disabled={props.actionMode === TOOLBAR_MODE.SEARCH} />
-  //     )
-  //   }
-  //   else {
-  //     console.log("hello")
-  //     return (
-  //       <NumberInput step={0.0001} name={`line_items[${index}].per_unit_price`}
-  //         disabled={props.actionMode === TOOLBAR_MODE.SEARCH} />
-  //     )
-  //   }
-  // }
-
-
 
   const validateLineNumberInternalItemIDField = (fieldName, internal_item_id) => {
     // internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
-    // console.log(" I AM CHECKING ", internal_item_id)
+    console.log(" I AM CHECKING ", internal_item_id)
     if (internal_item_id === ""){
       setFieldValue(fieldName + `.description`, '', false);
       setFieldValue(fieldName + `.quantity`, '', false);
@@ -114,20 +44,18 @@ const BottomContent = (props) => {
     
     let items = props.fact.items.items;
     let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
-    
+
     if (item) {
       setFieldValue(fieldName + `.description`, `${item.description}`, false);
       setFieldValue(fieldName + `.quantity`, 0, false);
       setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
-      setFieldValue(fieldName + `.per_unit_price`, 0.0, false);
+      setFieldValue(fieldName + `.per_unit_price`, 0, false);
       return;
     } else {
       return 'Invalid Item ID';
     }
   }
-  // const validateInternalItemIDField = (...args) => validateItemDescriptionField(`line_items[${lineNumber - 1}]`, ...args);
 
-  // console.log("values.line_items", values.line_items)
   return (
     <div id="blackground-gray">
       <div className="container_12 clearfix">
