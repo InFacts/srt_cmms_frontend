@@ -101,9 +101,13 @@ const BottomContent = (props) => {
 
 
 
-  const validateLineNumberInternalItemIDField = (fieldName, internal_item_id) => {
+  const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => {
     // internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
-    // console.log(" I AM CHECKING ", internal_item_id)
+    //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
+    if (values.line_items[index].internal_item_id === internal_item_id){
+      return;
+    }
+    console.log(" I AM CHECKING ", internal_item_id)
     if (internal_item_id === ""){
       setFieldValue(fieldName + `.description`, '', false);
       setFieldValue(fieldName + `.quantity`, '', false);
@@ -154,7 +158,7 @@ const BottomContent = (props) => {
                         <th className="edit-padding text-center">{line_number}</th>
                         <td className="edit-padding">
                           <TextInput name={`line_items[${index}].internal_item_id`}
-                            validate={internal_item_id => validateLineNumberInternalItemIDField(`line_items[${index}]`, internal_item_id)}
+                            validate={internal_item_id => validateLineNumberInternalItemIDField(`line_items[${index}]`, internal_item_id, index)}
                             tabIndex="6"
                             disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
                             searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart"
