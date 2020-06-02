@@ -78,9 +78,20 @@ const TopContent = (props) => {
   }, [props.decoded_token, props.fact.users, props.toolbar.mode])
 
   const validateInternalDocumentIDField = internal_document_id => new Promise(resolve => {
-    if (!internal_document_id) {
-      return resolve(); // Resolve doesn't return
+    // Internal Document ID
+        //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
+        //  ie. GR-PYO-2563/0001
+    console.log("I am validating doucment id")
+    let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS)-[A-Z]{3}-\d{4}\/\d{4}$/g
+    let draftInternalDocumentIDRegex= /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
+    if (!values.internal_document_id) {
+        return resolve('Required');
+    }else if (!internalDocumentIDRegex.test(values.internal_document_id) && !draftInternalDocumentIDRegex.test(values.internal_document_id)){ //
+        return resolve('Invalid Document ID Format\nBe sure to use the format ie. GR-PYO-2563/0001')
     }
+    // if (!internal_document_id) {
+    //   return resolve(); // Resolve doesn't return
+    // }
     let error;
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/internal_document_id/${internal_document_id}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
@@ -90,15 +101,16 @@ const TopContent = (props) => {
             console.log(" I AM STILL IN MODE SEARCH AND SET VALUE")
             setValues({ ...values, ...responseToFormState(props.fact.users, res.data) }, false); //Setvalues and don't validate
             validateField("dest_warehouse_id");
-            // validateForm();
-            return resolve();
+            // validateField("internal_document_id");
+            return resolve(null);
           } else { //If Mode add, need to error duplicate Document ID
             error = 'Duplicate Document ID';
           }
         } else { // If input Document ID doesn't exists
           if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
             error = 'Invalid Document ID';
-          }//If mode add, ok
+          } else {//If mode add, ok
+          }
         }
       })
       .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists

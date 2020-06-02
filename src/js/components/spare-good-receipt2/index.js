@@ -261,11 +261,20 @@ const EnhancedGoodsReceiptComponent = withFormik({
     validate: (values, props) => {
         const errors = {};
 
-        if (!values.internal_document_id) {
-          errors.internal_document_id = 'Required';
+        // Internal Document ID
+        //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
+        //  ie. GR-PYO-2563/0001
+        // let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS)-[A-Z]{3}-\d{4}\/\d{4}$/g
+        // let draftInternalDocumentIDRegex= /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
+        // if (!values.internal_document_id) {
+        //     errors.internal_document_id = 'Required';
+        // }else if (!internalDocumentIDRegex.test(values.internal_document_id)){ //&& !draftInternalDocumentIDRegex.text(values.internal_document_id)
+        //     errors.internal_document_id = 'Invalid Document ID Format\nBe sure to use the format ie. GR-PYO-2563/0001'
+        // }
+        // MOVED TO FIELD
+        if (!values.document_date){
+            errors.document_date = "Required";
         }
-
-
         return errors;
     },
     handleSubmit: values => {
