@@ -143,17 +143,26 @@ const GoodsReceiptComponent = (props) => {
 }
 
 // const initialForm = 
-
-const initialLineItem = {
-    quantity: '',
-    uom_id: '',
-    per_unit_price: '',
-    item_id: '',
-    item_status_id: '',
-    //Field ที่ไม่ได้กรอก
-    line_number: '',
-    document_id: '',
+const initialRow = (n=10) => {
+    const initialLineItem = {
+        internal_item_id: '',
+        quantity: '',
+        uom_id: '',
+        per_unit_price: '',
+        item_id: '',
+        item_status_id: '',
+        //Field ที่ไม่ได้กรอก
+        line_number: '',
+        document_id: '',
+        list_uoms: []
+    }
+    let initialRows =[]
+    for (var i = 0; i < n; i++) {
+        initialRows.push(initialLineItem);
+    }
+    return initialRows
 }
+
 
 const EnhancedGoodsReceiptComponent = withFormik({
     mapPropsToValues: (props) => ({ 
@@ -168,7 +177,7 @@ const EnhancedGoodsReceiptComponent = withFormik({
     
         remark: '',
     
-        line_items: [],
+        line_items: initialRow(),
     
         //Field ที่ไม่ได้กรอก
         document_id: '',

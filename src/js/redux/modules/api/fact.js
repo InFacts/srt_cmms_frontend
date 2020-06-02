@@ -15,7 +15,7 @@ export const FACTS = {
     DOCUMENT_STATUS: "document-status",
     USERS: "users",
     WAREHOUSES: "warehouses",
-
+    ITEM: "items"
 }
 
 
@@ -106,7 +106,7 @@ export function fetchFact(factName){
         dispatch(requestFact(factName));
         return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/${factName}?page_size=1000`, 
         { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
-            console.log(res)
+            // console.log(res)
             if(res.status === 200){
                 dispatch(receiveFact(factName, res.data))
             }else{
