@@ -69,12 +69,13 @@ const TopContent = (props) => {
     document.getElementById("defaultOpen").click();
   }, []);
 
-  const {values, errors,setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm} = useFormikContext();
+  const {values, touched, errors,setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm} = useFormikContext();
 
   // Fill Default Forms
   useEffect(() => {
     if(props.toolbar.mode === TOOLBAR_MODE.ADD){
       setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(props.fact.users, props.decoded_token.id));
+      setFieldValue("status_name_th","ยังไม่ได้รับการบันทึก");
       // validateField("created_by_admin_employee_id");
     }
   }, [props.decoded_token, props.fact.users, props.toolbar.mode])
@@ -124,7 +125,7 @@ const TopContent = (props) => {
         }//If mode add, ok
       })
       .finally(() => {
-        resolve(error)
+        return resolve(error)
       });
   });
 
