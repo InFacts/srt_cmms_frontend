@@ -154,7 +154,8 @@ const initialRow = (n=10) => {
         //Field ที่ไม่ได้กรอก
         line_number: '',
         document_id: '',
-        list_uoms: []
+        list_uoms: [],
+        description: ""
     }
     let initialRows =[]
     for (var i = 0; i < n; i++) {
