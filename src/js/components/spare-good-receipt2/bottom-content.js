@@ -78,7 +78,9 @@ const BottomContent = (props) => {
     // if (values.line_items[index].internal_item_id === internal_item_id) {
     //   return;
     // }
+    console.log("values.line_items[index].internal_item_id", values.line_items[index].internal_item_id)
     if (internal_item_id === "") {
+      console.log("check id one", internal_item_id)
       setFieldValue(fieldName + `.description`, '', false);
       setFieldValue(fieldName + `.quantity`, '', false);
       setFieldValue(fieldName + `.list_uoms`, [], false);
@@ -89,14 +91,14 @@ const BottomContent = (props) => {
     let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
 
     if (item) {
-      // console.log("if")
+      console.log("check id two")
       setFieldValue(fieldName + `.description`, `${item.description}`, false);
       setFieldValue(fieldName + `.quantity`, 0, false);
       setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
       setFieldValue(fieldName + `.per_unit_price`, 0, false);
       return;
     } else {
-      // console.log("else")
+      console.log("else")
       return 'Invalid Number ID';
     }
   }
@@ -235,9 +237,7 @@ const BottomContent = (props) => {
           </div>
 
           {/* PopUp ค้นหาอะไหล่ MODE ADD */}
-          <PopupModalNoPart 
-          // bodyTableStatus={}
-          />
+          <PopupModalNoPart lineNumber={lineNumber}/>
 
         </div>
       </div>

@@ -68,7 +68,7 @@ const TopContent = (props) => {
     // Internal Document ID
         //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
         //  ie. GR-PYO-2563/0001
-    console.log("I am validating doucment id")
+    // console.log("I am validating doucment id")
     let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS)-[A-Z]{3}-\d{4}\/\d{4}$/g
     // let draftInternalDocumentIDRegex= /^heh\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
     let draftInternalDocumentIDRegex = /^heh/g
