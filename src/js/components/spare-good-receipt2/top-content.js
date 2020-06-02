@@ -72,9 +72,9 @@ const TopContent = (props) => {
     let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS)-[A-Z]{3}-\d{4}\/\d{4}$/g
     // let draftInternalDocumentIDRegex= /^heh\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
     let draftInternalDocumentIDRegex = /^heh/g
-    if (!values.internal_document_id) {
+    if (!internal_document_id) {
         return resolve('Required');
-    }else if (!internalDocumentIDRegex.test(values.internal_document_id) && !draftInternalDocumentIDRegex.test(values.internal_document_id)){ //
+    }else if (!internalDocumentIDRegex.test(internal_document_id) && !draftInternalDocumentIDRegex.test(internal_document_id)){ //
         return resolve('Invalid Document ID Format\nBe sure to use the format ie. GR-PYO-2563/0001')
     }
     // if (!internal_document_id) {
@@ -92,10 +92,12 @@ const TopContent = (props) => {
             // validateField("internal_document_id");
             return resolve(null);
           } else { //If Mode add, need to error duplicate Document ID
+            console.log("I AM DUPLICATE")
             error = 'Duplicate Document ID';
           }
         } else { // If input Document ID doesn't exists
           if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
+            console.log("I KNOW IT'sINVALID")
             error = 'Invalid Document ID';
           } else {//If mode add, ok
           }
