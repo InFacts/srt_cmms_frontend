@@ -1,37 +1,71 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
-const ActionTabDocument = (e) => {
-  var i, tabcontent, tablinks;
-  var idElement = e.target.id;
-  console.log("idElement", idElement)
-  tabcontent = document.getElementsByClassName("tabcontent");
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
-  }
-  tablinks = document.getElementsByClassName("tablinks");
-
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
-  }
-  document.getElementById(idElement+"_content").style.display = "block";
-  e.currentTarget.className += " active";
+export const TAB_BAR_ACTIVE = {
+  ACTIVE: "ACTIVE",
+  INACTIVE: "INACTIVE"
 }
 
-const TabDocument = (props) => {
-  const {tabNames} = props;
-  return (
+const TabBar = (props) => {
+
+  // Run only once with checking nothing []
+  // 1. Check Tabbar is_active
+  useEffect(()=>{
+    actionTabDocument();
+    console.log("><>>>>>>>>>>>>")
+  }, []);
+
+  // Clear & Check initial Tabbar is_active
+  const actionTabDocument = (e) => {
+    // Clear Class of Tabbar & TabLinks
+    clearTabbar()
+
+    // Check initial Tabbar is_active
+    if (props.initialTabbar !== true) {
+      // Active Tabar
+      document.getElementById(e.target.id+"_content").style.display = "block";
+      e.currentTarget.className += " active";
+    }
+    else {
+      // Set Initial Tabbar is False
+      props.setInitialTabbar(false);
+
+      // Active Tabar
+      for (let i = 0; i < props.tabNames.length; i++) {
+        if (props.tabNames[i].is_active === TAB_BAR_ACTIVE.ACTIVE) {
+          document.getElementById(props.tabNames[i].id+"_content").style.display = "block";
+
+          let tablinks = document.getElementsByClassName("tablinks");
+          tablinks[i].className += " active";
+        }
+      }
+    }
+  }
+  return ( 
     <>
-      <div className="grid_12">
-        <div className="tab grid_11">
-          {
-            tabNames.map((tabName, index) => 
-              <button type="button" className="tablinks" id={tabName.id} onClick={ActionTabDocument}>{tabName.name}</button>
-            )
-          }
+      <div id="blackground-white">
+        <div className="container_12">
+          <div className="tab grid_11">
+            {props.tabNames.map((tabName, index) => 
+                <button type="button" className="tablinks" id={tabName.id} onClick={actionTabDocument}>{tabName.name}</button>
+            )}
+          </div>
         </div>
       </div>
       {props.children}
     </>
   )
 }
-export default TabDocument;
+export default TabBar;
+
+// Clear Class of Tabbar & TabLinks
+const clearTabbar = () => {
+  let tabcontent = document.getElementsByClassName("tabcontent");
+  for (let i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  let tablinks = document.getElementsByClassName("tablinks");
+  for (let i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+}
