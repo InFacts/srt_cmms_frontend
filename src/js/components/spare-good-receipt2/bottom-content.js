@@ -99,24 +99,35 @@ const BottomContent = (props) => {
   //   }
   // }
 
-  const validateItemDescriptionField = (fieldName, internal_item_id) => {
-    internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
+
+
+  const validateLineNumberInternalItemIDField = (fieldName, internal_item_id) => {
+    // internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
+    // console.log(" I AM CHECKING ", internal_item_id)
+    if (internal_item_id === ""){
+      setFieldValue(fieldName + `.description`, '', false);
+      setFieldValue(fieldName + `.quantity`, '', false);
+      setFieldValue(fieldName + `.list_uoms`, [], false);
+      setFieldValue(fieldName + `.per_unit_price`, '', false);
+      return;
+    }
+    
     let items = props.fact.items.items;
     let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
-
+    
     if (item) {
       setFieldValue(fieldName + `.description`, `${item.description}`, false);
-      setFieldValue(fieldName + `.quantity`, item.quantity, false);
+      setFieldValue(fieldName + `.quantity`, 0, false);
       setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
-      setFieldValue(fieldName + `.per_unit_price`, item.per_unit_price, false);
+      setFieldValue(fieldName + `.per_unit_price`, 0.0, false);
       return;
     } else {
       return 'Invalid Item ID';
     }
   }
-  const validateInternalItemIDField = (...args) => validateItemDescriptionField(`line_items[${lineNumber - 1}]`, ...args);
+  // const validateInternalItemIDField = (...args) => validateItemDescriptionField(`line_items[${lineNumber - 1}]`, ...args);
 
-  console.log("values.line_items", values.line_items)
+  // console.log("values.line_items", values.line_items)
   return (
     <div id="blackground-gray">
       <div className="container_12 clearfix">
@@ -143,7 +154,7 @@ const BottomContent = (props) => {
                         <th className="edit-padding text-center">{line_number}</th>
                         <td className="edit-padding">
                           <TextInput name={`line_items[${index}].internal_item_id`}
-                            validate={validateInternalItemIDField}
+                            validate={internal_item_id => validateLineNumberInternalItemIDField(`line_items[${index}]`, internal_item_id)}
                             tabIndex="6"
                             disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
                             searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart"
