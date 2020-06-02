@@ -71,14 +71,14 @@ export function getUserIDFromEmployeeID(userFact, employee_id) {
     if (users && users.length > 0) {
       let user = users.find(user => `${user.employee_id}` === `${employee_id}`)
       if (user) {
-        return user.employee_id;
+        return user.user_id;
       }
       return null;
     }
     return null;
 }
 
-const packDataFromValues = (fact, values, document_type_id) => {
+export const packDataFromValues = (fact, values, document_type_id) => {
     let document_part = {
         ...DOCUMENT_SCHEMA,
         document_id: values.document_id,

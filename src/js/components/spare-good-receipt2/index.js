@@ -23,7 +23,7 @@ import {fetchFactIfNeeded , FACTS} from '../../redux/modules/api/fact';
 import {decodeTokenIfNeeded} from '../../redux/modules/token';
 import DateTimeInput from '../common/formik-datetime-input.js';
 
-import {getUserIDFromEmployeeID, DOCUMENT_SCHEMA, ICD_SCHEMA, ICD_LINE_ITEM_SCHEMA, DOCUMENT_TYPE_ID} from '../common/helper';
+import {getUserIDFromEmployeeID, DOCUMENT_SCHEMA, ICD_SCHEMA, ICD_LINE_ITEM_SCHEMA,packDataFromValues, DOCUMENT_TYPE_ID} from '../common/helper';
 
 
 
@@ -299,8 +299,11 @@ const EnhancedGoodsReceiptComponent = withFormik({
         }
         return errors;
     },
-    handleSubmit: values => {
+    handleSubmit: (values, formikBag) => {
+        
         console.log("i am submitting", values)
+        console.log("i have facts on submit", formikBag.props)
+        console.log("I AM SUBMITTING ", packDataFromValues(formikBag.props.fact, values, DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO) )
         alert(JSON.stringify(values, null, 2));
       },    
     // validateOnChange: false,
@@ -312,6 +315,7 @@ const mapStateToProps = (state) => ({
     toolbar: state.toolbar,
     decoded_token: state.token.decoded_token,
     actionMode: state.goods_receipt.action,
+    fact: state.api.fact,
 })
 
 const mapDispatchToProps = {

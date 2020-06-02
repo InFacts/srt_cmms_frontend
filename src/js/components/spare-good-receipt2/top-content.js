@@ -68,7 +68,7 @@ const TopContent = (props) => {
     // Internal Document ID
         //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
         //  ie. GR-PYO-2563/0001
-    console.log("I am validating doucment id")
+    console.log("I am validating document id")
     let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS)-[A-Z]{3}-\d{4}\/\d{4}$/g
     // let draftInternalDocumentIDRegex= /^heh\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
     let draftInternalDocumentIDRegex = /^heh/g
@@ -114,6 +114,7 @@ const TopContent = (props) => {
   });
 
   const validateEmployeeIDField = (fieldName, employee_id) => {
+    console.log("I am validating employee id")
     employee_id = employee_id.split('\\')[0]; // Escape Character USERNAME CANT HAVE ESCAPE CHARACTER!
     let users = props.fact.users.items;
     let user = users.find(user => user.employee_id === employee_id); // Returns undefined if not found
@@ -129,6 +130,7 @@ const TopContent = (props) => {
   const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", ...args);
   
   const validateWarehouseIDField = (fieldName, warehouse_id) => {
+    console.log("I am validating warehouse id")
     warehouse_id = `${warehouse_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
     let warehouses = props.fact.warehouses.items;
     let warehouse = warehouses.find(warehouse => `${warehouse.warehouse_id}` === `${warehouse_id}`); // Returns undefined if not found
