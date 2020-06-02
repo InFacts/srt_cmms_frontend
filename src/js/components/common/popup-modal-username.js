@@ -10,14 +10,11 @@ const PopupModalUsername = (props) => {
 
   useEffect(() => {
     const filterDataOnCurrentQueryString = () => {
-      console.log("filterDataOnCurrentQueryString")
         // currentQueryString
         setData(props.users.filter(function (users) {
           var removeSpaces = currentQueryString.replace(/\s/g, '');
-          console.log(removeSpaces, "removeSpaces")
           const regex = new RegExp(`${removeSpaces}`, 'i');
           var isMatch = regex.test(users.employee_id) || regex.test(users.firstname_th);
-          console.log("isMatch", isMatch)
           return (isMatch);
         }));
         // setData corresponding to currentQueryString

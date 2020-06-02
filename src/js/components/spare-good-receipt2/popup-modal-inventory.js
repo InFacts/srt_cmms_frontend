@@ -10,13 +10,11 @@ const PopupModalInventory = (props) => {
 
   useEffect(() => {
     const filterDataOnCurrentQueryString = () => {
-      console.log("filterDataOnCurrentQueryString")
       // currentQueryString
       setData(props.warehouses.filter(function (warehouses) {
         var removeSpaces = currentQueryString.replace(/\s/g, '');
         const regex = new RegExp(`${removeSpaces}`, 'i');
         var isMatch = regex.test(warehouses.warehouse_id) || regex.test(warehouses.name);
-        console.log("isMatch", isMatch)
         return (isMatch);
       }));
       // setData corresponding to currentQueryString
