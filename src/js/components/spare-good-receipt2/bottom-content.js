@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
 
 import axios from "axios";
@@ -7,17 +7,22 @@ import { API_URL_DATABASE } from '../../config_url.js';
 
 import TextInput from '../common/formik-text-input';
 import NumberInput from '../common/formik-number-input';
+import SelectInput from '../common/formik-select-input';
 import Files from '../common/files'
 
 import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
 
 import { useFormikContext } from 'formik';
 
+import PopupModalNoPart from '../common/popup-modal-nopart'
+
 import '../../../css/table.css';
 
 const BottomContent = (props) => {
 
-  const { values } = useFormikContext();
+  const [lineNumber, setLineNumber] = useState('');
+
+  const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
   const sumTotalLineItem = (quantity, per_unit_price) => {
     var sum = 0;
@@ -67,7 +72,7 @@ const BottomContent = (props) => {
     }
   }
 
-  const perUnitPriceModeSearch = (description, per_unit_price) => {
+  const perUnitPriceModeSearch = (description, per_unit_price, index) => {
     // TODO description !== undefined ถ้าเชื่อม Bottom เข้ากับ Formix หมดแล้วเด่วกลับมาเช็ค
     if (description !== undefined) {
       if (description !== "") {
@@ -75,18 +80,59 @@ const BottomContent = (props) => {
         var n = s.indexOf(".")
         if (n == -1) {
           s = s + ".0000"
-          return s;
+          return (
+            <NumberInput name={`line_items[${index}].per_unit_price`} value={s}
+              disabled={props.actionMode === TOOLBAR_MODE.SEARCH} />
+          );
         }
-        else return per_unit_price
+        else return (
+          <NumberInput name={`line_items[${index}].per_unit_price`} value={per_unit_price}
+            disabled={props.actionMode === TOOLBAR_MODE.SEARCH} />
+        )
+        // per_unit_price
       }
       else {
-        return per_unit_price
+        return (
+          <NumberInput name={`line_items[${index}].per_unit_price`} value={per_unit_price}
+            disabled={props.actionMode === TOOLBAR_MODE.SEARCH} />
+        )
       }
     }
     else {
       return null
     }
   }
+
+  const validateItemDescriptionField = (fieldName, internal_item_id) => {
+    internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
+    let items = props.fact.items.items;
+    let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+
+    // console.log("item.internal_item_id", item.internal_item_id, "internal_item_id", internal_item_id)
+    // console.log("item", item)
+    if (item) {
+      setFieldValue(fieldName, `${item.description}`, false);
+      return;
+    } else {
+      return 'Invalid Item ID';
+    }
+  }
+  const validateInternalItemIDField = (...args) => validateItemDescriptionField(`line_items[${lineNumber - 1}].description`, ...args);
+
+
+  const validateItemUomField = (fieldName, internal_item_id) => {  
+    internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
+    let items = props.fact.items.items;
+    let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+
+    if (item) {
+      setFieldValue(fieldName, `${item.list_uoms}`, false);
+      return;
+    } else {
+      return 'Invalid UOM ID';
+    }
+  }
+  const validateItemUomGroupField = (...args) => validateItemUomField(`line_items[${lineNumber - 1}].list_uoms`, ...args);
 
   return (
     <div id="blackground-gray">
@@ -108,44 +154,32 @@ const BottomContent = (props) => {
                 </thead>
                 <tbody>
                   {values.line_items.map(function (list, index) {
+                    let line_number = index + 1;
                     return (
                       <tr key={index}>
-                        <th className="edit-padding text-center">{index + 1}</th>
+                        <th className="edit-padding text-center">{line_number}</th>
                         <td className="edit-padding">
-                          {/* {props.actionMode === TOOLBAR_MODE.SEARCH
-                            ?
-                            list.internal_item_id
-                            //  <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}> 
-                            //  <input type="text" className="p-search-box__input cancel-default-table" value={list.internal_item_id} onChange={(e) => props.onChangeNoPartEachRow(e)} />
-                            //   <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPart" onClick={(e) => props.onClickNoPartEachRow(e)}></i></button> 
-                            // </div> 
-                            :
-                            <TextInput name={`internal_item_id_${index}`}
-                              disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-                              searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart" tabIndex="1" />
-                          } */}
                           <TextInput name={`line_items[${index}].internal_item_id`}
-                              disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-                              searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart" />
+                            validate={validateInternalItemIDField} tabIndex="6"
+                            disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
+                            searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart"
+                            handleModalClick={() => setLineNumber(line_number)}
+                          />
                         </td>
                         <td className="edit-padding">{list.description}</td>
                         <td className="edit-padding text-center">
-                          {props.actionMode === TOOLBAR_MODE.SEARCH
-                            ?
-                            list.quantity
-                            :
-                            <NumberInput name={`quantity_${index}`} disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-                              tabIndex="3" />
-                          }
+                          <NumberInput name={`line_items[${index}].quantity`} tabIndex="7"
+                            disabled={props.actionMode === TOOLBAR_MODE.SEARCH} />
                         </td>
+
                         <td className="edit-padding text-center">
-                          <select className="edit-select-top" disabled="disabled">
-                            {list.list_uoms.map(function (list_uoms, index) {
-                              return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
-                            })}
-                          </select>
+                          <SelectInput name={`line_items[${index}].list_uoms`} listUoms={list.list_uoms}
+                          validate={validateItemUomGroupField} 
+                          tabIndex="8"
+                            disabled={props.actionMode === TOOLBAR_MODE.SEARCH} />
                         </td>
-                        <td className="edit-padding text-right">{perUnitPriceModeSearch(list.description, list.per_unit_price)}</td>
+
+                        <td className="edit-padding text-right">{perUnitPriceModeSearch(list.description, list.per_unit_price, index)}</td>
                         <td className="edit-padding text-right">{sumTotalLineItem(list.quantity, list.per_unit_price)}</td>
                       </tr>
                     )
@@ -157,6 +191,10 @@ const BottomContent = (props) => {
           <div id="attachment_content" className="tabcontent">
             <Files />
           </div>
+
+          {/* PopUp ค้นหาอะไหล่ MODE ADD */}
+          <PopupModalNoPart lineNumber={lineNumber} />
+
         </div>
       </div>
     </div >

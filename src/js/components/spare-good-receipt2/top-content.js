@@ -9,13 +9,13 @@ import { API_URL_DATABASE } from '../../config_url.js';
 import FormInput from '../common/form-input'
 import TextInput from '../common/formik-text-input'
 import DateTimeInput from '../common/formik-datetime-input'
+import DateInput from '../common/formik-date-input'
 
 import { useFormikContext, useField } from 'formik';
 
 import PopupModalDocument from '../common/popup-modal-document'
-import PopupModalInventory from './popup-modal-inventory'
+import PopupModalInventory from '../common/popup-modal-inventory'
 import PopupModalUsername from '../common/popup-modal-username'
-import PopupModalNoPart from './popup-modal-nopart'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 
 
@@ -178,7 +178,7 @@ const TopContent = (props) => {
             {/* Created On */}
             <div className="grid_3 float-right">
               <DateTimeInput name="created_on" /*validate={validateCreateOnField */
-                disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                disabled />
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">วันที่</p>
@@ -196,8 +196,8 @@ const TopContent = (props) => {
 
             {/* Document date */}
             <div className="grid_3 float-right">
-              <DateTimeInput name="document_date" /*validate={validateCreateOnField */
-                disabled={props.actionMode === TOOLBAR_MODE.SEARCH} />
+              <DateInput name="document_date" /*validate={validateCreateOnField */
+                disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="3"/>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">วันที่เอกสาร</p>
@@ -211,14 +211,14 @@ const TopContent = (props) => {
               <p className="top-text">เลขที่ใบสั่งซื้อ/เลขที่เอกสารอ้างอิง</p>
             </div>
             <div className="grid_3 pull_0">
-              <TextInput name="po_id" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} />
+              <TextInput name="po_id" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="4"/>
             </div>
 
             {/* Dest Warehouse ID */}
             <div className="grid_3 float-right">
               <TextInput name="dest_warehouse_id" validate={validateDestWarehouseIDField}
                 disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-                searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalInventory" />
+                searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalInventory" tabIndex="5"/>
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">เลขที่คลัง</p>
@@ -235,9 +235,6 @@ const TopContent = (props) => {
 
       {/* PopUp ค้นหาชื่อพนักงาน MODE ADD */}
       <PopupModalUsername />  
-
-      {/* PopUp ค้นหาอะไหล่ MODE ADD */}
-      <PopupModalNoPart />
 
     </div>
   )
