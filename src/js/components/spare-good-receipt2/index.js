@@ -120,6 +120,7 @@ const GoodsReceiptComponent = (props) => {
     const [tabNames, setTabNames] = useState([
         {id:"listItem", name:"รายการ", is_active: TAB_BAR_ACTIVE.ACTIVE},
         {id:"attachment", name:"แนบไฟล์", is_active: TAB_BAR_ACTIVE.INACTIVE},
+        {id:"table_status", name:"สถานะเอกสาร", is_active: TAB_BAR_ACTIVE.INACTIVE},
     ]);
     const [initialTabbar, setInitialTabbar] = useState(true);
 
@@ -239,9 +240,6 @@ const initialLineItem = {
     line_number: '',
     // document_id: '', // maybe not needed
     list_uoms: [],
-
-    //Field ที่กรอกแต่ไม่ใช้เป็น dummy
-    list_uom: ''
 }
 const initialRows = (n=10) => {
     let rows = [];

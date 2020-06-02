@@ -269,7 +269,7 @@
   .p-search-box.cancel-margin {
     height: 26px;
     /* top: -5px; */
-    margin-bottom: 10px;
+    margin-bottom: 0px;
   }
   
   .head-title-bottom{
@@ -595,4 +595,65 @@ input.p-search-box__input:focus + .p-search-box__button.hidden{
   /* justify-content: center;    Group Children in Center */
   /* align-items: center;        Group Children in Center (+axis) */
   padding: 15px 10px;            /* Add padding to the top/bottom */
+}
+
+/* CSS CHECK INVALID */
+div.error {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+div.error .tooltiptext {
+  visibility: visible;
+  width: 150px;
+  background-color: white;
+  color: red;
+  text-align: center;
+  border: 1px solid red;
+  border-radius: 5px;
+  padding: 5px 2px;
+  position: absolute;
+  z-index: 4;
+  top: -8px;
+  left: 60px;
+  margin-left: -60px;
+}
+
+div.error .tooltiptext::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 10%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent red transparent;
+}
+
+div.error .tooltiptextForNumber {
+  visibility: visible;
+  width: 150px;
+  background-color: white;
+  color: red;
+  text-align: center;
+  border: 1px solid red;
+  border-radius: 5px;
+  padding: 5px 2px;
+  position: absolute;
+  z-index: 4;
+  top: -8px;
+  left: 17px;
+  margin-left: -60px;
+}
+
+div.error .tooltiptextForNumber::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 10%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent red transparent;
 }

@@ -9,6 +9,8 @@ import TextInput from '../common/formik-text-input';
 import NumberInput from '../common/formik-number-input';
 import SelectInput from '../common/formik-select-input';
 import TextareaInput from '../common/formik-textarea-input';
+import TableStatus from '../common/table-status';
+
 import Files from '../common/files'
 
 import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
@@ -151,7 +153,7 @@ const BottomContent = (props) => {
                     <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
                     <th className="font text-center" style={{ minWidth: "80px" }}>หน่วยนับ</th>
                     <th className="font text-right" style={{ minWidth: "80px" }}>สถานะ</th>
-                    <th className="font text-right" style={{ minWidth: "80px" }}>ราคาต่อหน่วย</th>
+                    <th className="font text-center" style={{ minWidth: "80px" }}>ราคาต่อหน่วย</th>
                     <th className="font text-right" style={{ minWidth: "80px" }}>จำนวนเงิน</th>
                   </tr>
                 </thead>
@@ -178,7 +180,7 @@ const BottomContent = (props) => {
 
                         {/* หน่วยนับ */}
                         <td className="edit-padding text-center">
-                          <SelectInput name={`line_items[${index}].list_uom`} listProps={list.list_uoms}
+                          <SelectInput name={`line_items[${index}].uom_id`} listProps={list.list_uoms}
                             tabIndex="8" disabled={props.actionMode === TOOLBAR_MODE.SEARCH} 
                             optionValue='uom_id' optionName='name'
                             />
@@ -193,7 +195,7 @@ const BottomContent = (props) => {
                             />
                         </td>
 
-                        <td className="edit-padding text-right">
+                        <td className="edit-padding text-center">
                           <NumberInput step={0.0001} name={`line_items[${index}].per_unit_price`}
                             validate={per_unit_price => validateLineNumberPerUnitPriceItemIDField(`line_items[${index}].per_unit_price`, per_unit_price, index)}
                             disabled={props.actionMode === TOOLBAR_MODE.SEARCH} />
@@ -216,9 +218,6 @@ const BottomContent = (props) => {
             <div className="container_12">
               <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
               <div className="grid_11">
-                {/* <textarea className="edit" name="Text1" rows="2" 
-                defaultValue={current.props.document_show.remark} 
-                ></textarea> */}
                 <TextareaInput name="remark" tabIndex="6"
                   disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
                   searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart"
@@ -231,8 +230,14 @@ const BottomContent = (props) => {
             <Files />
           </div>
 
+          <div id="table_status_content" className="tabcontent">
+            {/* <TableStatus headTableStatus = "[]" bodyTableStatus = "[]" /> */}
+          </div>
+
           {/* PopUp ค้นหาอะไหล่ MODE ADD */}
-          <PopupModalNoPart lineNumber={lineNumber} />
+          <PopupModalNoPart 
+          // bodyTableStatus={}
+          />
 
         </div>
       </div>
