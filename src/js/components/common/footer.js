@@ -57,17 +57,21 @@ const FooterComponent = (props) => {
   const footer = useSelector((state) => ({...state.footer}));
   console.log("footer.mode", footer.mode)
   if (footer.mode !== "INVISIBLE") {
-    return (
-      <div id="footer">
-        <div className="container_12 clearfix">
-          <div className="grid_12 nav-footer">
-            { Object.keys(FOOTER_ACTIONS).map((key, index) => (
-                <FooterItemComponent keyFooter={key} buttonName={FOOTER_ACTIONS_TEXT[key]} buttonType={props[key].styleButton} isVisible={props[key].isVisible} handleClick={props.handleClick}/>
-              ))}
+    try {
+      return (
+        <div id="footer">
+          <div className="container_12 clearfix">
+            <div className="grid_12 nav-footer">
+              { Object.keys(FOOTER_ACTIONS).map((key, index) => (
+                  <FooterItemComponent keyFooter={key} buttonName={FOOTER_ACTIONS_TEXT[key]} buttonType={props[key].styleButton} isVisible={props[key].isVisible} handleClick={props.handleClick}/>
+                ))}
+            </div>
           </div>
         </div>
-      </div>
-    )
+      )
+    } catch (error) {
+      return null
+    }
   }
   return null
 }
