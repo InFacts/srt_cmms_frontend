@@ -9,7 +9,7 @@ import TextareaInput from '../common/formik-textarea-input';
 import TableStatus from '../common/table-status';
 import Table from '../common/table';
 
-import Files from '../common/files'
+import Files from '../common/files2'
 
 import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
 import { useFormikContext } from 'formik';
@@ -131,6 +131,7 @@ const BottomContent = (props) => {
       return 'Invalid Per Unit Price Line Item';
     }
   }
+
   return (
     <div id="blackground-gray">
       <div className="container_12 clearfix">
@@ -138,12 +139,12 @@ const BottomContent = (props) => {
 
           <div id="listItem_content" className="tabcontent">
             <div className="container_12 mt-1" style={{ paddingRight: "10px" }}>
-              <Table line_items = {values.line_items} 
-              sumTotalLineItem = {sumTotalLineItem} 
-              validateLineNumberInternalItemIDField = {validateLineNumberInternalItemIDField}
-              validateLineNumberQuatityItemIDField = {validateLineNumberQuatityItemIDField}
-              validateLineNumberPerUnitPriceItemIDField = {validateLineNumberPerUnitPriceItemIDField}
-              setLineNumber = {setLineNumber}
+              <Table line_items={values.line_items}
+                sumTotalLineItem={sumTotalLineItem}
+                validateLineNumberInternalItemIDField={validateLineNumberInternalItemIDField}
+                validateLineNumberQuatityItemIDField={validateLineNumberQuatityItemIDField}
+                validateLineNumberPerUnitPriceItemIDField={validateLineNumberPerUnitPriceItemIDField}
+                setLineNumber={setLineNumber}
               />
             </div>
 
@@ -166,16 +167,15 @@ const BottomContent = (props) => {
           </div>
 
           <div id="attachment_content" className="tabcontent">
-            <Files />
+            <Files desrciptionFiles={values.desrciption_files} desrciptionFilesLength={values.desrciption_files_length} />
           </div>
 
           <div id="table_status_content" className="tabcontent">
-            {console.log("values.step_approve", values.step_approve)}
-            <TableStatus bodyTableStatus = {values.step_approve} />
+            <TableStatus bodyTableStatus={values.step_approve}/>
           </div>
 
           {/* PopUp ค้นหาอะไหล่ MODE ADD */}
-          <PopupModalNoPart lineNumber={lineNumber}/>
+          <PopupModalNoPart lineNumber={lineNumber} />
 
         </div>
       </div>
