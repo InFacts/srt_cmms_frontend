@@ -23,23 +23,13 @@ import {fetchFactIfNeeded , FACTS} from '../../redux/modules/api/fact';
 import {decodeTokenIfNeeded} from '../../redux/modules/token';
 import DateTimeInput from '../common/formik-datetime-input.js';
 
-import {getUserIDFromEmployeeID, DOCUMENT_SCHEMA, ICD_SCHEMA, ICD_LINE_ITEM_SCHEMA,packDataFromValues, DOCUMENT_TYPE_ID} from '../common/helper';
+import {getUserIDFromEmployeeID, DOCUMENT_SCHEMA, ICD_SCHEMA, ICD_LINE_ITEM_SCHEMA,packDataFromValues, DOCUMENT_TYPE_ID} from '../../helper';
+
+import useToolbarInitializer from '../../hooks/toolbar-initializer';
+import useFactInitializer from '../../hooks/fact-initializer';
+import useTokenInitializer from '../../hooks/token-initializer';
 
 
-
-
-const fetchLastestInternalDocumentID = (document_type_group_id) => new Promise((resolve, reject) => {
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=${document_type_group_id}`
-    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-        .then((res) => {
-            let results = res.data.results;
-            if(results){
-                resolve(results[0].internal_document_id);
-            }else{
-                reject('No Results in fetchLastestInternalDocumentID');
-            }
-        })
-});
 
 
 
@@ -100,66 +90,9 @@ const GoodsReceiptComponent = (props) => {
     ]);
     const [initialTabbar, setInitialTabbar] = useState(true);
 
-    // Initializer
-    // Run only once with checking nothing []
-    // 1. Change Toolbar to Mode Search
-    useEffect(()=>{
-        props.toModeSearch();
-    }, []);
-
-    // Handles all state.toolbar mode and requiresHandleClick Changes
-    useEffect(()=> {
-        // Handle toolbar mode change: SEARCH
-        if (props.toolbar.mode === TOOLBAR_MODE.SEARCH){
-            resetForm();
-        }
-        // Handle home button, only re-subscribe if requiresHandleClick of HOME changes
-        if (props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.HOME]){
-            props.handleClickHomeToSpareMain();
-        }
-        if (props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]){
-            props.handleClickAdd(); // make handle click False
-            resetForm();
-        }
-        if (props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.REFRESH]){
-            props.handleClickRefresh(); // make handle click False
-            resetForm();
-        }
-        if (props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.FORWARD]){
-            props.handleClickForward(); // make handle click False
-            if(values.document_id){ // If there is document ID
-
-            }else{ // If there is not document ID
-                console.log("I HAVE NO DOC ID")
-                
-            }
-        }
-        if (props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.BACKWARD]){
-            props.handleClickBackward(); // make handle click False
-            if(values.document_id){ // If there is document ID
-
-            }else{ // If there is not document ID
-                console.log("I HAVE NO DOC ID")
-                fetchLastestInternalDocumentID(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO)
-                .then(internal_document_id => {
-                    setFieldValue('internal_document_id', internal_document_id, true);
-                })
-            }
-        }
-        
-    }, [props.toolbar]);
-
-
-    // Fetch Fact If needed
-    useEffect(() => {
-        for (const factName of Object.values(FACTS)){
-            props.fetchFactIfNeeded(factName);
-        }
-    }, []);
-    // Decode Token If needed
-    useEffect(() => {
-        props.decodeTokenIfNeeded();
-    }, []);
+    useToolbarInitializer();
+    useTokenInitializer();
+    useFactInitializer();
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -191,9 +124,6 @@ const GoodsReceiptComponent = (props) => {
     return (
         <form onSubmit={props.handleSubmit}>
         {/* <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) handleSubmit(e) }}> */}
-            {/* <TopContent />
-            <BottomContent />
-            <Footer /> */}
             <TopContent />
             <TabBar tabNames={tabNames} initialTabbar={initialTabbar} setInitialTabbar={setInitialTabbar}>
                 <BottomContent />

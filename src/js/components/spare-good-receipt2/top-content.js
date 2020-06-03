@@ -17,7 +17,7 @@ import PopupModalDocument from '../common/popup-modal-document'
 import PopupModalInventory from '../common/popup-modal-inventory'
 import PopupModalUsername from '../common/popup-modal-username'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
-import {getEmployeeIDFromUserID} from '../common/helper';
+import {getEmployeeIDFromUserID} from '../../helper';
 
 
 const responseToFormState = (userFact, data) => {
