@@ -162,7 +162,6 @@ const MainModule = (props) => {
 
     const toolbar = useSelector((state) => ({...state.toolbar}));
     const footer = useSelector((state) => ({...state.footer}));
-    console.log("nav.mode", toolbar.mode, footer.mode)
     if (toolbar.mode === "INVISIBLE" && footer.mode === "INVISIBLE") {
         return null
     }

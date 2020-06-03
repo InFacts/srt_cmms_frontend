@@ -108,7 +108,6 @@ function getPropSelectAndEnabled(selectedAction, enabledActions){
 }
 
 const mapStateToProps = (state) => {
-    console.log("state.toolbar.mode", state.toolbar.mode)
     switch(state.toolbar.mode){
         case TOOLBAR_MODE.INVISIBLE:
             return {toolbar: state.toolbar};

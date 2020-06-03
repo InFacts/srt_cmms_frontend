@@ -170,7 +170,7 @@ const BottomContent = (props) => {
           </div>
 
           <div id="table_status_content" className="tabcontent">
-            {console.log("values.step_approve", values.step_approve)}
+            {/* {console.log("values.step_approve", values.step_approve)} */}
             <TableStatus bodyTableStatus = {values.step_approve} />
           </div>
 

@@ -8,6 +8,8 @@ import {FACTS, fetchFact} from '../../redux/modules/api/fact.js'
 import {TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeSearch, toModeAdd, toModeNoneHome,handleClickHomeToSpareMain } from '../../redux/modules/toolbar.js';
 
 import {fetchDocuments } from '../../redux/modules/track_doc.js';
+import { footerToModeInvisible } from '../../redux/modules/footer.js';
+import { useDispatch, useSelector  } from 'react-redux'
 
 const Track = (props) => {
 
@@ -35,6 +37,11 @@ const Track = (props) => {
         }
     }, [props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.HOME]]);
 
+    // Footer invisible
+    const dispatch = useDispatch();
+    useEffect(()=>{
+        dispatch(footerToModeInvisible());
+    }, []);
     return (
         <>
             <form>
