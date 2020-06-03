@@ -20,7 +20,7 @@ import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/to
 import { getEmployeeIDFromUserID } from '../common/helper';
 
 
-const responseToFormState = (userFact, data) => {
+const responseToFormState = (userFact, data, step_approve) => {
   for (var i = data.line_items.length; i <= 9; i++) {
     data.line_items.push(
       {
@@ -45,6 +45,7 @@ const responseToFormState = (userFact, data) => {
     remark: data.remark,
     status_name_th: data.status_name,
     po_id: data.po_id,
+    step_approve: step_approve.approval_step
   }
 }
 
@@ -66,11 +67,11 @@ const TopContent = (props) => {
 
   const validateInternalDocumentIDField = internal_document_id => new Promise(resolve => {
     // Internal Document ID
-        //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
-        //  ie. GR-PYO-2563/0001
+    //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
+    //  ie. GR-PYO-2563/0001
     console.log("I am validating document id")
     let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS)-[A-Z]{3}-\d{4}\/\d{4}$/g
-    let draftInternalDocumentIDRegex= /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
+    let draftInternalDocumentIDRegex = /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
     // let draftInternalDocumentIDRegex = /^heh/g
     if (!internal_document_id) {
       return resolve('Required');
@@ -87,15 +88,15 @@ const TopContent = (props) => {
         if (res.data.internal_document_id === internal_document_id) { // If input document ID exists
           if (props.toolbar.mode === TOOLBAR_MODE.SEARCH && !props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
 
-            // Start Axios Get resApprove By nuk
-            // axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${res.data.document_id}/latest/plus`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-            //   .then((resApprove) => {
-            console.log(" I AM STILL IN MODE SEARCH AND SET VALUE")
-            setValues({ ...values, ...responseToFormState(props.fact.users, res.data) }, false); //Setvalues and don't validate
-            validateField("dest_warehouse_id");
-            // validateField("internal_document_id");
-            return resolve(null);
-            // });
+            // Start Axios Get step_approve By nuk
+            axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${res.data.document_id}/latest/plus`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+              .then((step_approve) => {
+                console.log(" I AM STILL IN MODE SEARCH AND SET VALUE")
+                setValues({ ...values, ...responseToFormState(props.fact.users, res.data, step_approve.data) }, false); //Setvalues and don't validate
+                validateField("dest_warehouse_id");
+                // validateField("internal_document_id");
+                return resolve(null);
+              });
             // End
 
           } else { //If Mode add, need to error duplicate Document ID

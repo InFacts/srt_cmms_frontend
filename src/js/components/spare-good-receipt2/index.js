@@ -251,6 +251,7 @@ const EnhancedGoodsReceiptComponent = withFormik({
         status_name_th: '',
         document_status_id: '',
         created_by_admin_employee_id: '',
+        step_approve: []
     
         // dest_warehouse_name: '',
 

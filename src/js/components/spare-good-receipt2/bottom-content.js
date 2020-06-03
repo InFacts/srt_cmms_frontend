@@ -131,7 +131,6 @@ const BottomContent = (props) => {
       return 'Invalid Per Unit Price Line Item';
     }
   }
-
   return (
     <div id="blackground-gray">
       <div className="container_12 clearfix">
@@ -171,7 +170,8 @@ const BottomContent = (props) => {
           </div>
 
           <div id="table_status_content" className="tabcontent">
-            {/* <TableStatus bodyTableStatus = "[]" /> */}
+            {console.log("values.step_approve", values.step_approve)}
+            <TableStatus bodyTableStatus = {values.step_approve} />
           </div>
 
           {/* PopUp ค้นหาอะไหล่ MODE ADD */}

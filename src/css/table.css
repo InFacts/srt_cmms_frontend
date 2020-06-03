@@ -118,8 +118,10 @@ button.button-for-table{
 th.font-for-status{
   color: #000000;
   font-size: 19px;
+  padding: 2px 2px 2px 5px;
 }
 
 td.font-for-status{
   font-size: 18px;
+  padding: 2px 2px 2px 5px;
 }
