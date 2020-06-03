@@ -7,7 +7,6 @@ import Toolbar from './js/components/common/nav-toolbar';
 import history from './js/history'
 
 function App() {
-  console.log("FrontEnd", FrontEnd.path)
   return (
     <div className="App">
       <Router history={history}>

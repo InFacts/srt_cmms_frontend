@@ -1,8 +1,8 @@
 
 import axios from "axios";
-import { API_PORT_DATABASE } from '../../config_port.js';
-import { API_URL_DATABASE } from '../../config_url.js';
-import {fetchFactIfNeeded , FACTS} from '../../redux/modules/api/fact';
+import { API_PORT_DATABASE } from './config_port.js';
+import { API_URL_DATABASE } from './config_url.js';
+import {fetchFactIfNeeded , FACTS} from './redux/modules/api/fact';
 // Constants
 export const DOCUMENT_TYPE_ID = {
     GOODS_RECEIPT_PO: 101,
@@ -152,7 +152,18 @@ export const createDocumentEmptyRow = () => new Promise((resolve) => {
         })
 });
 
-
+export const fetchLastestInternalDocumentID = (document_type_group_id) => new Promise((resolve, reject) => {
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=${document_type_group_id}`
+    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((res) => {
+            let results = res.data.results;
+            if(results){
+                resolve(results[0].internal_document_id);
+            }else{
+                reject('No Results in fetchLastestInternalDocumentID');
+            }
+        })
+});
 
 const editDocument = (document_id, document_type_group_id, data) => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/new/0`;
