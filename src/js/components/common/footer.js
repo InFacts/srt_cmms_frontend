@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import {FOOTER_MODE, FOOTER_ACTIONS, FOOTER_ACTIONS_TEXT, clickApproval, clickSend, clickSave, clickReject, clickBack, clickCheckApproval, clickApprovalOrder, clickFastTrack, clickCancleApprovalProcess, clickVoid} from '../../redux/modules/footer.js';
 
+import { useDispatch, useSelector  } from 'react-redux'
 import '../../../vender/fontawesome-free/css/all.css';
 import '../../../css/style-nav.css';
 
@@ -53,21 +54,28 @@ const FooterItemComponent = (props) => {
 }
 
 const FooterComponent = (props) => {
-  return (
-    <div id="footer">
-      <div className="container_12 clearfix">
-        <div className="grid_12 nav-footer">
-          { Object.keys(FOOTER_ACTIONS).map((key, index) => (
-              <FooterItemComponent keyFooter={key} buttonName={FOOTER_ACTIONS_TEXT[key]} buttonType={props[key].styleButton} isVisible={props[key].isVisible} handleClick={props.handleClick}/>
-            ))}
+  const footer = useSelector((state) => ({...state.footer}));
+  console.log("footer.mode", footer.mode)
+  if (footer.mode !== "INVISIBLE") {
+    return (
+      <div id="footer">
+        <div className="container_12 clearfix">
+          <div className="grid_12 nav-footer">
+            { Object.keys(FOOTER_ACTIONS).map((key, index) => (
+                <FooterItemComponent keyFooter={key} buttonName={FOOTER_ACTIONS_TEXT[key]} buttonType={props[key].styleButton} isVisible={props[key].isVisible} handleClick={props.handleClick}/>
+              ))}
+          </div>
         </div>
       </div>
-    </div>
-  )
+    )
+  }
+  return null
 }
 
 const mapStateToProps = (state) => {
   switch(state.footer.mode){
+    case FOOTER_MODE.INVISIBLE:
+      return {};
     case FOOTER_MODE.NONE:
       // console.log(">>>>> NONE")
       return {...ALL_DISABLED_PROP};
