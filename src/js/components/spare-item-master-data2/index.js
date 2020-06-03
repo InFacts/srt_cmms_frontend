@@ -1,8 +1,6 @@
 import React, {useEffect} from 'react';
 import { connect } from 'react-redux'
 
-import NavTopbar from '../nav/nav-top.js';
-import Toolbar from '../common/nav-toolbar';
 import Footer from '../common/footer';
 import TopContent from './top-content';
 import { TOOLBAR_ACTIONS, handleClickHomeToSpareMain, toModeSearch } from '../../redux/modules/toolbar.js';
@@ -24,9 +22,6 @@ const ItemMasterDataComponent = (props) => {
     
     return (
     <>
-        <NavTopbar />
-        <Toolbar />   
-        
         <form>
             <TopContent />
             {/* <TabDocument tabNames={tabNames}>

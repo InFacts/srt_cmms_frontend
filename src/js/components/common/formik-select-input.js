@@ -8,14 +8,13 @@ const TextInput = ({ ...props }) => {
   const [field, meta] = useField(props);
   return (
     <>
-      <div className="p-search-box cancel-margin">
-        <input type='text' className='p-search-box__input cancel-default' onClick={props.handleModalClick} {...field} {...props} />
-        {props.searchable &&
-          <button type="button" className="p-search-box__button cancel-padding hidden" >
-            <i className="p-icon--search" aria-controls={props.ariaControls} onClick={props.handleModalClick} />
-          </button>
+      <select className="edit-select-top" {...field} {...props}>
+        {props.checkDescription !== '' &&
+          props.listProps.map(function (list_uoms, index) {
+            return <option value={list_uoms[props.optionValue]} key={index}>{list_uoms[props.optionName]}</option>
+          })
         }
-      </div>
+      </select>
       {props.redBorderForError !== "error-in-table"
         ?
         meta.touched && meta.error ? (

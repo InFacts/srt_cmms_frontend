@@ -152,13 +152,13 @@ const setupAllSubNav = () => {
 const MainModule = (props) => {
     // Load Notify
     useEffect(() => {
-        // props.loadNotify();
+        props.loadNotify();
         // Setup DropDawn
         setupAllContextualMenus('.p-contextual-menu__toggle');
         // Setup SubNav
         setupAllSubNav();
     }, []);
-    console.log( "not_read_count", props.notify.not_read_count)
+
     return (
         <div>
             <div id="header">
@@ -174,7 +174,7 @@ const MainModule = (props) => {
                         <li className="p-navigation__item p-subnav a nav-li" style={{ marginRight: "0", marginLeft: "auto" }} role="menuitem" id="link-1">
                             <Link to="#" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu" style={{ paddingRight: "10px" }} >
                                 <i className="fas fa-bell" style={{ fontSize: "22px", color: "white" }}></i>
-                                {props.notify.not_read_count !== 0 
+                                {props.notify.not_read_count !== 0
                                     ?
                                     <span className="badge badge-danger badge-counter">{props.notify.not_read_count}</span>
                                     :

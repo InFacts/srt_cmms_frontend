@@ -2,7 +2,7 @@ import React from 'react';
 import { Router } from 'react-router-dom';
 import FrontEnd from './js/route.js';
 
-import NavTopbar from './js/components/nav/nav-top';
+import NavTopbar from './js/components/common/nav-top2';
 import Toolbar from './js/components/common/nav-toolbar';
 import Footer from './js/components/common/footer';
 import history from './js/history'

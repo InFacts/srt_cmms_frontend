@@ -1,13 +1,15 @@
 import React from 'react';
 import { useField } from 'formik';
 
-const DateTimeInput = ({ ...props }) => {
+const DateInput = ({ ...props }) => {
   // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
   // which we can spread on <input> and also replace ErrorMessage entirely.
   const [field, meta] = useField(props);
   return (
     <>
-      <input type="datetime-local" className="cancel-default" {...field} {...props}></input>
+      <div>
+        <input type="date" className="cancel-default" {...field} {...props}></input>
+      </div>
       {meta.touched && meta.error ? (
         <div className="error">
           <span class="tooltiptext">{meta.error}</span>
@@ -17,4 +19,4 @@ const DateTimeInput = ({ ...props }) => {
   );
 };
 
-export default DateTimeInput;
+export default DateInput;

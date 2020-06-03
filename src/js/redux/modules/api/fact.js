@@ -15,7 +15,8 @@ export const FACTS = {
     DOCUMENT_STATUS: "document-status",
     USERS: "users",
     WAREHOUSES: "warehouses",
-    ITEM: "items"
+    ITEM: "items",
+    ITEM_STATUS: "item-status"
 }
 
 

@@ -1,6 +1,4 @@
 import React, {useEffect} from 'react';
-import NavTopbar from '../nav/nav-top.js';
-import Toolbar from '../common/nav-toolbar';
 import TopContent from './top-content';
 import BottomContent from './bottom-content';
 import Footer from '../common/footer.js';
@@ -39,8 +37,6 @@ const Track = (props) => {
 
     return (
         <>
-            <NavTopbar />
-            <Toolbar />
             <form>
                 <TopContent />
                 <BottomContent  />

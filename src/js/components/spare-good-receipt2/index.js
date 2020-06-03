@@ -2,10 +2,11 @@ import React, {useState, useEffect} from 'react';
 import { connect } from 'react-redux';
 import { useFormik , withFormik ,useFormikContext} from 'formik';
 
-import { TOOLBAR_ACTIONS, handleClickHomeToSpareMain, toModeSearch, handleClickAdd, TOOLBAR_MODE } from '../../redux/modules/toolbar.js';
-import { onClearStateModeAdd} from '../../redux/modules/goods_receipt.js';
+
+
 import TabBar, {TAB_BAR_ACTIVE} from '../common/tab-bar';
 import {FOOTER_MODE, FOOTER_ACTIONS, footerToModeSearch, footerToModeAddDraft} from '../../redux/modules/footer.js';
+
 
 import axios from "axios";
 
@@ -16,8 +17,21 @@ import TopContent from './top-content';
 import BottomContent from './bottom-content';
 import Footer from '../common/footer.js';
 
+import { TOOLBAR_ACTIONS, handleClickHomeToSpareMain, handleClickRefresh, toModeSearch, handleClickAdd, 
+    handleClickForward, handleClickBackward, TOOLBAR_MODE } from '../../redux/modules/toolbar.js';
+import { onClearStateModeAdd} from '../../redux/modules/goods_receipt.js';
 import {fetchFactIfNeeded , FACTS} from '../../redux/modules/api/fact';
 import {decodeTokenIfNeeded} from '../../redux/modules/token';
+import DateTimeInput from '../common/formik-datetime-input.js';
+
+import {getUserIDFromEmployeeID, DOCUMENT_SCHEMA, ICD_SCHEMA, ICD_LINE_ITEM_SCHEMA,packDataFromValues, DOCUMENT_TYPE_ID} from '../../helper';
+
+import useToolbarInitializer from '../../hooks/toolbar-initializer';
+import useFactInitializer from '../../hooks/fact-initializer';
+import useTokenInitializer from '../../hooks/token-initializer';
+
+
+
 
 
 const packForm = (document_id, document_show, list_show) => {
@@ -67,50 +81,19 @@ const packForm = (document_id, document_show, list_show) => {
 
 const GoodsReceiptComponent = (props) => {
     
-    const {resetForm, setValues} = useFormikContext();
+    const {resetForm, setFieldValue, setValues, values} = useFormikContext();
 
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
         {id:"listItem", name:"รายการ", is_active: TAB_BAR_ACTIVE.ACTIVE},
         {id:"attachment", name:"แนบไฟล์", is_active: TAB_BAR_ACTIVE.INACTIVE},
+        {id:"table_status", name:"สถานะเอกสาร", is_active: TAB_BAR_ACTIVE.INACTIVE},
     ]);
     const [initialTabbar, setInitialTabbar] = useState(true);
 
-    // Initializer
-    // Run only once with checking nothing []
-    // 1. Change Toolbar to Mode Search
-    useEffect(()=>{
-        props.toModeSearch();
-    }, []);
-
-    // Handle home button, only re-subscribe if requiresHandleClick of HOME changes
-    useEffect(()=> {
-        if (props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.HOME]){
-            props.handleClickHomeToSpareMain();
-        }
-    }, [props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.HOME]]);
-
-    // Handle toolbar mode change: ADD, SEARCH
-    useEffect(()=> {
-        if (props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]){
-            props.handleClickAdd(); // make handle click False
-            resetForm();
-        }
-        if (props.toolbar.mode === TOOLBAR_MODE.SEARCH){
-            resetForm();
-        }
-    }, [props.toolbar.mode]);
-
-    // Fetch Fact If needed
-    useEffect(() => {
-        for (const factName of Object.values(FACTS)){
-            props.fetchFactIfNeeded(factName);
-        }
-    }, []);
-    // Decode Token If needed
-    useEffect(() => {
-        props.decodeTokenIfNeeded();
-    }, []);
+    useToolbarInitializer();
+    useTokenInitializer();
+    useFactInitializer();
 
     // Handle Footer
     useEffect(() => {
@@ -155,9 +138,6 @@ const GoodsReceiptComponent = (props) => {
     return (
         <form onSubmit={props.handleSubmit}>
         {/* <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) handleSubmit(e) }}> */}
-            {/* <TopContent />
-            <BottomContent />
-            <Footer /> */}
             <TopContent />
             <TabBar tabNames={tabNames} initialTabbar={initialTabbar} setInitialTabbar={setInitialTabbar}>
                 <BottomContent />
@@ -167,26 +147,29 @@ const GoodsReceiptComponent = (props) => {
 
     )
 }
-
-// const initialForm = 
-const initialRow = (n=10) => {
-    const initialLineItem = {
-        internal_item_id: '',
-        quantity: '',
-        uom_id: '',
-        per_unit_price: '',
-        item_id: '',
-        item_status_id: '',
-        //Field ที่ไม่ได้กรอก
-        line_number: '',
-        document_id: '',
-        list_uoms: []
+const initialLineItem = {
+    internal_item_id: '',
+    quantity: '',
+    uom_id: '',
+    per_unit_price: '',
+    item_id: '',
+    item_status_id: 1,
+    
+    //Field ที่ไม่ได้กรอก
+    description: '',
+    line_number: '',
+    // document_id: '', // maybe not needed
+    list_uoms: [],
+}
+const initialRows = (n=10) => {
+    let rows = [];
+    for (var i = 1; i <= n; i++) {
+        rows.push({
+            ...initialLineItem, 
+            line_number: i
+        });
     }
-    let initialRows =[]
-    for (var i = 0; i < n; i++) {
-        initialRows.push(initialLineItem);
-    }
-    return initialRows
+    return rows;
 }
 
 
@@ -196,14 +179,15 @@ const EnhancedGoodsReceiptComponent = withFormik({
         internal_document_id: '',
         document_date: '',
     
-        dest_warehouse_id: '',
+        dest_warehouse_id: '', // Need to fill for user's own WH
+        src_warehouse_id: 999, // for Goods Receipt
         created_by_user_employee_id: '',
     
         po_id: '',
     
         remark: '',
     
-        line_items: initialRow(),
+        line_items: initialRows(),
     
         //Field ที่ไม่ได้กรอก
         document_id: '',
@@ -211,23 +195,36 @@ const EnhancedGoodsReceiptComponent = withFormik({
         status_name_th: '',
         document_status_id: '',
         created_by_admin_employee_id: '',
+        step_approve: []
     
-        dest_warehouse_name: '',
+        // dest_warehouse_name: '',
 
-        firstPosted: false
+        // firstPosted: false
     }),
     validate: (values, props) => {
         const errors = {};
 
-        if (!values.internal_document_id) {
-          errors.internal_document_id = 'Required';
+        // Internal Document ID
+        //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
+        //  ie. GR-PYO-2563/0001
+        // let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS)-[A-Z]{3}-\d{4}\/\d{4}$/g
+        // let draftInternalDocumentIDRegex= /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
+        // if (!values.internal_document_id) {
+        //     errors.internal_document_id = 'Required';
+        // }else if (!internalDocumentIDRegex.test(values.internal_document_id)){ //&& !draftInternalDocumentIDRegex.text(values.internal_document_id)
+        //     errors.internal_document_id = 'Invalid Document ID Format\nBe sure to use the format ie. GR-PYO-2563/0001'
+        // }
+        // MOVED TO FIELD
+        if (!values.document_date){
+            errors.document_date = "Required";
         }
-
-
         return errors;
     },
-    handleSubmit: values => {
+    handleSubmit: (values, formikBag) => {
+        
         console.log("i am submitting", values)
+        console.log("i have facts on submit", formikBag.props)
+        console.log("I AM SUBMITTING ", packDataFromValues(formikBag.props.fact, values, DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO) )
         alert(JSON.stringify(values, null, 2));
       },    
     // validateOnChange: false,
@@ -239,10 +236,12 @@ const mapStateToProps = (state) => ({
     toolbar: state.toolbar,
     decoded_token: state.token.decoded_token,
     actionMode: state.goods_receipt.action,
+    fact: state.api.fact,
 })
 
 const mapDispatchToProps = {
-    handleClickHomeToSpareMain, toModeSearch, onClearStateModeAdd, handleClickAdd, fetchFactIfNeeded, decodeTokenIfNeeded, footerToModeAddDraft, footerToModeSearch
+    handleClickHomeToSpareMain, toModeSearch, onClearStateModeAdd, handleClickAdd, fetchFactIfNeeded, 
+    decodeTokenIfNeeded, handleClickRefresh, handleClickForward, handleClickBackward, footerToModeAddDraft, footerToModeSearch
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EnhancedGoodsReceiptComponent);

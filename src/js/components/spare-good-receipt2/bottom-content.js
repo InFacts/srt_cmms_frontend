@@ -1,49 +1,51 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
 
 import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
 import { API_URL_DATABASE } from '../../config_url.js';
 
-import TextInput from '../common/formik-text-input';
-import NumberInput from '../common/formik-number-input';
+import TextareaInput from '../common/formik-textarea-input';
+import TableStatus from '../common/table-status';
+import Table from '../common/table';
+
 import Files from '../common/files'
 
 import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
-
 import { useFormikContext } from 'formik';
+
+import PopupModalNoPart from '../common/popup-modal-nopart'
 
 import '../../../css/table.css';
 
 const BottomContent = (props) => {
 
-  const { values } = useFormikContext();
+  const [lineNumber, setLineNumber] = useState('');
 
-  const sumTotalLineItem = (quantity, per_unit_price) => {
-    var sum = 0;
-    sum = quantity * per_unit_price;
-    if (sum === 0 || sum == NaN) {
-      return null
-    }
-    else {
-      var s = sum.toString();
-      var n = s.indexOf(".")
-      // console.log(n, "s>>>>", s)
-      if (n == -1) {
-        s = s + ".00"
-        return s;
+  const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
+
+  const sumTotalLineItem = (quantity, per_unit_price, description) => {
+    let sumValueInLineItem = 0;
+    sumValueInLineItem = quantity * per_unit_price
+    if (description !== '') {
+      var conventToString = sumValueInLineItem.toString();
+      var findDot = conventToString.indexOf(".")
+      if (findDot == -1) {
+        conventToString = conventToString + ".00"
+        return conventToString;
       }
       else {
-        s = s.slice(0, n + 3)
-        var c = s.length - n;
-        // console.log(c, "s.length", s.length, "n", n )
-        if (c === 2) {
-          return s + "0";
+        conventToString = conventToString.slice(0, findDot + 3)
+        var addOneDot = conventToString.length - findDot;
+        if (addOneDot === 2) {
+          return conventToString + "0";
         }
         else {
-          return s;
+          return conventToString;
         }
       }
+    } else {
+      return '';
     }
   }
 
@@ -67,123 +69,120 @@ const BottomContent = (props) => {
     }
   }
 
-  const perUnitPriceModeSearch = (description, per_unit_price) => {
-    // TODO description !== undefined ถ้าเชื่อม Bottom เข้ากับ Formix หมดแล้วเด่วกลับมาเช็ค
-    if (description !== undefined) {
-      if (description !== "") {
-        var s = per_unit_price.toString();
-        var n = s.indexOf(".")
-        if (n == -1) {
-          s = s + ".0000"
-          return s;
-        }
-        else return per_unit_price
-      }
-      else {
-        return per_unit_price
-      }
+  const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => {
+    //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
+
+    // if (values.line_items[index].internal_item_id === internal_item_id) {
+    //   return;
+    // }
+    if (internal_item_id === "") {
+      setFieldValue(fieldName + `.description`, '', false);
+      setFieldValue(fieldName + `.quantity`, '', false);
+      setFieldValue(fieldName + `.list_uoms`, [], false);
+      setFieldValue(fieldName + `.per_unit_price`, '', false);
+      return;
     }
-    else {
-      return null
+    let items = props.fact.items.items;
+    let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+
+    if (item) {
+      setFieldValue(fieldName + `.description`, `${item.description}`, false);
+      setFieldValue(fieldName + `.quantity`, 0, false);
+      setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+      setFieldValue(fieldName + `.per_unit_price`, 0, false);
+      return;
+    } else {
+      return 'Invalid Number ID';
     }
   }
 
+  const validateLineNumberQuatityItemIDField = (fieldName, quantity, index) => {
+    // internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
+    //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
+    // if (values.line_items[index].quantity === quantity) {
+    //   return;
+    // }
+    if (quantity === "") {
+      return;
+    }
+
+    if (quantity !== 0) {
+      setFieldValue(fieldName, quantity, false);
+      return;
+    } else {
+      return 'Invalid Quantity Line Item';
+    }
+  }
+
+  const validateLineNumberPerUnitPriceItemIDField = (fieldName, per_unit_price, index) => {
+    // internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
+    //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
+    // if (values.line_items[index].per_unit_price === per_unit_price) {
+    //   return;
+    // }
+    if (per_unit_price === "") {
+      return;
+    }
+
+    if (per_unit_price !== 0) {
+      setFieldValue(fieldName, per_unit_price, false);
+      return;
+    } else {
+      return 'Invalid Per Unit Price Line Item';
+    }
+  }
   return (
     <div id="blackground-gray">
       <div className="container_12 clearfix">
         <div className="container_12 ">
+
           <div id="listItem_content" className="tabcontent">
             <div className="container_12 mt-1" style={{ paddingRight: "10px" }}>
-              <table className="table-many-column">
-                <thead>
-                  <tr>
-                    <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
-                    <th className="font" style={{ minWidth: "130px" }}>เลขที่อะไหล่</th>
-                    <th className="font" style={{ minWidth: "448px" }}>รายละเอียด</th>
-                    <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
-                    <th className="font text-center" style={{ minWidth: "80px" }}>หน่วยนับ</th>
-                    <th className="font text-right" style={{ minWidth: "80px" }}>ราคาต่อหน่วย</th>
-                    <th className="font text-right" style={{ minWidth: "80px" }}>จำนวนเงิน</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {values.line_items.map(function (list, index) {
-                    return (
-                      <tr key={index}>
-                        <th className="edit-padding text-center">{index + 1}</th>
-                        <td className="edit-padding">
-                          {/* {props.actionMode === TOOLBAR_MODE.SEARCH
-                            ?
-                            list.internal_item_id
-                            //  <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}> 
-                            //  <input type="text" className="p-search-box__input cancel-default-table" value={list.internal_item_id} onChange={(e) => props.onChangeNoPartEachRow(e)} />
-                            //   <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPart" onClick={(e) => props.onClickNoPartEachRow(e)}></i></button> 
-                            // </div> 
-                            :
-                            <TextInput name={`internal_item_id_${index}`}
-                              disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-                              searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart" tabIndex="1" />
-                          } */}
-                          <TextInput name={`line_items[${index}].internal_item_id`}
-                              disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-                              searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart" />
-                        </td>
-                        <td className="edit-padding">{list.description}</td>
-                        <td className="edit-padding text-center">
-                          {props.actionMode === TOOLBAR_MODE.SEARCH
-                            ?
-                            list.quantity
-                            :
-                            <NumberInput name={`quantity_${index}`} disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-                              tabIndex="3" />
-                          }
-                        </td>
-                        <td className="edit-padding text-center">
-                          <select className="edit-select-top" disabled="disabled">
-                            {list.list_uoms.map(function (list_uoms, index) {
-                              return <option value={list_uoms.name} key={index}>{list_uoms.name}</option>
-                            })}
-                          </select>
-                        </td>
-                        <td className="edit-padding text-right">{perUnitPriceModeSearch(list.description, list.per_unit_price)}</td>
-                        <td className="edit-padding text-right">{sumTotalLineItem(list.quantity, list.per_unit_price)}</td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
+              <Table line_items = {values.line_items} 
+              sumTotalLineItem = {sumTotalLineItem} 
+              validateLineNumberInternalItemIDField = {validateLineNumberInternalItemIDField}
+              validateLineNumberQuatityItemIDField = {validateLineNumberQuatityItemIDField}
+              validateLineNumberPerUnitPriceItemIDField = {validateLineNumberPerUnitPriceItemIDField}
+              setLineNumber = {setLineNumber}
+              />
+            </div>
+
+            <div className="container_12 mt-3">
+              <div className="grid_1 float-right"><p className="cancel-default float-right">บาท.</p></div>
+              <div className="grid_3 float-right push_0">
+                <input type="text" className="cancel-default" value={sumTotal(values.line_items)} disabled="disabled"></input>
+              </div>
+              <div className="grid_2 float-right push_0"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
+            </div>
+            <div className="container_12">
+              <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
+              <div className="grid_11">
+                <TextareaInput name="remark" tabIndex="6"
+                  disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
+                  searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart"
+                />
+              </div>
             </div>
           </div>
+
           <div id="attachment_content" className="tabcontent">
             <Files />
           </div>
+
+          <div id="table_status_content" className="tabcontent">
+            {console.log("values.step_approve", values.step_approve)}
+            <TableStatus bodyTableStatus = {values.step_approve} />
+          </div>
+
+          {/* PopUp ค้นหาอะไหล่ MODE ADD */}
+          <PopupModalNoPart lineNumber={lineNumber}/>
+
         </div>
       </div>
     </div >
   )
 };
 
-
-
-// const mapStateToProps = (state) => {
-//   state = state.goods_receipt;
-//   return ({
-//     actionMode: state.toolbar.mode,
-
-//     document_show: state.document_show,
-//     list_show: state.list_show,
-
-//     // Mode Edit 
-//     list_no_part: state.list_no_part,
-//     no_part_show: state.no_part_show,
-
-//     // Mode Add
-//     list_show_mode_add: state.list_show_mode_add,
-//     no_part_show_mode_add: state.no_part_show_mode_add,
-//     list_no_part_mode_add: state.list_no_part_mode_add,
-//     document_show_mode_add: state.document_show_mode_add
-//   })
-// }
 const mapStateToProps = (state) => ({
   fact: state.api.fact,
   actionMode: state.toolbar.mode,

@@ -1,66 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux'
+import { useFormikContext } from 'formik';
 
-class TableSatus extends React.Component {
-  checkVariable = (check, value) => {
-    if (check === "green") {
-      return (
-        <i className="fas fa-check-circle green"></i>
-      )
-    }
-    if (check === "gray") {
-      return (
-        <i className="fas fa-check-circle gray"></i>
-      )
-    }
-    else {
-      return value;
-    }
-  }
-  render() {
-    const current = this;
-    return (
-      <>
-        <table className="table-many-column">
-          <thead>
-            <tr>
-              {current.props.headTableStatus.map(function (headTableStatus, index) {
-                return (
-                  <th className="font-for-status" style={{ minWidth: `${headTableStatus[1]}` }} key={index}>
-                    {headTableStatus[0]}
-                  </th>
-                )
-              })}
-            </tr>
-          </thead>
-          <tbody>
-            {current.props.bodyTableStatus.map((bodyTableStatus, i) => {
-              return (
-                <tr key={i} id={i}>
-                  {bodyTableStatus.map((rowBodyTable, j) => {
-                    return (
-                      <>
-                        <td className="font-for-status" style={{ minWidth: `${rowBodyTable[1]}` }} key={j} id={j}>
-                          {current.checkVariable(rowBodyTable[2],rowBodyTable[0])}
-                        </td>
-                      </>
-                    )
-                  })}
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      </>
-    )
-  };
+const TableSatus = (props) => {
+  return (
+    <>
+      <table className="table-many-column mt-2">
+        <thead>
+          <tr>
+            <th className="font" style={{ width: "50px" }}></th>
+            <th className="font" style={{ width: "200px" }}>ตำแหน่ง</th>
+            <th className="font" style={{ width: "200px" }}>หน่วยงาน</th>
+            <th className="font" style={{ width: "250px" }}>ชื่อผู้ลงนาม</th>
+            <th className="font" style={{ width: "150px" }}>วันที่ลงนาม</th>
+            <th className="font" style={{ width: "150px" }}>สถานะ</th>
+          </tr>
+        </thead>
+        <tbody>
+          {props.bodyTableStatus.map((resApprove, i) => {
+            return (
+            resApprove.position_group.name !== "This"
+            ?
+              <tr key={i} id={i}>
+                <td className="edit-padding">
+                  {resApprove.approval_by.length === 0 ? <i className="fas fa-check-circle" style={{ color: "gray" }}></i> : <i className="fas fa-check-circle" style={{ color: "green" }}></i>}
+                </td>
+                <td className="edit-padding">{resApprove.position_group.name}</td>
+                <td className="edit-padding">{resApprove.position.length === 0 ? "" : resApprove.position[0].name}</td>
+                <td className="edit-padding">{resApprove.approval_by.length === 0 ? "-" : resApprove.approval_by[0].user.firstname_th + " " + resApprove.approval_by[0].user.lastname_th}</td>
+                <td className="edit-padding">{resApprove.approval_by.length === 0 ? "-" : resApprove.approval_by[0].approved_on.slice(0, 10)}</td>
+                <td className="edit-padding">{resApprove.approval_by.length === 0 ? "รอการลงนาม" : "อนุมัติเรียบร้อย"}</td>
+              </tr>
+            :
+            null
+          )
+          })}
+        </tbody>
+      </table>
+    </>
+  )
 }
 
-const mapStateToProps = state => {
-  return {
-    headTableStatus: state.headTableStatus,
-    bodyTableStatus: state.bodyTableStatus
-  };
-};
-
-export default connect(mapStateToProps)(TableSatus);
+export default TableSatus;

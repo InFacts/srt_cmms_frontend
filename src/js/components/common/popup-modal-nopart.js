@@ -53,7 +53,9 @@ const PopupModalNoPart = (props) => {
                                             <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show.internal_item_id} </td>
                                             <td className="edit-padding" style={{ minWidth: "300px" }}> {no_part_show.description} </td>
                                             <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
-                                                <button type="button" className="button-blue" onClick={() => setFieldValue('internal_item_id_0', no_part_show.internal_item_id, true)} aria-label="Close active modal" aria-controls="modalNoPart" id="closeModalNoPart" >เลือก</button>
+                                                <button type="button" className="button-blue" 
+                                                onClick={() => setFieldValue(`line_items[${props.lineNumber - 1}].internal_item_id`, no_part_show.internal_item_id, true)} 
+                                                aria-label="Close active modal" aria-controls="modalNoPart" id="closeModalNoPart" >เลือก</button>
                                             </td>
                                         </tr>
                                     )
