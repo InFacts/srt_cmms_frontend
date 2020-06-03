@@ -15,5 +15,6 @@ export {default as goods_receipt} from './goods_receipt.js'
 export {default as token} from './token.js'
 
 export {default as form_data} from './form_data.js'
+export {default as footer} from './footer.js'
 
 export const api = combineReducers(apis);

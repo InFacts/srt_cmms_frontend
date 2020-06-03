@@ -5,6 +5,7 @@ import { useFormik , withFormik ,useFormikContext} from 'formik';
 import { TOOLBAR_ACTIONS, handleClickHomeToSpareMain, toModeSearch, handleClickAdd, TOOLBAR_MODE } from '../../redux/modules/toolbar.js';
 import { onClearStateModeAdd} from '../../redux/modules/goods_receipt.js';
 import TabBar, {TAB_BAR_ACTIVE} from '../common/tab-bar';
+import {FOOTER_MODE, FOOTER_ACTIONS, footerToModeSearch, footerToModeAddDraft} from '../../redux/modules/footer.js';
 
 import axios from "axios";
 
@@ -110,6 +111,19 @@ const GoodsReceiptComponent = (props) => {
     useEffect(() => {
         props.decodeTokenIfNeeded();
     }, []);
+
+    // Handle Footer
+    useEffect(() => {
+        console.log("Handle Footer", props.toolbar.mode, TOOLBAR_MODE.SEARCH)
+        if (props.toolbar.mode === TOOLBAR_MODE.SEARCH){
+            console.log("Handle SEARCH")
+            props.footerToModeSearch();
+        }
+        else if (props.toolbar.mode === TOOLBAR_MODE.ADD){
+            console.log("Handle ADD")
+            props.footerToModeAddDraft();
+        }
+    }, [props.toolbar.mode]);
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -228,7 +242,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = {
-    handleClickHomeToSpareMain, toModeSearch, onClearStateModeAdd, handleClickAdd, fetchFactIfNeeded, decodeTokenIfNeeded
+    handleClickHomeToSpareMain, toModeSearch, onClearStateModeAdd, handleClickAdd, fetchFactIfNeeded, decodeTokenIfNeeded, footerToModeAddDraft, footerToModeSearch
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EnhancedGoodsReceiptComponent);

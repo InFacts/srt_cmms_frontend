@@ -4,6 +4,7 @@ import FrontEnd from './js/route.js';
 
 import NavTopbar from './js/components/nav/nav-top';
 import Toolbar from './js/components/common/nav-toolbar';
+import Footer from './js/components/common/footer';
 import history from './js/history'
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
         <NavTopbar />
         <Toolbar />
         <FrontEnd />
+        <Footer />
       </Router>
     </div>
   );
