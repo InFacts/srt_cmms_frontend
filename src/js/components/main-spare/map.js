@@ -78,8 +78,7 @@ class Map extends React.Component {
                                 <img alt='some value' src={Text8} className="text8" />
                                 <img alt='some value' src={Text9} className="text9" />
                                 <img alt='some value' src={Text10} className="text10" />
-                                {/* <Link to="/track"><img alt='some value' src={Fourone} className="four-one" /></Link> */}
-                                <a href="http://vanilla-erp.com:50000/track"><img alt='some value' src={Fourone} className="four-one" /></a>
+                                <Link to="/track"><img alt='some value' src={Fourone} className="four-one" /></Link>
                                 <Link to="/item-master-data"><img alt='some value' src={Fourtwo} className="four-two" /></Link>
                                 <img alt='some value' src={Fourthree} className="four-three" />
                                 <img alt='some value' src={Text11} className="text11" />

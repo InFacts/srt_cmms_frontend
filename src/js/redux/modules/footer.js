@@ -3,6 +3,7 @@ import history from '../../history'
 
 // Constants
 export const FOOTER_MODE = {
+    INVISIBLE: "INVISIBLE",
     NONE: "NONE",
     SEARCH: "SEARCH",
     EDIT: "EDIT",
@@ -45,6 +46,7 @@ export const FOOTER_ACTIONS_TEXT = {
 
 
 // Actions
+const TO_MODE_INVISIBLE = "footer/TO_MODE_INVISIBLE";
 const TO_MODE_NONE = "footer/TO_MODE_NONE";
 const TO_MODE_SEARCH = "footer/TO_MODE_SEARCH";
 const TO_MODE_EDIT = "footer/TO_MODE_EDIT";
@@ -95,6 +97,11 @@ const initialState = {
 export default function reducer(state = initialState, action){
     switch(action.type){
         // CHANGE MODE
+        case TO_MODE_INVISIBLE:
+            return {
+                ...state,
+                mode: FOOTER_MODE.INVISIBLE
+            }
         case TO_MODE_NONE:
             return {
                 ...state,
@@ -270,6 +277,7 @@ export default function reducer(state = initialState, action){
 
 
 // Action Creators
+export const footerToModeInvisible = makeActionCreator(TO_MODE_INVISIBLE);
 export const footerToModeNone = makeActionCreator(TO_MODE_NONE);
 export const footerToModeSearch = makeActionCreator(TO_MODE_SEARCH);
 export const footerToModeEdit = makeActionCreator(TO_MODE_EDIT);

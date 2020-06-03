@@ -17,10 +17,10 @@ import PopupModalDocument from '../common/popup-modal-document'
 import PopupModalInventory from '../common/popup-modal-inventory'
 import PopupModalUsername from '../common/popup-modal-username'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
-import {getEmployeeIDFromUserID} from '../../helper';
+import { getEmployeeIDFromUserID } from '../../helper';
 
 
-const responseToFormState = (userFact, data, step_approve) => {
+const responseToFormState = (userFact, data, step_approve, desrciption_files) => {
   for (var i = data.line_items.length; i <= 9; i++) {
     data.line_items.push(
       {
@@ -45,7 +45,11 @@ const responseToFormState = (userFact, data, step_approve) => {
     remark: data.remark,
     status_name_th: data.status_name,
     po_id: data.po_id,
-    step_approve: step_approve.approval_step
+
+    // Setup value From Approve and Attachment
+    step_approve: step_approve.approval_step === undefined ? [] : step_approve.approval_step,
+    desrciption_files_length: desrciption_files.length,
+    desrciption_files: desrciption_files
   }
 }
 
@@ -91,14 +95,17 @@ const TopContent = (props) => {
         if (res.data.internal_document_id === internal_document_id) { // If input document ID exists
           if (props.toolbar.mode === TOOLBAR_MODE.SEARCH && !props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
 
-            // Start Axios Get step_approve By nuk
+            // Start Axios Get step_approve and attachment By nuk
             axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${res.data.document_id}/latest/plus`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
               .then((step_approve) => {
-                console.log(" I AM STILL IN MODE SEARCH AND SET VALUE")
-                setValues({ ...values, ...responseToFormState(props.fact.users, res.data, step_approve.data) }, false); //Setvalues and don't validate
-                validateField("dest_warehouse_id");
-                // validateField("internal_document_id");
-                return resolve(null);
+                axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${res.data.document_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+                  .then((desrciption_files) => {
+                    console.log(" I AM STILL IN MODE SEARCH AND SET VALUE")
+                    setValues({ ...values, ...responseToFormState(props.fact.users, res.data, step_approve.data, desrciption_files.data.results) }, false); //Setvalues and don't validate
+                    validateField("dest_warehouse_id");
+                    // validateField("internal_document_id");
+                    return resolve(null);
+                  });
               });
             // End
 

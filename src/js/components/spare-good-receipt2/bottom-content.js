@@ -9,7 +9,7 @@ import TextareaInput from '../common/formik-textarea-input';
 import TableStatus from '../common/table-status';
 import Table from '../common/table';
 
-import Files from '../common/files'
+import Files from '../common/files2'
 
 import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
 import { useFormikContext } from 'formik';
@@ -85,7 +85,7 @@ const BottomContent = (props) => {
     }
     let items = props.fact.items.items;
     let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
-
+    console.log(item)
     if (item) {
       setFieldValue(fieldName + `.description`, `${item.description}`, false);
       setFieldValue(fieldName + `.quantity`, 0, false);
@@ -126,13 +126,44 @@ const BottomContent = (props) => {
       return;
     }
 
-    if (per_unit_price !== 0) {
+    if (per_unit_price !== "") {
       setFieldValue(fieldName, per_unit_price, false);
       return;
     } else {
       return 'Invalid Per Unit Price Line Item';
     }
   }
+
+  // For Down File in Attactment by Nuk
+  const HandleDownload = () => {
+    axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/1/download/1`,
+      { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+      .then((response) => {
+        console.log("response", response)
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        console.log("url", url)
+        const link = document.createElement('a');
+        console.log("link", link)
+        link.href = url;
+        link.setAttribute('download', 'Screen Shot 2563-05-28 at 20.11.15.png');
+        document.body.appendChild(link);
+        link.click();
+      }).catch(function (err) {
+        console.log(err);
+      })
+  };
+
+  const HandleDeleteFile = () => {
+    console.log("<<<<<<")
+    axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/1`, values.forUpLoadFile,
+      { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+      .then((res) => {
+        console.log("res", res)
+      }).catch(function (err) {
+        console.log(err);
+      })
+  };
+
   return (
     <div id="blackground-gray">
       <div className="container_12 clearfix">
@@ -140,12 +171,12 @@ const BottomContent = (props) => {
 
           <div id="listItem_content" className="tabcontent">
             <div className="container_12 mt-1" style={{ paddingRight: "10px" }}>
-              <Table line_items = {values.line_items} 
-              sumTotalLineItem = {sumTotalLineItem} 
-              validateLineNumberInternalItemIDField = {validateLineNumberInternalItemIDField}
-              validateLineNumberQuatityItemIDField = {validateLineNumberQuatityItemIDField}
-              validateLineNumberPerUnitPriceItemIDField = {validateLineNumberPerUnitPriceItemIDField}
-              setLineNumber = {setLineNumber}
+              <Table line_items={values.line_items}
+                sumTotalLineItem={sumTotalLineItem}
+                validateLineNumberInternalItemIDField={validateLineNumberInternalItemIDField}
+                validateLineNumberQuatityItemIDField={validateLineNumberQuatityItemIDField}
+                validateLineNumberPerUnitPriceItemIDField={validateLineNumberPerUnitPriceItemIDField}
+                setLineNumber={setLineNumber}
               />
             </div>
 
@@ -168,16 +199,21 @@ const BottomContent = (props) => {
           </div>
 
           <div id="attachment_content" className="tabcontent">
-            <Files />
+            <Files name="file[0].filename" desrciptionFiles={props.actionMode === TOOLBAR_MODE.SEARCH ? values.desrciption_files
+              : values.file}
+              desrciptionFilesLength={props.actionMode === TOOLBAR_MODE.SEARCH ? values.desrciption_files_length
+                : values.file.length}
+              disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
+              HandleDownload={HandleDownload}
+            />
           </div>
 
           <div id="table_status_content" className="tabcontent">
-            {console.log("values.step_approve", values.step_approve)}
-            <TableStatus bodyTableStatus = {values.step_approve} />
+            <TableStatus bodyTableStatus={values.step_approve} />
           </div>
 
           {/* PopUp ค้นหาอะไหล่ MODE ADD */}
-          <PopupModalNoPart lineNumber={lineNumber}/>
+          <PopupModalNoPart lineNumber={lineNumber} />
 
         </div>
       </div>

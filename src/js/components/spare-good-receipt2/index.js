@@ -87,6 +87,8 @@ const EnhancedGoodsReceiptComponent = withFormik({
         po_id: '',
         remark: '',
         line_items: initialRows(),
+
+        file: [],
     
         //Field ที่ไม่ได้กรอก
         

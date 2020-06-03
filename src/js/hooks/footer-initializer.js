@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import {  toModeSearch, handleClickAdd, handleClickHomeToSpareMain,
     handleClickForward, handleClickBackward,handleClickRefresh, TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../redux/modules/toolbar.js';
 import {FOOTER_MODE, FOOTER_ACTIONS, footerToModeSearch, 
-        footerToModeAddDraft, handleClickBackToSpareMain, ACTION_TO_HANDLE_CLICK} from '../redux/modules/footer.js';
+        footerToModeAddDraft, handleClickBackToSpareMain, ACTION_TO_HANDLE_CLICK, footerToModeInvisible} from '../redux/modules/footer.js';
 import { useDispatch, useSelector  } from 'react-redux'
 import { useFormikContext} from 'formik';
 import {startDocumentApprovalFlow} from '../helper';
@@ -21,6 +21,9 @@ const useFooterInitializer = () => {
         }
         else if (toolbar.mode === TOOLBAR_MODE.ADD){
             dispatch(footerToModeAddDraft());
+        }
+        else {
+            dispatch(footerToModeInvisible());
         }
     }, [toolbar.mode]);
 
