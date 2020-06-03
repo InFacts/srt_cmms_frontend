@@ -42,30 +42,6 @@ const fetchLastestInternalDocumentID = (document_type_group_id) => new Promise((
 });
 
 
-const createDocumentEmptyRow = () => new Promise((resolve) => {
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/new/0`;
-    axios.post(url, null, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-        .then((res) => {
-            resolve({
-                internal_document_id: res.data.internal_document_id, //"draft-bea9f75d-23db-49ae-a8d5-385121fb0234",
-                document_id: res.data.document_id,  //"document_id": 14
-            });
-        })
-});
-
-
-
-const editDocument = (document_id, document_type_group_id, data) => new Promise((resolve, reject) => {
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/new/0`;
-    axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-        .then((res) => {
-            if(res.status === 200){
-                resolve(res.data);
-            }else{
-                reject(res);
-            }
-        })
-});
 
 const packForm = (document_id, document_show, list_show) => {
     const line_items = [];

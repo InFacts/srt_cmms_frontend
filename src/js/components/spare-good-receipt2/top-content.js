@@ -70,8 +70,8 @@ const TopContent = (props) => {
         //  ie. GR-PYO-2563/0001
     console.log("I am validating document id")
     let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS)-[A-Z]{3}-\d{4}\/\d{4}$/g
-    // let draftInternalDocumentIDRegex= /^heh\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
-    let draftInternalDocumentIDRegex = /^heh/g
+    let draftInternalDocumentIDRegex= /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
+    // let draftInternalDocumentIDRegex = /^heh/g
     if (!internal_document_id) {
         return resolve('Required');
     }else if (!internalDocumentIDRegex.test(internal_document_id) && !draftInternalDocumentIDRegex.test(internal_document_id)){ //
@@ -81,7 +81,7 @@ const TopContent = (props) => {
     //   return resolve(); // Resolve doesn't return
     // }
     let error;
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/internal_document_id/${internal_document_id}`;
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/internal_document_id/${encodeURIComponent(internal_document_id)}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
       .then((res) => {
         if (res.data.internal_document_id === internal_document_id) { // If input document ID exists
