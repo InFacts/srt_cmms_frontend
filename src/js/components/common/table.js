@@ -38,7 +38,7 @@ const Table = (props) => {
               </td>
               <td className="edit-padding">{list.description}</td>
               <td className="edit-padding text-center">
-                <NumberInput name={`line_items[${index}].quantity`} tabIndex="7"
+                <NumberInput step={0.01} name={`line_items[${index}].quantity`} tabIndex="7"
                   validate={quantity => props.validateLineNumberQuatityItemIDField(`line_items[${index}].quantity`, quantity, index)}
                   disabled={props.actionMode === TOOLBAR_MODE.SEARCH} 
                   redBorderForError = "error-in-table"/>

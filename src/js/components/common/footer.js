@@ -55,7 +55,7 @@ const FooterItemComponent = (props) => {
 
 const FooterComponent = (props) => {
   const footer = useSelector((state) => ({...state.footer}));
-  console.log("footer.mode", footer.mode)
+  // console.log("footer.mode", footer.mode)
   if (footer.mode !== "INVISIBLE") {
     try {
       return (

@@ -168,6 +168,8 @@ const EnhancedGoodsReceiptComponent = withFormik({
         remark: '',
     
         line_items: initialRows(),
+
+        file: [],
     
         //Field ที่ไม่ได้กรอก
         document_id: '',
@@ -177,7 +179,6 @@ const EnhancedGoodsReceiptComponent = withFormik({
         created_by_admin_employee_id: '',
         step_approve: [],
 
-        download_file: ''
         // dest_warehouse_name: '',
 
         // firstPosted: false

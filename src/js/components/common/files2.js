@@ -1,45 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux'
-import axios from "axios";
-import { API_PORT_DATABASE } from '../../config_port.js';
-import { API_URL_DATABASE } from '../../config_url.js';
-
-// import {handleChange} from '../../redux/modules/form_data.js';
-import { useFormikContext } from 'formik';
+import React from 'react';
+import { useField } from 'formik';
 
 import Document from '../../../images/document.svg';
 
-const HandleDownload = () => {
-    console.log(">>>")
-    // axios({
-    //     url: 'http://43.229.79.36:60013/attachment/1/download/1',
-    //     method: 'GET',
-    //     responseType: 'blob', // important
-    // }).then((response) => {
-    //     console.log("response")
-    //     const url = window.URL.createObjectURL(new Blob([response.data]));
-    //     const link = document.createElement('a');
-    //     link.href = url;
-    //     link.setAttribute('download', 'file.png');
-    //     document.body.appendChild(link);
-    //     link.click();
-    // })
-    axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/1/download/1`, {responseType: 'blob'}, 
-    { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-        .then((response) => {
-            console.log("response", response)
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', 'file.png');
-            document.body.appendChild(link);
-            link.click();
-        }).catch(function (err) {
-            console.log(err);
-        })
-};
+const Files = ({ ...props }) => {
+    const [field, meta] = useField(props);
 
-const Files = (props) => {
     return (
         <div>
             <h4 className="head-title-bottom mt-2">ข้อมูลแนบไฟล์</h4>
@@ -47,10 +13,14 @@ const Files = (props) => {
                 <div className="u-float-left">
                     <span className="top-text">ไฟล์เอกสาร</span>
                 </div>
-                <div className=" u-float-right">
-                    <span className="top-text">เพิ่มไฟล์</span>
+                <div className="u-float-right">
+                    <div className="upload-btn-wrapper">
+                        <button className="btn" disabled={props.disabled}>เพิ่มไฟล์</button>
+                        <input type="file" disabled={props.disabled} {...field} {...props} />
+                    </div>
                 </div>
             </div>
+            {/* {console.log("desrciptionFilesLength", props.desrciptionFilesLength)} */}
             {props.desrciptionFilesLength !== 0 && props.desrciptionFilesLength !== undefined
                 ?
                 <div className="dropZone-list">
@@ -60,8 +30,8 @@ const Files = (props) => {
                                 <h4 className="media-heading grid_5" style={{ fontWeight: 'bold' }}>{desrciptionFiles.filename}</h4>
                                 <h4 className="media-heading grid_2">ขนาดไฟล์ : {desrciptionFiles.sizeReadable}</h4>
                                 <div className="float-right">
-                                    <button type="button"><h4 className="media-heading grid_1" style={{ color: "blue" }} onClick={(e) => HandleDownload(e)}>ดาวน์โหลด</h4></button>
-                                    <h4 className="media-heading grid_1" style={{ color: "blue", float: "right" }}>ลบ</h4>
+                                    <button className="btn media-heading grid_1" style={{ color: "blue", padding: "4px" }} onClick={(e) => props.HandleDownload(e)}>ดาวน์โหลด</button>
+                                    <button className="btn media-heading grid_1" style={{ color: "blue", padding: "4px" }} disabled={props.disabled}>ลบ</button>
                                 </div>
                             </div>
                         </li>
@@ -75,7 +45,6 @@ const Files = (props) => {
                     <div className="top-text">ไม่พบไฟล์เอกสาร</div>
                     <div className="top-text">คลิกที่ "+" ในการแนบเอกสาร</div>
                 </div>
-
             }
         </div>
     )

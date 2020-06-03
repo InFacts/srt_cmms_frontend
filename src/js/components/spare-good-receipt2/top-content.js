@@ -47,7 +47,7 @@ const responseToFormState = (userFact, data, step_approve, desrciption_files) =>
     po_id: data.po_id,
 
     // Setup value From Approve and Attachment
-    step_approve: step_approve.approval_step,
+    step_approve: step_approve.approval_step === undefined ? [] : step_approve.approval_step,
     desrciption_files_length: desrciption_files.length,
     desrciption_files: desrciption_files
   }
@@ -58,7 +58,6 @@ const responseToFormState = (userFact, data, step_approve, desrciption_files) =>
 
 const TopContent = (props) => {
   const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
-
   // Fill Default Forms
   useEffect(() => {
     if (props.toolbar.mode === TOOLBAR_MODE.ADD) {

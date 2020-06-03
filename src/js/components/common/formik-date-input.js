@@ -8,7 +8,7 @@ const DateInput = ({ ...props }) => {
   return (
     <>
       <div>
-        <input type="date" className="cancel-default" {...field} {...props}></input>
+        <input type="date" className="cancel-default" style={{paddingRight: "0"}} {...field} {...props}></input>
       </div>
       {meta.touched && meta.error ? (
         <div className="error">
