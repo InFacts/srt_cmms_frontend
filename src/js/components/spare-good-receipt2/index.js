@@ -23,7 +23,7 @@ import {fetchFactIfNeeded , FACTS} from '../../redux/modules/api/fact';
 import {decodeTokenIfNeeded} from '../../redux/modules/token';
 import DateTimeInput from '../common/formik-datetime-input.js';
 
-import {getUserIDFromEmployeeID, DOCUMENT_SCHEMA, ICD_SCHEMA, ICD_LINE_ITEM_SCHEMA, DOCUMENT_TYPE_ID} from '../common/helper';
+import {getUserIDFromEmployeeID, DOCUMENT_SCHEMA, ICD_SCHEMA, ICD_LINE_ITEM_SCHEMA,packDataFromValues, DOCUMENT_TYPE_ID} from '../common/helper';
 
 
 
@@ -42,30 +42,6 @@ const fetchLastestInternalDocumentID = (document_type_group_id) => new Promise((
 });
 
 
-const createDocumentEmptyRow = () => new Promise((resolve) => {
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/new/0`;
-    axios.post(url, null, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-        .then((res) => {
-            resolve({
-                internal_document_id: res.data.internal_document_id, //"draft-bea9f75d-23db-49ae-a8d5-385121fb0234",
-                document_id: res.data.document_id,  //"document_id": 14
-            });
-        })
-});
-
-
-
-const editDocument = (document_id, document_type_group_id, data) => new Promise((resolve, reject) => {
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/new/0`;
-    axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-        .then((res) => {
-            if(res.status === 200){
-                resolve(res.data);
-            }else{
-                reject(res);
-            }
-        })
-});
 
 const packForm = (document_id, document_show, list_show) => {
     const line_items = [];
@@ -299,8 +275,11 @@ const EnhancedGoodsReceiptComponent = withFormik({
         }
         return errors;
     },
-    handleSubmit: values => {
+    handleSubmit: (values, formikBag) => {
+        
         console.log("i am submitting", values)
+        console.log("i have facts on submit", formikBag.props)
+        console.log("I AM SUBMITTING ", packDataFromValues(formikBag.props.fact, values, DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO) )
         alert(JSON.stringify(values, null, 2));
       },    
     // validateOnChange: false,
@@ -312,6 +291,7 @@ const mapStateToProps = (state) => ({
     toolbar: state.toolbar,
     decoded_token: state.token.decoded_token,
     actionMode: state.goods_receipt.action,
+    fact: state.api.fact,
 })
 
 const mapDispatchToProps = {
