@@ -1,136 +1,88 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
+import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
 
-import '../../../css/table.css';
-class Table extends React.Component {
-  checkVariable = (check, value) => {
-    if (check === "search") {
-      return (
-        <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
-          <input type="text" className="p-search-box__input cancel-default-table" value={value} onChange={(e) => this.props.handleChangeSearch(e)} onKeyDown={(e) => this.props._handleKeyDown(e)} />
-          <button type="button" className="p-search-box__button cancel-padding hidden"><i className="p-icon--search" onClick={(e) => this.props.handleOnClickOpenPopUp(e, value)} id="showModal2" aria-controls={this.props.idPopUpTable} ></i></button>
-        </div>
-      )
-    }
-    if (check === "number") {
-      return (
-        <input type="number" min="0" className="cancel-default" value={value} onChange={(e) => this.props.handleChangeNumber(e)} />
-      )
-    }
-    if (check === "text") {
-      return (
-        <input type="text" className="cancel-default" value={value} onChange={(e) => this.props.handleChangeText(e)} />
-      )
-    }
-    else {
-      return value;
-    }
-  }
-  render() {
-    const current = this;
-    return (
-      <>
-        <table className="table-many-column">
-          <thead>
-            <tr>
-              {this.props.headTable.map(function (headTable, index) {
-                return (
-                  <th className={`font ${headTable[1]}`} style={{ minWidth: `${headTable[2]}` }} key={index}>
-                    {headTable[0]}
-                  </th>
-                )
-              })}
+import TextInput from '../common/formik-text-input';
+import NumberInput from '../common/formik-number-input';
+import SelectInput from '../common/formik-select-input';
+
+const Table = (props) => {
+  return (
+    <table className="table-many-column">
+      <thead>
+        <tr>
+          <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
+          <th className="font" style={{ minWidth: "130px" }}>เลขที่อะไหล่</th>
+          <th className="font" style={{ minWidth: "368px" }}>รายละเอียด</th>
+          <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
+          <th className="font text-center" style={{ minWidth: "80px" }}>หน่วยนับ</th>
+          <th className="font text-right" style={{ minWidth: "80px" }}>สถานะ</th>
+          <th className="font text-center" style={{ minWidth: "80px" }}>ราคาต่อหน่วย</th>
+          <th className="font text-right" style={{ minWidth: "80px" }}>จำนวนเงิน</th>
+        </tr>
+      </thead>
+      <tbody>
+        {props.line_items.map(function (list, index) {
+          let line_number = index + 1;
+          return (
+            <tr key={index}>
+              <th className="edit-padding text-center">{line_number}</th>
+              <td className="edit-padding">
+                <TextInput name={`line_items[${index}].internal_item_id`}
+                  validate={internal_item_id => props.validateLineNumberInternalItemIDField(`line_items[${index}]`, internal_item_id, index)} tabIndex="6"
+                  disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
+                  searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart"
+                  handleModalClick={() => props.setLineNumber(line_number)}
+                  redBorderForError = "error-in-table"
+                />
+              </td>
+              <td className="edit-padding">{list.description}</td>
+              <td className="edit-padding text-center">
+                <NumberInput name={`line_items[${index}].quantity`} tabIndex="7"
+                  validate={quantity => props.validateLineNumberQuatityItemIDField(`line_items[${index}].quantity`, quantity, index)}
+                  disabled={props.actionMode === TOOLBAR_MODE.SEARCH} 
+                  redBorderForError = "error-in-table"/>
+              </td>
+
+              {/* หน่วยนับ */}
+              <td className="edit-padding text-center">
+                <SelectInput name={`line_items[${index}].uom_id`} listProps={list.list_uoms}
+                  tabIndex="8" disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
+                  optionValue='uom_id' optionName='name'
+                  redBorderForError = "error-in-table"
+                />
+              </td>
+
+              {/* สถานะของอะไหล่ */}
+              <td className="edit-padding text-center">
+                <SelectInput name={`line_items[${index}].item_status_id`} listProps={props.fact['item-status'].items}
+                  tabIndex="8" disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
+                  checkDescription={list.description}
+                  optionValue='item_status_id' optionName='description_th'
+                />
+              </td>
+
+              <td className="edit-padding text-center">
+                <NumberInput step={0.0001} name={`line_items[${index}].per_unit_price`}
+                  validate={per_unit_price => props.validateLineNumberPerUnitPriceItemIDField(`line_items[${index}].per_unit_price`, per_unit_price, index)}
+                  disabled={props.actionMode === TOOLBAR_MODE.SEARCH} 
+                  redBorderForError = "error-in-table"
+                  />
+              </td>
+              <td className="edit-padding text-right">{props.sumTotalLineItem(list.quantity, list.per_unit_price, list.description)}</td>
             </tr>
-          </thead>
-          <tbody>
-            {this.props.bodyTable.map((bodyTable, rowBodyTable) => {
-              return (
-                <tr key={rowBodyTable} id={rowBodyTable}>
-                  {bodyTable.map((bodyTable, columnBodyTable) => {
-                    return (
-                      <>
-                        <td className={`edit-padding ${bodyTable[1]} ${bodyTable[2]}`} key={columnBodyTable} id={columnBodyTable}>
-                          {current.checkVariable(bodyTable[3], bodyTable[0])}
-                        </td>
-                      </>
-                    )
-                  })}
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      </>
-    )
-  };
+          )
+        })}
+      </tbody>
+    </table>
+  )
 }
 
-const mapStateToProps = state => {
-  // console.log("NEW state", state);
-  return {
-    headTable: state.headTable,
-    bodyTable: state.bodyTable,
-    idPopUpTable: state.idPopUpTable
-  };
-};
-
-const mapDispatchToProps = (dispatch) => ({
-  handleChangeSearch: (e) => dispatch(changeSearch(e)),
-  handleOnClickOpenPopUp: (e, value) => dispatch(onClickOpenPopUp(e, value)),
-  handleChangeText: (e) => dispatch(changeText(e)),
-  handleChangeNumber: (e) => dispatch(changeNumber(e)),
-  _handleKeyDown: (e) => dispatch(handleKeyDown(e))
+const mapStateToProps = (state) => ({
+  actionMode: state.toolbar.mode,
+  fact: state.api.fact
 })
+const mapDispatchToProps = {
 
+}
 export default connect(mapStateToProps, mapDispatchToProps)(Table);
-
-// Action Creator
-export const changeSearch = (e) => {
-  console.log("hi")
-  return {
-    type: "CHANGE SEARCH TYPE HAVE WORD",
-    value: e.target.value,
-    columnBodyTable: e.target.parentNode.parentNode.id,
-    rowBodyTable: e.target.parentNode.parentNode.parentNode.id
-  }
-}
-
-export const onClickOpenPopUp = (e, value) => {
-  // console.log("value", value)
-  return {
-    type: "CLICK SEARCH TYPE NO WORD",
-    value: value,
-    columnBodyTable: e.target.parentNode.parentNode.parentNode.id,
-    rowBodyTable: e.target.parentNode.parentNode.parentNode.parentNode.id
-  }
-}
-
-export const changeText = (e) => {
-  return {
-    type: "TEXT",
-    value: e.target.value,
-    columnBodyTable: e.target.parentNode.id,
-    rowBodyTable: e.target.parentNode.parentNode.id
-  }
-}
-
-export const changeNumber = (e) => {
-  // console.log(e.target.parentNode)
-  // console.log(e.target.parentNode.parentNode)
-  return {
-    type: "NUMBER",
-    value: e.target.value,
-    columnBodyTable: e.target.parentNode.id,
-    rowBodyTable: e.target.parentNode.parentNode.id
-  }
-}
-
-export const handleKeyDown = (e) => {
-    return {
-      type: "ENTER VALUE IN TABLE",
-      key: e.key,
-      value: e.target.value,
-      columnBodyTable: e.target.parentNode.parentNode.id,
-      rowBodyTable: e.target.parentNode.parentNode.parentNode.id
-    }
-}

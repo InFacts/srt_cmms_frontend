@@ -604,6 +604,13 @@ div.error {
   border-bottom: 1px dotted black;
 }
 
+div.error2 {
+  color: red;
+  font-size: 14px;
+  margin-top: -5px;
+  margin-bottom: -5px;
+}
+
 div.error .tooltiptext {
   visibility: visible;
   width: 150px;
@@ -612,9 +619,9 @@ div.error .tooltiptext {
   text-align: center;
   border: 1px solid red;
   border-radius: 5px;
-  padding: 5px 2px;
+  padding: 0px;
   position: absolute;
-  z-index: 4;
+  z-index: 1;
   top: -8px;
   left: 60px;
   margin-left: -60px;
@@ -639,9 +646,9 @@ div.error .tooltiptextForNumber {
   text-align: center;
   border: 1px solid red;
   border-radius: 5px;
-  padding: 5px 2px;
+  padding: 0px;
   position: absolute;
-  z-index: 4;
+  z-index: 1;
   top: -8px;
   left: 17px;
   margin-left: -60px;

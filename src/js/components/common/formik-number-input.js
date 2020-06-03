@@ -10,11 +10,16 @@ const NumberInput = ({ ...props }) => {
       <div>
         <input type="number" min="0" step={props.step} className="cancel-default" {...field} {...props}></input>
       </div>
-      {meta.touched && meta.error ? (
-        <div className="error">
-          <span className="tooltiptextForNumber">{meta.error}</span>
-        </div>
-      ) : null}
+      {props.redBorderForError !== "error-in-table"
+        ?
+        meta.touched && meta.error ? (
+          <div className="error">
+            <span className="tooltiptextForNumber">{meta.error}</span>
+          </div>
+        ) : null
+        :
+        <div className="error2">{meta.error}</div>
+      }
     </>
   );
 };

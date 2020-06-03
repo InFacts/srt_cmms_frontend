@@ -5,16 +5,13 @@ import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
 import { API_URL_DATABASE } from '../../config_url.js';
 
-import TextInput from '../common/formik-text-input';
-import NumberInput from '../common/formik-number-input';
-import SelectInput from '../common/formik-select-input';
 import TextareaInput from '../common/formik-textarea-input';
 import TableStatus from '../common/table-status';
+import Table from '../common/table';
 
 import Files from '../common/files'
 
 import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
-
 import { useFormikContext } from 'formik';
 
 import PopupModalNoPart from '../common/popup-modal-nopart'
@@ -78,9 +75,7 @@ const BottomContent = (props) => {
     // if (values.line_items[index].internal_item_id === internal_item_id) {
     //   return;
     // }
-    console.log("values.line_items[index].internal_item_id", values.line_items[index].internal_item_id)
     if (internal_item_id === "") {
-      console.log("check id one", internal_item_id)
       setFieldValue(fieldName + `.description`, '', false);
       setFieldValue(fieldName + `.quantity`, '', false);
       setFieldValue(fieldName + `.list_uoms`, [], false);
@@ -91,14 +86,12 @@ const BottomContent = (props) => {
     let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
 
     if (item) {
-      console.log("check id two")
       setFieldValue(fieldName + `.description`, `${item.description}`, false);
       setFieldValue(fieldName + `.quantity`, 0, false);
       setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
       setFieldValue(fieldName + `.per_unit_price`, 0, false);
       return;
     } else {
-      console.log("else")
       return 'Invalid Number ID';
     }
   }
@@ -146,68 +139,13 @@ const BottomContent = (props) => {
 
           <div id="listItem_content" className="tabcontent">
             <div className="container_12 mt-1" style={{ paddingRight: "10px" }}>
-              <table className="table-many-column">
-                <thead>
-                  <tr>
-                    <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
-                    <th className="font" style={{ minWidth: "130px" }}>เลขที่อะไหล่</th>
-                    <th className="font" style={{ minWidth: "368px" }}>รายละเอียด</th>
-                    <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
-                    <th className="font text-center" style={{ minWidth: "80px" }}>หน่วยนับ</th>
-                    <th className="font text-right" style={{ minWidth: "80px" }}>สถานะ</th>
-                    <th className="font text-center" style={{ minWidth: "80px" }}>ราคาต่อหน่วย</th>
-                    <th className="font text-right" style={{ minWidth: "80px" }}>จำนวนเงิน</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {values.line_items.map(function (list, index) {
-                    let line_number = index + 1;
-                    return (
-                      <tr key={index}>
-                        <th className="edit-padding text-center">{line_number}</th>
-                        <td className="edit-padding">
-                          <TextInput name={`line_items[${index}].internal_item_id`}
-                            validate={internal_item_id => validateLineNumberInternalItemIDField(`line_items[${index}]`, internal_item_id, index)} tabIndex="6"
-                            disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-                            searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart"
-                            handleModalClick={() => setLineNumber(line_number)}
-                          />
-                        </td>
-                        <td className="edit-padding">{list.description}</td>
-                        <td className="edit-padding text-center">
-                          <NumberInput name={`line_items[${index}].quantity`} tabIndex="7"
-                            validate={quantity => validateLineNumberQuatityItemIDField(`line_items[${index}].quantity`, quantity, index)}
-                            disabled={props.actionMode === TOOLBAR_MODE.SEARCH} />
-                        </td>
-
-                        {/* หน่วยนับ */}
-                        <td className="edit-padding text-center">
-                          <SelectInput name={`line_items[${index}].uom_id`} listProps={list.list_uoms}
-                            tabIndex="8" disabled={props.actionMode === TOOLBAR_MODE.SEARCH} 
-                            optionValue='uom_id' optionName='name'
-                            />
-                        </td>
-
-                        {/* สถานะของอะไหล่ */}
-                        <td className="edit-padding text-center">
-                          <SelectInput name={`line_items[${index}].item_status_id`} listProps={props.fact['item-status'].items}
-                            tabIndex="8" disabled={props.actionMode === TOOLBAR_MODE.SEARCH} 
-                            checkDescription = {list.description}
-                            optionValue='item_status_id' optionName='description_th'
-                            />
-                        </td>
-
-                        <td className="edit-padding text-center">
-                          <NumberInput step={0.0001} name={`line_items[${index}].per_unit_price`}
-                            validate={per_unit_price => validateLineNumberPerUnitPriceItemIDField(`line_items[${index}].per_unit_price`, per_unit_price, index)}
-                            disabled={props.actionMode === TOOLBAR_MODE.SEARCH} />
-                        </td>
-                        <td className="edit-padding text-right">{sumTotalLineItem(list.quantity, list.per_unit_price, list.description)}</td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
+              <Table line_items = {values.line_items} 
+              sumTotalLineItem = {sumTotalLineItem} 
+              validateLineNumberInternalItemIDField = {validateLineNumberInternalItemIDField}
+              validateLineNumberQuatityItemIDField = {validateLineNumberQuatityItemIDField}
+              validateLineNumberPerUnitPriceItemIDField = {validateLineNumberPerUnitPriceItemIDField}
+              setLineNumber = {setLineNumber}
+              />
             </div>
 
             <div className="container_12 mt-3">
@@ -233,7 +171,7 @@ const BottomContent = (props) => {
           </div>
 
           <div id="table_status_content" className="tabcontent">
-            {/* <TableStatus headTableStatus = "[]" bodyTableStatus = "[]" /> */}
+            {/* <TableStatus bodyTableStatus = "[]" /> */}
           </div>
 
           {/* PopUp ค้นหาอะไหล่ MODE ADD */}

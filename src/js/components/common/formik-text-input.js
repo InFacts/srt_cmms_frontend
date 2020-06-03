@@ -16,11 +16,16 @@ const TextInput = ({ ...props }) => {
           </button>
         }
       </div>
-      {meta.touched && meta.error ? (
-        <div className="error">
-          <span class="tooltiptext">{meta.error}</span>
-        </div>
-      ) : null}
+      {props.redBorderForError !== "error-in-table"
+        ?
+        meta.touched && meta.error ? (
+          <div className="error">
+            <span class="tooltiptext">{meta.error}</span>
+          </div>
+        ) : null
+        :
+        <div className="error2">{meta.error}</div>
+      }
     </>
   );
 };
