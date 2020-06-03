@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
 import { API_URL_DATABASE } from '../../config_url.js';
-
+import { v4 as uuidv4 } from 'uuid';
 
 import FormInput from '../common/form-input'
 import TextInput from '../common/formik-text-input'
@@ -53,17 +53,20 @@ const responseToFormState = (userFact, data, step_approve) => {
 
 
 const TopContent = (props) => {
-  const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
+  const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
   // Fill Default Forms
   useEffect(() => {
     if (props.toolbar.mode === TOOLBAR_MODE.ADD) {
+      if (!values.internal_document_id && touched.internal_document_id){
+        setFieldValue('internal_document_id', `draft-${uuidv4()}`)
+      }
       setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(props.fact.users, props.decoded_token.id));
       setFieldValue("status_name_th", "ยังไม่ได้รับการบันทึก");
       setFieldValue("created_on", new Date().toISOString().slice(0, 16));
       // validateField("created_by_admin_employee_id");
     }
-  }, [props.decoded_token, props.fact.users, props.toolbar.mode])
+  }, [props.decoded_token, props.fact.users, props.toolbar.mode, touched.internal_document_id, !values.internal_document_id])
 
   const validateInternalDocumentIDField = internal_document_id => new Promise(resolve => {
     // Internal Document ID

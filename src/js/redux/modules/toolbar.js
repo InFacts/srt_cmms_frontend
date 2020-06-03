@@ -20,6 +20,8 @@ export const TOOLBAR_ACTIONS = {
     EXPORT_PDF: "EXPORT_PDF"
 }
 
+
+
 // Actions
 const TO_MODE_NONE = "toolbar/TO_MODE_NONE";
 const TO_MODE_NONE_HOME = "toolbar/TO_MODE_NONE_HOME";
@@ -204,4 +206,11 @@ export const handleClickHomeToSpareMain = () => {
         dispatch(handleClickHome());
         history.push('/main-spare');
     };
+}
+
+export const MODE_TO_ACTION_CREATOR = {
+    [TOOLBAR_MODE.NONE]: toModeNone,
+    [TOOLBAR_MODE.NONE_HOME]: toModeNoneHome,
+    [TOOLBAR_MODE.SEARCH]: toModeSearch,
+    [TOOLBAR_MODE.ADD]: toModeAdd,
 }

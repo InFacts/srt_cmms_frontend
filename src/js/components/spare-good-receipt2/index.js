@@ -4,72 +4,22 @@ import { useFormik , withFormik ,useFormikContext} from 'formik';
 
 import TabBar, {TAB_BAR_ACTIVE} from '../common/tab-bar';
 
-
 import axios from "axios";
-
 import { API_PORT_DATABASE } from '../../config_port.js';
 import { API_URL_DATABASE } from '../../config_url.js';
 
 import TopContent from './top-content';
 import BottomContent from './bottom-content';
 import Footer from '../common/footer.js';
-import { onClearStateModeAdd} from '../../redux/modules/goods_receipt.js';
 
-import {getUserIDFromEmployeeID, DOCUMENT_SCHEMA, ICD_SCHEMA, ICD_LINE_ITEM_SCHEMA,packDataFromValues, DOCUMENT_TYPE_ID} from '../../helper';
+import {packDataFromValues, DOCUMENT_TYPE_ID, saveDocument} from '../../helper';
 
 import useToolbarInitializer from '../../hooks/toolbar-initializer';
 import useFactInitializer from '../../hooks/fact-initializer';
 import useTokenInitializer from '../../hooks/token-initializer';
 import useFooterInitializer from '../../hooks/footer-initializer';
 
-
-
-
-
-const packForm = (document_id, document_show, list_show) => {
-    const line_items = [];
-    var line_number = 1
-    // console.log(list_show_mode_add)
-    list_show.map(function (item, index) {
-        if (item.description !== "") {
-            var myObj = {
-                "document_id": document_id,
-                "line_number": line_number,
-                "quantity": parseInt(item.quantity),
-                "uom_id": item.uom_group_id,
-                "per_unit_price": parseFloat(item.per_unit_price),
-                "item_id": item.item_id,
-                "item_status_id": 1
-            };
-            line_number += 1;
-            return (
-                line_items.push(myObj)
-            )
-        }
-    })
-
-    const data = {
-        "document": {
-            "document_id": document_id,
-            "internal_document_id": document_show.internal_document_id,
-            "created_by_admin_id": document_show.created_by_admin_id,
-            "created_by_user_id": document_show.created_by_user_id,
-            "remark": document_show.remark,
-        },
-        "specific": {
-            "document_id": document_id,
-            "dest_warehouse_id": parseInt(document_show.dest_warehouse_id),
-            "src_warehouse_id": 999,
-            "line_items": line_items,
-            "movement": {
-                "document_id": document_id,
-                "po_id": document_show.po_id
-            }
-        }
-    };
-    console.log(data)
-    return data;
-}
+import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
 const GoodsReceiptComponent = (props) => {
     
@@ -83,37 +33,10 @@ const GoodsReceiptComponent = (props) => {
     ]);
     const [initialTabbar, setInitialTabbar] = useState(true);
 
-    useToolbarInitializer();
+    useToolbarInitializer(TOOLBAR_MODE.SEARCH);
     useTokenInitializer();
     useFactInitializer();
     useFooterInitializer();
-
-    function handleSubmit(e) {
-        e.preventDefault();
-        if (props.actionMode === "add") {
-            return (
-                axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${props.document_id}/101`, packForm(props.document_id, props.document_show_mode_add, props.list_show_mode_add), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-                    .then(res => {
-                        console.log(res);
-                        props.onClearStateModeAdd()
-                    }).catch(function (err) {
-                        console.log(err);
-                    })
-            )
-        }
-        if (props.actionMode === "edit") {
-            return (
-                axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${props.document_show.document_id}/101`, packForm(props.document_show.document_id, props.document_show, props.list_show), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-                    .then(res => {
-                        console.log(res);
-                        props.onClearStateModeAdd()
-                    }).catch(function (err) {
-                        console.log(err);
-                    })
-            )
-            // }
-        }
-    }
 
     return (
         <form onSubmit={props.handleSubmit}>
@@ -132,7 +55,7 @@ const initialLineItem = {
     quantity: '',
     uom_id: '',
     per_unit_price: '',
-    item_id: '',
+    // item_id: '',
     item_status_id: 1,
     
     //Field ที่ไม่ได้กรอก
@@ -158,24 +81,23 @@ const EnhancedGoodsReceiptComponent = withFormik({
         // Field ที่ให้ User กรอก
         internal_document_id: '',
         document_date: '',
-    
         dest_warehouse_id: '', // Need to fill for user's own WH
         src_warehouse_id: 999, // for Goods Receipt
         created_by_user_employee_id: '',
-    
         po_id: '',
-    
         remark: '',
-    
         line_items: initialRows(),
     
         //Field ที่ไม่ได้กรอก
-        document_id: '',
+        
         created_on: '',
         status_name_th: '',
         document_status_id: '',
         created_by_admin_employee_id: '',
-        step_approve: []
+        step_approve: [],
+
+        //Field ที่ไม่ได้ display
+        document_id: '', // changes when document is displayed (internal_document_id field validation)
     }),
     validate: (values, props) => {
         const errors = {};
@@ -196,13 +118,18 @@ const EnhancedGoodsReceiptComponent = withFormik({
         }
         return errors;
     },
-    handleSubmit: (values, formikBag) => {
-        
-        console.log("i am submitting", values)
-        console.log("i have facts on submit", formikBag.props)
-        console.log("I AM SUBMITTING ", packDataFromValues(formikBag.props.fact, values, DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO) )
-        alert(JSON.stringify(values, null, 2));
-      },    
+    handleSubmit: (values, formikBag) => new Promise ((resolve, reject) => { //handle Submit will just POST the Empty Document and PUT information inside
+        let data = packDataFromValues(formikBag.props.fact, values, DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO);
+        console.log("I AM SUBMITTING ", data );
+        saveDocument(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO, data)
+        .then((document_id) => {
+            formikBag.setFieldValue('document_id', document_id, false);
+            return resolve(document_id);
+        })
+        .catch((err) => {
+            return reject(err)
+        })
+      }),    
     // validateOnChange: false,
 })(GoodsReceiptComponent);
 
@@ -210,13 +137,12 @@ const EnhancedGoodsReceiptComponent = withFormik({
 
 const mapStateToProps = (state) => ({
     toolbar: state.toolbar,
-    decoded_token: state.token.decoded_token,
-    actionMode: state.goods_receipt.action,
+    // decoded_token: state.token.decoded_token,
     fact: state.api.fact,
 })
 
 const mapDispatchToProps = {
-    onClearStateModeAdd,
+
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EnhancedGoodsReceiptComponent);

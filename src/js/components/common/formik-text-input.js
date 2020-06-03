@@ -20,7 +20,7 @@ const TextInput = ({ ...props }) => {
         ?
         meta.touched && meta.error ? (
           <div className="error">
-            <span class="tooltiptext">{meta.error}</span>
+            <span className="tooltiptext">{meta.error}</span>
           </div>
         ) : null
         :

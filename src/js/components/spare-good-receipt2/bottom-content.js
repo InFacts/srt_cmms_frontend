@@ -79,6 +79,7 @@ const BottomContent = (props) => {
       setFieldValue(fieldName + `.description`, '', false);
       setFieldValue(fieldName + `.quantity`, '', false);
       setFieldValue(fieldName + `.list_uoms`, [], false);
+      setFieldValue(fieldName + `.uom_id`, '', false);
       setFieldValue(fieldName + `.per_unit_price`, '', false);
       return;
     }
@@ -89,6 +90,7 @@ const BottomContent = (props) => {
       setFieldValue(fieldName + `.description`, `${item.description}`, false);
       setFieldValue(fieldName + `.quantity`, 0, false);
       setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+      setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
       setFieldValue(fieldName + `.per_unit_price`, 0, false);
       return;
     } else {

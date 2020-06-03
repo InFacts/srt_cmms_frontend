@@ -1,21 +1,29 @@
 import { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import {  toModeSearch, handleClickAdd, handleClickHomeToSpareMain,
-    handleClickForward, handleClickBackward,handleClickRefresh, TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../redux/modules/toolbar.js';
+    handleClickForward, handleClickBackward,handleClickRefresh, TOOLBAR_MODE,TOOLBAR_ACTIONS,
+    MODE_TO_ACTION_CREATOR } from '../redux/modules/toolbar.js';
 import {useFormikContext } from 'formik';
 import { useDispatch, useSelector  } from 'react-redux'
 import {fetchLastestInternalDocumentID, DOCUMENT_TYPE_ID} from '../helper'
+import { useLocation } from 'react-router-dom'
 
-const useToolbarInitializer = () => {
+export const useToolbarChangeModeInitializer = (initial_mode) => {
+    const dispatch = useDispatch();
+    useEffect(()=>{
+        dispatch(MODE_TO_ACTION_CREATOR[initial_mode]());
+    }, []);
+    return;
+}
+
+const useToolbarInitializer = (initial_mode) => {
     const {resetForm, values, setFieldValue} = useFormikContext();
     const toolbar = useSelector((state) => ({...state.toolbar}));
     const dispatch = useDispatch();
     // Initializer
     // Run only once with checking nothing []
     // 1. Change Toolbar to Mode Search
-    useEffect(()=>{
-        dispatch(toModeSearch());
-    }, []);
+    useToolbarChangeModeInitializer(initial_mode);
 
     // !!! Handles all state.toolbar mode and requiresHandleClick Changes !!!
 
