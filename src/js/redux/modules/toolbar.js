@@ -3,6 +3,7 @@ import {makeActionCreator} from './generate_action_creator'
 
 // Constants
 export const TOOLBAR_MODE = {
+    INVISIBLE: "INVISIBLE",
     NONE: "NONE",
     NONE_HOME: "NONE_HOME",
     SEARCH: "SEARCH",
@@ -21,6 +22,7 @@ export const TOOLBAR_ACTIONS = {
 }
 
 // Actions
+const TO_MODE_INVISIBLE = "toolbar/TO_MODE_INVISIBLE";
 const TO_MODE_NONE = "toolbar/TO_MODE_NONE";
 const TO_MODE_NONE_HOME = "toolbar/TO_MODE_NONE_HOME";
 const TO_MODE_SEARCH = "toolbar/TO_MODE_SEARCH";
@@ -59,6 +61,11 @@ const initialState = {
 export default function reducer(state = initialState, action){
     switch(action.type){
         // CHANGE MODE
+        case TO_MODE_INVISIBLE:
+            return {
+                ...state,
+                mode: TOOLBAR_MODE.INVISIBLE
+            }
         case TO_MODE_NONE:
             return {
                 ...state,
@@ -178,6 +185,7 @@ export default function reducer(state = initialState, action){
 }
 
 // Action Creators
+export const toModeInvisible = makeActionCreator(TO_MODE_INVISIBLE);
 export const toModeNone = makeActionCreator(TO_MODE_NONE);
 export const toModeNoneHome = makeActionCreator(TO_MODE_NONE_HOME);
 export const toModeSearch = makeActionCreator(TO_MODE_SEARCH);

@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Map from './map';
+import { footerToModeInvisible } from '../../redux/modules/footer.js';
+import { useDispatch, useSelector  } from 'react-redux'
 
 import { connect } from 'react-redux'
 
 const MainModuleSpare = (props) => {
-
+    const dispatch = useDispatch();
+    useEffect(()=>{
+        dispatch(footerToModeInvisible());
+    }, []);
     return (
         <>
             <Map />
@@ -13,7 +18,7 @@ const MainModuleSpare = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-
+    
 });
 
 const mapDispatchToProps = {

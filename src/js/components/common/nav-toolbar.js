@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux'
+import { useDispatch, useSelector  } from 'react-redux'
 
 import {TOOLBAR_MODE, TOOLBAR_ACTIONS, clickHome, clickAdd, clickSave, 
-    clickRefresh, clickBackward, clickForward, clickExportPDF, toModeSearch} from '../../redux/modules/toolbar.js';
+    clickRefresh, clickBackward, clickForward, clickExportPDF, toModeSearch, toModeInvisible} from '../../redux/modules/toolbar.js';
     
 
 import '../../../vender/fontawesome-free/css/all.css';
@@ -62,26 +63,31 @@ const ToolbarItemComponent = (props) => {
     }
     return(
     <li className="nav-li"><a className={a_className}><img className={img_className} alt={toolbarAction} src={TOOLBAR_TO_ICON[toolbarAction]} onClick={handleClick} /></a></li>
-)};
+    )
+};
 
 
-const ToolbarComponent = (props) => (
-    <div id="toolbar">
-        <div className="container_12 clearfix" style={{ marginTop: "3px" }}>
-            <ul className="grid_12 nav-ul ">
-                {TOOLBAR_ORDER.map( toolbar_action => (
-                    <ToolbarItemComponent toolbarAction={toolbar_action} isDisabled={props[toolbar_action].isDisabled} 
-                    isSelecting={props[toolbar_action].isSelecting} handleClick={props.handleClick} />
-                ))}
-            </ul>
+const ToolbarComponent = (props) => {
+    const toolbar = useSelector((state) => ({...state.toolbar}));
+    if (toolbar.mode !== "INVISIBLE") {
+    return (
+        <div id="toolbar">
+            <div className="container_12 clearfix" style={{ marginTop: "3px" }}>
+                <ul className="grid_12 nav-ul ">
+                    {TOOLBAR_ORDER.map( toolbar_action => (
+                        <ToolbarItemComponent toolbarAction={toolbar_action} isDisabled={props[toolbar_action].isDisabled} 
+                        isSelecting={props[toolbar_action].isSelecting} handleClick={props.handleClick} />
+                    ))}
+                </ul>
+            </div>
         </div>
-    </div>
-);
+    )}
+    return null
+};
 
 const ALL_DISABLED_PROP = {}
-Object.keys(TOOLBAR_ACTIONS).map((key, index) => ALL_DISABLED_PROP[key] = {
-    isDisabled: true,
-    isSelecting: false
+Object.keys(TOOLBAR_ACTIONS).map((key, index) => {
+    return ( ALL_DISABLED_PROP[key] = {isDisabled: true, isSelecting: false} )
 }); 
 
 function getPropSelectAndEnabled(selectedAction, enabledActions){
@@ -102,7 +108,10 @@ function getPropSelectAndEnabled(selectedAction, enabledActions){
 }
 
 const mapStateToProps = (state) => {
+    console.log("state.toolbar.mode", state.toolbar.mode)
     switch(state.toolbar.mode){
+        case TOOLBAR_MODE.INVISIBLE:
+            return {toolbar: state.toolbar};
         case TOOLBAR_MODE.NONE:
             return {...ALL_DISABLED_PROP};
         case TOOLBAR_MODE.NONE_HOME:
