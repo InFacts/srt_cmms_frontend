@@ -1,123 +1,47 @@
 const initialState = {
-
-  // ค่าคงที่ต่างๆใน DropDawn
-
-  // แขวง
-  district: [
-    {
-      "id": 1,
-      "name": "แขวงลาดยาว"
-    },
-    {
-      "id": 2,
-      "name": "แขวงจตุจักร"
-    },
-    {
-      "id": 3,
-      "name": "แขวงนครสวรรค์"
-    }
-  ],
-  // เขต
-  zone: [
-    {
-      "id": 1,
-      "name": "ตอนลาดยาว"
-    },
-    {
-      "id": 2,
-      "name": "ตอนจตุจักร"
-    },
-    {
-      "id": 3,
-      "name": "ตอนบางซื่อ"
-    }
-  ],
-
-  station: [
-    {
-      "id": 1,
-      "name": "ตอนลาดยาว"
-    },
-    {
-      "id": 2,
-      "name": "ตอนจตุจักร"
-    },
-    {
-      "id": 3,
-      "name": "ตอนบางซื่อ"
-    }
-  ],
-
-
-  // ค่าคงที่ต่างๆ ของแต่ละคลัง
-  wordrequest: [
-    {
-      "id": 1,
-      "no_word_request": "WR-0004",
-      "create_date_time": "2020-04-14",
-      "create_name": "นายศิวกร แสงสว่าง",
-      "job_name": "รถไฟชน",
-      "station": "ตอนบางซื่อ",
-
-      "information_name": "นายศิวกร แสงสว่าง",
-      "date_start": "2020-04-14",
-      "time_start": "04:00",
-      "date_end": "2020-04-14",
-      "time_end": "04:00",
-      "district": "แขวงนครสวรรค์",
-      "zone": "ตอนลาดยาว",
-
-    },
-    {
-      "id": 2,
-      "no_word_request": "WR-0003",
-      "create_date_time": "2020-04-14",
-      "create_name": "นายศิวกร แสงสว่าง",
-      "job_name": "รถยนต์ขับชนไม้กั้น",
-      "station": "ตอนบางซื่อ",
-
-      "information_name": "นายศิวกร แสงสว่าง",
-      "date_start": "2020-04-14",
-      "time_start": "04:00",
-      "date_end": "2020-04-14",
-      "time_end": "04:00",
-      "district": "แขวงนครสวรรค์",
-      "zone": "ตอนลาดยาว",
-    }
-  ],
-
   // Mode การทำงาน
   action: "search",
+  actionId: 2,
   fill_data: false,
   tool_mode: true,
 
-  // Mode Search
-  no_word_request: "",
-  districts: "",
-  zones: "",
-  date_starts: "",
-  date_ends: "",
+  // Mode Search 
+  no_document: "",
+  no_districts: "",
+  no_zone: "",
+  no_date_start: "",
+  no_date_end: "",
 
-  word_request_show_popup: [],
-  word_request_show: [],
+  document_show_popup: [],
+  document_show: [],
+
 
   // Mode Add
-  no_word_request_add: "",
-  create_date_time_add: "",
-  create_name_add: "",
-  information_name_add: "",
-  date_start_add: "",
-  time_start_add: "",
-  date_end_add: "",
-  time_end_add: "",
-  district_add: "",
-  zone_add: "",
-  station_add: "",
-  job_name_add: "",
+  document_id: "",
+  document_type_id: "",
+  document_show_mode_add: {
+    "internal_document_id": "",
+    "created_on": "",
+    "remark": "",
+    "created_by_user_id": "",
+    "created_by_user_name_th": "",
+    "created_by_admin_name_th": "",
+    "document_status_id": "",
+    "employee_id": "",
+    "src_warehouse_id": 999,
+    "dest_warehouse_id": "",
+    "dest_warehouse_name": "",
+    "refer_to_document": null,
+    "refer_to_document_id": "",
+    "line_items": []
+  },
+
+  // สำหรับเก็บชื่อพนักงาน
+  // line_users: [],
 
   // แนบไฟล์
   files: [],
-  clickable: true,
+  clickable: false,
   accepts: null,
   multiple: true,
   maxFiles: Infinity,
@@ -127,251 +51,314 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     // เลืก mode ในการทำงาน ( Search / Create / Edit )
+    case "CLICK MODE EDIT":
+      return {
+        ...state,
+        action: "edit"
+      }
+    // เลืก mode ในการทำงาน ( Search / Add / Edit )
     case "ACTION":
-      // console.log("mode", state.action)
+      // console.log("mode", action.value)
       return {
         ...state,
-        action: action.value
+        action: action.value,
+        clickable: action.value === "add" || action.value === "edit" ? true : false
       }
-
+    case "ACTIONID":
+      console.log("mode", action.value)
+      return {
+        ...state,
+        actionId: action.value,
+      }
     // Mode Search
-    case "ON CHANGE NO WORKREQUEST":
+    case "CLICK OPEN POPUP":
       return {
         ...state,
-        no_word_request: action.value
+        document_show_popup: initialState.document_show_popup
       }
-
-
-
-    case "ON CHANGE DISTRICTS WORKREQUEST":
+    case "ON CHANGE NO DOCUMENT":
       return {
         ...state,
-        districts: action.value
+        no_document: action.value
       }
-
-    case "ON CHANGE ZONES WORKREQUEST":
+    case "ON CHANGE DISTRICTS":
       return {
         ...state,
-        zones: action.value
+        no_districts: action.value
       }
-
-
-    case "ON CHANGE DATE STRARTS WORKREQUEST":
-      return {
-        ...state,
-        date_starts: action.value
-      }
-
-    case "ON CHANGE DATE ENDS WORKREQUEST":
-      return {
-        ...state,
-        date_ends: action.value
-      }
-
-    case "CLICK POPUP NO WORKREQUEST":
-      return {
-        ...state,
-        no_word_request: state.no_word_request
-      }
-    case "CLICK SEARCH POPUP NO WORKREQUEST":
-      return {
-        ...state,
-        // word_request_show_popup: initialState.wordrequest.filter(function (wordrequest) {
-        //   const regex = new RegExp(`${state.no_word_request}`, 'i');
-        //   var isMatch = regex.test(wordrequest.no_word_request);
-        //   return (isMatch);
-        // }
-
-        word_request_show_popup: initialState.wordrequest.filter(item =>{
-          const query = state.no_word_request.toLowerCase();
-          const query2 = state.date_starts.toLowerCase();
-          const query3 = state.date_ends.toLowerCase();
-          const query4 = state.zones.toLowerCase();
-          const query5 = state.districts.toLowerCase();
-          return(
-            (item.no_word_request.toLowerCase().indexOf(query) >= 0 || !query )&&
-            (item.zone.toLowerCase().indexOf(query4) >= 0 || !query4 ) &&
-            (item.district.toLowerCase().indexOf(query5) >= 0 || !query5 ) &&
-            (item.date_end.toLowerCase().indexOf(query3) >= 0 || !query3 ) &&
-            (item.date_start.toLowerCase().indexOf(query2) >= 0 || !query2 ) 
-          )
-
-          }
-        ),
-      }
-
-    case "CLICK SELECT POPUP NO WORKREQUEST":
-
-      return {
-        ...state,
-        no_word_request: state.word_request_show_popup[action.row_word_request_show_popup].no_word_request,
-        word_request_show: state.word_request_show_popup[action.row_word_request_show_popup],
-        fill_data: true,
-      }
-
-
-    // Mode Edit
-    case "ON CHANGE CREATE DATETIME":
-      var clone_word_request_show = { ...state.word_request_show };
-      clone_word_request_show.create_date_time = action.value;
-      return {
-        ...state,
-        word_request_show: clone_word_request_show
-      }
-
-    case "ON CHANGE CREATE NAME":
-      var clone_word_request_show = { ...state.word_request_show };
-      clone_word_request_show.create_name = action.value;
-      return {
-        ...state,
-        word_request_show: clone_word_request_show
-      }
-
-    case "ON CHANGE INFORMATION NAME":
-      var clone_word_request_show = { ...state.word_request_show };
-      clone_word_request_show.information_name = action.value;
-      return {
-        ...state,
-        word_request_show: clone_word_request_show
-      }
-
-    case "ON CHANGE DATE START":
-      var clone_word_request_show = { ...state.word_request_show };
-      clone_word_request_show.date_start = action.value;
-      return {
-        ...state,
-        word_request_show: clone_word_request_show
-      }
-
-    case "ON CHANGE TIME START":
-      var clone_word_request_show = { ...state.word_request_show };
-      clone_word_request_show.time_start = action.value;
-      return {
-        ...state,
-        word_request_show: clone_word_request_show
-      }
-
-    case "ON CHANGE DATE END":
-      var clone_word_request_show = { ...state.word_request_show };
-      clone_word_request_show.date_end = action.value;
-      return {
-        ...state,
-        word_request_show: clone_word_request_show
-      }
-
-    case "ON CHANGE TIME END":
-      var clone_word_request_show = { ...state.word_request_show };
-      clone_word_request_show.time_end = action.value;
-      return {
-        ...state,
-        word_request_show: clone_word_request_show
-      }
-
-    case "ON CHANGE DISTRICT":
-      var clone_word_request_show = { ...state.word_request_show };
-      clone_word_request_show.district = action.value;
-      return {
-        ...state,
-        word_request_show: clone_word_request_show
-      }
-
     case "ON CHANGE ZONE":
-      var clone_word_request_show = { ...state.word_request_show };
-      clone_word_request_show.zone = action.value;
       return {
         ...state,
-        word_request_show: clone_word_request_show
+        no_zone: action.value
       }
-
-    case "ON CHANGE STATION":
-      var clone_word_request_show = { ...state.word_request_show };
-      clone_word_request_show.station = action.value;
+    case "ON CHANGE DATE START":
       return {
         ...state,
-        word_request_show: clone_word_request_show
+        no_date_start: action.value
       }
-
-    case "ON CHANGE JOB NAME":
-      var clone_word_request_show = { ...state.word_request_show };
-      clone_word_request_show.job_name = action.value;
+    case "ON CHANGE DATE END":
       return {
         ...state,
-        word_request_show: clone_word_request_show
+        no_date_end: action.value
+      }
+    case "CLICK SEARCH POPUP NO DOCUMENT":
+      console.log("reducer", action.value)
+      return {
+        ...state,
+        document_show_popup: action.value
       }
 
 
-    // Mode Add
-    case "ON CHANGE NO WORDREQUEST ADD":
+
+
+
+
+    case "ON CLICK CANCLE":
+      console.log(initialState.action)
       return {
         ...state,
-        no_word_request_add: action.value
-      }
-    case "ON CHANGE CREATE DATETIME ADD":
-      return {
-        ...state,
-        create_date_time_add: action.value
-      }
-    case "ON CHANGE CREATE NAME ADD":
-      return {
-        ...state,
-        create_name_add: action.value
+        action: initialState.action,
+        actionId: initialState.actionId,
+
+        document_id: initialState.document_id,
+        document_show_mode_add: initialState.document_show_mode_add,
+
+        no_document: initialState.no_document,
+        document_show: initialState.document_show,
+        list_show: initialState.list_show,
+        document_show_popup: initialState.document_show_popup,
+        document_type_id: initialState.document_type_id,
+
+        // line_users: initialState.line_users,
+        files: initialState.files,
+        clickable: initialState.clickable
       }
 
-    case "ON CHANGE INFORMATION NAME ADD":
+
+
+    case "ON CHANGE DATE":
+      var clone_document_show = { ...state.document_show };
+      clone_document_show.created_on = action.value;
       return {
         ...state,
-        information_name_add: action.value
+        document_show: clone_document_show
       }
 
-    case "ON CHANGE DATE START ADD":
+    case "ON CHANGE NAME BY ADMIN":
+      var clone_document_show = { ...state.document_show };
+      clone_document_show.created_by_admin_name_th = action.value;
       return {
         ...state,
-        date_start_add: action.value
+        document_show: clone_document_show
       }
 
-    case "ON CHANGE TIME START ADD":
+
+
+
+
+
+    case "ON CHANGE INFORMATION EDIT":
+      var clone_document_show = { ...state.document_show };
+      clone_document_show.created_by_user_id = action.value;
       return {
         ...state,
-        time_start_add: action.value
+        document_show: clone_document_show
       }
 
-    case "ON CHANGE DATE END ADD":
+    case "ON CHANGE DATE EDIT":
+      var clone_document_show = { ...state.document_show };
+      clone_document_show.created_on_date = action.value;
       return {
         ...state,
-        date_end_add: action.value
+        document_show: clone_document_show
       }
 
-    case "ON CHANGE TIME END ADD":
+    case "ON CHANGE TIME EDIT":
+      var clone_document_show = { ...state.document_show };
+      clone_document_show.created_on_time = action.value;
       return {
         ...state,
-        time_end_add: action.value
+        document_show: clone_document_show
       }
 
-    case "ON CHANGE CREATE NAME ADD":
+    case "ON CHANGE STATION EDIT":
+      var clone_document_show = { ...state.document_show };
+      clone_document_show.created_by_user_id = action.value;
       return {
         ...state,
-        create_name_add: action.value
+        document_show: clone_document_show
+      }
+
+    case "ON CHANGE DISTRICTS EDIT":
+      var clone_document_show = { ...state.document_show };
+      clone_document_show.created_by_user_id = action.value;
+      return {
+        ...state,
+        document_show: clone_document_show
+      }
+
+    case "ON CHANGE ZONE EDIT":
+      var clone_document_show = { ...state.document_show };
+      clone_document_show.created_by_user_id = action.value;
+      return {
+        ...state,
+        document_show: clone_document_show
+      }
+
+    case "ON CHANGE JOB NAME EDIT":
+      var clone_document_show = { ...state.document_show };
+      clone_document_show.job_name = action.value;
+      return {
+        ...state,
+        document_show: clone_document_show
+      }
+
+
+
+
+    case "ON CHANGE INFORMATION ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.created_by_user_id = action.value;
+      return {
+        ...state,
+        document_show_mode_add: clone_document_show_mode_add
+      }
+
+    case "ON CHANGE DATE ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.created_on_date = action.value;
+      return {
+        ...state,
+        document_show_mode_add: clone_document_show_mode_add
+      }
+
+    case "ON CHANGE TIME ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.created_on_time = action.value;
+      return {
+        ...state,
+        document_show_mode_add: clone_document_show_mode_add
       }
 
     case "ON CHANGE STATION ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.created_by_user_id = action.value;
       return {
         ...state,
-        station_add: action.value
+        document_show_mode_add: clone_document_show_mode_add
       }
-    case "ON CHANGE ADDRESS ADD":
+
+    case "ON CHANGE DISTRICTS ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.created_by_user_id = action.value;
       return {
         ...state,
-        address_add: action.value
+        document_show_mode_add: clone_document_show_mode_add
       }
-    case "ON CHANGE DISTRICT ADD":
+
+    case "ON CHANGE ZONE ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.created_by_user_id = action.value;
       return {
         ...state,
-        district_add: action.value
+        document_show_mode_add: clone_document_show_mode_add
       }
+
     case "ON CHANGE JOB NAME ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.job_name = action.value;
       return {
         ...state,
-        job_name_add: action.value
+        document_show_mode_add: clone_document_show_mode_add
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    case "ON CHANGE DOCUMENT MODE ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.internal_document_id = action.value;
+      return {
+        ...state,
+        document_show_mode_add: clone_document_show_mode_add
+      }
+
+    case "ON CHANGE BY ADMIN NAME MODE ADD":
+      var clone_document_show_mode_add = { ...state.document_show_mode_add };
+      clone_document_show_mode_add.created_by_admin_name_th = action.value;
+      return {
+        ...state,
+        document_show_mode_add: clone_document_show_mode_add
+      }
+
+
+    // POST DOCUMENT
+    case "POST DOCUMENT":
+      clone_document_show_mode_add = initialState.document_show_mode_add;
+      clone_document_show_mode_add.created_by_admin_name_th = action.decoded.firstname_th === null ? "" : action.decoded.firstname_th + " " + action.decoded.lastname_th;
+      clone_document_show_mode_add.created_by_admin_id = action.decoded.user_id === null ? "" : action.decoded.user_id;
+
+      clone_document_show_mode_add.dest_warehouse_id = action.decoded.list_positions[0].warehouse_id === null ? "" : action.decoded.list_positions[0].warehouse_id;
+      clone_document_show_mode_add.dest_warehouse_name = action.decoded.list_positions[0].warehouse_name === null ? "" : action.decoded.list_positions[0].warehouse_name;
+
+      console.log("action.decoded", clone_document_show_mode_add)
+      return {
+        ...state,
+        action: action.value,
+        document_id: action.resPost.document_id,
+        clickable: action.value === "add" || action.value === "edit" ? true : false,
+        document_show_mode_add: clone_document_show_mode_add
+      }
+
+    // Clear State after sumbit
+    case "ON CLEAR STATE MODE ADD":
+      console.log(initialState.no_document)
+      console.log(initialState.action)
+      return {
+        ...state,
+        action: initialState.action,
+        actionId: initialState.actionId,
+
+        document_id: initialState.document_id,
+        document_show_mode_add: initialState.document_show_mode_add,
+        no_document: initialState.no_document,
+        document_show: initialState.document_show,
+        document_show_popup: initialState.document_show_popup,
+        document_type_id: initialState.document_type_id,
+
+        // line_users: initialState.line_users,
+        files: initialState.files,
+        clickable: initialState.clickable
       }
 
     // แนบไฟล์

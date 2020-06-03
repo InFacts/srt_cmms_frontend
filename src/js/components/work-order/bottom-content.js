@@ -2,7 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Document from '../../../images/document.svg'
 import Files from '../common/files'
+import axios from "axios";
 
+import { API_PORT_DATABASE } from '../../config_port.js';
+import { API_URL_DATABASE } from '../../config_url.js';
 import '../../../css/style.css'
 
 class BottomContent extends React.Component {
@@ -18,68 +21,68 @@ class BottomContent extends React.Component {
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default">ชื่องาน</p></div>
               <div className="grid_7 ">
-                <input type="text" className="cancel-default mt-1" value={this.props.word_order_show.information_name} disabled="disabled"></input>
+                <input type="text" className="cancel-default mt-1" value={this.props.document_show.information_name} disabled="disabled"></input>
               </div>
             </div>
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default">วันเวลาที่เกิดเหตุ</p></div>
               <div className="grid_7 ">
-                <input type="date" className="cancel-default grid_3 mt-1" value={this.props.word_order_show.date_start} disabled="disabled"></input>
-                <input type="time" className="cancel-default grid_3 mt-1 float-right" value={this.props.word_order_show.time_start} disabled="disabled"></input>
+                <input type="date" className="cancel-default grid_3 mt-1" value={this.props.document_show.date_start} disabled="disabled"></input>
+                <input type="time" className="cancel-default grid_3 mt-1 float-right" value={this.props.document_show.time_start} disabled="disabled"></input>
                 <p className="cancel-default grid_1 float-right">เวลา</p>
               </div>
             </div>
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default">วันเวลาที่รับแจ้ง</p></div>
               <div className="grid_7 ">
-                <input type="date" className="cancel-default grid_3 mt-1" value={this.props.word_order_show.date_end} disabled="disabled"></input>
-                <input type="time" className="cancel-default grid_3 mt-1 float-right" value={this.props.word_order_show.time_end} disabled="disabled"></input>
+                <input type="date" className="cancel-default grid_3 mt-1" value={this.props.document_show.date_end} disabled="disabled"></input>
+                <input type="time" className="cancel-default grid_3 mt-1 float-right" value={this.props.document_show.time_end} disabled="disabled"></input>
                 <p className="cancel-default grid_1 float-right">เวลา</p>
               </div>
             </div>
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default">อาการเสียโดยสรุป</p></div>
               <div className="grid_7 ">
-                <input type="text" className="cancel-default mt-1" value={this.props.word_order_show.conclusions} disabled="disabled"></input>
+                <input type="text" className="cancel-default mt-1" value={this.props.document_show.conclusions} disabled="disabled"></input>
               </div>
             </div>
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default">ได้รับเหตุจาก</p></div>
               <div className="grid_7">
-                <input type="text" className="cancel-default mt-1" value={this.props.word_order_show.reason} disabled="disabled"></input>
+                <input type="text" className="cancel-default mt-1" value={this.props.document_show.reason} disabled="disabled"></input>
               </div>
             </div>
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default">ได้รับข้อมูลผ่านช่องทาง</p></div>
               <div className="grid_7 ">
-                {current.props.type.map(function (type, index) {
-                        if (type.name === current.props.word_order_show.type){
-                          return <div><input className="d-inline" type="radio" name="RadioOptions" id={type.name} value={type.name} checked/><label htmlFor={type.name} className="cancel-default d-inline">{type.name}</label></div>
-                        }
-                        else{
-                          return <div><input className="d-inline ml-3" type="radio" name="RadioOptions" id={type.name} value={type.name} /><label htmlFor={type.name} className="cancel-default d-inline ml-3">{type.name} </label></div>
-                        }
-                })}
+                {/* {current.props.type.map(function (type, index) {
+                  if (type.name === current.props.word_order_show.type) {
+                    return <div><input className="d-inline" type="radio" name="RadioOptions" id={type.name} value={type.name} checked /><label htmlFor={type.name} className="cancel-default d-inline">{type.name}</label></div>
+                  }
+                  else {
+                    return <div><input className="d-inline ml-3" type="radio" name="RadioOptions" id={type.name} value={type.name} /><label htmlFor={type.name} className="cancel-default d-inline ml-3">{type.name} </label></div>
+                  }
+                })} */}
 
               </div>
             </div>
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default">รายงานการตรวจซ่อมอุปกรณ์แขวง</p></div>
               <div className="grid_7 ">
-                <input type="text" className="cancel-default mt-1" value={this.props.word_order_show.report} disabled="disabled"></input>
+                <input type="text" className="cancel-default mt-1" value={this.props.document_show.report} disabled="disabled"></input>
               </div>
             </div>
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default" style={{ paddingRight: "50px" }}>ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม (สถานที่/ที่ตั้ง)</p></div>
               <div className="grid_7 ">
-                <input type="text" className="cancel-default mt-1" value={this.props.word_order_show.equipment} disabled="disabled"></input>
+                <input type="text" className="cancel-default mt-1" value={this.props.document_show.equipment} disabled="disabled"></input>
               </div>
             </div>
 
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default">หมายเหตุ</p></div>
               <div className="grid_7">
-                <textarea className="edit" name="Text1" cols="40" rows="2" value={this.props.word_order_show.note}></textarea>
+                <textarea className="edit" name="Text1" cols="40" rows="2" value={this.props.document_show.note} disabled="disabled"></textarea>
               </div>
             </div>
           </div>
@@ -107,8 +110,8 @@ class BottomContent extends React.Component {
                   {current.props.list_show.map(function (list, index) {
                     return (
                       <tr key={index}>
-                        <th className="edit-padding text-center" style={{ minWidth: "30px" }}>{list.id}</th>
-                        <td className="edit-padding" style={{ minWidth: "130px" }}>{list.no_part}</td>
+                        <th className="edit-padding text-center" style={{ minWidth: "30px" }}>{index + 1}</th>
+                        <td className="edit-padding" style={{ minWidth: "130px" }}>{list.internal_item_id}</td>
                         <td className="edit-padding text-left" style={{ minWidth: "250px" }}>{list.quility}</td>
                         <td className="edit-padding text-center" style={{ minWidth: "80px" }}>{list.location}</td>
                         <td className="edit-padding text-center" style={{ minWidth: "100px" }}>
@@ -150,63 +153,63 @@ class BottomContent extends React.Component {
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default">ชื่องาน</p></div>
               <div className="grid_7 ">
-                <input type="text" className="cancel-default mt-1" value={this.props.word_order_show.information_name} onChange={(e) => { this.props.onChangeInformatioName(e) }} ></input>
+                <input type="text" className="cancel-default mt-1" value={this.props.document_show.information_name} onChange={(e) => { this.props.onChangeInformatioName(e) }} ></input>
               </div>
             </div>
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default">วันเวลาที่เกิดเหตุ</p></div>
               <div className="grid_7 ">
-                <input type="date" className="cancel-default grid_3 mt-1" value={this.props.word_order_show.date_start} onChange={(e) => { this.props.onChangeDateStart(e) }}></input>
-                <input type="time" className="cancel-default grid_3 mt-1 float-right" value={this.props.word_order_show.time_start} onChange={(e) => { this.props.onChangeTimeStart(e) }}></input>
+                <input type="date" className="cancel-default grid_3 mt-1" value={this.props.document_show.date_start} onChange={(e) => { this.props.onChangeDateStart(e) }}></input>
+                <input type="time" className="cancel-default grid_3 mt-1 float-right" value={this.props.document_show.time_start} onChange={(e) => { this.props.onChangeTimeStart(e) }}></input>
                 <p className="cancel-default grid_1 float-right">เวลา</p>
               </div>
             </div>
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default">วันเวลาที่รับแจ้ง</p></div>
               <div className="grid_7 ">
-                <input type="date" className="cancel-default grid_3 mt-1" value={this.props.word_order_show.date_end} onChange={(e) => { this.props.onChangeDateEnd(e) }}></input>
-                <input type="time" className="cancel-default grid_3 mt-1 float-right" value={this.props.word_order_show.time_end} onChange={(e) => { this.props.onChangeTimeEnd(e) }}></input>
+                <input type="date" className="cancel-default grid_3 mt-1" value={this.props.document_show.date_end} onChange={(e) => { this.props.onChangeDateEnd(e) }}></input>
+                <input type="time" className="cancel-default grid_3 mt-1 float-right" value={this.props.document_show.time_end} onChange={(e) => { this.props.onChangeTimeEnd(e) }}></input>
                 <p className="cancel-default grid_1 float-right">เวลา</p>
               </div>
             </div>
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default">อาการเสียโดยสรุป</p></div>
               <div className="grid_7 ">
-                <input type="text" className="cancel-default mt-1" value={this.props.word_order_show.conclusions} onChange={(e) => { this.props.onChangeConclusions(e) }}></input>
+                <input type="text" className="cancel-default mt-1" value={this.props.document_show.conclusions} onChange={(e) => { this.props.onChangeConclusions(e) }}></input>
               </div>
             </div>
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default">ได้รับเหตุจาก</p></div>
               <div className="grid_7">
-                <input type="text" className="cancel-default mt-1" value={this.props.word_order_show.reason} onChange={(e) => { this.props.onChangeReason(e) }}></input>
+                <input type="text" className="cancel-default mt-1" value={this.props.document_show.reason} onChange={(e) => { this.props.onChangeReason(e) }}></input>
               </div>
             </div>
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default">ได้รับข้อมูลผ่านช่องทาง</p></div>
               <div className="grid_7 ">
-                <input className="d-inline" type="radio" name="RadioOptions" id="Radio1" value="โทรศัพท์" onChange={(e) => { this.props.onChangeType(e) }} />
+                {/* <input className="d-inline" type="radio" name="RadioOptions" id="Radio1" value="โทรศัพท์" onChange={(e) => { this.props.onChangeType(e) }} />
                 <label htmlFor="Radio1" className="cancel-default d-inline">โทรศัพท์</label>
                 <input className="d-inline ml-3" type="radio" name="RadioOptions" id="Radio2" value="จดหมาย" onChange={(e) => { this.props.onChangeType(e) }} />
-                <label htmlFor="Radio2" className="cancel-default d-inline ml-3">จดหมาย</label>
+                <label htmlFor="Radio2" className="cancel-default d-inline ml-3">จดหมาย</label> */}
               </div>
             </div>
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default">รายงานการตรวจซ่อมอุปกรณ์แขวง</p></div>
               <div className="grid_7 ">
-                <input type="text" className="cancel-default mt-1" value={this.props.word_order_show.report} onChange={(e) => { this.props.onChangeReport(e) }}></input>
+                <input type="text" className="cancel-default mt-1" value={this.props.document_show.report} onChange={(e) => { this.props.onChangeReport(e) }}></input>
               </div>
             </div>
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default" style={{ paddingRight: "50px" }}>ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม (สถานที่/ที่ตั้ง)</p></div>
               <div className="grid_7 ">
-                <input type="text" className="cancel-default mt-1" value={this.props.word_order_show.equipment} onChange={(e) => { this.props.onChangeEquipment(e) }}></input>
+                <input type="text" className="cancel-default mt-1" value={this.props.document_show.equipment} onChange={(e) => { this.props.onChangeEquipment(e) }}></input>
               </div>
             </div>
 
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default">หมายเหตุ</p></div>
               <div className="grid_7">
-                <textarea className="edit" name="Text1" cols="40" rows="2" value={this.props.word_order_show.note} onChange={(e) => { this.props.onChangeNote(e) }}></textarea>
+                <textarea className="edit" name="Text1" cols="40" rows="2" value={this.props.document_show.note} onChange={(e) => { this.props.onChangeNote(e) }}></textarea>
               </div>
             </div>
           </div>
@@ -232,39 +235,71 @@ class BottomContent extends React.Component {
 
 
                   {current.props.list_show.map(function (list, index) {
-                    return (
-                      <tr key={index}>
-                        <th className="edit-padding text-center" style={{ minWidth: "30px" }}>{list.id}</th>
-                        <td className="edit-padding" style={{ minWidth: "130px" }}>{list.no_part}</td>
-                        <td className="edit-padding text-left" style={{ minWidth: "250px" }}>{list.quility}</td>
-                        <td className="edit-padding text-center" style={{ minWidth: "80px" }}>{list.location}</td>
-                        <td className="edit-padding text-center" style={{ minWidth: "100px" }}>
-                          <select className="edit-select-table">
-                            {current.props.status.map(function (status, index) {
-                              if (list.status === status.name) {
-                                return <option defaultValue={status.id} key={index} selected> {status.name} </option>
-                              }
-                              else {
-                                return null
-                              }
-                            })}
-                          </select>
-                        </td>
-                        <td className="edit-padding text-left" style={{ minWidth: "300px" }}>{list.note}</td>
-                      </tr>)
+
+                    if (index === 0) {
+                      return (
+                        <tr key={index}>
+                          <th className="edit-padding text-center">{index + 1}</th>
+                          <td className="edit-padding">
+                            <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
+                              <input type="text" className="p-search-box__input cancel-default-table" value={list.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRow(e)} onKeyPress={(e) => current.props.handleKeyPressModeEdit(e)} required />
+                              <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPart" onClick={(e) => current.props.onClickNoPartEachRow(e)}></i></button>
+                            </div>
+                          </td>
+
+                          <td className="edit-padding text-left" style={{ minWidth: "250px" }}>{list.quility}</td>
+                          <td className="edit-padding text-center" style={{ minWidth: "80px" }}>{list.location}</td>
+                          <td className="edit-padding text-center" style={{ minWidth: "100px" }}>
+                            <select className="edit-select-table">
+                              {/* {current.props.status.map(function (status, index) {
+                                if (list.status === status.name) {
+                                  return <option defaultValue={status.id} key={index} selected> {status.name} </option>
+                                }
+                                else {
+                                  return null
+                                }
+                              })} */}
+                            </select>
+                          </td>
+                          <td className="edit-padding text-left" style={{ minWidth: "300px" }}>{list.note}</td>
+                        </tr>)
+                    }
+                    else {
+                      return (
+                        <tr key={index}>
+                          <th className="edit-padding text-center">{index + 1}</th>
+                          <td className="edit-padding">
+                            <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
+                              <input type="text" className="p-search-box__input cancel-default-table" value={list.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRow(e)} onKeyPress={(e) => current.props.handleKeyPressModeEdit(e)} />
+                              <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPart" onClick={(e) => current.props.onClickNoPartEachRow(e)}></i></button>
+                            </div>
+                          </td>
+
+                          <td className="edit-padding text-left" style={{ minWidth: "250px" }}>{list.quility}</td>
+                          <td className="edit-padding text-center" style={{ minWidth: "80px" }}>{list.location}</td>
+                          <td className="edit-padding text-center" style={{ minWidth: "100px" }}>
+                            <select className="edit-select-table">
+                              {/* {current.props.status.map(function (status, index) {
+                                if (list.status === status.name) {
+                                  return <option defaultValue={status.id} key={index} selected> {status.name} </option>
+                                }
+                                else {
+                                  return null
+                                }
+                              })} */}
+                            </select>
+                          </td>
+                          <td className="edit-padding text-left" style={{ minWidth: "300px" }}>{list.note}</td>
+                        </tr>)
+
+                    }
+
+
                   })}
                 </tbody>
               </table>
             </div>
-            {/* <select className="edit-select" onChange={(e) => this.props.onChangeZone(e)}>
-                {this.props.zone.map(function (zone, index) {
-                  if (current.props.word_request_show.zone === zone.name) {
-                    return <option defaultValue={zone.id} key={index} selected> {zone.name} </option>
-                  }
-                  else {
-                    return <option value={zone.name} key={index}> {zone.name} </option>
-                  }
-                })} */}
+
 
           </div>
 
@@ -274,6 +309,69 @@ class BottomContent extends React.Component {
               <Files />
             </div>
           </div>
+
+
+
+          {/* PopUp เลขที่อะไหล่ */}
+          <div className="modal" id="modalNoPart" style={{ display: "none" }}>
+            <div className="gray-board">
+              <p className="head-title-modal edit">ค้นหาเลขที่อะไหล่</p>
+              <div className="container_12 edit-padding">
+
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">เลขที่อะไหล่</p></div>
+                  <div className="grid_8 pull_0">
+                    <input type="text" className="cancel-default grid_3" value={this.props.list_no_part} onChange={(e) => this.props.onChangeNoPart(e)} />
+                    {/* <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickSearchPopUpNoPart(this.props.list_no_part)}>ค้นหา</button> */}
+                  </div>
+                </div>
+
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">รายละเอียด</p></div>
+                  <div className="grid_8 pull_0">
+                    <input type="text" className="cancel-default grid_3" value={this.props.list_description_part} onChange={(e) => this.props.onChangeDescriptionPart(e)} />
+                    <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickSearchPopUpNoPart(this.props.list_no_part)}>ค้นหา</button>
+                  </div>
+                </div>
+
+                <div className="grid_12">
+                  <table className="table-many-column mt-3">
+                    <thead>
+                      <tr>
+                        <th className="font" style={{ minWidth: "300px" }}>เลขที่อะไหล่</th>
+                        <th className="font" style={{ minWidth: "450px" }}>รายละเอียด</th>
+                        <th className="font" style={{ minWidth: "150px" }}>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {this.props.no_part_show.map(function (no_part_show, index) {
+                        return (
+                          <tr key={index} id={index}>
+                            <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show.internal_item_id} </td>
+                            <td className="edit-padding" style={{ minWidth: "300px" }}> {no_part_show.description} </td>
+                            <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
+                              <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectPopUpNoPart(e)} aria-label="Close active modal" aria-controls="modalNoPart" id="closeModalNoPart" >เลือก</button>
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="grid_12">
+                  <button className="button-blue float-right grid_1 mr-5" type="button" aria-label="Close active modal" aria-controls="modalNoPart" id="closeModalNoPart">กลับ</button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+
+
+
+
+
         </>
       )
     }
@@ -281,68 +379,68 @@ class BottomContent extends React.Component {
       return (
         <>
 
-<div id="อาการเสีย" className="tabcontent">
+          <div id="อาการเสีย" className="tabcontent">
             <h3 className="head-title-bottom mt-2">ข้อมูลเกี่ยวกับอาการขัดข้อง</h3>
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default">ชื่องาน</p></div>
               <div className="grid_7 ">
-                <input type="text" className="cancel-default mt-1" value={this.props.information_name_add} onChange={(e) => { this.props.onChangeInformatioNameAdd(e) }} ></input>
+                <input type="text" className="cancel-default mt-1" value={this.props.document_show_mode_add.information_name} onChange={(e) => { this.props.onChangeInformatioNameAdd(e) }} ></input>
               </div>
             </div>
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default">วันเวลาที่เกิดเหตุ</p></div>
               <div className="grid_7 ">
-                <input type="date" className="cancel-default grid_3 mt-1" value={this.props.date_start_add} onChange={(e) => { this.props.onChangeDateStartAdd(e) }}></input>
-                <input type="time" className="cancel-default grid_3 mt-1 float-right" value={this.props.time_start_add} onChange={(e) => { this.props.onChangeTimeStartAdd(e) }}></input>
+                <input type="date" className="cancel-default grid_3 mt-1" value={this.props.document_show_mode_add.date_start} onChange={(e) => { this.props.onChangeDateStartAdd(e) }}></input>
+                <input type="time" className="cancel-default grid_3 mt-1 float-right" value={this.props.document_show_mode_add.time_start} onChange={(e) => { this.props.onChangeTimeStartAdd(e) }}></input>
                 <p className="cancel-default grid_1 float-right">เวลา</p>
               </div>
             </div>
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default">วันเวลาที่รับแจ้ง</p></div>
               <div className="grid_7 ">
-                <input type="date" className="cancel-default grid_3 mt-1" value={this.props.date_end_add} onChange={(e) => { this.props.onChangeDateEndAdd(e) }}></input>
-                <input type="time" className="cancel-default grid_3 mt-1 float-right" value={this.props.time_end_add} onChange={(e) => { this.props.onChangeTimeEndAdd(e) }}></input>
+                <input type="date" className="cancel-default grid_3 mt-1" value={this.props.document_show_mode_add.date_end} onChange={(e) => { this.props.onChangeDateEndAdd(e) }}></input>
+                <input type="time" className="cancel-default grid_3 mt-1 float-right" value={this.props.document_show_mode_add.time_end} onChange={(e) => { this.props.onChangeTimeEndAdd(e) }}></input>
                 <p className="cancel-default grid_1 float-right">เวลา</p>
               </div>
             </div>
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default">อาการเสียโดยสรุป</p></div>
               <div className="grid_7 ">
-                <input type="text" className="cancel-default mt-1" value={this.props.conclusions_add} onChange={(e) => { this.props.onChangeConclusionsAdd(e) }}></input>
+                <input type="text" className="cancel-default mt-1" value={this.props.document_show_mode_add.conclusions} onChange={(e) => { this.props.onChangeConclusionsAdd(e) }}></input>
               </div>
             </div>
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default">ได้รับเหตุจาก</p></div>
               <div className="grid_7">
-                <input type="text" className="cancel-default mt-1" value={this.props.reason_add} onChange={(e) => { this.props.onChangeReasonAdd(e) }}></input>
+                <input type="text" className="cancel-default mt-1" value={this.props.document_show_mode_add.reason} onChange={(e) => { this.props.onChangeReasonAdd(e) }}></input>
               </div>
             </div>
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default">ได้รับข้อมูลผ่านช่องทาง</p></div>
               <div className="grid_7 ">
-                <input className="d-inline" type="radio" name="RadioOptions" id="Radio1" value="โทรศัพท์" onChange={(e) => { this.props.onChangeTypeAdd(e) }}/>
+                {/* <input className="d-inline" type="radio" name="RadioOptions" id="Radio1" value="โทรศัพท์" onChange={(e) => { this.props.onChangeTypeAdd(e) }} />
                 <label htmlFor="Radio1" className="cancel-default d-inline">โทรศัพท์</label>
-                <input className="d-inline ml-3" type="radio" name="RadioOptions" id="Radio2" value="จดหมาย" onChange={(e) => { this.props.onChangeTypeAdd(e) }}/>
-                <label htmlFor="Radio2" className="cancel-default d-inline ml-3">จดหมาย</label>
+                <input className="d-inline ml-3" type="radio" name="RadioOptions" id="Radio2" value="จดหมาย" onChange={(e) => { this.props.onChangeTypeAdd(e) }} />
+                <label htmlFor="Radio2" className="cancel-default d-inline ml-3">จดหมาย</label> */}
               </div>
             </div>
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default">รายงานการตรวจซ่อมอุปกรณ์แขวง</p></div>
               <div className="grid_7 ">
-                <input type="text" className="cancel-default mt-1" value={this.props.report_add} onChange={(e) => { this.props.onChangeReportAdd(e) }}></input>
+                <input type="text" className="cancel-default mt-1" value={this.props.document_show_mode_add.report} onChange={(e) => { this.props.onChangeReportAdd(e) }}></input>
               </div>
             </div>
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default" style={{ paddingRight: "50px" }}>ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม (สถานที่/ที่ตั้ง)</p></div>
               <div className="grid_7 ">
-                <input type="text" className="cancel-default mt-1" value={this.props.equipment_add} onChange={(e) => { this.props.onChangeEquipmentAdd(e) }}></input>
+                <input type="text" className="cancel-default mt-1" value={this.props.document_show_mode_add.equipment} onChange={(e) => { this.props.onChangeEquipmentAdd(e) }}></input>
               </div>
             </div>
 
             <div className="grid_12">
               <div className="grid_3"><p className="cancel-default">หมายเหตุ</p></div>
               <div className="grid_7">
-                <textarea className="edit" name="Text1" cols="40" rows="2" value={this.props.note_add} onChange={(e) => { this.props.onChangeNoteAdd(e) }}></textarea>
+                <textarea className="edit" name="Text1" cols="40" rows="2" value={this.props.document_show_mode_add.note} onChange={(e) => { this.props.onChangeNoteAdd(e) }}></textarea>
               </div>
             </div>
           </div>
@@ -367,47 +465,128 @@ class BottomContent extends React.Component {
                   {/* "status": "เสียหาย", */}
 
 
-                  {current.props.list_show.map(function (list, index) {
-                    return (
-                      <tr key={index}>
-                        <th className="edit-padding text-center" style={{ minWidth: "30px" }}>{list.id}</th>
-                        <td className="edit-padding" style={{ minWidth: "130px" }}>{list.no_part}</td>
-                        <td className="edit-padding text-left" style={{ minWidth: "250px" }}>{list.quility}</td>
-                        <td className="edit-padding text-center" style={{ minWidth: "80px" }}>{list.location}</td>
-                        <td className="edit-padding text-center" style={{ minWidth: "100px" }}>
-                          <select className="edit-select-table">
-                            {current.props.status.map(function (status, index) {
-                              if (list.status === status.name) {
-                                return <option defaultValue={status.id} key={index} selected> {status.name} </option>
-                              }
-                              else {
-                                return null
-                              }
-                            })}
-                          </select>
-                        </td>
-                        <td className="edit-padding text-left" style={{ minWidth: "300px" }}>{list.note}</td>
-                      </tr>)
+                  {current.props.list_show_mode_add.map(function (list, index) {
+
+                    if (index === 0) {
+                      return (
+                        <tr key={index}>
+                          <th className="edit-padding text-center">{index + 1}</th>
+                          <td className="edit-padding">
+                            <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
+                              <input type="text" className="p-search-box__input cancel-default-table" value={list.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRowModeAdd(e)} onKeyPress={(e) => current.props.handleKeyPress(e)} required />
+                              <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPartModeAdd" onClick={(e) => current.props.onClickNoPartEachRowModeAdd(e)}></i></button>
+                            </div>
+                          </td>
+
+                          <td className="edit-padding text-left" style={{ minWidth: "250px" }}>{list.quility}</td>
+                          <td className="edit-padding text-center" style={{ minWidth: "80px" }}>{list.location}</td>
+                          <td className="edit-padding text-center" style={{ minWidth: "100px" }}>
+                            <select className="edit-select-table">
+                              {/* {current.props.status.map(function (status, index) {
+                                if (list.status === status.name) {
+                                  return <option defaultValue={status.id} key={index} selected> {status.name} </option>
+                                }
+                                else {
+                                  return null
+                                }
+                              })} */}
+                            </select>
+                          </td>
+                          <td className="edit-padding text-left" style={{ minWidth: "300px" }}>{list.note}</td>
+                        </tr>)
+                    } else {
+                      return (
+                        <tr key={index}>
+                          <th className="edit-padding text-center">{index + 1}</th>
+                          <td className="edit-padding">
+                            <div className="p-search-box cancel-margin" style={{ marginBottom: "0" }}>
+                              <input type="text" className="p-search-box__input cancel-default-table" value={list.internal_item_id} onChange={(e) => current.props.onChangeNoPartEachRowModeAdd(e)} onKeyPress={(e) => current.props.handleKeyPress(e)} />
+                              <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPartModeAdd" onClick={(e) => current.props.onClickNoPartEachRowModeAdd(e)}></i></button>
+                            </div>
+                          </td>
+
+                          <td className="edit-padding text-left" style={{ minWidth: "250px" }}>{list.quility}</td>
+                          <td className="edit-padding text-center" style={{ minWidth: "80px" }}>{list.location}</td>
+                          <td className="edit-padding text-center" style={{ minWidth: "100px" }}>
+                            <select className="edit-select-table">
+                              {/* {current.props.status.map(function (status, index) {
+                                if (list.status === status.name) {
+                                  return <option defaultValue={status.id} key={index} selected> {status.name} </option>
+                                }
+                                else {
+                                  return null
+                                }
+                              })} */}
+                            </select>
+                          </td>
+                          <td className="edit-padding text-left" style={{ minWidth: "300px" }}>{list.note}</td>
+                        </tr>)
+                    }
+
                   })}
                 </tbody>
               </table>
             </div>
-            {/* <select className="edit-select" onChange={(e) => this.props.onChangeZone(e)}>
-                {this.props.zone.map(function (zone, index) {
-                  if (current.props.word_request_show.zone === zone.name) {
-                    return <option defaultValue={zone.id} key={index} selected> {zone.name} </option>
-                  }
-                  else {
-                    return <option value={zone.name} key={index}> {zone.name} </option>
-                  }
-                })} */}
-
           </div>
 
 
           <div id="แนบไฟล์" className="tabcontent">
             <div className="grid_12 ">
               <Files />
+            </div>
+          </div>
+
+
+          {/* PopUp เลขที่อะไหล่ */}
+          <div className="modal" id="modalNoPartModeAdd" style={{ display: "none" }}>
+            <div className="gray-board">
+              <p className="head-title-modal edit">ค้นหาเลขที่อะไหล่</p>
+              <div className="container_12 edit-padding">
+
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">เลขที่อะไหล่</p></div>
+                  <div className="grid_8 pull_0">
+                    <input type="text" className="cancel-default grid_3" value={this.props.list_no_part_mode_add} onChange={(e) => this.props.onChangeNoPartModeAdd(e)} />
+                    {/* <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickSearchPopUpNoPartModeAdd(this.props.list_no_part_mode_add)}>ค้นหา</button> */}
+                  </div>
+                </div>
+
+                <div className="grid_12">
+                  <div className="grid_2"><p className="cancel-default">รายละเอียด</p></div>
+                  <div className="grid_8 pull_0">
+                    <input type="text" className="cancel-default grid_3" value={this.props.list_desription_part_mode_add} onChange={(e) => this.props.onChangeDescriptionPartModeAdd(e)} />
+                    <button className="button-blue edit grid_1 mr-5" type="button" onClick={(e) => this.props.onClickSearchPopUpNoPartModeAdd(this.props.list_no_part_mode_add, this.props.list_desription_part_mode_add)}>ค้นหา</button>
+                  </div>
+                </div>
+
+                <div className="grid_12">
+                  <table className="table-many-column mt-3">
+                    <thead>
+                      <tr>
+                        <th className="font" style={{ minWidth: "300px" }}>เลขที่อะไหล่</th>
+                        <th className="font" style={{ minWidth: "450px" }}>รายละเอียด</th>
+                        <th className="font" style={{ minWidth: "150px" }}>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {this.props.no_part_show_mode_add.map(function (no_part_show_mode_add, index) {
+                        return (
+                          <tr key={index} id={index}>
+                            <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show_mode_add.internal_item_id} </td>
+                            <td className="edit-padding" style={{ minWidth: "300px" }}> {no_part_show_mode_add.description} </td>
+                            <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
+                              <button type="button" className="button-blue" onClick={(e) => current.props.onClickSelectPopUpNoPartModeAdd(e)} aria-label="Close active modal" aria-controls="modalNoPartModeAdd" id="closeModalNoPart" >เลือก</button>
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="grid_12">
+                  <button className="button-blue float-right grid_1 mr-5" type="button" aria-label="Close active modal" aria-controls="modalNoPartModeAdd" id="closeModalNoPart">กลับ</button>
+                </div>
+              </div>
             </div>
           </div>
         </>
@@ -425,12 +604,6 @@ class BottomContent extends React.Component {
             <div className="grid_12 ">
               {/* Input in Bottom */}
               {this.checkActionMode(this.props.actionMode)}
-
-
-
-
-
-
             </div>
           </div>
         </div>
@@ -443,32 +616,20 @@ class BottomContent extends React.Component {
 
 const mapStateToProps = (state) => ({
   actionMode: state.action,
-  word_order_show: state.word_order_show,
+  document_show: state.document_show,
   list_show: state.list_show,
 
-  district: state.district,
-  zone: state.zone,
-  status: state.status,
-  type:state.type,
+  // Mode Edit 
+  list_no_part: state.list_no_part,
+  no_part_show: state.no_part_show,
+  list_description_part: state.list_description_part,
 
   // Mode Add
-  information_name_add: state.information_name_add,
-  date_start_add: state.date_start_add,
-  time_start_add: state.time_start_add,
-  date_end_add: state.date_end_add,
-  time_end_add: state.time_end_add,
-  district_add: state.district_add,
-  zone_add: state.zone_add,
-  station_add: state.station_add,
-  job_name_add: state.job_name_add,
-  type_add:state.type_add,
-
-  conclusions_add: state.conclusions_add,
-  reason_add: state.reason_add,
-  report_add: state.report_add,
-  equipment_add: state.equipment_add,
-  note_add: state.note_add,
-  list_add: state.list_add,
+  list_show_mode_add: state.list_show_mode_add,
+  no_part_show_mode_add: state.no_part_show_mode_add,
+  list_no_part_mode_add: state.list_no_part_mode_add,
+  document_show_mode_add: state.document_show_mode_add,
+  list_desription_part_mode_add: state.list_desription_part_mode_add
 
 })
 
@@ -490,10 +651,10 @@ const mapDispatchToProps = (dispatch) => ({
   onChangeReason: (e) => dispatch(onChangeReason(e)),
   onChangeConclusions: (e) => dispatch(onChangeConclusions(e)),
 
-  onChangeType: (e) => dispatch(onChangeType(e)),
+  // onChangeType: (e) => dispatch(onChangeType(e)),
 
   // Mode Add
-  onChangeTypeAdd: (e) => dispatch(onChangeTypeAdd(e)),
+  // onChangeTypeAdd: (e) => dispatch(onChangeTypeAdd(e)),
   onChangeInformatioNameAdd: (e) => dispatch(onChangeInformatioNameAdd(e)),
   onChangeDateStartAdd: (e) => dispatch(onChangeDateStartAdd(e)),
   onChangeTimeStartAdd: (e) => dispatch(onChangeTimeStartAdd(e)),
@@ -509,6 +670,29 @@ const mapDispatchToProps = (dispatch) => ({
   onChangeReasonAdd: (e) => dispatch(onChangeReasonAdd(e)),
   onChangeConclusionsAdd: (e) => dispatch(onChangeConclusionsAdd(e)),
 
+
+  // Mode Edit
+  onChangeNoPart: (e) => dispatch(onChangeNoPart(e)),
+  onChangeNoPartEachRow: (e) => dispatch(onChangeNoPartEachRow(e)),
+  onClickNoPartEachRow: (e) => dispatch(onClickNoPartEachRow(e)),
+  onClickSearchPopUpNoPart: (e) => dispatch(onClickSearchPopUpNoPart(e)),
+  onClickSelectPopUpNoPart: (e) => dispatch(onClickSelectPopUpNoPart(e)),
+
+  onChangeStatusEachRow: (e) => dispatch(onChangeStatusEachRow(e)),
+  onChangeNoteEachRow: (e) => dispatch(onChangeNoteEachRow(e)),
+
+  // Mode Add
+  onChangeNoPartEachRowModeAdd: (e) => dispatch(onChangeNoPartEachRowModeAdd(e)),
+  onClickNoPartEachRowModeAdd: (e) => dispatch(onClickNoPartEachRowModeAdd(e)),
+  onClickSearchPopUpNoPartModeAdd: (e, i) => dispatch(onClickSearchPopUpNoPartModeAdd(e, i)),
+  onChangeNoPartModeAdd: (e) => dispatch(onChangeNoPartModeAdd(e)),
+  onClickSelectPopUpNoPartModeAdd: (e) => dispatch(onClickSelectPopUpNoPartModeAdd(e)),
+
+  onChangeStatusEachRowModeAdd: (e) => dispatch(onChangeStatusEachRowModeAdd(e)),
+  onChangeNoteEachRowModeAdd: (e) => dispatch(onChangeNoteEachRowModeAdd(e)),
+
+  handleKeyPress: (e) => dispatch(handleKeyPress(e)),
+  handleKeyPressModeEdit: (e) => dispatch(handleKeyPressModeEdit(e)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(BottomContent);
@@ -517,12 +701,12 @@ export default connect(mapStateToProps, mapDispatchToProps)(BottomContent);
 // Mode Edit
 
 
-// export const onChangeList = (e) => {
-//   return {
-//     type: "ON CHANGE LIST",
-//     value: e.target.value
-//   }
-// }
+export const onChangeList = (e) => {
+  return {
+    type: "ON CHANGE LIST",
+    value: e.target.value
+  }
+}
 export const onChangeNote = (e) => {
   return {
     type: "ON CHANGE NOTE",
@@ -632,7 +816,7 @@ export const onChangeType = (e) => {
 }
 
 
-// Mode Add
+// // Mode Add
 
 
 export const onChangeTypeAdd = (e) => {
@@ -740,5 +924,182 @@ export const onChangeJobNameAdd = (e) => {
   return {
     type: "ON CHANGE JOB NAME ADD",
     value: e.target.value
+  }
+}
+
+
+export const onChangeStatusEachRow = (e) => {
+  return {
+    type: "ON CHANGE STATUS EACH ROW",
+    value: e.target.value,
+    rowIndex: e.target.parentNode.parentNode.id
+  }
+}
+
+export const onChangeNoteEachRow = (e) => {
+  return {
+    type: "ON CHANGE NOTE EACH ROW",
+    value: e.target.value,
+    rowIndex: e.target.parentNode.parentNode.id
+  }
+}
+
+export const onChangeStatusEachRowModeAdd = (e) => {
+  return {
+    type: "ON CHANGE STATUS EACH ROW MODE ADD",
+    value: e.target.value,
+    rowIndex: e.target.parentNode.parentNode.id
+  }
+}
+
+export const onChangeNoteEachRowModeAdd = (e) => {
+  return {
+    type: "ON CHANGE NOTE EACH ROW MODE ADD",
+    value: e.target.value,
+    rowIndex: e.target.parentNode.parentNode.id
+  }
+}
+
+
+
+
+export const onChangeNoPart = (e) => {
+  return {
+    type: "ON CHANGE NO PART",
+    value: e.target.value,
+  }
+}
+export const onChangeNoPartEachRow = (e) => {
+  return {
+    type: "ON CHANGE NO PART EACH ROW",
+    value: e.target.value,
+    rowIndex: e.target.parentNode.parentNode.parentNode.id
+  }
+}
+export const onClickNoPartEachRow = (e) => {
+  console.log(e.target.parentNode.parentNode.parentNode.parentNode)
+  return {
+    type: "ON CLICK NO PART EACH ROW",
+    rowIndex: e.target.parentNode.parentNode.parentNode.parentNode.id
+  }
+}
+
+
+export const onClickSearchPopUpNoPart = (item) => {
+  // return {
+  //   type: "ON CLICK SEARCH POPUP NO PART",
+  // }
+
+  return function (dispatch) {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items?internal_item_id=${item}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+      console.log(res)
+      dispatch({
+        type: "ON CLICK SEARCH POPUP NO PART",
+        value: res.data.results
+      });
+    });
+  };
+}
+export const onClickSelectPopUpNoPart = (e) => {
+  return {
+    type: "ON CLICK SELECT POPUP NO PART",
+    rowIndex: e.target.parentNode.parentNode.id
+  }
+}
+
+
+
+export const onChangeNoPartEachRowModeAdd = (e) => {
+  return {
+    type: "ON CHANGE NO PART EACH ROW MODE ADD",
+    value: e.target.value,
+    rowIndex: e.target.parentNode.parentNode.parentNode.id
+  }
+}
+
+export const onClickNoPartEachRowModeAdd = (e) => {
+  // console.log(e.target.parentNode.parentNode.parentNode.parentNode)
+  return {
+    type: "ON CLICK NO PART EACH ROW MODE ADD",
+    rowIndex: e.target.parentNode.parentNode.parentNode.parentNode.id
+  }
+}
+export const onClickSearchPopUpNoPartModeAdd = (list_no_part_mode_add, list_desription_part_mode_add) => {
+  console.log(list_no_part_mode_add)
+  console.log(list_desription_part_mode_add)
+  return function (dispatch) {
+    return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items?internal_item_id=${list_no_part_mode_add}&description=${list_desription_part_mode_add}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+      console.log(res)
+      dispatch({
+        type: "ON CLICK SEARCH POPUP NO PART ADD MODE",
+        value: res.data.results
+      });
+    });
+  };
+}
+export const onChangeNoPartModeAdd = (e) => {
+  return {
+    type: "ON CHANGE NO PART MODE ADD",
+    value: e.target.value,
+  }
+}
+export const onClickSelectPopUpNoPartModeAdd = (e) => {
+  return {
+    type: "ON CLICK SELECT POPUP NO PART MODE ADD",
+    rowIndex: e.target.parentNode.parentNode.id
+  }
+}
+
+
+export const handleKeyPress = (e) => {
+  if (e.key === 'Enter') {
+    console.log("in enter")
+    let value = e.target.value;
+    let rowIndex = e.target.parentNode.parentNode.parentNode.id;
+    console.log("rowIndex", rowIndex)
+    return function (dispatch) {
+      return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items?internal_item_id=${value}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+        console.log("pree key down", res)
+        dispatch({
+          type: "KEY PRESS ENTER",
+          value: value,
+          rowIndex: rowIndex,
+          res: res.data.results
+        });
+      });
+    };
+  }
+  else {
+    console.log("not enter");
+    return {
+      type: "NOT ENTER"
+    }
+  }
+}
+
+
+export const handleKeyPressModeEdit = (e) => {
+  if (e.key === 'Enter') {
+    console.log("in enter")
+    let value = e.target.value;
+    let rowIndex = e.target.parentNode.parentNode.parentNode.id;
+    console.log("rowIndex", rowIndex)
+    return function (dispatch) {
+      return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items?internal_item_id=${value}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
+        console.log("pree key down", res)
+        dispatch({
+          type: "KEY PRESS ENTER MODE EDIT",
+          value: value,
+          rowIndex: rowIndex,
+          res: res.data.results
+        });
+      });
+    };
+  }
+  else {
+    console.log("not enter");
+    return {
+      type: "NOT ENTER"
+    }
   }
 }

@@ -13,66 +13,43 @@ class BottomContent extends React.Component {
           <div className="grid_12">
             <div className="grid_2"><p className="cancel-default">ผู้แจ้งเหตุ</p></div>
             <div className="grid_7 ">
-              <input type="text" className="cancel-default mt-1" value={this.props.word_request_show.information_name} disabled="disabled"></input>
+              <input type="text" className="cancel-default mt-1" value={this.props.document_show.created_by_user_id} disabled="disabled"></input>
             </div>
           </div>
           <div className="grid_12">
             <div className="grid_2"><p className="cancel-default">วันเวลาเกิดเหตุ</p></div>
             <div className="grid_7 ">
-              <input type="date" className="cancel-default grid_3 mt-1" value={this.props.word_request_show.date_start} disabled="disabled"></input>
-              <input type="time" className="cancel-default grid_3 mt-1 float-right" value={this.props.word_request_show.time_start} disabled="disabled"></input>
+              <input type="date" className="cancel-default grid_3 mt-1" value={this.props.document_show.created_on_date} disabled="disabled"></input>
+              <input type="time" className="cancel-default grid_3 mt-1 float-right" value={this.props.document_show.created_on_time} disabled="disabled"></input>
               <p className="cancel-default grid_1 float-right">เวลา</p>
             </div>
           </div>
           <div className="grid_12">
             <div className="grid_2"><p className="cancel-default">อาการขัดข้อง</p></div>
             <div className="grid_7 ">
-              <textarea className="edit" name="Text1" cols="40" rows="2" value={this.props.word_request_show.job_name} disabled="disabled"></textarea>
+              {/* parameter undefined */}
+              <textarea className="edit" name="Text1" cols="40" rows="2" value={this.props.document_show.job_name} disabled="disabled"></textarea>
             </div>
           </div>
           <div className="grid_12">
             <div className="grid_2"><p className="cancel-default">สถานที่ แขวง</p></div>
             <div className="grid_3 ">
-              <select className="edit-select" disabled="disabled">
-                {this.props.district.map(function (district, index) {
-                  if (current.props.word_request_show.district === district.name) {
-                    return <option defaultValue={district.id} key={index} selected> {district.name} </option>
-                  }
-                  else {
-                    return null
-                  }
-                })}
-              </select>
+              {/* parameter undefined */}
+              <input type="text" className="cancel-default mt-1" value={this.props.document_show.created_by_user_id} disabled="disabled"></input>
             </div>
           </div>
           <div className="grid_12">
             <div className="grid_2"><p className="cancel-default">สถานที่ ตอน</p></div>
             <div className="grid_3 ">
-              <select className="edit-select" disabled="disabled">
-                {this.props.zone.map(function (zone, index) {
-                  if (current.props.word_request_show.zone === zone.name) {
-                    return <option defaultValue={zone.id} key={index} selected> {zone.name} </option>
-                  }
-                  else {
-                    return null
-                  }
-                })}
-              </select>
+              {/* parameter undefined */}
+              <input type="text" className="cancel-default mt-1" value={this.props.document_show.created_by_user_id} disabled="disabled"></input>
             </div>
           </div>
           <div className="grid_12">
             <div className="grid_2"><p className="cancel-default">รายละเอียดของสถานที่</p></div>
             <div className="grid_3 ">
-              <select className="edit-select" disabled="disabled">
-                {this.props.station.map(function (station, index) {
-                  if (current.props.word_request_show.station === station.name) {
-                    return <option defaultValue={station.id} key={index} selected> {station.name} </option>
-                  }
-                  else {
-                    return null
-                  }
-                })}
-              </select>
+              {/* parameter undefined */}
+              <input type="text" className="cancel-default mt-1" value={this.props.document_show.created_by_user_id} disabled="disabled"></input>
             </div>
           </div>
         </>
@@ -84,66 +61,44 @@ class BottomContent extends React.Component {
           <div className="grid_12">
             <div className="grid_2"><p className="cancel-default">ผู้แจ้งเหตุ</p></div>
             <div className="grid_7 ">
-              <input type="text" className="cancel-default mt-1" value={this.props.word_request_show.information_name} onChange={(e) => { this.props.onChangeInformatioName(e) }}></input>
+              <input type="text" className="cancel-default mt-1" value={this.props.document_show.created_by_user_id} onChange={(e) => { this.props.onChangeInformatioNameEdit(e) }}></input>
             </div>
           </div>
           <div className="grid_12">
             <div className="grid_2"><p className="cancel-default">วันเวลาเกิดเหตุ</p></div>
             <div className="grid_7 ">
-              <input type="date" className="cancel-default grid_3 mt-1" value={this.props.word_request_show.date_start} onChange={(e) => { this.props.onChangeDateStart(e) }}></input>
-              <input type="time" className="cancel-default grid_3 mt-1 float-right" value={this.props.word_request_show.time_start} onChange={(e) => { this.props.onChangeTimeStart(e) }}></input>
+              <input type="date" className="cancel-default grid_3 mt-1" value={this.props.document_show.created_on_date} onChange={(e) => { this.props.onChangeDateEdit(e) }}></input>
+              <input type="time" className="cancel-default grid_3 mt-1 float-right" value={this.props.document_show.created_on_time} onChange={(e) => { this.props.onChangeTimeEdit(e) }}></input>
               <p className="cancel-default grid_1 float-right">เวลา</p>
             </div>
           </div>
           <div className="grid_12">
             <div className="grid_2"><p className="cancel-default">อาการขัดข้อง</p></div>
             <div className="grid_7 ">
-              <textarea className="edit" name="Text1" cols="40" rows="2" value={this.props.word_request_show.job_name} onChange={(e) => { this.props.onChangeJobName(e) }}></textarea>
+              <textarea className="edit" name="Text1" cols="40" rows="2" value={this.props.document_show.job_name} onChange={(e) => { this.props.onChangeJobNameEdit(e) }}></textarea>
             </div>
           </div>
           <div className="grid_12">
             <div className="grid_2"><p className="cancel-default">สถานที่ แขวง</p></div>
             <div className="grid_3 ">
-              <select className="edit-select" onChange={(e) => this.props.onChangeDistrict(e)}>
-                {this.props.district.map(function (district, index) {
-                  if (current.props.word_request_show.district === district.name) {
-                    return <option defaultValue={district.id} key={index} selected> {district.name} </option>
-                  }
-                  else {
-                    return <option value={district.name} key={index}> {district.name} </option>
-                  }
-                })}
-                
+              <select className="edit-select" onChange={(e) => this.props.onChangeDistrictEdit(e)}>
+               
               </select>
             </div>
           </div>
           <div className="grid_12">
             <div className="grid_2"><p className="cancel-default">สถานที่ ตอน</p></div>
             <div className="grid_3 ">
-              <select className="edit-select" onChange={(e) => this.props.onChangeZone(e)}>
-                {this.props.zone.map(function (zone, index) {
-                  if (current.props.word_request_show.zone === zone.name) {
-                    return <option defaultValue={zone.id} key={index} selected> {zone.name} </option>
-                  }
-                  else {
-                    return <option value={zone.name} key={index}> {zone.name} </option>
-                  }
-                })}
+              <select className="edit-select" onChange={(e) => this.props.onChangeZoneEdit(e)}>
+               
               </select>
             </div>
           </div>
           <div className="grid_12">
             <div className="grid_2"><p className="cancel-default">รายละเอียดของสถานที่</p></div>
             <div className="grid_3 ">
-              <select className="edit-select" onChange={(e) => this.props.onChangeStation(e)}>
-                {this.props.station.map(function (station, index) {
-                  if (current.props.word_request_show.station === station.name) {
-                    return <option defaultValue={station.id} key={index} selected> {station.name} </option>
-                  }
-                  else {
-                    return <option value={station.name} key={index}> {station.name} </option>
-                  }
-                })}
+              <select className="edit-select" onChange={(e) => this.props.onChangeStationEdit(e)}>
+                
               </select>
             </div>
           </div>
@@ -156,32 +111,28 @@ class BottomContent extends React.Component {
           <div className="grid_12">
             <div className="grid_2"><p className="cancel-default">ผู้แจ้งเหตุ</p></div>
             <div className="grid_7 ">
-              <input type="text" className="cancel-default mt-1" value={this.props.information_name_add} onChange={(e) => { this.props.onChangeInformatioNameAdd(e) }}></input>
+              <input type="text" className="cancel-default mt-1" value={this.props.document_show_mode_add.created_by_admin_name_th} disabled="disabled"></input>
             </div>
           </div>
           <div className="grid_12">
             <div className="grid_2"><p className="cancel-default">วันเวลาเกิดเหตุ</p></div>
             <div className="grid_7 ">
-              <input type="date" className="cancel-default grid_3 mt-1" value={this.props.date_start_add} onChange={(e) => { this.props.onChangeDateStartAdd(e) }}></input>
-              <input type="time" className="cancel-default grid_3 mt-1 float-right" value={this.props.time_start_add} onChange={(e) => { this.props.onChangeTimeStartAdd(e) }}></input>
+              <input type="date" className="cancel-default grid_3 mt-1" value={this.props.document_show_mode_add.created_on_date} onChange={(e) => { this.props.onChangeDateAdd(e) }}></input>
+              <input type="time" className="cancel-default grid_3 mt-1 float-right" value={this.props.document_show_mode_add.created_on_time} onChange={(e) => { this.props.onChangeTimeAdd(e) }}></input>
               <p className="cancel-default grid_1 float-right">เวลา</p>
             </div>
           </div>
           <div className="grid_12">
             <div className="grid_2"><p className="cancel-default">อาการขัดข้อง</p></div>
             <div className="grid_7 ">
-              <textarea className="edit" name="Text1" cols="40" rows="2" value={this.props.job_name_add} onChange={(e) => { this.props.onChangeJobNameAdd(e) }}></textarea>
+              <textarea className="edit" name="Text1" cols="40" rows="2" value={this.props.document_show_mode_add.job_name} onChange={(e) => { this.props.onChangeJobNameAdd(e) }}></textarea>
             </div>
           </div>
           <div className="grid_12">
             <div className="grid_2"><p className="cancel-default">สถานที่ แขวง</p></div>
             <div className="grid_3 ">
               <select className="edit-select" onChange={(e) => this.props.onChangeDistrictAdd(e)}>
-              <option defaultValue="0"> none </option>
-                  {this.props.district.map(function (district, index) {
-                    return <option value={district.name} key={index}> {district.name} </option>
-                  })}
-               
+              
               </select>
             </div>
           </div>
@@ -189,10 +140,7 @@ class BottomContent extends React.Component {
             <div className="grid_2"><p className="cancel-default">สถานที่ ตอน</p></div>
             <div className="grid_3 ">
               <select className="edit-select" onChange={(e) => this.props.onChangeZoneAdd(e)}>
-              <option defaultValue="0"> none </option>
-                  {this.props.zone.map(function (zone, index) {
-                    return <option value={zone.name} key={index}> {zone.name} </option>
-                  })}
+             
               </select>
             </div>
           </div>
@@ -200,10 +148,7 @@ class BottomContent extends React.Component {
             <div className="grid_2"><p className="cancel-default">รายละเอียดของสถานที่</p></div>
             <div className="grid_3 ">
               <select className="edit-select" onChange={(e) => this.props.onChangeStationAdd(e)}>
-                <option defaultValue="0"> none </option>
-                  {this.props.station.map(function (station, index) {
-                    return <option value={station.name} key={index}> {station.name} </option>
-                  })}
+               
               </select>
             </div>
           </div>
@@ -237,42 +182,27 @@ class BottomContent extends React.Component {
 
 const mapStateToProps = (state) => ({
   actionMode: state.action,
-  word_request_show: state.word_request_show,
+  document_show: state.document_show,
+  // list_show: state.list_show,
 
-  district: state.district,
-  zone: state.zone,
-  station: state.station,
-
-  // Mode Add
-  information_name_add: state.information_name_add,
-  date_start_add: state.date_start_add,
-  time_start_add: state.time_start_add,
-  date_end_add: state.date_end_add,
-  time_end_add: state.time_end_add,
-  district_add: state.district_add,
-  zone_add: state.zone_add,
-  station_add: state.station_add,
-  job_name_add: state.job_name_add,
+  document_show_mode_add: state.document_show_mode_add,
+  
 })
 
 const mapDispatchToProps = (dispatch) => ({
   // Mode Edit
-  onChangeInformatioName: (e) => dispatch(onChangeInformatioName(e)),
-  onChangeDateStart: (e) => dispatch(onChangeDateStart(e)),
-  onChangeTimeStart: (e) => dispatch(onChangeTimeStart(e)),
-  onChangeDateEnd: (e) => dispatch(onChangeDateEnd(e)),
-  onChangeTimeEnd: (e) => dispatch(onChangeTimeEnd(e)),
-  onChangeStation: (e) => dispatch(onChangeStation(e)),
-  onChangeDistrict: (e) => dispatch(onChangeDistrict(e)),
-  onChangeZone: (e) => dispatch(onChangeZone(e)),
-  onChangeJobName: (e) => dispatch(onChangeJobName(e)),
+  onChangeInformatioNameEdit: (e) => dispatch(onChangeInformatioNameEdit(e)),
+  onChangeDateEdit: (e) => dispatch(onChangeDateEdit(e)),
+  onChangeTimeEdit: (e) => dispatch(onChangeTimeEdit(e)),
+  onChangeStationEdit: (e) => dispatch(onChangeStationEdit(e)),
+  onChangeDistrictEdit: (e) => dispatch(onChangeDistrictEdit(e)),
+  onChangeZoneEdit: (e) => dispatch(onChangeZoneEdit(e)),
+  onChangeJobNameEdit: (e) => dispatch(onChangeJobNameEdit(e)),
 
   // Mode Add
   onChangeInformatioNameAdd: (e) => dispatch(onChangeInformatioNameAdd(e)),
-  onChangeDateStartAdd: (e) => dispatch(onChangeDateStartAdd(e)),
-  onChangeTimeStartAdd: (e) => dispatch(onChangeTimeStartAdd(e)),
-  onChangeDateEndAdd: (e) => dispatch(onChangeDateEndAdd(e)),
-  onChangeTimeEndAdd: (e) => dispatch(onChangeTimeEndAdd(e)),
+  onChangeDateAdd: (e) => dispatch(onChangeDateAdd(e)),
+  onChangeTimeAdd: (e) => dispatch(onChangeTimeAdd(e)),
   onChangeStationAdd: (e) => dispatch(onChangeStationAdd(e)),
   onChangeDistrictAdd: (e) => dispatch(onChangeDistrictAdd(e)),
   onChangeZoneAdd: (e) => dispatch(onChangeZoneAdd(e)),
@@ -281,108 +211,76 @@ const mapDispatchToProps = (dispatch) => ({
 })
 export default connect(mapStateToProps, mapDispatchToProps)(BottomContent);
 
-// Mode Edit
-export const onChangeInformatioName = (e) => {
+export const onChangeInformatioNameEdit = (e) => {
   return {
-    type: "ON CHANGE INFORMATION NAME",
+    type: "ON CHANGE INFORMATION EDIT",
+    value: e.target.value
+  }
+}
+export const onChangeDateEdit = (e) => {
+  return {
+    type: "ON CHANGE DATE EDIT",
     value: e.target.value
   }
 }
 
-export const onChangeDateStart = (e) => {
+export const onChangeTimeEdit = (e) => {
   return {
-    type: "ON CHANGE DATE START",
+    type: "ON CHANGE TIME EDIT",
     value: e.target.value
   }
 }
 
-export const onChangeTimeStart = (e) => {
+export const onChangeStationEdit = (e) => {
   return {
-    type: "ON CHANGE TIME START",
+    type: "ON CHANGE STATION EDIT",
     value: e.target.value
   }
 }
 
-export const onChangeDateEnd = (e) => {
+export const onChangeDistrictEdit = (e) => {
   return {
-    type: "ON CHANGE DATE END",
+    type: "ON CHANGE DISTRICTS EDIT",
     value: e.target.value
   }
 }
 
-export const onChangeTimeEnd = (e) => {
+export const onChangeZoneEdit = (e) => {
   return {
-    type: "ON CHANGE TIME END",
+    type: "ON CHANGE ZONE EDIT",
     value: e.target.value
   }
 }
 
-export const onChangeStation = (e) => {
-  console.log(e.target.value)
+export const onChangeJobNameEdit = (e) => {
   return {
-    type: "ON CHANGE STATION",
+    type: "ON CHANGE JOB NAME EDIT",
     value: e.target.value
   }
 }
 
-export const onChangeDistrict = (e) => {
-  return {
-    type: "ON CHANGE DISTRICT",
-    value: e.target.value
-  }
-}
 
-export const onChangeZone = (e) => {
-  return {
-    type: "ON CHANGE ZONE",
-    value: e.target.value
-  }
-}
-
-export const onChangeJobName = (e) => {
-  return {
-    type: "ON CHANGE JOB NAME",
-    value: e.target.value
-  }
-}
-// Mode Add
 export const onChangeInformatioNameAdd = (e) => {
   return {
-    type: "ON CHANGE INFORMATION NAME ADD",
+    type: "ON CHANGE INFORMATION ADD",
+    value: e.target.value
+  }
+}
+export const onChangeDateAdd = (e) => {
+  return {
+    type: "ON CHANGE DATE ADD",
     value: e.target.value
   }
 }
 
-export const onChangeDateStartAdd = (e) => {
+export const onChangeTimeAdd = (e) => {
   return {
-    type: "ON CHANGE DATE START ADD",
-    value: e.target.value
-  }
-}
-
-export const onChangeTimeStartAdd = (e) => {
-  return {
-    type: "ON CHANGE TIME START ADD",
-    value: e.target.value
-  }
-}
-
-export const onChangeDateEndAdd = (e) => {
-  return {
-    type: "ON CHANGE DATE END ADD",
-    value: e.target.value
-  }
-}
-
-export const onChangeTimeEndAdd = (e) => {
-  return {
-    type: "ON CHANGE TIME END ADD",
+    type: "ON CHANGE TIME ADD",
     value: e.target.value
   }
 }
 
 export const onChangeStationAdd = (e) => {
-  console.log(e.target.value)
   return {
     type: "ON CHANGE STATION ADD",
     value: e.target.value
@@ -391,7 +289,7 @@ export const onChangeStationAdd = (e) => {
 
 export const onChangeDistrictAdd = (e) => {
   return {
-    type: "ON CHANGE DISTRICT ADD",
+    type: "ON CHANGE DISTRICTS ADD",
     value: e.target.value
   }
 }
