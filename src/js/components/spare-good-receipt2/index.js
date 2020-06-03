@@ -2,10 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { connect } from 'react-redux';
 import { useFormik , withFormik ,useFormikContext} from 'formik';
 
-
-
 import TabBar, {TAB_BAR_ACTIVE} from '../common/tab-bar';
-import {FOOTER_MODE, FOOTER_ACTIONS, footerToModeSearch, footerToModeAddDraft} from '../../redux/modules/footer.js';
 
 
 import axios from "axios";
@@ -16,19 +13,14 @@ import { API_URL_DATABASE } from '../../config_url.js';
 import TopContent from './top-content';
 import BottomContent from './bottom-content';
 import Footer from '../common/footer.js';
-
-import { TOOLBAR_ACTIONS, handleClickHomeToSpareMain, handleClickRefresh, toModeSearch, handleClickAdd, 
-    handleClickForward, handleClickBackward, TOOLBAR_MODE } from '../../redux/modules/toolbar.js';
 import { onClearStateModeAdd} from '../../redux/modules/goods_receipt.js';
-import {fetchFactIfNeeded , FACTS} from '../../redux/modules/api/fact';
-import {decodeTokenIfNeeded} from '../../redux/modules/token';
-import DateTimeInput from '../common/formik-datetime-input.js';
 
 import {getUserIDFromEmployeeID, DOCUMENT_SCHEMA, ICD_SCHEMA, ICD_LINE_ITEM_SCHEMA,packDataFromValues, DOCUMENT_TYPE_ID} from '../../helper';
 
 import useToolbarInitializer from '../../hooks/toolbar-initializer';
 import useFactInitializer from '../../hooks/fact-initializer';
 import useTokenInitializer from '../../hooks/token-initializer';
+import useFooterInitializer from '../../hooks/footer-initializer';
 
 
 
@@ -94,19 +86,7 @@ const GoodsReceiptComponent = (props) => {
     useToolbarInitializer();
     useTokenInitializer();
     useFactInitializer();
-
-    // Handle Footer
-    useEffect(() => {
-        console.log("Handle Footer", props.toolbar.mode, TOOLBAR_MODE.SEARCH)
-        if (props.toolbar.mode === TOOLBAR_MODE.SEARCH){
-            console.log("Handle SEARCH")
-            props.footerToModeSearch();
-        }
-        else if (props.toolbar.mode === TOOLBAR_MODE.ADD){
-            console.log("Handle ADD")
-            props.footerToModeAddDraft();
-        }
-    }, [props.toolbar.mode]);
+    useFooterInitializer();
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -241,8 +221,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = {
-    handleClickHomeToSpareMain, toModeSearch, onClearStateModeAdd, handleClickAdd, fetchFactIfNeeded, 
-    decodeTokenIfNeeded, handleClickRefresh, handleClickForward, handleClickBackward, footerToModeAddDraft, footerToModeSearch
+    onClearStateModeAdd,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EnhancedGoodsReceiptComponent);
