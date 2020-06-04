@@ -17,7 +17,7 @@ import PopupModalDocument from '../common/popup-modal-document'
 import PopupModalInventory from '../common/popup-modal-inventory'
 import PopupModalUsername from '../common/popup-modal-username'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
-import { getEmployeeIDFromUserID } from '../../helper';
+import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData } from '../../helper';
 
 
 const responseToFormState = (userFact, data, step_approve, desrciption_files) => {
@@ -96,19 +96,24 @@ const TopContent = (props) => {
           if (props.toolbar.mode === TOOLBAR_MODE.SEARCH && !props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
 
             // Start Axios Get step_approve and attachment By nuk
-            axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${res.data.document_id}/latest/plus`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-              .then((step_approve) => {
+            // axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${res.data.document_id}/latest/plus`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+            //   .then((step_approve) => {
+              fetchStepApprovalDocumentData(res.data.document_id)
+              .then((result) => {
                 axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${res.data.document_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
                   .then((desrciption_files) => {
                     console.log(" I AM STILL IN MODE SEARCH AND SET VALUE")
-                    setValues({ ...values, ...responseToFormState(props.fact.users, res.data, step_approve.data, desrciption_files.data.results) }, false); //Setvalues and don't validate
+                    setValues({ ...values, ...responseToFormState(props.fact.users, res.data, result, desrciption_files.data.results) }, false); //Setvalues and don't validate
                     validateField("dest_warehouse_id");
                     validateField("created_by_user_employee_id");
                     validateField("created_by_admin_employee_id");
                     // validateField("internal_document_id");
                     return resolve(null);
                   });
-              });
+                
+              })
+              
+              // });
             // End
 
           } else { //If Mode add, need to error duplicate Document ID
