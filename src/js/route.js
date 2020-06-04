@@ -11,6 +11,7 @@ import ItemMasterData2 from './components/spare-item-master-data2';
 import SpareGoodReceipt2 from './components/spare-good-receipt2';
 import Track from './components/track-document';
 
+import PmtSS101 from './components/pmt-ss-101';
 const FrontEnd = () => (
     <>
         <Route exact path="/" component={Login} />
@@ -21,6 +22,8 @@ const FrontEnd = () => (
         <Route exact path="/item-master-data2" component={ItemMasterData2} />
         <Route exact path="/good-receipt2" component={SpareGoodReceipt2} />
         <Route exact path="/track" component={Track} />
+
+        <Route exact path="/ss-101" component={PmtSS101} />
     </>
 );
 
