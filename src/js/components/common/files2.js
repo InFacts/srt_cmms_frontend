@@ -15,12 +15,11 @@ const Files = ({ ...props }) => {
                 </div>
                 <div className="u-float-right">
                     <div className="upload-btn-wrapper">
-                        <button className="btn" disabled={props.disabled}>เพิ่มไฟล์</button>
+                        <button type="button" className="btn" disabled={props.disabled}>เพิ่มไฟล์</button>
                         <input type="file" disabled={props.disabled} {...field} {...props} />
                     </div>
                 </div>
             </div>
-            {/* {console.log("desrciptionFilesLength", props.desrciptionFilesLength)} */}
             {props.desrciptionFilesLength !== 0 && props.desrciptionFilesLength !== undefined
                 ?
                 <div className="dropZone-list">
@@ -30,8 +29,10 @@ const Files = ({ ...props }) => {
                                 <h4 className="media-heading grid_5" style={{ fontWeight: 'bold' }}>{desrciptionFiles.filename}</h4>
                                 <h4 className="media-heading grid_2">ขนาดไฟล์ : {desrciptionFiles.sizeReadable}</h4>
                                 <div className="float-right">
-                                    <button className="btn media-heading grid_1" style={{ color: "blue", padding: "4px" }} onClick={(e) => props.HandleDownload(e)}>ดาวน์โหลด</button>
-                                    <button className="btn media-heading grid_1" style={{ color: "blue", padding: "4px" }} disabled={props.disabled}>ลบ</button>
+                                    <button type="button" className="btn media-heading grid_1" style={{ color: "blue", padding: "4px" }} onClick={(e) => props.HandleDownload(e)} disabled={props.disabledForModeAdd}>ดาวน์โหลด</button>
+                                    <button type="button" className="btn media-heading grid_1" style={{ color: "blue", padding: "4px" }} 
+                                    onClick={(e) => props.HandleDeleteFile(e)}
+                                    disabled={props.disabled}>ลบ</button>
                                 </div>
                             </div>
                         </li>
