@@ -10,6 +10,7 @@ import MainPmt from './components/main-pmt';
 import ItemMasterData2 from './components/spare-item-master-data2';
 import SpareGoodReceipt2 from './components/spare-good-receipt2';
 import Track from './components/track-document';
+import PmtWorkOrder from './components/pmt-work-order';
 
 import PmtSS101 from './components/pmt-ss-101';
 const FrontEnd = () => (
@@ -24,6 +25,8 @@ const FrontEnd = () => (
         <Route exact path="/track" component={Track} />
 
         <Route exact path="/ss-101" component={PmtSS101} />
+        <Route exact path="/wo" component={PmtWorkOrder} />
+
     </>
 );
 
