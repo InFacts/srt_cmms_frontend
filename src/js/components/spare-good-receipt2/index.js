@@ -53,33 +53,6 @@ const GoodsReceiptComponent = (props) => {
         }
     }, [])
 
-    function handleSubmit(e) {
-        e.preventDefault();
-        if (props.actionMode === "add") {
-            return (
-                axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${props.document_id}/101`, packForm(props.document_id, props.document_show_mode_add, props.list_show_mode_add), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-                    .then(res => {
-                        console.log(res);
-                        props.onClearStateModeAdd()
-                    }).catch(function (err) {
-                        console.log(err);
-                    })
-            )
-        }
-        if (props.actionMode === "edit") {
-            return (
-                axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${props.document_show.document_id}/101`, packForm(props.document_show.document_id, props.document_show, props.list_show), { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-                    .then(res => {
-                        console.log(res);
-                        props.onClearStateModeAdd()
-                    }).catch(function (err) {
-                        console.log(err);
-                    })
-            )
-            // }
-        }
-    }
-
     return (
         <form onSubmit={props.handleSubmit}>
         {/* <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) handleSubmit(e) }}> */}

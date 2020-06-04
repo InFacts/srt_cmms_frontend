@@ -72,9 +72,9 @@ const BottomContent = (props) => {
   const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => {
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
 
-    // if (values.line_items[index].internal_item_id === internal_item_id) {
-    //   return;
-    // }
+    if (values.line_items[index].internal_item_id === internal_item_id) {
+      return;
+    }
     if (internal_item_id === "") {
       setFieldValue(fieldName + `.description`, '', false);
       setFieldValue(fieldName + `.quantity`, '', false);
@@ -153,15 +153,22 @@ const BottomContent = (props) => {
       })
   };
 
+  // const HandleUpLoad = () => {
+  //   console.log("<<<<<<")
+  //   const data = {
+  //     file: values.file
+  //   }
+  //   axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/1`, data,
+  //     { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+  //     .then((res) => {
+  //       console.log("response", res)
+  //     }).catch(function (err) {
+  //       console.log(err);
+  //     })
+  // };
+
   const HandleDeleteFile = () => {
-    console.log("<<<<<<")
-    axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/1`, values.forUpLoadFile,
-      { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-      .then((res) => {
-        console.log("res", res)
-      }).catch(function (err) {
-        console.log(err);
-      })
+    setFieldValue('file', [], false);
   };
 
   return (
@@ -204,7 +211,9 @@ const BottomContent = (props) => {
               desrciptionFilesLength={props.actionMode === TOOLBAR_MODE.SEARCH ? values.desrciption_files_length
                 : values.file.length}
               disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
+              disabledForModeAdd={props.actionMode === TOOLBAR_MODE.ADD}
               HandleDownload={HandleDownload}
+              HandleDeleteFile={HandleDeleteFile}
             />
           </div>
 

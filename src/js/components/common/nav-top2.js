@@ -5,7 +5,9 @@ import { loadNotify, readNotify } from '../../redux/modules/notify.js';
 
 import { Link } from 'react-router-dom';
 import logo from '../../../images/logo.png';
-import { useDispatch, useSelector  } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+
+// import useTokenInitializer from '../../hooks/token-initializer';
 
 // Start Function For Drop Dawn
 const toggleMenu = (element, show, top) => {
@@ -151,17 +153,23 @@ const setupAllSubNav = () => {
 }
 
 const MainModule = (props) => {
-    // Load Notify
     useEffect(() => {
-        props.loadNotify();
         // Setup DropDawn
         setupAllContextualMenus('.p-contextual-menu__toggle');
         // Setup SubNav
         setupAllSubNav();
     }, []);
 
-    const toolbar = useSelector((state) => ({...state.toolbar}));
-    const footer = useSelector((state) => ({...state.footer}));
+    // Load Notify
+    useEffect(() => {
+        props.loadNotify();
+    }, []);
+
+    // useTokenInitializer();
+
+    const toolbar = useSelector((state) => ({ ...state.toolbar }));
+    const footer = useSelector((state) => ({ ...state.footer }));
+    // console.log("nav.mode", toolbar.mode, footer.mode)
     if (toolbar.mode === "INVISIBLE" && footer.mode === "INVISIBLE") {
         return null
     }
@@ -170,14 +178,14 @@ const MainModule = (props) => {
             <div>
                 <div id="header">
                     <div className="container_12 clearfix">
-    
+
                         <ul className="p-navigation__items" role="menu" style={{ height: "49px" }}>
                             <li className="nav-li">
                                 <Link to="/main">
                                     <img src={logo} alt="logo" width="160px" />
                                 </Link>
                             </li>
-    
+
                             <li className="p-navigation__item p-subnav a nav-li" style={{ marginRight: "0", marginLeft: "auto" }} role="menuitem" id="link-1">
                                 <Link to="#" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu" style={{ paddingRight: "10px" }} >
                                     <i className="fas fa-bell" style={{ fontSize: "22px", color: "white" }}></i>
@@ -236,7 +244,8 @@ const MainModule = (props) => {
 
 const mapStateToProps = (state) => ({
     notify: state.notify,
-    not_read_count: state.not_read_count
+    not_read_count: state.not_read_count,
+    // fact: state.token.raw_token
 });
 
 const mapDispatchToProps = {
