@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
 import { API_URL_DATABASE } from '../../config_url.js';
-
+import { v4 as uuidv4 } from 'uuid';
 
 import FormInput from '../common/form-input'
 import TextInput from '../common/formik-text-input'
@@ -17,10 +17,10 @@ import PopupModalDocument from '../common/popup-modal-document'
 import PopupModalInventory from '../common/popup-modal-inventory'
 import PopupModalUsername from '../common/popup-modal-username'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
-import {getEmployeeIDFromUserID} from '../../helper';
+import { getEmployeeIDFromUserID } from '../../helper';
 
 
-const responseToFormState = (userFact, data, step_approve) => {
+const responseToFormState = (userFact, data, step_approve, desrciption_files) => {
   for (var i = data.line_items.length; i <= 9; i++) {
     data.line_items.push(
       {
@@ -39,13 +39,17 @@ const responseToFormState = (userFact, data, step_approve) => {
     internal_document_id: data.internal_document_id,
     created_by_user_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_user_id) || '',
     created_by_admin_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_admin_id) || '',
-    created_on: data.created_on,
+    created_on: data.created_on.split(".")[0],
     line_items: data.line_items,
     dest_warehouse_id: data.dest_warehouse_id,
     remark: data.remark,
     status_name_th: data.status_name,
     po_id: data.po_id,
-    step_approve: step_approve.approval_step
+
+    // Setup value From Approve and Attachment
+    step_approve: step_approve.approval_step === undefined ? [] : step_approve.approval_step,
+    desrciption_files_length: desrciption_files.length,
+    desrciption_files: desrciption_files
   }
 }
 
@@ -53,17 +57,20 @@ const responseToFormState = (userFact, data, step_approve) => {
 
 
 const TopContent = (props) => {
-  const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
+  const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
   // Fill Default Forms
   useEffect(() => {
     if (props.toolbar.mode === TOOLBAR_MODE.ADD) {
+      if (!values.internal_document_id && touched.internal_document_id){
+        setFieldValue('internal_document_id', `draft-${uuidv4()}`)
+      }
       setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(props.fact.users, props.decoded_token.id));
       setFieldValue("status_name_th", "ยังไม่ได้รับการบันทึก");
       setFieldValue("created_on", new Date().toISOString().slice(0, 16));
       // validateField("created_by_admin_employee_id");
     }
-  }, [props.decoded_token, props.fact.users, props.toolbar.mode])
+  }, [props.decoded_token, props.fact.users, props.toolbar.mode, touched.internal_document_id, !values.internal_document_id])
 
   const validateInternalDocumentIDField = internal_document_id => new Promise(resolve => {
     // Internal Document ID
@@ -88,14 +95,19 @@ const TopContent = (props) => {
         if (res.data.internal_document_id === internal_document_id) { // If input document ID exists
           if (props.toolbar.mode === TOOLBAR_MODE.SEARCH && !props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
 
-            // Start Axios Get step_approve By nuk
+            // Start Axios Get step_approve and attachment By nuk
             axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${res.data.document_id}/latest/plus`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
               .then((step_approve) => {
-                console.log(" I AM STILL IN MODE SEARCH AND SET VALUE")
-                setValues({ ...values, ...responseToFormState(props.fact.users, res.data, step_approve.data) }, false); //Setvalues and don't validate
-                validateField("dest_warehouse_id");
-                // validateField("internal_document_id");
-                return resolve(null);
+                axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${res.data.document_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+                  .then((desrciption_files) => {
+                    console.log(" I AM STILL IN MODE SEARCH AND SET VALUE")
+                    setValues({ ...values, ...responseToFormState(props.fact.users, res.data, step_approve.data, desrciption_files.data.results) }, false); //Setvalues and don't validate
+                    validateField("dest_warehouse_id");
+                    validateField("created_by_user_employee_id");
+                    validateField("created_by_admin_employee_id");
+                    // validateField("internal_document_id");
+                    return resolve(null);
+                  });
               });
             // End
 

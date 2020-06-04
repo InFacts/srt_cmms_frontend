@@ -1,7 +1,7 @@
 import React from 'react'
 import Document from '../../../images/document.svg';
 import { connect } from 'react-redux'
-import '../../../css/style-list.css'
+
 const mimeTypeRegexp = /^(application|audio|example|image|message|model|multipart|text|video)\/[a-z0-9\.\+\*-]+$/;
 const extRegexp = /\.[a-zA-Z0-9]*$/;
 

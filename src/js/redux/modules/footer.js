@@ -1,4 +1,5 @@
 import {makeActionCreator} from './generate_action_creator'
+import history from '../../history' 
 
 // Constants
 export const FOOTER_MODE = {
@@ -305,3 +306,15 @@ export const handleFooterClickApprovalOrder = makeActionCreator(HANDLE_CLICK_APP
 export const handleFooterClickFastTrack = makeActionCreator(HANDLE_CLICK_FAST_TRACK);
 export const handleFooterClickApprovalProcess = makeActionCreator(HANDLE_CLICK_CANCEL_APPROVAL_PROCESS);
 export const handleFooterClickVoid = makeActionCreator(HANDLE_CLICK_VOID);
+
+export const handleClickBackToSpareMain = () => {
+    return (dispatch) => {
+        dispatch(handleFooterClickBack());
+        history.push('/main-spare');
+    };
+}
+
+export const ACTION_TO_HANDLE_CLICK = {
+    [FOOTER_ACTIONS.SAVE]: handleFooterClickSave,
+    [FOOTER_ACTIONS.SEND]: handleFooterClickSend,
+}

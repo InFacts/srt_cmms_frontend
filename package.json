@@ -20,6 +20,7 @@
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "source-map-explorer": "^2.4.2",
+    "uuid": "^8.1.0",
     "vanilla-framework": "^2.9.0",
     "vanilla-framework-react": "^0.2.0"
   },

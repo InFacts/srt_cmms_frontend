@@ -4,15 +4,14 @@
 .list-group-item {
     position: relative;
     display: block;
-    padding: 15px 15px;
-    margin-bottom: 15px;
+    padding: 5px 15px;
+    margin-bottom: 5px;
     background-color: #fff;
     border: 1px solid #ddd;
 }
 .media-object {
     display: block;
     width:250px;
-    height: 150px;
 }
 .media-left  {
     padding-right: 15px;
@@ -22,12 +21,13 @@
     vertical-align: top;
 }
 .media-body {
-    width:250px;
+    width: 960px;
     height: 10px;
 }
 .media-heading {
     margin-top: 0;
     margin-bottom: 0px;
+    display: inline;
 }
 
 .dropZone-list {

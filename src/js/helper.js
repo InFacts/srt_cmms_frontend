@@ -77,6 +77,25 @@ export function getUserIDFromEmployeeID(userFact, employee_id) {
     }
     return null;
 }
+export function getItemIDFromInternalItemID(itemFact, internal_item_id) {
+    internal_item_id = internal_item_id.split('\\')[0]; // Escape Character USERNAME CANT HAVE ESCAPE CHARACTER!
+    let items = itemFact.items;
+    if (items && items.length > 0) {
+      let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`)
+      if (item) {
+        return item.item_id;
+      }
+      return null;
+    }
+    return null;
+}
+
+const getNumberFromEscapedString = (escapedString) => {
+    if(Number.isInteger(escapedString)){
+        return escapedString;
+    }
+    return parseInt(escapedString.split('\\')[0]);
+}
 
 export const packDataFromValues = (fact, values, document_type_id) => {
     let document_part = {
@@ -89,16 +108,18 @@ export const packDataFromValues = (fact, values, document_type_id) => {
     }
     let line_items_part = [];
     values.line_items.map(line_item => {
-        line_items_part.push({
-            ...ICD_LINE_ITEM_SCHEMA,
-            document_id: values.document_id,
-            line_number: line_item.line_number,
-            quantity: line_item.quantity,
-            uom_id: line_item.uom_id,
-            per_unit_price: line_item.per_unit_price,
-            item_id: line_item.item_id,
-            item_status_id: line_item.item_status_id,
-        });
+        if (line_item.internal_item_id){
+            line_items_part.push({
+                ...ICD_LINE_ITEM_SCHEMA,
+                document_id: values.document_id,
+                line_number: line_item.line_number,
+                quantity: line_item.quantity,
+                uom_id: line_item.uom_id,
+                per_unit_price: line_item.per_unit_price,
+                item_id: getItemIDFromInternalItemID(fact[FACTS.ITEM], line_item.internal_item_id),
+                item_status_id: line_item.item_status_id,
+            });
+        }
     })
     let movement_part = {
         ...DOCUMENT_TYPE_ID_TO_MOVEMENT_SCHEMA[document_type_id],
@@ -118,8 +139,8 @@ export const packDataFromValues = (fact, values, document_type_id) => {
     const icd_part = {
         ...ICD_SCHEMA,
         document_id: values.document_id,
-        dest_warehouse_id: values.dest_warehouse_id, 
-        src_warehouse_id: values.src_warehouse_id, 
+        dest_warehouse_id: getNumberFromEscapedString(values.dest_warehouse_id), 
+        src_warehouse_id: getNumberFromEscapedString(values.src_warehouse_id), 
         line_items: line_items_part, 
         movement: movement_part, // REFER TO MOVEMENT SCHEMAS
 
@@ -131,16 +152,65 @@ export const packDataFromValues = (fact, values, document_type_id) => {
 }
 
 
+// const packForm = (document_id, document_show, list_show) => {
+//     const line_items = [];
+//     var line_number = 1
+//     // console.log(list_show_mode_add)
+//     list_show.map(function (item, index) {
+//         if (item.description !== "") {
+//             var myObj = {
+//                 "document_id": document_id,
+//                 "line_number": line_number,
+//                 "quantity": parseInt(item.quantity),
+//                 "uom_id": item.uom_group_id,
+//                 "per_unit_price": parseFloat(item.per_unit_price),
+//                 "item_id": item.item_id,
+//                 "item_status_id": 1
+//             };
+//             line_number += 1;
+//             return (
+//                 line_items.push(myObj)
+//             )
+//         }
+//     })
+
+//     const data = {
+//         "document": {
+//             "document_id": document_id,
+//             "internal_document_id": document_show.internal_document_id,
+//             "created_by_admin_id": document_show.created_by_admin_id,
+//             "created_by_user_id": document_show.created_by_user_id,
+//             "remark": document_show.remark,
+//         },
+//         "specific": {
+//             "document_id": document_id,
+//             "dest_warehouse_id": parseInt(document_show.dest_warehouse_id),
+//             "src_warehouse_id": 999,
+//             "line_items": line_items,
+//             "movement": {
+//                 "document_id": document_id,
+//                 "po_id": document_show.po_id
+//             }
+//         }
+//     };
+//     console.log(data)
+//     return data;
+// }
+
 // Document API
-const fetchDocumentData = (document_id) => new Promise((resolve) =>{
+const fetchDocumentData = (document_id) => new Promise((resolve, reject) =>{
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             resolve(res.data);
         })
+        .catch((err) => {
+            reject(err)
+        });
 });
 
 // Reserve a row in `document` table and return `document_id` and `internal_document_id`
+// POST /document/new/0
 export const createDocumentEmptyRow = () => new Promise((resolve) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/new/0`;
     axios.post(url, null, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
@@ -151,6 +221,7 @@ export const createDocumentEmptyRow = () => new Promise((resolve) => {
             });
         })
 });
+
 
 export const fetchLastestInternalDocumentID = (document_type_group_id) => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=${document_type_group_id}`
@@ -165,8 +236,9 @@ export const fetchLastestInternalDocumentID = (document_type_group_id) => new Pr
         })
 });
 
-const editDocument = (document_id, document_type_group_id, data) => new Promise((resolve, reject) => {
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/new/0`;
+// PUT /document/{document_id}/{document_type_group_id}
+export const editDocument = (document_id, document_type_group_id, data) => new Promise((resolve, reject) => {
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}/${document_type_group_id}`;
     axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             if(res.status === 200){
@@ -175,8 +247,78 @@ const editDocument = (document_id, document_type_group_id, data) => new Promise(
                 reject(res);
             }
         })
+        .catch((err) => {
+            reject(err)
+        });
 });
 
+
+const fillObjectOfName = (object, fieldName, value) => {
+    for (let key1 in object) {
+        if(typeof object[key1] === "object"){
+            for (let key2 in object[key1]) {
+                if(typeof object[key1][key2] === "object"){
+                    for (let key3 in object[key1][key2]) {
+                        if(typeof object[key1][key2][key3] === "object"){
+                            // recursive line items
+                            let line_item = object[key1][key2][key3];
+                            if(typeof line_item === "object"){
+                                if(line_item.hasOwnProperty(fieldName)){
+                                    object[key1][key2][key3][fieldName] = value;
+                                }
+                            }
+                        }else {
+                            // base case, stop recurring
+                            if (key3 === fieldName) {
+                                object[key1][key2][key3] = value;
+                            }
+                        }
+                    }
+                }else{
+                    // base case, stop recurring
+                    if (key2 === fieldName) {
+                        object[key1][key2] = value;
+                    }
+                }
+            }
+        }else{
+            // base case, stop recurring
+            if (key1 === fieldName) {
+                object[key1] = value;
+            }
+        }
+    }
+}
+
+// Fill in the document ID keys inside the nested object
+const mutateDataFillDocumentID = (object, document_id) => {
+    let mutated_object = {...object};
+    fillObjectOfName(mutated_object, 'document_id', document_id);
+    return mutated_object
+}
+
 // Save a Document Draft (without getting beginning approval flow)
-//   1. createDocumentEmptyRow
-//   2. 
+//   1. POST /document/new/0: createDocumentEmptyRow()
+//   2. PUT /document/{document_id}/{document_type_group_id}: editDocument(document_id, document_type_group_id, data)
+export const saveDocument = (document_type_group_id, data) => new Promise((resolve, reject) => {
+    createDocumentEmptyRow()
+    .then(({document_id, internal_document_id}) => { // Get the Document_ID
+        editDocument(document_id, document_type_group_id, mutateDataFillDocumentID(data, document_id))
+        .then(() => {
+            return resolve(document_id);
+        });
+    })
+});
+// Start the Approval Flow of the Document
+// POST /approval/{document_id}/new
+export const startDocumentApprovalFlow = (document_id) => new Promise((resolve, reject) => {
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/new`;
+    axios.put(url, null, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((res) => {
+            if(res.status === 200 || res.status === 201){
+                resolve(res.data);
+            }else{
+                reject(res);
+            }
+        })
+});
