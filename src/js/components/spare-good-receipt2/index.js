@@ -141,7 +141,7 @@ const EnhancedGoodsReceiptComponent = withFormik({
         saveDocument(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO, data)
         .then((document_id) => {
             formikBag.setFieldValue('document_id', document_id, false);
-            return resolve(document_id);
+            return resolve(document_id); // Document_id is not passed on in submitForm, only Promise for isSubmitting https://jaredpalmer.com/formik/docs/api/withFormik#handlesubmit-values-values-formikbag-formikbag--void--promiseany
         })
         .catch((err) => {
             return reject(err)

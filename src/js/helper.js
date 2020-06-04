@@ -215,6 +215,7 @@ export const createDocumentEmptyRow = () => new Promise((resolve) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/new/0`;
     axios.post(url, null, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
+            console.log(" I am successful in creating empty document with document_id ", res.data.document_id)
             resolve({
                 internal_document_id: res.data.internal_document_id, //"draft-bea9f75d-23db-49ae-a8d5-385121fb0234",
                 document_id: res.data.document_id,  //"document_id": 14
@@ -241,6 +242,7 @@ export const editDocument = (document_id, document_type_group_id, data) => new P
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}/${document_type_group_id}`;
     axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
+            console.log(" I am successful in updating contents of document_id ", document_id)
             if(res.status === 200){
                 resolve(res.data);
             }else{
@@ -313,9 +315,10 @@ export const saveDocument = (document_type_group_id, data) => new Promise((resol
 // POST /approval/{document_id}/new
 export const startDocumentApprovalFlow = (document_id) => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/new`;
-    axios.put(url, null, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+    axios.post(url, null, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             if(res.status === 200 || res.status === 201){
+                console.log(" I am successful in starting approval flow of document_id ", document_id)
                 resolve(res.data);
             }else{
                 reject(res);

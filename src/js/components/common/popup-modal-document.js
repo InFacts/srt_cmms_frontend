@@ -12,6 +12,7 @@ const PopupModalDocument = () => {
     const [documentID, setDocumentID] = useState("");
     const [url, setUrl] = useState(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=101&internal_document_id=${documentID}`)
     const {setFieldValue} = useFormikContext();
+    const [forceRefresh, setForceRefresh] = useState(false);
 
     useEffect(() => {
         const fetchData = () => {
@@ -23,10 +24,10 @@ const PopupModalDocument = () => {
         fetchData();
     }, [url]);
 
-    function onClickSelect(e) {
-        e.preventDefault()
-        setFieldValue('internal_document_id', document.internal_document_id, true); // Force Trigger Validation onClick
-    }
+    // function onClickSelect(e) {
+    //     e.preventDefault()
+    //     setFieldValue('internal_document_id', document.internal_document_id, true); // Force Trigger Validation onClick
+    // }
 
     return (
     <div className="modal" id="modalDocument" style={{ display: "none" }}>

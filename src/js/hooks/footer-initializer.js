@@ -9,15 +9,16 @@ import axios from "axios";
 
 import { API_PORT_DATABASE } from '../config_port.js';
 import { API_URL_DATABASE } from '../config_url.js';
-import {startDocumentApprovalFlow} from '../helper';
+import {startDocumentApprovalFlow,DOCUMENT_TYPE_ID, saveDocument, packDataFromValues} from '../helper';
 
 const useFooterInitializer = () => {
     const dispatch = useDispatch();
     const toolbar = useSelector((state) => ({...state.toolbar}));
     const user = useSelector((state) => ({...state.token.decoded_token}));
     const footer = useSelector((state) => ({...state.footer}));
+    const fact = useSelector((state) => ({...state.api.fact}));
 
-    const {values, submitForm} = useFormikContext();
+    const {values, submitForm, setFieldValue} = useFormikContext();
     useTokenInitializer();
 
     // Handle Toolbar Mode
@@ -114,9 +115,22 @@ const useFooterInitializer = () => {
     // Handle Click Save
     useEffect(()=> {
         if (footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]){
-            submitForm()
+            // submitForm()
+            // .catch((err) => {
+            //     //TODO Do something if Submit Fails
+            //     console.log("Submit Failed ", err);
+            // })
+            // .finally(() => { // Set that I already handled the Click
+            //     console.log(" I submitted and i am now handling click")
+            //     dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
+            // }); 
+            let data = packDataFromValues(fact, values, DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO);
+            console.log("I AM SUBMITTING ", data );
+            saveDocument(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO, data)
+            .then((document_id) => {
+                setFieldValue('document_id', document_id, false);
+            })
             .catch((err) => {
-                //TODO Do something if Submit Fails
                 console.log("Submit Failed ", err);
             })
             .finally(() => { // Set that I already handled the Click
@@ -129,21 +143,39 @@ const useFooterInitializer = () => {
     // Handle Click Send To Approval Process
     useEffect(()=> {
         if (footer.requiresHandleClick[FOOTER_ACTIONS.SEND]){
-            submitForm()
+            // submitForm()
+            // .then((document_id) => {
+            //     // After getting the document_id and PUTTING, needs to start the approval process
+            //     setTimeout(startDocumentApprovalFlow(values.document_id) // HACK TO GET VALUE
+            //     .catch((err) => {
+            //         //TODO Do something if Submit Fails
+            //         console.log("Adding Approval Flow Failed ", err);
+            //     }), 20);                
+            // }) 
+            // .catch((err) => {
+            //     //TODO Do something if Submit Fails
+            //     console.log("Submit Failed ", err);
+            // })
+            // .finally(() => { // Set that I already handled the Click
+            //     dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
+            // }); 
+            let data = packDataFromValues(fact, values, DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO);
+            console.log("I AM SUBMITTING ", data );
+            saveDocument(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO, data)
             .then((document_id) => {
-                // After getting the document_id and PUTTING, needs to start the approval process
+                setFieldValue('document_id', document_id, false);
                 startDocumentApprovalFlow(document_id)
                 .catch((err) => {
-                    //TODO Do something if Submit Fails
+                    //         //TODO Do something if Submit Fails
                     console.log("Adding Approval Flow Failed ", err);
-                })
-            }) 
+                });
+            })
             .catch((err) => {
-                //TODO Do something if Submit Fails
                 console.log("Submit Failed ", err);
             })
             .finally(() => { // Set that I already handled the Click
-                dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
+                console.log(" I submitted and i am now handling click")
+                dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
             }); 
         }
     }, [footer.requiresHandleClick[FOOTER_ACTIONS.SEND]]);
