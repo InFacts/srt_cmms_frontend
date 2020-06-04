@@ -39,7 +39,7 @@ const responseToFormState = (userFact, data, step_approve, desrciption_files) =>
     internal_document_id: data.internal_document_id,
     created_by_user_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_user_id) || '',
     created_by_admin_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_admin_id) || '',
-    created_on: data.created_on,
+    created_on: data.created_on.split(".")[0],
     line_items: data.line_items,
     dest_warehouse_id: data.dest_warehouse_id,
     remark: data.remark,
@@ -103,6 +103,8 @@ const TopContent = (props) => {
                     console.log(" I AM STILL IN MODE SEARCH AND SET VALUE")
                     setValues({ ...values, ...responseToFormState(props.fact.users, res.data, step_approve.data, desrciption_files.data.results) }, false); //Setvalues and don't validate
                     validateField("dest_warehouse_id");
+                    validateField("created_by_user_employee_id");
+                    validateField("created_by_admin_employee_id");
                     // validateField("internal_document_id");
                     return resolve(null);
                   });
