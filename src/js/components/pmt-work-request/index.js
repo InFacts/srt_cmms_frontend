@@ -42,15 +42,22 @@ const EnhancedWorkRequestComponent = withFormik({
         created_on: '',                  // TODO doesn't have (Field ที่ไม่ได้กรอก)
         document_date: '',              // วันที่ออกเอกสาร (Default === NOW )
         
-        remark: '',                      // หมายเหตุ
-        accident: '',                   // อาการขัดข้อง
+        // Bottom Content
         accident_on: '',                // วันเวลาเกิดเหตุ
+        informed_by: '',                // ผู้แจ้งเหตุ
+        accident_detail: '',            // อาการขัดข้อง
 
-        district_id: '',
-        node_id: '',
+        district_id: '',                // สถานที่ แขวง
+        node_id: '',                    // สถานที่ ตอน
+        station_id: '',                 // สถานที่ สถานี
+        location_description: '',       //รายละเอียดสถานที่
+
+        remark: '',                      // หมายเหตุ
+        
+
 
         document_status_id: '', // ?
-        step_approve: [],
+        step_approve: [],               // (Field ที่ไม่ได้กรอก)
 
         //Field ที่ไม่ได้ display
         document_id: '', // changes when document is displayed (internal_document_id field validation)

@@ -5,17 +5,9 @@ import TextInput from '../common/formik-text-input'
 import DateTimeInput from '../common/formik-datetime-input'
 import DateInput from '../common/formik-date-input'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
+import Label from '../common/form-label'
 
 
-const Label = (props) => {
-    return (
-        <div className="grid_1 alpha"> 
-            <p className="top-text float-right" style={{whiteSpace: "nowrap"}}>
-                {props.children}
-            </p>
-        </div>
-    );
-}
 
 const TopContent = (props) => {
     const toolbar = useSelector((state) => ({...state.toolbar}), shallowEqual);
