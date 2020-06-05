@@ -27,7 +27,7 @@ const TopContent = (props) => {
         <h4 className="head-title">แจ้งเหตุขัดข้อง/ชำรุด</h4>
 
         {/* === Left Column === */}
-        <div className="grid_6">
+        <div className="grid_6" style={{paddingLeft: "10px"}}>
 
             {/* Document ID */}
             <Label>เลขที่เอกสาร</Label>
