@@ -54,17 +54,20 @@ class Map extends React.Component {
                                 <Link to="/goods-receipt2"><img alt='some value' src={Oneone} className="one-one" /></Link>
                                 <img alt='some value' src={Onetwo} className="one-two" />
                                 <Link to="/goods-receipt-no-po"><img alt='some value' src={Onethree} className="one-three" /></Link>
+
                                 <img alt='some value' src={Arrow1} className="arrow1" />
                                 <img alt='some value' src={Arrow2} className="arrow2" />
                                 <img alt='some value' src={Arrow3} className="arrow3" />
                                 <img alt='some value' src={Text1} className="text1" />
                                 <img alt='some value' src={Text2} className="text2" />
                                 <img alt='some value' src={Text3} className="text3" />
+
                                 <Link to="/inventory"><img alt='some value' src={Center} className="center" /></Link>
                                 <img alt='some value' src={Text4} className="text4" />
                                 <Link to="/goods-usage"><img alt='some value' src={Twoone} className="two-one" /></Link>
                                 <Link to="/goods-receipt-fix"><img alt='some value' src={Twothree} className="two-two" /></Link>
-                                <Link to="/goods-take-out"><img alt='some value' src={Twotwo} className="two-three" /></Link>
+                                <Link to="/goods-issue"><img alt='some value' src={Twotwo} className="two-three" /></Link>
+
                                 <img alt='some value' src={Arrow4} className="arrow4" />
                                 <img alt='some value' src={Arrow5} className="arrow5" />
                                 <img alt='some value' src={Arrow6} className="arrow6" />
@@ -73,13 +76,16 @@ class Map extends React.Component {
                                 <img alt='some value' src={Text7} className="text6" />
                                 
                                 <Link to="/s1646"><img alt='some value' src={Threeone} className="three-one" /></Link>
+
                                 <img alt='some value' src={Threetwo} className="three-two" />
                                 <img alt='some value' src={Threethree} className="three-three" />
                                 <img alt='some value' src={Text8} className="text8" />
                                 <img alt='some value' src={Text9} className="text9" />
                                 <img alt='some value' src={Text10} className="text10" />
+
                                 <Link to="/track"><img alt='some value' src={Fourone} className="four-one" /></Link>
                                 <Link to="/item-master-data"><img alt='some value' src={Fourtwo} className="four-two" /></Link>
+                                
                                 <img alt='some value' src={Fourthree} className="four-three" />
                                 <img alt='some value' src={Text11} className="text11" />
                                 <img alt='some value' src={Text12} className="text12" />
