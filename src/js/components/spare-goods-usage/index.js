@@ -51,7 +51,7 @@ const GoodsReturnComponent = (props) => {
             setFieldValue("internal_document_id", internal_document_id, true);
             console.log(" THIS IS AFTER VALUES ", values);
         }
-    }, [props.toolbar.mode, values.internal_document_id])
+    }, [])
 
     return (
         <form onSubmit={props.handleSubmit}>
@@ -111,10 +111,14 @@ const EnhancedGoodsReturnComponent = withFormik({
         status_name_th: '',
         document_status_id: '',
         created_by_admin_employee_id: '',
-        step_approve: [],
 
         //Field ที่ไม่ได้ display
         document_id: '', // changes when document is displayed (internal_document_id field validation)
+        // For Attactment
+        desrciption_files_length: '',
+        desrciption_files: [],
+        // For Step Approval
+        step_approve: [],
     }),
     validate: (values, props) => {
         const errors = {};

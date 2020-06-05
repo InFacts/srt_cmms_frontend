@@ -20,7 +20,7 @@ import PopupModalUsername from '../common/popup-modal-username'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID } from '../../helper';
 
-const responseToFormState = (userFact, data, step_approve, desrciption_files) => {
+const responseToFormState = (userFact, data) => {
   for (var i = data.line_items.length; i <= 9; i++) {
     data.line_items.push(
       {
@@ -45,11 +45,6 @@ const responseToFormState = (userFact, data, step_approve, desrciption_files) =>
     remark: data.remark,
     status_name_th: data.status_name,
     refer_to_document_internal_document_id: data.refer_to_document_internal_document_id,
-
-    // Setup value From Approve and Attachment
-    step_approve: step_approve.approval_step === undefined ? [] : step_approve.approval_step,
-    desrciption_files_length: desrciption_files.length,
-    desrciption_files: desrciption_files
   }
 }
 
@@ -112,7 +107,10 @@ const TopContent = (props) => {
         console.log("res", res)
         if (res.data.internal_document_id === internal_document_id) { // If input document ID exists
           if (props.toolbar.mode === TOOLBAR_MODE.SEARCH && !props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
-
+            setValues({ ...values, ...responseToFormState(props.fact.users, res.data) }, false); //Setvalues and don't validate
+            validateField("dest_warehouse_id");
+            validateField("created_by_user_employee_id");
+            validateField("created_by_admin_employee_id");
             // Start Axios Get step_approve and attachment By nuk
             // axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${res.data.document_id}/latest/plus`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
             //   .then((step_approve) => {
@@ -121,10 +119,10 @@ const TopContent = (props) => {
                 axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${res.data.document_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
                   .then((desrciption_files) => {
                     // console.log(" I AM STILL IN MODE SEARCH AND SET VALUE")
-                    setValues({ ...values, ...responseToFormState(props.fact.users, res.data, result, desrciption_files.data.results) }, false); //Setvalues and don't validate
-                    validateField("dest_warehouse_id");
-                    validateField("created_by_user_employee_id");
-                    validateField("created_by_admin_employee_id");
+                    setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
+                    setFieldValue("desrciption_files_length", desrciption_files.data.results.length, false);
+                    setFieldValue("desrciption_files", desrciption_files.data.results, false);
+                    setFieldValue("document_id", res.data.document_id, false);
                     // validateField("internal_document_id");
                     return resolve(null);
                   });

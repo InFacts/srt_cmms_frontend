@@ -90,7 +90,7 @@ class Map extends React.Component {
                                     <span className="p-contextual-menu__dropdown" id="menu-1" aria-hidden="true" aria-label="submenu">
                                         <span className="p-contextual-menu__group">
                                             <Link to="/goods-return" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>คืนอะไหล่</Link>
-                                            <Link to="/goods-return-maintenance" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รับคืนอะไหล่ส่งซ่อม</Link>
+                                            <Link to="/goods-fix" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รับคืนอะไหล่ส่งซ่อม</Link>
                                         </span>
                                     </span>
                                 </span>
