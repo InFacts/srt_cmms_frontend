@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import {  toModeSearch, handleClickAdd, handleClickHomeToSpareMain,
     handleClickForward, handleClickBackward,handleClickRefresh, TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../redux/modules/toolbar.js';
-import { FOOTER_MODE, FOOTER_ACTIONS, handleClickBackToSpareMain, ACTION_TO_HANDLE_CLICK, footerToModeInvisible, footerToModeNone, footerToModeSearch, footerToModeEdit, footerToModeAddDraft, footerToModeApApproval, footerToModeApCheckApproval, footerToModeApGotIt, footerToModeApCheckOrder, footerToModeApCheckMaintenance, footerToModeApGuarnteeMaintenance} from '../redux/modules/footer.js';
+import { FOOTER_MODE, FOOTER_ACTIONS, handleClickBackToSpareMain, ACTION_TO_HANDLE_CLICK, footerToModeInvisible, footerToModeNone, footerToModeSearch, footerToModeEdit, footerToModeOwnDocument, footerToModeAddDraft, footerToModeApApproval, footerToModeApCheckApproval, footerToModeApGotIt, footerToModeApCheckOrder, footerToModeApCheckMaintenance, footerToModeApGuarnteeMaintenance} from '../redux/modules/footer.js';
 import { useDispatch, useSelector  } from 'react-redux';
 import useTokenInitializer from '../hooks/token-initializer';
 import { useFormikContext} from 'formik';
@@ -9,78 +9,128 @@ import axios from "axios";
 
 import { API_PORT_DATABASE } from '../config_port.js';
 import { API_URL_DATABASE } from '../config_url.js';
-import {startDocumentApprovalFlow, DOCUMENT_TYPE_ID, saveDocument, packDataFromValues, fetchStepApprovalDocumentData, fetchLatestStepApprovalDocumentData, fetchSearchDocumentData} from '../helper';
+import {startDocumentApprovalFlow, DOCUMENT_TYPE_ID, saveDocument, packDataFromValues, fetchLatestStepApprovalDocumentData, getUserIDFromEmployeeID} from '../helper';
+import { FACTS } from '../redux/modules/api/fact';
 
-const useFooterInitializer = (document_type_id) => {
+const DOCUMENT_STATUS = {
+    DRAFT: "สร้าง Draft",
+    WAIT_APPROVE: "รอการอนุมัติ",
+    APPROVED: "อนุมัติเรียบร้อยแล้ว",
+    VOID: "เอกสารหมดสถานะการใช้งาน",
+    REOPEN: "แก้ไขเอกสาร",
+    FAST_TRACK: "Fast Track",
+}
+// approval_step_action_id
+const APPROVAL_STEP_ACTION = {
+    CHECK_APPROVAL: 1, // "ตรวจสอบและรับทราบลงนาม",
+    APPROVAL: 2, // "รับทราบลงนาม",
+    GOT_IT: 3, // "รับทราบ",
+    CHECK_ORDER: 4, // "ตรวจสอบและสั่งจ่าย",
+    CHECK_MAINTENANCE: 5, // "ตรวจสอบรับทราบลงนาม และเลือกวิธีจัดซ่อม",
+    GUARANTEE_MAINTENANCE: 6 // "รับรองผลดำเนินการซ่อมเสร็จแล้ว",
+}
+const useFooterInitializer = (document_type_id, props) => {
     const dispatch = useDispatch();
     const toolbar = useSelector((state) => ({...state.toolbar}));
-    const state = useSelector((state) => ({...state}));
-    
-    const user = useSelector((state) => ({...state.token.decoded_token}));
+    const user_id = useSelector((state) => ({...state.token.decoded_token}));
     const footer = useSelector((state) => ({...state.footer}));
     const fact = useSelector((state) => ({...state.api.fact}));
 
     const {values, submitForm, setFieldValue} = useFormikContext();
+    const token = useSelector((state) => ({...state.token}));
+    console.log("useFormikContext ------>", token)
     useTokenInitializer();
 
     // Handle Toolbar Mode
     useEffect(() => {
-        // let url = window.location.search;
-        // const urlParams = new URLSearchParams(url);
-        // const internal_document_id = urlParams.get('internal_document_id');
-        // const document_id = urlParams.get('document_id');
+        let document_id = values.document_id;
+        let internal_document_id = values.internal_document_id;
+        if (toolbar.mode === TOOLBAR_MODE.SEARCH){
+            let userInfo = {
+                id: user_id.id, // TEST: User ID
+                position_id: 12,    // TODO: Fixpostion_id
+                has_positions: [], // abbreviation: "สสญ.นว.", name: "สารวัตรงานบำรุงรักษาอาณัติสัญญาณแขวงนครสวรรค์", position_group_id: 3, position_id: 33, warehouse_id: null
+            };
+            let track_document_id = document_id; // TEST: Track Document
+            let previousApprovalInfo = values.step_approve; // Check Previous Approver 
+            let document_status = DOCUMENT_STATUS.REOPEN; // TODO: values.status_name_th
+            let created_by_admin_employee_id = getUserIDFromEmployeeID(props.fact[FACTS.USERS], values.created_by_admin_employee_id); // TEST: values.created_by_admin_employee_id;
+            let latestApprovalInfo = {}
 
-        // if (toolbar.mode === TOOLBAR_MODE.SEARCH){
-        //     if (internal_document_id !== "") {
-        //         // action_approval
-        //         // GET APPROVAL STEP http://43.229.79.36:60013/approval/{document_id}/all
-        //         // For Loop find "approval_step.approval_by" & "position_id" & "user_id" & Check "isCancel" & "approval_status_id"
-                
-        //         let userInfo = {
-        //             id: "",
-        //             level_id: "",
-        //             postion: 3,
-        //             has_positions: [], // abbreviation: "สสญ.นว.", name: "สารวัตรงานบำรุงรักษาอาณัติสัญญาณแขวงนครสวรรค์", position_group_id: 3, position_id: 33, warehouse_id: null
-        //         };
-                
-        //         let track_document_id = 1
-        //         let previousApprovalInfo = values.step_approve;
-        //         let latestApprovalInfo = {}
-        //         // Check if user_id matched == created_by_admin_id
-        //         //      show => SEARCH, EDIT, ADD_DRAFT mode
-        //         // Check Previous Approver 
-                
-        //         // Check Next Approver 
-        //         fetchLatestStepApprovalDocumentData(track_document_id).then((result) => {
-        //             console.log("result fetchLatestStepApprovalDocumentData", result);
-        //             latestApprovalInfo = result
-        //             previousApprovalInfo.approval_step.map(prevApprval => {
-        //                 // if user_id matched & show approval_status => disable *NOTE: approval_by!=[]
-        //                 //      show => AP_APPROVAL, AP_CHECK_APPROVAL, AP_GOT_IT, AP_CHECK_ORDER, AP_CHECK_MAINTENANCE, AP_GUARANTEE_MAINTENANCE mode
-        //                 // else
-        //                 //      if position_id matched. it can button enable (check Next approval)
-        //                 //      else show => NONE mode
-        //             })
-        //             console.log("------>footerToModeApproval")
-                    
-        //         })
+            // Check Who's create document
+            // TODO: created_by_admin_employee_id doesn't has when refresh
+            if (userInfo.id === created_by_admin_employee_id) {
+                if (document_status === DOCUMENT_STATUS.REOPEN) { dispatch(footerToModeEdit()); }
+                else if (document_status === DOCUMENT_STATUS.WAIT_APPROVE) { dispatch(footerToModeOwnDocument()); }
+                else { dispatch(footerToModeEdit()); }
+            }
+            else {
+                // Check That user_id into Previous Approval Flow ?
+                // if user_id matched & show approval_status => disable *NOTE: approval_by != []
+                //      show => AP_APPROVAL, AP_CHECK_APPROVAL, AP_GOT_IT, AP_CHECK_ORDER, AP_CHECK_MAINTENANCE, AP_GUARANTEE_MAINTENANCE mode
+                // else
+                //      if position_id matched. it can button enable (check Next approval)
+                //      else show => NONE mode
+                previousApprovalInfo.map(prevApprval => {
+                    if (prevApprval.approval_by !== undefined || prevApprval.approval_by.length !== 0) {
+                        prevApprval.approval_by.map(prevApprvalBy => {
+                            if (userInfo.id === prevApprvalBy.user_id){
+                                if (prevApprvalBy.approval_status.name === "Approved"){ // TODO: approval_status
+                                    dispatch(footerToModeApApproval()); // TODO: Disiable
+                                }
+                                else if (prevApprvalBy.approval_status.name === "Check"){
+                                    dispatch(footerToModeApGotIt()); // TODO: Disiable
+                                }
+                                return "";
+                            }
+                        });
+                    }
+                });
 
-                
-        //         dispatch(footerToModeApGotIt());
-                
-        //     }
-        //     else {
-        //         // Normal Search
-        //         dispatch(footerToModeSearch());
-        //     }
-        // }
-        // else if (toolbar.mode === TOOLBAR_MODE.ADD){
-        //     dispatch(footerToModeAddDraft());
-        // }
-        // else {
-        //     dispatch(footerToModeInvisible());
-        // }
-    }, [toolbar.mode]);
+                // Check Next Approver from postion_id
+                fetchLatestStepApprovalDocumentData(track_document_id).then((latestApprovalInfo) => {
+                    if (latestApprovalInfo !== undefined || latestApprovalInfo.length !== 0) {
+                        if (latestApprovalInfo.position_id !== userInfo.position_id) {
+                            if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_APPROVAL) {
+                                dispatch(footerToModeApApproval());
+                            }
+                            else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.APPROVAL) {
+                                dispatch(footerToModeApCheckApproval());
+                            }
+                            else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.GOT_IT) {
+                                dispatch(footerToModeApGotIt());
+                            }
+                            else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_ORDER) {
+                                dispatch(footerToModeApCheckOrder());
+                            }
+                            else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_MAINTENANCE) {
+                                dispatch(footerToModeApCheckMaintenance());
+                            }
+                            else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.GUARANTEE_MAINTENANCE) {
+                                dispatch(footerToModeApGuarnteeMaintenance());
+                            }
+                        }
+                        else {
+                            // Everyone for Search mode
+                            dispatch(footerToModeSearch());
+                        }
+                    }
+                    else { 
+                        // Everyone for Search mode
+                        dispatch(footerToModeSearch());
+                    }
+                })
+            }
+        }
+        else if (toolbar.mode === TOOLBAR_MODE.ADD){
+            // ADD_DRAFT mode
+            dispatch(footerToModeAddDraft());
+        }
+        else {
+            // INVISIBLE mode
+            dispatch(footerToModeInvisible());
+        }
+    }, [toolbar.mode, values]);
 
     // Handle Back
     useEffect(()=> {

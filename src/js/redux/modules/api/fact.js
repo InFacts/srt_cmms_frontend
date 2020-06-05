@@ -19,8 +19,6 @@ export const FACTS = {
     ITEM_STATUS: "item-status"
 }
 
-
-
 // Actions
 const FETCH_DATA_REQUEST = "api/fact/FETCH_DATA_REQUEST";
 const FETCH_DATA_FAILURE = "api/fact/FETCH_DATA_FAILURE";

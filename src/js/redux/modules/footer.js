@@ -7,13 +7,20 @@ export const FOOTER_MODE = {
     NONE: "NONE",
     SEARCH: "SEARCH",
     EDIT: "EDIT",
+    OWN_DOCUMENT: "OWN_DOCUMENT",
     ADD_DRAFT: "ADD_DRAFT",
     AP_APPROVAL: "AP_APPROVAL",
     AP_CHECK_APPROVAL: "AP_CHECK_APPROVAL",
     AP_GOT_IT: "AP_GOT_IT",
     AP_CHECK_ORDER: "AP_CHECK_ORDER",
     AP_CHECK_MAINTENANCE: "AP_CHECK_MAINTENANCE",
-    AP_GUARANTEE_MAINTENANCE: "AP_GUARANTEE_MAINTENANCE"
+    AP_GUARANTEE_MAINTENANCE: "AP_GUARANTEE_MAINTENANCE",
+    AP_APPROVAL_END: "AP_APPROVAL_END",
+    AP_CHECK_APPROVAL_END: "AP_CHECK_APPROVAL_END",
+    AP_GOT_IT_END: "AP_GOT_IT_END",
+    AP_CHECK_ORDER_END: "AP_CHECK_ORDER_END",
+    AP_CHECK_MAINTENANCE_END: "AP_CHECK_MAINTENANCE_END",
+    AP_GUARANTEE_MAINTENANCE_END: "AP_GUARANTEE_MAINTENANCE_END"
 }
 
 export const FOOTER_ACTIONS = {
@@ -31,9 +38,9 @@ export const FOOTER_ACTIONS = {
 }
 
 export const FOOTER_ACTIONS_TEXT = {
-    BACK: "ยกเลิก", 
+    BACK: "ย้อนกลับ", 
     CANCEL_APPROVAL_PROCESS: "ยกเลิกการขออนุมัติ", 
-    VOID: "ยกเลิกเอกสาร", // Visual DELETE_DOCUMENT
+    VOID: "ยกเลิกการใช้งานเอกสาร", // Visual DELETE_DOCUMENT
     REJECT: "ส่งกลับไปยังต้นทาง", 
     SAVE: "บันทึก",
     CHECK_APPROVAL: "ตรวจสอบและลงนาม", 
@@ -50,6 +57,7 @@ const TO_MODE_INVISIBLE = "footer/TO_MODE_INVISIBLE";
 const TO_MODE_NONE = "footer/TO_MODE_NONE";
 const TO_MODE_SEARCH = "footer/TO_MODE_SEARCH";
 const TO_MODE_EDIT = "footer/TO_MODE_EDIT";
+const TO_MODE_OWN_DOCUMENT = "footer/TO_MODE_OWN_DOCUMENT";
 const TO_MODE_ADD_DRAFT = "footer/TO_MODE_ADD_DRAFT";
 const TO_MODE_AP_APPROVAL = "footer/TO_MODE_AP_APPROVAL";
 const TO_MODE_AP_CHECK_APPROVAL = "footer/TO_MODE_AP_CHECK_APPROVAL";
@@ -120,6 +128,11 @@ export default function reducer(state = initialState, action){
             return {
                 ...state,
                 mode: FOOTER_MODE.EDIT
+            }
+        case TO_MODE_OWN_DOCUMENT:
+            return {
+                ...state,
+                mode: FOOTER_MODE.OWN_DOCUMENT
             }
         case TO_MODE_ADD_DRAFT:
             return {
@@ -305,6 +318,7 @@ export const footerToModeInvisible = makeActionCreator(TO_MODE_INVISIBLE);
 export const footerToModeNone = makeActionCreator(TO_MODE_NONE);
 export const footerToModeSearch = makeActionCreator(TO_MODE_SEARCH);
 export const footerToModeEdit = makeActionCreator(TO_MODE_EDIT);
+export const footerToModeOwnDocument = makeActionCreator(TO_MODE_OWN_DOCUMENT);
 export const footerToModeAddDraft = makeActionCreator(TO_MODE_ADD_DRAFT);
 export const footerToModeApApproval = makeActionCreator(TO_MODE_AP_APPROVAL);
 export const footerToModeApCheckApproval = makeActionCreator(TO_MODE_AP_CHECK_APPROVAL);
