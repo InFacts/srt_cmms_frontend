@@ -1,11 +1,14 @@
 import React, { useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux'
 import PopupModalWorkRequest from './popup-modal-work-request'
+import PopupModalDocument from '../common/popup-modal-document'
 import TextInput from '../common/formik-text-input'
 import DateTimeInput from '../common/formik-datetime-input'
 import DateInput from '../common/formik-date-input'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import Label from '../common/form-label'
+import { DOCUMENT_TYPE_ID } from '../../helper';
+
 
 
 
@@ -26,7 +29,7 @@ const TopContent = (props) => {
             <div className="grid_3 alpha">
                 <TextInput name='internal_document_id'
                     searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} 
-                    ariaControls="modalWorkRequset" 
+                    ariaControls="modalDocument"
                     tabIndex="1" />
             </div>
             <div class="clear" />
@@ -83,7 +86,12 @@ const TopContent = (props) => {
             <div class="clear" />
         </div>
     </div>
-    <PopupModalWorkRequest />
+    <PopupModalDocument 
+        documentTypeGroupID={DOCUMENT_TYPE_ID.WORK_REQUEST} 
+        id="modalDocument" //For Open POPUP
+        name="internal_document_id" //For setFieldValue 
+    />
+    {/* <PopupModalWorkRequest /> */}
     </div>
     );
 }
