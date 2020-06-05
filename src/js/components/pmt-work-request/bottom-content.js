@@ -7,16 +7,8 @@ import TextareaInput from '../common/formik-textarea-input';
 import DateTimeInput from '../common/formik-datetime-input';
 import SelectNoChildrenInput from '../common/formik-select-no-children';
 import { useFormik , withFormik ,useFormikContext} from 'formik';
+import Label from '../common/form-label'
 
-const Label = (props) => {
-    return (
-        <div className="grid_1 alpha"> 
-            <p className="top-text float-right" style={{whiteSpace: "nowrap"}}>
-                {props.children}
-            </p>
-        </div>
-    );
-}
 
 
 const BottomContent = (props) => {
