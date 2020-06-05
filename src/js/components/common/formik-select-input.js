@@ -1,7 +1,7 @@
 import React from 'react';
 import { useField } from 'formik';
 
-const TextInput = ({ ...props }) => {
+const SelectInput = ({ ...props }) => {
   // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
   // which we can spread on <input> and also replace ErrorMessage entirely.
   //     props.name
@@ -28,4 +28,4 @@ const TextInput = ({ ...props }) => {
     </>
   );
 };
-export default TextInput;
+export default SelectInput;

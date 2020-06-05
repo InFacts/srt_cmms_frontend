@@ -4,12 +4,21 @@ import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
 import Files from '../common/files2'
 import TextInput from '../common/formik-text-input';
 import TextareaInput from '../common/formik-textarea-input';
+import DateTimeInput from '../common/formik-datetime-input';
+import SelectNoChildrenInput from '../common/formik-select-no-children';
+import { useFormik , withFormik ,useFormikContext} from 'formik';
 
 const BottomContent = (props) => {
     const toolbar = useSelector((state) => ({...state.toolbar}), shallowEqual);
     const factDistricts = useSelector((state) => ({...state.api.fact.districts}), shallowEqual); 
     const factNodes = useSelector((state) => ({...state.api.fact.nodes}), shallowEqual); 
     const factStations = useSelector((state) => ({...state.api.fact.stations}), shallowEqual); 
+
+    const {values} = useFormikContext();
+    useEffect(() => {
+        console.log(values)
+    }, [values]);
+
     return (
     <div id="blackground-gray">
         <div className="container_12 clearfix">
@@ -22,14 +31,7 @@ const BottomContent = (props) => {
                     <TextInput name='information_name' disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}/>
                 </div>
             </div>
-            <div className="grid_12">
-                <div className="grid_2"><p className="cancel-default">วันเวลาเกิดเหตุ</p></div>
-                <div className="grid_7 ">
-                <input type="date" className="cancel-default grid_3 mt-1" value={props.date_start} disabled="disabled"></input>
-                <input type="time" className="cancel-default grid_3 mt-1 float-right" value={props.time_start} disabled="disabled"></input>
-                <p className="cancel-default grid_1 float-right">เวลา</p>
-                </div>
-            </div>
+            
             <div className="grid_12">
                 <div className="grid_2"><p className="cancel-default">อาการขัดข้อง</p></div>
                 <div className="grid_7 ">
@@ -38,40 +40,48 @@ const BottomContent = (props) => {
                 </div>
             </div>
             <div className="grid_12">
+                <div className="grid_2"><p className="cancel-default">วันเวลาเกิดเหตุ</p></div>
+                <div className="grid_4 mt-1 ">
+                    <DateTimeInput name="datetime_start" 
+                    disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}/>
+                </div>
+            </div>
+            <div className="grid_12">
                 <div className="grid_2"><p className="cancel-default">สถานที่ แขวง</p></div>
-                <div className="grid_3 ">
-                <select className="edit-select" disabled="disabled">
-                    {factDistricts.items.map(function (district, index) {
-                        if (props.district === district.name) {
-                            return <option defaultValue={district.id} key={index} selected> {district.name} </option>
-                        }
-                    })}
-                </select>
+                <div className="grid_4 ">
+                    <SelectNoChildrenInput name="district_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                        <option value=''></option>
+                        {factDistricts.items.map(function ({district_id, name, division_id}) {
+                            return <option value={district_id} key={district_id}> {name} </option>
+                        })}
+                    </SelectNoChildrenInput>
                 </div>
             </div>
 
             <div className="grid_12">
                 <div className="grid_2"><p className="cancel-default">สถานที่ ตอน</p></div>
-                <div className="grid_3 ">
-                <select className="edit-select" disabled="disabled">
-                    {factNodes.items.map(function (zone, index) {
-                        if (props.zone === zone.name) {
-                            return <option defaultValue={zone.id} key={index} selected> {zone.name} </option>
+                <div className="grid_4 ">
+                <SelectNoChildrenInput name="node_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                    <option value=''></option>
+                    {factNodes.items.map(function ({node_id, name, district_id}) {
+                        if(values.district_id == district_id){ // Shallow equality, district ID may be string
+                            return <option value={node_id} key={node_id}>{name}</option>
                         }
                     })}
-                </select>
+                </SelectNoChildrenInput>
                 </div>
             </div>
             <div className="grid_12">
-                <div className="grid_2"><p className="cancel-default">รายละเอียดของสถานที่</p></div>
-                <div className="grid_3 ">
-                <select className="edit-select" disabled="disabled">
-                    {factStations.items.map(function (station, index) {
-                        if (props.station === station.name) {
-                            return <option defaultValue={station.id} key={index} selected> {station.name} </option>
+                <div className="grid_2"><p className="cancel-default">สถานที่ สถานี</p></div>
+                <div className="grid_4 ">
+                <SelectNoChildrenInput name="station_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                    <option value=''></option>
+                    {factStations.items.map(function ({station_id, name, node_id}) {
+                        if (values.node_id == node_id) { // Shallow equality, node ID may be string
+                            return <option value={station_id} key={station_id}> {name} </option>
                         }
                     })}
-                </select>
+                </SelectNoChildrenInput>
                 </div>
             </div>
           </div>
