@@ -125,3 +125,11 @@ td.font-for-status{
   font-size: 18px;
   padding: 2px 2px 2px 5px;
 }
+
+.blue {
+  background-color: rgba(201, 230, 253, 0.64);
+}
+
+.gray-column {
+  background: #E0E0E0;
+}

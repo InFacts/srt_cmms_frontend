@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import {  toModeSearch, handleClickAdd, handleClickHomeToSpareMain,
     handleClickForward, handleClickBackward,handleClickRefresh, TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../redux/modules/toolbar.js';
-import { FOOTER_MODE, FOOTER_ACTIONS, footerToModeSearch, footerToModeAddDraft, handleClickBackToSpareMain, ACTION_TO_HANDLE_CLICK, footerToModeInvisible} from '../redux/modules/footer.js';
+import { FOOTER_MODE, FOOTER_ACTIONS, handleClickBackToSpareMain, ACTION_TO_HANDLE_CLICK, footerToModeInvisible, footerToModeNone, footerToModeSearch, footerToModeEdit, footerToModeAddDraft, footerToModeApApproval, footerToModeApCheckApproval, footerToModeApGotIt, footerToModeApCheckOrder, footerToModeApCheckMaintenance, footerToModeApGuarnteeMaintenance} from '../redux/modules/footer.js';
 import { useDispatch, useSelector  } from 'react-redux';
 import useTokenInitializer from '../hooks/token-initializer';
 import { useFormikContext} from 'formik';
@@ -9,11 +9,13 @@ import axios from "axios";
 
 import { API_PORT_DATABASE } from '../config_port.js';
 import { API_URL_DATABASE } from '../config_url.js';
-import {startDocumentApprovalFlow,DOCUMENT_TYPE_ID, saveDocument, packDataFromValues} from '../helper';
+import {startDocumentApprovalFlow, DOCUMENT_TYPE_ID, saveDocument, packDataFromValues, fetchStepApprovalDocumentData, fetchLatestStepApprovalDocumentData, fetchSearchDocumentData} from '../helper';
 
-const useFooterInitializer = () => {
+const useFooterInitializer = (document_type_id) => {
     const dispatch = useDispatch();
     const toolbar = useSelector((state) => ({...state.toolbar}));
+    const state = useSelector((state) => ({...state}));
+    
     const user = useSelector((state) => ({...state.token.decoded_token}));
     const footer = useSelector((state) => ({...state.footer}));
     const fact = useSelector((state) => ({...state.api.fact}));
@@ -23,85 +25,61 @@ const useFooterInitializer = () => {
 
     // Handle Toolbar Mode
     useEffect(() => {
-        let url = window.location.search;
-        const urlParams = new URLSearchParams(url);
-        const internal_document_id = urlParams.get('internal_document_id');
-        const document_id = urlParams.get('document_id');
+        // let url = window.location.search;
+        // const urlParams = new URLSearchParams(url);
+        // const internal_document_id = urlParams.get('internal_document_id');
+        // const document_id = urlParams.get('document_id');
 
-        if (toolbar.mode === TOOLBAR_MODE.SEARCH){
-            dispatch(footerToModeSearch());
-        }
-        else if (toolbar.mode === TOOLBAR_MODE.ADD){
-            dispatch(footerToModeAddDraft());
-        }
-        else if (internal_document_id !== "") {
-            // action_approval
-            // GET APPROVAL STEP http://43.229.79.36:60013/approval/{document_id}/all
-            // For Loop find "approval_step.approval_by" & "position_id" & "user_id" & Check "isCancel" & "approval_status_id"
-            let userID = 0;
-            let approvalStatusID = 0;
-            let userHasPosition = [];
-            // GET Infomation of user
-            // TODO if Fact. it has user_id, position_id, warehouse_id, position_group, level_id, has_positions. You can remove API /user/profile
-            axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/profile`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((resUser) => {
-                userID = resUser.data.user_id;
-                const userLevelID = resUser.data.level_id;
-                userHasPosition = resUser.data.has_positions;// abbreviation: "สสญ.นว.", name: "สารวัตรงานบำรุงรักษาอาณัติสัญญาณแขวงนครสวรรค์", position_group_id: 3, position_id: 33, warehouse_id: null
-                axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/all`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
-                    // console.log("DONUT TEST", res.data.results, userHasPosition)
-                    // Check Previous Approver 
-                    let approvalFlowBy = res.data.results;
-                    approvalFlowBy[0].approval_step.map(approvalStep => {
-                        console.log("approvalStep", approvalStep)
-                        if (approvalStep.is_cancel === 0 || approvalStep.is_cancel === undefined) {
-                            if (approvalStep.approval_by.user_id === userID) {
-                                approvalStatusID = approvalStep.approval_status_id;
-                                console.log("approvalStatusID", approvalStatusID)
-                            }
-                            else {
-                                console.log("General User for view")
-                            }
-                        }
-                    });
+        // if (toolbar.mode === TOOLBAR_MODE.SEARCH){
+        //     if (internal_document_id !== "") {
+        //         // action_approval
+        //         // GET APPROVAL STEP http://43.229.79.36:60013/approval/{document_id}/all
+        //         // For Loop find "approval_step.approval_by" & "position_id" & "user_id" & Check "isCancel" & "approval_status_id"
+                
+        //         let userInfo = {
+        //             id: "",
+        //             level_id: "",
+        //             postion: 3,
+        //             has_positions: [], // abbreviation: "สสญ.นว.", name: "สารวัตรงานบำรุงรักษาอาณัติสัญญาณแขวงนครสวรรค์", position_group_id: 3, position_id: 33, warehouse_id: null
+        //         };
+                
+        //         let track_document_id = 1
+        //         let previousApprovalInfo = values.step_approve;
+        //         let latestApprovalInfo = {}
+        //         // Check if user_id matched == created_by_admin_id
+        //         //      show => SEARCH, EDIT, ADD_DRAFT mode
+        //         // Check Previous Approver 
+                
+        //         // Check Next Approver 
+        //         fetchLatestStepApprovalDocumentData(track_document_id).then((result) => {
+        //             console.log("result fetchLatestStepApprovalDocumentData", result);
+        //             latestApprovalInfo = result
+        //             previousApprovalInfo.approval_step.map(prevApprval => {
+        //                 // if user_id matched & show approval_status => disable *NOTE: approval_by!=[]
+        //                 //      show => AP_APPROVAL, AP_CHECK_APPROVAL, AP_GOT_IT, AP_CHECK_ORDER, AP_CHECK_MAINTENANCE, AP_GUARANTEE_MAINTENANCE mode
+        //                 // else
+        //                 //      if position_id matched. it can button enable (check Next approval)
+        //                 //      else show => NONE mode
+        //             })
+        //             console.log("------>footerToModeApproval")
                     
-                    // Check Next Approver
-                    axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/latest/step`, { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
-                    // console.log("DONUT TEST", res.data.results, userHasPosition)
-                    // Check Previous Approver 
-                    let approvalFlowBy = res.data.results;
-                    approvalFlowBy[0].approval_step.map(approvalStep => {
-                        console.log("approvalStep", approvalStep)
-                        if (approvalStep.is_cancel === 0 || approvalStep.is_cancel === undefined) {
-                            if (approvalStep.approval_by.user_id === userID) {
-                                approvalStatusID = approvalStep.approval_status_id;
-                                console.log("approvalStatusID", approvalStatusID)
-                            }
-                            else {
-                                console.log("General User for view")
-                            }
-                        }
-                    });
-                    
-                    // Check Next Approver
+        //         })
 
-                    
-
-                }).catch(function (err) {
-                    console.log(err)
-                })
-
-                    
-
-                }).catch(function (err) {
-                    console.log(err)
-                })
-            }).catch(function (err) {
-                console.log(err)
-            })
-        }
-        else {
-            dispatch(footerToModeInvisible());
-        }
+                
+        //         dispatch(footerToModeApGotIt());
+                
+        //     }
+        //     else {
+        //         // Normal Search
+        //         dispatch(footerToModeSearch());
+        //     }
+        // }
+        // else if (toolbar.mode === TOOLBAR_MODE.ADD){
+        //     dispatch(footerToModeAddDraft());
+        // }
+        // else {
+        //     dispatch(footerToModeInvisible());
+        // }
     }, [toolbar.mode]);
 
     // Handle Back
@@ -124,9 +102,9 @@ const useFooterInitializer = () => {
             //     console.log(" I submitted and i am now handling click")
             //     dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
             // }); 
-            let data = packDataFromValues(fact, values, DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO);
+            let data = packDataFromValues(fact, values, document_type_id);
             console.log("I AM SUBMITTING ", data );
-            saveDocument(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO, data)
+            saveDocument(document_type_id, data)
             .then((document_id) => {
                 setFieldValue('document_id', document_id, false);
             })
@@ -159,9 +137,9 @@ const useFooterInitializer = () => {
             // .finally(() => { // Set that I already handled the Click
             //     dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
             // }); 
-            let data = packDataFromValues(fact, values, DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO);
+            let data = packDataFromValues(fact, values, document_type_id);
             console.log("I AM SUBMITTING ", data );
-            saveDocument(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO, data)
+            saveDocument(document_type_id, data)
             .then((document_id) => {
                 setFieldValue('document_id', document_id, false);
                 startDocumentApprovalFlow(document_id)

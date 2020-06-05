@@ -14,9 +14,15 @@ const Table = (props) => {
           <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
           <th className="font" style={{ minWidth: "130px" }}>เลขที่อะไหล่</th>
           <th className="font" style={{ minWidth: "368px" }}>รายละเอียด</th>
+
+          <th className="font text-center gray-column" style={{ minWidth: "80px" }}>คงคลัง</th>
+          <th className="font text-center gray-column" style={{ minWidth: "80px" }}>รอส่งมอบ</th>
+          <th className="font text-right gray-column" style={{ minWidth: "80px" }}>ระหว่างจัดซื้อ</th>
+          <th className="font text-center gray-column" style={{ minWidth: "80px" }}>จำนวนสุทธิ</th>
+
+          <th className="font text-center" style={{ minWidth: "80px" }}>สถานนะ</th>
           <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
           <th className="font text-center" style={{ minWidth: "80px" }}>หน่วยนับ</th>
-          <th className="font text-right" style={{ minWidth: "80px" }}>สถานะ</th>
           <th className="font text-center" style={{ minWidth: "80px" }}>ราคาต่อหน่วย</th>
           <th className="font text-right" style={{ minWidth: "80px" }}>จำนวนเงิน</th>
         </tr>
@@ -33,26 +39,23 @@ const Table = (props) => {
                   disabled={props.disabledBothMode !== true ? props.actionMode === TOOLBAR_MODE.SEARCH : true}
                   searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart"
                   handleModalClick={() => props.setLineNumber(line_number)}
-                  redBorderForError = "error-in-table"
+                  redBorderForError="error-in-table"
                 />
               </td>
               <td className="edit-padding">{list.description}</td>
-              <td className="edit-padding text-center">
-                <NumberInput step={0.01} name={`line_items[${index}].quantity`} tabIndex="7"
-                  validate={quantity => props.validateLineNumberQuatityItemIDField(`line_items[${index}].quantity`, quantity, index)}
-                  disabled={props.disabledBothMode !== true ? props.actionMode === TOOLBAR_MODE.SEARCH : true}
-                  redBorderForError = "error-in-table"/>
-              </td>
 
-              {/* หน่วยนับ */}
-              <td className="edit-padding text-center">
-                <SelectInput name={`line_items[${index}].uom_id`} listProps={list.list_uoms}
-                  tabIndex="8" disabled={props.disabledBothMode !== true ? props.actionMode === TOOLBAR_MODE.SEARCH : true}
-                  optionValue='uom_id' optionName='name'
-                  redBorderForError = "error-in-table"
-                />
+              <td className="edit-padding gray-column"> {/* คงคลัง */}
+                {list.description !== '' ? list.at_source.length !== 0 ? list.at_source[0].current_unit_count : 0 : ''}</td>
+              <td className="edit-padding gray-column"> {/* รอส่งมอบ */}
+                {list.description !== '' ? list.at_source.length !== 0 ? list.at_source[0].committed_unit_count : 0 : ''}</td>
+              <td className="edit-padding gray-column">{/* ระหว่างจัดซ้ือ */}
+                {list.description !== '' ? list.at_source.length !== 0 ? 0 : 0 : ''}
+                {/* {list.at_source.length !== 0 ? list.at_source[0].order : ''} */} {/* TODO Database Send Value */}
               </td>
-
+              <td className="edit-padding gray-column">{/* จำนวนสุทธิ */}
+                {list.description !== '' ? list.at_source.length !== 0 ? list.at_source[0].current_unit_count - list.at_source[0].committed_unit_count + 0 : 0 : ''}
+              </td>
+              
               {/* สถานะของอะไหล่ */}
               <td className="edit-padding text-center">
                 <SelectInput name={`line_items[${index}].item_status_id`} listProps={props.fact['item-status'].items}
@@ -63,11 +66,27 @@ const Table = (props) => {
               </td>
 
               <td className="edit-padding text-center">
+                <NumberInput step={0.01} name={`line_items[${index}].quantity`} tabIndex="7"
+                  validate={quantity => props.validateLineNumberQuatityItemIDField(`line_items[${index}].quantity`, quantity, index)}
+                  disabled={props.disabledBothMode !== true ? props.actionMode === TOOLBAR_MODE.SEARCH : true}
+                  redBorderForError="error-in-table" />
+              </td>
+
+              {/* หน่วยนับ */}
+              <td className="edit-padding text-center">
+                <SelectInput name={`line_items[${index}].uom_id`} listProps={list.list_uoms}
+                  tabIndex="8" disabled={props.disabledBothMode !== true ? props.actionMode === TOOLBAR_MODE.SEARCH : true}
+                  optionValue='uom_id' optionName='name'
+                  redBorderForError="error-in-table"
+                />
+              </td>
+
+              <td className="edit-padding text-center">
                 <NumberInput step={0.0001} name={`line_items[${index}].per_unit_price`}
                   validate={per_unit_price => props.validateLineNumberPerUnitPriceItemIDField(`line_items[${index}].per_unit_price`, per_unit_price, index)}
                   disabled={props.disabledBothMode !== true ? props.actionMode === TOOLBAR_MODE.SEARCH : true}
-                  redBorderForError = "error-in-table"
-                  />
+                  redBorderForError="error-in-table"
+                />
               </td>
               <td className="edit-padding text-right">{props.sumTotalLineItem(list.quantity, list.per_unit_price, list.description)}</td>
             </tr>

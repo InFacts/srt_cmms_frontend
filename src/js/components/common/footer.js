@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 
 import {FOOTER_MODE, FOOTER_ACTIONS, FOOTER_ACTIONS_TEXT, clickApproval, clickSend, clickSave, clickReject, clickBack, clickCheckApproval, clickApprovalOrder, clickFastTrack, clickCancleApprovalProcess, clickVoid} from '../../redux/modules/footer.js';
 import { useDispatch, useSelector  } from 'react-redux'
-// import '../../../vender/fontawesome-free/css/all.css';
-// import '../../../css/style-nav.css';
 
 const FOOTER_ACTIONS_TO_ACTION_CREATOR = {
   [FOOTER_ACTIONS.APPROVAL]: clickApproval,
