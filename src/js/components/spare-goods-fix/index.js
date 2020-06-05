@@ -36,7 +36,7 @@ const GoodsReturnComponent = (props) => {
     useToolbarInitializer(TOOLBAR_MODE.SEARCH);
     useTokenInitializer();
     useFactInitializer();
-    useFooterInitializer(DOCUMENT_TYPE_ID.GOODS_RETURN_MAINTENANCE);
+    useFooterInitializer(DOCUMENT_TYPE_ID.GOODS_FIX);
 
     // If Link to this url via Track Document
     useEffect(() => {
@@ -110,11 +110,15 @@ const EnhancedGoodsReturnComponent = withFormik({
         status_name_th: '',
         document_status_id: '',
         created_by_admin_employee_id: '',
-        step_approve: [],
         refer_to_document_id: '',
 
         //Field ที่ไม่ได้ display
         document_id: '', // changes when document is displayed (internal_document_id field validation)
+        // For Attactment
+        desrciption_files_length: '',
+        desrciption_files: [],
+        // For Step Approval
+        step_approve: [],
     }),
     validate: (values, props) => {
         const errors = {};
@@ -138,7 +142,7 @@ const EnhancedGoodsReturnComponent = withFormik({
     handleSubmit: (values, formikBag) => new Promise ((resolve, reject) => { //handle Submit will just POST the Empty Document and PUT information inside
         let data = packDataFromValues(formikBag.props.fact, values);
         console.log("I AM SUBMITTING ", data );
-        saveDocument(DOCUMENT_TYPE_ID.GOODS_RETURN_MAINTENANCE, data)
+        saveDocument(DOCUMENT_TYPE_ID.GOODS_FIX, data)
         .then((document_id) => {
             formikBag.setFieldValue('document_id', document_id, false);
             return resolve(document_id);
