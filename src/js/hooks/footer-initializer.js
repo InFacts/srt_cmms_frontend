@@ -38,7 +38,6 @@ const useFooterInitializer = (document_type_id, props) => {
 
     const {values, submitForm, setFieldValue} = useFormikContext();
     const token = useSelector((state) => ({...state.token}));
-    console.log("useFormikContext ------>", token)
     useTokenInitializer();
 
     // Handle Toolbar Mode
