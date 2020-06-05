@@ -1,44 +1,98 @@
 import React, { useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux'
 import PopupModalWorkRequest from './popup-modal-work-request'
+import TextInput from '../common/formik-text-input'
+import DateTimeInput from '../common/formik-datetime-input'
+import DateInput from '../common/formik-date-input'
+import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
+
+
+const Label = (props) => {
+    return (
+        <div className="grid_1 alpha"> 
+            <p className="top-text float-right" style={{whiteSpace: "nowrap"}}>
+                {props.children}
+            </p>
+        </div>
+    );
+}
 
 const TopContent = (props) => {
+    const toolbar = useSelector((state) => ({...state.toolbar}), shallowEqual);
 
     return (
-        <div>
-            <div id="blackground-white">
-                <div className="container_12 clearfix">
-                <section className="container_12 ">
-                    <h4 className="head-title">แจ้งเหตุขัดข้อง/ชำรุด</h4>
-                    <div className="container_12">
-                    <div className="grid_2"><p className="top-text">เลขที่เอกสาร</p></div>
-                    <div>
-                    <div className="p-search-box cancel-margin grid_3 pull_0">
-                        <input type="search" className="p-search-box__input cancel-default " value={props.no_word_request} onChange={(e) => { props.onChangeNoWorkRequset(e) }} />
-                        <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showWorkRequset" aria-controls="modalWorkRequset"></i></button>
-                    </div>
-                    <div className="p-search-box cancel-margin grid_3  float-right">
-                        <input type="date" className="p-search-box__input cancel-default " defaultValue={props.create_date_time} disabled="diabled" />
-                    </div>
-                    <div className="grid_2 cancel-default float-right"><p className="cancel-default float-right">วันที่ออกเอกสาร</p></div>
-                    </div>
-                </div>
-                <div className="container_12">
-                    <div>
-                    <div className="p-search-box cancel-margin grid_3  float-right">
-                        <input type="text" className=" p-search-box__input cancel-default  " defaultValue={props.create_name} disabled="diabled"></input>
-                    </div>
-                    </div>
-                    <div className="grid_2 cancel-default float-right"><p className="cancel-default float-right">ผู้สร้างเอกสาร</p></div>
-                </div>
-                </section>
-                </div>
+    <div id="blackground-white">
+    <div className="container_12 clearfix" style={{marginTop: "55px"}}>
+        {/* Section Title */}
+        <h4 className="head-title">แจ้งเหตุขัดข้อง/ชำรุด</h4>
+
+        {/* === Left Column === */}
+        <div className="grid_6">
+
+            {/* Document ID */}
+            <Label>เลขที่เอกสาร</Label>
+            <div className="grid_3 alpha">
+                <TextInput name='internal_document_id'
+                    searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} 
+                    ariaControls="modalWorkRequset" 
+                    tabIndex="1" />
             </div>
+            <div class="clear" />
+
+            {/* User Employee ID  */}
+            <Label>ผู้ดำเนินเรื่อง</Label>
+            <div className="grid_3 alpha">
+                <TextInput name="created_by_user_employee_id" 
+                    disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} 
+                    tabIndex="2"/>
+            </div>
+            <div class="clear" />
+
+            {/* Admin Employee ID  */}
+            <Label>ผู้สร้างเอกสาร</Label>
+            <div className="grid_3 alpha">
+                <TextInput name="created_by_admin_employee_id" 
+                    disabled 
+                    tabIndex="3"/>
+            </div>
+            <div class="clear" />
+        </div>
 
 
-        <PopupModalWorkRequest />
 
-      </div >
+        {/* === Right Column === */}
+        <div className="grid_6 prefix_2">
+
+            {/* Document Status  */}
+            <Label>สถานะ</Label>
+            <div className="grid_3 alpha">
+                <TextInput name="status_name_th" 
+                    disabled 
+                    tabIndex="4"/>
+            </div>
+            <div class="clear" />
+
+            {/* Created On */}
+            <Label>วันที่</Label>
+            <div className="grid_3 alpha">
+                <DateTimeInput name="created_on" 
+                    disabled 
+                    tabIndex="5"/>
+            </div>
+            <div class="clear" />
+
+            {/* Document date */}
+            <Label>วันที่เอกสาร</Label>
+            <div className="grid_3 alpha">
+                <DateInput name="document_date"
+                    disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} 
+                    tabIndex="6" />
+            </div>
+            <div class="clear" />
+        </div>
+    </div>
+    <PopupModalWorkRequest />
+    </div>
     );
 }
 
