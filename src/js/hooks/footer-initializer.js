@@ -54,7 +54,7 @@ const useFooterInitializer = (document_type_id, props) => {
             let track_document_id = document_id; // TEST: Track Document
             let previousApprovalInfo = values.step_approve; // Check Previous Approver 
             let document_status = DOCUMENT_STATUS.REOPEN; // TODO: values.status_name_th
-            let created_by_admin_employee_id = getUserIDFromEmployeeID(props.fact[FACTS.USERS], values.created_by_admin_employee_id); // TEST: values.created_by_admin_employee_id;
+            let created_by_admin_employee_id = getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id); // TEST: values.created_by_admin_employee_id;
             let latestApprovalInfo = {}
 
             // Check Who's create document
