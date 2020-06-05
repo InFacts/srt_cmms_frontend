@@ -29,16 +29,16 @@ const APPROVAL_STEP_ACTION = {
     CHECK_MAINTENANCE: 5, // "ตรวจสอบรับทราบลงนาม และเลือกวิธีจัดซ่อม",
     GUARANTEE_MAINTENANCE: 6 // "รับรองผลดำเนินการซ่อมเสร็จแล้ว",
 }
-const useFooterInitializer = (document_type_id, props) => {
+const useFooterInitializer = (document_type_id) => {
     const dispatch = useDispatch();
     const toolbar = useSelector((state) => ({...state.toolbar}));
     const user_id = useSelector((state) => ({...state.token.decoded_token}));
     const footer = useSelector((state) => ({...state.footer}));
     const fact = useSelector((state) => ({...state.api.fact}));
 
-    const {values, submitForm, setFieldValue} = useFormikContext();
+    const {values, submitForm, setFieldValue, resetForm} = useFormikContext();
     const token = useSelector((state) => ({...state.token}));
-    console.log("useFormikContext ------>", token)
+    // console.log("useFormikContext ------>", token)
     useTokenInitializer();
 
     // Handle Toolbar Mode
@@ -157,6 +157,7 @@ const useFooterInitializer = (document_type_id, props) => {
             saveDocument(document_type_id, data)
             .then((document_id) => {
                 setFieldValue('document_id', document_id, false);
+                
             })
             .catch((err) => {
                 console.log("Submit Failed ", err);
@@ -164,6 +165,7 @@ const useFooterInitializer = (document_type_id, props) => {
             .finally(() => { // Set that I already handled the Click
                 console.log(" I submitted and i am now handling click")
                 dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
+                resetForm();
             }); 
         }
     }, [footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]]);

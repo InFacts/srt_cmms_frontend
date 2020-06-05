@@ -102,15 +102,14 @@ const EnhancedGoodsReturnComponent = withFormik({
         created_by_user_employee_id: '',
         remark: '',
         line_items: initialRows(),
-        refer_to_document_internal_document_id: '',
         file: [],
+        refer_to_document_name: '',
     
         //Field ที่ไม่ได้กรอก        
         created_on: '',
         status_name_th: '',
         document_status_id: '',
         created_by_admin_employee_id: '',
-        refer_to_document_id: '',
 
         //Field ที่ไม่ได้ display
         document_id: '', // changes when document is displayed (internal_document_id field validation)
