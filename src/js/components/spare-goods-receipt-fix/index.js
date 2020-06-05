@@ -36,7 +36,7 @@ const GoodsReturnComponent = (props) => {
     useToolbarInitializer(TOOLBAR_MODE.SEARCH);
     useTokenInitializer();
     useFactInitializer();
-    useFooterInitializer(DOCUMENT_TYPE_ID.GOODS_USAGE);
+    useFooterInitializer(DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX);
 
     // If Link to this url via Track Document
     useEffect(() => {
@@ -46,10 +46,10 @@ const GoodsReturnComponent = (props) => {
         const internal_document_id = urlParams.get('internal_document_id');
         if (internal_document_id !== "") {
             // action_approval
-            console.log(" IA M NOT SETTING ", internal_document_id);
-            console.log(" THIS IS CURRENT VALUES ", values);
+            // console.log(" IA M NOT SETTING ", internal_document_id);
+            // console.log(" THIS IS CURRENT VALUES ", values);
             setFieldValue("internal_document_id", internal_document_id, true);
-            console.log(" THIS IS AFTER VALUES ", values);
+            // console.log(" THIS IS AFTER VALUES ", values);
         }
     }, [props.toolbar.mode, values.internal_document_id])
 
@@ -136,10 +136,10 @@ const EnhancedGoodsReturnComponent = withFormik({
         return errors;
     },
     handleSubmit: (values, formikBag) => new Promise ((resolve, reject) => { //handle Submit will just POST the Empty Document and PUT information inside
-        console.log("DOCUMENT_TYPE_ID.GOODS_USAGE", DOCUMENT_TYPE_ID.GOODS_USAGE)
+        console.log("DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX", DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX)
         let data = packDataFromValues(formikBag.props.fact, values);
         console.log("I AM SUBMITTING ", data );
-        saveDocument(DOCUMENT_TYPE_ID.GOODS_USAGE, data)
+        saveDocument(DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX, data)
         .then((document_id) => {
             formikBag.setFieldValue('document_id', document_id, false);
             return resolve(document_id);

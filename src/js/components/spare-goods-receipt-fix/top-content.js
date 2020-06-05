@@ -72,7 +72,7 @@ const TopContent = (props) => {
     // Internal Document ID
     //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
     //  ie. GR-PYO-2563/0001
-    console.log("I am validating document id", internal_document_id)
+    // console.log("I am validating document id", internal_document_id)
     let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS)-[A-Z]{3}-\d{4}\/\d{4}$/g
     let draftInternalDocumentIDRegex = /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
     // let draftInternalDocumentIDRegex = /^heh/g
@@ -168,7 +168,7 @@ const TopContent = (props) => {
     <div id="blackground-white">
       <div className="container_12 clearfix">
         <section className="container_12 ">
-          <h4 className="head-title">เบิกอะไหล่ไปใช้งาน</h4>
+          <h4 className="head-title">ส่งซ่อมอะไหล่</h4>
           <div className="container_12">
 
             {/* Document ID */}
@@ -246,7 +246,7 @@ const TopContent = (props) => {
       </div>
 
       {/* PopUp ค้นหาเลขที่เอกสาร */}
-      <PopupModalDocument documentTypeGroupID={DOCUMENT_TYPE_ID.GOODS_USAGE}
+      <PopupModalDocument documentTypeGroupID={DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX}
         id="modalDocument" //For Open POPUP
         name="internal_document_id" //For setFieldValue
       />
