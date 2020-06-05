@@ -261,6 +261,7 @@ const TopContent = (props) => {
 
       {/* PopUp ค้นหาเลขที่คลัง MODE ADD */}
       <PopupModalInventory 
+       id="modalInventory" //For Open POPUP
       name="src_warehouse_id"
       />
 
