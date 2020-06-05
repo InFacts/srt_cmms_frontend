@@ -9,6 +9,7 @@ export const DOCUMENT_TYPE_ID = {
     GOODS_RETURN: 102,
     GOODS_RETURN_MAINTENANCE: 102,
     GOODS_RECEIPT_PO_NO_PO: 103,
+    GOODS_USAGE: 111,
     INVENTORY_TRANSFER: 121,
 
     SS101: 204,
@@ -96,7 +97,7 @@ export function getItemIDFromInternalItemID(itemFact, internal_item_id) {
     return null;
 }
 
-const getNumberFromEscapedString = (escapedString) => {
+export const getNumberFromEscapedString = (escapedString) => {
     if (Number.isInteger(escapedString)) {
         return escapedString;
     }
@@ -138,6 +139,10 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                 po_id: values.po_id
             }
             break;
+        case DOCUMENT_TYPE_ID.GOODS_RETURN:
+            break;
+        case DOCUMENT_TYPE_ID.GOODS_RETURN_MAINTENANCE:
+            break;
         case DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO:
             document_part = {
                 ...document_part,
@@ -149,6 +154,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                 ...document_part,
                 refer_to_document_id: values.refer_to_document_id
             }
+        case DOCUMENT_TYPE_ID.GOODS_USAGE:
             break;
         default:
             break;
@@ -233,6 +239,7 @@ export const createDocumentEmptyRow = () => new Promise((resolve) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/new/0`;
     axios.post(url, null, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
+            console.log(" I am successful in creating empty document with document_id ", res.data.document_id)
             resolve({
                 internal_document_id: res.data.internal_document_id, //"draft-bea9f75d-23db-49ae-a8d5-385121fb0234",
                 document_id: res.data.document_id,  //"document_id": 14
@@ -259,7 +266,8 @@ export const editDocument = (document_id, document_type_group_id, data) => new P
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}/${document_type_group_id}`;
     axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
-            if (res.status === 200) {
+            console.log(" I am successful in updating contents of document_id ", document_id)
+            if(res.status === 200){
                 resolve(res.data);
             } else {
                 reject(res);
@@ -331,9 +339,10 @@ export const saveDocument = (document_type_group_id, data) => new Promise((resol
 // POST /approval/{document_id}/new
 export const startDocumentApprovalFlow = (document_id) => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/new`;
-    axios.put(url, null, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+    axios.post(url, null, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
-            if (res.status === 200 || res.status === 201) {
+            if(res.status === 200 || res.status === 201){
+                console.log(" I am successful in starting approval flow of document_id ", document_id)
                 resolve(res.data);
             } else {
                 reject(res);
@@ -347,6 +356,18 @@ export const fetchStepApprovalDocumentData = (document_id) => new Promise((resol
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((step_approve) => {
             resolve(step_approve.data);
+        })
+        .catch((err) => {
+            reject(err)
+        });
+});
+
+// Get Goods Onhand After Select Warehoues ID and No part ID
+export const fetchGoodsOnhandData = (warehouse_id, item_id) => new Promise((resolve, reject) => {
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-onhand/plus?warehouse_id=${warehouse_id}&item_id=${item_id}`;
+    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((res) => {
+            resolve(res.data.results);
         })
         .catch((err) => {
             reject(err)

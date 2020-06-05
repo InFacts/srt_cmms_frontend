@@ -337,7 +337,8 @@ const TopContent = (props) => {
       />
 
       {/* PopUp ค้นหาเลขที่คลัง MODE ADD */}
-      <PopupModalInventory />
+      <PopupModalInventory
+      name="dest_warehouse_id" />
 
       {/* PopUp ค้นหาชื่อพนักงาน MODE ADD */}
       <PopupModalUsername />

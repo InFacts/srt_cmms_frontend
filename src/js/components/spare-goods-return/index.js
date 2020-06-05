@@ -36,7 +36,7 @@ const GoodsReturnComponent = (props) => {
     useToolbarInitializer(TOOLBAR_MODE.SEARCH);
     useTokenInitializer();
     useFactInitializer();
-    useFooterInitializer();
+    useFooterInitializer(DOCUMENT_TYPE_ID.GOODS_RETURN);
 
     // If Link to this url via Track Document
     useEffect(() => {

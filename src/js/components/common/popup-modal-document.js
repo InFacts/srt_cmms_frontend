@@ -12,6 +12,7 @@ const PopupModalDocument = (props) => {
     const [documentID, setDocumentID] = useState("");
     const [url, setUrl] = useState(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=${props.documentTypeGroupID}&internal_document_id=${documentID}`)
     const { setFieldValue } = useFormikContext();
+    const [forceRefresh, setForceRefresh] = useState(false);
 
     useEffect(() => {
         const fetchData = () => {
