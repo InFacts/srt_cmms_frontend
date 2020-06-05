@@ -317,6 +317,22 @@ export const fetchLastestInternalDocumentID = (document_type_group_id) => new Pr
         })
 });
 
+// GET /document/internal_document_id/{internal_document_id}
+export const getDocumentbyInternalDocumentID = (internal_document_id) => new Promise((resolve, reject) => {
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/internal_document_id/${encodeURIComponent(internal_document_id)}`;
+    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+      .then((res) => {
+        console.log(" I am successful in GETTING contents of internal_document_id ", internal_document_id)
+        if(res.status === 200){
+            console.log("wow i Getted successfully status 200 ", res.data)
+            resolve(res.data);
+        } else {
+            console.log(" i think i have some problems Getted ",res.data)
+            reject(res);
+        }
+      });
+})
+
 // PUT /document/{document_id}/{document_type_group_id}
 export const editDocument = (document_id, document_type_group_id, data) => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}/${document_type_group_id}`;

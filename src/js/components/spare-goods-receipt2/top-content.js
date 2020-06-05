@@ -17,7 +17,7 @@ import PopupModalDocument from '../common/popup-modal-document'
 import PopupModalInventory from '../common/popup-modal-inventory'
 import PopupModalUsername from '../common/popup-modal-username'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
-import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID } from '../../helper';
+import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, getDocumentbyInternalDocumentID } from '../../helper';
 
 
 const responseToFormState = (userFact, data) => {
@@ -92,7 +92,7 @@ const TopContent = (props) => {
         if ((props.toolbar.mode === TOOLBAR_MODE.SEARCH || props.toolbar.mode === TOOLBAR_MODE.NONE || props.toolbar.mode === TOOLBAR_MODE.NONE_HOME) 
           && !props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
 
-          setValues({ ...values, ...responseToFormState(props.fact.users, res.data) }, false); //Setvalues and don't validate
+          setValues({ ...values, ...responseToFormState(props.fact.users, data) }, false); //Setvalues and don't validate
           validateField("dest_warehouse_id");
           validateField("created_by_user_employee_id");
           validateField("created_by_admin_employee_id");
@@ -110,7 +110,7 @@ const TopContent = (props) => {
                 setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
                 setFieldValue("desrciption_files_length", desrciption_files.data.results.length, false);
                 setFieldValue("desrciption_files", desrciption_files.data.results, false);
-                setFieldValue("document_id", res.data.document_id, false);
+                setFieldValue("document_id", data.document_id, false);
                 return resolve(null);
               });
             
