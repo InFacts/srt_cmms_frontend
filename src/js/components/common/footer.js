@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import {FOOTER_MODE, FOOTER_ACTIONS, FOOTER_ACTIONS_TEXT, clickApproval, clickSend, clickSave, clickReject, clickBack, clickCheckApproval, clickApprovalOrder, clickFastTrack, clickCancleApprovalProcess, clickVoid} from '../../redux/modules/footer.js';
+import {FOOTER_MODE, FOOTER_ACTIONS, FOOTER_ACTIONS_TEXT, clickApproval, clickSend, clickSave, clickReject, clickBack, clickCheckApproval, clickApprovalOrder, clickFastTrack, clickCancleApprovalProcess, clickVoid, clickApproved} from '../../redux/modules/footer.js';
 import { useDispatch, useSelector  } from 'react-redux'
 
 const FOOTER_ACTIONS_TO_ACTION_CREATOR = {
@@ -14,7 +14,8 @@ const FOOTER_ACTIONS_TO_ACTION_CREATOR = {
   [FOOTER_ACTIONS.APPROVAL_ORDER]: clickApprovalOrder, 
   [FOOTER_ACTIONS.FAST_TRACK]: clickFastTrack,
   [FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]: clickCancleApprovalProcess,
-  [FOOTER_ACTIONS.VOID]: clickVoid
+  [FOOTER_ACTIONS.VOID]: clickVoid,
+  [FOOTER_ACTIONS.APPROVED]: clickApproved
 }
 
 const ALL_DISABLED_PROP = {}
@@ -43,9 +44,15 @@ function getPropButtonVisible(isButtonBlue, enabledActions){
 const FooterItemComponent = (props) => {
   let {keyFooter, buttonName, buttonType, isVisible, handleClick} = props;
   if (isVisible) {
-    return(
-      <button type="button" title={keyFooter} className={buttonType == "Button-Blue" ? "button-blue edit float-right mr-2":"p-button--base edit float-right"} onClick={handleClick}>{buttonName}</button>
-    )
+    if (FOOTER_ACTIONS_TEXT.APPROVED === buttonName){
+      return(
+        <button type="button" title={keyFooter} className={buttonType == "Button-Blue" ? "button-blue edit float-right mr-2":"p-button--base edit float-right"} onClick={handleClick}>{buttonName}</button>
+      )
+    } else {
+      return(
+        <button type="button" title={keyFooter} className={buttonType == "Button-Blue" ? "button-blue edit float-right mr-2":"p-button--base edit float-right"} onClick={handleClick}>{buttonName}</button>
+      )
+    }
   }
   return null;
 }
@@ -109,6 +116,9 @@ const mapStateToProps = (state) => {
     case FOOTER_MODE.AP_GUARANTEE_MAINTENANCE:
       // console.log(">>>>> AP_GUARANTEE_MAINTENANCE")
       return getPropButtonVisible(FOOTER_ACTIONS.CHECK_APPROVAL, [FOOTER_ACTIONS.CHECK_APPROVAL, FOOTER_ACTIONS.REJECT, FOOTER_ACTIONS.BACK]);
+    case FOOTER_MODE.AP_APPROVAL_END:
+      // console.log(">>>>> AP_APPROVAL_END")
+      return getPropButtonVisible(FOOTER_ACTIONS.CHECK_APPROVAL, [FOOTER_ACTIONS.CHECK_APPROVAL, FOOTER_ACTIONS.BACK]);
     default:
       return {...ALL_DISABLED_PROP};
   }

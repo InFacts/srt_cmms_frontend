@@ -29,16 +29,15 @@ const APPROVAL_STEP_ACTION = {
     CHECK_MAINTENANCE: 5, // "ตรวจสอบรับทราบลงนาม และเลือกวิธีจัดซ่อม",
     GUARANTEE_MAINTENANCE: 6 // "รับรองผลดำเนินการซ่อมเสร็จแล้ว",
 }
-const useFooterInitializer = (document_type_id, props) => {
+const useFooterInitializer = (document_type_id) => {
     const dispatch = useDispatch();
     const toolbar = useSelector((state) => ({...state.toolbar}));
     const user_id = useSelector((state) => ({...state.token.decoded_token}));
     const footer = useSelector((state) => ({...state.footer}));
     const fact = useSelector((state) => ({...state.api.fact}));
 
-    const {values, submitForm, setFieldValue} = useFormikContext();
+    const {values, submitForm, setFieldValue, resetForm} = useFormikContext();
     const token = useSelector((state) => ({...state.token}));
-    console.log("useFormikContext ------>", token)
     useTokenInitializer();
 
     // Handle Toolbar Mode
@@ -53,16 +52,16 @@ const useFooterInitializer = (document_type_id, props) => {
             };
             let track_document_id = document_id; // TEST: Track Document
             let previousApprovalInfo = values.step_approve; // Check Previous Approver 
-            let document_status = DOCUMENT_STATUS.REOPEN; // TODO: values.status_name_th
+            let document_status = DOCUMENT_STATUS.DRAFT; // TODO: values.status_name_th
             let created_by_admin_employee_id = getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id); // TEST: values.created_by_admin_employee_id;
-            let latestApprovalInfo = {}
 
             // Check Who's create document
             // TODO: created_by_admin_employee_id doesn't has when refresh
             if (userInfo.id === created_by_admin_employee_id) {
+                console.log("HI Check Who's create document", userInfo.id, created_by_admin_employee_id)
                 if (document_status === DOCUMENT_STATUS.REOPEN) { dispatch(footerToModeEdit()); }
                 else if (document_status === DOCUMENT_STATUS.WAIT_APPROVE) { dispatch(footerToModeOwnDocument()); }
-                else { dispatch(footerToModeEdit()); }
+                else { dispatch(footerToModeAddDraft()); }
             }
             else {
                 // Check That user_id into Previous Approval Flow ?
@@ -157,6 +156,7 @@ const useFooterInitializer = (document_type_id, props) => {
             saveDocument(document_type_id, data)
             .then((document_id) => {
                 setFieldValue('document_id', document_id, false);
+                
             })
             .catch((err) => {
                 console.log("Submit Failed ", err);
@@ -164,6 +164,7 @@ const useFooterInitializer = (document_type_id, props) => {
             .finally(() => { // Set that I already handled the Click
                 console.log(" I submitted and i am now handling click")
                 dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
+                resetForm();
             }); 
         }
     }, [footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]]);

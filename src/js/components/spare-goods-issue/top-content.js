@@ -44,7 +44,7 @@ const responseToFormState = (userFact, data) => {
     src_warehouse_id: data.src_warehouse_id,
     remark: data.remark,
     status_name_th: data.status_name,
-    refer_to_document_internal_document_id: data.refer_to_document_internal_document_id,
+    refer_to_document_name: data.refer_to_document_name,
   }
 }
 
@@ -233,14 +233,11 @@ const TopContent = (props) => {
           </div>
 
           <div className="container_12">
-          <div className="grid_1" style={{ whiteSpace: "nowrap"}}>
-              <p className="top-text">เอกสารอ้างอิง</p>
+          <div className="grid_2" style={{ whiteSpace: "nowrap"}}>
+              <p className="top-text">เลขที่เอกสารอ้างอิง</p>
             </div>
-            <div className="grid_3">
-              <TextInput name="refer_to_document_internal_document_id"
-                // validate={validateInternalDocumentSS1646ID}
-                disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
-                tabIndex="4" />
+            <div className="grid_3 pull_0">
+            <TextInput name="refer_to_document_name" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="4" />
             </div>
 
             {/* Src Warehouse ID */}

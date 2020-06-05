@@ -145,6 +145,12 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                 po_id: values.po_id
             }
             break;
+        case DOCUMENT_TYPE_ID.GOODS_ISSUE:
+            movement_part = {
+                ...movement_part,
+                refer_to_document_name: values.refer_to_document_name
+            }
+            break;
         case DOCUMENT_TYPE_ID.GOODS_RETURN:
             break;
         case DOCUMENT_TYPE_ID.GOODS_RETURN_MAINTENANCE:
