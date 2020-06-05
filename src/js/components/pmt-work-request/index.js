@@ -33,15 +33,20 @@ const WorkRequestComponent = () => {
 const EnhancedWorkRequestComponent = withFormik({
     mapPropsToValues: () => ({ 
         // Field ที่ให้ User กรอก
-        internal_document_id: '',
-        document_date: '',
-        
+        internal_document_id: '',       // เลขที่เอกสาร
+        document_date: '',              // วันที่ออกเอกสาร
+        created_by_user_employee_id: '', // 
+        remark: '',                      // หมายเหตุ
+        accident: '',                   // อาการขัดข้อง
+        accident_on: '',                // วันเวลาเกิดเหตุ
 
+        district_id: '',
+        node_id: '',
         //Field ที่ไม่ได้กรอก
         created_on: '', // TODO doesn't have
         status_name_th: '', // TODO doesn't have
-        document_status_id: '',
-        created_by_admin_employee_id: '', // TODO doesn't have
+        document_status_id: '', // ?
+        created_by_admin_employee_id: '',  //ผู้สร้างเอกสาร
         step_approve: [],
 
         //Field ที่ไม่ได้ display
@@ -52,6 +57,7 @@ const EnhancedWorkRequestComponent = withFormik({
         return errors;
     },
     handleSubmit: (values, formikBag) => new Promise ((resolve, reject) => { //handle Submit will just POST the Empty Document and PUT information inside
+        console.log( "I am submitting ". values)
         resolve("DONE!")
       }),    
 })(WorkRequestComponent);
