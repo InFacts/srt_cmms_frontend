@@ -23,7 +23,7 @@ import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
 const GoodsReceiptComponent = (props) => {
     
-    const {resetForm, setFieldValue, setValues, values} = useFormikContext();
+    const {resetForm, setFieldValue, setValues, values, validateField,validateForm} = useFormikContext();
 
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
@@ -41,17 +41,19 @@ const GoodsReceiptComponent = (props) => {
     // If Link to this url via Track Document
     useEffect(() => {
         let url = window.location.search;
-        console.log("URL IS", url)
+        // console.log("URL IS", url)
         const urlParams = new URLSearchParams(url);
         const internal_document_id = urlParams.get('internal_document_id');
         if (internal_document_id !== "") {
             // action_approval
-            console.log(" IA M NOT SETTING ", internal_document_id);
-            console.log(" THIS IS CURRENT VALUES ", values);
+            // console.log(" IA M NOT SETTING ", internal_document_id);
+            // console.log(" i think that toolbar mode is ", props.toolbar.mode)
+            // console.log(" THIS IS CURRENT VALUES ", values);
             setFieldValue("internal_document_id", internal_document_id, true);
-            console.log(" THIS IS AFTER VALUES ", values);
+            // console.log(" THIS IS AFTER VALUES ", values);
+            // setTimeout(validateForm, 2);
         }
-    }, [])
+    }, [props.toolbar.mode, values.internal_document_id])
 
     return (
         <form onSubmit={props.handleSubmit}>

@@ -15,7 +15,7 @@ const formatDate = (dateISOString) => {
 const BottomContent = (props) => {
   const listUsers = useSelector((state) => ({...state.api.fact.users.items}));
   const listDocumentStatus = useSelector((state) => ({...state.api.fact['document-status'].items}));
-
+  
   const identifyEndpoins = (document_type_id) => {
     let doc_type = document_type_id.toString().substring(0, 3);
     if (doc_type === "101") return "good-receipt2";
@@ -60,7 +60,7 @@ const BottomContent = (props) => {
                           Object.values(listDocumentStatus).find(status => status.document_status_id === track_document_show.document_status_id).status
                         }</td>
                         <td className="edit-padding">
-                          <Link to={identifyEndpoins(track_document_show.document_type_id) + "?internal_document_id=" + track_document_show.internal_document_id + "&document_id=" + track_document_show.document_id}>รายละเอียด</Link>
+                          <Link to={identifyEndpoins(track_document_show.document_type_id) + "?internal_document_id=" + track_document_show.internal_document_id + "&document_id=" + track_document_show.document_id}>รายละเอียดsdasd</Link>
                         </td>
                       </tr>
                     )})}

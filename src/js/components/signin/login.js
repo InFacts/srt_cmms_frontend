@@ -4,8 +4,6 @@ import { Link, Redirect } from 'react-router-dom'
 import { API_PORT_DATABASE } from '../../config_port.js';
 import { API_URL_DATABASE } from '../../config_url.js';
 
-import { connect } from 'react-redux'
-
 import '../../../vender/fontawesome-free/css/all.css';
 import '../../../css/style-signin.css';
 

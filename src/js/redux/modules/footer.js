@@ -51,8 +51,12 @@ const TO_MODE_NONE = "footer/TO_MODE_NONE";
 const TO_MODE_SEARCH = "footer/TO_MODE_SEARCH";
 const TO_MODE_EDIT = "footer/TO_MODE_EDIT";
 const TO_MODE_ADD_DRAFT = "footer/TO_MODE_ADD_DRAFT";
-const TO_MODE_SEND = "footer/TO_MODE_SEND";
-const TO_MODE_APPROVAL = "footer/TO_MODE_APPROVAL";
+const TO_MODE_AP_APPROVAL = "footer/TO_MODE_AP_APPROVAL";
+const TO_MODE_AP_CHECK_APPROVAL = "footer/TO_MODE_AP_CHECK_APPROVAL";
+const TO_MODE_AP_GOT_IT = "footer/TO_MODE_AP_GOT_IT";
+const TO_MODE_AP_CHECK_ORDER = "footer/TO_MODE_AP_CHECK_ORDER";
+const TO_MODE_AP_CHECK_MAINTENANCE = "footer/TO_MODE_AP_CHECK_MAINTENANCE";
+const TO_MODE_AP_GUARANTEE_MAINTENANCE = "footer/TO_MODE_AP_GUARANTEE_MAINTENANCE";
 
 const CLICK_APPROVAL = "footer/CLICK_APPROVAL";
 const CLICK_SEND = "footer/CLICK_SEND";
@@ -122,15 +126,35 @@ export default function reducer(state = initialState, action){
                 ...state,
                 mode: FOOTER_MODE.ADD_DRAFT
             }
-        case TO_MODE_SEND:
+        case TO_MODE_AP_APPROVAL:
             return {
                 ...state,
-                mode: FOOTER_MODE.SEND
+                mode: FOOTER_MODE.AP_APPROVAL
             }
-        case TO_MODE_APPROVAL:
+        case TO_MODE_AP_CHECK_APPROVAL:
             return {
                 ...state,
-                mode: FOOTER_MODE.APPROVAL
+                mode: FOOTER_MODE.AP_CHECK_APPROVAL
+            }
+        case TO_MODE_AP_GOT_IT:
+            return {
+                ...state,
+                mode: FOOTER_MODE.AP_GOT_IT
+            }
+        case TO_MODE_AP_CHECK_ORDER:
+            return {
+                ...state,
+                mode: FOOTER_MODE.AP_CHECK_ORDER
+            }
+        case TO_MODE_AP_CHECK_MAINTENANCE:
+            return {
+                ...state,
+                mode: FOOTER_MODE.AP_CHECK_MAINTENANCE
+            }
+        case TO_MODE_AP_GUARANTEE_MAINTENANCE:
+            return {
+                ...state,
+                mode: FOOTER_MODE.AP_GUARANTEE_MAINTENANCE
             }
 
         // CLICK
@@ -282,8 +306,12 @@ export const footerToModeNone = makeActionCreator(TO_MODE_NONE);
 export const footerToModeSearch = makeActionCreator(TO_MODE_SEARCH);
 export const footerToModeEdit = makeActionCreator(TO_MODE_EDIT);
 export const footerToModeAddDraft = makeActionCreator(TO_MODE_ADD_DRAFT);
-export const footerToModeSend = makeActionCreator(TO_MODE_SEND);
-export const footerToModeApproval = makeActionCreator(TO_MODE_APPROVAL);
+export const footerToModeApApproval = makeActionCreator(TO_MODE_AP_APPROVAL);
+export const footerToModeApCheckApproval = makeActionCreator(TO_MODE_AP_CHECK_APPROVAL);
+export const footerToModeApGotIt = makeActionCreator(TO_MODE_AP_GOT_IT);
+export const footerToModeApCheckOrder = makeActionCreator(TO_MODE_AP_CHECK_ORDER);
+export const footerToModeApCheckMaintenance = makeActionCreator(TO_MODE_AP_CHECK_MAINTENANCE);
+export const footerToModeApGuarnteeMaintenance = makeActionCreator(TO_MODE_AP_GUARANTEE_MAINTENANCE);
 
 export const clickApproval = makeActionCreator(CLICK_APPROVAL);
 export const clickSend = makeActionCreator(CLICK_SEND);

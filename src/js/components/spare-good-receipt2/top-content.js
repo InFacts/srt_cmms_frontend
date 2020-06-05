@@ -81,8 +81,10 @@ const TopContent = (props) => {
     let draftInternalDocumentIDRegex = /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
     // let draftInternalDocumentIDRegex = /^heh/g
     if (!internal_document_id) {
+      console.log(" there is no doc id ")
       return resolve('Required');
     } else if (!internalDocumentIDRegex.test(internal_document_id) && !draftInternalDocumentIDRegex.test(internal_document_id)) { //
+      console.log(' document not in the form')
       return resolve('Invalid Document ID Format\nBe sure to use the format ie. GR-PYO-2563/0001')
     }
     // if (!internal_document_id) {
@@ -93,7 +95,8 @@ const TopContent = (props) => {
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
       .then((res) => {
         if (res.data.internal_document_id === internal_document_id) { // If input document ID exists
-          if (props.toolbar.mode === TOOLBAR_MODE.SEARCH && !props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
+          if ((props.toolbar.mode === TOOLBAR_MODE.SEARCH || props.toolbar.mode === TOOLBAR_MODE.NONE || props.toolbar.mode === TOOLBAR_MODE.NONE_HOME) 
+            && !props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
 
             // Start Axios Get step_approve and attachment By nuk
             // axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${res.data.document_id}/latest/plus`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })

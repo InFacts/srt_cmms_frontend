@@ -334,3 +334,27 @@ export const fetchStepApprovalDocumentData = (document_id) => new Promise((resol
             reject(err)
         });
 });
+
+// Get Latest Step Approval After Track Docuemnt
+export const fetchLatestStepApprovalDocumentData = (document_id) => new Promise((resolve, reject) =>{
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/latest/step`;
+    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((latest_step_approve) => {
+            resolve(latest_step_approve.data);
+        })
+        .catch((err) => {
+            reject(err)
+        });
+});
+
+// Get Latest Step Approval After Track Docuemnt
+export const fetchSearchDocumentData = (document_id) => new Promise((resolve, reject) =>{
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?${document_id}`;
+    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((document) => {
+            resolve(document.data);
+        })
+        .catch((err) => {
+            reject(err)
+        });
+});
