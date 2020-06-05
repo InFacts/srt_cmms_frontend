@@ -2,14 +2,21 @@
 import axios from "axios";
 import { API_PORT_DATABASE } from './config_port.js';
 import { API_URL_DATABASE } from './config_url.js';
-import {fetchFactIfNeeded , FACTS} from './redux/modules/api/fact';
+import { fetchFactIfNeeded, FACTS } from './redux/modules/api/fact';
 // Constants
 export const DOCUMENT_TYPE_ID = {
     GOODS_RECEIPT_PO: 101,
+    GOODS_RETURN: 102,
+    GOODS_RETURN_MAINTENANCE: 102,
+    GOODS_RECEIPT_PO_NO_PO: 103,
+    GOODS_USAGE: 111,
+    INVENTORY_TRANSFER: 121,
+
+    SS101: 204,
 }
 export const MOVEMENT_GOODS_RECEIPT_PO_SCHEMA = {
     document_id: -1, //  required, redundant!
-    po_id: '', 
+    po_id: '',
 }
 export const DOCUMENT_TYPE_ID_TO_MOVEMENT_SCHEMA = {
     [DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO]: MOVEMENT_GOODS_RECEIPT_PO_SCHEMA
@@ -31,11 +38,11 @@ export const DOCUMENT_SCHEMA = {
 
 export const ICD_LINE_ITEM_SCHEMA = {
     document_id: -1, //  required, redundant!
-    line_number: -1, 
-    quantity: 0.0, 
+    line_number: -1,
+    quantity: 0.0,
     uom_id: -1,
     per_unit_price: 0.0,
-    item_id: -1, 
+    item_id: -1,
     item_status_id: -1,
 }
 
@@ -43,7 +50,7 @@ export const ICD_LINE_ITEM_SCHEMA = {
 
 export const ICD_SCHEMA = {
     document_id: -1, //  required, redundant!
-    dest_warehouse_id: -1, 
+    dest_warehouse_id: -1,
     src_warehouse_id: -1,
     line_items: [],  // REFER TO LINE ITEM SCHEMA
     movement: {}, // REFER TO MOVEMENT SCHEMAS
@@ -53,14 +60,14 @@ export const ICD_SCHEMA = {
 export function getEmployeeIDFromUserID(userFact, userID) {
     let users = userFact.items;
     if (users && users.length > 0) {
-      let user = users.find(user => `${user.user_id}` === `${userID}`)
-      if (userID === 0){ // needs to be handled later
-        return "Server"
-      }
-      if (user) {
-        return user.employee_id;
-      }
-      return null;
+        let user = users.find(user => `${user.user_id}` === `${userID}`)
+        if (userID === 0) { // needs to be handled later
+            return "Server"
+        }
+        if (user) {
+            return user.employee_id;
+        }
+        return null;
     }
     return null;
 }
@@ -69,11 +76,11 @@ export function getUserIDFromEmployeeID(userFact, employee_id) {
     employee_id = employee_id.split('\\')[0]; // Escape Character USERNAME CANT HAVE ESCAPE CHARACTER!
     let users = userFact.items;
     if (users && users.length > 0) {
-      let user = users.find(user => `${user.employee_id}` === `${employee_id}`)
-      if (user) {
-        return user.user_id;
-      }
-      return null;
+        let user = users.find(user => `${user.employee_id}` === `${employee_id}`)
+        if (user) {
+            return user.user_id;
+        }
+        return null;
     }
     return null;
 }
@@ -81,17 +88,17 @@ export function getItemIDFromInternalItemID(itemFact, internal_item_id) {
     internal_item_id = internal_item_id.split('\\')[0]; // Escape Character USERNAME CANT HAVE ESCAPE CHARACTER!
     let items = itemFact.items;
     if (items && items.length > 0) {
-      let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`)
-      if (item) {
-        return item.item_id;
-      }
-      return null;
+        let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`)
+        if (item) {
+            return item.item_id;
+        }
+        return null;
     }
     return null;
 }
 
-const getNumberFromEscapedString = (escapedString) => {
-    if(Number.isInteger(escapedString)){
+export const getNumberFromEscapedString = (escapedString) => {
+    if (Number.isInteger(escapedString)) {
         return escapedString;
     }
     return parseInt(escapedString.split('\\')[0]);
@@ -108,7 +115,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
     }
     let line_items_part = [];
     values.line_items.map(line_item => {
-        if (line_item.internal_item_id){
+        if (line_item.internal_item_id) {
             line_items_part.push({
                 ...ICD_LINE_ITEM_SCHEMA,
                 document_id: values.document_id,
@@ -125,12 +132,29 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         ...DOCUMENT_TYPE_ID_TO_MOVEMENT_SCHEMA[document_type_id],
         document_id: values.document_id,
     }
-    switch(document_type_id) {
+    switch (document_type_id) {
         case DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO:
             movement_part = {
                 ...movement_part,
                 po_id: values.po_id
             }
+            break;
+        case DOCUMENT_TYPE_ID.GOODS_RETURN:
+            break;
+        case DOCUMENT_TYPE_ID.GOODS_RETURN_MAINTENANCE:
+            break;
+        case DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO:
+            document_part = {
+                ...document_part,
+                refer_to_document_id: values.refer_to_document_id
+            }
+            break;
+        case DOCUMENT_TYPE_ID.GOODS_RETURN_MAINTENANCE:
+            document_part = {
+                ...document_part,
+                refer_to_document_id: values.refer_to_document_id
+            }
+        case DOCUMENT_TYPE_ID.GOODS_USAGE:
             break;
         default:
             break;
@@ -139,9 +163,9 @@ export const packDataFromValues = (fact, values, document_type_id) => {
     const icd_part = {
         ...ICD_SCHEMA,
         document_id: values.document_id,
-        dest_warehouse_id: getNumberFromEscapedString(values.dest_warehouse_id), 
-        src_warehouse_id: getNumberFromEscapedString(values.src_warehouse_id), 
-        line_items: line_items_part, 
+        dest_warehouse_id: getNumberFromEscapedString(values.dest_warehouse_id),
+        src_warehouse_id: getNumberFromEscapedString(values.src_warehouse_id),
+        line_items: line_items_part,
         movement: movement_part, // REFER TO MOVEMENT SCHEMAS
 
     }
@@ -198,7 +222,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
 // }
 
 // Document API
-const fetchDocumentData = (document_id) => new Promise((resolve, reject) =>{
+const fetchDocumentData = (document_id) => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
@@ -215,6 +239,7 @@ export const createDocumentEmptyRow = () => new Promise((resolve) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/new/0`;
     axios.post(url, null, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
+            console.log(" I am successful in creating empty document with document_id ", res.data.document_id)
             resolve({
                 internal_document_id: res.data.internal_document_id, //"draft-bea9f75d-23db-49ae-a8d5-385121fb0234",
                 document_id: res.data.document_id,  //"document_id": 14
@@ -228,9 +253,9 @@ export const fetchLastestInternalDocumentID = (document_type_group_id) => new Pr
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             let results = res.data.results;
-            if(results){
+            if (results) {
                 resolve(results[0].internal_document_id);
-            }else{
+            } else {
                 reject('No Results in fetchLastestInternalDocumentID');
             }
         })
@@ -241,9 +266,10 @@ export const editDocument = (document_id, document_type_group_id, data) => new P
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}/${document_type_group_id}`;
     axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
+            console.log(" I am successful in updating contents of document_id ", document_id)
             if(res.status === 200){
                 resolve(res.data);
-            }else{
+            } else {
                 reject(res);
             }
         })
@@ -255,33 +281,33 @@ export const editDocument = (document_id, document_type_group_id, data) => new P
 
 const fillObjectOfName = (object, fieldName, value) => {
     for (let key1 in object) {
-        if(typeof object[key1] === "object"){
+        if (typeof object[key1] === "object") {
             for (let key2 in object[key1]) {
-                if(typeof object[key1][key2] === "object"){
+                if (typeof object[key1][key2] === "object") {
                     for (let key3 in object[key1][key2]) {
-                        if(typeof object[key1][key2][key3] === "object"){
+                        if (typeof object[key1][key2][key3] === "object") {
                             // recursive line items
                             let line_item = object[key1][key2][key3];
-                            if(typeof line_item === "object"){
-                                if(line_item.hasOwnProperty(fieldName)){
+                            if (typeof line_item === "object") {
+                                if (line_item.hasOwnProperty(fieldName)) {
                                     object[key1][key2][key3][fieldName] = value;
                                 }
                             }
-                        }else {
+                        } else {
                             // base case, stop recurring
                             if (key3 === fieldName) {
                                 object[key1][key2][key3] = value;
                             }
                         }
                     }
-                }else{
+                } else {
                     // base case, stop recurring
                     if (key2 === fieldName) {
                         object[key1][key2] = value;
                     }
                 }
             }
-        }else{
+        } else {
             // base case, stop recurring
             if (key1 === fieldName) {
                 object[key1] = value;
@@ -292,7 +318,7 @@ const fillObjectOfName = (object, fieldName, value) => {
 
 // Fill in the document ID keys inside the nested object
 const mutateDataFillDocumentID = (object, document_id) => {
-    let mutated_object = {...object};
+    let mutated_object = { ...object };
     fillObjectOfName(mutated_object, 'document_id', document_id);
     return mutated_object
 }
@@ -302,29 +328,30 @@ const mutateDataFillDocumentID = (object, document_id) => {
 //   2. PUT /document/{document_id}/{document_type_group_id}: editDocument(document_id, document_type_group_id, data)
 export const saveDocument = (document_type_group_id, data) => new Promise((resolve, reject) => {
     createDocumentEmptyRow()
-    .then(({document_id, internal_document_id}) => { // Get the Document_ID
-        editDocument(document_id, document_type_group_id, mutateDataFillDocumentID(data, document_id))
-        .then(() => {
-            return resolve(document_id);
-        });
-    })
+        .then(({ document_id, internal_document_id }) => { // Get the Document_ID
+            editDocument(document_id, document_type_group_id, mutateDataFillDocumentID(data, document_id))
+                .then(() => {
+                    return resolve(document_id);
+                });
+        })
 });
 // Start the Approval Flow of the Document
 // POST /approval/{document_id}/new
 export const startDocumentApprovalFlow = (document_id) => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/new`;
-    axios.put(url, null, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+    axios.post(url, null, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             if(res.status === 200 || res.status === 201){
+                console.log(" I am successful in starting approval flow of document_id ", document_id)
                 resolve(res.data);
-            }else{
+            } else {
                 reject(res);
             }
         })
 });
 
 // Get Step Approval After Search Document
-export const fetchStepApprovalDocumentData = (document_id) => new Promise((resolve, reject) =>{
+export const fetchStepApprovalDocumentData = (document_id) => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/latest/plus`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((step_approve) => {
@@ -353,6 +380,18 @@ export const fetchSearchDocumentData = (document_id) => new Promise((resolve, re
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((document) => {
             resolve(document.data);
+        })
+        .catch((err) => {
+            reject(err)
+        });
+});
+
+// Get Goods Onhand After Select Warehoues ID and No part ID
+export const fetchGoodsOnhandData = (warehouse_id, item_id) => new Promise((resolve, reject) => {
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-onhand/plus?warehouse_id=${warehouse_id}&item_id=${item_id}`;
+    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((res) => {
+            resolve(res.data.results);
         })
         .catch((err) => {
             reject(err)

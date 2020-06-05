@@ -51,9 +51,9 @@ class Map extends React.Component {
                         <section className="grid_12 ">
                         <h4 className="head-title" style={{ color: "black"}}>ระบบบริหารข้อมูลอะไหล่ - Spare</h4>
                             <div id="blackground-white" style={{ height: "380px" }}>
-                                <Link to="/good-receipt2"><img alt='some value' src={Oneone} className="one-one" /></Link>
+                                <Link to="/goods-receipt2"><img alt='some value' src={Oneone} className="one-one" /></Link>
                                 <img alt='some value' src={Onetwo} className="one-two" />
-                                <Link to="/good-good-issue-no-po"><img alt='some value' src={Onethree} className="one-three" /></Link>
+                                <Link to="/goods-receipt-no-po"><img alt='some value' src={Onethree} className="one-three" /></Link>
                                 <img alt='some value' src={Arrow1} className="arrow1" />
                                 <img alt='some value' src={Arrow2} className="arrow2" />
                                 <img alt='some value' src={Arrow3} className="arrow3" />
@@ -62,9 +62,9 @@ class Map extends React.Component {
                                 <img alt='some value' src={Text3} className="text3" />
                                 <Link to="/inventory"><img alt='some value' src={Center} className="center" /></Link>
                                 <img alt='some value' src={Text4} className="text4" />
-                                <Link to="/good-issue-2"><img alt='some value' src={Twoone} className="two-one" /></Link>
-                                <Link to="/good-maintenace"><img alt='some value' src={Twothree} className="two-two" /></Link>
-                                <Link to="/good-take-out"><img alt='some value' src={Twotwo} className="two-three" /></Link>
+                                <Link to="/goods-usage"><img alt='some value' src={Twoone} className="two-one" /></Link>
+                                <Link to="/goods-maintenace"><img alt='some value' src={Twothree} className="two-two" /></Link>
+                                <Link to="/goods-take-out"><img alt='some value' src={Twotwo} className="two-three" /></Link>
                                 <img alt='some value' src={Arrow4} className="arrow4" />
                                 <img alt='some value' src={Arrow5} className="arrow5" />
                                 <img alt='some value' src={Arrow6} className="arrow6" />
@@ -89,8 +89,8 @@ class Map extends React.Component {
                                     <button className="p-contextual-menu__toggle" style={{ border: "none", padding: "0" }} aria-controls="menu-1" aria-expanded="false" aria-haspopup="true"><img alt='some value' src={Dropdown} /></button>
                                     <span className="p-contextual-menu__dropdown" id="menu-1" aria-hidden="true" aria-label="submenu">
                                         <span className="p-contextual-menu__group">
-                                            <Link to="/good-return-1" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>คืนอะไหล่</Link>
-                                            <Link to="/good-return-2" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รับคืนอะไหล่ส่งซ่อม</Link>
+                                            <Link to="/goods-return" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>คืนอะไหล่</Link>
+                                            <Link to="/goods-return-maintenance" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รับคืนอะไหล่ส่งซ่อม</Link>
                                         </span>
                                     </span>
                                 </span>
