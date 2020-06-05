@@ -38,7 +38,7 @@ const BottomContent = (props) => {
                 {/* Informed By */}
                 <Label>ผู้แจ้งเหตุ</Label>
                 <div className="grid_4 alpha omega">
-                    <TextInput name='informed_by' 
+                    <TextInput name='request_by' 
                         disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}/>
                 </div>
 
@@ -47,7 +47,7 @@ const BottomContent = (props) => {
                 {/* Accident Detail */}
                 <Label>อาการขัดข้อง</Label>
                 <div className="grid_4 alpha omega">
-                    <TextareaInput name="accident_detail" rows="4"
+                    <TextareaInput name="accident" rows="4"
                         disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
                 </div>
 
@@ -62,7 +62,7 @@ const BottomContent = (props) => {
                 {/* District ID */}
                 <Label>สถานที่ แขวง</Label>
                 <div className="grid_4 alpha omega">
-                    <SelectNoChildrenInput name="district_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                    <SelectNoChildrenInput name="location_district_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
                         <option value=''></option>
                         {factDistricts.items.map(function ({district_id, name, division_id}) {
                             return <option value={district_id} key={district_id}> {name} </option>
@@ -75,7 +75,7 @@ const BottomContent = (props) => {
                 {/* Node ID */}
                 <Label>สถานที่ ตอน</Label>
                 <div className="grid_4 alpha omega">
-                    <SelectNoChildrenInput name="node_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                    <SelectNoChildrenInput name="location_node_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
                         <option value=''></option>
                         {factNodes.items.map(function ({node_id, name, district_id}) {
                             if(values.district_id == district_id){ // Shallow equality, district ID may be string
@@ -90,7 +90,7 @@ const BottomContent = (props) => {
                 {/* Station ID */}
                 <Label>สถานที่ สถานี</Label>
                 <div className="grid_4 alpha omega">
-                    <SelectNoChildrenInput name="station_id" 
+                    <SelectNoChildrenInput name="location_station_id" 
                         disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
                         <option value=''></option>
                         {factStations.items.map(function ({station_id, name, node_id}) {
@@ -106,7 +106,7 @@ const BottomContent = (props) => {
                 {/* Station ID */}
                 <Label>รายละเอียดสถานที่</Label>
                 <div className="grid_4 alpha omega">
-                    <TextareaInput name="location_description" 
+                    <TextareaInput name="location_detail" 
                         disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
                 </div>
 

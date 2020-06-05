@@ -3,6 +3,7 @@ import axios from "axios";
 import { API_PORT_DATABASE } from './config_port.js';
 import { API_URL_DATABASE } from './config_url.js';
 import { fetchFactIfNeeded, FACTS } from './redux/modules/api/fact';
+import { isEmptyChildren } from "formik";
 // Constants
 export const DOCUMENT_TYPE_ID = {
     GOODS_RECEIPT_PO: 101,
@@ -20,6 +21,19 @@ export const DOCUMENT_TYPE_ID = {
     WORK_ORDER_PM: 203,
     SS101: 204,
 }
+
+export const ICD_DOCUMENT_TYPE_GROUP_IDS = [
+    DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO,
+    DOCUMENT_TYPE_ID.GOODS_RETURN,
+    DOCUMENT_TYPE_ID.GOODS_RETURN_MAINTENANCE,
+    DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO,
+    DOCUMENT_TYPE_ID.GOODS_USAGE,
+    DOCUMENT_TYPE_ID.GOODS_ISSUE,
+    DOCUMENT_TYPE_ID.INVENTORY_TRANSFER,
+    DOCUMENT_TYPE_ID.GOODS_FIX,
+    DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX,
+]
+
 export const MOVEMENT_GOODS_RECEIPT_PO_SCHEMA = {
     document_id: -1, //  required, redundant!
     po_id: '',
@@ -60,6 +74,19 @@ export const ICD_SCHEMA = {
     src_warehouse_id: -1,
     line_items: [],  // REFER TO LINE ITEM SCHEMA
     movement: {}, // REFER TO MOVEMENT SCHEMAS
+}
+
+export const WORK_REQUEST_SCHEMA = {
+    accident_on: '', // accident_on วันเวลาเกิดเหตุ
+    accident: '', // accident_detail อาการขัดข้อง
+    request_by: '', // informed_by ผู้แจ้งเหตุ
+    
+    // responsible_by: '', // remove from db!
+    location_district_id: -1, // location_district_id สถานที่ แขวง  [TODO DATABASE]
+    location_node_id: -1, // location_node_id สถานที่ ตอน
+    location_station_id: -1, // สถานที่ สถานี  [TODO DATABASE]
+    location_detail: '', // location_detail รายละเอียดสถานที่
+    remark: '',
 }
 
 // Helper Functions
@@ -110,6 +137,10 @@ export const getNumberFromEscapedString = (escapedString) => {
     return parseInt(escapedString.split('\\')[0]);
 }
 
+function isICD(document_type_group_id){
+    return ICD_DOCUMENT_TYPE_GROUP_IDS.includes(document_type_group_id);
+}
+
 export const packDataFromValues = (fact, values, document_type_id) => {
     let document_part = {
         ...DOCUMENT_SCHEMA,
@@ -119,71 +150,84 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         created_by_admin_id: getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id),
         created_by_user_id: getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_user_employee_id),
     }
-    let line_items_part = [];
-    values.line_items.map(line_item => {
-        if (line_item.internal_item_id) {
-            line_items_part.push({
-                ...ICD_LINE_ITEM_SCHEMA,
-                document_id: values.document_id,
-                line_number: line_item.line_number,
-                quantity: line_item.quantity,
-                uom_id: line_item.uom_id,
-                per_unit_price: line_item.per_unit_price,
-                item_id: getItemIDFromInternalItemID(fact[FACTS.ITEM], line_item.internal_item_id),
-                item_status_id: line_item.item_status_id,
-            });
+    if(isICD(document_type_id)) {
+        let line_items_part = [];
+        values.line_items.map(line_item => {
+            if (line_item.internal_item_id) {
+                line_items_part.push({
+                    ...ICD_LINE_ITEM_SCHEMA,
+                    document_id: values.document_id,
+                    line_number: line_item.line_number,
+                    quantity: line_item.quantity,
+                    uom_id: line_item.uom_id,
+                    per_unit_price: line_item.per_unit_price,
+                    item_id: getItemIDFromInternalItemID(fact[FACTS.ITEM], line_item.internal_item_id),
+                    item_status_id: line_item.item_status_id,
+                });
+            }
+        })
+        let movement_part = {
+            ...DOCUMENT_TYPE_ID_TO_MOVEMENT_SCHEMA[document_type_id],
+            document_id: values.document_id,
         }
-    })
-    let movement_part = {
-        ...DOCUMENT_TYPE_ID_TO_MOVEMENT_SCHEMA[document_type_id],
-        document_id: values.document_id,
-    }
-    switch (document_type_id) {
-        case DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO:
-            movement_part = {
-                ...movement_part,
-                po_id: values.po_id
-            }
-            break;
-        case DOCUMENT_TYPE_ID.GOODS_ISSUE:
-            movement_part = {
-                ...movement_part,
-                refer_to_document_name: values.refer_to_document_name
-            }
-            break;
-        case DOCUMENT_TYPE_ID.GOODS_RETURN:
-            break;
-        case DOCUMENT_TYPE_ID.GOODS_RETURN_MAINTENANCE:
-            break;
-        case DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO:
-            document_part = {
-                ...document_part,
-                refer_to_document_id: values.refer_to_document_id
-            }
-            break;
-        case DOCUMENT_TYPE_ID.GOODS_RETURN_MAINTENANCE:
-            document_part = {
-                ...document_part,
-                refer_to_document_id: values.refer_to_document_id
-            }
-        case DOCUMENT_TYPE_ID.GOODS_USAGE:
-            break;
-        default:
-            break;
-    }
-
-    const icd_part = {
-        ...ICD_SCHEMA,
-        document_id: values.document_id,
-        dest_warehouse_id: getNumberFromEscapedString(values.dest_warehouse_id),
-        src_warehouse_id: getNumberFromEscapedString(values.src_warehouse_id),
-        line_items: line_items_part,
-        movement: movement_part, // REFER TO MOVEMENT SCHEMAS
-
-    }
-    return {
-        document: document_part,
-        specific: icd_part,
+        switch (document_type_id) {
+            case DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO:
+                movement_part = {
+                    ...movement_part,
+                    po_id: values.po_id
+                }
+                break;
+            case DOCUMENT_TYPE_ID.GOODS_ISSUE:
+                movement_part = {
+                    ...movement_part,
+                    refer_to_document_name: values.refer_to_document_name
+                }
+                break;
+            case DOCUMENT_TYPE_ID.GOODS_RETURN:
+                break;
+            case DOCUMENT_TYPE_ID.GOODS_RETURN_MAINTENANCE:
+                break;
+            case DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO:
+                document_part = {
+                    ...document_part,
+                    refer_to_document_id: values.refer_to_document_id
+                }
+                break;
+            case DOCUMENT_TYPE_ID.GOODS_RETURN_MAINTENANCE:
+                document_part = {
+                    ...document_part,
+                    refer_to_document_id: values.refer_to_document_id
+                }
+                break;
+            case DOCUMENT_TYPE_ID.GOODS_USAGE:
+                break;
+            default:
+                break;
+        }
+    
+        const icd_part = {
+            ...ICD_SCHEMA,
+            document_id: values.document_id,
+            dest_warehouse_id: getNumberFromEscapedString(values.dest_warehouse_id),
+            src_warehouse_id: getNumberFromEscapedString(values.src_warehouse_id),
+            line_items: line_items_part,
+            movement: movement_part, // REFER TO MOVEMENT SCHEMAS
+    
+        }
+        return {
+            document: document_part,
+            specific: icd_part,
+        }
+    }else if (document_type_id === DOCUMENT_TYPE_ID.WORK_REQUEST){
+        document_part["document_type_id"] = DOCUMENT_TYPE_ID.WORK_REQUEST;
+        let work_request_part = {}
+        Object.keys(WORK_REQUEST_SCHEMA).map((key) => {
+            work_request_part[key] = values[key]
+        })
+        return {
+            document: document_part,
+            specific: work_request_part,
+        }
     }
 }
 
@@ -280,8 +324,10 @@ export const editDocument = (document_id, document_type_group_id, data) => new P
         .then((res) => {
             console.log(" I am successful in updating contents of document_id ", document_id)
             if(res.status === 200){
+                console.log("wow i putted successfully status 200 ", res.data)
                 resolve(res.data);
             } else {
+                console.log(" i think i have some problems putting ",res.data)
                 reject(res);
             }
         })
