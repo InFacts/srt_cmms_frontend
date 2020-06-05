@@ -16,6 +16,8 @@ import SpareGoodsFix from './components/spare-goods-fix';
 import SpareGoodsUsage from './components/spare-goods-usage';
 import SpareGoodsReceiptFix from './components/spare-goods-receipt-fix';
 import SpareGoodsIssue from './components/spare-goods-issue';
+import SpareInventoryTransfer from './components/spare-inventory-transfer';
+import SpareSalvageReturn from './components/spare-salvage-return';
 
 // PMT PAGE
 import PmtWorkOrder from './components/pmt-work-order';
@@ -39,6 +41,8 @@ const FrontEnd = () => (
         <Route exact path="/goods-usage" component={SpareGoodsUsage} />
         <Route exact path="/goods-receipt-fix" component={SpareGoodsReceiptFix} />
         <Route exact path="/goods-issue" component={SpareGoodsIssue} />
+        <Route exact path="/inventory-transfer" component={SpareInventoryTransfer} />
+        <Route exact path="/salvage-return" component={SpareSalvageReturn} />
 
         {/* PMT PAGE */}
         <Route exact path="/main-pmt" component={MainPmt} />

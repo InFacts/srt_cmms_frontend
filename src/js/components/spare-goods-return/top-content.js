@@ -251,6 +251,7 @@ const TopContent = (props) => {
 
       {/* PopUp ค้นหาเลขที่คลัง MODE ADD */}
       <PopupModalInventory 
+       id="modalInventory" //For Open POPUP
       name="dest_warehouse_id"/>
 
       {/* PopUp ค้นหาชื่อพนักงาน MODE ADD */}

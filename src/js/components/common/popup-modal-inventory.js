@@ -23,7 +23,7 @@ const PopupModalInventory = (props) => {
   }, [currentQueryString, props.warehouses]);
 
   return (
-    <div className="modal" id="modalInventory" style={{ display: "none" }}>
+    <div className="modal" id={props.id} style={{ display: "none" }}>
       <div className="gray-board">
         <p className="head-title-modal edit">ค้นหาเลขที่คลัง</p>
         <div className="container_12 edit-padding">
@@ -52,7 +52,7 @@ const PopupModalInventory = (props) => {
                       <td className="edit-padding" style={{ minWidth: "150px" }}> {inventory_show_popup.warehouse_id} </td>
                       <td className="edit-padding" style={{ minWidth: "300px" }}> {inventory_show_popup.name} </td>
                       <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
-                        <button type="button" className="button-blue" onClick={() => setFieldValue(`${props.name}`, inventory_show_popup.warehouse_id, true)} aria-label="Close active modal" aria-controls="modalInventory" id="closeModalInventory" >เลือก</button>
+                        <button type="button" className="button-blue" onClick={() => setFieldValue(`${props.name}`, inventory_show_popup.warehouse_id, true)} aria-label="Close active modal" aria-controls={props.id} id="closeModalInventory" >เลือก</button>
                       </td>
                     </tr>
                   )
@@ -61,7 +61,7 @@ const PopupModalInventory = (props) => {
             </table>
           </div>
 
-            <button className="button-blue float-right grid_1 mr-5 mt-3" type="button" aria-label="Close active modal" aria-controls="modalInventory" id="closeModalInventory">กลับ</button>
+            <button className="button-blue float-right grid_1 mr-5 mt-3" type="button" aria-label="Close active modal" aria-controls={props.id} id="closeModalInventory">กลับ</button>
 
         </div>
       </div>
