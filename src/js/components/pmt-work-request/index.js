@@ -32,21 +32,24 @@ const WorkRequestComponent = () => {
 
 const EnhancedWorkRequestComponent = withFormik({
     mapPropsToValues: () => ({ 
-        // Field ที่ให้ User กรอก
+        // === Field ที่ให้ User กรอก ===
+        // Top Content
         internal_document_id: '',       // เลขที่เอกสาร
-        document_date: '',              // วันที่ออกเอกสาร
-        created_by_user_employee_id: '', // 
+        created_by_user_employee_id: '', // ผู้ดำเนินเรื่อง (Default === admin_employee_id)
+        created_by_admin_employee_id: '',  //ผู้สร้างเอกสาร (Field ที่ไม่ได้กรอก)
+
+        status_name_th: '',              // TODO doesn't have (Field ที่ไม่ได้กรอก)
+        created_on: '',                  // TODO doesn't have (Field ที่ไม่ได้กรอก)
+        document_date: '',              // วันที่ออกเอกสาร (Default === NOW )
+        
         remark: '',                      // หมายเหตุ
         accident: '',                   // อาการขัดข้อง
         accident_on: '',                // วันเวลาเกิดเหตุ
 
         district_id: '',
         node_id: '',
-        //Field ที่ไม่ได้กรอก
-        created_on: '', // TODO doesn't have
-        status_name_th: '', // TODO doesn't have
+
         document_status_id: '', // ?
-        created_by_admin_employee_id: '',  //ผู้สร้างเอกสาร
         step_approve: [],
 
         //Field ที่ไม่ได้ display

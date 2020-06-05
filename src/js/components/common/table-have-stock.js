@@ -15,14 +15,14 @@ const Table = (props) => {
           <th className="font" style={{ minWidth: "130px" }}>เลขที่อะไหล่</th>
           <th className="font" style={{ minWidth: "368px" }}>รายละเอียด</th>
 
-          <th className="font text-center blue" style={{ minWidth: "80px" }}>คงคลัง</th>
-          <th className="font text-center blue" style={{ minWidth: "80px" }}>รอส่งมอบ</th>
-          <th className="font text-right blue" style={{ minWidth: "80px" }}>ระหว่างจัดซื้อ</th>
-          <th className="font text-center blue" style={{ minWidth: "80px" }}>จำนวนสุทธิ</th>
+          <th className="font text-center gray-column" style={{ minWidth: "80px" }}>คงคลัง</th>
+          <th className="font text-center gray-column" style={{ minWidth: "80px" }}>รอส่งมอบ</th>
+          <th className="font text-right gray-column" style={{ minWidth: "80px" }}>ระหว่างจัดซื้อ</th>
+          <th className="font text-center gray-column" style={{ minWidth: "80px" }}>จำนวนสุทธิ</th>
 
+          <th className="font text-center" style={{ minWidth: "80px" }}>สถานนะ</th>
           <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
           <th className="font text-center" style={{ minWidth: "80px" }}>หน่วยนับ</th>
-          <th className="font text-center" style={{ minWidth: "80px" }}>สถานนะ</th>
           <th className="font text-center" style={{ minWidth: "80px" }}>ราคาต่อหน่วย</th>
           <th className="font text-right" style={{ minWidth: "80px" }}>จำนวนเงิน</th>
         </tr>
@@ -44,16 +44,25 @@ const Table = (props) => {
               </td>
               <td className="edit-padding">{list.description}</td>
 
-              <td className="edit-padding blue"> {/* คงคลัง */}
+              <td className="edit-padding gray-column"> {/* คงคลัง */}
                 {list.description !== '' ? list.at_source.length !== 0 ? list.at_source[0].current_unit_count : 0 : ''}</td>
-              <td className="edit-padding blue"> {/* รอส่งมอบ */}
+              <td className="edit-padding gray-column"> {/* รอส่งมอบ */}
                 {list.description !== '' ? list.at_source.length !== 0 ? list.at_source[0].committed_unit_count : 0 : ''}</td>
-              <td className="edit-padding blue">{/* ระหว่างจัดซ้ือ */}
+              <td className="edit-padding gray-column">{/* ระหว่างจัดซ้ือ */}
                 {list.description !== '' ? list.at_source.length !== 0 ? 0 : 0 : ''}
                 {/* {list.at_source.length !== 0 ? list.at_source[0].order : ''} */} {/* TODO Database Send Value */}
               </td>
-              <td className="edit-padding blue">{/* จำนวนสุทธิ */}
+              <td className="edit-padding gray-column">{/* จำนวนสุทธิ */}
                 {list.description !== '' ? list.at_source.length !== 0 ? list.at_source[0].current_unit_count - list.at_source[0].committed_unit_count + 0 : 0 : ''}
+              </td>
+              
+              {/* สถานะของอะไหล่ */}
+              <td className="edit-padding text-center">
+                <SelectInput name={`line_items[${index}].item_status_id`} listProps={props.fact['item-status'].items}
+                  tabIndex="8" disabled={props.disabledBothMode !== true ? props.actionMode === TOOLBAR_MODE.SEARCH : true}
+                  checkDescription={list.description}
+                  optionValue='item_status_id' optionName='description_th'
+                />
               </td>
 
               <td className="edit-padding text-center">
@@ -69,15 +78,6 @@ const Table = (props) => {
                   tabIndex="8" disabled={props.disabledBothMode !== true ? props.actionMode === TOOLBAR_MODE.SEARCH : true}
                   optionValue='uom_id' optionName='name'
                   redBorderForError="error-in-table"
-                />
-              </td>
-
-              {/* สถานะของอะไหล่ */}
-              <td className="edit-padding text-center">
-                <SelectInput name={`line_items[${index}].item_status_id`} listProps={props.fact['item-status'].items}
-                  tabIndex="8" disabled={props.disabledBothMode !== true ? props.actionMode === TOOLBAR_MODE.SEARCH : true}
-                  checkDescription={list.description}
-                  optionValue='item_status_id' optionName='description_th'
                 />
               </td>
 

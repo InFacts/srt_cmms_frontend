@@ -63,7 +63,7 @@ class Map extends React.Component {
                                 <Link to="/inventory"><img alt='some value' src={Center} className="center" /></Link>
                                 <img alt='some value' src={Text4} className="text4" />
                                 <Link to="/goods-usage"><img alt='some value' src={Twoone} className="two-one" /></Link>
-                                <Link to="/goods-maintenace"><img alt='some value' src={Twothree} className="two-two" /></Link>
+                                <Link to="/goods-receipt-fix"><img alt='some value' src={Twothree} className="two-two" /></Link>
                                 <Link to="/goods-take-out"><img alt='some value' src={Twotwo} className="two-three" /></Link>
                                 <img alt='some value' src={Arrow4} className="arrow4" />
                                 <img alt='some value' src={Arrow5} className="arrow5" />
@@ -90,7 +90,7 @@ class Map extends React.Component {
                                     <span className="p-contextual-menu__dropdown" id="menu-1" aria-hidden="true" aria-label="submenu">
                                         <span className="p-contextual-menu__group">
                                             <Link to="/goods-return" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>คืนอะไหล่</Link>
-                                            <Link to="/goods-return-maintenance" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รับคืนอะไหล่ส่งซ่อม</Link>
+                                            <Link to="/goods-fix" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รับคืนอะไหล่ส่งซ่อม</Link>
                                         </span>
                                     </span>
                                 </span>

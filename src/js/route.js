@@ -12,8 +12,9 @@ import ItemMasterData2 from './components/spare-item-master-data2';
 import SpareGoodsReceipt2 from './components/spare-goods-receipt2';
 import SpareGoodsReceiptNoPo from './components/spare-goods-receipt-no-po';
 import SpareGoodsReturn from './components/spare-goods-return';
-import SpareGoodsReturnMaintenance from './components/spare-goods-return-maintenance';
+import SpareGoodsFix from './components/spare-goods-fix';
 import SpareGoodsUsage from './components/spare-goods-usage';
+import SpareGoodsReceiptFix from './components/spare-goods-receipt-fix';
 
 // PMT PAGE
 import PmtWorkOrder from './components/pmt-work-order';
@@ -33,8 +34,9 @@ const FrontEnd = () => (
         <Route exact path="/goods-receipt2" component={SpareGoodsReceipt2} />
         <Route exact path="/goods-receipt-no-po" component={SpareGoodsReceiptNoPo} />
         <Route exact path="/goods-return" component={SpareGoodsReturn} />
-        <Route exact path="/goods-return-maintenance" component={SpareGoodsReturnMaintenance} />
+        <Route exact path="/goods-fix" component={SpareGoodsFix} />
         <Route exact path="/goods-usage" component={SpareGoodsUsage} />
+        <Route exact path="/goods-receipt-fix" component={SpareGoodsReceiptFix} />
 
         {/* PMT PAGE */}
         <Route exact path="/main-pmt" component={MainPmt} />
