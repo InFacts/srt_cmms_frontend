@@ -38,7 +38,6 @@ const useFooterInitializer = (document_type_id) => {
 
     const {values, submitForm, setFieldValue, resetForm} = useFormikContext();
     const token = useSelector((state) => ({...state.token}));
-    // console.log("useFormikContext ------>", token)
     useTokenInitializer();
 
     // Handle Toolbar Mode
@@ -53,16 +52,16 @@ const useFooterInitializer = (document_type_id) => {
             };
             let track_document_id = document_id; // TEST: Track Document
             let previousApprovalInfo = values.step_approve; // Check Previous Approver 
-            let document_status = DOCUMENT_STATUS.REOPEN; // TODO: values.status_name_th
+            let document_status = DOCUMENT_STATUS.DRAFT; // TODO: values.status_name_th
             let created_by_admin_employee_id = getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id); // TEST: values.created_by_admin_employee_id;
-            let latestApprovalInfo = {}
 
             // Check Who's create document
             // TODO: created_by_admin_employee_id doesn't has when refresh
             if (userInfo.id === created_by_admin_employee_id) {
+                console.log("HI Check Who's create document", userInfo.id, created_by_admin_employee_id)
                 if (document_status === DOCUMENT_STATUS.REOPEN) { dispatch(footerToModeEdit()); }
                 else if (document_status === DOCUMENT_STATUS.WAIT_APPROVE) { dispatch(footerToModeOwnDocument()); }
-                else { dispatch(footerToModeEdit()); }
+                else { dispatch(footerToModeAddDraft()); }
             }
             else {
                 // Check That user_id into Previous Approval Flow ?
