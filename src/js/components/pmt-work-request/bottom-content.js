@@ -8,47 +8,68 @@ import DateTimeInput from '../common/formik-datetime-input';
 import SelectNoChildrenInput from '../common/formik-select-no-children';
 import { useFormik , withFormik ,useFormikContext} from 'formik';
 
+const Label = (props) => {
+    return (
+        <div className="grid_1 alpha"> 
+            <p className="top-text float-right" style={{whiteSpace: "nowrap"}}>
+                {props.children}
+            </p>
+        </div>
+    );
+}
+
+
 const BottomContent = (props) => {
     const toolbar = useSelector((state) => ({...state.toolbar}), shallowEqual);
     const factDistricts = useSelector((state) => ({...state.api.fact.districts}), shallowEqual); 
     const factNodes = useSelector((state) => ({...state.api.fact.nodes}), shallowEqual); 
     const factStations = useSelector((state) => ({...state.api.fact.stations}), shallowEqual); 
-
     const {values} = useFormikContext();
-    useEffect(() => {
-        console.log(values)
-    }, [values]);
-
     return (
     <div id="blackground-gray">
         <div className="container_12 clearfix">
-          <div className="container_12 ">
+            {/* Component Title */}
             <h3 className="head-title-bottom mt-2">ข้อมูลเหตุขัดข้อง/ชำรุด</h3>
 
-            <div className="grid_12">
-                <div className="grid_2"><p className="cancel-default">ผู้แจ้งเหตุ</p></div>
-                <div className="grid_7 ">
-                    <TextInput name='information_name' disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}/>
-                </div>
-            </div>
-            
-            <div className="grid_12">
-                <div className="grid_2"><p className="cancel-default">อาการขัดข้อง</p></div>
-                <div className="grid_7 ">
-                    <TextareaInput name="job_name" 
-                    disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
-                </div>
-            </div>
-            <div className="grid_12">
-                <div className="grid_2"><p className="cancel-default">วันเวลาเกิดเหตุ</p></div>
-                <div className="grid_4 mt-1 ">
-                    <DateTimeInput name="datetime_start" 
+            {/* === Left Column === */}
+            <div className="grid_6" style={{paddingLeft: "10px"}}>
+                
+                {/* Accident On */}
+                <Label>วันเวลาเกิดเหตุ</Label>
+                <div className="grid_4 alpha omega">
+                    <DateTimeInput name="accident_on" 
                     disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}/>
                 </div>
+
+                <div class="clear" />
+
+                {/* Informed By */}
+                <Label>ผู้แจ้งเหตุ</Label>
+                <div className="grid_4 alpha omega">
+                    <TextInput name='informed_by' 
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}/>
+                </div>
+
+                <div class="clear" />
+
+                {/* Accident Detail */}
+                <Label>อาการขัดข้อง</Label>
+                <div className="grid_4 alpha omega">
+                    <TextareaInput name="accident_detail" rows="4"
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                </div>
+
+                <div class="clear" />
+
             </div>
-            <div className="grid_12">
-                <div className="grid_2"><p className="cancel-default">สถานที่ แขวง</p></div>
-                <div className="grid_4 ">
+            
+
+            {/* === Right Column === */}
+            <div className="grid_6 prefix_1">
+
+                {/* District ID */}
+                <Label>สถานที่ แขวง</Label>
+                <div className="grid_4 alpha omega">
                     <SelectNoChildrenInput name="district_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
                         <option value=''></option>
                         {factDistricts.items.map(function ({district_id, name, division_id}) {
@@ -56,40 +77,72 @@ const BottomContent = (props) => {
                         })}
                     </SelectNoChildrenInput>
                 </div>
+
+                <div class="clear" />
+                
+                {/* Node ID */}
+                <Label>สถานที่ ตอน</Label>
+                <div className="grid_4 alpha omega">
+                    <SelectNoChildrenInput name="node_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                        <option value=''></option>
+                        {factNodes.items.map(function ({node_id, name, district_id}) {
+                            if(values.district_id == district_id){ // Shallow equality, district ID may be string
+                                return <option value={node_id} key={node_id}>{name}</option>
+                            }
+                        })}
+                    </SelectNoChildrenInput>
+                </div>
+
+                <div class="clear" />
+
+                {/* Station ID */}
+                <Label>สถานที่ สถานี</Label>
+                <div className="grid_4 alpha omega">
+                    <SelectNoChildrenInput name="station_id" 
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                        <option value=''></option>
+                        {factStations.items.map(function ({station_id, name, node_id}) {
+                            if (values.node_id == node_id) { // Shallow equality, node ID may be string
+                                return <option value={station_id} key={station_id}> {name} </option>
+                            }
+                        })}
+                    </SelectNoChildrenInput>
+                </div>
+
+                <div class="clear" />
+
+                {/* Station ID */}
+                <Label>รายละเอียดสถานที่</Label>
+                <div className="grid_4 alpha omega">
+                    <TextareaInput name="location_description" 
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                </div>
+
+                <div class="clear" />
+
+            </div>
+            
+            <div className="grid_12" style={{marginTop: "150px"}}>
+                {/* Remark */}
+                <Label>หมายเหตุ</Label>
+                <div className="grid_11 alpha omega">
+                    <TextareaInput name="remark" 
+                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                </div>
+
+                <div class="clear" />
             </div>
 
-            <div className="grid_12">
-                <div className="grid_2"><p className="cancel-default">สถานที่ ตอน</p></div>
-                <div className="grid_4 ">
-                <SelectNoChildrenInput name="node_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
-                    <option value=''></option>
-                    {factNodes.items.map(function ({node_id, name, district_id}) {
-                        if(values.district_id == district_id){ // Shallow equality, district ID may be string
-                            return <option value={node_id} key={node_id}>{name}</option>
-                        }
-                    })}
-                </SelectNoChildrenInput>
-                </div>
             </div>
-            <div className="grid_12">
-                <div className="grid_2"><p className="cancel-default">สถานที่ สถานี</p></div>
-                <div className="grid_4 ">
-                <SelectNoChildrenInput name="station_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
-                    <option value=''></option>
-                    {factStations.items.map(function ({station_id, name, node_id}) {
-                        if (values.node_id == node_id) { // Shallow equality, node ID may be string
-                            return <option value={station_id} key={station_id}> {name} </option>
-                        }
-                    })}
-                </SelectNoChildrenInput>
-                </div>
+
+
+            
+
+
+            <div className="container_12 ">
+                {/* <Files /> */}
             </div>
-          </div>
-          <div className="container_12 ">
-            {/* <Files /> */}
-          </div>
         </div>
-      </div>
     );
 };
 
