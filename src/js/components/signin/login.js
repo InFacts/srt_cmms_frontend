@@ -23,7 +23,7 @@ const Login = (props) => {
     const user = {"username": username, "password": password};
     console.log("user", user)
 
-    axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/login`, user)
+    axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/auth/login`, user)
       .then(res => {
         console.log(res);
         localStorage.setItem('token_auth', res.data.token)
