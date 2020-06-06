@@ -697,7 +697,7 @@ export const validateInternalDocumentIDFieldHelper = (toolbar, fact, values , se
     // Internal Document ID
     //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
     //  ie. GR-PYO-2563/0001
-    console.log("I am validating document id")
+    console.log("I am validating internal document id ", internal_document_id)
     if (!internal_document_id) {
         console.log("I dont have any internal doc id")
       return resolve('Required');
