@@ -3,6 +3,7 @@ import axios from "axios";
 import { API_PORT_DATABASE } from './config_port.js';
 import { API_URL_DATABASE } from './config_url.js';
 import { fetchFactIfNeeded, FACTS } from './redux/modules/api/fact';
+import { isEmptyChildren } from "formik";
 // Constants
 export const DOCUMENT_TYPE_ID = {
     GOODS_RECEIPT_PO: 101,
@@ -23,6 +24,19 @@ export const DOCUMENT_TYPE_ID = {
     WORK_ORDER_PM: 203,
     SS101: 204,
 }
+
+export const ICD_DOCUMENT_TYPE_GROUP_IDS = [
+    DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO,
+    DOCUMENT_TYPE_ID.GOODS_RETURN,
+    DOCUMENT_TYPE_ID.GOODS_RETURN_MAINTENANCE,
+    DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO,
+    DOCUMENT_TYPE_ID.GOODS_USAGE,
+    DOCUMENT_TYPE_ID.GOODS_ISSUE,
+    DOCUMENT_TYPE_ID.INVENTORY_TRANSFER,
+    DOCUMENT_TYPE_ID.GOODS_FIX,
+    DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX,
+]
+
 export const MOVEMENT_GOODS_RECEIPT_PO_SCHEMA = {
     document_id: -1, //  required, redundant!
     po_id: '',
@@ -63,6 +77,19 @@ export const ICD_SCHEMA = {
     src_warehouse_id: -1,
     line_items: [],  // REFER TO LINE ITEM SCHEMA
     movement: {}, // REFER TO MOVEMENT SCHEMAS
+}
+
+export const WORK_REQUEST_SCHEMA = {
+    accident_on: '', // accident_on วันเวลาเกิดเหตุ
+    accident: '', // accident_detail อาการขัดข้อง
+    request_by: '', // informed_by ผู้แจ้งเหตุ
+    
+    // responsible_by: '', // remove from db!
+    location_district_id: -1, // location_district_id สถานที่ แขวง  [TODO DATABASE]
+    location_node_id: -1, // location_node_id สถานที่ ตอน
+    location_station_id: -1, // สถานที่ สถานี  [TODO DATABASE]
+    location_detail: '', // location_detail รายละเอียดสถานที่
+    remark: '',
 }
 
 // Helper Functions
@@ -111,6 +138,10 @@ export const getNumberFromEscapedString = (escapedString) => {
         return escapedString;
     }
     return parseInt(escapedString.split('\\')[0]);
+}
+
+function isICD(document_type_group_id){
+    return ICD_DOCUMENT_TYPE_GROUP_IDS.includes(document_type_group_id);
 }
 
 export const packDataFromValues = (fact, values, document_type_id) => {
@@ -285,15 +316,33 @@ export const fetchLastestInternalDocumentID = (document_type_group_id) => new Pr
         })
 });
 
+// GET /document/internal_document_id/{internal_document_id}
+export const getDocumentbyInternalDocumentID = (internal_document_id) => new Promise((resolve, reject) => {
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/internal_document_id/${encodeURIComponent(internal_document_id)}`;
+    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+      .then((res) => {
+        console.log(" I am successful in GETTING contents of internal_document_id ", internal_document_id)
+        if(res.status === 200){
+            console.log("wow i Getted successfully status 200 ", res.data)
+            resolve(res.data);
+        } else {
+            console.log(" i think i have some problems Getted ",res.data)
+            reject(res);
+        }
+      });
+})
+
 // PUT /document/{document_id}/{document_type_group_id}
 export const editDocument = (document_id, document_type_group_id, data) => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}/${document_type_group_id}`;
     axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             console.log(" I am successful in updating contents of document_id ", document_id)
-            if (res.status === 200) {
+            if(res.status === 200){
+                console.log("wow i putted successfully status 200 ", res.data)
                 resolve(res.data);
             } else {
+                console.log(" i think i have some problems putting ",res.data)
                 reject(res);
             }
         })

@@ -11,13 +11,14 @@ import useFactInitializer from '../../hooks/fact-initializer';
 import useTokenInitializer from '../../hooks/token-initializer';
 import useFooterInitializer from '../../hooks/footer-initializer';
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
+import { DOCUMENT_TYPE_ID} from '../../helper';
 
 const WorkRequestComponent = () => {
 
     useToolbarInitializer(TOOLBAR_MODE.SEARCH);
     useTokenInitializer();
     useFactInitializer();
-    useFooterInitializer();
+    useFooterInitializer(DOCUMENT_TYPE_ID.WORK_REQUEST);
 
     return (
         <>
@@ -44,13 +45,13 @@ const EnhancedWorkRequestComponent = withFormik({
         
         // Bottom Content
         accident_on: '',                // วันเวลาเกิดเหตุ
-        informed_by: '',                // ผู้แจ้งเหตุ
-        accident_detail: '',            // อาการขัดข้อง
+        request_by: '',                // ผู้แจ้งเหตุ
+        accident: '',            // อาการขัดข้อง
 
-        district_id: '',                // สถานที่ แขวง
-        node_id: '',                    // สถานที่ ตอน
-        station_id: '',                 // สถานที่ สถานี
-        location_description: '',       //รายละเอียดสถานที่
+        location_district_id: '',                // สถานที่ แขวง
+        location_node_id: '',                    // สถานที่ ตอน
+        location_station_id: '',                 // สถานที่ สถานี
+        location_detail: '',       //รายละเอียดสถานที่
 
         remark: '',                      // หมายเหตุ
         

@@ -7,13 +7,28 @@ import DateTimeInput from '../common/formik-datetime-input'
 import DateInput from '../common/formik-date-input'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import Label from '../common/form-label'
-import { DOCUMENT_TYPE_ID } from '../../helper';
+import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID } from '../../helper';
+import { v4 as uuidv4 } from 'uuid';
 
-
-
+import { useFormikContext, useField } from 'formik';
 
 const TopContent = (props) => {
     const toolbar = useSelector((state) => ({...state.toolbar}), shallowEqual);
+    const fact = useSelector((state) => ({...state.api.fact}), shallowEqual);
+    const decoded_token = useSelector((state) => ({...state.token.decoded_token}), shallowEqual);
+    const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
+
+    // Fill Default Forms
+  useEffect(() => {
+    if (toolbar.mode === TOOLBAR_MODE.ADD) {
+      if (!values.internal_document_id && touched.internal_document_id){
+        setFieldValue('internal_document_id', `draft-${uuidv4()}`)
+      }
+      setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(fact.users, decoded_token.id));
+      setFieldValue("status_name_th", "ยังไม่ได้รับการบันทึก");
+      setFieldValue("created_on", new Date().toISOString().slice(0, 16));
+    }
+  }, [decoded_token, fact.users, toolbar.mode, touched.internal_document_id, !values.internal_document_id])
 
     return (
     <div id="blackground-white">

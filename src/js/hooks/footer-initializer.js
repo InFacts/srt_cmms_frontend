@@ -129,7 +129,7 @@ const useFooterInitializer = (document_type_id) => {
             // INVISIBLE mode
             dispatch(footerToModeInvisible());
         }
-    }, [toolbar.mode, values]);
+    }, [toolbar.mode, values.document_id, values.step_approve, values.created_by_admin_employee_id]);
 
     // Handle Back
     useEffect(()=> {
