@@ -34,7 +34,7 @@ function shouldDecodeToken(state, raw_token) {
 }
 
 export function decodeTokenIfNeeded() {
-    console.log("localStorage.getItem('token_auth')", localStorage.getItem('token_auth'))
+    // console.log("localStorage.getItem('token_auth')", localStorage.getItem('token_auth'))
     let raw_token = localStorage.getItem('token_auth');
     return (dispatch, getState) => {
         if (shouldDecodeToken(getState(), raw_token)) {
