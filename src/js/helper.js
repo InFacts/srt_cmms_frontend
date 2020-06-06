@@ -147,7 +147,7 @@ export const getNumberFromEscapedString = (escapedString) => {
 }
 
 export const isValidInternalDocumentIDFormat = (internal_document_id) => {
-    const internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS)-[A-Z]{3}-\d{4}\/\d{4}$/g;
+    const internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SD|WR|WO|WP|SS)-[A-Z]{3}-\d{4}\/\d{4}$/g;
     return internalDocumentIDRegex.test(internal_document_id);
 }
 export const isValidInternalDocumentIDDraftFormat = (internal_document_id) => {
@@ -163,86 +163,100 @@ function isICD(document_type_group_id){
 export const packDataFromValues = (fact, values, document_type_id) => {
     let document_part = {
         ...DOCUMENT_SCHEMA,
+        document_status_id: 1,
+        document_action_type: 1, 
         document_id: values.document_id,
         internal_document_id: values.internal_document_id,
         remark: values.remark,
         created_by_admin_id: getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id),
         created_by_user_id: getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_user_employee_id),
     }
-    let line_items_part = [];
-    values.line_items.map(line_item => {
-        if (line_item.internal_item_id) {
-            line_items_part.push({
-                ...ICD_LINE_ITEM_SCHEMA,
-                document_id: values.document_id,
-                line_number: line_item.line_number,
-                quantity: line_item.quantity,
-                uom_id: line_item.uom_id,
-                per_unit_price: line_item.per_unit_price,
-                item_id: getItemIDFromInternalItemID(fact[FACTS.ITEM], line_item.internal_item_id),
-                item_status_id: line_item.item_status_id,
-            });
+    if(isICD(document_type_id)) {
+        let line_items_part = [];
+        values.line_items.map(line_item => {
+            if (line_item.internal_item_id) {
+                line_items_part.push({
+                    ...ICD_LINE_ITEM_SCHEMA,
+                    document_id: values.document_id,
+                    line_number: line_item.line_number,
+                    quantity: line_item.quantity,
+                    uom_id: line_item.uom_id,
+                    per_unit_price: line_item.per_unit_price,
+                    item_id: getItemIDFromInternalItemID(fact[FACTS.ITEM], line_item.internal_item_id),
+                    item_status_id: line_item.item_status_id,
+                });
+            }
+        })
+        let movement_part = {
+            ...DOCUMENT_TYPE_ID_TO_MOVEMENT_SCHEMA[document_type_id],
+            document_id: values.document_id,
         }
-    })
-    let movement_part = {
-        ...DOCUMENT_TYPE_ID_TO_MOVEMENT_SCHEMA[document_type_id],
-        document_id: values.document_id,
-    }
-    switch (document_type_id) {
-        case DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO:
-            movement_part = {
-                ...movement_part,
-                po_id: values.po_id
-            }
-            break;
-        case DOCUMENT_TYPE_ID.GOODS_ISSUE:
-            movement_part = {
-                ...movement_part,
-                refer_to_document_name: values.refer_to_document_name
-            }
-            break;
-        case DOCUMENT_TYPE_ID.PHYSICAL_COUNT:
-            movement_part = {
-                ...movement_part,
-                refer_to_document_name: values.refer_to_document_name
-            }
-            break;
-        case DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO:
-            document_part = {
-                ...document_part,
-                refer_to_document_id: values.refer_to_document_id
-            }
-            break;
-        case DOCUMENT_TYPE_ID.GOODS_RETURN_MAINTENANCE:
-            document_part = {
-                ...document_part,
-                refer_to_document_id: values.refer_to_document_id
-            }
-            break;
-        case DOCUMENT_TYPE_ID.GOODS_USAGE:
-            break;
-        case DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX:
-            break
-        case DOCUMENT_TYPE_ID.GOODS_RETURN:
-            break;
-        case DOCUMENT_TYPE_ID.GOODS_RETURN_MAINTENANCE:
-            break;
-        default:
-            break;
-    }
+        switch (document_type_id) {
+            case DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO:
+                movement_part = {
+                    ...movement_part,
+                    po_id: values.po_id
+                }
+                break;
+            case DOCUMENT_TYPE_ID.GOODS_ISSUE:
+                movement_part = {
+                    ...movement_part,
+                    refer_to_document_name: values.refer_to_document_name
+                }
+                break;
+            case DOCUMENT_TYPE_ID.PHYSICAL_COUNT:
+                movement_part = {
+                    ...movement_part,
+                    refer_to_document_name: values.refer_to_document_name
+                }
+                break;
+            case DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO:
+                document_part = {
+                    ...document_part,
+                    refer_to_document_id: values.refer_to_document_id
+                }
+                break;
+            case DOCUMENT_TYPE_ID.GOODS_RETURN_MAINTENANCE:
+                document_part = {
+                    ...document_part,
+                    refer_to_document_id: values.refer_to_document_id
+                }
+                break;
+            case DOCUMENT_TYPE_ID.GOODS_USAGE:
+                break;
+            case DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX:
+                break
+            case DOCUMENT_TYPE_ID.GOODS_RETURN:
+                break;
+            case DOCUMENT_TYPE_ID.GOODS_RETURN_MAINTENANCE:
+                break;
+            default:
+                break;
+        }
 
-    const icd_part = {
-        ...ICD_SCHEMA,
-        document_id: values.document_id,
-        dest_warehouse_id: getNumberFromEscapedString(values.dest_warehouse_id),
-        src_warehouse_id: getNumberFromEscapedString(values.src_warehouse_id),
-        line_items: line_items_part,
-        movement: movement_part, // REFER TO MOVEMENT SCHEMAS
+        const icd_part = {
+            ...ICD_SCHEMA,
+            document_id: values.document_id,
+            dest_warehouse_id: getNumberFromEscapedString(values.dest_warehouse_id),
+            src_warehouse_id: getNumberFromEscapedString(values.src_warehouse_id),
+            line_items: line_items_part,
+            movement: movement_part, // REFER TO MOVEMENT SCHEMAS
 
-    }
-    return {
-        document: document_part,
-        specific: icd_part,
+        }
+        return {
+            document: document_part,
+            specific: icd_part,
+        }
+    }else if (document_type_id === DOCUMENT_TYPE_ID.WORK_REQUEST){
+            document_part["document_type_id"] = DOCUMENT_TYPE_ID.WORK_REQUEST;
+            let work_request_part = {}
+            Object.keys(WORK_REQUEST_SCHEMA).map((key) => {
+                work_request_part[key] = values[key]
+            })
+            return {
+                document: document_part,
+                specific: work_request_part,
+            }
     }
 }
 
@@ -350,6 +364,10 @@ export const getDocumentbyInternalDocumentID = (internal_document_id) => new Pro
             console.log(" i think i have some problems Getted ",res.data)
             reject(res);
         }
+      })
+      .catch((err) => {
+          console.warn(err.response);
+          reject(err)
       });
 })
 
@@ -426,9 +444,11 @@ export const saveDocument = (document_type_group_id, data) => new Promise((resol
             editDocument(document_id, document_type_group_id, mutateDataFillDocumentID(data, document_id))
                 .then(() => {
                     return resolve(document_id);
-                }).catch((err) => {
-                    reject(err)
+                })
+                .catch((err) => {
+                    return reject(err);
                 });
+
         })
         .catch((err) => {
             reject(err)
@@ -650,7 +670,7 @@ export const checkDocumentStatus = (valuesContext) => {
 }
 
 
-const responseToFormState = (userFact, data) => {
+const responseToFormState = (fact, data) => {
     for (var i = data.line_items.length; i <= 9; i++) {
       data.line_items.push(
         {
@@ -668,8 +688,8 @@ const responseToFormState = (userFact, data) => {
     return {
       document_id: data.document_id,
       internal_document_id: data.internal_document_id,
-      created_by_user_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_user_id) || '',
-      created_by_admin_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_admin_id) || '',
+      created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.created_by_user_id) || '',
+      created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.created_by_admin_id) || '',
       created_on: data.created_on.split(".")[0],
       line_items: data.line_items,
       dest_warehouse_id: data.dest_warehouse_id,
@@ -681,52 +701,66 @@ const responseToFormState = (userFact, data) => {
   }
 
 // Validation 
-export const validateInternalDocumentIDFieldHelper = (props, values , setValues, validateField, internal_document_id) => new Promise(resolve => {
+export const validateInternalDocumentIDFieldHelper = (toolbar, fact, values , setValues, setFieldValue, validateField, internal_document_id) => new Promise(resolve => {
     // Internal Document ID
     //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
     //  ie. GR-PYO-2563/0001
     console.log("I am validating document id")
     if (!internal_document_id) {
+        console.log("I dont have any internal doc id")
       return resolve('Required');
     } else if (!isValidInternalDocumentIDFormat(internal_document_id) && !isValidInternalDocumentIDDraftFormat(internal_document_id)) {
       return resolve('Invalid Document ID Format Be sure to use the format ie. GR-PYO-2563/0001')
     }
 
+
     // Checking from Database if Internal Document ID Exists
     let error;
     getDocumentbyInternalDocumentID(internal_document_id)
     .then((data) => {
+        console.log(" i got data", data);
       if (data.internal_document_id === internal_document_id) { // If input document ID exists
-        if ((props.toolbar.mode === TOOLBAR_MODE.SEARCH || props.toolbar.mode === TOOLBAR_MODE.NONE || props.toolbar.mode === TOOLBAR_MODE.NONE_HOME) 
-          && !props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
+        if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME) 
+          && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
           
           console.log("validateInternalDocumentIDField:: I got document ID ",data.document_id)
-          setValues({ ...values , ...responseToFormState(props.fact.users, data) }, false); //Setvalues and don't validate
+          setValues({ ...values , ...responseToFormState(fact, data) }, false); //Setvalues and don't validate
           validateField("dest_warehouse_id");
           validateField("created_by_user_employee_id");
           validateField("created_by_admin_employee_id");
           return resolve(null);
 
         } else { //If Mode add, need to error duplicate Document ID
-          console.log("I AM DUPLICATE")
-          error = 'Duplicate Document ID';
+            // setFieldValue('document_id', '', false); 
+            console.log("I AM DUPLICATE")
+            error = 'Duplicate Document ID';
         }
-      } else { // If input Document ID doesn't exists
-          if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
+    } else { // If input Document ID doesn't exists
+        
+        setFieldValue('document_id', '', false);
+        if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID  
             console.log("I KNOW IT'sINVALID")
             error = 'Invalid Document ID';
-          } else {//If mode add, ok
-          }
+        } else {//If mode add, ok
+            console.log("document ID doesn't exist but I am in mode add")
+            error = '';
         }
-      })
-      .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
-        if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
-          error = 'Invalid Document ID';
-        }//If mode add, ok
-      })
-      .finally(() => {
-        return resolve(error)
-      });
+    }
+    })
+    .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
+        console.log("I think I have 404 not found in doc id.")   
+        setFieldValue('document_id', '', false);
+
+        if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
+            error = 'Invalid Document ID';
+        } else{//If mode add, ok
+            console.log("document ID doesn't exist but I am in mode add")
+            error = ''
+        }
+    })
+    .finally(() => {
+    return resolve(error)
+    });
   });
 
 

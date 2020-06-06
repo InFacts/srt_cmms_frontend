@@ -24,7 +24,7 @@ import SparePhysicalCount from './components/spare-physical-count';
 // PMT PAGE
 import PmtWorkOrder from './components/pmt-work-order';
 import WorkRequestComponent from './components/pmt-work-request';
-import PmtSS101 from './components/pmt-ss-101';
+import PmtSS101 from './components/pmt-ss101';
 
 import Track from './components/track-document';
 const FrontEnd = () => (

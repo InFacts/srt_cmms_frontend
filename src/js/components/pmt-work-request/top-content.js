@@ -6,8 +6,9 @@ import TextInput from '../common/formik-text-input'
 import DateTimeInput from '../common/formik-datetime-input'
 import DateInput from '../common/formik-date-input'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
+import { FACTS } from '../../redux/modules/api/fact';
 import Label from '../common/form-label'
-import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID } from '../../helper';
+import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID , validateEmployeeIDField, validateWarehouseIDField, validateInternalDocumentIDFieldHelper} from '../../helper';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useFormikContext, useField } from 'formik';
@@ -22,13 +23,19 @@ const TopContent = (props) => {
   useEffect(() => {
     if (toolbar.mode === TOOLBAR_MODE.ADD) {
       if (!values.internal_document_id && touched.internal_document_id){
-        setFieldValue('internal_document_id', `draft-${uuidv4()}`)
+        setFieldValue('internal_document_id', `draft-${uuidv4()}`, true)
       }
       setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(fact.users, decoded_token.id));
-      setFieldValue("status_name_th", "ยังไม่ได้รับการบันทึก");
-      setFieldValue("created_on", new Date().toISOString().slice(0, 16));
+      setFieldValue("created_on", new Date().toISOString().slice(0, 16), false);
     }
-  }, [decoded_token, fact.users, toolbar.mode, touched.internal_document_id, !values.internal_document_id])
+    
+  }, [ fact.users, toolbar.mode, touched.internal_document_id, !values.internal_document_id,
+    toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]]) // This needs requiresHandleClick since it resetsForm AFTER the setField Value, making it not show anything
+
+    const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(toolbar, fact, values , setValues, setFieldValue, validateField, ...args)
+    
+    const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
+    const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
 
     return (
     <div id="blackground-white">
@@ -43,6 +50,7 @@ const TopContent = (props) => {
             <Label>เลขที่เอกสาร</Label>
             <div className="grid_3 alpha">
                 <TextInput name='internal_document_id'
+                    validate={validateInternalDocumentIDField}
                     searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} 
                     ariaControls="modalDocument"
                     tabIndex="1" />
@@ -53,6 +61,7 @@ const TopContent = (props) => {
             <Label>ผู้ดำเนินเรื่อง</Label>
             <div className="grid_3 alpha">
                 <TextInput name="created_by_user_employee_id" 
+                    validate={validateUserEmployeeIDField}
                     disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} 
                     tabIndex="2"/>
             </div>
@@ -62,6 +71,7 @@ const TopContent = (props) => {
             <Label>ผู้สร้างเอกสาร</Label>
             <div className="grid_3 alpha">
                 <TextInput name="created_by_admin_employee_id" 
+                    validate={validateAdminEmployeeIDField}
                     disabled 
                     tabIndex="3"/>
             </div>
