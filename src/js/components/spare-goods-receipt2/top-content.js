@@ -17,7 +17,7 @@ import PopupModalDocument from '../common/popup-modal-document'
 import PopupModalInventory from '../common/popup-modal-inventory'
 import PopupModalUsername from '../common/popup-modal-username'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
-import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID } from '../../helper';
+import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, getDocumentbyInternalDocumentID } from '../../helper';
 
 const DOCUMENT_STATUS = {
   DRAFT: "สร้าง Draft",
@@ -95,47 +95,42 @@ const TopContent = (props) => {
     //   return resolve(); // Resolve doesn't return
     // }
     let error;
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/internal_document_id/${encodeURIComponent(internal_document_id)}`;
-    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-      .then((res) => {
-        if (res.data.internal_document_id === internal_document_id) { // If input document ID exists
-          if ((props.toolbar.mode === TOOLBAR_MODE.SEARCH || props.toolbar.mode === TOOLBAR_MODE.NONE || props.toolbar.mode === TOOLBAR_MODE.NONE_HOME) 
-            && !props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
+    getDocumentbyInternalDocumentID(internal_document_id)
+    .then((data) => {
+      if (data.internal_document_id === internal_document_id) { // If input document ID exists
+        if ((props.toolbar.mode === TOOLBAR_MODE.SEARCH || props.toolbar.mode === TOOLBAR_MODE.NONE || props.toolbar.mode === TOOLBAR_MODE.NONE_HOME) 
+          && !props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
 
-            setValues({ ...values, ...responseToFormState(props.fact.users, res.data) }, false); //Setvalues and don't validate
-            validateField("dest_warehouse_id");
-            validateField("created_by_user_employee_id");
-            validateField("created_by_admin_employee_id");
-            // Start Axios Get step_approve and attachment By nuk
-            // axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${res.data.document_id}/latest/plus`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-            //   .then((step_approve) => {
-              fetchStepApprovalDocumentData(res.data.document_id)
-              .then((result) => {
-                axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${res.data.document_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-                  .then((desrciption_files) => {
-                    console.log(" I AM STILL IN MODE SEARCH AND SET VALUE")
-                    
-                    // validateField("internal_document_id");
-                    // Setup value From Approve and Attachment
-                    setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
-                    setFieldValue("desrciption_files_length", desrciption_files.data.results.length, false);
-                    setFieldValue("desrciption_files", desrciption_files.data.results, false);
-                    setFieldValue("document_id", res.data.document_id, false);
-                    // setFieldValue("document_action_type_id", "TEST", false);
-                    setFieldValue("document_is_canceled", result.is_canceled.data, false);
-                    return resolve(null);
-                  });
+          setValues({ ...values, ...responseToFormState(props.fact.users, data) }, false); //Setvalues and don't validate
+          validateField("dest_warehouse_id");
+          validateField("created_by_user_employee_id");
+          validateField("created_by_admin_employee_id");
+
+
+          // Start Axios Get step_approve and attachment By nuk
+          fetchStepApprovalDocumentData(data.document_id)
+          .then((result) => {
+            axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${data.document_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+              .then((desrciption_files) => {
+                console.log(" I AM STILL IN MODE SEARCH AND SET VALUE")
                 
-              })
-              
-              // });
-            // End
+                // validateField("internal_document_id");
+                // Setup value From Approve and Attachment
+                setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
+                setFieldValue("desrciption_files_length", desrciption_files.data.results.length, false);
+                setFieldValue("desrciption_files", desrciption_files.data.results, false);
+                setFieldValue("document_id", data.document_id, false);
+                setFieldValue("document_is_canceled", result.is_canceled.data, false);
+                return resolve(null);
+              });
+            
+          })
 
-          } else { //If Mode add, need to error duplicate Document ID
-            console.log("I AM DUPLICATE")
-            error = 'Duplicate Document ID';
-          }
-        } else { // If input Document ID doesn't exists
+        } else { //If Mode add, need to error duplicate Document ID
+          console.log("I AM DUPLICATE")
+          error = 'Duplicate Document ID';
+        }
+      } else { // If input Document ID doesn't exists
           if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
             console.log("I KNOW IT'sINVALID")
             error = 'Invalid Document ID';
@@ -280,6 +275,7 @@ const TopContent = (props) => {
 
       {/* PopUp ค้นหาเลขที่คลัง MODE ADD */}
       <PopupModalInventory 
+       id="modalInventory" //For Open POPUP
       name="dest_warehouse_id"/>
 
       {/* PopUp ค้นหาชื่อพนักงาน MODE ADD */}

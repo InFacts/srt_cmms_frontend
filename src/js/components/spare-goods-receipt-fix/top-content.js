@@ -41,7 +41,7 @@ const responseToFormState = (userFact, data) => {
     created_by_admin_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_admin_id) || '',
     created_on: data.created_on.split(".")[0],
     line_items: data.line_items,
-    src_warehouse_id: data.src_warehouse_id,
+    dest_warehouse_id: data.dest_warehouse_id,
     remark: data.remark,
     status_name_th: data.status_name,
   }
@@ -86,7 +86,7 @@ const TopContent = (props) => {
         if (res.data.internal_document_id === internal_document_id) { // If input document ID exists
           if (props.toolbar.mode === TOOLBAR_MODE.SEARCH && !props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
             setValues({ ...values, ...responseToFormState(props.fact.users, res.data) }, false); //Setvalues and don't validate
-            validateField("src_warehouse_id");
+            validateField("dest_warehouse_id");
             validateField("created_by_user_employee_id");
             validateField("created_by_admin_employee_id");
             // Start Axios Get step_approve and attachment By nuk
@@ -160,7 +160,7 @@ const TopContent = (props) => {
       return 'Invalid Warehouse ID';
     }
   }
-  const validateSrcWarehouseIDField = (...args) => validateWarehouseIDField("src_warehouse_id", ...args);
+  const validateDestWarehouseIDField = (...args) => validateWarehouseIDField("dest_warehouse_id", ...args);
 
   return (
     <div id="blackground-white">
@@ -230,9 +230,9 @@ const TopContent = (props) => {
           </div>
 
           <div className="container_12">
-            {/* Src Warehouse ID */}
+            {/* DEST Warehouse ID */}
             <div className="grid_3 float-right">
-              <TextInput name="src_warehouse_id" validate={validateSrcWarehouseIDField}
+              <TextInput name="dest_warehouse_id" validate={validateDestWarehouseIDField}
                 disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
                 searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalInventory" tabIndex="5" />
             </div>
@@ -251,7 +251,8 @@ const TopContent = (props) => {
 
       {/* PopUp ค้นหาเลขที่คลัง MODE ADD */}
       <PopupModalInventory 
-      name="src_warehouse_id"
+       id="modalInventory" //For Open POPUP
+      name="dest_warehouse_id"
       />
 
       {/* PopUp ค้นหาชื่อพนักงาน MODE ADD */}

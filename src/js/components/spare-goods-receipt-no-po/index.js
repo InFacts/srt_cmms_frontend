@@ -36,7 +36,7 @@ const GoodsReceiptNoPoComponent = (props) => {
     useToolbarInitializer(TOOLBAR_MODE.SEARCH);
     useTokenInitializer();
     useFactInitializer();
-    useFooterInitializer();
+    useFooterInitializer(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO);
 
     // If Link to this url via Track Document
     useEffect(() => {

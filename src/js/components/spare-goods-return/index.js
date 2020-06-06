@@ -53,7 +53,7 @@ const GoodsReturnComponent = (props) => {
             // console.log(" THIS IS AFTER VALUES ", values);
             // setTimeout(validateForm, 2);
         }
-    }, [props.toolbar.mode, values.internal_document_id])
+    }, [])
 
     return (
         <form onSubmit={props.handleSubmit}>

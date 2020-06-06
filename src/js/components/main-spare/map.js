@@ -75,10 +75,10 @@ class Map extends React.Component {
                                 <img alt='some value' src={Text6} className="text7" />
                                 <img alt='some value' src={Text7} className="text6" />
                                 
-                                <Link to="/s1646"><img alt='some value' src={Threeone} className="three-one" /></Link>
-
+                                <Link to="/inventory-transfer"><img alt='some value' src={Threeone} className="three-one" /></Link>
                                 <img alt='some value' src={Threetwo} className="three-two" />
                                 <img alt='some value' src={Threethree} className="three-three" />
+                                
                                 <img alt='some value' src={Text8} className="text8" />
                                 <img alt='some value' src={Text9} className="text9" />
                                 <img alt='some value' src={Text10} className="text10" />
@@ -104,8 +104,8 @@ class Map extends React.Component {
                                     <button className="p-contextual-menu__toggle" style={{ border: "none", padding: "0" }} aria-controls="menu-2" aria-expanded="false" aria-haspopup="true"><img alt='some value' src={Dropdown} /></button>
                                     <span className="p-contextual-menu__dropdown" id="menu-2" aria-hidden="true" aria-label="submenu">
                                         <span className="p-contextual-menu__group">
-                                            <Link to="/unit-count" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>ตรวจนับสินค้า</Link>
-                                            {/* <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>ปรับปรุงจำนวนอะไหล่</Link> */}
+                                            <Link to="/physical-count" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>ตรวจนับสินค้า</Link>
+                                            <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>ปรับปรุงจำนวนอะไหล่</Link>
                                         </span>
                                     </span>
                                 </span>
@@ -113,8 +113,8 @@ class Map extends React.Component {
                                     <button className="p-contextual-menu__toggle" style={{ border: "none", padding: "0" }} aria-controls="menu-3" aria-expanded="false" aria-haspopup="true"><img alt='some value' src={Dropdown} /></button>
                                     <span className="p-contextual-menu__dropdown" id="menu-3" aria-hidden="true" aria-label="submenu">
                                         <span className="p-contextual-menu__group">
-                                            <Link to="/salvage-management-1" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>คืนซากอะไหล่</Link>
-                                            <Link to="/salvage-management-2" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>จำหหน่ายซากอะไหล่</Link>
+                                            <Link to="/salvage-return" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>คืนซากอะไหล่</Link>
+                                            <Link to="/salvage-sold" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>จำหหน่ายซากอะไหล่</Link>
                                         </span>
                                     </span>
                                 </span>

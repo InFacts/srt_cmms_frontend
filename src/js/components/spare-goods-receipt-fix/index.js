@@ -97,8 +97,8 @@ const EnhancedGoodsReturnComponent = withFormik({
         // Field ที่ให้ User กรอก
         internal_document_id: '',
         document_date: '',
-        dest_warehouse_id: 999, // for Goods Issue 
-        src_warehouse_id: '', // Need to fill for user's own WH
+        dest_warehouse_id: '', 
+        src_warehouse_id: 999, 
         created_by_user_employee_id: '',
         remark: '',
         line_items: initialRows(),
