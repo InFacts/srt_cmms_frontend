@@ -8,8 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import FormInput from '../common/form-input'
 import TextInput from '../common/formik-text-input'
-import DateTimeInput from '../common/formik-datetime-input'
-import DateInput from '../common/formik-date-input'
+import SelectNoChildrenInput from '../common/formik-select-no-children';
 
 import { useFormikContext, useField } from 'formik';
 
@@ -17,8 +16,10 @@ import { useFormikContext, useField } from 'formik';
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, getDocumentbyInternalDocumentID } from '../../helper';
 
+import PopupModalNoPart from '../common/popup-modal-nopart'
+
 const FormLabel = ({ children }) => (
-  <div className="grid_2">
+  <div className={`grid_2`}>
     <p className="top-text">{children}</p>
   </div>
 );
@@ -44,91 +45,67 @@ const TopContent = (props) => {
           <FormTitle>ข้อมูลอุปกรณ์</FormTitle>
           <div className="container_12">
             <FormLabel>เลขที่อุปกรณ์</FormLabel>
-            <div className="grid_6">
-              <div className="grid_2 pull_1">
-                {/* Select Manual or Auto on  */}
-                <select className="edit-select" style={{ marginTop: "0" }} disabled="disabled">
-                  <option defaultValue="0">none</option>
-                  {/* {props.mode_no_part.map(function (mode_no_part, index) {
-                    return (<option key={index} defaultValue={mode_no_part.mode_no}>{mode_no_part.mode_no}</option>)
+            <div className="grid_3 pull_1">
+              <TextInput name='internal_item_id'
+                // validate={validateInternalDocumentIDField}
+                searchable={props.toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart" tabIndex="1" />
+            </div>
+            <div className="float-right">
+              <div className="grid_3 float-right">
+                <SelectNoChildrenInput name="item_type_id" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                  <option value=''></option>
+                  {/* {factDistricts.items.map(function ({ district_id, name, division_id }) {
+                    return <option value={district_id} key={district_id}> {name} </option>
                   })} */}
-                </select>
+                </SelectNoChildrenInput>
               </div>
-              <div className="grid_3 pull_1">
-                <div className="p-search-box cancel-margin">
-
-                  <input type="text" className="p-search-box__input cancel-default"
-                  // value={props.no_part} onChange={props.onChangeNoPart} 
-                  />
-                  <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalPart" aria-controls="modalPart" onClick={props.onClickOpenPopUpNoPart}></i></button>
-                </div>
+              <div className="grid_2 float-right">
+                <p className="top-text float-right">ชนิดอุปกรณ์</p>
               </div>
             </div>
           </div>
 
           <div className="container_12">
             <FormLabel>รายละเอียด</FormLabel>
-            <div className="grid_2 pull_1"><h1></h1></div>
-            <div className="grid_6">
-              <div className="grid_3 pull_1">
-                <input type="text" className="cancel-default"
-                  // defaultValue={props.info_part_show.description} 
-                  disabled="disabled"></input>
+            <div className="grid_3 pull_1">
+              <TextInput name="description" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="2" />
+            </div>
+            <div className="float-right">
+              <div className="grid_3 float-right">
+                <SelectNoChildrenInput name="item_group_id" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                  <option value=''></option>
+                  {/* {factDistricts.items.map(function ({ district_id, name, division_id }) {
+                    return <option value={district_id} key={district_id}> {name} </option>
+                  })} */}
+                </SelectNoChildrenInput>
+              </div>
+              <div className="grid_2 float-right">
+                <p className="top-text float-right">กลุ่มอุปกรณ์</p>
               </div>
             </div>
           </div>
 
           <div className="container_12">
-            <FormLabel>ชนิดอุปกรณ์</FormLabel>
-            <div className="grid_2 pull_1"><h1></h1></div>
-            <div className="grid_6">
-              <div className="grid_3 pull_1">
+            <div className="float-right">
+              <div className="grid_3 float-right">
                 <select className="edit-select" style={{ marginTop: "0" }} disabled="disabled">
                   <option defaultValue="0">none</option>
-                  {/* {props.type_part.map(function (type_part, index) {
+                  {/* {props.info_part_show.parent_unit_part(function (type_part, index) {
                     if (props.info_part_show.type === type_part.type)
                       return (<option key={index} defaultValue={type_part.type} selected>{type_part.type}</option>)
                     else return <option key={index} defaultValue={type_part.type}>{type_part.type}</option>
                   })} */}
                 </select>
               </div>
-            </div>
-          </div>
-
-          <div className="container_12">
-            <FormLabel>กลุ่มอุปกรณ์</FormLabel>
-            <div className="grid_2 pull_1"><h1></h1></div>
-            <div className="grid_6">
-              <div className="grid_3 pull_1">
-                <select className="edit-select" style={{ marginTop: "0" }} disabled="disabled">
-                  <option defaultValue="0">none</option>
-                  {/* {props.group_part.map(function (group_part, index) {
-                    if (props.info_part_show.group === group_part.group)
-                      return (<option key={index} defaultValue={group_part.group} selected>{group_part.group}</option>)
-                    else return <option key={index} defaultValue={group_part.group}>{group_part.group}</option>
-                  })} */}
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <div className="container_12">
-            <FormLabel>กลุ่มหน่วยนับ</FormLabel>
-            <div className="grid_2 pull_1"><h1></h1></div>
-            <div className="grid_6">
-              <div className="grid_3 pull_1">
-                <select className="edit-select" style={{ marginTop: "0" }} disabled="disabled">
-                  <option defaultValue="0">none</option>
-                  {/* {props.parent_unit_part.map(function (parent_unit_part, index) {
-                    if (props.info_part_show.parent_unit_part === parent_unit_part.parent_unit)
-                      return (<option key={index} defaultValue={parent_unit_part.parent_unit} selected>{parent_unit_part.parent_unit}</option>)
-                    else return <option key={index} defaultValue={parent_unit_part.parent_unit}>{parent_unit_part.parent_unit}</option>
-                  })} */}
-                </select>
+              <div className="grid_2 float-right">
+                <p className="top-text float-right">กลุ่มหน่วยนับ</p>
               </div>
             </div>
           </div>
         </section>
+
+        {/* PopUp ค้นหาอะไหล่ */}
+        <PopupModalNoPart />
       </div>
     </div>
   )

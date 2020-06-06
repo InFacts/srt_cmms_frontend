@@ -201,6 +201,7 @@ const useFooterInitializer = (document_type_id) => {
             .finally(() => { // Set that I already handled the Click
                 console.log(" I submitted and i am now handling click")
                 dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
+                resetForm();
             }); 
         }
     }, [footer.requiresHandleClick[FOOTER_ACTIONS.SEND]]);

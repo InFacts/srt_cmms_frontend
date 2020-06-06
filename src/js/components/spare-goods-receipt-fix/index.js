@@ -46,10 +46,10 @@ const GoodsReturnComponent = (props) => {
         const internal_document_id = urlParams.get('internal_document_id');
         if (internal_document_id !== "") {
             // action_approval
-            // console.log(" IA M NOT SETTING ", internal_document_id);
-            // console.log(" THIS IS CURRENT VALUES ", values);
+            console.log(" IA M NOT SETTING ", internal_document_id);
+            console.log(" THIS IS CURRENT VALUES ", values);
             setFieldValue("internal_document_id", internal_document_id, true);
-            // console.log(" THIS IS AFTER VALUES ", values);
+            console.log(" THIS IS AFTER VALUES ", values);
         }
     }, [])
 
@@ -78,7 +78,6 @@ const initialLineItem = {
     line_number: '',
     // document_id: '', // maybe not needed
     list_uoms: [],
-    at_source: [],
 }
 const initialRows = (n=10) => {
     let rows = [];
@@ -97,12 +96,12 @@ const EnhancedGoodsReturnComponent = withFormik({
         // Field ที่ให้ User กรอก
         internal_document_id: '',
         document_date: '',
-        dest_warehouse_id: '', 
-        src_warehouse_id: 999, 
+        dest_warehouse_id: '', // Need to fill for user's own WH
+        src_warehouse_id: 999, // for Goods Receipt
         created_by_user_employee_id: '',
         remark: '',
         line_items: initialRows(),
-
+        refer_to_document_internal_document_id: '',
         file: [],
     
         //Field ที่ไม่ได้กรอก
@@ -111,6 +110,7 @@ const EnhancedGoodsReturnComponent = withFormik({
         status_name_th: '',
         document_status_id: '',
         created_by_admin_employee_id: '',
+        refer_to_document_id: '',
 
         //Field ที่ไม่ได้ display
         document_id: '', // changes when document is displayed (internal_document_id field validation)
@@ -140,7 +140,6 @@ const EnhancedGoodsReturnComponent = withFormik({
         return errors;
     },
     handleSubmit: (values, formikBag) => new Promise ((resolve, reject) => { //handle Submit will just POST the Empty Document and PUT information inside
-        console.log("DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX", DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX)
         let data = packDataFromValues(formikBag.props.fact, values);
         console.log("I AM SUBMITTING ", data );
         saveDocument(DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX, data)

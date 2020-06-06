@@ -112,6 +112,9 @@ const EnhancedGoodsReceiptComponent = withFormik({
         list_uoms: [],
         line_items: [],
         file: [],
+
+        // NOT USE FOR FOOTER
+        step_approve: [],
         created_by_admin_employee_id: '',
 
         //Field ที่ไม่ได้ display

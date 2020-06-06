@@ -14,8 +14,6 @@ import Files from '../common/files2'
 import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
 import { useFormikContext } from 'formik';
 
-import PopupModalNoPart from '../common/popup-modal-nopart'
-
 import '../../../css/table.css';
 
 const BottomContent = (props) => {
@@ -221,9 +219,6 @@ const BottomContent = (props) => {
             {/* {console.log("values.step_approve", values.step_approve)} */}
             <TableStatus bodyTableStatus = {values.step_approve} />
           </div>
-
-          {/* PopUp ค้นหาอะไหล่ MODE ADD */}
-          <PopupModalNoPart lineNumber={lineNumber} />
 
         </div>
       </div>

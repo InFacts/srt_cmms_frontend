@@ -7,7 +7,7 @@ import { API_URL_DATABASE } from '../../config_url.js';
 
 import TextareaInput from '../common/formik-textarea-input';
 import TableStatus from '../common/table-status';
-import TableHaveStock from '../common/table-have-stock';
+import Table from '../common/table';
 
 import Files from '../common/files2'
 
@@ -18,7 +18,6 @@ import PopupModalNoPart from '../common/popup-modal-nopart'
 
 import '../../../css/table.css';
 
-import { fetchGoodsOnhandData, getNumberFromEscapedString } from '../../helper';
 const BottomContent = (props) => {
 
   const [lineNumber, setLineNumber] = useState('');
@@ -70,11 +69,11 @@ const BottomContent = (props) => {
     }
   }
 
-  const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => new Promise(resolve => {
+  const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => {
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
 
     if (values.line_items[index].internal_item_id === internal_item_id) {
-      return resolve();
+      return;
     }
     if (internal_item_id === "") {
       setFieldValue(fieldName + `.description`, '', false);
@@ -82,8 +81,7 @@ const BottomContent = (props) => {
       setFieldValue(fieldName + `.list_uoms`, [], false);
       setFieldValue(fieldName + `.uom_id`, '', false);
       setFieldValue(fieldName + `.per_unit_price`, '', false);
-      setFieldValue(fieldName + `.at_source`, [], false);
-      return resolve();
+      return;
     }
     let items = props.fact.items.items;
     let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
@@ -94,16 +92,11 @@ const BottomContent = (props) => {
       setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
       setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
       setFieldValue(fieldName + `.per_unit_price`, 0, false);
-      
-      fetchGoodsOnhandData(getNumberFromEscapedString(values.src_warehouse_id), item.item_id)
-      .then((at_source) => {
-        setFieldValue(fieldName + `.at_source`, at_source, false);
-      })
-      return resolve();
+      return;
     } else {
-      return resolve('Invalid Number ID');
+      return 'Invalid Number ID';
     }
-  });
+  }
 
   const validateLineNumberQuatityItemIDField = (fieldName, quantity, index) => {
     // internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
@@ -185,7 +178,7 @@ const BottomContent = (props) => {
 
           <div id="listItem_content" className="tabcontent">
             <div className="container_12 mt-1" style={{ paddingRight: "10px" }}>
-              <TableHaveStock line_items={values.line_items}
+              <Table line_items={values.line_items}
                 sumTotalLineItem={sumTotalLineItem}
                 validateLineNumberInternalItemIDField={validateLineNumberInternalItemIDField}
                 validateLineNumberQuatityItemIDField={validateLineNumberQuatityItemIDField}
@@ -226,7 +219,7 @@ const BottomContent = (props) => {
 
           <div id="table_status_content" className="tabcontent">
             {/* {console.log("values.step_approve", values.step_approve)} */}
-            <TableStatus bodyTableStatus={values.step_approve} />
+            <TableStatus bodyTableStatus = {values.step_approve} />
           </div>
 
           {/* PopUp ค้นหาอะไหล่ MODE ADD */}
