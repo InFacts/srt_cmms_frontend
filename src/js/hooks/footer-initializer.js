@@ -143,7 +143,7 @@ const useFooterInitializer = (document_type_id) => {
                         
                     })
                     .catch((err) => {
-                        console.log("Submit Failed ", err);
+                        console.log("Submit Failed ", err.response);
                     })
                     .finally(() => { // Set that I already handled the Click
                         console.log(" I submitted and i am now handling click")

@@ -69,7 +69,7 @@ const TopContent = (props) => {
   }, [values.document_id]);
 
 
-  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(props.toolbar, props.fact, values , setValues, validateField, ...args)
+  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(props.toolbar, props.fact, values , setValues, setFieldValue, validateField, ...args)
 
   const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", props.fact, setFieldValue, ...args);
   const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", props.fact, setFieldValue, ...args);

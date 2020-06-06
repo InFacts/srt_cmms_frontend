@@ -163,6 +163,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
     let document_part = {
         ...DOCUMENT_SCHEMA,
         document_status_id: 1,
+        document_action_type: 1, 
         document_id: values.document_id,
         internal_document_id: values.internal_document_id,
         remark: values.remark,
@@ -360,7 +361,7 @@ export const getDocumentbyInternalDocumentID = (internal_document_id) => new Pro
         }
       })
       .catch((err) => {
-          console.warn(err);
+          console.warn(err.response);
           reject(err)
       });
 })
@@ -438,7 +439,11 @@ export const saveDocument = (document_type_group_id, data) => new Promise((resol
             editDocument(document_id, document_type_group_id, mutateDataFillDocumentID(data, document_id))
                 .then(() => {
                     return resolve(document_id);
+                })
+                .catch((err) => {
+                    return reject(err);
                 });
+
         })
 });
 // Start the Approval Flow of the Document
@@ -705,6 +710,7 @@ export const validateInternalDocumentIDFieldHelper = (toolbar, fact, values , se
     let error;
     getDocumentbyInternalDocumentID(internal_document_id)
     .then((data) => {
+        console.log(" i got data", data);
       if (data.internal_document_id === internal_document_id) { // If input document ID exists
         if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME) 
           && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
