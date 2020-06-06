@@ -168,7 +168,7 @@ const TopContent = (props) => {
     <div id="blackground-white">
       <div className="container_12 clearfix">
         <section className="container_12 ">
-          <h4 className="head-title">เบิกอะไหล่ไปใช้งาน</h4>
+          <h4 className="head-title">คืนซากอะไหล่</h4>
           <div className="container_12">
 
             {/* Document ID */}
@@ -246,7 +246,7 @@ const TopContent = (props) => {
       </div>
 
       {/* PopUp ค้นหาเลขที่เอกสาร */}
-      <PopupModalDocument documentTypeGroupID={DOCUMENT_TYPE_ID.GOODS_USAGE}
+      <PopupModalDocument documentTypeGroupID={DOCUMENT_TYPE_ID.SALVAGE_RETURN}
         id="modalDocument" //For Open POPUP
         name="internal_document_id" //For setFieldValue
       />

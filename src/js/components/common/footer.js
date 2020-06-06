@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import {FOOTER_MODE, FOOTER_ACTIONS, FOOTER_ACTIONS_TEXT, clickApproval, clickSend, clickSave, clickReject, clickBack, clickCheckApproval, clickApprovalOrder, clickFastTrack, clickCancleApprovalProcess, clickVoid, clickApproved} from '../../redux/modules/footer.js';
+import {FOOTER_MODE, FOOTER_ACTIONS, FOOTER_ACTIONS_TEXT, clickApproval, clickSend, clickSave, clickReject, clickBack, clickCheckApproval, clickApprovalOrder, clickFastTrack, clickCancleApprovalProcess, clickVoid, clickApprovalDone} from '../../redux/modules/footer.js';
 import { useDispatch, useSelector  } from 'react-redux'
 
 const FOOTER_ACTIONS_TO_ACTION_CREATOR = {
@@ -15,7 +15,7 @@ const FOOTER_ACTIONS_TO_ACTION_CREATOR = {
   [FOOTER_ACTIONS.FAST_TRACK]: clickFastTrack,
   [FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]: clickCancleApprovalProcess,
   [FOOTER_ACTIONS.VOID]: clickVoid,
-  [FOOTER_ACTIONS.APPROVED]: clickApproved
+  [FOOTER_ACTIONS.APPROVAL_DONE]: clickApprovalDone
 }
 
 const ALL_DISABLED_PROP = {}
@@ -98,6 +98,12 @@ const mapStateToProps = (state) => {
     case FOOTER_MODE.ADD_DRAFT:
       // console.log(">>>>> ADD_DRAFT")
       return getPropButtonVisible(FOOTER_ACTIONS.SEND, [FOOTER_ACTIONS.SEND, FOOTER_ACTIONS.SAVE, FOOTER_ACTIONS.BACK]);
+    case FOOTER_MODE.VOID:
+      // console.log(">>>>> VOID")
+      return getPropButtonVisible(null, [FOOTER_ACTIONS.BACK]);
+    case FOOTER_MODE.FAST_TRACK:
+      // console.log(">>>>> FAST_TRACK")
+      return getPropButtonVisible(FOOTER_ACTIONS.SEND, [FOOTER_ACTIONS.FAST_TRACK, FOOTER_ACTIONS.BACK]);
     case FOOTER_MODE.AP_APPROVAL:
       // console.log(">>>>> AP_APPROVAL")
       return getPropButtonVisible(FOOTER_ACTIONS.APPROVAL, [FOOTER_ACTIONS.APPROVAL, FOOTER_ACTIONS.REJECT, FOOTER_ACTIONS.BACK]);

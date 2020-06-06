@@ -22,7 +22,14 @@ import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData,
   isValidInternalDocumentIDFormat, isValidInternalDocumentIDDraftFormat ,
   fetchAttachmentDocumentData} from '../../helper';
 
-
+const DOCUMENT_STATUS = {
+  DRAFT: "สร้าง Draft",
+  WAIT_APPROVE: "รอการอนุมัติ",
+  APPROVE_DONE: "อนุมัติเรียบร้อยแล้ว",
+  VOID: "เอกสารหมดสถานะการใช้งาน",
+  REOPEN: "แก้ไขเอกสาร",
+  FAST_TRACK: "Fast Track",
+}
 const responseToFormState = (userFact, data) => {
   for (var i = data.line_items.length; i <= 9; i++) {
     data.line_items.push(
@@ -47,7 +54,8 @@ const responseToFormState = (userFact, data) => {
     line_items: data.line_items,
     dest_warehouse_id: data.dest_warehouse_id,
     remark: data.remark,
-    status_name_th: data.status_name,
+    status_name_th: "",
+    document_action_type_id: "",
     po_id: data.po_id,
   }
 }
@@ -78,6 +86,7 @@ const TopContent = (props) => {
     .then((result) => {
       // Setup value From Approve 
       setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
+      setFieldValue("document_is_canceled", result.is_canceled.data, false);
     });
   }, [values.document_id]);
 

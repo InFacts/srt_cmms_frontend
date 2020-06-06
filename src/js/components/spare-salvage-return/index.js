@@ -36,7 +36,7 @@ const GoodsReturnComponent = (props) => {
     useToolbarInitializer(TOOLBAR_MODE.SEARCH);
     useTokenInitializer();
     useFactInitializer();
-    useFooterInitializer(DOCUMENT_TYPE_ID.GOODS_USAGE);
+    useFooterInitializer(DOCUMENT_TYPE_ID.SALVAGE_RETURN);
 
     // If Link to this url via Track Document
     useEffect(() => {
@@ -140,10 +140,10 @@ const EnhancedGoodsReturnComponent = withFormik({
         return errors;
     },
     handleSubmit: (values, formikBag) => new Promise ((resolve, reject) => { //handle Submit will just POST the Empty Document and PUT information inside
-        console.log("DOCUMENT_TYPE_ID.GOODS_USAGE", DOCUMENT_TYPE_ID.GOODS_USAGE)
+        console.log("DOCUMENT_TYPE_ID.SALVAGE_RETURN", DOCUMENT_TYPE_ID.SALVAGE_RETURN)
         let data = packDataFromValues(formikBag.props.fact, values);
         console.log("I AM SUBMITTING ", data );
-        saveDocument(DOCUMENT_TYPE_ID.GOODS_USAGE, data)
+        saveDocument(DOCUMENT_TYPE_ID.SALVAGE_RETURN, data)
         .then((document_id) => {
             formikBag.setFieldValue('document_id', document_id, false);
             return resolve(document_id);

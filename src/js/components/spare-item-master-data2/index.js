@@ -24,21 +24,9 @@ const ItemMasterDataComponent = (props) => {
     <>
         <form>
             <TopContent />
-            {/* <TabDocument tabNames={tabNames}>
-            <TestBottomContent />
-            </TabDocument> */}
             <Footer />
         </form>
     </>
-    // <Provider store={store}>
-    //     <NavTopbar />
-    //     <Toolbar />
-    //     <form>
-    //         <TopContent />
-    //         <BottomContent />
-    //         <Footer />
-    //     </form>
-    // </Provider> this is test
 )}
 
 const mapStateToProps = (state) => ({

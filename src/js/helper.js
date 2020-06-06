@@ -15,8 +15,11 @@ export const DOCUMENT_TYPE_ID = {
     INVENTORY_TRANSFER: 121,
     GOODS_FIX: 131,
     GOODS_RECEIPT_FIX: 132,
+    PHYSICAL_COUNT: 141,
+    SALVAGE_RETURN: 151,
+    SALVAGE_SOLD: 152,
 
-    WORK_REQUEST:201,
+    WORK_REQUEST: 201,
     WORK_ORDER: 202,
     WORK_ORDER_PM: 203,
     SS101: 204,
@@ -160,84 +163,80 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         created_by_admin_id: getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id),
         created_by_user_id: getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_user_employee_id),
     }
-    if(isICD(document_type_id)) {
-        let line_items_part = [];
-        values.line_items.map(line_item => {
-            if (line_item.internal_item_id) {
-                line_items_part.push({
-                    ...ICD_LINE_ITEM_SCHEMA,
-                    document_id: values.document_id,
-                    line_number: line_item.line_number,
-                    quantity: line_item.quantity,
-                    uom_id: line_item.uom_id,
-                    per_unit_price: line_item.per_unit_price,
-                    item_id: getItemIDFromInternalItemID(fact[FACTS.ITEM], line_item.internal_item_id),
-                    item_status_id: line_item.item_status_id,
-                });
+    let line_items_part = [];
+    values.line_items.map(line_item => {
+        if (line_item.internal_item_id) {
+            line_items_part.push({
+                ...ICD_LINE_ITEM_SCHEMA,
+                document_id: values.document_id,
+                line_number: line_item.line_number,
+                quantity: line_item.quantity,
+                uom_id: line_item.uom_id,
+                per_unit_price: line_item.per_unit_price,
+                item_id: getItemIDFromInternalItemID(fact[FACTS.ITEM], line_item.internal_item_id),
+                item_status_id: line_item.item_status_id,
+            });
+        }
+    })
+    let movement_part = {
+        ...DOCUMENT_TYPE_ID_TO_MOVEMENT_SCHEMA[document_type_id],
+        document_id: values.document_id,
+    }
+    switch (document_type_id) {
+        case DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO:
+            movement_part = {
+                ...movement_part,
+                po_id: values.po_id
             }
-        })
-        let movement_part = {
-            ...DOCUMENT_TYPE_ID_TO_MOVEMENT_SCHEMA[document_type_id],
-            document_id: values.document_id,
-        }
-        switch (document_type_id) {
-            case DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO:
-                movement_part = {
-                    ...movement_part,
-                    po_id: values.po_id
-                }
-                break;
-            case DOCUMENT_TYPE_ID.GOODS_ISSUE:
-                movement_part = {
-                    ...movement_part,
-                    refer_to_document_name: values.refer_to_document_name
-                }
-                break;
-            case DOCUMENT_TYPE_ID.GOODS_RETURN:
-                break;
-            case DOCUMENT_TYPE_ID.GOODS_RETURN_MAINTENANCE:
-                break;
-            case DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO:
-                document_part = {
-                    ...document_part,
-                    refer_to_document_id: values.refer_to_document_id
-                }
-                break;
-            case DOCUMENT_TYPE_ID.GOODS_RETURN_MAINTENANCE:
-                document_part = {
-                    ...document_part,
-                    refer_to_document_id: values.refer_to_document_id
-                }
-                break;
-            case DOCUMENT_TYPE_ID.GOODS_USAGE:
-                break;
-            default:
-                break;
-        }
-    
-        const icd_part = {
-            ...ICD_SCHEMA,
-            document_id: values.document_id,
-            dest_warehouse_id: getNumberFromEscapedString(values.dest_warehouse_id),
-            src_warehouse_id: getNumberFromEscapedString(values.src_warehouse_id),
-            line_items: line_items_part,
-            movement: movement_part, // REFER TO MOVEMENT SCHEMAS
-    
-        }
-        return {
-            document: document_part,
-            specific: icd_part,
-        }
-    }else if (document_type_id === DOCUMENT_TYPE_ID.WORK_REQUEST){
-        document_part["document_type_id"] = DOCUMENT_TYPE_ID.WORK_REQUEST;
-        let work_request_part = {}
-        Object.keys(WORK_REQUEST_SCHEMA).map((key) => {
-            work_request_part[key] = values[key]
-        })
-        return {
-            document: document_part,
-            specific: work_request_part,
-        }
+            break;
+        case DOCUMENT_TYPE_ID.GOODS_ISSUE:
+            movement_part = {
+                ...movement_part,
+                refer_to_document_name: values.refer_to_document_name
+            }
+            break;
+        case DOCUMENT_TYPE_ID.PHYSICAL_COUNT:
+            movement_part = {
+                ...movement_part,
+                refer_to_document_name: values.refer_to_document_name
+            }
+            break;
+        case DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO:
+            document_part = {
+                ...document_part,
+                refer_to_document_id: values.refer_to_document_id
+            }
+            break;
+        case DOCUMENT_TYPE_ID.GOODS_RETURN_MAINTENANCE:
+            document_part = {
+                ...document_part,
+                refer_to_document_id: values.refer_to_document_id
+            }
+            break;
+        case DOCUMENT_TYPE_ID.GOODS_USAGE:
+            break;
+        case DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX:
+            break
+        case DOCUMENT_TYPE_ID.GOODS_RETURN:
+            break;
+        case DOCUMENT_TYPE_ID.GOODS_RETURN_MAINTENANCE:
+            break;
+        default:
+            break;
+    }
+
+    const icd_part = {
+        ...ICD_SCHEMA,
+        document_id: values.document_id,
+        dest_warehouse_id: getNumberFromEscapedString(values.dest_warehouse_id),
+        src_warehouse_id: getNumberFromEscapedString(values.src_warehouse_id),
+        line_items: line_items_part,
+        movement: movement_part, // REFER TO MOVEMENT SCHEMAS
+
+    }
+    return {
+        document: document_part,
+        specific: icd_part,
     }
 }
 
@@ -426,7 +425,7 @@ export const startDocumentApprovalFlow = (document_id) => new Promise((resolve, 
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/new`;
     axios.post(url, null, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
-            if(res.status === 200 || res.status === 201){
+            if (res.status === 200 || res.status === 201) {
                 console.log(" I am successful in starting approval flow of document_id ", document_id)
                 resolve(res.data);
             } else {
@@ -460,7 +459,7 @@ export const fetchAttachmentDocumentData = (document_id) => new Promise((resolve
 });
 
 // Get Latest Step Approval After Track Docuemnt
-export const fetchLatestStepApprovalDocumentData = (document_id) => new Promise((resolve, reject) =>{
+export const fetchLatestStepApprovalDocumentData = (document_id) => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/latest/step`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((latest_step_approve) => {
@@ -472,7 +471,7 @@ export const fetchLatestStepApprovalDocumentData = (document_id) => new Promise(
 });
 
 // Get Latest Step Approval After Track Docuemnt
-export const fetchSearchDocumentData = (document_id) => new Promise((resolve, reject) =>{
+export const fetchSearchDocumentData = (document_id) => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?${document_id}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((document) => {
@@ -494,3 +493,143 @@ export const fetchGoodsOnhandData = (warehouse_id, item_id) => new Promise((reso
             reject(err)
         });
 });
+
+// Check Document Status from 
+export const DOCUMENT_STATUS = {
+    DRAFT: "สร้าง Draft",
+    WAIT_APPROVE: "รอการอนุมัติ",
+    APPROVE_DONE: "อนุมัติเรียบร้อยแล้ว",
+    VOID: "เอกสารหมดสถานะการใช้งาน",
+    REOPEN: "แก้ไขเอกสาร",
+    FAST_TRACK: "Fast Track",
+}
+// approval_step_action_id
+export const APPROVAL_STEP_ACTION = {
+    CHECK_APPROVAL: 1, // "ตรวจสอบและรับทราบลงนาม",
+    APPROVAL: 2, // "รับทราบลงนาม",
+    GOT_IT: 3, // "รับทราบ",
+    CHECK_ORDER: 4, // "ตรวจสอบและสั่งจ่าย",
+    CHECK_MAINTENANCE: 5, // "ตรวจสอบรับทราบลงนาม และเลือกวิธีจัดซ่อม",
+    GUARANTEE_MAINTENANCE: 6 // "รับรองผลดำเนินการซ่อมเสร็จแล้ว",
+}
+
+// Check document_action_type table in database -> CreateNew(DRAFT/WAIT_APPROVE/APPROVED), FastTrack(FAST_TRACK), Void(VOID)
+// Check approval_process table in database -> is_canceled(REOPEN)
+// Check Approval flow -> Clear infomation of CreateNew(DRAFT/WAIT_APPROVE/APPROVED)
+// DRAFT
+export const checkDocumentStatus = (valuesContext) => {
+    // GET document_action_type_id
+    const _lookup_document_action_type = {
+        CreateNew: 1,
+        FastTrack: 2,
+        Void: 3
+    }
+    // http://43.229.79.36:60013/approval/1/latest/plus
+    let result = {
+        "id": 1,
+        "created_on": "2020-05-31T15:28:51.000Z",
+        "update_time": null,
+        "document_id": 1,
+        "approval_process_lookup_id": 1031,
+        "is_canceled": {
+            "type": "Buffer",
+            "data": [
+                0
+            ]
+        },
+        "approval_step": [
+            {
+                "approval_process_id": 1,
+                "step_number": 1,
+                "is_skipped": {
+                    "type": "Buffer",
+                    "data": [
+                        0
+                    ]
+                },
+                "approval_by": [
+                    {
+                        "id": 1,
+                        "approval_process_id": 1,
+                        "step_number": 1,
+                        "approval_status_id": 1,
+                        "user_id": 0,
+                        "position_group_id": 0,
+                        "approved_on": "2020-05-31T15:28:51.000Z",
+                        "remark": "AUTOMATIC EXECUTION BY DATABASE",
+                        "position": null,
+                        "user": {
+                            "firstname_th": null,
+                            "firstname_en": null,
+                            "lastname_th": null,
+                            "lastname_en": null
+                        },
+                        "approval_status": {
+                            "approval_status_id": 1,
+                            "name": "Approved",
+                            "description": "Approved",
+                            "name_th": null,
+                            "description_th": null
+                        }
+                    }
+                ],
+                "position": [],
+                "position_group": {
+                    "position_group_id": 0,
+                    "name": "This"
+                }
+            },
+            {
+                "approval_process_id": 1,
+                "step_number": 2,
+                "is_skipped": {
+                    "type": "Buffer",
+                    "data": [
+                        0
+                    ]
+                },
+                "approval_by": [],
+                "position": [],
+                "position_group": {
+                    "position_group_id": 5,
+                    "name": "หัวหน้าตอน (นสต. นายตรวจสายตอน)"
+                }
+            }
+        ]
+    }
+    let document_action_type_id = 1; //TODO valuesContext.document_action_type_id
+    let approval_process_is_canceled = valuesContext.document_is_canceled;
+    let approval_step = valuesContext.step_approve;
+    if (_lookup_document_action_type.FastTrack === document_action_type_id) { return DOCUMENT_STATUS.FastTrack; }
+    else if  (_lookup_document_action_type.Void === document_action_type_id) { return DOCUMENT_STATUS.VOID; }
+    else {
+        // CreateNew
+        if (approval_process_is_canceled === 1){
+            // console.log("------> REOPEN")
+            return DOCUMENT_STATUS.REOPEN;
+        }
+        else {
+            if (approval_step.length !== 0) {
+                // TODO: Check Latest ApprovalProcessID
+                let checkWaitApproval = false;
+                approval_step.map(apStep => {
+                    if (apStep.approval_by.length === 0){ 
+                        // console.log("------> WAIT_APPROVE")
+                        checkWaitApproval = true;
+                        return DOCUMENT_STATUS.WAIT_APPROVE;
+                    }
+                })
+                if (!checkWaitApproval) {
+                    // console.log("------> APPROVE_DONE")
+                    return DOCUMENT_STATUS.APPROVE_DONE;
+                }
+            }
+            else {
+                // console.log("------> DRAFT")
+                return DOCUMENT_STATUS.DRAFT;
+            }
+        }
+    }
+
+
+}

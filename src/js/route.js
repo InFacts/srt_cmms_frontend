@@ -8,7 +8,7 @@ import MainSpare from './components/main-spare';
 import MainPmt from './components/main-pmt';
 
 // SPARE PAGE
-import ItemMasterData2 from './components/spare-item-master-data2';
+import ItemMasterData from './components/spare-item-master-data';
 import SpareGoodsReceipt2 from './components/spare-goods-receipt2';
 import SpareGoodsReceiptNoPo from './components/spare-goods-receipt-no-po';
 import SpareGoodsReturn from './components/spare-goods-return';
@@ -18,6 +18,8 @@ import SpareGoodsReceiptFix from './components/spare-goods-receipt-fix';
 import SpareGoodsIssue from './components/spare-goods-issue';
 import SpareInventoryTransfer from './components/spare-inventory-transfer';
 import SpareSalvageReturn from './components/spare-salvage-return';
+import SpareSalvageSold from './components/spare-salvage-sold';
+import SparePhysicalCount from './components/spare-physical-count';
 
 // PMT PAGE
 import PmtWorkOrder from './components/pmt-work-order';
@@ -33,7 +35,7 @@ const FrontEnd = () => (
         
         {/* SPARE PAGE */}
         <Route exact path="/main-spare" component={MainSpare} />
-        <Route exact path="/item-master-data2" component={ItemMasterData2} />
+        <Route exact path="/item-master-data" component={ItemMasterData} />
         <Route exact path="/goods-receipt2" component={SpareGoodsReceipt2} />
         <Route exact path="/goods-receipt-no-po" component={SpareGoodsReceiptNoPo} />
         <Route exact path="/goods-return" component={SpareGoodsReturn} />
@@ -43,6 +45,8 @@ const FrontEnd = () => (
         <Route exact path="/goods-issue" component={SpareGoodsIssue} />
         <Route exact path="/inventory-transfer" component={SpareInventoryTransfer} />
         <Route exact path="/salvage-return" component={SpareSalvageReturn} />
+        <Route exact path="/salvage-sold" component={SpareSalvageSold} />
+        <Route exact path="/physical-count" component={SparePhysicalCount} />
 
         {/* PMT PAGE */}
         <Route exact path="/main-pmt" component={MainPmt} />

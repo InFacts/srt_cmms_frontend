@@ -36,17 +36,20 @@ const GoodsReceiptComponent = (props) => {
     useToolbarInitializer(TOOLBAR_MODE.SEARCH);
     useTokenInitializer();
     useFactInitializer();
-    useFooterInitializer(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO);
+    useFooterInitializer(DOCUMENT_TYPE_ID.PHYSICAL_COUNT);
 
     // If Link to this url via Track Document
     useEffect(() => {
         let url = window.location.search;
+        console.log("URL IS", url)
         const urlParams = new URLSearchParams(url);
         const internal_document_id = urlParams.get('internal_document_id');
         if (internal_document_id !== "") {
             // action_approval
-            setFieldValue("status_name_th", "", true);
+            console.log(" IA M NOT SETTING ", internal_document_id);
+            console.log(" THIS IS CURRENT VALUES ", values);
             setFieldValue("internal_document_id", internal_document_id, true);
+            console.log(" THIS IS AFTER VALUES ", values);
         }
     }, [])
 
@@ -93,10 +96,10 @@ const EnhancedGoodsReceiptComponent = withFormik({
         // Field ที่ให้ User กรอก
         internal_document_id: '',
         document_date: '',
-        dest_warehouse_id: '', // Need to fill for user's own WH
-        src_warehouse_id: 999, // for Goods Receipt
+        dest_warehouse_id: 0, // Need to fill for user's own WH
+        src_warehouse_id: '', // for Goods Receipt
         created_by_user_employee_id: '',
-        po_id: '',
+        refer_to_document_name: '',
         remark: '',
         line_items: initialRows(),
 
@@ -107,8 +110,6 @@ const EnhancedGoodsReceiptComponent = withFormik({
         created_on: '',
         status_name_th: '',
         document_status_id: '',
-        document_action_type_id: '',
-        document_is_canceled: '',
         created_by_admin_employee_id: '',
 
         //Field ที่ไม่ได้ display
@@ -123,15 +124,26 @@ const EnhancedGoodsReceiptComponent = withFormik({
     validate: (values, props) => {
         const errors = {};
 
+        // Internal Document ID
+        //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
+        //  ie. GR-PYO-2563/0001
+        // let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS)-[A-Z]{3}-\d{4}\/\d{4}$/g
+        // let draftInternalDocumentIDRegex= /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
+        // if (!values.internal_document_id) {
+        //     errors.internal_document_id = 'Required';
+        // }else if (!internalDocumentIDRegex.test(values.internal_document_id)){ //&& !draftInternalDocumentIDRegex.text(values.internal_document_id)
+        //     errors.internal_document_id = 'Invalid Document ID Format\nBe sure to use the format ie. GR-PYO-2563/0001'
+        // }
+        // MOVED TO FIELD
         if (!values.document_date){
             errors.document_date = "Required";
         }
         return errors;
     },
     handleSubmit: (values, formikBag) => new Promise ((resolve, reject) => { //handle Submit will just POST the Empty Document and PUT information inside
-        let data = packDataFromValues(formikBag.props.fact, values, DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO);
+        let data = packDataFromValues(formikBag.props.fact, values, DOCUMENT_TYPE_ID.PHYSICAL_COUNT);
         console.log("I AM SUBMITTING ", data );
-        saveDocument(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO, data)
+        saveDocument(DOCUMENT_TYPE_ID.PHYSICAL_COUNT, data)
         .then((document_id) => {
             formikBag.setFieldValue('document_id', document_id, false);
             return resolve(document_id); // Document_id is not passed on in submitForm, only Promise for isSubmitting https://jaredpalmer.com/formik/docs/api/withFormik#handlesubmit-values-values-formikbag-formikbag--void--promiseany
