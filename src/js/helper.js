@@ -162,6 +162,7 @@ function isICD(document_type_group_id){
 export const packDataFromValues = (fact, values, document_type_id) => {
     let document_part = {
         ...DOCUMENT_SCHEMA,
+        document_status_id: 1,
         document_id: values.document_id,
         internal_document_id: values.internal_document_id,
         remark: values.remark,

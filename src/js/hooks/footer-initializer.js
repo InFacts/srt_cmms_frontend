@@ -164,22 +164,35 @@ const useFooterInitializer = (document_type_id) => {
                 if(isEmpty(err)){
                     let data = packDataFromValues(fact, values, document_type_id);
                     console.log("I AM SUBMITTING ", data );
-                    saveDocument(document_type_id, data)
-                    .then((document_id) => {
-                        setFieldValue('document_id', document_id, false);
-                        startDocumentApprovalFlow(document_id)
+                    if(values.document_id){ // If have document_id, no need to create new doc
+                        startDocumentApprovalFlow(values.document_id)
                         .catch((err) => {
                             //         //TODO Do something if Submit Fails
-                            console.log("Adding Approval Flow Failed ", err);
-                        });
-                    })
-                    .catch((err) => {
-                        console.log("Submit Failed ", err);
-                    })
-                    .finally(() => { // Set that I already handled the Click
-                        console.log(" I submitted and i am now handling click")
-                        resetForm();
-                    }); 
+                            console.warn("Adding Approval Flow Failed ", err.response);
+                        })
+                        .finally(() => { // Set that I already handled the Click
+                            console.log(" I submitted and i am now handling click")
+                            resetForm();
+                        }); 
+                    }else{ // If not have document_id
+                        saveDocument(document_type_id, data)
+                        .then((document_id) => {
+                            setFieldValue('document_id', document_id, false);
+                            startDocumentApprovalFlow(document_id)
+                            .catch((err) => {
+                                //         //TODO Do something if Submit Fails
+                                console.warn("Adding Approval Flow Failed ", err.response);
+                            });
+                        })
+                        .catch((err) => {
+                            console.warn("Submit Failed ", err.response);
+                        })
+                        .finally(() => { // Set that I already handled the Click
+                            console.log(" I submitted and i am now handling click")
+                            resetForm();
+                        }); 
+                    }
+                    
                 }
             })
             
