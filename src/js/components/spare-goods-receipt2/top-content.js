@@ -20,51 +20,13 @@ import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/to
 import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, 
   DOCUMENT_TYPE_ID, getDocumentbyInternalDocumentID,
   isValidInternalDocumentIDFormat, isValidInternalDocumentIDDraftFormat ,
-  fetchAttachmentDocumentData} from '../../helper';
-
-const DOCUMENT_STATUS = {
-  DRAFT: "สร้าง Draft",
-  WAIT_APPROVE: "รอการอนุมัติ",
-  APPROVE_DONE: "อนุมัติเรียบร้อยแล้ว",
-  VOID: "เอกสารหมดสถานะการใช้งาน",
-  REOPEN: "แก้ไขเอกสาร",
-  FAST_TRACK: "Fast Track",
-}
-const responseToFormState = (userFact, data) => {
-  for (var i = data.line_items.length; i <= 9; i++) {
-    data.line_items.push(
-      {
-        item_id: "",
-        internal_item_id: "",
-        description: "",
-        quantity: "",
-        uom_group_id: "",
-        unit: "",
-        per_unit_price: "",
-        list_uoms: []
-      }
-    );
-  }
-  return {
-    document_id: data.document_id,
-    internal_document_id: data.internal_document_id,
-    created_by_user_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_user_id) || '',
-    created_by_admin_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_admin_id) || '',
-    created_on: data.created_on.split(".")[0],
-    line_items: data.line_items,
-    dest_warehouse_id: data.dest_warehouse_id,
-    remark: data.remark,
-    status_name_th: "",
-    document_action_type_id: "",
-    po_id: data.po_id,
-  }
-}
-
-
+  fetchAttachmentDocumentData, validateEmployeeIDField, validateWarehouseIDField,
+  validateInternalDocumentIDFieldHelper} from '../../helper';
+import { FACTS } from '../../redux/modules/api/fact.js';
 
 
 const TopContent = (props) => {
-  const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
+  const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm   } = useFormikContext();
 
   // Fill Default Forms
   useEffect(() => {
@@ -86,7 +48,9 @@ const TopContent = (props) => {
     .then((result) => {
       // Setup value From Approve 
       setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
-      setFieldValue("document_is_canceled", result.is_canceled.data, false);
+      if(result.is_canceled){
+        setFieldValue("document_is_canceled", result.is_canceled.data, false);
+      }
     });
   }, [values.document_id]);
 
@@ -102,83 +66,15 @@ const TopContent = (props) => {
   }, [values.document_id]);
 
 
-  const validateInternalDocumentIDField = internal_document_id => new Promise(resolve => {
-    // Internal Document ID
-    //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
-    //  ie. GR-PYO-2563/0001
-    console.log("I am validating document id")
-    if (!internal_document_id) {
-      return resolve('Required');
-    } else if (!isValidInternalDocumentIDFormat(internal_document_id) && !isValidInternalDocumentIDDraftFormat(internal_document_id)) {
-      console.log(' document not in the form')
-      return resolve('Invalid Document ID Format\nBe sure to use the format ie. GR-PYO-2563/0001')
-    }
+  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(props, values , setValues, validateField, ...args)
 
-    let error;
-    getDocumentbyInternalDocumentID(internal_document_id)
-    .then((data) => {
-      if (data.internal_document_id === internal_document_id) { // If input document ID exists
-        if ((props.toolbar.mode === TOOLBAR_MODE.SEARCH || props.toolbar.mode === TOOLBAR_MODE.NONE || props.toolbar.mode === TOOLBAR_MODE.NONE_HOME) 
-          && !props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
-          
-          console.log("validateInternalDocumentIDField:: I got document ID ",data.document_id)
-          setValues({ ...values, ...responseToFormState(props.fact.users, data) }, false); //Setvalues and don't validate
-          validateField("dest_warehouse_id");
-          validateField("created_by_user_employee_id");
-          validateField("created_by_admin_employee_id");
-          return resolve(null);
+  
 
-        } else { //If Mode add, need to error duplicate Document ID
-          console.log("I AM DUPLICATE")
-          error = 'Duplicate Document ID';
-        }
-      } else { // If input Document ID doesn't exists
-          if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
-            console.log("I KNOW IT'sINVALID")
-            error = 'Invalid Document ID';
-          } else {//If mode add, ok
-          }
-        }
-      })
-      .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
-        if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
-          error = 'Invalid Document ID';
-        }//If mode add, ok
-      })
-      .finally(() => {
-        return resolve(error)
-      });
-  });
+  const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", props.fact, setFieldValue, ...args);
+  const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", props.fact, setFieldValue, ...args);
 
-  const validateEmployeeIDField = (fieldName, employee_id) => {
-    console.log("I am validating employee id")
-    employee_id = employee_id.split('\\')[0]; // Escape Character USERNAME CANT HAVE ESCAPE CHARACTER!
-    let users = props.fact.users.items;
-    let user = users.find(user => user.employee_id === employee_id); // Returns undefined if not found
-    if (user) {
-      setFieldValue(fieldName, `${employee_id}\\${user.firstname_th} ${user.lastname_th}`, false);
-      return;
-    } else {
-      return 'Invalid Employee ID';
-    }
-  };
-
-  const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", ...args);
-  const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", ...args);
-
-  const validateWarehouseIDField = (fieldName, warehouse_id) => {
-    console.log("I am validating warehouse id")
-    warehouse_id = `${warehouse_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
-    let warehouses = props.fact.warehouses.items;
-    let warehouse = warehouses.find(warehouse => `${warehouse.warehouse_id}` === `${warehouse_id}`); // Returns undefined if not found
-    if (warehouse) {
-      setFieldValue(fieldName, `${warehouse_id}\\[${warehouse.abbreviation}] ${warehouse.name}`, false);
-      return;
-    } else {
-      return 'Invalid Warehouse ID';
-    }
-  }
-  const validateDestWarehouseIDField = (...args) => validateWarehouseIDField("dest_warehouse_id", ...args);
+  
+  const validateDestWarehouseIDField = (...args) => validateWarehouseIDField("dest_warehouse_id", props.fact, setFieldValue, ...args);
 
   return (
     <div id="blackground-white">
