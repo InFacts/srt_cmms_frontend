@@ -16,7 +16,10 @@ export const FACTS = {
     USERS: "users",
     WAREHOUSES: "warehouses",
     ITEM: "items",
-    ITEM_STATUS: "item-status"
+    ITEM_STATUS: "item-status",
+    ITEM_GROUP: "item-group",
+    UNIT_OF_MEASURE_GROUPS: "unit-of-measure-groups",
+    ITEM_TYPE: "item-type"
 }
 
 // Actions

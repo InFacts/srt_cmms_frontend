@@ -21,7 +21,7 @@ import useFooterInitializer from '../../hooks/footer-initializer';
 
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
-const GoodsReturnComponent = (props) => {
+const GoodsReceiptComponent = (props) => {
     
     const {resetForm, setFieldValue, setValues, values} = useFormikContext();
 
@@ -36,7 +36,7 @@ const GoodsReturnComponent = (props) => {
     useToolbarInitializer(TOOLBAR_MODE.SEARCH);
     useTokenInitializer();
     useFactInitializer();
-    useFooterInitializer(DOCUMENT_TYPE_ID.SALVAGE_RETURN);
+    useFooterInitializer(DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT);
 
     // If Link to this url via Track Document
     useEffect(() => {
@@ -78,7 +78,6 @@ const initialLineItem = {
     line_number: '',
     // document_id: '', // maybe not needed
     list_uoms: [],
-    at_source: [],
 }
 const initialRows = (n=10) => {
     let rows = [];
@@ -92,14 +91,15 @@ const initialRows = (n=10) => {
 }
 
 
-const EnhancedGoodsReturnComponent = withFormik({
+const EnhancedGoodsReceiptComponent = withFormik({
     mapPropsToValues: (props) => ({ 
         // Field ที่ให้ User กรอก
         internal_document_id: '',
         document_date: '',
-        dest_warehouse_id: 100, // for Goods Issue 
-        src_warehouse_id: '', // Need to fill for user's own WH
+        dest_warehouse_id: 0, // Need to fill for user's own WH
+        src_warehouse_id: '', // for Goods Receipt
         created_by_user_employee_id: '',
+        refer_to_document_name: '',
         remark: '',
         line_items: initialRows(),
 
@@ -114,6 +114,7 @@ const EnhancedGoodsReturnComponent = withFormik({
 
         //Field ที่ไม่ได้ display
         document_id: '', // changes when document is displayed (internal_document_id field validation)
+
         // For Attactment
         desrciption_files_length: '',
         desrciption_files: [],
@@ -140,20 +141,19 @@ const EnhancedGoodsReturnComponent = withFormik({
         return errors;
     },
     handleSubmit: (values, formikBag) => new Promise ((resolve, reject) => { //handle Submit will just POST the Empty Document and PUT information inside
-        console.log("DOCUMENT_TYPE_ID.SALVAGE_RETURN", DOCUMENT_TYPE_ID.SALVAGE_RETURN)
-        let data = packDataFromValues(formikBag.props.fact, values);
+        let data = packDataFromValues(formikBag.props.fact, values, DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT);
         console.log("I AM SUBMITTING ", data );
-        saveDocument(DOCUMENT_TYPE_ID.SALVAGE_RETURN, data)
+        saveDocument(DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT, data)
         .then((document_id) => {
             formikBag.setFieldValue('document_id', document_id, false);
-            return resolve(document_id);
+            return resolve(document_id); // Document_id is not passed on in submitForm, only Promise for isSubmitting https://jaredpalmer.com/formik/docs/api/withFormik#handlesubmit-values-values-formikbag-formikbag--void--promiseany
         })
         .catch((err) => {
             return reject(err)
         })
       }),    
     // validateOnChange: false,
-})(GoodsReturnComponent);
+})(GoodsReceiptComponent);
 
 
 
@@ -167,4 +167,4 @@ const mapDispatchToProps = {
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EnhancedGoodsReturnComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(EnhancedGoodsReceiptComponent);

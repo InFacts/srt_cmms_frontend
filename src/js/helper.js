@@ -16,11 +16,10 @@ export const DOCUMENT_TYPE_ID = {
     GOODS_USAGE: 111,
     GOODS_ISSUE: 112,
     INVENTORY_TRANSFER: 121,
-    // GOODS_FIX: 131,
-    // GOODS_RECEIPT_FIX: 132,
     GOODS_RECEIPT_FIX: 131,
     GOODS_FIX: 132,
     PHYSICAL_COUNT: 141,
+    INVENTORY_ADJUSTMENT: 142,
     SALVAGE_RETURN: 151,
     SALVAGE_SOLD: 152,
 
@@ -167,6 +166,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         remark: values.remark,
         created_by_admin_id: getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id),
         created_by_user_id: getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_user_employee_id),
+        document_date: values.document_date
     }
     let line_items_part = [];
     values.line_items.map(line_item => {
@@ -200,12 +200,6 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                 refer_to_document_name: values.refer_to_document_name
             }
             break;
-        case DOCUMENT_TYPE_ID.PHYSICAL_COUNT:
-            movement_part = {
-                ...movement_part,
-                refer_to_document_name: values.refer_to_document_name
-            }
-            break;
         case DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO:
             document_part = {
                 ...document_part,
@@ -230,15 +224,60 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             break;
     }
 
-    const icd_part = {
+    let icd_part = {
         ...ICD_SCHEMA,
         document_id: values.document_id,
         dest_warehouse_id: getNumberFromEscapedString(values.dest_warehouse_id),
         src_warehouse_id: getNumberFromEscapedString(values.src_warehouse_id),
         line_items: line_items_part,
         movement: movement_part, // REFER TO MOVEMENT SCHEMAS
-
     }
+    switch (document_type_id) {
+        case DOCUMENT_TYPE_ID.PHYSICAL_COUNT:
+            line_items_part = [];
+            values.line_items.map(line_item => {
+                if (line_item.internal_item_id) {
+                    line_items_part.push({
+                        document_id: values.document_id,
+                        line_number: line_item.line_number,
+                        unit_count: line_item.quantity,
+                        per_unit_price: line_item.per_unit_price,
+                        item_id: getItemIDFromInternalItemID(fact[FACTS.ITEM], line_item.internal_item_id),
+                        item_status_id: line_item.item_status_id,
+                        count_datetime: `${values.document_date} 00:00:00`
+                    });
+                }
+            })
+            icd_part = {
+                document_id: values.document_id,   
+                warehouse_id: getNumberFromEscapedString(values.src_warehouse_id),
+                refer_to_document_name: values.refer_to_document_name,
+                line_items: line_items_part,
+            }
+            break;
+            case DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT:
+                line_items_part = [];
+                values.line_items.map(line_item => {
+                    if (line_item.internal_item_id) {
+                        line_items_part.push({
+                            document_id: values.document_id,
+                            line_number: line_item.line_number,
+                            unit_count: line_item.quantity,
+                            per_unit_price: line_item.per_unit_price,
+                            item_id: getItemIDFromInternalItemID(fact[FACTS.ITEM], line_item.internal_item_id),
+                            item_status_id: line_item.item_status_id,
+                            adjustment_datetime: `${values.document_date} 00:00:00`
+                        });
+                    }
+                })
+                icd_part = {
+                    document_id: values.document_id,   
+                    warehouse_id: getNumberFromEscapedString(values.src_warehouse_id),
+                    refer_to_document_name: values.refer_to_document_name,
+                    line_items: line_items_part,
+                }
+                break;
+        }
     return {
         document: document_part,
         specific: icd_part,

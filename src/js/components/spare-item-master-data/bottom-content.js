@@ -7,6 +7,9 @@ import { API_URL_DATABASE } from '../../config_url.js';
 
 import TextareaInput from '../common/formik-textarea-input';
 // import Table from '../common/table'; เปลัี่ยน Table ให้เป็นแบบสำหรับ form นี้
+import TextInput from '../common/formik-text-input'
+import NumberInput from '../common/formik-number-input'
+import SelectNoChildrenInput from '../common/formik-select-no-children';
 
 import Files from '../common/files2'
 
@@ -19,38 +22,7 @@ import '../../../css/table.css';
 
 const BottomContent = (props) => {
 
-  const [lineNumber, setLineNumber] = useState('');
-
-  const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
-
-  // const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => {
-  //   //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
-
-  //   if (values.line_items[index].internal_item_id === internal_item_id) {
-  //     return;
-  //   }
-  //   if (internal_item_id === "") {
-  //     setFieldValue(fieldName + `.description`, '', false);
-  //     setFieldValue(fieldName + `.quantity`, '', false);
-  //     setFieldValue(fieldName + `.list_uoms`, [], false);
-  //     setFieldValue(fieldName + `.uom_id`, '', false);
-  //     setFieldValue(fieldName + `.per_unit_price`, '', false);
-  //     return;
-  //   }
-  //   let items = props.fact.items.items;
-  //   let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
-  //   console.log(item)
-  //   if (item) {
-  //     setFieldValue(fieldName + `.description`, `${item.description}`, false);
-  //     setFieldValue(fieldName + `.quantity`, 0, false);
-  //     setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
-  //     setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
-  //     setFieldValue(fieldName + `.per_unit_price`, 0, false);
-  //     return;
-  //   } else {
-  //     return 'Invalid Number ID';
-  //   }
-  // }
+  const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm, resetForm } = useFormikContext();
 
   // For Down File in Attactment by Nuk
   const HandleDownload = () => {
@@ -99,228 +71,174 @@ const BottomContent = (props) => {
           <div id="general_content" className="tabcontent">
             <div className="container_12 mt-3">
               <div className="grid_2 cancel-default">
-                <p className="cancel-default">ชื่อย่อหน่วยนับการนำเข้า </p>
+                <p className="cancel-default">ชื่อย่อหน่วยนับ </p>
               </div>
               <div className="grid_2">
-                <input type="text" className="cancel-default" disabled="disabled"
-                // defaultValue={
-                //   props.parent_unit_part.map(function (parent_unit_part, index) {
-                //     if (parent_unit_part.parent_unit === props.info_part_show.parent_unit_part)
-                //       return parent_unit_part.child_unit[0].short_name
-                //   })}
-                >
-                </input>
-              </div>
-              <div className="grid_1 ml-0">
-                <button type="button" className="p-button--neutral edit" disabled="disabled">...</button>
+                <SelectNoChildrenInput name="name" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                  <option value=''></option>
+                  {values.list_uoms.map((list_uoms) => (
+                    list_uoms.name === values.name
+                      ?
+                      <option value={list_uoms.name} key={list_uoms.name} selected> {list_uoms.name} </option>
+                      :
+                      <option value={list_uoms.name} key={list_uoms.name}> {list_uoms.name} </option>
+                  ))}
+                </SelectNoChildrenInput>
               </div>
 
               <div className="float-right">
                 <div className="grid_2 cancel-default">
-                  <p className="cancel-default">ขั้นต่ำการสั่งซื้อ</p>
+                  <p className="cancel-default float-right">ขั้นต่ำการสั่งซื้อ</p>
                 </div>
-                <div className="grid_2 pull_0">
-                  <input type="text" className="cancel-default"
-                    // defaultValue={props.info_part_show.low_po} 
-                    disabled="disabled"></input>
+                <div className="grid_2">
+                  <NumberInput step={0.01} name="minimum_order_quantity" tabIndex="7"
+                    // validate={quantity => props.validateLineNumberQuatityItemIDField(`line_items[${index}].quantity`, quantity, index)}
+                    disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  />
                 </div>
                 <div className="grid_1 ml-0 pull_0">
-
+                  <p className="cancel-default"></p>
                 </div>
               </div>
             </div>
 
             <div className="container_12">
               <div className="grid_2 cancel-default">
-                <p className="cancel-default">ชื่อหน่วยนับการนำเข้า  </p>
+                <p className="cancel-default">ชื่อหน่วยนับ  </p>
               </div>
               <div className="grid_2">
-                <input type="text" className="cancel-default" disabled="disabled"
-                // defaultValue={
-                //   props.parent_unit_part.map(function (parent_unit_part, index) {
-                //     if (parent_unit_part.parent_unit === props.info_part_show.parent_unit_part)
-                //       return parent_unit_part.child_unit[0].child_unit
-                //   })}
-                ></input>
+                <TextInput name='name'
+                  // validate={validateInternalItemIDField}
+                  disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  tabIndex="1" />
               </div>
 
               <div className="float-right">
                 <div className="grid_2 cancel-default">
-                  <p className="cancel-default">Lead Time</p>
+                  <p className="cancel-default float-right">Lead Time</p>
                 </div>
-                <div className="grid_2 pull_0">
-                  <input type="text" className="cancel-default"
-                    // defaultValue={props.info_part_show.lead_time} 
-                    disabled="disabled"></input>
+                <div className="grid_2">
+                  <NumberInput step={1} name="lead_time" tabIndex="7"
+                    // validate={quantity => props.validateLineNumberQuatityItemIDField(`line_items[${index}].quantity`, quantity, index)}
+                    disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  />
                 </div>
-                <div className="grid_1 ml-0 pull_0">
+                <div className="grid_1">
                   <p className="cancel-default">วัน </p>
                 </div>
               </div>
             </div>
 
             <div className="container_12">
-              <div className="grid_2 cancel-default">
-                <p className="cancel-default">จำนวนต่อหน่วยนำเข้า </p>
-              </div>
-              <div className="grid_2">
-                <input type="text" className="cancel-default"
-                  // defaultValue={props.info_part_show.quality_into} 
-                  disabled="disabled"></input>
-              </div>
-              <div className="grid_1 ml-0">
-                <p className="cancel-default">
-                  {/* {props.parent_unit_part.map(function (parent_unit_part, index) {
-                    if (parent_unit_part.parent_unit === props.info_part_show.parent_unit_part)
-                      return parent_unit_part.child_unit[0].child_unit
-                  })} */}
-                </p>
-              </div>
-
               <div className="float-right">
                 <div className="grid_2 cancel-default">
-                  <p className="cancel-default">Tolerance Days </p>
+                  <p className="cancel-default float-right">Tolerance Days</p>
                 </div>
-                <div className="grid_2 pull_0">
-                  <input type="text" className="cancel-default"
-                    // defaultValue={props.info_part_show.tolerance_day} 
-                    disabled="disabled"></input>
+                <div className="grid_2">
+                  <NumberInput step={1} name="tolerance_time" tabIndex="7"
+                    // validate={quantity => props.validateLineNumberQuatityItemIDField(`line_items[${index}].quantity`, quantity, index)}
+                    disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  />
                 </div>
-                <div className="grid_1 ml-0 pull_0">
+                <div className="grid_1">
                   <p className="cancel-default">วัน </p>
                 </div>
               </div>
             </div>
 
-            <div className="container_12 mt-2">
-              <div className="grid_4 ml-3">
-                <input type="radio" name="RadioOptions" id="checkExample1" value="option1" />
-                <label className="cancel-default d-inline ml-2n" htmlFor="checkExample1">เปิดการใช้งาน</label>
+            <div className="container_12 mt-3">
+              <div className="grid_2 cancel-default">
+                <p className="cancel-default">สถานะอะไหล่ </p>
               </div>
-            </div>
-            <div className="container_12 mt-2">
-              <div className="grid_4 ml-3">
-                <input type="radio" name="RadioOptions" id="checkExample2" value="option2" />
-                <label className="cancel-default d-inline ml-2n" htmlFor="checkExample2">ปิดการใช้งาน</label>
+              <div className="grid_2">
+                <SelectNoChildrenInput name="active" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                  <option value=''></option>
+                  {values.active === 0
+                    ?
+                    <>
+                      <option value='0' selected>ปิดการใช้งาน</option>
+                      <option value='1'>เปิดการใช้งาน</option>
+                    </>
+                    :
+                    <>
+                      <option value='0'>ปิดการใช้งาน</option>
+                      <option value='1' selected>เปิดการใช้งาน</option>
+                    </>
+                  }
+                </SelectNoChildrenInput>
               </div>
             </div>
 
             <div className="container_12 mt-3">
               <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
-              <div className="grid_">
-                <textarea className="edit" name="Text1" cols="40" rows="2"
-                  // defaultValue={props.info_part_show.note} 
-                  disabled="disabled"></textarea>
+              <div className="grid_11">
+                <TextareaInput name="remark" tabIndex="6"
+                  disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                />
               </div>
             </div>
-
           </div>
 
           {/* Warehouse Tab  */}
           <div id="warehouse_content" className="tabcontent">
-
             <div className="container_12 mt-3">
               <div className="grid_2 cancel-default">
-                <p className="cancel-default">ชื่อย่อหน่วยนับ </p>
+                <p className="cancel-default" style={{ textDecoration: "underline" }}>จำนวนในคลัง</p>
+              </div>
+              <div className="grid_2 pull_0"></div>
+              <div className="grid_1 ml-0 pull_0"></div>
+            </div>
+
+            <div className="container_12">
+              <div className="grid_2 cancel-default">
+                <p className="cancel-default">จำนวนที่ต้องการ</p>
               </div>
               <div className="grid_2 pull_0">
-                <input type="text" className="cancel-default" disabled="disabled"
-                //  defaultValue={
-                //   props.parent_unit_part.map(function (parent_unit_part, index) {
-                //     if (parent_unit_part.parent_unit === props.info_part_show.parent_unit_part)
-                //       return parent_unit_part.child_unit[0].short_name
-                //   })}
-                >
-                </input>
+                <NumberInput step={0.01} name="quantity_required" tabIndex="7"
+                  // validate={quantity => props.validateLineNumberQuatityItemIDField(`line_items[${index}].quantity`, quantity, index)}
+                  disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                />
+              </div>
+              <div className="grid_1 ml-0 pull_0"></div>
+            </div>
+
+            <div className="container_12">
+              <div className="grid_2 cancel-default">
+                <p className="cancel-default">จำนวนต่ำสุด</p>
+              </div>
+              <div className="grid_2 pull_0">
+                <NumberInput step={0.01} name="quantity_lowest" tabIndex="7"
+                  // validate={quantity => props.validateLineNumberQuatityItemIDField(`line_items[${index}].quantity`, quantity, index)}
+                  disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                />
               </div>
               <div className="grid_1 ml-0 pull_0">
-                <button type="button" className="p-button--neutral edit" disabled="disabled">...</button>
-              </div>
 
-              <div className="float-right">
-                <div className="grid_2 cancel-default">
-                  <p className="cancel-default" style={{ textDecoration: "underline" }}>จำนวนในคลัง</p>
-                </div>
-                <div className="grid_2 pull_0">
-
-                </div>
-                <div className="grid_1 ml-0 pull_0">
-
-                </div>
               </div>
             </div>
 
             <div className="container_12">
               <div className="grid_2 cancel-default">
-                <p className="cancel-default">ชื่อหน่วยนับ </p>
+                <p className="cancel-default">จำนวนสูงสุด</p>
               </div>
               <div className="grid_2 pull_0">
-                <input type="text" className="cancel-default" disabled="disabled"
-                // defaultValue={
-                //   props.parent_unit_part.map(function (parent_unit_part, index) {
-                //     if (parent_unit_part.parent_unit === props.info_part_show.parent_unit_part)
-                //       return parent_unit_part.child_unit[0].child_unit
-                //   })}
-                ></input>
+                <NumberInput step={0.01} name="quantity_highest" tabIndex="7"
+                  // validate={quantity => props.validateLineNumberQuatityItemIDField(`line_items[${index}].quantity`, quantity, index)}
+                  disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                />
               </div>
-              <div className="grid_1 ml-0">
+              <div className="grid_3 float-right">
+                <SelectNoChildrenInput name="name" disabled>
+                  {values.description
+                    ?
+                    <option value=''></option>
+                    :
+                    <option value=''>FIFO</option>
+                  }
+                </SelectNoChildrenInput>
               </div>
-
-              <div className="float-right">
-                <div className="grid_2 cancel-default">
-                  <p className="cancel-default">จำนวนที่ต้องการ</p>
-                </div>
-                <div className="grid_2 pull_0">
-                  <input type="text" className="cancel-default"
-                    // defaultValue={props.info_part_show.stock_need} 
-                    disabled="disabled"></input>
-                </div>
-                <div className="grid_1 ml-0 pull_0">
-
-                </div>
-              </div>
-            </div>
-
-            <div className="container_12">
-              <div className="float-right">
-                <div className="grid_2 cancel-default">
-                  <p className="cancel-default">จำนวนต่ำสุด</p>
-                </div>
-                <div className="grid_2 pull_0">
-                  <input type="text" className="cancel-default"
-                    // defaultValue={props.info_part_show.stock_min} 
-                    disabled="disabled"></input>
-                </div>
-                <div className="grid_1 ml-0 pull_0">
-
-                </div>
-              </div>
-            </div>
-
-            <div className="container_12">
-              <div className="float-right">
-                <div className="grid_2 cancel-default">
-                  <p className="cancel-default">จำนวนสูงสุด</p>
-                </div>
-                <div className="grid_2 pull_0">
-                  <input type="text" className="cancel-default"
-                    // defaultValue={props.info_part_show.stock_max} 
-                    disabled="disabled"></input>
-                </div>
-                <div className="grid_1 ml-0 pull_0">
-
-                </div>
-              </div>
-            </div>
-
-            <div className="container_12 mt-2">
-              <div className="grid_2 cancel-default">
-                <p className="cancel-default">Valuation Method</p>
-              </div>
-              <div className="grid_3 pull_0">
-                <select className="edit-select" style={{ marginTop: "0" }} disabled="disabled">
-                  {/* <option defaultValue={props.info_part_show.valuation_method}>{props.info_part_show.valuation_method}</option> */}
-                </select>
+              <div className="grid_2 cancel-default float-right">
+                <p className="cancel-default float-right">Valuation Method</p>
               </div>
             </div>
 
@@ -382,10 +300,10 @@ const BottomContent = (props) => {
 
 const mapStateToProps = (state) => ({
   fact: state.api.fact,
-  actionMode: state.toolbar.mode,
-
-  list_show: state.list_show
+  toolbar: state.toolbar,
+  decoded_token: state.token.decoded_token,
 })
+
 const mapDispatchToProps = {
 
 }

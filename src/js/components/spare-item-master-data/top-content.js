@@ -16,7 +16,8 @@ import { useFormikContext, useField } from 'formik';
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, getDocumentbyInternalDocumentID } from '../../helper';
 
-import PopupModalNoPart from '../common/popup-modal-nopart'
+import PopupModalNoPart from './popup-modal-nopart'
+import { FACTS } from '../../redux/modules/api/fact.js';
 
 const FormLabel = ({ children }) => (
   <div className={`grid_2`}>
@@ -27,16 +28,85 @@ const FormTitle = ({ children }) => (
   <h4 className="head-title">{children}</h4>
 );
 
-
-// const responseToFormState = (userFact, data) => {
-//   return {
-//     line_items: data.line_items,
-//     remark: data.remark,
-//   }
-// }
-
 const TopContent = (props) => {
-  const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
+  const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm, resetForm } = useFormikContext();
+
+  const responseToFormState = (data) => {
+    console.log("!data.quantity_required", !data.quantity_required, data.quantity_required)
+    return {
+      internal_item_id: data.internal_item_id,
+      description: data.description,
+      item_group_id: data.item_group_id,
+      item_type_id: data.item_type_id,
+      uom_group_id: data.uom_group_id,                    //UOM
+      name: data.list_uoms[0].name,                       //UOM ตัวย่อ
+      abbreviation: data.list_uoms[0].abbreviation,       //UOM
+      minimum_order_quantity: !data.minimum_order_quantity ? 0 : data.minimum_order_quantity,  //ขั้นต่ำการสั่งซื้อ
+      lead_time: !data.lead_time ? 0 : data.lead_time,
+      tolerance_time: !data.tolerance_time ? 0 : data.tolerance_time,
+      quantity_required: !data.quantity_required ? 0 : data.quantity_required,  //จำนวนที่ต้องการ
+      quantity_lowest: !data.quantity_lowest ? 0 : data.quantity_lowest,    //ขั้นต่ำ
+      quantity_highest: !data.quantity_highest ? 0 : data.quantity_highest,   //ขั้นสูง
+      remark: data.remark,
+      active: data.active.data[0],
+
+      list_uoms: data.list_uoms
+    }
+  }
+  const validateInternalItemIDField = internal_item_id => {
+    //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
+
+    if (values.internal_item_id === internal_item_id) {
+      return;
+    }
+    if (internal_item_id === "") {
+      resetForm();
+      return;
+    }
+    let items = props.fact.items.items;
+    let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+    if (item) {
+      setValues({ ...values, ...responseToFormState(item) }, false); //Setvalues and don't validate
+      validateField("item_type_id");
+
+      // fetchStepApprovalDocumentData(res.data.document_id)
+      //         .then((result) => {
+      //           axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${res.data.document_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+      //             .then((desrciption_files) => {
+      //               console.log(" I AM STILL IN MODE SEARCH AND SET VALUE")
+      //               // Setup value From Approve and Attachment
+      //               setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
+      //               setFieldValue("desrciption_files_length", desrciption_files.data.results.length, false);
+      //               setFieldValue("desrciption_files", desrciption_files.data.results, false);
+      //               setFieldValue("document_id", res.data.document_id, false);
+      //               return resolve(null);
+      //             });
+      //         })    
+      // fetchGoodsOnhandData(getNumberFromEscapedString(values.src_warehouse_id), item.item_id)
+      // .then((at_source) => {
+      //   setFieldValue(fieldName + `.at_source`, at_source, false);
+      // })
+      return;
+    } else {
+      return 'Invalid Number ID';
+    }
+  };
+
+  const validateItemTypeID = (fieldName, item_type_id) => {
+    item_type_id = `${item_type_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
+    let item_types = props.fact[FACTS.ITEM_TYPE].items;
+    let item_type = item_types.find(item_type => `${item_type.item_type_id}` === `${item_type_id}`); // Returns undefined if not found
+    console.log("item_type", item_type)
+    if (item_type) {
+      console.log("in")
+      setFieldValue(fieldName, item_type_id, false);
+      return;
+    } else {
+      console.log("out")
+      return 'Invalid Item Type ID';
+    }
+  }
+  const validateItemTypeIDField = (...args) => validateItemTypeID("item_type_id", ...args);
 
   return (
     <div id="blackground-white">
@@ -47,16 +117,21 @@ const TopContent = (props) => {
             <FormLabel>เลขที่อุปกรณ์</FormLabel>
             <div className="grid_3 pull_1">
               <TextInput name='internal_item_id'
-                // validate={validateInternalDocumentIDField}
+                validate={validateInternalItemIDField}
                 searchable={props.toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart" tabIndex="1" />
             </div>
             <div className="float-right">
               <div className="grid_3 float-right">
-                <SelectNoChildrenInput name="item_type_id" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                <SelectNoChildrenInput name="item_type_id" validate={validateItemTypeIDField}
+                  disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
                   <option value=''></option>
-                  {/* {factDistricts.items.map(function ({ district_id, name, division_id }) {
-                    return <option value={district_id} key={district_id}> {name} </option>
-                  })} */}
+                  {props.fact[FACTS.ITEM_TYPE].items.map((item_type) => (
+                    values.item_type_id === item_type.item_type_id
+                      ?
+                      <option value={item_type.item_type_id} key={item_type.item_type_id} selected> {item_type.name} </option>
+                      :
+                      <option value={item_type.item_type_id} key={item_type.item_type_id}> {item_type.name} </option>
+                  ))}
                 </SelectNoChildrenInput>
               </div>
               <div className="grid_2 float-right">
@@ -74,9 +149,13 @@ const TopContent = (props) => {
               <div className="grid_3 float-right">
                 <SelectNoChildrenInput name="item_group_id" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
                   <option value=''></option>
-                  {/* {factDistricts.items.map(function ({ district_id, name, division_id }) {
-                    return <option value={district_id} key={district_id}> {name} </option>
-                  })} */}
+                  {props.fact[FACTS.ITEM_GROUP].items.map((item_group) => (
+                    values.item_group_id === item_group.item_group_id
+                      ?
+                      <option value={item_group.item_group_id} key={item_group.item_group_id} selected> {item_group.abbreviation} </option>
+                      :
+                      <option value={item_group.item_group_id} key={item_group.item_group_id}> {item_group.abbreviation} </option>
+                  ))}
                 </SelectNoChildrenInput>
               </div>
               <div className="grid_2 float-right">
@@ -88,14 +167,16 @@ const TopContent = (props) => {
           <div className="container_12">
             <div className="float-right">
               <div className="grid_3 float-right">
-                <select className="edit-select" style={{ marginTop: "0" }} disabled="disabled">
-                  <option defaultValue="0">none</option>
-                  {/* {props.info_part_show.parent_unit_part(function (type_part, index) {
-                    if (props.info_part_show.type === type_part.type)
-                      return (<option key={index} defaultValue={type_part.type} selected>{type_part.type}</option>)
-                    else return <option key={index} defaultValue={type_part.type}>{type_part.type}</option>
-                  })} */}
-                </select>
+                <SelectNoChildrenInput name="uom_group_id" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                  <option value=''></option>
+                  {props.fact[FACTS.UNIT_OF_MEASURE_GROUPS].items.map((uom) => (
+                    values.uom_group_id === uom.uom_group_id
+                      ?
+                      <option value={uom.uom_group_id} key={uom.uom_group_id} selected> {uom.name} </option>
+                      :
+                      <option value={uom.uom_group_id} key={uom.uom_group_id}> {uom.name} </option>
+                  ))}
+                </SelectNoChildrenInput>
               </div>
               <div className="grid_2 float-right">
                 <p className="top-text float-right">กลุ่มหน่วยนับ</p>

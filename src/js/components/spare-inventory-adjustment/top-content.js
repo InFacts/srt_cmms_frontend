@@ -19,6 +19,7 @@ import PopupModalUsername from '../common/popup-modal-username'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID } from '../../helper';
 
+
 const responseToFormState = (userFact, data) => {
   for (var i = data.line_items.length; i <= 9; i++) {
     data.line_items.push(
@@ -30,8 +31,7 @@ const responseToFormState = (userFact, data) => {
         uom_group_id: "",
         unit: "",
         per_unit_price: "",
-        list_uoms: [],
-        at_source: []
+        list_uoms: []
       }
     );
   }
@@ -44,8 +44,12 @@ const responseToFormState = (userFact, data) => {
     src_warehouse_id: data.src_warehouse_id,
     remark: data.remark,
     status_name_th: data.status_name,
+    refer_to_document_name: data.refer_to_document_name,
   }
 }
+
+
+
 
 const TopContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
@@ -53,7 +57,7 @@ const TopContent = (props) => {
   // Fill Default Forms
   useEffect(() => {
     if (props.toolbar.mode === TOOLBAR_MODE.ADD) {
-      if (!values.internal_document_id && touched.internal_document_id) {
+      if (!values.internal_document_id && touched.internal_document_id){
         setFieldValue('internal_document_id', `draft-${uuidv4()}`)
       }
       setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(props.fact.users, props.decoded_token.id));
@@ -68,10 +72,11 @@ const TopContent = (props) => {
     //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
     //  ie. GR-PYO-2563/0001
     console.log("I am validating document id")
-    let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS)-[A-Z]{3}-\d{4}\/\d{4}$/g
+    let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS|PC)-[A-Z]{3}-\d{4}\/\d{4}$/g
     let draftInternalDocumentIDRegex = /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
     // let draftInternalDocumentIDRegex = /^heh/g
     if (!internal_document_id) {
+      console.log(" there is no doc id ")
       return resolve('Required');
     } else if (!internalDocumentIDRegex.test(internal_document_id) && !draftInternalDocumentIDRegex.test(internal_document_id)) { //
       console.log(' document not in the form')
@@ -87,10 +92,11 @@ const TopContent = (props) => {
         if (res.data.internal_document_id === internal_document_id) { // If input document ID exists
           if ((props.toolbar.mode === TOOLBAR_MODE.SEARCH || props.toolbar.mode === TOOLBAR_MODE.NONE || props.toolbar.mode === TOOLBAR_MODE.NONE_HOME) 
             && !props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
-              setValues({ ...values, ...responseToFormState(props.fact.users, res.data) }, false); //Setvalues and don't validate
-              validateField("src_warehouse_id");
-              validateField("created_by_user_employee_id");
-              validateField("created_by_admin_employee_id");
+
+            setValues({ ...values, ...responseToFormState(props.fact.users, res.data) }, false); //Setvalues and don't validate
+            validateField("src_warehouse_id");
+            validateField("created_by_user_employee_id");
+            validateField("created_by_admin_employee_id");
             // Start Axios Get step_approve and attachment By nuk
             // axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${res.data.document_id}/latest/plus`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
             //   .then((step_approve) => {
@@ -99,6 +105,8 @@ const TopContent = (props) => {
                 axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${res.data.document_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
                   .then((desrciption_files) => {
                     console.log(" I AM STILL IN MODE SEARCH AND SET VALUE")
+                    
+                    // validateField("internal_document_id");
                     // Setup value From Approve and Attachment
                     setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
                     setFieldValue("desrciption_files_length", desrciption_files.data.results.length, false);
@@ -106,6 +114,7 @@ const TopContent = (props) => {
                     setFieldValue("document_id", res.data.document_id, false);
                     return resolve(null);
                   });
+                
               })
               
               // });
@@ -134,7 +143,7 @@ const TopContent = (props) => {
   });
 
   const validateEmployeeIDField = (fieldName, employee_id) => {
-    // console.log("I am validating employee id")
+    console.log("I am validating employee id")
     employee_id = employee_id.split('\\')[0]; // Escape Character USERNAME CANT HAVE ESCAPE CHARACTER!
     let users = props.fact.users.items;
     let user = users.find(user => user.employee_id === employee_id); // Returns undefined if not found
@@ -150,7 +159,7 @@ const TopContent = (props) => {
   const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", ...args);
 
   const validateWarehouseIDField = (fieldName, warehouse_id) => {
-    // console.log("I am validating warehouse id")
+    console.log("I am validating warehouse id")
     warehouse_id = `${warehouse_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
     let warehouses = props.fact.warehouses.items;
     let warehouse = warehouses.find(warehouse => `${warehouse.warehouse_id}` === `${warehouse_id}`); // Returns undefined if not found
@@ -167,7 +176,7 @@ const TopContent = (props) => {
     <div id="blackground-white">
       <div className="container_12 clearfix">
         <section className="container_12 ">
-          <h4 className="head-title">เบิกอะไหล่ไปใช้งาน</h4>
+          <h4 className="head-title">ปรับปรุงจำนวนอะไหล่</h4>
           <div className="container_12">
 
             {/* Document ID */}
@@ -230,8 +239,16 @@ const TopContent = (props) => {
 
           </div>
 
+          {/* PO ID */}
           <div className="container_12">
-            {/* Src Warehouse ID */}
+            <div className="grid_2">
+              <p className="top-text">เลขที่เอกสารอ้างอิง</p>
+            </div>
+            <div className="grid_3 pull_0">
+              <TextInput name="refer_to_document_name" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="4" />
+            </div>
+
+            {/* SRC Warehouse ID */}
             <div className="grid_3 float-right">
               <TextInput name="src_warehouse_id" validate={validateSrcWarehouseIDField}
                 disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
@@ -245,16 +262,15 @@ const TopContent = (props) => {
       </div>
 
       {/* PopUp ค้นหาเลขที่เอกสาร */}
-      <PopupModalDocument documentTypeGroupID={DOCUMENT_TYPE_ID.GOODS_USAGE}
-        id="modalDocument" //For Open POPUP
-        name="internal_document_id" //For setFieldValue
+      <PopupModalDocument documentTypeGroupID={DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT} 
+      id="modalDocument" //For Open POPUP
+      name="internal_document_id" //For setFieldValue
       />
 
       {/* PopUp ค้นหาเลขที่คลัง MODE ADD */}
       <PopupModalInventory 
        id="modalInventory" //For Open POPUP
-      name="src_warehouse_id"
-      />
+      name="src_warehouse_id"/>
 
       {/* PopUp ค้นหาชื่อพนักงาน MODE ADD */}
       <PopupModalUsername />

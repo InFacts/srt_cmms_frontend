@@ -94,6 +94,8 @@ const EnhancedGoodsReceiptComponent = withFormik({
         // Field ที่ให้ User กรอก
         internal_item_id: '',
         description: '',
+        item_type_name: '',
+        
         item_type_id: '',
         item_group_id: '',
         uom_group_id: '',       //UOM
@@ -107,6 +109,7 @@ const EnhancedGoodsReceiptComponent = withFormik({
         quantity_highest: '',   //ขั้นสูง
         remark: '', 
         goods_onhand: [],       //อะไหล่ที่มีอยู่ในทุกคลัง
+        active: ''  ,            //สถานะอะไหล่ ปิด เปิด
 
          //Field ที่ไม่ได้กรอก
         list_uoms: [],
