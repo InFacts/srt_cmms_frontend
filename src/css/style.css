@@ -327,7 +327,7 @@
 
   /* Footer */
   #footer{
-    bottom: 0;
+    bottom: 20px;
     background-color: white;
     width: 100%;
     height: 40px;
@@ -339,10 +339,47 @@
     overflow: hidden;
     background-color: white;
     position: fixed;
+    bottom: 20px;
+    width: 100%;
+  }
+
+  /* Footer */
+  .nav-bottom-status{
+    bottom: 0;
+    width: 100%;
+    height: 17px;
+    position: fixed;
+    z-index: 1;
+  }
+  .nav-bottom-status.blue{
+    background-color: #0770BF;
+  }
+  .nav-bottom-status.orange{
+    background-color: #D06C3F;
+  }
+  .nav-bottom-status.red{
+    background-color: #BE1911;
+  }
+  .nav-bottom-status.green{
+    background-color: #4DA276;
+  }
+
+  p.text-for-nav-bottom {
+    padding: 0;
+    color: white;
+    font-weight: bold;
+    margin-left: 10px;
+    margin-top: -3px;
+  }
+  
+  .grid_12.nav-bottom {
+    overflow: hidden;
+    background-color: yellowgreen;
+    position: fixed;
     bottom: 5px;
     width: 100%;
   }
-  
+
   .float-right{
     float: right;
   }

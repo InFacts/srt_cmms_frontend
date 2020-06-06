@@ -16,5 +16,6 @@ export {default as token} from './token.js'
 
 export {default as form_data} from './form_data.js'
 export {default as footer} from './footer.js'
+export {default as nav_bottom_status} from './nav-bottom.js'
 
 export const api = combineReducers(apis);
