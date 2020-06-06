@@ -20,11 +20,13 @@ import useTokenInitializer from '../../hooks/token-initializer';
 import useFooterInitializer from '../../hooks/footer-initializer';
 
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
+import { footerToModeSearch } from '../../redux/modules/footer.js';
+import { useDispatch, useSelector  } from 'react-redux'
 
 const GoodsReceiptComponent = (props) => {
     
     const {resetForm, setFieldValue, setValues, values} = useFormikContext();
-
+    const dispatch = useDispatch();
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
         {id:"listItem", name:"รายการ", is_active: TAB_BAR_ACTIVE.ACTIVE},
@@ -37,6 +39,9 @@ const GoodsReceiptComponent = (props) => {
     useTokenInitializer();
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO);
+    useEffect(()=>{
+        dispatch(footerToModeSearch());
+    }, []);
 
     // If Link to this url via Track Document
     useEffect(() => {

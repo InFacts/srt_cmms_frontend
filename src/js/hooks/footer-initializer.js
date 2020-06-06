@@ -84,7 +84,7 @@ const useFooterInitializer = (document_type_id) => {
                 // Check Next Approver from postion_id
                 fetchLatestStepApprovalDocumentData(track_document_id).then((latestApprovalInfo) => {
                     if (latestApprovalInfo !== undefined || latestApprovalInfo.length !== 0) {
-                        console.log("latestApprovalInfo------> ", latestApprovalInfo, APPROVAL_STEP_ACTION.CHECK_APPROVAL)
+                        // console.log("latestApprovalInfo------> ", latestApprovalInfo, APPROVAL_STEP_ACTION.CHECK_APPROVAL)
                         if (latestApprovalInfo.position_id !== userInfo.position_id) {
                             if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_APPROVAL) {
                                 dispatch(footerToModeApApproval());
@@ -123,7 +123,7 @@ const useFooterInitializer = (document_type_id) => {
         }
         else {
             // INVISIBLE mode
-            dispatch(footerToModeInvisible());
+            // dispatch(footerToModeInvisible());
         }
     }, [toolbar.mode, values.document_id, values.step_approve, values.created_by_admin_employee_id]);
 
