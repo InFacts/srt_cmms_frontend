@@ -4,9 +4,6 @@ import { useFormik , withFormik ,useFormikContext} from 'formik';
 
 import TabBar, {TAB_BAR_ACTIVE} from '../common/tab-bar';
 
-import axios from "axios";
-import { API_PORT_DATABASE } from '../../config_port.js';
-import { API_URL_DATABASE } from '../../config_url.js';
 
 import TopContent from './top-content';
 import BottomContent from './bottom-content';
@@ -29,11 +26,10 @@ const GoodsReceiptComponent = (props) => {
     const dispatch = useDispatch();
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
-        {id:"listItem", name:"รายการ", is_active: TAB_BAR_ACTIVE.ACTIVE},
-        {id:"attachment", name:"แนบไฟล์", is_active: TAB_BAR_ACTIVE.INACTIVE},
-        {id:"table_status", name:"สถานะเอกสาร", is_active: TAB_BAR_ACTIVE.INACTIVE},
+        {id:"listItem", name:"รายการ"},
+        {id:"attachment", name:"แนบไฟล์"},
+        {id:"table_status", name:"สถานะเอกสาร"},
     ]);
-    const [initialTabbar, setInitialTabbar] = useState(true);
 
     useToolbarInitializer(TOOLBAR_MODE.SEARCH);
     useTokenInitializer();
@@ -59,7 +55,7 @@ const GoodsReceiptComponent = (props) => {
         <form onSubmit={props.handleSubmit}>
         {/* <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) handleSubmit(e) }}> */}
             <TopContent />
-            <TabBar tabNames={tabNames} initialTabbar={initialTabbar} setInitialTabbar={setInitialTabbar}>
+            <TabBar tabNames={tabNames} initialTabID="listItem">
                 <BottomContent />
             </TabBar>
             <Footer />
