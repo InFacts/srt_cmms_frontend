@@ -41,12 +41,11 @@ const GoodsReceiptComponent = (props) => {
     // If Link to this url via Track Document
     useEffect(() => {
         let url = window.location.search;
-        console.log("URL IS", url)
         const urlParams = new URLSearchParams(url);
         const internal_document_id = urlParams.get('internal_document_id');
         if (internal_document_id !== "") {
             // action_approval
-            console.log(" IA M NOT SETTING ", internal_document_id);
+            setFieldValue("status_name_th", "", true);
             setFieldValue("internal_document_id", internal_document_id, true);
         }
     }, [])
@@ -108,6 +107,8 @@ const EnhancedGoodsReceiptComponent = withFormik({
         created_on: '',
         status_name_th: '',
         document_status_id: '',
+        document_action_type_id: '',
+        document_is_canceled: '',
         created_by_admin_employee_id: '',
 
         //Field ที่ไม่ได้ display

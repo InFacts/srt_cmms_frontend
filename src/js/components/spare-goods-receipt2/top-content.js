@@ -19,7 +19,14 @@ import PopupModalUsername from '../common/popup-modal-username'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, getDocumentbyInternalDocumentID } from '../../helper';
 
-
+const DOCUMENT_STATUS = {
+  DRAFT: "สร้าง Draft",
+  WAIT_APPROVE: "รอการอนุมัติ",
+  APPROVE_DONE: "อนุมัติเรียบร้อยแล้ว",
+  VOID: "เอกสารหมดสถานะการใช้งาน",
+  REOPEN: "แก้ไขเอกสาร",
+  FAST_TRACK: "Fast Track",
+}
 const responseToFormState = (userFact, data) => {
   for (var i = data.line_items.length; i <= 9; i++) {
     data.line_items.push(
@@ -43,7 +50,8 @@ const responseToFormState = (userFact, data) => {
     line_items: data.line_items,
     dest_warehouse_id: data.dest_warehouse_id,
     remark: data.remark,
-    status_name_th: data.status_name,
+    status_name_th: "",
+    document_action_type_id: "",
     po_id: data.po_id,
   }
 }
@@ -63,6 +71,7 @@ const TopContent = (props) => {
       setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(props.fact.users, props.decoded_token.id));
       setFieldValue("status_name_th", "ยังไม่ได้รับการบันทึก");
       setFieldValue("created_on", new Date().toISOString().slice(0, 16));
+      // checkDocumentStatus(values); // TODO: ADD MODE
       // validateField("created_by_admin_employee_id");
     }
   }, [props.decoded_token, props.fact.users, props.toolbar.mode, touched.internal_document_id, !values.internal_document_id])
@@ -111,6 +120,7 @@ const TopContent = (props) => {
                 setFieldValue("desrciption_files_length", desrciption_files.data.results.length, false);
                 setFieldValue("desrciption_files", desrciption_files.data.results, false);
                 setFieldValue("document_id", data.document_id, false);
+                setFieldValue("document_is_canceled", result.is_canceled.data, false);
                 return resolve(null);
               });
             

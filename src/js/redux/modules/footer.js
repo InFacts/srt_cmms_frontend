@@ -6,16 +6,18 @@ export const FOOTER_MODE = {
     INVISIBLE: "INVISIBLE",
     NONE: "NONE",
     SEARCH: "SEARCH",
+    ADD_DRAFT: "ADD_DRAFT",
     EDIT: "EDIT",
     OWN_DOCUMENT: "OWN_DOCUMENT",
-    ADD_DRAFT: "ADD_DRAFT",
+    FAST_TRACK: "FAST_TRACK",
+    VOID: "VOID",
     AP_APPROVAL: "AP_APPROVAL",
     AP_CHECK_APPROVAL: "AP_CHECK_APPROVAL",
     AP_GOT_IT: "AP_GOT_IT",
     AP_CHECK_ORDER: "AP_CHECK_ORDER",
     AP_CHECK_MAINTENANCE: "AP_CHECK_MAINTENANCE",
     AP_GUARANTEE_MAINTENANCE: "AP_GUARANTEE_MAINTENANCE",
-    AP_APPROVAL_END: "AP_APPROVAL_END"
+    AP_APPROVAL_DONE: "AP_APPROVAL_DONE"
 }
 
 export const FOOTER_ACTIONS = {
@@ -30,7 +32,7 @@ export const FOOTER_ACTIONS = {
     FAST_TRACK: "FAST_TRACK", 
     SEND: "SEND",
     APPROVAL: "APPROVAL", 
-    APPROVED: "APPROVED"
+    APPROVAL_DONE: "APPROVAL_DONE"
 }
 
 export const FOOTER_ACTIONS_TEXT = {
@@ -42,10 +44,10 @@ export const FOOTER_ACTIONS_TEXT = {
     CHECK_APPROVAL: "ตรวจสอบและลงนาม", 
     APPROVAL_ORDER: "ตรวจสอบและสั่งจ่าย", 
     GOT_IT: "รับทราบ",
-    FAST_TRACK: "Fast Track", 
+    FAST_TRACK: "เอกสาร Fast Track", 
     SEND: "ส่งเอกสาร",
     APPROVAL: "ลงนาม", 
-    APPROVED: "ลงนามเรียบร้อยแล้ว"
+    APPROVAL_DONE: "ลงนามเรียบร้อยแล้ว"
 }
 
 
@@ -56,13 +58,16 @@ const TO_MODE_SEARCH = "footer/TO_MODE_SEARCH";
 const TO_MODE_EDIT = "footer/TO_MODE_EDIT";
 const TO_MODE_OWN_DOCUMENT = "footer/TO_MODE_OWN_DOCUMENT";
 const TO_MODE_ADD_DRAFT = "footer/TO_MODE_ADD_DRAFT";
+const TO_MODE_FAST_TRACK = "footer/TO_MODE_FAST_TRACK";
+const TO_MODE_VOID = "footer/TO_MODE_VOID";
+
 const TO_MODE_AP_APPROVAL = "footer/TO_MODE_AP_APPROVAL";
 const TO_MODE_AP_CHECK_APPROVAL = "footer/TO_MODE_AP_CHECK_APPROVAL";
 const TO_MODE_AP_GOT_IT = "footer/TO_MODE_AP_GOT_IT";
 const TO_MODE_AP_CHECK_ORDER = "footer/TO_MODE_AP_CHECK_ORDER";
 const TO_MODE_AP_CHECK_MAINTENANCE = "footer/TO_MODE_AP_CHECK_MAINTENANCE";
 const TO_MODE_AP_GUARANTEE_MAINTENANCE = "footer/TO_MODE_AP_GUARANTEE_MAINTENANCE";
-const TO_MODE_AP_APPROVAL_END = "footer/TO_MODE_AP_APPROVAL_END";
+const TO_MODE_AP_APPROVAL_DONE = "footer/TO_MODE_AP_APPROVAL_DONE";
 
 const CLICK_APPROVAL = "footer/CLICK_APPROVAL";
 const CLICK_SEND = "footer/CLICK_SEND";
@@ -75,7 +80,7 @@ const CLICK_GOT_IT = "footer/CLICK_GOT_IT";
 const CLICK_FAST_TRACK = "footer/CLICK_FAST_TRACK";
 const CLICK_CANCEL_APPROVAL_PROCESS = "footer/CLICK_CANCEL_APPROVAL_PROCESS";
 const CLICK_VOID = "footer/CLICK_VOID";
-const CLICK_APPROVED = "footer/CLICK_APPROVED";
+const CLICK_APPROVAL_DONE = "footer/CLICK_APPROVAL_DONE";
 
 const HANDLE_CLICK_APPROVAL = "footer/HANDLE_CLICK_APPROVAL";
 const HANDLE_CLICK_SEND = "footer/HANDLE_CLICK_SEND";
@@ -88,7 +93,7 @@ const HANDLE_CLICK_GOT_IT = "footer/HANDLE_CLICK_GOT_IT";
 const HANDLE_CLICK_FAST_TRACK = "footer/HANDLE_CLICK_FAST_TRACK";
 const HANDLE_CLICK_CANCEL_APPROVAL_PROCESS = "footer/HANDLE_CLICK_CANCEL_APPROVAL_PROCESS";
 const HANDLE_CLICK_VOID = "footer/HANDLE_CLICK_VOID";
-const HANDLE_CLICK_APPROVED = "footer/HANDLE_CLICK_APPROVED";
+const HANDLE_CLICK_APPROVAL_DONE = "footer/HANDLE_CLICK_APPROVAL_DONE";
 
 const initialState = {
     mode: FOOTER_MODE.SEARCH,
@@ -102,7 +107,7 @@ const initialState = {
         [FOOTER_ACTIONS.FAST_TRACK]: false,
         [FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]: false,
         [FOOTER_ACTIONS.VOID]: false,
-        [FOOTER_ACTIONS.APPROVED]: false
+        [FOOTER_ACTIONS.APPROVAL_DONE]: false
     }
 }
 
@@ -140,6 +145,16 @@ export default function reducer(state = initialState, action){
                 ...state,
                 mode: FOOTER_MODE.ADD_DRAFT
             }
+        case TO_MODE_FAST_TRACK:
+            return {
+                ...state,
+                mode: FOOTER_MODE.FAST_TRACK
+            }
+        case TO_MODE_VOID:
+            return {
+                ...state,
+                mode: FOOTER_MODE.VOID
+            }
         case TO_MODE_AP_APPROVAL:
             return {
                 ...state,
@@ -170,10 +185,10 @@ export default function reducer(state = initialState, action){
                 ...state,
                 mode: FOOTER_MODE.AP_GUARANTEE_MAINTENANCE
             }
-        case TO_MODE_AP_APPROVAL_END:
+        case TO_MODE_AP_APPROVAL_DONE:
             return {
                 ...state,
-                mode: FOOTER_MODE.AP_APPROVAL_END
+                mode: FOOTER_MODE.AP_APPROVAL_DONE
             }
 
         // CLICK
@@ -243,11 +258,11 @@ export default function reducer(state = initialState, action){
                 requiresHandleClick: {...state.requiresHandleClick, 
                                     [FOOTER_ACTIONS.VOID]: true}
             }
-        case CLICK_APPROVED:
+        case CLICK_APPROVAL_DONE:
             return {
                 ...state,
                 requiresHandleClick: {...state.requiresHandleClick, 
-                                    [FOOTER_ACTIONS.APPROVED]: true}
+                                    [FOOTER_ACTIONS.APPROVAL_DONE]: true}
             }
 
         // HANDLE CLICK
@@ -317,11 +332,11 @@ export default function reducer(state = initialState, action){
                 requiresHandleClick: {...state.requiresHandleClick, 
                                     [FOOTER_ACTIONS.VOID]: false}
             }
-        case HANDLE_CLICK_APPROVED:
+        case HANDLE_CLICK_APPROVAL_DONE:
             return {
                 ...state,
                 requiresHandleClick: {...state.requiresHandleClick, 
-                                    [FOOTER_ACTIONS.APPROVED]: false}
+                                    [FOOTER_ACTIONS.APPROVAL_DONE]: false}
             }
         
         default:
@@ -338,13 +353,15 @@ export const footerToModeSearch = makeActionCreator(TO_MODE_SEARCH);
 export const footerToModeEdit = makeActionCreator(TO_MODE_EDIT);
 export const footerToModeOwnDocument = makeActionCreator(TO_MODE_OWN_DOCUMENT);
 export const footerToModeAddDraft = makeActionCreator(TO_MODE_ADD_DRAFT);
+export const footerToModeVoid = makeActionCreator(TO_MODE_VOID);
+export const footerToModeFastTrack = makeActionCreator(TO_MODE_FAST_TRACK);
 export const footerToModeApApproval = makeActionCreator(TO_MODE_AP_APPROVAL);
 export const footerToModeApCheckApproval = makeActionCreator(TO_MODE_AP_CHECK_APPROVAL);
 export const footerToModeApGotIt = makeActionCreator(TO_MODE_AP_GOT_IT);
 export const footerToModeApCheckOrder = makeActionCreator(TO_MODE_AP_CHECK_ORDER);
 export const footerToModeApCheckMaintenance = makeActionCreator(TO_MODE_AP_CHECK_MAINTENANCE);
 export const footerToModeApGuarnteeMaintenance = makeActionCreator(TO_MODE_AP_GUARANTEE_MAINTENANCE);
-export const footerToModeApApprovalEnd = makeActionCreator(TO_MODE_AP_APPROVAL_END);
+export const footerToModeApApprovalDone = makeActionCreator(TO_MODE_AP_APPROVAL_DONE);
 
 export const clickApproval = makeActionCreator(CLICK_APPROVAL);
 export const clickSend = makeActionCreator(CLICK_SEND);
@@ -356,7 +373,7 @@ export const clickApprovalOrder = makeActionCreator(CLICK_APPROVAL_ORDER);
 export const clickFastTrack = makeActionCreator(CLICK_FAST_TRACK);
 export const clickCancleApprovalProcess = makeActionCreator(CLICK_CANCEL_APPROVAL_PROCESS);
 export const clickVoid = makeActionCreator(CLICK_VOID);
-export const clickApproved = makeActionCreator(CLICK_APPROVED);
+export const clickApprovalDone = makeActionCreator(CLICK_APPROVAL_DONE);
 
 export const handleFooterClickApproval = makeActionCreator(HANDLE_CLICK_APPROVAL);
 export const handleFooterClickSend = makeActionCreator(HANDLE_CLICK_SEND);
@@ -368,7 +385,7 @@ export const handleFooterClickApprovalOrder = makeActionCreator(HANDLE_CLICK_APP
 export const handleFooterClickFastTrack = makeActionCreator(HANDLE_CLICK_FAST_TRACK);
 export const handleFooterClickApprovalProcess = makeActionCreator(HANDLE_CLICK_CANCEL_APPROVAL_PROCESS);
 export const handleFooterClickVoid = makeActionCreator(HANDLE_CLICK_VOID);
-export const handleFooterClickApproved = makeActionCreator(HANDLE_CLICK_APPROVED);
+export const handleFooterClickApprovalDone = makeActionCreator(HANDLE_CLICK_APPROVAL_DONE);
 
 export const handleClickBackToSpareMain = () => {
     return (dispatch) => {
