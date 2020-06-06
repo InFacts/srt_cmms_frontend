@@ -122,9 +122,9 @@ const mapStateToProps = (state) => {
     case FOOTER_MODE.AP_GUARANTEE_MAINTENANCE:
       // console.log(">>>>> AP_GUARANTEE_MAINTENANCE")
       return getPropButtonVisible(FOOTER_ACTIONS.CHECK_APPROVAL, [FOOTER_ACTIONS.CHECK_APPROVAL, FOOTER_ACTIONS.REJECT, FOOTER_ACTIONS.BACK]);
-    case FOOTER_MODE.AP_APPROVAL_END:
+    case FOOTER_MODE.AP_APPROVAL_DONE:
       // console.log(">>>>> AP_APPROVAL_END")
-      return getPropButtonVisible(FOOTER_ACTIONS.CHECK_APPROVAL, [FOOTER_ACTIONS.CHECK_APPROVAL, FOOTER_ACTIONS.BACK]);
+      return getPropButtonVisible(null, [FOOTER_ACTIONS.VOID, FOOTER_ACTIONS.BACK]);
     default:
       return {...ALL_DISABLED_PROP};
   }

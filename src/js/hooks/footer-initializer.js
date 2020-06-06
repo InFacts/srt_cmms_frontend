@@ -53,7 +53,7 @@ const useFooterInitializer = (document_type_id) => {
                 // console.log("HI Check Who's create document", userInfo.id, created_by_admin_employee_id)
                 if (document_status === DOCUMENT_STATUS.DRAFT) { dispatch(footerToModeAddDraft()); }
                 else if (document_status === DOCUMENT_STATUS.WAIT_APPROVE) { dispatch(footerToModeOwnDocument()); }
-                else if (document_status === DOCUMENT_STATUS.APPROVE_DONE) { dispatch(footerToModeOwnDocument()); }
+                else if (document_status === DOCUMENT_STATUS.APPROVE_DONE) { dispatch(footerToModeApApprovalDone()); }
                 else if (document_status === DOCUMENT_STATUS.VOID) { dispatch(footerToModeVoid()); }
                 else if (document_status === DOCUMENT_STATUS.REOPEN) { dispatch(footerToModeEdit()); }
                 else if (document_status === DOCUMENT_STATUS.FAST_TRACK) { dispatch(footerToModeFastTrack()); } 

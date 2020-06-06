@@ -15,6 +15,7 @@ import useToolbarInitializer from '../../hooks/toolbar-initializer';
 import useFactInitializer from '../../hooks/fact-initializer';
 import useTokenInitializer from '../../hooks/token-initializer';
 import useFooterInitializer from '../../hooks/footer-initializer';
+import useNavBottomStatusInitializer from '../../hooks/nav-bottom-status-initializer';
 
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 import { footerToModeSearch } from '../../redux/modules/footer.js';
@@ -35,6 +36,8 @@ const GoodsReceiptComponent = (props) => {
     useTokenInitializer();
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO);
+    useNavBottomStatusInitializer();
+
     useEffect(()=>{
         dispatch(footerToModeSearch());
     }, []);
@@ -131,7 +134,7 @@ const EnhancedGoodsReceiptComponent = withFormik({
     },
     handleSubmit: (values, formikBag) => new Promise ((resolve, reject) => { //handle Submit will just POST the Empty Document and PUT information inside
         let data = packDataFromValues(formikBag.props.fact, values, DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO);
-        console.log("I AM SUBMITTING ", data );
+        // console.log("I AM SUBMITTING ", data );
         saveDocument(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO, data)
         .then((document_id) => {
             formikBag.setFieldValue('document_id', document_id, false);
