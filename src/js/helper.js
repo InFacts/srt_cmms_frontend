@@ -14,8 +14,11 @@ export const DOCUMENT_TYPE_ID = {
     INVENTORY_TRANSFER: 121,
     GOODS_FIX: 131,
     GOODS_RECEIPT_FIX: 132,
+    PHYSICAL_COUNT: 141,
+    SALVAGE_RETURN: 151,
+    SALVAGE_SOLD: 152,
 
-    WORK_REQUEST:201,
+    WORK_REQUEST: 201,
     WORK_ORDER: 202,
     WORK_ORDER_PM: 203,
     SS101: 204,
@@ -151,9 +154,11 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                 refer_to_document_name: values.refer_to_document_name
             }
             break;
-        case DOCUMENT_TYPE_ID.GOODS_RETURN:
-            break;
-        case DOCUMENT_TYPE_ID.GOODS_RETURN_MAINTENANCE:
+        case DOCUMENT_TYPE_ID.PHYSICAL_COUNT:
+            movement_part = {
+                ...movement_part,
+                refer_to_document_name: values.refer_to_document_name
+            }
             break;
         case DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO:
             document_part = {
@@ -166,7 +171,14 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                 ...document_part,
                 refer_to_document_id: values.refer_to_document_id
             }
+            break;
         case DOCUMENT_TYPE_ID.GOODS_USAGE:
+            break;
+        case DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX:
+            break
+        case DOCUMENT_TYPE_ID.GOODS_RETURN:
+            break;
+        case DOCUMENT_TYPE_ID.GOODS_RETURN_MAINTENANCE:
             break;
         default:
             break;
@@ -279,7 +291,7 @@ export const editDocument = (document_id, document_type_group_id, data) => new P
     axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             console.log(" I am successful in updating contents of document_id ", document_id)
-            if(res.status === 200){
+            if (res.status === 200) {
                 resolve(res.data);
             } else {
                 reject(res);
@@ -353,7 +365,7 @@ export const startDocumentApprovalFlow = (document_id) => new Promise((resolve, 
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/new`;
     axios.post(url, null, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
-            if(res.status === 200 || res.status === 201){
+            if (res.status === 200 || res.status === 201) {
                 console.log(" I am successful in starting approval flow of document_id ", document_id)
                 resolve(res.data);
             } else {
@@ -375,7 +387,7 @@ export const fetchStepApprovalDocumentData = (document_id) => new Promise((resol
 });
 
 // Get Latest Step Approval After Track Docuemnt
-export const fetchLatestStepApprovalDocumentData = (document_id) => new Promise((resolve, reject) =>{
+export const fetchLatestStepApprovalDocumentData = (document_id) => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/latest/step`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((latest_step_approve) => {
@@ -387,7 +399,7 @@ export const fetchLatestStepApprovalDocumentData = (document_id) => new Promise(
 });
 
 // Get Latest Step Approval After Track Docuemnt
-export const fetchSearchDocumentData = (document_id) => new Promise((resolve, reject) =>{
+export const fetchSearchDocumentData = (document_id) => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?${document_id}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((document) => {

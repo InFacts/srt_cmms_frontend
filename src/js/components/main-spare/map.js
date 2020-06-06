@@ -104,8 +104,8 @@ class Map extends React.Component {
                                     <button className="p-contextual-menu__toggle" style={{ border: "none", padding: "0" }} aria-controls="menu-2" aria-expanded="false" aria-haspopup="true"><img alt='some value' src={Dropdown} /></button>
                                     <span className="p-contextual-menu__dropdown" id="menu-2" aria-hidden="true" aria-label="submenu">
                                         <span className="p-contextual-menu__group">
-                                            <Link to="/unit-count" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>ตรวจนับสินค้า</Link>
-                                            {/* <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>ปรับปรุงจำนวนอะไหล่</Link> */}
+                                            <Link to="/physical-count" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>ตรวจนับสินค้า</Link>
+                                            <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>ปรับปรุงจำนวนอะไหล่</Link>
                                         </span>
                                     </span>
                                 </span>
@@ -113,8 +113,8 @@ class Map extends React.Component {
                                     <button className="p-contextual-menu__toggle" style={{ border: "none", padding: "0" }} aria-controls="menu-3" aria-expanded="false" aria-haspopup="true"><img alt='some value' src={Dropdown} /></button>
                                     <span className="p-contextual-menu__dropdown" id="menu-3" aria-hidden="true" aria-label="submenu">
                                         <span className="p-contextual-menu__group">
-                                            <Link to="/salvage-management-1" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>คืนซากอะไหล่</Link>
-                                            <Link to="/salvage-management-2" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>จำหหน่ายซากอะไหล่</Link>
+                                            <Link to="/salvage-return" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>คืนซากอะไหล่</Link>
+                                            <Link to="/salvage-sold" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>จำหหน่ายซากอะไหล่</Link>
                                         </span>
                                     </span>
                                 </span>

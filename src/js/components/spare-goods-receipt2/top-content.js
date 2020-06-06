@@ -104,7 +104,7 @@ const TopContent = (props) => {
               .then((result) => {
                 axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${res.data.document_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
                   .then((desrciption_files) => {
-                    console.log(" I AM STILL IN MODE SEARCH AND SET VALUE")
+                    console.log(" I AM STILL IN MODE SEARCH AND SET VALUE", result.approval_step)
                     
                     // validateField("internal_document_id");
                     // Setup value From Approve and Attachment
