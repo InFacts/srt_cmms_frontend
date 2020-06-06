@@ -17,7 +17,10 @@ import PopupModalDocument from '../common/popup-modal-document'
 import PopupModalInventory from '../common/popup-modal-inventory'
 import PopupModalUsername from '../common/popup-modal-username'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
-import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, getDocumentbyInternalDocumentID } from '../../helper';
+import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, 
+  DOCUMENT_TYPE_ID, getDocumentbyInternalDocumentID,
+  isValidInternalDocumentIDFormat, isValidInternalDocumentIDDraftFormat ,
+  fetchAttachmentDocumentData} from '../../helper';
 
 
 const responseToFormState = (userFact, data) => {
@@ -36,6 +39,7 @@ const responseToFormState = (userFact, data) => {
     );
   }
   return {
+    document_id: data.document_id,
     internal_document_id: data.internal_document_id,
     created_by_user_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_user_id) || '',
     created_by_admin_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_admin_id) || '',
@@ -63,58 +67,57 @@ const TopContent = (props) => {
       setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(props.fact.users, props.decoded_token.id));
       setFieldValue("status_name_th", "ยังไม่ได้รับการบันทึก");
       setFieldValue("created_on", new Date().toISOString().slice(0, 16));
-      // validateField("created_by_admin_employee_id");
     }
   }, [props.decoded_token, props.fact.users, props.toolbar.mode, touched.internal_document_id, !values.internal_document_id])
+
+
+  // Get approval Step when values.document_id changes
+  useEffect(() => {
+    // Start Axios Get step_approve and attachment By nuk
+    fetchStepApprovalDocumentData(values.document_id)
+    .then((result) => {
+      // Setup value From Approve 
+      setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
+    });
+  }, [values.document_id]);
+
+  // Get  attachment when values.document_id changes
+  useEffect(() => {
+    // Start Axios Get step_approve and attachment By nuk
+    fetchAttachmentDocumentData(values.document_id)
+    .then((desrciption_files) => {
+      // Setup value From Attachment
+      setFieldValue("desrciption_files_length", desrciption_files.results.length, false);
+      setFieldValue("desrciption_files", desrciption_files.results, false);
+    });
+  }, [values.document_id]);
+
 
   const validateInternalDocumentIDField = internal_document_id => new Promise(resolve => {
     // Internal Document ID
     //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
     //  ie. GR-PYO-2563/0001
     console.log("I am validating document id")
-    let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS)-[A-Z]{3}-\d{4}\/\d{4}$/g
-    let draftInternalDocumentIDRegex = /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
-    // let draftInternalDocumentIDRegex = /^heh/g
     if (!internal_document_id) {
-      console.log(" there is no doc id ")
       return resolve('Required');
-    } else if (!internalDocumentIDRegex.test(internal_document_id) && !draftInternalDocumentIDRegex.test(internal_document_id)) { //
+    } else if (!isValidInternalDocumentIDFormat(internal_document_id) && !isValidInternalDocumentIDDraftFormat(internal_document_id)) {
       console.log(' document not in the form')
       return resolve('Invalid Document ID Format\nBe sure to use the format ie. GR-PYO-2563/0001')
     }
-    // if (!internal_document_id) {
-    //   return resolve(); // Resolve doesn't return
-    // }
+
     let error;
     getDocumentbyInternalDocumentID(internal_document_id)
     .then((data) => {
       if (data.internal_document_id === internal_document_id) { // If input document ID exists
         if ((props.toolbar.mode === TOOLBAR_MODE.SEARCH || props.toolbar.mode === TOOLBAR_MODE.NONE || props.toolbar.mode === TOOLBAR_MODE.NONE_HOME) 
           && !props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
-
+          
+          console.log("validateInternalDocumentIDField:: I got document ID ",data.document_id)
           setValues({ ...values, ...responseToFormState(props.fact.users, data) }, false); //Setvalues and don't validate
           validateField("dest_warehouse_id");
           validateField("created_by_user_employee_id");
           validateField("created_by_admin_employee_id");
-
-
-          // Start Axios Get step_approve and attachment By nuk
-          fetchStepApprovalDocumentData(data.document_id)
-          .then((result) => {
-            axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${data.document_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-              .then((desrciption_files) => {
-                console.log(" I AM STILL IN MODE SEARCH AND SET VALUE")
-                
-                // validateField("internal_document_id");
-                // Setup value From Approve and Attachment
-                setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
-                setFieldValue("desrciption_files_length", desrciption_files.data.results.length, false);
-                setFieldValue("desrciption_files", desrciption_files.data.results, false);
-                setFieldValue("document_id", data.document_id, false);
-                return resolve(null);
-              });
-            
-          })
+          return resolve(null);
 
         } else { //If Mode add, need to error duplicate Document ID
           console.log("I AM DUPLICATE")

@@ -137,6 +137,16 @@ export const getNumberFromEscapedString = (escapedString) => {
     return parseInt(escapedString.split('\\')[0]);
 }
 
+export const isValidInternalDocumentIDFormat = (internal_document_id) => {
+    const internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS)-[A-Z]{3}-\d{4}\/\d{4}$/g;
+    return internalDocumentIDRegex.test(internal_document_id);
+}
+export const isValidInternalDocumentIDDraftFormat = (internal_document_id) => {
+    const draftInternalDocumentIDRegex = /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g;
+    return draftInternalDocumentIDRegex.test(internal_document_id);
+}
+
+
 function isICD(document_type_group_id){
     return ICD_DOCUMENT_TYPE_GROUP_IDS.includes(document_type_group_id);
 }
@@ -304,6 +314,7 @@ export const createDocumentEmptyRow = () => new Promise((resolve) => {
 });
 
 
+
 export const fetchLastestInternalDocumentID = (document_type_group_id) => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=${document_type_group_id}`
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
@@ -424,12 +435,24 @@ export const startDocumentApprovalFlow = (document_id) => new Promise((resolve, 
         })
 });
 
-// Get Step Approval After Search Document
+// Get Step Approval After Search Document (document_id changes)
 export const fetchStepApprovalDocumentData = (document_id) => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/latest/plus`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((step_approve) => {
             resolve(step_approve.data);
+        })
+        .catch((err) => {
+            reject(err)
+        });
+});
+
+// Get Attachment after search Document (document_id changes)
+export const fetchAttachmentDocumentData = (document_id) => new Promise((resolve, reject) => {
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${document_id}`;
+    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((desrciption_files) => {
+            resolve(desrciption_files.data);
         })
         .catch((err) => {
             reject(err)
