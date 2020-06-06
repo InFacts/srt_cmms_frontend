@@ -23,6 +23,16 @@ const TO_STATUS_ERROR = "navBottom/TO_STATUS_ERROR";
 
 const initialState = {
     mode: NAV_BOTTOM_STATUS.ON_READY,
+    api_type: "",
+    action: "",
+    description: "",
+}
+
+const ACTION_TYPE_TO_MODE = {
+    "navBottom/TO_STATUS_ON_READY": NAV_BOTTOM_STATUS.ON_READY,
+    "navBottom/TO_STATUS_SUCCESS": NAV_BOTTOM_STATUS.SUCCESS,
+    "navBottom/TO_STATUS_WARNING": NAV_BOTTOM_STATUS.WARNING,
+    "navBottom/TO_STATUS_ERROR": NAV_BOTTOM_STATUS.ERROR,
 }
 
 // Reducer
@@ -30,25 +40,15 @@ export default function reducer(state = initialState, action){
     switch(action.type){
         // CHANGE MODE
         case TO_STATUS_ON_READY:
-            console.log("-----> TO_STATUS_ON_READY")
-            return {
-                ...state,
-                mode: NAV_BOTTOM_STATUS.ON_READY
-            }
         case TO_STATUS_SUCCESS:
-            return {
-                ...state,
-                mode: NAV_BOTTOM_STATUS.SUCCESS
-            }
         case TO_STATUS_WARNING:
-            return {
-                ...state,
-                mode: NAV_BOTTOM_STATUS.WARNING
-            }
         case TO_STATUS_ERROR:
             return {
                 ...state,
-                mode: NAV_BOTTOM_STATUS.ERROR
+                mode: ACTION_TYPE_TO_MODE[action.type],
+                api_type: action.api_type,
+                action: action.action,
+                description: action.description,
             }
         default:
             return state;
@@ -56,7 +56,7 @@ export default function reducer(state = initialState, action){
 }
 
 // Action Creators
-export const navBottomOnReady = makeActionCreator(TO_STATUS_ON_READY);
-export const navBottomSuccess = makeActionCreator(TO_STATUS_SUCCESS);
-export const navBottomWarning = makeActionCreator(TO_STATUS_WARNING);
-export const navBottomError = makeActionCreator(TO_STATUS_ERROR);
+export const navBottomOnReady = makeActionCreator(TO_STATUS_ON_READY, 'api_type', 'action', 'description');
+export const navBottomSuccess = makeActionCreator(TO_STATUS_SUCCESS, 'api_type', 'action', 'description');
+export const navBottomWarning = makeActionCreator(TO_STATUS_WARNING, 'api_type', 'action', 'description');
+export const navBottomError = makeActionCreator(TO_STATUS_ERROR, 'api_type', 'action', 'description');

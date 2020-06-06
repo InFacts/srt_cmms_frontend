@@ -7,6 +7,7 @@ import useTokenInitializer from '../hooks/token-initializer';
 import { useFormikContext} from 'formik';
 import {startDocumentApprovalFlow, DOCUMENT_TYPE_ID, saveDocument, packDataFromValues, fetchLatestStepApprovalDocumentData, getUserIDFromEmployeeID, DOCUMENT_STATUS, APPROVAL_STEP_ACTION, checkDocumentStatus} from '../helper';
 import { FACTS } from '../redux/modules/api/fact';
+import { navBottomOnReady, navBottomError, navBottomSuccess } from '../redux/modules/nav-bottom'
 
 function isEmpty(obj) {
     for(var key in obj) {
@@ -35,7 +36,9 @@ const useFooterInitializer = (document_type_id) => {
     useEffect(() => {
         let document_id = values.document_id;
         let docuementStatus = checkDocumentStatus(values);
+        console.log("HI document_status", docuementStatus, "toolbar>>", toolbar.mode)
         setFieldValue("status_name_th", docuementStatus, false);
+        dispatch(navBottomOnReady('', '', ''));
         // setFieldValue("document_action_type_id", docuementStatus, false);
         if (toolbar.mode === TOOLBAR_MODE.SEARCH && document_id !== "" && document_id !== undefined){
             let userInfo = {
@@ -50,14 +53,14 @@ const useFooterInitializer = (document_type_id) => {
 
             // Check That user who create document?
             if (userInfo.id === created_by_admin_employee_id) {
-                // console.log("HI Check Who's create document", userInfo.id, created_by_admin_employee_id)
+                console.log("HI Check Who's create document", userInfo.id, created_by_admin_employee_id)
                 if (document_status === DOCUMENT_STATUS.DRAFT) { dispatch(footerToModeAddDraft()); }
                 else if (document_status === DOCUMENT_STATUS.WAIT_APPROVE) { dispatch(footerToModeOwnDocument()); }
                 else if (document_status === DOCUMENT_STATUS.APPROVE_DONE) { dispatch(footerToModeApApprovalDone()); }
                 else if (document_status === DOCUMENT_STATUS.VOID) { dispatch(footerToModeVoid()); }
                 else if (document_status === DOCUMENT_STATUS.REOPEN) { dispatch(footerToModeEdit()); }
                 else if (document_status === DOCUMENT_STATUS.FAST_TRACK) { dispatch(footerToModeFastTrack()); } 
-                else { dispatch(footerToModeAddDraft()); }
+                else { dispatch(footerToModeSearch()); }
             }
             else {
                 // Check That user_id into Previous Approval Flow ?
@@ -114,7 +117,7 @@ const useFooterInitializer = (document_type_id) => {
         }
         else {
             // INVISIBLE mode
-            // dispatch(footerToModeInvisible());
+            dispatch(footerToModeSearch());
         }
     }, [toolbar.mode, values.document_id, values.step_approve, values.created_by_admin_employee_id]);
 
@@ -140,10 +143,11 @@ const useFooterInitializer = (document_type_id) => {
                     saveDocument(document_type_id, data)
                     .then((document_id) => {
                         setFieldValue('document_id', document_id, false);
-                        
+                        dispatch(navBottomSuccess('[PUT]', 'Submit Success', ''));
                     })
                     .catch((err) => {
                         console.log("Submit Failed ", err.response);
+                        dispatch(navBottomError('[PUT]', 'Submit Failed', err));
                     })
                     .finally(() => { // Set that I already handled the Click
                         console.log(" I submitted and i am now handling click")
@@ -166,9 +170,13 @@ const useFooterInitializer = (document_type_id) => {
                     console.log("I AM SUBMITTING ", data );
                     if(values.document_id){ // If have document_id, no need to create new doc
                         startDocumentApprovalFlow(values.document_id)
+                        .then(() => {
+                            dispatch(navBottomSuccess('[PUT]', 'Submit Success', ''));
+                        })
                         .catch((err) => {
                             //         //TODO Do something if Submit Fails
                             console.warn("Adding Approval Flow Failed ", err.response);
+                            dispatch(navBottomError('[PUT]', 'Adding Approval Flow Failed', err));
                         })
                         .finally(() => { // Set that I already handled the Click
                             console.log(" I submitted and i am now handling click")
@@ -179,13 +187,18 @@ const useFooterInitializer = (document_type_id) => {
                         .then((document_id) => {
                             setFieldValue('document_id', document_id, false);
                             startDocumentApprovalFlow(document_id)
+                            .then(() => {
+                                dispatch(navBottomSuccess('[PUT]', 'Submit Success', ''));
+                            })
                             .catch((err) => {
                                 //         //TODO Do something if Submit Fails
                                 console.warn("Adding Approval Flow Failed ", err.response);
+                                dispatch(navBottomError('[PUT]', 'Adding Approval Flow Failed', err));
                             });
                         })
                         .catch((err) => {
                             console.warn("Submit Failed ", err.response);
+                            dispatch(navBottomError('[PUT]', 'Submit Failed', err));
                         })
                         .finally(() => { // Set that I already handled the Click
                             console.log(" I submitted and i am now handling click")

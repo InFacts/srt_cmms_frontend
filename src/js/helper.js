@@ -7,6 +7,7 @@ import { isEmptyChildren } from "formik";
 import {TOOLBAR_MODE, TOOLBAR_ACTIONS} from './redux/modules/toolbar'
 
 // import { useFormikContext } from 'formik';
+
 // Constants
 export const DOCUMENT_TYPE_ID = {
     GOODS_RECEIPT_PO: 101,
@@ -319,7 +320,7 @@ const fetchDocumentData = (document_id) => new Promise((resolve, reject) => {
 
 // Reserve a row in `document` table and return `document_id` and `internal_document_id`
 // POST /document/new/0
-export const createDocumentEmptyRow = () => new Promise((resolve) => {
+export const createDocumentEmptyRow = () => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/new/0`;
     axios.post(url, null, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
@@ -327,8 +328,12 @@ export const createDocumentEmptyRow = () => new Promise((resolve) => {
             resolve({
                 internal_document_id: res.data.internal_document_id, //"draft-bea9f75d-23db-49ae-a8d5-385121fb0234",
                 document_id: res.data.document_id,  //"document_id": 14
+                status: res.status,
             });
         })
+        .catch((err) => {
+            reject(err)
+        });
 });
 
 
@@ -435,7 +440,7 @@ const mutateDataFillDocumentID = (object, document_id) => {
 //   2. PUT /document/{document_id}/{document_type_group_id}: editDocument(document_id, document_type_group_id, data)
 export const saveDocument = (document_type_group_id, data) => new Promise((resolve, reject) => {
     createDocumentEmptyRow()
-        .then(({ document_id, internal_document_id }) => { // Get the Document_ID
+        .then(({ document_id, internal_document_id, status }) => { // Get the Document_ID
             editDocument(document_id, document_type_group_id, mutateDataFillDocumentID(data, document_id))
                 .then(() => {
                     return resolve(document_id);
@@ -445,6 +450,9 @@ export const saveDocument = (document_type_group_id, data) => new Promise((resol
                 });
 
         })
+        .catch((err) => {
+            reject(err)
+        });
 });
 // Start the Approval Flow of the Document
 // POST /approval/{document_id}/new
