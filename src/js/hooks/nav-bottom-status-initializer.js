@@ -7,7 +7,7 @@ const useNavBottomStatusInitializer = () => {
     const dispatch = useDispatch();
     // Fetch Fact If needed
     useEffect(() => {
-        dispatch(navBottomOnReady);
+        dispatch(navBottomOnReady('', '', ''));
     }, []);
 
     return;

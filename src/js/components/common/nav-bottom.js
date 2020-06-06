@@ -14,14 +14,14 @@ const NavBottomComponent = (props) => {
     else { colorStatus="blue" }
     return (
         <div className={`nav-bottom-status ${colorStatus}`}>
-            <p className="text-for-nav-bottom">สถานะ: {NAV_BOTTOM_STATUS_TEXT[nav_bottom_status.mode]}</p>
+            <p className="text-for-nav-bottom">{`สถานะ: ${NAV_BOTTOM_STATUS_TEXT[nav_bottom_status.mode]} : ${nav_bottom_status.api_type} ${nav_bottom_status.action} ${nav_bottom_status.description}`}</p>
         </div>
     )
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state) => ({
 
-}
+})
 
 
 const mapDispatchToProps = (dispatch) => ({
