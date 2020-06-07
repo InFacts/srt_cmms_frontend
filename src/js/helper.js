@@ -373,6 +373,7 @@ export const getDocumentbyInternalDocumentID = (internal_document_id) => new Pro
 
 // PUT /document/{document_id}/{document_type_group_id}
 export const editDocument = (document_id, document_type_group_id, data) => new Promise((resolve, reject) => {
+    console.log(">>>>> I HEAR", document_id, ">>>>", document_type_group_id, ">>>>", data)
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}/${document_type_group_id}`;
     axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
