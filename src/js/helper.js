@@ -156,7 +156,7 @@ export const isValidInternalDocumentIDDraftFormat = (internal_document_id) => {
 }
 
 
-function isICD(document_type_group_id){
+export function isICD(document_type_group_id){
     return ICD_DOCUMENT_TYPE_GROUP_IDS.includes(document_type_group_id);
 }
 

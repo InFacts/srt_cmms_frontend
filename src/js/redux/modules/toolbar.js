@@ -215,6 +215,12 @@ export const handleClickHomeToSpareMain = () => {
         history.push('/main-spare');
     };
 }
+export const handleClickHomeToPMTMain = () => {
+    return (dispatch) => {
+        dispatch(handleClickHome());
+        history.push('/main-pmt');
+    };
+}
 
 export const MODE_TO_ACTION_CREATOR = {
     [TOOLBAR_MODE.NONE]: toModeNone,
