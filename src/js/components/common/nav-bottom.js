@@ -5,7 +5,7 @@ import {NAV_BOTTOM_STATUS, NAV_BOTTOM_STATUS_TEXT} from '../../redux/modules/nav
 
 const NavBottomComponent = (props) => {
     const nav_bottom_status = useSelector((state) => ({...state.nav_bottom_status}));
-    console.log("nav_bottom_status,", nav_bottom_status.mode)
+    // console.log("nav_bottom_status,", nav_bottom_status.mode)
     let colorStatus = ""
     if (nav_bottom_status.mode === NAV_BOTTOM_STATUS.ON_READY) { colorStatus="blue" }
     else if (nav_bottom_status.mode === NAV_BOTTOM_STATUS.WARNING) { colorStatus="orange" }
