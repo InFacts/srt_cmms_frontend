@@ -9,9 +9,17 @@ import { navBottomOnReady, navBottomError, navBottomSuccess } from '../redux/mod
 
 export const useToolbarChangeModeInitializer = (initial_mode) => {
     const dispatch = useDispatch();
+    const toolbar = useSelector((state) => ({...state.toolbar}));
     useEffect(()=>{
         dispatch(MODE_TO_ACTION_CREATOR[initial_mode]());
     }, [dispatch, initial_mode]);
+
+    // Handle toolbar mode change
+    useEffect(()=> {
+        // Handle make navBottom onready (Blue) once change mode
+        dispatch(navBottomOnReady('', '', ''));
+    }, [toolbar.mode]);
+
     return;
 }
 
@@ -25,7 +33,6 @@ const useToolbarInitializer = (initial_mode) => {
     useToolbarChangeModeInitializer(initial_mode);
 
 
-
     // !!! Handles all state.toolbar mode and requiresHandleClick Changes !!!
 
     // Handle toolbar mode change
@@ -33,8 +40,6 @@ const useToolbarInitializer = (initial_mode) => {
         if (toolbar.mode === TOOLBAR_MODE.SEARCH){
             resetForm(); //Search doesn't have handleClick, Clicks are tracked by mode changes only.
         }
-        // Handle make navBottom onready (Blue) once change mode
-        dispatch(navBottomOnReady('', '', ''));
     }, [toolbar.mode, resetForm]);
 
     // Handle home button, only re-subscribe if requiresHandleClick of HOME changes
