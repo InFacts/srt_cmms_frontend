@@ -31,14 +31,12 @@ const useFooterInitializer = (document_type_id) => {
     //Handle Document Status TODO: move it out of footer!!
 
 
-
     // Handle Toolbar Mode
     useEffect(() => {
         let document_id = values.document_id;
         let docuementStatus = checkDocumentStatus(values);
         console.log("HI document_status", docuementStatus, "toolbar>>", toolbar.mode)
         setFieldValue("status_name_th", docuementStatus, false);
-        dispatch(navBottomOnReady('', '', ''));
         // setFieldValue("document_action_type_id", docuementStatus, false);
         if (toolbar.mode === TOOLBAR_MODE.SEARCH && document_id !== "" && document_id !== undefined){
             let userInfo = {

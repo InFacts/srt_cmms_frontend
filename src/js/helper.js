@@ -237,11 +237,8 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                 }
                 break;
             case DOCUMENT_TYPE_ID.GOODS_USAGE:
-                break;
             case DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX:
-                break
             case DOCUMENT_TYPE_ID.GOODS_RETURN:
-                break;
             case DOCUMENT_TYPE_ID.GOODS_RETURN_MAINTENANCE:
                 break;
             default:
@@ -319,51 +316,6 @@ export const packDataFromValues = (fact, values, document_type_id) => {
     }
 }
 
-
-// const packForm = (document_id, document_show, list_show) => {
-//     const line_items = [];
-//     var line_number = 1
-//     // console.log(list_show_mode_add)
-//     list_show.map(function (item, index) {
-//         if (item.description !== "") {
-//             var myObj = {
-//                 "document_id": document_id,
-//                 "line_number": line_number,
-//                 "quantity": parseInt(item.quantity),
-//                 "uom_id": item.uom_group_id,
-//                 "per_unit_price": parseFloat(item.per_unit_price),
-//                 "item_id": item.item_id,
-//                 "item_status_id": 1
-//             };
-//             line_number += 1;
-//             return (
-//                 line_items.push(myObj)
-//             )
-//         }
-//     })
-
-//     const data = {
-//         "document": {
-//             "document_id": document_id,
-//             "internal_document_id": document_show.internal_document_id,
-//             "created_by_admin_id": document_show.created_by_admin_id,
-//             "created_by_user_id": document_show.created_by_user_id,
-//             "remark": document_show.remark,
-//         },
-//         "specific": {
-//             "document_id": document_id,
-//             "dest_warehouse_id": parseInt(document_show.dest_warehouse_id),
-//             "src_warehouse_id": 999,
-//             "line_items": line_items,
-//             "movement": {
-//                 "document_id": document_id,
-//                 "po_id": document_show.po_id
-//             }
-//         }
-//     };
-//     console.log(data)
-//     return data;
-// }
 
 // Document API
 const fetchDocumentData = (document_id) => new Promise((resolve, reject) => {
