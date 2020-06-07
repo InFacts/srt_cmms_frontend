@@ -578,6 +578,15 @@ export const APPROVAL_STEP_ACTION = {
     GUARANTEE_MAINTENANCE: 6 // "รับรองผลดำเนินการซ่อมเสร็จแล้ว",
 }
 
+// approval_status
+export const APPROVAL_STATUS = {
+    UNCOMPLETE: 0, // "ตรวจสอบและรับทราบลงนาม",
+    APPROVED: 1, // "รับทราบลงนาม",
+    REJECTED: 2, // "รับทราบ",
+    FAST_TRACKEDF: 4, // "ตรวจสอบและสั่งจ่าย",
+    ESCALATED: 5, // "ตรวจสอบรับทราบลงนาม และเลือกวิธีจัดซ่อม",
+}
+
 // Check document_action_type table in database -> CreateNew(DRAFT/WAIT_APPROVE/APPROVED), FastTrack(FAST_TRACK), Void(VOID)
 // Check approval_process table in database -> is_canceled(REOPEN)
 // Check Approval flow -> Clear infomation of CreateNew(DRAFT/WAIT_APPROVE/APPROVED)
@@ -752,3 +761,59 @@ export const validateWarehouseIDField = (fieldName, fact, setFieldValue, warehou
       return 'Invalid Warehouse ID';
     }
   }
+
+
+
+// Approve a Document
+//   1. GET /approval/{document_id}/latest/step : getLatestApprovalStep()
+//   2. POST /approval/{document_id}/approval_process_id/approve : approveDocuement(document_id, objBody)
+export const approveDocument = (document_id, approval_step_action_id, userInfo, remark) => new Promise((resolve, reject) => {
+    getLatestApprovalStep(document_id, approval_step_action_id, userInfo, remark)
+        .then(( obj_body ) => { // Get the Document_ID
+            approveDocuement(document_id, obj_body)
+                .then((res) => {
+                    return resolve(res);
+                })
+                .catch((err) => {
+                    return reject(err);
+                });
+        })
+        .catch((err) => {
+            reject(err)
+        });
+});
+
+// Get latest approval step
+// GET /approval/{document_id}/latest/step
+export const getLatestApprovalStep = (document_id, approval_step_action_id, userInfo, remark) => new Promise((resolve, reject) => {
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/latest/step`;
+    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then(res => {
+            console.log(" I am successful in get latest approval_step ", res.data);
+            let obj_body = {
+                "step_number": res.data.step_number,
+                "user_id": userInfo.id,
+                "approval_process_id": res.data.approval_process_id,
+                "approval_status_id": approval_step_action_id,
+                "position_group_id": userInfo.has_position[0].position_group_id,
+                "remark": remark
+            }
+            resolve(obj_body);
+        }).catch(function (err) {
+            reject(err)
+        })
+});
+
+// Approve document in approval_step
+// POST /approval/{document_id}/approval_process_id/approve
+export const approveDocuement = (document_id, obj_body) => new Promise((resolve, reject) => {
+    console.log("approveDocuement obj_body ------>", obj_body)
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/${obj_body.approval_process_id}/approve`;
+    axios.post(url, obj_body, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then(res => {
+            console.log(" I am successful in creating approval to document with document_id ", res.data);
+            resolve(res);
+        }).catch(function (err) {
+            reject(err);
+        })
+});

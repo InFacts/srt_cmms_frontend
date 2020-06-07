@@ -5,7 +5,7 @@ import { FOOTER_MODE, FOOTER_ACTIONS, handleClickBackToSpareMain, ACTION_TO_HAND
 import { useDispatch, useSelector  } from 'react-redux';
 import useTokenInitializer from '../hooks/token-initializer';
 import { useFormikContext} from 'formik';
-import {startDocumentApprovalFlow, DOCUMENT_TYPE_ID, saveDocument, packDataFromValues, fetchLatestStepApprovalDocumentData, getUserIDFromEmployeeID, DOCUMENT_STATUS, APPROVAL_STEP_ACTION, checkDocumentStatus} from '../helper';
+import {startDocumentApprovalFlow, APPROVAL_STATUS, DOCUMENT_TYPE_ID, saveDocument, packDataFromValues, fetchLatestStepApprovalDocumentData, getUserIDFromEmployeeID, DOCUMENT_STATUS, APPROVAL_STEP_ACTION, checkDocumentStatus, approveDocument} from '../helper';
 import { FACTS } from '../redux/modules/api/fact';
 import { navBottomOnReady, navBottomError, navBottomSuccess } from '../redux/modules/nav-bottom'
 
@@ -25,7 +25,6 @@ const useFooterInitializer = (document_type_id) => {
     const fact = useSelector((state) => ({...state.api.fact}));
 
     const {values, submitForm, validateForm, setFieldValue, setErrors} = useFormikContext();
-    const token = useSelector((state) => ({...state.token}));
     useTokenInitializer();
 
     //Handle Document Status TODO: move it out of footer!!
@@ -50,7 +49,7 @@ const useFooterInitializer = (document_type_id) => {
                 let created_by_admin_employee_id = getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id); // TEST: values.created_by_admin_employee_id;
     
                 // Check That user who create document?
-                // console.log("userInfo.id", userInfo.id,"created_by_admin_employee_id", created_by_admin_employee_id)
+                console.log("userInfo.id", userInfo.id,"created_by_admin_employee_id", created_by_admin_employee_id)
                 if (userInfo.id === created_by_admin_employee_id) {
                     // console.log("HI Check Who's create document---->", document_status)
                     if (document_status === DOCUMENT_STATUS.DRAFT) { dispatch(footerToModeAddDraft()); }
@@ -77,12 +76,16 @@ const useFooterInitializer = (document_type_id) => {
                     // Check Next Approver from postion_id
                     fetchLatestStepApprovalDocumentData(track_document_id).then((latestApprovalInfo) => {
                         if (latestApprovalInfo !== undefined || latestApprovalInfo.length !== 0) {
-                            // console.log("latestApprovalInfo------> ", latestApprovalInfo, APPROVAL_STEP_ACTION.CHECK_APPROVAL)
-                            if (latestApprovalInfo.position_id !== userInfo.position_id) {
+                            console.log("latestApprovalInfo------> ", latestApprovalInfo)
+                            console.log("user------> ", latestApprovalInfo.position_id, userInfo.position_id)
+                            console.log("approval_step_action_id------> ", latestApprovalInfo.approval_step_action_id, APPROVAL_STEP_ACTION.APPROVAL)
+                            if (latestApprovalInfo.position_id === userInfo.position_id) {
+                                console.log(" ------ APPROVALLLL------> ")
                                 if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_APPROVAL) {
                                     dispatch(footerToModeApApproval());
                                 }
                                 else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.APPROVAL) {
+                                    console.log(" ------ APPROVAL_STEP_ACTION.APPROVAL------> ")
                                     dispatch(footerToModeApCheckApproval());
                                 }
                                 else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.GOT_IT) {
@@ -220,8 +223,6 @@ const useFooterInitializer = (document_type_id) => {
     useEffect(()=> {
         console.log("I AM Handle CHECK_APPROVAL" );
         if (footer.requiresHandleClick[FOOTER_ACTIONS.CHECK_APPROVAL]){
-            dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.CHECK_APPROVAL]());
-            console.log("I AM dispatch FOOTER_ACTIONS.CHECK_APPROVAL" );
             validateForm()
             .then((err) => {
                 setErrors(err);
@@ -229,11 +230,24 @@ const useFooterInitializer = (document_type_id) => {
                     let data = packDataFromValues(fact, values, document_type_id);
                     console.log("I AM SUBMITTING ", data );
                     if(values.document_id){ // If have document_id, no need to create new doc
-                        console.log("If have document_id" );
-                    }else{ // If not have document_id
+                        console.log("If have document_id", values);
+                        let remark = "demo body";
+                        approveDocument(values.document_id, APPROVAL_STATUS.APPROVED, user_id, remark)
+                            .then(() => {
+                                dispatch(navBottomSuccess('[PUT]', 'Submit Success', ''));
+                            })
+                            .catch((err) => {
+                                console.warn("Approve Document Failed ", err.response);
+                                dispatch(navBottomError('[PUT]', 'Approve Document Failed', err));
+                            })
+                            .finally(() => { // Set that I already handled the Click
+                                console.log(" I submitted and i am now handling click")
+                                dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.CHECK_APPROVAL]());
+                            });
+                    }
+                    else { // If not have document_id
                         console.log("If not have document_id" );
                     }
-                
                 }
                 else {
                     console.warn("isEmpty(err) ", err);

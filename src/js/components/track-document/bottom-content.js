@@ -41,32 +41,35 @@ const BottomContent = (props) => {
                     {/* <th className="font" style={{ minWidth: "150px" }}>ชื่องาน</th> */}
                     <th className="font" style={{ minWidth: "10px" }}>ผู้นำเข้าระบบ</th>
                     <th className="font" style={{ minWidth: "150px" }}>สถานะ</th>
-                    <th className="font" style={{ minWidth: "150px" }}>รายละเอียด</th>
+                    {/* <th className="font" style={{ minWidth: "150px" }}>รายละเอียด</th> */}
                   </tr>
                 </thead>
                 <tbody>
                   {props.track_document_show.map(function (track_document_show, index) {
-                    return (
-                      <tr key={index} id={index}>
-                        <td className="edit-padding" style={{ paddingLeft: "5px" }}>{formatDate(track_document_show.created_on)}</td>
-                        <td className="edit-padding" >
-                          <Link to={identifyEndpoins(track_document_show.document_type_id) + "?internal_document_id=" + track_document_show.internal_document_id + "&document_id=" + track_document_show.document_id}>{track_document_show.internal_document_id}</Link>
-                        </td>
-                        {/* <td className="edit-padding" >{track_document_show.internal_document_id}</td> */}
-                        <td className="edit-padding" >{track_document_show.document_type_name} </td>
-                        {/* <td className="edit-padding" style={{  }}>{track_document_show.job_document}</td> */}
-                        <td className="edit-padding">{
-                          track_document_show.created_by_user_id === 0 ? "Server" :
-                          Object.values(listUsers).find(user => user.user_id === track_document_show.created_by_user_id).username
-                        }</td>
-                        <td className="edit-padding">{
-                          Object.values(listDocumentStatus).find(status => status.document_status_id === track_document_show.document_status_id).status
-                        }</td>
-                        <td className="edit-padding">
-                          <Link to={identifyEndpoins(track_document_show.document_type_id) + "?internal_document_id=" + track_document_show.internal_document_id + "&document_id=" + track_document_show.document_id}>รายละเอียด</Link>
-                        </td>
-                      </tr>
-                    )})}
+                    if (Object.keys(listUsers).length !== 0 && listUsers !== undefined && Object.keys(listDocumentStatus).length !== 0 && listDocumentStatus !== undefined){
+                      return (
+                        <tr key={index} id={index}>
+                          <td className="edit-padding" style={{ paddingLeft: "5px" }}>{formatDate(track_document_show.created_on)}</td>
+                          <td className="edit-padding" >
+                            <Link to={identifyEndpoins(track_document_show.document_type_id) + "?internal_document_id=" + track_document_show.internal_document_id + "&document_id=" + track_document_show.document_id}>{track_document_show.internal_document_id}</Link>
+                          </td>
+                          {/* <td className="edit-padding" >{track_document_show.internal_document_id}</td> */}
+                          <td className="edit-padding" >{track_document_show.document_type_name} </td>
+                          {/* <td className="edit-padding" style={{  }}>{track_document_show.job_document}</td> */}
+                          <td className="edit-padding">{
+                            track_document_show.created_by_user_id === 0 && listUsers[0].username !== undefined ? "Server" :
+                            Object.values(listUsers).find(user => user.user_id === track_document_show.created_by_user_id).username
+                          }</td>
+                          <td className="edit-padding">{
+                            Object.values(listDocumentStatus).find(status => status.document_status_id === track_document_show.document_status_id).status
+                          }</td>
+                          {/* <td className="edit-padding">
+                            <Link to={identifyEndpoins(track_document_show.document_type_id) + "?internal_document_id=" + track_document_show.internal_document_id + "&document_id=" + track_document_show.document_id}>รายละเอียด</Link>
+                          </td> */}
+                        </tr>
+                      )}
+                    })
+                  }
                 </tbody>
               </table>
             </div>
