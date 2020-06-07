@@ -24,7 +24,7 @@ const useFooterInitializer = (document_type_id) => {
     const footer = useSelector((state) => ({...state.footer}));
     const fact = useSelector((state) => ({...state.api.fact}));
 
-    const {values, submitForm, validateForm, setFieldValue, resetForm, setErrors} = useFormikContext();
+    const {values, submitForm, validateForm, setFieldValue, setErrors} = useFormikContext();
     const token = useSelector((state) => ({...state.token}));
     useTokenInitializer();
 
@@ -151,7 +151,6 @@ const useFooterInitializer = (document_type_id) => {
                     })
                     .finally(() => { // Set that I already handled the Click
                         console.log(" I submitted and i am now handling click")
-                        resetForm();
                     }); 
                 }
             })
@@ -180,7 +179,6 @@ const useFooterInitializer = (document_type_id) => {
                         })
                         .finally(() => { // Set that I already handled the Click
                             console.log(" I submitted and i am now handling click")
-                            resetForm();
                         }); 
                     }else{ // If not have document_id
                         saveDocument(document_type_id, data)
@@ -202,7 +200,6 @@ const useFooterInitializer = (document_type_id) => {
                         })
                         .finally(() => { // Set that I already handled the Click
                             console.log(" I submitted and i am now handling click")
-                            resetForm();
                         }); 
                     }
                     
