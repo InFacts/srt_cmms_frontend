@@ -15,7 +15,7 @@ import PopupModalInventory from '../common/popup-modal-inventory'
 import PopupModalNoPartNoChildren from '../common/popup-modal-nopart-no-children'
 
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
-import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID } from '../../helper';
+import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, getNumberFromEscapedString } from '../../helper';
 
 // const responseToFormState = (userFact, data) => {
 //   for (var i = data.line_items.length; i <= 9; i++) {
@@ -62,17 +62,83 @@ const TopContent = (props) => {
   }
   const validateSrcWarehouseIDField = (...args) => validateWarehouseIDField("src_warehouse_id", ...args);
 
-  const validateInternalItemIDField = internal_item_id => {
-    let items = props.fact.items.items;
-    let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
-    if (item) {
-      // setValues({ ...values, ...responseToFormState(item) }, false); //Setvalues and don't validate
-      setFieldValue("internal_item_id", internal_item_id, false);
-      return;
-    } else {
-      return 'Invalid Number ID';
+  // const validateInternalItemIDField = internal_item_id => {
+  //   //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
+
+  //   if (values.internal_item_id === internal_item_id) {
+  //     return;
+  //   }
+  //   if (internal_item_id === "") {
+  //     return;
+  //   }
+  //   let items = props.fact.items.items;
+  //   let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+  //   if (item) {
+  //     // setValues({ ...values, ...responseToFormState(item) }, false); //Setvalues and don't validate
+  //     setFieldValue("internal_item_id", internal_item_id, false);
+  //     return;
+  //   } else {
+  //     return 'Invalid Number ID';
+  //   }
+  // };
+
+  let error;
+  const searchGoodsOnHand = () => new Promise(resolve => {
+    // check ว่าเดือน ปี ที่เข้ามาเป็นของ ปัจจุบันหรือไหม
+    var new_date = new Date();
+    var year_now = new_date.getFullYear();
+    var mouth_now = new_date.getMonth() + 1;
+    var start_date = values.year_id - 543 + "-" + values.mouth_id + "-1";
+    var end_date
+    if (values.year_id - 543 === year_now && parseInt(values.mouth_id) === mouth_now) {
+      if (values.mouth_id === "12") {
+        end_date = values.year_id - 543 + 1 + "-1-1";
+        console.log(">>>start_date", start_date, "end_date", end_date)
+      }
+      else {
+        end_date = values.year_id - 543 + "-" + `${parseInt(values.mouth_id) + 1}` + "-1";
+        console.log("start_date", start_date, "end_date", end_date)
+      }
+      const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-onhand/plus?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&internal_item_id=${values.internal_item_id}&start_date=${start_date}&end_date=${end_date}`;
+      axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((res) => {
+          console.log("res", res)
+          setFieldValue("line_items", res.data.results, false);
+        })
+        .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
+          if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
+            error = 'Invalid Document ID';
+          }//If mode add, ok
+        })
+        .finally(() => {
+          return resolve(error)
+        });
     }
-  };
+    else {
+      if (values.mouth_id === "12") {
+        end_date = values.year_id - 543 + 1 + "-1-1";
+        console.log(">>>start_date", start_date, "end_date", end_date)
+      }
+      else {
+        end_date = values.year_id - 543 + "-" + `${parseInt(values.mouth_id) + 1}` + "-1";
+        console.log("start_date", start_date, "end_date", end_date)
+      }
+      const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-monthly-summary/plus?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&internal_item_id=${values.internal_item_id}&start_date=${start_date}&end_date=${end_date}`;
+      axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((res) => {
+          console.log("res", res)
+          setFieldValue("line_items", res.data.results, false);
+        })
+        .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
+          if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
+            error = 'Invalid Document ID';
+          }//If mode add, ok
+        })
+        .finally(() => {
+          return resolve(error)
+        });
+    }
+  });
 
   return (
     <>
@@ -112,8 +178,11 @@ const TopContent = (props) => {
               </div>
               <div className="grid_3 pull_1">
                 <TextInput name='internal_item_id'
-                  validate={validateInternalItemIDField}
-                  searchable={props.toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart" tabIndex="1" />
+                  // validate={validateInternalItemIDField}
+                  // searchable={props.toolbar.mode === TOOLBAR_MODE.SEARCH} 
+                  // ariaControls="modalNoPart" 
+                  tabIndex="1"
+                />
               </div>
 
               {/* Drop Dawn month */}
@@ -134,7 +203,7 @@ const TopContent = (props) => {
 
             <div className="container_12 mt-3">
               <div className="grid_1 float-right">
-                <button type="button" className="button-blue">ค้นหา</button>
+                <button type="button" className="button-blue" onClick={searchGoodsOnHand}>ค้นหา</button>
               </div>
             </div>
 

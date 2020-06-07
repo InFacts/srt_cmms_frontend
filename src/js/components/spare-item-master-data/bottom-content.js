@@ -248,32 +248,34 @@ const BottomContent = (props) => {
                   <tr>
                     <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
                     <th className="font" style={{ minWidth: "130px" }}>เลขที่คลัง</th>
-                    <th className="font" style={{ minWidth: "250px" }}>ชื่อคลัง</th>
-                    <th className="font text-center" style={{ minWidth: "80px" }}>คงคลัง</th>
-                    <th className="font text-center" style={{ minWidth: "80px" }}>รอส่งมอบ</th>
-                    <th className="font text-center" style={{ minWidth: "80px" }}>ระหว่างการจัดซื้อ</th>
-                    <th className="font text-center" style={{ minWidth: "80px" }}>จำนวนสุทธิ</th>
-                    <th className="font blue text-center" style={{ minWidth: "80px" }}>ของเสีย</th>
+                    <th className="font" style={{ minWidth: "290px" }}>ชื่อคลัง</th>
+                    <th className="font text-center" style={{ minWidth: "100px" }}>คงคลัง</th>
+                    <th className="font text-center" style={{ minWidth: "100px" }}>รอส่งมอบ</th>
+                    <th className="font text-center" style={{ minWidth: "100px" }}>ระหว่างการจัดซื้อ</th>
+                    <th className="font text-center" style={{ minWidth: "100px" }}>จำนวนสุทธิ</th>
+                    <th className="font text-center" style={{ minWidth: "100px" }}>สถานะ</th>
+                    {/* <th className="font blue text-center" style={{ minWidth: "80px" }}>ของเสีย</th>
                     <th className="font blue text-center" style={{ minWidth: "80px" }}>ส่งซ่อม</th>
                     <th className="font blue text-center" style={{ minWidth: "80px" }}>ของเก่าพร้อมใช้งาน</th>
-                    <th className="font blue text-center" style={{ minWidth: "80px" }}>ซาก</th>
+                    <th className="font blue text-center" style={{ minWidth: "80px" }}>ซาก</th> */}
                   </tr>
                 </thead>
                 <tbody>
                   {values.goods_onhand.map((goods_onhand, index) => (
                     goods_onhand.warehouse_id !== 0 && goods_onhand.warehouse_id !== 999 &&
                       <tr>
-                        <th className="edit-padding text-center">{index+1}</th>
+                        <th className="edit-padding text-center">{index}</th>
                         <td className="edit-padding">{goods_onhand.warehouse_id}</td>
                         <td className="edit-padding">{goods_onhand.warehouse_name}</td>
                         <td className="edit-padding text-center disable">{goods_onhand.current_unit_count}</td>
                         <td className="edit-padding text-center disable">{goods_onhand.committed_unit_count}</td>
                         <td className="edit-padding text-center disable">0</td>  {/* ระหว่างจัดซื้อ */}
                         <td className="edit-padding text-center disable">{goods_onhand.current_unit_count - goods_onhand.committed_unit_count + 0}</td>  {/* จำนวนสุทธิ */}
-                        <td className="edit-padding text-center blue font-red">{goods_onhand.broken}</td>
+                        <td className="edit-padding text-center disable">{goods_onhand.item_status_description_th}</td>  {/* สถานะเอกอะไหล่ */}
+                        {/* <td className="edit-padding text-center blue font-red">{goods_onhand.broken}</td>
                         <td className="edit-padding text-center blue">{goods_onhand.send_fix}</td>
                         <td className="edit-padding text-center blue">{goods_onhand.old_part}</td>
-                        <td className="edit-padding text-center blue">{goods_onhand.carcass}</td>
+                        <td className="edit-padding text-center blue">{goods_onhand.carcass}</td> */}
                       </tr>
                   ))}
                 </tbody>

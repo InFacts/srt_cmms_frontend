@@ -30,8 +30,9 @@ const BottomContent = (props) => {
               <thead>
                 <tr>
                   <th className="font text-center" style={{ minWidth: "30px" }}>ลำดับที่</th>
-                  <th className="font" style={{ minWidth: "350px" }}>รายการสิ่งของ</th>
-                  <th className="font text-center" style={{ minWidth: "150px" }}>เลขที่สิ่งของคงคลัง</th>
+                  <th className="font" style={{ minWidth: "310px" }}>รายการสิ่งของ</th>
+                  <th className="font text-center" style={{ minWidth: "80px" }}>เลขที่สิ่งของคงคลัง</th>
+                  <th className="font text-center" style={{ minWidth: "80px" }}>สถานะ</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>หน่วย</th>
                   <th className="font text-center" style={{ minWidth: "100px" }}>จำนวนเหลือ ณ วันนี้</th>
                   <th className="font text-center" style={{ minWidth: "96px" }}>รวมเป็นเงิน</th>
@@ -39,19 +40,20 @@ const BottomContent = (props) => {
                 </tr>
               </thead>
               <tbody>
-                {/* {this.props.line_item_s1.map(function (line_item_s1, index) {
+                {values.line_items.map(function (line_items, index) {
                   return (
                     <tr key={index}>
                       <th className="edit-padding text-center">{index + 1}</th>
-                      <td className="edit-padding">{line_item_s1.description} {line_item_s1.item_status_id === 1 ? "สถานะของใหม่" : "สถานะรอส่งมอบ"}</td>
-                      <td className="edit-padding">{line_item_s1.internal_item_id}</td>
-                      <td className="edit-padding text-center">{line_item_s1.uom_name}</td>
-                      <td className="edit-padding text-center">{line_item_s1.ending_unit_count === undefined ? line_item_s1.current_unit_count : line_item_s1.ending_unit_count}</td>
+                      <td className="edit-padding">{line_items.item_description_th}</td>
+                      <td className="edit-padding">{line_items.internal_item_id}</td>
+                      <td className="edit-padding">{line_items.item_status_description_th}</td>
+                      <td className="edit-padding text-center">{line_items.uom_name}</td>
+                      <td className="edit-padding text-center">{!line_items.committed_unit_count ? line_items.current_unit_count - line_items.committed_unit_count : line_items.current_unit_count}</td>
                       <td className="edit-padding text-center">-</td>
                       <td className="edit-padding text-center">-</td>
                     </tr>
                   )
-                })} */}
+                })}
               </tbody>
             </table>
           </div>
