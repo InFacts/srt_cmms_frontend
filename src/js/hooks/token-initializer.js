@@ -7,7 +7,7 @@ const useTokenInitializer = () => {
     // Decode Token If needed
     useEffect(() => {
         dispatch(decodeTokenIfNeeded());
-    }, []);
+    }, [dispatch]);
     return;
 }
 export default useTokenInitializer;

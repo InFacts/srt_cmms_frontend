@@ -1,16 +1,15 @@
 import { useEffect } from 'react';
 import {fetchFactIfNeeded , FACTS} from '../redux/modules/api/fact';
 import { useDispatch } from 'react-redux'
+import { navBottomOnReady } from '../redux/modules/nav-bottom';
 
-const useFactInitializer = () => {
+const useNavBottomStatusInitializer = () => {
     const dispatch = useDispatch();
     // Fetch Fact If needed
     useEffect(() => {
-        for (const factName of Object.values(FACTS)){
-            dispatch(fetchFactIfNeeded(factName));
-        }
-    }, [dispatch]);
+        dispatch(navBottomOnReady('', '', ''));
+    }, []);
 
     return;
 }
-export default useFactInitializer;
+export default useNavBottomStatusInitializer;

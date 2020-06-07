@@ -32,48 +32,48 @@ const TopContent = (props) => {
   useEffect(() => {
     if (props.toolbar.mode === TOOLBAR_MODE.ADD) {
       if (!values.internal_document_id && touched.internal_document_id){
-        setFieldValue('internal_document_id', `draft-${uuidv4()}`)
+        setFieldValue('internal_document_id', `draft-${uuidv4()}`, true)
       }
-      setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(props.fact.users, props.decoded_token.id));
-      setFieldValue("status_name_th", "ยังไม่ได้รับการบันทึก");
-      setFieldValue("created_on", new Date().toISOString().slice(0, 16));
+      setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(props.fact.users, props.decoded_token.id), true);
+      setFieldValue("created_on", new Date().toISOString().slice(0, 16), false);
     }
-  }, [props.decoded_token, props.fact.users, props.toolbar.mode, touched.internal_document_id, !values.internal_document_id])
+  }, [props.fact.users, props.toolbar.mode, touched.internal_document_id, !values.internal_document_id])
 
 
   // Get approval Step when values.document_id changes
   useEffect(() => {
-    // Start Axios Get step_approve and attachment By nuk
-    fetchStepApprovalDocumentData(values.document_id)
-    .then((result) => {
-      // Setup value From Approve 
-      setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
-      if(result.is_canceled){
-        setFieldValue("document_is_canceled", result.is_canceled.data, false);
-      }
-    });
+    if(values.document_id){ // If not an empty string
+      // Start Axios Get step_approve and attachment By nuk
+      fetchStepApprovalDocumentData(values.document_id)
+      .then((result) => {
+        // Setup value From Approve 
+        setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
+        if(result.is_canceled){
+          setFieldValue("document_is_canceled", result.is_canceled.data, false);
+        }
+      });
+    }
   }, [values.document_id]);
 
   // Get  attachment when values.document_id changes
   useEffect(() => {
-    // Start Axios Get step_approve and attachment By nuk
-    fetchAttachmentDocumentData(values.document_id)
-    .then((desrciption_files) => {
-      // Setup value From Attachment
-      setFieldValue("desrciption_files_length", desrciption_files.results.length, false);
-      setFieldValue("desrciption_files", desrciption_files.results, false);
-    });
+    if(values.document_id) { // If not an empty string
+      // Start Axios Get step_approve and attachment By nuk
+      fetchAttachmentDocumentData(values.document_id)
+      .then((desrciption_files) => {
+        // Setup value From Attachment
+        setFieldValue("desrciption_files_length", desrciption_files.results.length, false);
+        setFieldValue("desrciption_files", desrciption_files.results, false);
+      });
+    }
   }, [values.document_id]);
 
 
-  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(props, values , setValues, validateField, ...args)
-
-  
+  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(props.toolbar, props.fact, values , setValues, setFieldValue, validateField, ...args)
 
   const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", props.fact, setFieldValue, ...args);
   const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", props.fact, setFieldValue, ...args);
 
-  
   const validateDestWarehouseIDField = (...args) => validateWarehouseIDField("dest_warehouse_id", props.fact, setFieldValue, ...args);
 
   return (

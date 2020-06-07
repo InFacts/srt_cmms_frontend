@@ -27,9 +27,9 @@ const GoodsReceiptComponent = (props) => {
 
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
-        {id:"listItem", name:"รายการ", is_active: TAB_BAR_ACTIVE.ACTIVE},
-        {id:"attachment", name:"แนบไฟล์", is_active: TAB_BAR_ACTIVE.INACTIVE},
-        {id:"table_status", name:"สถานะเอกสาร", is_active: TAB_BAR_ACTIVE.INACTIVE},
+        {id:"listItem", name:"รายการ"},
+        {id:"attachment", name:"แนบไฟล์"},
+        {id:"table_status", name:"สถานะเอกสาร"},
     ]);
     const [initialTabbar, setInitialTabbar] = useState(true);
 

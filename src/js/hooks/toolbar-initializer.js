@@ -1,18 +1,17 @@
-import { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import {  toModeSearch, handleClickAdd, handleClickHomeToSpareMain,
+import { useEffect } from 'react';
+import {   handleClickAdd, handleClickHomeToSpareMain,
     handleClickForward, handleClickBackward,handleClickRefresh, TOOLBAR_MODE,TOOLBAR_ACTIONS,
     MODE_TO_ACTION_CREATOR } from '../redux/modules/toolbar.js';
 import {useFormikContext } from 'formik';
 import { useDispatch, useSelector  } from 'react-redux'
 import {fetchLastestInternalDocumentID, DOCUMENT_TYPE_ID} from '../helper'
-import { useLocation } from 'react-router-dom'
+
 
 export const useToolbarChangeModeInitializer = (initial_mode) => {
     const dispatch = useDispatch();
     useEffect(()=>{
         dispatch(MODE_TO_ACTION_CREATOR[initial_mode]());
-    }, []);
+    }, [dispatch, initial_mode]);
     return;
 }
 
@@ -32,7 +31,7 @@ const useToolbarInitializer = (initial_mode) => {
         if (toolbar.mode === TOOLBAR_MODE.SEARCH){
             resetForm(); //Search doesn't have handleClick, Clicks are tracked by mode changes only.
         }
-    }, [toolbar.mode]);
+    }, [toolbar.mode, resetForm]);
 
     // Handle home button, only re-subscribe if requiresHandleClick of HOME changes
     useEffect(()=> {
@@ -65,7 +64,6 @@ const useToolbarInitializer = (initial_mode) => {
 
             }else{ // If there is not document ID
                 console.log("I HAVE NO DOC ID")
-                
             }
         }
     }, [toolbar.requiresHandleClick[TOOLBAR_ACTIONS.FORWARD]]);

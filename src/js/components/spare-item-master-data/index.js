@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { connect } from 'react-redux';
 import { useFormik , withFormik ,useFormikContext} from 'formik';
 
-import TabBar, {TAB_BAR_ACTIVE} from '../common/tab-bar';
+import TabBar from '../common/tab-bar';
 
 import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
@@ -27,11 +27,10 @@ const GoodsReceiptComponent = (props) => {
 
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
-        {id:"general", name:"ทั่วไป", is_active: TAB_BAR_ACTIVE.ACTIVE},
-        {id:"warehouse", name:"คลัง", is_active: TAB_BAR_ACTIVE.INACTIVE},
-        {id:"attachment", name:"แนบไฟล์", is_active: TAB_BAR_ACTIVE.INACTIVE},
+        {id:"general", name:"ทั่วไป"},
+        {id:"warehouse", name:"คลัง"},
+        {id:"attachment", name:"แนบไฟล์"},
     ]);
-    const [initialTabbar, setInitialTabbar] = useState(true);
 
     useToolbarInitializer(TOOLBAR_MODE.SEARCH);
     useTokenInitializer();
@@ -55,7 +54,7 @@ const GoodsReceiptComponent = (props) => {
     return (
         <form onSubmit={props.handleSubmit}>
             <TopContent />
-            <TabBar tabNames={tabNames} initialTabbar={initialTabbar} setInitialTabbar={setInitialTabbar}>
+            <TabBar tabNames={tabNames} initialTabID="general">
                 <BottomContent />
             </TabBar>
             <Footer />

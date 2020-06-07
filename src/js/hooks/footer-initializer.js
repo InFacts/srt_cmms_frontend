@@ -5,30 +5,18 @@ import { FOOTER_MODE, FOOTER_ACTIONS, handleClickBackToSpareMain, ACTION_TO_HAND
 import { useDispatch, useSelector  } from 'react-redux';
 import useTokenInitializer from '../hooks/token-initializer';
 import { useFormikContext} from 'formik';
-import axios from "axios";
-
-import { API_PORT_DATABASE } from '../config_port.js';
-import { API_URL_DATABASE } from '../config_url.js';
 import {startDocumentApprovalFlow, DOCUMENT_TYPE_ID, saveDocument, packDataFromValues, fetchLatestStepApprovalDocumentData, getUserIDFromEmployeeID, DOCUMENT_STATUS, APPROVAL_STEP_ACTION, checkDocumentStatus} from '../helper';
 import { FACTS } from '../redux/modules/api/fact';
+import { navBottomOnReady, navBottomError, navBottomSuccess } from '../redux/modules/nav-bottom'
 
-// const DOCUMENT_STATUS = {
-//     DRAFT: "สร้าง Draft",
-//     WAIT_APPROVE: "รอการอนุมัติ",
-//     APPROVED: "อนุมัติเรียบร้อยแล้ว",
-//     VOID: "เอกสารหมดสถานะการใช้งาน",
-//     REOPEN: "แก้ไขเอกสาร",
-//     FAST_TRACK: "Fast Track",
-// }
-// // approval_step_action_id
-// const APPROVAL_STEP_ACTION = {
-//     CHECK_APPROVAL: 1, // "ตรวจสอบและรับทราบลงนาม",
-//     APPROVAL: 2, // "รับทราบลงนาม",
-//     GOT_IT: 3, // "รับทราบ",
-//     CHECK_ORDER: 4, // "ตรวจสอบและสั่งจ่าย",
-//     CHECK_MAINTENANCE: 5, // "ตรวจสอบรับทราบลงนาม และเลือกวิธีจัดซ่อม",
-//     GUARANTEE_MAINTENANCE: 6 // "รับรองผลดำเนินการซ่อมเสร็จแล้ว",
-// }
+function isEmpty(obj) {
+    for(var key in obj) {
+        if(obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+}
+
 const useFooterInitializer = (document_type_id) => {
     const dispatch = useDispatch();
     const toolbar = useSelector((state) => ({...state.toolbar}));
@@ -36,15 +24,21 @@ const useFooterInitializer = (document_type_id) => {
     const footer = useSelector((state) => ({...state.footer}));
     const fact = useSelector((state) => ({...state.api.fact}));
 
-    const {values, submitForm, setFieldValue, resetForm} = useFormikContext();
+    const {values, submitForm, validateForm, setFieldValue, resetForm, setErrors} = useFormikContext();
     const token = useSelector((state) => ({...state.token}));
     useTokenInitializer();
+
+    //Handle Document Status TODO: move it out of footer!!
+
+
 
     // Handle Toolbar Mode
     useEffect(() => {
         let document_id = values.document_id;
         let docuementStatus = checkDocumentStatus(values);
+        console.log("HI document_status", docuementStatus, "toolbar>>", toolbar.mode)
         setFieldValue("status_name_th", docuementStatus, false);
+        dispatch(navBottomOnReady('', '', ''));
         // setFieldValue("document_action_type_id", docuementStatus, false);
         if (toolbar.mode === TOOLBAR_MODE.SEARCH && document_id !== "" && document_id !== undefined){
             let userInfo = {
@@ -59,14 +53,14 @@ const useFooterInitializer = (document_type_id) => {
 
             // Check That user who create document?
             if (userInfo.id === created_by_admin_employee_id) {
-                // console.log("HI Check Who's create document", userInfo.id, created_by_admin_employee_id)
+                console.log("HI Check Who's create document", userInfo.id, created_by_admin_employee_id)
                 if (document_status === DOCUMENT_STATUS.DRAFT) { dispatch(footerToModeAddDraft()); }
                 else if (document_status === DOCUMENT_STATUS.WAIT_APPROVE) { dispatch(footerToModeOwnDocument()); }
-                else if (document_status === DOCUMENT_STATUS.APPROVE_DONE) { dispatch(footerToModeOwnDocument()); }
+                else if (document_status === DOCUMENT_STATUS.APPROVE_DONE) { dispatch(footerToModeApApprovalDone()); }
                 else if (document_status === DOCUMENT_STATUS.VOID) { dispatch(footerToModeVoid()); }
                 else if (document_status === DOCUMENT_STATUS.REOPEN) { dispatch(footerToModeEdit()); }
                 else if (document_status === DOCUMENT_STATUS.FAST_TRACK) { dispatch(footerToModeFastTrack()); } 
-                else { dispatch(footerToModeAddDraft()); }
+                else { dispatch(footerToModeSearch()); }
             }
             else {
                 // Check That user_id into Previous Approval Flow ?
@@ -123,7 +117,7 @@ const useFooterInitializer = (document_type_id) => {
         }
         else {
             // INVISIBLE mode
-            // dispatch(footerToModeInvisible());
+            dispatch(footerToModeSearch());
         }
     }, [toolbar.mode, values.document_id, values.step_approve, values.created_by_admin_employee_id]);
 
@@ -138,71 +132,83 @@ const useFooterInitializer = (document_type_id) => {
     // Handle Click Save
     useEffect(()=> {
         if (footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]){
-            // submitForm()
-            // .catch((err) => {
-            //     //TODO Do something if Submit Fails
-            //     console.log("Submit Failed ", err);
-            // })
-            // .finally(() => { // Set that I already handled the Click
-            //     console.log(" I submitted and i am now handling click")
-            //     dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
-            // }); 
-            let data = packDataFromValues(fact, values, document_type_id);
-            console.log("I AM SUBMITTING ", data );
-            saveDocument(document_type_id, data)
-            .then((document_id) => {
-                setFieldValue('document_id', document_id, false);
-                
+            dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
+            validateForm()
+            .then((err) => {
+                console.log("THIS IS ErR I GET ", err)
+                setErrors(err);
+                if(isEmpty(err)){
+                    let data = packDataFromValues(fact, values, document_type_id);
+                    console.log("I AM SUBMITTING ", data );
+                    saveDocument(document_type_id, data)
+                    .then((document_id) => {
+                        setFieldValue('document_id', document_id, false);
+                        dispatch(navBottomSuccess('[PUT]', 'Submit Success', ''));
+                    })
+                    .catch((err) => {
+                        console.log("Submit Failed ", err.response);
+                        dispatch(navBottomError('[PUT]', 'Submit Failed', err));
+                    })
+                    .finally(() => { // Set that I already handled the Click
+                        console.log(" I submitted and i am now handling click")
+                        resetForm();
+                    }); 
+                }
             })
-            .catch((err) => {
-                console.log("Submit Failed ", err);
-            })
-            .finally(() => { // Set that I already handled the Click
-                console.log(" I submitted and i am now handling click")
-                dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
-                resetForm();
-            }); 
         }
     }, [footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]]);
 
     // Handle Click Send To Approval Process
     useEffect(()=> {
         if (footer.requiresHandleClick[FOOTER_ACTIONS.SEND]){
-            // submitForm()
-            // .then((document_id) => {
-            //     // After getting the document_id and PUTTING, needs to start the approval process
-            //     setTimeout(startDocumentApprovalFlow(values.document_id) // HACK TO GET VALUE
-            //     .catch((err) => {
-            //         //TODO Do something if Submit Fails
-            //         console.log("Adding Approval Flow Failed ", err);
-            //     }), 20);                
-            // }) 
-            // .catch((err) => {
-            //     //TODO Do something if Submit Fails
-            //     console.log("Submit Failed ", err);
-            // })
-            // .finally(() => { // Set that I already handled the Click
-            //     dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
-            // }); 
-            let data = packDataFromValues(fact, values, document_type_id);
-            console.log("I AM SUBMITTING ", data );
-            saveDocument(document_type_id, data)
-            .then((document_id) => {
-                setFieldValue('document_id', document_id, false);
-                startDocumentApprovalFlow(document_id)
-                .catch((err) => {
-                    //         //TODO Do something if Submit Fails
-                    console.log("Adding Approval Flow Failed ", err);
-                });
+            dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
+            validateForm()
+            .then((err) => {
+                setErrors(err);
+                if(isEmpty(err)){
+                    let data = packDataFromValues(fact, values, document_type_id);
+                    console.log("I AM SUBMITTING ", data );
+                    if(values.document_id){ // If have document_id, no need to create new doc
+                        startDocumentApprovalFlow(values.document_id)
+                        .then(() => {
+                            dispatch(navBottomSuccess('[PUT]', 'Submit Success', ''));
+                        })
+                        .catch((err) => {
+                            //         //TODO Do something if Submit Fails
+                            console.warn("Adding Approval Flow Failed ", err.response);
+                            dispatch(navBottomError('[PUT]', 'Adding Approval Flow Failed', err));
+                        })
+                        .finally(() => { // Set that I already handled the Click
+                            console.log(" I submitted and i am now handling click")
+                            resetForm();
+                        }); 
+                    }else{ // If not have document_id
+                        saveDocument(document_type_id, data)
+                        .then((document_id) => {
+                            setFieldValue('document_id', document_id, false);
+                            startDocumentApprovalFlow(document_id)
+                            .then(() => {
+                                dispatch(navBottomSuccess('[PUT]', 'Submit Success', ''));
+                            })
+                            .catch((err) => {
+                                //         //TODO Do something if Submit Fails
+                                console.warn("Adding Approval Flow Failed ", err.response);
+                                dispatch(navBottomError('[PUT]', 'Adding Approval Flow Failed', err));
+                            });
+                        })
+                        .catch((err) => {
+                            console.warn("Submit Failed ", err.response);
+                            dispatch(navBottomError('[PUT]', 'Submit Failed', err));
+                        })
+                        .finally(() => { // Set that I already handled the Click
+                            console.log(" I submitted and i am now handling click")
+                            resetForm();
+                        }); 
+                    }
+                    
+                }
             })
-            .catch((err) => {
-                console.log("Submit Failed ", err);
-            })
-            .finally(() => { // Set that I already handled the Click
-                console.log(" I submitted and i am now handling click")
-                dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
-                resetForm();
-            }); 
+            
         }
     }, [footer.requiresHandleClick[FOOTER_ACTIONS.SEND]]);
 
