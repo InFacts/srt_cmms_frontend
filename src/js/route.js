@@ -22,6 +22,7 @@ import SpareSalvageSold from './components/spare-salvage-sold';
 import SparePhysicalCount from './components/spare-physical-count';
 import SpareInventoryAdjustment from './components/spare-inventory-adjustment';
 import SpareS1 from './components/spare-s-1';
+import SpareWarehouse from './components/spare-warehouse';
 
 // PMT PAGE
 import PmtWorkOrder from './components/pmt-work-order';
@@ -51,6 +52,7 @@ const FrontEnd = () => (
         <Route exact path="/physical-count" component={SparePhysicalCount} />
         <Route exact path="/inventory-adjustment" component={SpareInventoryAdjustment} />
         <Route exact path="/report-s-1" component={SpareS1} />
+        <Route exact path="/warehouse" component={SpareWarehouse} />
 
         {/* PMT PAGE */}
         <Route exact path="/main-pmt" component={MainPmt} />

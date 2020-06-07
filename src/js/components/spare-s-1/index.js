@@ -44,7 +44,7 @@ const GoodsReturnComponent = (props) => {
     )
 }
 
-const initialLineYears = (n=20) => {
+const initialLineYears = (n=10) => {
     let rows_year = [];
     var new_date = new Date();
     var start_year = new_date.getFullYear() + 543 - 10; //ปีปัจุบัน(ค.ศ.) + 543(แปลงเป็น พ.ศ.) - 10(ย้อนหลังสิบปี) 
@@ -64,8 +64,8 @@ const EnhancedGoodsReturnComponent = withFormik({
         src_warehouse_id: '', 
         document_date: '', 
         line_items: [],
-        year_id: '',
-        mouth_id: '',
+        year_id: 0,
+        mouth_id: 0,
         
         // Field ที่ให้ User ไม่ได้กรอก
         year: initialLineYears(),
