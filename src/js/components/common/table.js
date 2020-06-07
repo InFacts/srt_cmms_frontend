@@ -38,7 +38,7 @@ const Table = (props) => {
               </td>
               <td className="edit-padding">{list.description}</td>
               <td className="edit-padding text-center">
-                <NumberInput step={0.01} name={`line_items[${index}].quantity`} tabIndex="7"
+                <NumberInput step={1} name={`line_items[${index}].quantity`} tabIndex="7"
                   validate={quantity => props.validateLineNumberQuatityItemIDField(`line_items[${index}].quantity`, quantity, index)}
                   disabled={props.disabledBothMode !== true ? props.actionMode === TOOLBAR_MODE.SEARCH : true}
                   redBorderForError = "error-in-table"/>
@@ -63,7 +63,7 @@ const Table = (props) => {
               </td>
 
               <td className="edit-padding text-center">
-                <NumberInput step={0.0001} name={`line_items[${index}].per_unit_price`}
+                <NumberInput step={1.0} name={`line_items[${index}].per_unit_price`}
                   validate={per_unit_price => props.validateLineNumberPerUnitPriceItemIDField(`line_items[${index}].per_unit_price`, per_unit_price, index)}
                   disabled={props.disabledBothMode !== true ? props.actionMode === TOOLBAR_MODE.SEARCH : true}
                   redBorderForError = "error-in-table"

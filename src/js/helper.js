@@ -5,6 +5,7 @@ import { API_URL_DATABASE } from './config_url.js';
 import { fetchFactIfNeeded, FACTS } from './redux/modules/api/fact';
 import { isEmptyChildren } from "formik";
 import {TOOLBAR_MODE, TOOLBAR_ACTIONS} from './redux/modules/toolbar'
+import {FOOTER_ACTIONS} from './redux/modules/footer'
 
 // import { useFormikContext } from 'formik';
 
@@ -546,6 +547,18 @@ export const fetchGoodsOnhandData = (warehouse_id, item_id) => new Promise((reso
         });
 });
 
+// Get Goods Onhand After Select Warehoues ID and No part ID
+export const fetchGoodsOnhandDataForItemmasterData = (item_id) => new Promise((resolve, reject) => {
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-onhand/plus?item_id=${item_id}`;
+    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((res) => {
+            resolve(res.data.results);
+        })
+        .catch((err) => {
+            reject(err)
+        });
+});
+
 // Check Document Status from 
 export const DOCUMENT_STATUS = {
     DRAFT: "สร้าง Draft",
@@ -644,7 +657,7 @@ const responseToFormState = (fact, data) => {
   }
 
 // Validation 
-export const validateInternalDocumentIDFieldHelper = (toolbar, fact, values , setValues, setFieldValue, validateField, internal_document_id) => new Promise(resolve => {
+export const validateInternalDocumentIDFieldHelper = (toolbar, footer, fact, values , setValues, setFieldValue, validateField, internal_document_id) => new Promise(resolve => {
     // Internal Document ID
     //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
     //  ie. GR-PYO-2563/0001
@@ -675,8 +688,14 @@ export const validateInternalDocumentIDFieldHelper = (toolbar, fact, values , se
 
         } else { //If Mode add, need to error duplicate Document ID
             // setFieldValue('document_id', '', false); 
-            console.log("I AM DUPLICATE")
-            error = 'Duplicate Document ID';
+            if (values.document_id || footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve
+                console.log("i am in mode add, saved and wanting to approve")
+                error = '';
+            }else{
+                console.log("I AM DUPLICATE")
+                error = 'Duplicate Document ID';
+            }
+            
         }
     } else { // If input Document ID doesn't exists
         

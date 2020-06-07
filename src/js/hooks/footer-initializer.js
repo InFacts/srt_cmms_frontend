@@ -132,7 +132,6 @@ const useFooterInitializer = (document_type_id) => {
     // Handle Click Save
     useEffect(()=> {
         if (footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]){
-            dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
             validateForm()
             .then((err) => {
                 console.log("THIS IS ErR I GET ", err)
@@ -142,8 +141,8 @@ const useFooterInitializer = (document_type_id) => {
                     console.log("I AM SUBMITTING ", data );
                     saveDocument(document_type_id, data)
                     .then((document_id) => {
-                        setFieldValue('document_id', document_id, false);
-                        dispatch(navBottomSuccess('[PUT]', 'Submit Success', ''));
+                        setFieldValue('document_id', document_id, true);
+                        dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
                     })
                     .catch((err) => {
                         console.log("Submit Failed ", err.response);
@@ -151,6 +150,7 @@ const useFooterInitializer = (document_type_id) => {
                     })
                     .finally(() => { // Set that I already handled the Click
                         console.log(" I submitted and i am now handling click")
+                        dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
                     }); 
                 }
             })
@@ -160,7 +160,8 @@ const useFooterInitializer = (document_type_id) => {
     // Handle Click Send To Approval Process
     useEffect(()=> {
         if (footer.requiresHandleClick[FOOTER_ACTIONS.SEND]){
-            dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
+            // Move Dispatch to `finally` in the async functions
+            // dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
             validateForm()
             .then((err) => {
                 setErrors(err);
@@ -170,7 +171,7 @@ const useFooterInitializer = (document_type_id) => {
                     if(values.document_id){ // If have document_id, no need to create new doc
                         startDocumentApprovalFlow(values.document_id)
                         .then(() => {
-                            dispatch(navBottomSuccess('[PUT]', 'Submit Success', ''));
+                            dispatch(navBottomSuccess('[PUT]', 'Started Approval Flow Success', ''));
                         })
                         .catch((err) => {
                             //         //TODO Do something if Submit Fails
@@ -179,11 +180,12 @@ const useFooterInitializer = (document_type_id) => {
                         })
                         .finally(() => { // Set that I already handled the Click
                             console.log(" I submitted and i am now handling click")
+                            dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
                         }); 
                     }else{ // If not have document_id
                         saveDocument(document_type_id, data)
                         .then((document_id) => {
-                            setFieldValue('document_id', document_id, false);
+                            setFieldValue('document_id', document_id, true);
                             startDocumentApprovalFlow(document_id)
                             .then(() => {
                                 dispatch(navBottomSuccess('[PUT]', 'Submit Success', ''));
@@ -192,14 +194,19 @@ const useFooterInitializer = (document_type_id) => {
                                 //         //TODO Do something if Submit Fails
                                 console.warn("Adding Approval Flow Failed ", err.response);
                                 dispatch(navBottomError('[PUT]', 'Adding Approval Flow Failed', err));
-                            });
+                            })
+                            .finally(() => { // Set that I already handled the Click
+                                console.log(" I submitted and i am now handling click")
+                                dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
+                            }); 
                         })
                         .catch((err) => {
                             console.warn("Submit Failed ", err.response);
                             dispatch(navBottomError('[PUT]', 'Submit Failed', err));
+                            dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
                         })
                         .finally(() => { // Set that I already handled the Click
-                            console.log(" I submitted and i am now handling click")
+                            console.log(" I submitted ")
                         }); 
                     }
                     
