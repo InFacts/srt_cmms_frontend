@@ -14,7 +14,7 @@ import { useFormikContext, useField } from 'formik';
 
 // import PopupModalDocument from '../common/popup-modal-document'  เปลี่ยนเป็น MOdal ของ part
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
-import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, getDocumentbyInternalDocumentID } from '../../helper';
+import { getNumberFromEscapedString, fetchGoodsOnhandData, DOCUMENT_TYPE_ID, getDocumentbyInternalDocumentID } from '../../helper';
 
 import PopupModalNoPart from './popup-modal-nopart'
 import { FACTS } from '../../redux/modules/api/fact.js';
@@ -69,23 +69,11 @@ const TopContent = (props) => {
       setValues({ ...values, ...responseToFormState(item) }, false); //Setvalues and don't validate
       validateField("item_type_id");
 
-      // fetchStepApprovalDocumentData(res.data.document_id)
-      //         .then((result) => {
-      //           axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${res.data.document_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-      //             .then((desrciption_files) => {
-      //               console.log(" I AM STILL IN MODE SEARCH AND SET VALUE")
-      //               // Setup value From Approve and Attachment
-      //               setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
-      //               setFieldValue("desrciption_files_length", desrciption_files.data.results.length, false);
-      //               setFieldValue("desrciption_files", desrciption_files.data.results, false);
-      //               setFieldValue("document_id", res.data.document_id, false);
-      //               return resolve(null);
-      //             });
-      //         })    
-      // fetchGoodsOnhandData(getNumberFromEscapedString(values.src_warehouse_id), item.item_id)
-      // .then((at_source) => {
-      //   setFieldValue(fieldName + `.at_source`, at_source, false);
-      // })
+      fetchGoodsOnhandData('', item.item_id)
+        .then((goods_onhand) => {
+          console.log("good on hand", goods_onhand)
+          setFieldValue('goods_onhand', goods_onhand, false);
+        })
       return;
     } else {
       return 'Invalid Number ID';

@@ -9,6 +9,8 @@ import TextareaInput from '../common/formik-textarea-input';
 import TableStatus from '../common/table-status';
 import Table from '../common/table';
 
+import PopupModalNoPart from '../common/popup-modal-nopart'
+
 import Files from '../common/files2'
 
 import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
@@ -197,7 +199,7 @@ const BottomContent = (props) => {
               <div className="grid_11">
                 <TextareaInput name="remark" tabIndex="6"
                   disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-                  searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart"
+                  searchable={props.actionMode !== TOOLBAR_MODE.SEARCH}
                 />
               </div>
             </div>
@@ -223,6 +225,8 @@ const BottomContent = (props) => {
           </div>
 
         </div>
+        {/* PopUp ค้นหาอะไหล่ MODE ADD */}
+        <PopupModalNoPart lineNumber={lineNumber} />
       </div>
     </div >
   )

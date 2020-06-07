@@ -62,31 +62,6 @@ const GoodsReceiptComponent = (props) => {
 
     )
 }
-// const initialLineItem = {
-//     internal_item_id: '',
-//     quantity: '',
-//     uom_id: '',
-//     per_unit_price: '',
-//     // item_id: '',
-//     item_status_id: 1,
-    
-//     //Field ที่ไม่ได้กรอก
-//     description: '',
-//     line_number: '',
-//     // document_id: '', // maybe not needed
-//     list_uoms: [],
-// }
-// const initialRows = (n=10) => {
-//     let rows = [];
-//     for (var i = 1; i <= n; i++) {
-//         rows.push({
-//             ...initialLineItem, 
-//             line_number: i
-//         });
-//     }
-//     return rows;
-// }
-
 
 const EnhancedGoodsReceiptComponent = withFormik({
     mapPropsToValues: (props) => ({ 
@@ -125,28 +100,7 @@ const EnhancedGoodsReceiptComponent = withFormik({
         // For Attactment
         desrciption_files_length: '',
         desrciption_files: [],
-    }),
-    // validate: (values, props) => {
-    //     const errors = {};
-
-    //     if (!values.document_date){
-    //         errors.document_date = "Required";
-    //     }
-    //     return errors;
-    // },
-    // handleSubmit: (values, formikBag) => new Promise ((resolve, reject) => { //handle Submit will just POST the Empty Document and PUT information inside
-    //     let data = packDataFromValues(formikBag.props.fact, values, DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO);
-    //     console.log("I AM SUBMITTING ", data );
-    //     saveDocument(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO, data)
-    //     .then((document_id) => {
-    //         formikBag.setFieldValue('document_id', document_id, false);
-    //         return resolve(document_id); // Document_id is not passed on in submitForm, only Promise for isSubmitting https://jaredpalmer.com/formik/docs/api/withFormik#handlesubmit-values-values-formikbag-formikbag--void--promiseany
-    //     })
-    //     .catch((err) => {
-    //         return reject(err)
-    //     })
-    //   }),    
-    // // validateOnChange: false,
+    })
 })(GoodsReceiptComponent);
 
 

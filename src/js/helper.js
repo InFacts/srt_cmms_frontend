@@ -163,7 +163,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
     let document_part = {
         ...DOCUMENT_SCHEMA,
         document_status_id: 1,
-        document_action_type: 1, 
+        document_action_type_id: 1, 
         document_id: values.document_id,
         internal_document_id: values.internal_document_id,
         remark: values.remark,
@@ -524,9 +524,14 @@ export const startDocumentApprovalFlow = (document_id) => new Promise((resolve, 
                 console.log(" I am successful in starting approval flow of document_id ", document_id)
                 resolve(res.data);
             } else {
+                console.warn("I have trouble in starting approval flow ", res);
                 reject(res);
             }
         })
+        .catch((err) => {
+            console.warn("I have trouble in starting approval flow ", err.response);
+            reject(err)
+        });
 });
 
 // Get Step Approval After Search Document (document_id changes)
@@ -673,6 +678,7 @@ const responseToFormState = (fact, data) => {
     return {
       document_id: data.document_id,
       internal_document_id: data.internal_document_id,
+      document_date: data.document_date.split("T")[0], 
       created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.created_by_user_id) || '',
       created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.created_by_admin_id) || '',
       created_on: data.created_on.split(".")[0],
@@ -737,7 +743,7 @@ export const validateInternalDocumentIDFieldHelper = (toolbar, fact, values , se
         setFieldValue('document_id', '', false);
 
         if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
-            error = 'Invalid Document ID';
+            error = 'Document ID not Found in System';
         } else{//If mode add, ok
             console.log("document ID doesn't exist but I am in mode add")
             error = ''
