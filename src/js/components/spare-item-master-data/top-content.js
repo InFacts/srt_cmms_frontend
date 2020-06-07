@@ -14,7 +14,7 @@ import { useFormikContext, useField } from 'formik';
 
 // import PopupModalDocument from '../common/popup-modal-document'  เปลี่ยนเป็น MOdal ของ part
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
-import { getNumberFromEscapedString, fetchGoodsOnhandData, DOCUMENT_TYPE_ID, getDocumentbyInternalDocumentID } from '../../helper';
+import { getNumberFromEscapedString, fetchGoodsOnhandDataForItemmasterData, DOCUMENT_TYPE_ID, getDocumentbyInternalDocumentID } from '../../helper';
 
 import PopupModalNoPart from './popup-modal-nopart'
 import { FACTS } from '../../redux/modules/api/fact.js';
@@ -69,7 +69,7 @@ const TopContent = (props) => {
       setValues({ ...values, ...responseToFormState(item) }, false); //Setvalues and don't validate
       validateField("item_type_id");
 
-      fetchGoodsOnhandData('', item.item_id)
+      fetchGoodsOnhandDataForItemmasterData(item.item_id)
         .then((goods_onhand) => {
           console.log("good on hand", goods_onhand)
           setFieldValue('goods_onhand', goods_onhand, false);

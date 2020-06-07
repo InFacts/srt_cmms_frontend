@@ -34,80 +34,82 @@ const useFooterInitializer = (document_type_id) => {
     // Handle Toolbar Mode
     useEffect(() => {
         let document_id = values.document_id;
-        let docuementStatus = checkDocumentStatus(values);
-        console.log("HI document_status", docuementStatus, "toolbar>>", toolbar.mode)
-        setFieldValue("status_name_th", docuementStatus, false);
         // setFieldValue("document_action_type_id", docuementStatus, false);
         if (toolbar.mode === TOOLBAR_MODE.SEARCH && document_id !== "" && document_id !== undefined){
-            let userInfo = {
-                id: user_id.id, // TEST: User ID
-                position_id: user_id.has_position[0].position_id, 
-                has_positions: user_id.has_position,
-            };
-            let track_document_id = document_id; // TEST: Track Document
-            let previousApprovalInfo = values.step_approve; // Check Previous Approver 
-            let document_status = docuementStatus; // TEST: values.status_name_th
-            let created_by_admin_employee_id = getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id); // TEST: values.created_by_admin_employee_id;
-
-            // Check That user who create document?
-            if (userInfo.id === created_by_admin_employee_id) {
-                console.log("HI Check Who's create document", userInfo.id, created_by_admin_employee_id)
-                if (document_status === DOCUMENT_STATUS.DRAFT) { dispatch(footerToModeAddDraft()); }
-                else if (document_status === DOCUMENT_STATUS.WAIT_APPROVE) { dispatch(footerToModeOwnDocument()); }
-                else if (document_status === DOCUMENT_STATUS.APPROVE_DONE) { dispatch(footerToModeApApprovalDone()); }
-                else if (document_status === DOCUMENT_STATUS.VOID) { dispatch(footerToModeVoid()); }
-                else if (document_status === DOCUMENT_STATUS.REOPEN) { dispatch(footerToModeEdit()); }
-                else if (document_status === DOCUMENT_STATUS.FAST_TRACK) { dispatch(footerToModeFastTrack()); } 
-                else { dispatch(footerToModeSearch()); }
-            }
-            else {
-                // Check That user_id into Previous Approval Flow ?
-                previousApprovalInfo.map(prevApprval => {
-                    if (prevApprval.approval_by !== undefined || prevApprval.approval_by.length !== 0) {
-                        prevApprval.approval_by.map(prevApprvalBy => {
-                            if (userInfo.id === prevApprvalBy.user_id){
-                                dispatch(footerToModeApApprovalDone());
-                                return "";
+            checkDocumentStatus(values).then(function(docuementStatus) {
+                console.log("HI document_status", docuementStatus, "toolbar>>", toolbar.mode)
+                setFieldValue("status_name_th", docuementStatus, false);
+                let userInfo = {
+                    id: user_id.id, // TEST: User ID
+                    position_id: user_id.has_position[0].position_id, 
+                    has_positions: user_id.has_position,
+                };
+                let track_document_id = document_id; // TEST: Track Document
+                let previousApprovalInfo = values.step_approve; // Check Previous Approver 
+                let document_status = docuementStatus; // TEST: values.status_name_th
+                let created_by_admin_employee_id = getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id); // TEST: values.created_by_admin_employee_id;
+    
+                // Check That user who create document?
+                console.log("userInfo.id", userInfo.id,"created_by_admin_employee_id", created_by_admin_employee_id)
+                if (userInfo.id === created_by_admin_employee_id) {
+                    console.log("HI Check Who's create document---->", document_status)
+                    if (document_status === DOCUMENT_STATUS.DRAFT) { dispatch(footerToModeAddDraft()); }
+                    else if (document_status === DOCUMENT_STATUS.WAIT_APPROVE) { dispatch(footerToModeOwnDocument()); }
+                    else if (document_status === DOCUMENT_STATUS.APPROVE_DONE) { dispatch(footerToModeApApprovalDone()); }
+                    else if (document_status === DOCUMENT_STATUS.VOID) { dispatch(footerToModeVoid()); }
+                    else if (document_status === DOCUMENT_STATUS.REOPEN) { dispatch(footerToModeEdit()); }
+                    else if (document_status === DOCUMENT_STATUS.FAST_TRACK) { dispatch(footerToModeFastTrack()); } 
+                    else { dispatch(footerToModeSearch()); }
+                }
+                else {
+                    // Check That user_id into Previous Approval Flow ?
+                    previousApprovalInfo.map(prevApprval => {
+                        if (prevApprval.approval_by !== undefined || prevApprval.approval_by.length !== 0) {
+                            prevApprval.approval_by.map(prevApprvalBy => {
+                                if (userInfo.id === prevApprvalBy.user_id){
+                                    dispatch(footerToModeApApprovalDone());
+                                    return "";
+                                }
+                            });
+                        }
+                    });
+    
+                    // Check Next Approver from postion_id
+                    fetchLatestStepApprovalDocumentData(track_document_id).then((latestApprovalInfo) => {
+                        if (latestApprovalInfo !== undefined || latestApprovalInfo.length !== 0) {
+                            // console.log("latestApprovalInfo------> ", latestApprovalInfo, APPROVAL_STEP_ACTION.CHECK_APPROVAL)
+                            if (latestApprovalInfo.position_id !== userInfo.position_id) {
+                                if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_APPROVAL) {
+                                    dispatch(footerToModeApApproval());
+                                }
+                                else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.APPROVAL) {
+                                    dispatch(footerToModeApCheckApproval());
+                                }
+                                else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.GOT_IT) {
+                                    dispatch(footerToModeApGotIt());
+                                }
+                                else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_ORDER) {
+                                    dispatch(footerToModeApCheckOrder());
+                                }
+                                else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_MAINTENANCE) {
+                                    dispatch(footerToModeApCheckMaintenance());
+                                }
+                                else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.GUARANTEE_MAINTENANCE) {
+                                    dispatch(footerToModeApGuarnteeMaintenance());
+                                }
                             }
-                        });
-                    }
-                });
-
-                // Check Next Approver from postion_id
-                fetchLatestStepApprovalDocumentData(track_document_id).then((latestApprovalInfo) => {
-                    if (latestApprovalInfo !== undefined || latestApprovalInfo.length !== 0) {
-                        // console.log("latestApprovalInfo------> ", latestApprovalInfo, APPROVAL_STEP_ACTION.CHECK_APPROVAL)
-                        if (latestApprovalInfo.position_id !== userInfo.position_id) {
-                            if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_APPROVAL) {
-                                dispatch(footerToModeApApproval());
-                            }
-                            else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.APPROVAL) {
-                                dispatch(footerToModeApCheckApproval());
-                            }
-                            else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.GOT_IT) {
-                                dispatch(footerToModeApGotIt());
-                            }
-                            else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_ORDER) {
-                                dispatch(footerToModeApCheckOrder());
-                            }
-                            else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_MAINTENANCE) {
-                                dispatch(footerToModeApCheckMaintenance());
-                            }
-                            else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.GUARANTEE_MAINTENANCE) {
-                                dispatch(footerToModeApGuarnteeMaintenance());
+                            else {
+                                // Everyone for Search mode
+                                dispatch(footerToModeSearch());
                             }
                         }
-                        else {
+                        else { 
                             // Everyone for Search mode
                             dispatch(footerToModeSearch());
                         }
-                    }
-                    else { 
-                        // Everyone for Search mode
-                        dispatch(footerToModeSearch());
-                    }
-                })
-            }
+                    })
+                }
+            });
         }
         else if (toolbar.mode === TOOLBAR_MODE.ADD){
             // ADD_DRAFT mode

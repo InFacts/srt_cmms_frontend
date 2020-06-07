@@ -260,23 +260,22 @@ const BottomContent = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {/* {props.table_list_show.map(function (table_list_show, index) {
-                    return (
+                  {values.goods_onhand.map((goods_onhand, index) => (
+                    goods_onhand.warehouse_id !== 0 && goods_onhand.warehouse_id !== 999 &&
                       <tr>
                         <th className="edit-padding text-center">{index+1}</th>
-                        <td className="edit-padding">{table_list_show.no_inventory}</td>
-                        <td className="edit-padding">{table_list_show.name_inventory}</td>
-                        <td className="edit-padding text-center disable">{table_list_show.stock}</td>
-                        <td className="edit-padding text-center disable">{table_list_show.wait_send}</td>
-                        <td className="edit-padding text-center disable">{table_list_show.wait_po}</td>
-                        <td className="edit-padding text-center disable">{table_list_show.real_stock}</td>
-                        <td className="edit-padding text-center blue font-red">{table_list_show.broken}</td>
-                        <td className="edit-padding text-center blue">{table_list_show.send_fix}</td>
-                        <td className="edit-padding text-center blue">{table_list_show.old_part}</td>
-                        <td className="edit-padding text-center blue">{table_list_show.carcass}</td>
+                        <td className="edit-padding">{goods_onhand.warehouse_id}</td>
+                        <td className="edit-padding">{goods_onhand.warehouse_name}</td>
+                        <td className="edit-padding text-center disable">{goods_onhand.current_unit_count}</td>
+                        <td className="edit-padding text-center disable">{goods_onhand.committed_unit_count}</td>
+                        <td className="edit-padding text-center disable">0</td>  {/* ระหว่างจัดซื้อ */}
+                        <td className="edit-padding text-center disable">{goods_onhand.current_unit_count - goods_onhand.committed_unit_count + 0}</td>  {/* จำนวนสุทธิ */}
+                        <td className="edit-padding text-center blue font-red">{goods_onhand.broken}</td>
+                        <td className="edit-padding text-center blue">{goods_onhand.send_fix}</td>
+                        <td className="edit-padding text-center blue">{goods_onhand.old_part}</td>
+                        <td className="edit-padding text-center blue">{goods_onhand.carcass}</td>
                       </tr>
-                    )
-                  })} */}
+                  ))}
                 </tbody>
               </table>
             </div>

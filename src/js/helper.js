@@ -546,6 +546,18 @@ export const fetchGoodsOnhandData = (warehouse_id, item_id) => new Promise((reso
         });
 });
 
+// Get Goods Onhand After Select Warehoues ID and No part ID
+export const fetchGoodsOnhandDataForItemmasterData = (item_id) => new Promise((resolve, reject) => {
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-onhand/plus?item_id=${item_id}`;
+    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((res) => {
+            resolve(res.data.results);
+        })
+        .catch((err) => {
+            reject(err)
+        });
+});
+
 // Check Document Status from 
 export const DOCUMENT_STATUS = {
     DRAFT: "สร้าง Draft",
@@ -569,85 +581,12 @@ export const APPROVAL_STEP_ACTION = {
 // Check approval_process table in database -> is_canceled(REOPEN)
 // Check Approval flow -> Clear infomation of CreateNew(DRAFT/WAIT_APPROVE/APPROVED)
 // DRAFT
-export const checkDocumentStatus = (valuesContext) => {
+export const checkDocumentStatus = (valuesContext) => new Promise((resolve, reject)=> {
     // GET document_action_type_id
     const _lookup_document_action_type = {
         CreateNew: 1,
         FastTrack: 2,
         Void: 3
-    }
-    // http://43.229.79.36:60013/approval/1/latest/plus
-    let result = {
-        "id": 1,
-        "created_on": "2020-05-31T15:28:51.000Z",
-        "update_time": null,
-        "document_id": 1,
-        "approval_process_lookup_id": 1031,
-        "is_canceled": {
-            "type": "Buffer",
-            "data": [
-                0
-            ]
-        },
-        "approval_step": [
-            {
-                "approval_process_id": 1,
-                "step_number": 1,
-                "is_skipped": {
-                    "type": "Buffer",
-                    "data": [
-                        0
-                    ]
-                },
-                "approval_by": [
-                    {
-                        "id": 1,
-                        "approval_process_id": 1,
-                        "step_number": 1,
-                        "approval_status_id": 1,
-                        "user_id": 0,
-                        "position_group_id": 0,
-                        "approved_on": "2020-05-31T15:28:51.000Z",
-                        "remark": "AUTOMATIC EXECUTION BY DATABASE",
-                        "position": null,
-                        "user": {
-                            "firstname_th": null,
-                            "firstname_en": null,
-                            "lastname_th": null,
-                            "lastname_en": null
-                        },
-                        "approval_status": {
-                            "approval_status_id": 1,
-                            "name": "Approved",
-                            "description": "Approved",
-                            "name_th": null,
-                            "description_th": null
-                        }
-                    }
-                ],
-                "position": [],
-                "position_group": {
-                    "position_group_id": 0,
-                    "name": "This"
-                }
-            },
-            {
-                "approval_process_id": 1,
-                "step_number": 2,
-                "is_skipped": {
-                    "type": "Buffer",
-                    "data": [
-                        0
-                    ]
-                },
-                "approval_by": [],
-                "position": [],
-                "position_group": {
-                    "position_group_id": 5,
-                    "name": "หัวหน้าตอน (นสต. นายตรวจสายตอน)"
-                }
-            }
-        ]
     }
     let document_action_type_id = 1; //TODO valuesContext.document_action_type_id
     let approval_process_is_canceled = valuesContext.document_is_canceled;
@@ -658,7 +597,7 @@ export const checkDocumentStatus = (valuesContext) => {
         // CreateNew
         if (approval_process_is_canceled === 1){
             // console.log("------> REOPEN")
-            return DOCUMENT_STATUS.REOPEN;
+            return resolve(DOCUMENT_STATUS.REOPEN);
         }
         else {
             if (approval_step.length !== 0) {
@@ -668,23 +607,21 @@ export const checkDocumentStatus = (valuesContext) => {
                     if (apStep.approval_by.length === 0){ 
                         // console.log("------> WAIT_APPROVE")
                         checkWaitApproval = true;
-                        return DOCUMENT_STATUS.WAIT_APPROVE;
+                        return resolve(DOCUMENT_STATUS.WAIT_APPROVE);
                     }
                 })
                 if (!checkWaitApproval) {
                     // console.log("------> APPROVE_DONE")
-                    return DOCUMENT_STATUS.APPROVE_DONE;
+                    return resolve(DOCUMENT_STATUS.APPROVE_DONE);
                 }
             }
             else {
                 // console.log("------> DRAFT")
-                return DOCUMENT_STATUS.DRAFT;
+                return resolve(DOCUMENT_STATUS.DRAFT);
             }
         }
     }
-
-
-}
+})
 
 
 const responseToFormState = (fact, data) => {
