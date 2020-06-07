@@ -363,11 +363,11 @@ export const footerToModeApCheckMaintenance = makeActionCreator(TO_MODE_AP_CHECK
 export const footerToModeApGuarnteeMaintenance = makeActionCreator(TO_MODE_AP_GUARANTEE_MAINTENANCE);
 export const footerToModeApApprovalDone = makeActionCreator(TO_MODE_AP_APPROVAL_DONE);
 
-export const clickApproval = makeActionCreator(CLICK_APPROVAL);
-export const clickSend = makeActionCreator(CLICK_SEND);
-export const clickSave = makeActionCreator(CLICK_SAVE);
+export const clickApproval = makeActionCreator(CLICK_APPROVAL); // Complete
+export const clickSend = makeActionCreator(CLICK_SEND); // Complete
+export const clickSave = makeActionCreator(CLICK_SAVE); // Complete
 export const clickReject = makeActionCreator(CLICK_REJECT);
-export const clickBack = makeActionCreator(CLICK_BACK);
+export const clickBack = makeActionCreator(CLICK_BACK); // Complete
 export const clickCheckApproval = makeActionCreator(CLICK_CHECK_APPROVAL);
 export const clickApprovalOrder = makeActionCreator(CLICK_APPROVAL_ORDER);
 export const clickFastTrack = makeActionCreator(CLICK_FAST_TRACK);
@@ -397,5 +397,10 @@ export const handleClickBackToSpareMain = () => {
 export const ACTION_TO_HANDLE_CLICK = {
     [FOOTER_ACTIONS.SAVE]: handleFooterClickSave,
     [FOOTER_ACTIONS.SEND]: handleFooterClickSend,
-    [FOOTER_ACTIONS.CHECK_APPROVAL]: handleFooterClickCheckApproval,
+    [FOOTER_ACTIONS.APPROVAL]: handleFooterClickApproval,
+    [FOOTER_ACTIONS.CHECK_APPROVAL]: handleFooterClickApproval,
+    [FOOTER_ACTIONS.APPROVAL_ORDER]: handleFooterClickApproval,
+    [FOOTER_ACTIONS.GOT_IT]: handleFooterClickApproval,
+    [FOOTER_ACTIONS.FAST_TRACK]: handleFooterClickFastTrack,
+    [FOOTER_ACTIONS.REJECT]: handleFooterClickReject,
 }
