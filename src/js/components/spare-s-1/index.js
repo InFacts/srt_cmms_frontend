@@ -31,24 +31,7 @@ const GoodsReturnComponent = (props) => {
     ]);
 
     useToolbarInitializer(TOOLBAR_MODE.SEARCH);
-    // useTokenInitializer();
     useFactInitializer();
-    // useFooterInitializer(DOCUMENT_TYPE_ID.GOODS_USAGE);
-
-    // If Link to this url via Track Document
-    // useEffect(() => {
-    //     let url = window.location.search;
-    //     console.log("URL IS", url)
-    //     const urlParams = new URLSearchParams(url);
-    //     const internal_document_id = urlParams.get('internal_document_id');
-    //     if (internal_document_id !== "") {
-    //         // action_approval
-    //         console.log(" IA M NOT SETTING ", internal_document_id);
-    //         console.log(" THIS IS CURRENT VALUES ", values);
-    //         setFieldValue("internal_document_id", internal_document_id, true);
-    //         console.log(" THIS IS AFTER VALUES ", values);
-    //     }
-    // }, [])
 
     return (
         <>
@@ -61,6 +44,19 @@ const GoodsReturnComponent = (props) => {
     )
 }
 
+const initialLineYears = (n=20) => {
+    let rows_year = [];
+    var new_date = new Date();
+    var start_year = new_date.getFullYear() + 543 - 10; //ปีปัจุบัน(ค.ศ.) + 543(แปลงเป็น พ.ศ.) - 10(ย้อนหลังสิบปี) 
+    for (var i = 1; i <= n; i++) {
+        start_year = start_year + 1
+        rows_year.push({
+            year_id: start_year
+        });
+    }
+    return rows_year;
+}
+
 const EnhancedGoodsReturnComponent = withFormik({
     mapPropsToValues: (props) => ({ 
         // Field ที่ให้ User กรอก
@@ -68,54 +64,63 @@ const EnhancedGoodsReturnComponent = withFormik({
         src_warehouse_id: '', 
         document_date: '', 
         line_items: [],
-        //Field ที่ไม่ได้กรอก
+        year_id: '',
+        mouth_id: '',
         
-        created_on: '',
-        status_name_th: '',
-        document_status_id: '',
-        created_by_admin_employee_id: '',
+        // Field ที่ให้ User ไม่ได้กรอก
+        year: initialLineYears(),
+        mouth: [
+            {
+                id: 1,
+                mouth: "มกราคม"
+            },
+            {
+                id: 2,
+                mouth: "กุมภาพันธ์"
+            },
+            {
+                id: 3,
+                mouth: "มีนาคม"
+            },
+            {
+                id: 4,
+                mouth: "เมษายน "
+            },
+            {
+                id: 5,
+                mouth: "พฤษภาคม"
+            },
+            {
+                id: 6,
+                mouth: "มิถุนายน"
+            },
+            {
+                id: 7,
+                mouth: "กรกฎาคม"
+            },
+            {
+                id: 8,
+                mouth: "สิงหาคม"
+            },
+            {
+                id: 9,
+                mouth: "กันยายน"
+            },
+            {
+                id: 10,
+                mouth: "ตุลาคม"
+            },
+            {
+                id: 11,
+                mouth: "พฤศจิกายน"
+            },
+            {
+                id: 12,
+                mouth: "ธันวาคม"
+            }
+        ],
 
-        //Field ที่ไม่ได้ display
-        document_id: '', // changes when document is displayed (internal_document_id field validation)
-        // For Attactment
-        desrciption_files_length: '',
-        desrciption_files: [],
-        // For Step Approval
-        step_approve: [],
     }),
-    validate: (values, props) => {
-        const errors = {};
-
-        // Internal Document ID
-        //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
-        //  ie. GR-PYO-2563/0001
-        // let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS)-[A-Z]{3}-\d{4}\/\d{4}$/g
-        // let draftInternalDocumentIDRegex= /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
-        // if (!values.internal_document_id) {
-        //     errors.internal_document_id = 'Required';
-        // }else if (!internalDocumentIDRegex.test(values.internal_document_id)){ //&& !draftInternalDocumentIDRegex.text(values.internal_document_id)
-        //     errors.internal_document_id = 'Invalid Document ID Format\nBe sure to use the format ie. GR-PYO-2563/0001'
-        // }
-        // MOVED TO FIELD
-        if (!values.document_date){
-            errors.document_date = "Required";
-        }
-        return errors;
-    },
-    handleSubmit: (values, formikBag) => new Promise ((resolve, reject) => { //handle Submit will just POST the Empty Document and PUT information inside
-        console.log("DOCUMENT_TYPE_ID.GOODS_USAGE", DOCUMENT_TYPE_ID.GOODS_USAGE)
-        let data = packDataFromValues(formikBag.props.fact, values);
-        console.log("I AM SUBMITTING ", data );
-        saveDocument(DOCUMENT_TYPE_ID.GOODS_USAGE, data)
-        .then((document_id) => {
-            formikBag.setFieldValue('document_id', document_id, false);
-            return resolve(document_id);
-        })
-        .catch((err) => {
-            return reject(err)
-        })
-      }),    
-    // validateOnChange: false,
 })(GoodsReturnComponent);
 
 

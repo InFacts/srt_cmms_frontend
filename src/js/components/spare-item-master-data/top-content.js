@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import FormInput from '../common/form-input'
 import TextInput from '../common/formik-text-input'
 import SelectNoChildrenInput from '../common/formik-select-no-children';
+import PopupModalNoPartNoChildren from '../common/popup-modal-nopart-no-children'
 
 import { useFormikContext, useField } from 'formik';
 
@@ -16,7 +17,6 @@ import { useFormikContext, useField } from 'formik';
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import { getNumberFromEscapedString, fetchGoodsOnhandDataForItemmasterData, DOCUMENT_TYPE_ID, getDocumentbyInternalDocumentID } from '../../helper';
 
-import PopupModalNoPart from './popup-modal-nopart'
 import { FACTS } from '../../redux/modules/api/fact.js';
 
 const FormLabel = ({ children }) => (
@@ -174,7 +174,7 @@ const TopContent = (props) => {
         </section>
 
         {/* PopUp ค้นหาอะไหล่ */}
-        <PopupModalNoPart />
+        <PopupModalNoPartNoChildren />
       </div>
     </div>
   )

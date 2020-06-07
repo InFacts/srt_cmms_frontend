@@ -7,44 +7,43 @@ import { API_URL_DATABASE } from '../../config_url.js';
 import { v4 as uuidv4 } from 'uuid';
 
 import TextInput from '../common/formik-text-input'
-import DateTimeInput from '../common/formik-datetime-input'
-import DateInput from '../common/formik-date-input'
+import SelectNoChildrenInput from '../common/formik-select-no-children';
 
 import { useFormikContext, useField } from 'formik';
 
-import PopupModalDocument from '../common/popup-modal-document'
 import PopupModalInventory from '../common/popup-modal-inventory'
-import PopupModalUsername from '../common/popup-modal-username'
+import PopupModalNoPartNoChildren from '../common/popup-modal-nopart-no-children'
+
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID } from '../../helper';
 
-const responseToFormState = (userFact, data) => {
-  for (var i = data.line_items.length; i <= 9; i++) {
-    data.line_items.push(
-      {
-        item_id: "",
-        internal_item_id: "",
-        description: "",
-        quantity: "",
-        uom_group_id: "",
-        unit: "",
-        per_unit_price: "",
-        list_uoms: [],
-        at_source: []
-      }
-    );
-  }
-  return {
-    internal_document_id: data.internal_document_id,
-    created_by_user_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_user_id) || '',
-    created_by_admin_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_admin_id) || '',
-    created_on: data.created_on.split(".")[0],
-    line_items: data.line_items,
-    src_warehouse_id: data.src_warehouse_id,
-    remark: data.remark,
-    status_name_th: data.status_name,
-  }
-}
+// const responseToFormState = (userFact, data) => {
+//   for (var i = data.line_items.length; i <= 9; i++) {
+//     data.line_items.push(
+//       {
+//         item_id: "",
+//         internal_item_id: "",
+//         description: "",
+//         quantity: "",
+//         uom_group_id: "",
+//         unit: "",
+//         per_unit_price: "",
+//         list_uoms: [],
+//         at_source: []
+//       }
+//     );
+//   }
+//   return {
+//     internal_document_id: data.internal_document_id,
+//     created_by_user_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_user_id) || '',
+//     created_by_admin_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_admin_id) || '',
+//     created_on: data.created_on.split(".")[0],
+//     line_items: data.line_items,
+//     src_warehouse_id: data.src_warehouse_id,
+//     remark: data.remark,
+//     status_name_th: data.status_name,
+//   }
+// }
 
 const TopContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
@@ -63,102 +62,92 @@ const TopContent = (props) => {
   }
   const validateSrcWarehouseIDField = (...args) => validateWarehouseIDField("src_warehouse_id", ...args);
 
+  const validateInternalItemIDField = internal_item_id => {
+    let items = props.fact.items.items;
+    let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+    if (item) {
+      // setValues({ ...values, ...responseToFormState(item) }, false); //Setvalues and don't validate
+      setFieldValue("internal_item_id", internal_item_id, false);
+      return;
+    } else {
+      return 'Invalid Number ID';
+    }
+  };
+
   return (
     <>
-      <div className="grid_12">
-        <div className="grid_2">
-          <p className="top-text">เลขที่คลัง</p>
-        </div>
-        <div className="grid_3 pull_1">
-          <div className="p-search-box cancel-margin">
-            <input type="text" className="p-search-box__input cancel-default" 
-            // value={this.props.inventory_id} onChange={(e) => this.props.onChangeInventoryId(e)}
-             />
-            <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalInventory" aria-controls="modalSrcInventory"></i></button>
-          </div>
-        </div>
-        <div className="grid_3 float-right">
-          <input type="text" className="cancel-default float-right"
-          //  value={this.props.inventory_name}
-            disabled="disabled"></input>
-        </div>
-        <div className="grid_2 float-right">
-          <p className="top-text float-right">ชื่อคลัง</p>
-        </div>
-      </div>
+      <div id="blackground-white">
+        <div className="container_12 clearfix">
+          <section className="container_12 ">
+            <h4 className="head-title">รายงาน ส.1</h4>
 
-      <div className="grid_12">
-        <div className="grid_2">
-          <p className="top-text">เลขที่สิ่งของ</p>
-        </div>
-        <div className="grid_3 pull_1">
-          <div className="p-search-box cancel-margin">
-            {/* <input type="text" className="p-search-box__input cancel-default" value={this.props.no_item} onChange={(e) => this.props.onChangeNoItem(e)} /> */}
-            {/* <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNoPart"></i></button> */}
-          </div>
-        </div>
-      </div>
-
-      <div className="grid_12">
-        {/* <div className="grid_2">
-              <p className="top-text">แขวง</p>
-            </div>
-            <div className="grid_3 pull_1">
-              <div className="p-search-box cancel-margin">
-                <input type="text" className="p-search-box__input cancel-default" value={this.props.districts} onChange={(e) => this.props.onChangeDistricts(e)} />
-                <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalDistricts"></i></button>
+            <div className="container_12">
+              <div className="grid_2">
+                <p className="top-text">เลขที่คลัง</p>
               </div>
-            </div> */}
-        <div className="grid_3 float-right">
-          <select className="edit-select-top" onChange={(e) => this.props.onChangeYear(e)}>
-            <option value="0"> none </option>
-            {/* {this.props.year.map(function (year, index) {
-              return (
-                <option key={index} value={year.year_id}> {year.name} </option>
-              )
-            })} */}
-          </select>
-        </div>
-        <div className="grid_2 float-right">
-          <p className="top-text float-right">ปี</p>
-        </div>
-      </div>
-
-      <div className="grid_12">
-        {/* <div className="grid_2">
-              <p className="top-text">ตอน</p>
-            </div>
-            <div className="grid_3 pull_1">
-            <div className="p-search-box cancel-margin">
-                <input type="text" className="p-search-box__input cancel-default" value={this.props.node} onChange={(e) => this.props.onChangeNode(e)} />
-                <button type="button" className="p-search-box__button cancel-padding hidden" ><i className="p-icon--search" id="showModalNoPart" aria-controls="modalNode"></i></button>
+              <div className="grid_3 pull_1">
+                <TextInput name="src_warehouse_id" validate={validateSrcWarehouseIDField}
+                  searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalInventory" tabIndex="5" />
               </div>
-            </div> */}
-        <div className="grid_3 float-right">
-          <select className="edit-select-top" onChange={(e) => this.props.onChangeMonth(e)}>
-            <option value="0"> none </option>
-            {/* {this.props.month.map(function (month, index) {
-              return (
-                <option key={index} value={month.month_id}> {month.name} </option>
-              )
-            })} */}
-          </select>
-        </div>
-        <div className="grid_2 float-right">
-          <p className="top-text float-right">เดือน</p>
-        </div>
-      </div>
 
-      <div className="grid_12">
-        {/* {
-          this.props.inventory_id !== "" && this.props.month_id !== "0" && this.props.year_id !== "0" ? <button className="button-blue float-right grid_1 mt-3" type="button" onClick={(e) => this.props.onClickSearchS1(this.props.inventory_id, this.props.no_item, this.props.month_id, this.props.year_id)}>ค้นหา</button> : <button className="button-blue float-right grid_1 mt-3" type="button">ค้นหา</button>
-        } */}
+              {/* drop dawn year */}
+              <div className="grid_3 float-right">
+                <SelectNoChildrenInput name="year_id">
+                  <option value=''></option>
+                  {values.year.map(function (year) {
+                    return (
+                      <option key={year.year_id} value={year.year_id}> {year.year_id} </option>
+                    )
+                  })}
+                </SelectNoChildrenInput>
+              </div>
+              <div className="grid_2 float-right">
+                <p className="top-text float-right">ปี</p>
+              </div>
+            </div>
+
+            <div className="container_12">
+              <div className="grid_2">
+                <p className="top-text">เลขที่สิ่งของ</p>
+              </div>
+              <div className="grid_3 pull_1">
+                <TextInput name='internal_item_id'
+                  validate={validateInternalItemIDField}
+                  searchable={props.toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart" tabIndex="1" />
+              </div>
+
+              {/* Drop Dawn month */}
+              <div className="grid_3 float-right">
+                <SelectNoChildrenInput name="mouth_id" >
+                  <option value=''></option>
+                  {values.mouth.map(function (mouth) {
+                    return (
+                      <option key={mouth.id} value={mouth.id}> {mouth.mouth} </option>
+                    )
+                  })}
+                </SelectNoChildrenInput>
+              </div>
+              <div className="grid_2 float-right">
+                <p className="top-text float-right">เดือน</p>
+              </div>
+            </div>
+
+            <div className="container_12 mt-3">
+              <div className="grid_1 float-right">
+                <button type="button" className="button-blue">ค้นหา</button>
+              </div>
+            </div>
+
+            {/* PopUp ค้นหาเลขที่คลัง MODE ADD */}
+            <PopupModalInventory
+              id="modalInventory" //For Open POPUP
+              name="src_warehouse_id"
+            />
+            {/* PopUp ค้นหาอะไหล่ */}
+            <PopupModalNoPartNoChildren />
+          </section>
+        </div>
       </div>
-      {/* PopUp ค้นหาเลขที่คลัง MODE ADD */}
-      <PopupModalInventory
-        id="modalInventory" //For Open POPUP
-        name="src_warehouse_id"
-      />
     </>
 
   )

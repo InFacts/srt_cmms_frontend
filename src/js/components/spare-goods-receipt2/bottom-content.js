@@ -71,7 +71,6 @@ const BottomContent = (props) => {
 
   const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => {
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
-
     if (values.line_items[index].internal_item_id === internal_item_id) {
       return;
     }
