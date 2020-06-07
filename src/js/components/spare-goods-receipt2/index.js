@@ -15,6 +15,7 @@ import useToolbarInitializer from '../../hooks/toolbar-initializer';
 import useFactInitializer from '../../hooks/fact-initializer';
 import useTokenInitializer from '../../hooks/token-initializer';
 import useFooterInitializer from '../../hooks/footer-initializer';
+import useDocumentSubscription from '../../hooks/document-subscription';
 import useNavBottomStatusInitializer from '../../hooks/nav-bottom-status-initializer';
 
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
@@ -37,6 +38,7 @@ const GoodsReceiptComponent = (props) => {
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO);
     useNavBottomStatusInitializer();
+    useDocumentSubscription();
 
     useEffect(()=>{
         dispatch(footerToModeSearch());

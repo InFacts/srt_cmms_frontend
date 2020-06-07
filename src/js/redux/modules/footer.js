@@ -74,7 +74,7 @@ const CLICK_SEND = "footer/CLICK_SEND";
 const CLICK_SAVE = "footer/CLICK_SAVE";
 const CLICK_REJECT = "footer/CLICK_REJECT";
 const CLICK_BACK = "footer/CLICK_BACK";
-const CLICK_CHECK_APPROVAL = "footer/CLICK_FORWARD";
+const CLICK_CHECK_APPROVAL = "footer/CLICK_CHECK_APPROVAL";
 const CLICK_APPROVAL_ORDER = "footer/CLICK_APPROVAL_ORDER";
 const CLICK_GOT_IT = "footer/CLICK_GOT_IT";
 const CLICK_FAST_TRACK = "footer/CLICK_FAST_TRACK";
@@ -397,4 +397,5 @@ export const handleClickBackToSpareMain = () => {
 export const ACTION_TO_HANDLE_CLICK = {
     [FOOTER_ACTIONS.SAVE]: handleFooterClickSave,
     [FOOTER_ACTIONS.SEND]: handleFooterClickSend,
+    [FOOTER_ACTIONS.CHECK_APPROVAL]: handleFooterClickCheckApproval,
 }

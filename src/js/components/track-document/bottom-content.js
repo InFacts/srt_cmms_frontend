@@ -22,7 +22,7 @@ const BottomContent = (props) => {
     if (doc_type === "103") return "good-good-issue-no-po";
     if (doc_type === "111") return "good-issue-2";
     if (doc_type === "112") return "good-take-out";
-    if (doc_type === "121") return "s1646";
+    if (doc_type === "121") return "inventory-transfer";
     else return "#";
   }
 
@@ -49,7 +49,10 @@ const BottomContent = (props) => {
                     return (
                       <tr key={index} id={index}>
                         <td className="edit-padding" style={{ paddingLeft: "5px" }}>{formatDate(track_document_show.created_on)}</td>
-                        <td className="edit-padding" >{track_document_show.internal_document_id}</td>
+                        <td className="edit-padding" >
+                          <Link to={identifyEndpoins(track_document_show.document_type_id) + "?internal_document_id=" + track_document_show.internal_document_id + "&document_id=" + track_document_show.document_id}>{track_document_show.internal_document_id}</Link>
+                        </td>
+                        {/* <td className="edit-padding" >{track_document_show.internal_document_id}</td> */}
                         <td className="edit-padding" >{track_document_show.document_type_name} </td>
                         {/* <td className="edit-padding" style={{  }}>{track_document_show.job_document}</td> */}
                         <td className="edit-padding">{
@@ -60,7 +63,7 @@ const BottomContent = (props) => {
                           Object.values(listDocumentStatus).find(status => status.document_status_id === track_document_show.document_status_id).status
                         }</td>
                         <td className="edit-padding">
-                          <Link to={identifyEndpoins(track_document_show.document_type_id) + "?internal_document_id=" + track_document_show.internal_document_id + "&document_id=" + track_document_show.document_id}>รายละเอียดsdasd</Link>
+                          <Link to={identifyEndpoins(track_document_show.document_type_id) + "?internal_document_id=" + track_document_show.internal_document_id + "&document_id=" + track_document_show.document_id}>รายละเอียด</Link>
                         </td>
                       </tr>
                     )})}

@@ -59,7 +59,7 @@ const ToolbarItemComponent = (props) => {
     }
     if (isSelecting){
         img_className += " selecting";
-        handleClick = null;
+        // handleClick = null; Make it handle click!!
     }
     return(
     <li className="nav-li"><a className={a_className}><img className={img_className} alt={toolbarAction} src={TOOLBAR_TO_ICON[toolbarAction]} onClick={handleClick} /></a></li>

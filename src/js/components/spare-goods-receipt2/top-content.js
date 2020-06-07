@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux'
+import { connect , useSelector, shallowEqual} from 'react-redux'
 
 import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
@@ -23,10 +23,12 @@ import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData,
   fetchAttachmentDocumentData, validateEmployeeIDField, validateWarehouseIDField,
   validateInternalDocumentIDFieldHelper} from '../../helper';
 import { FACTS } from '../../redux/modules/api/fact.js';
+import { FOOTER_MODE, FOOTER_ACTIONS} from '../../redux/modules/footer.js';
 
 
 const TopContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm   } = useFormikContext();
+  const footer = useSelector((state) => ({...state.footer}), shallowEqual);
 
   // Fill Default Forms
   useEffect(() => {
@@ -39,37 +41,8 @@ const TopContent = (props) => {
     }
   }, [props.fact.users, props.toolbar.mode, touched.internal_document_id, !values.internal_document_id])
 
-
-  // Get approval Step when values.document_id changes
-  useEffect(() => {
-    if(values.document_id){ // If not an empty string
-      // Start Axios Get step_approve and attachment By nuk
-      fetchStepApprovalDocumentData(values.document_id)
-      .then((result) => {
-        // Setup value From Approve 
-        setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
-        if(result.is_canceled){
-          setFieldValue("document_is_canceled", result.is_canceled.data, false);
-        }
-      });
-    }
-  }, [values.document_id]);
-
-  // Get  attachment when values.document_id changes
-  useEffect(() => {
-    if(values.document_id) { // If not an empty string
-      // Start Axios Get step_approve and attachment By nuk
-      fetchAttachmentDocumentData(values.document_id)
-      .then((desrciption_files) => {
-        // Setup value From Attachment
-        setFieldValue("desrciption_files_length", desrciption_files.results.length, false);
-        setFieldValue("desrciption_files", desrciption_files.results, false);
-      });
-    }
-  }, [values.document_id]);
-
-
-  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(props.toolbar, props.fact, values , setValues, setFieldValue, validateField, ...args)
+  
+  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(props.toolbar, footer, props.fact, values , setValues, setFieldValue, validateField, ...args)
 
   const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", props.fact, setFieldValue, ...args);
   const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", props.fact, setFieldValue, ...args);
