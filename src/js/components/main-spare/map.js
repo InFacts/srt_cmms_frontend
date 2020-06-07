@@ -123,7 +123,7 @@ class Map extends React.Component {
                                     <span className="p-contextual-menu__dropdown" id="menu-4" aria-hidden="true" aria-label="submenu">
                                         <span className="p-contextual-menu__group">
                                             <Link to="/report-b22" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รายงาน บ.22 (Spare6)</Link>
-                                            <Link to="/report-s1" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รายงาน ส.1 (Spare7)</Link>
+                                            <Link to="/report-s-1" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รายงาน ส.1 (Spare7)</Link>
                                         </span>
                                     </span>
                                 </span>

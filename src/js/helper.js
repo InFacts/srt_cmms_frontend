@@ -594,6 +594,18 @@ export const fetchGoodsOnhandData = (warehouse_id, item_id) => new Promise((reso
         });
 });
 
+// Get Goods Onhand After Select Warehoues ID and No part ID
+export const fetchGoodsOnhandDataForItemmasterData = (item_id) => new Promise((resolve, reject) => {
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-onhand/plus?item_id=${item_id}`;
+    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((res) => {
+            resolve(res.data.results);
+        })
+        .catch((err) => {
+            reject(err)
+        });
+});
+
 // Check Document Status from 
 export const DOCUMENT_STATUS = {
     DRAFT: "สร้าง Draft",
