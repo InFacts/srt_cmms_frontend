@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux'
+import { useSelector, shallowEqual } from 'react-redux'
 import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
 import { API_URL_DATABASE } from '../../config_url.js';
@@ -13,6 +13,7 @@ const PopupModalDocument = (props) => {
     const [url, setUrl] = useState(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=${props.documentTypeGroupID}&internal_document_id=${documentID}`)
     const { setFieldValue } = useFormikContext();
     const [forceRefresh, setForceRefresh] = useState(false);
+    const toolbar = useSelector((state ) => ({...state.toolbar}), shallowEqual);
 
     useEffect(() => {
         const fetchData = () => {
@@ -22,7 +23,7 @@ const PopupModalDocument = (props) => {
                 })
         };
         fetchData();
-    }, [url]);
+    }, [url, toolbar.mode]);
 
     return (
         <div className="modal" id={props.id} style={{ display: "none" }}>

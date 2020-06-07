@@ -31,7 +31,6 @@ const useFooterInitializer = (document_type_id) => {
     //Handle Document Status TODO: move it out of footer!!
 
 
-
     // Handle Toolbar Mode
     useEffect(() => {
         let document_id = values.document_id;

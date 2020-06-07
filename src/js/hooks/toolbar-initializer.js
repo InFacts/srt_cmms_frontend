@@ -5,7 +5,7 @@ import {   handleClickAdd, handleClickHomeToSpareMain,
 import {useFormikContext } from 'formik';
 import { useDispatch, useSelector  } from 'react-redux'
 import {fetchLastestInternalDocumentID, DOCUMENT_TYPE_ID} from '../helper'
-
+import { navBottomOnReady, navBottomError, navBottomSuccess } from '../redux/modules/nav-bottom'
 
 export const useToolbarChangeModeInitializer = (initial_mode) => {
     const dispatch = useDispatch();
@@ -24,13 +24,17 @@ const useToolbarInitializer = (initial_mode) => {
     // 1. Change Toolbar to Mode Search
     useToolbarChangeModeInitializer(initial_mode);
 
+
+
     // !!! Handles all state.toolbar mode and requiresHandleClick Changes !!!
 
-    // Handle toolbar mode change: SEARCH
+    // Handle toolbar mode change
     useEffect(()=> {
         if (toolbar.mode === TOOLBAR_MODE.SEARCH){
             resetForm(); //Search doesn't have handleClick, Clicks are tracked by mode changes only.
         }
+        // Handle make navBottom onready (Blue) once change mode
+        dispatch(navBottomOnReady('', '', ''));
     }, [toolbar.mode, resetForm]);
 
     // Handle home button, only re-subscribe if requiresHandleClick of HOME changes
