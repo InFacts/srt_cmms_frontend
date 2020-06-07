@@ -141,8 +141,8 @@ const useFooterInitializer = (document_type_id) => {
                     console.log("I AM SUBMITTING ", data );
                     saveDocument(document_type_id, data)
                     .then((document_id) => {
-                        setFieldValue('document_id', document_id, false);
-                        dispatch(navBottomSuccess('[PUT]', 'Submit Success', ''));
+                        setFieldValue('document_id', document_id, true);
+                        dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
                     })
                     .catch((err) => {
                         console.log("Submit Failed ", err.response);
@@ -171,7 +171,7 @@ const useFooterInitializer = (document_type_id) => {
                     if(values.document_id){ // If have document_id, no need to create new doc
                         startDocumentApprovalFlow(values.document_id)
                         .then(() => {
-                            dispatch(navBottomSuccess('[PUT]', 'Submit Success', ''));
+                            dispatch(navBottomSuccess('[PUT]', 'Started Approval Flow Success', ''));
                         })
                         .catch((err) => {
                             //         //TODO Do something if Submit Fails
@@ -185,7 +185,7 @@ const useFooterInitializer = (document_type_id) => {
                     }else{ // If not have document_id
                         saveDocument(document_type_id, data)
                         .then((document_id) => {
-                            setFieldValue('document_id', document_id, false);
+                            setFieldValue('document_id', document_id, true);
                             startDocumentApprovalFlow(document_id)
                             .then(() => {
                                 dispatch(navBottomSuccess('[PUT]', 'Submit Success', ''));

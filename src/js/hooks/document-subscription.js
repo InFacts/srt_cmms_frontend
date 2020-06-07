@@ -16,6 +16,7 @@ const useDocumentSubscription = () => {
     // Get approval Step when values.document_id changes
     useEffect(() => {
         if(values.document_id && ! footer.requiresHandleClick[FOOTER_ACTIONS.SEND]){ // If not an empty string AND isn't handlingSEND process
+        console.log("fetchStepApprovalDocumentData: SEND/Doc ID Changed")
         // Start Axios Get step_approve and attachment By nuk
         fetchStepApprovalDocumentData(values.document_id)
         .then((result) => {
@@ -32,6 +33,7 @@ const useDocumentSubscription = () => {
     // Get  attachment when values.document_id changes
     useEffect(() => {
         if(values.document_id  && ! footer.requiresHandleClick[FOOTER_ACTIONS.SEND]) { // If not an empty string AND isn't handlingSEND process
+        console.log("fetchAttachmentDocumentData: SEND/Doc ID Changed")
         // Start Axios Get step_approve and attachment By nuk
         fetchAttachmentDocumentData(values.document_id)
         .then((desrciption_files) => {

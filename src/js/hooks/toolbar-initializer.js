@@ -3,22 +3,22 @@ import {   handleClickAdd, handleClickHomeToSpareMain,
     handleClickForward, handleClickBackward,handleClickRefresh, TOOLBAR_MODE,TOOLBAR_ACTIONS,
     MODE_TO_ACTION_CREATOR } from '../redux/modules/toolbar.js';
 import {useFormikContext } from 'formik';
-import { useDispatch, useSelector  } from 'react-redux'
+import { useDispatch, useSelector ,shallowEqual } from 'react-redux'
 import {fetchLastestInternalDocumentID, DOCUMENT_TYPE_ID} from '../helper'
 import { navBottomOnReady, navBottomError, navBottomSuccess } from '../redux/modules/nav-bottom'
 
 export const useToolbarChangeModeInitializer = (initial_mode) => {
     const dispatch = useDispatch();
-    const toolbar = useSelector((state) => ({...state.toolbar}));
+    const toolbar = useSelector((state) => ({...state.toolbar}), shallowEqual);
     useEffect(()=>{
         dispatch(MODE_TO_ACTION_CREATOR[initial_mode]());
     }, [dispatch, initial_mode]);
 
-    // Handle toolbar mode change
+    // Handle toolbar mode change + requireClick Changes, navBottom onReady 
     useEffect(()=> {
         // Handle make navBottom onready (Blue) once change mode
         dispatch(navBottomOnReady('', '', ''));
-    }, [toolbar.mode]);
+    }, [toolbar.mode, toolbar.requiresHandleClick]);
 
     return;
 }
