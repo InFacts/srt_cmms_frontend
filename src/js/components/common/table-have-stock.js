@@ -83,7 +83,7 @@ const Table = (props) => {
 
               <td className="edit-padding text-center">
                 <NumberInput step={0.0001} name={`line_items[${index}].per_unit_price`}
-                  validate={per_unit_price => props.validateLineNumberPerUnitPriceItemIDField(`line_items[${index}].per_unit_price`, per_unit_price, index)}
+                  // validate={per_unit_price => props.validateLineNumberPerUnitPriceItemIDField(`line_items[${index}].per_unit_price`, per_unit_price, index)}
                   disabled={props.disabledBothMode !== true ? props.actionMode === TOOLBAR_MODE.SEARCH : true}
                   redBorderForError="error-in-table"
                 />
