@@ -8,7 +8,7 @@ const NumberInput = ({ ...props }) => {
   return (
     <>
       <div>
-        <input type="number" min="0" step={props.step} className="cancel-default" style={{paddingRight: "0"}} {...field} {...props}></input>
+        <input type="number" min="0" className="cancel-default" style={{paddingRight: "0"}} {...field} {...props}></input>
       </div>
       {
       props.redBorderForError !== "error-in-table"

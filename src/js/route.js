@@ -59,8 +59,9 @@ const FrontEnd = () => (
 
         {/* PMT Routes */}
         <Route exact path="/pmt-work-request" component={WorkRequestComponent} />
+        <Route exact path="/pmt-work-order" component={PmtWorkOrder} />
         <Route exact path="/ss-101" component={PmtSS101} />
-        <Route exact path="/wo" component={PmtWorkOrder} />
+        
 
         <Route exact path="/track" component={Track} />
     </>

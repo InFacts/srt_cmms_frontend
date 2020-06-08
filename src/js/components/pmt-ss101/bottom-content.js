@@ -1,324 +1,386 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, shallowEqual} from 'react-redux';
 
-import TextareaInput from '../common/formik-textarea-input';
 import TableStatus from '../common/table-status';
+import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
 
 import Files from '../common/files2'
+import Label from '../common/form-label'
+import TextInput from '../common/formik-text-input';
+import TextareaInput from '../common/formik-textarea-input';
+import NumberInput from '../common/formik-number-input';
+import DateTimeInput from '../common/formik-datetime-input';
+import SelectNoChildrenInput from '../common/formik-select-no-children';
+import { useFormikContext } from 'formik';
 
 const BottomContent = (props) => {
+    const toolbar = useSelector((state) => ({...state.toolbar}), shallowEqual);
+    const factDistricts = useSelector((state) => ({...state.api.fact.districts}), shallowEqual); 
+    const factNodes = useSelector((state) => ({...state.api.fact.nodes}), shallowEqual); 
+    const factStations = useSelector((state) => ({...state.api.fact.stations}), shallowEqual); 
+    const {values} = useFormikContext();
     return (
-        <div id="blackground-gray">
-            <div className="container_12 clearfix">
-                <div className="container_12 ">
-                    <div id="breakdown_content" className="tabcontent">
-                        <h3 className="head-title-bottom mt-2">ข้อมูลเกี่ยวกับอาการขัดข้อง</h3>
-                        <div className="grid_12">
-                            <div className="grid_3"><p className="cancel-default">เดินทางโดย</p></div>
-                            <div className="grid_7">
-                                <select className="edit-select" disabled="disabled">
-                                    {/* {current.props.list_job.map(function (list_job, index) {
-                  if (current.props.document_show.travel_by === list_job.status) {
-                    return <option defaultValue={list_job.id} key={index} selected> {list_job.status} </option>
-                  }
-                  else {
-                    return null
-                  }
-                })} */}
-                                </select>
-                            </div>
-                        </div>
-                        <div className="grid_12">
-                            <div className="grid_3"><p className="cancel-default">ออกเดินทาง</p></div>
-                            <div className="grid_7">
-                                <input type="date" className="cancel-default grid_3 mt-1" disabled="disabled"
-                                // defaultValue={this.props.document_show.travel_by_date1}
-                                ></input>
-                                <input type="time" className="cancel-default grid_3 mt-1 float-right" disabled="disabled"
-                                // defaultValue={this.props.document_show.travel_by_time1}
-                                ></input>
-                                <p className="cancel-default grid_1 float-right">เวลา</p>
-                            </div>
-                        </div>
-                        <div className="grid_12">
-                            <div className="grid_3"><p className="cancel-default">เดินทางถึง</p></div>
-                            <div className="grid_7">
-                                <input type="date" className="cancel-default grid_3 mt-1" disabled="disabled"
-                                // defaultValue={this.props.document_show.travel_by_date2}
-                                ></input>
-                                <input type="time" className="cancel-default grid_3 mt-1 float-right" disabled="disabled"
-                                // defaultValue={this.props.document_show.travel_by_time2}
-                                ></input>
-                                <p className="cancel-default grid_1 float-right">เวลา</p>
-                            </div>
-                        </div>
-                        <div className="grid_12">
-                            <div className="grid_3"><p className="cancel-default">วันเวลาที่แล้วเสร็จ</p></div>
-                            <div className="grid_7 ">
-                                <input type="date" className="cancel-default grid_3 mt-1" disabled="disabled"
-                                // defaultValue={this.props.document_show.travel_by_date3}
-                                ></input>
-                                <input type="time" className="cancel-default grid_3 mt-1 float-right" disabled="disabled"
-                                // defaultValue={this.props.document_show.travel_by_time3}
-                                ></input>
-                                <p className="cancel-default grid_1 float-right">เวลา</p>
-                            </div>
-                        </div>
-                        <div className="grid_12">
-                            <div className="grid_3"><p className="cancel-default">ระบบตรวจซ่อม</p></div>
-                            <div className="grid_7 ">
-                                <select className="edit-select grid_3" disabled="disabled">
-                                    {/* {current.props.list_job.map(function (list_job, index) {
-                                    if (current.props.document_show.inspection === list_job.status) {
-                                        return <option defaultValue={list_job.id} key={index} selected> {list_job.status} </option>
-                                    }
-                                    else {
-                                        return null
-                                    }
-                                })} */}
-                                </select>
-                                <select className="edit-select grid_3 float-right" disabled="disabled">
-                                    {/* {current.props.list_job.map(function (list_job, index) {
-                                    if (current.props.document_show.type === list_job.status) {
-                                        return <option defaultValue={list_job.id} key={index} selected> {list_job.status} </option>
-                                    }
-                                    else {
-                                        return null
-                                    }
-                                })} */}
-                                </select>
-                                <p className="cancel-default grid_1 float-right">ชนิด</p>
-                            </div>
-                        </div>
-                        <div className="grid_12">
-                            <div className="grid_3"><p className="cancel-default">รายการที่ซ่อม</p></div>
-                            <div className="grid_8 ">
-                                <input type="text" className="cancel-default mt-1" disabled="disabled"
-                                // defaultValue={this.props.document_show.list}
-                                ></input>
-                            </div>
-                        </div>
-                        <div className="grid_12">
-                            <div className="grid_3"><p className="cancel-default">ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม</p></div>
-                            <div className="grid_8">
-                                <input type="text" className="cancel-default mt-1" disabled="disabled"
-                                // defaultValue={this.props.document_show.location}
-                                ></input>
-                            </div>
-                        </div>
-                        <div className="grid_12">
-                            <div className="grid_3"><p className="cancel-default">ชื่ออุปกรณ์ที่บำรุงรักษา</p></div>
-                            <div className="grid_8">
-                                <input type="text" className="cancel-default mt-1" disabled="disabled"
-                                // defaultValue={this.props.document_show.name_inspection}
-                                ></input>
-                            </div>
-                        </div>
-                        <div className="grid_12">
-                            <div className="grid_3"><p className="cancel-default">สาเหตุและอาการเสียโดยสรุป</p></div>
-                            <div className="grid_8">
-                                <textarea className="edit" name="Text1" cols="40" rows="2" disabled="disabled"
-                                // defaultValue={this.props.document_show.symptoms}
-                                ></textarea>
-                            </div>
-                        </div>
-                        <div className="grid_12">
-                            <div className="grid_3"><p className="cancel-default">ขบวนรถที่</p></div>
-                            <div className="grid_8">
-                                <p className="cancel-default grid_1 float-right">นาที:</p>
-                                <input type="text" className="cancel-default mt-1 grid_3" disabled="disabled"
-                                // defaultValue={this.props.document_show.procession}
-                                ></input>
-                                <input type="text" className="cancel-default mt-1 grid_2 float-right" disabled="disabled"
-                                // defaultValue={this.props.document_show.time}
-                                ></input>
-                                <p className="cancel-default grid_2 float-right">เสียเวลาเพราะเหตุนี้</p>
-                            </div>
-                        </div>
-                        <div className="grid_12">
-                            <div className="grid_3"><p className="cancel-default">สรุปการแก้ไขและการซ่อมแซม</p></div>
-                            <div className="grid_8 ">
-                                <textarea className="edit" name="Text1" cols="40" rows="2" disabled="disabled"
-                                // defaultValue={this.props.document_show.conclude}
-                                ></textarea>
-                            </div>
-                        </div>
-                        <div className="grid_12">
-                            <div className="grid_3"><p className="cancel-default">ยังไม่ได้จัดการแก้ไขเพราะ</p></div>
-                            <div className="grid_7 ">
-                                <select className="edit-select" disabled="disabled" >
-                                    {/* {current.props.list_job.map(function (list_job, index) {
-                                    if (current.props.document_show.edit === list_job.status) {
-                                        return <option defaultValue={list_job.id} key={index} selected> {list_job.status} </option>
-                                    }
-                                    else {
-                                        return null
-                                    }
-                                })} */}
-                                </select>
-                            </div>
-                        </div>
-                        <div className="grid_12">
-                            <div className="grid_3"><p className="cancel-default">สรุปการแก้ไขและการซ่อมแซม</p></div>
-                            <div className="grid_8 ">
-                                <textarea className="edit" name="Text1" cols="40" rows="2" disabled="disabled"
-                                // defaultValue={this.props.document_show.note}
-                                ></textarea>
-                            </div>
-                        </div>
-                    </div>
+    <div id="blackground-gray">
+    <div className="container_12 clearfix">
+        
+        {/* === Tab breakdown_content  === */}
+        <div id="breakdown_content" className="tabcontent">
+            {/* Component Title */}
+            <h3 className="head-title-bottom mt-2">ข้อมูลเกี่ยวกับอาการขัดข้อง</h3>
 
-                    <div id="related_partiesn_content" className="tabcontent">
-                        <h3 className="head-title-bottom mt-2">ผู้ปฎิบัติงาน</h3>
-                        <div className="grid_12">
-                            <div className="grid_2"><p className="cancel-default">ผู้ควบคุมตรวจสอบชื่อ</p></div>
-                            <div className="grid_8 pull_0">
-                                <input type="text" className="cancel-default grid_4 mt-1" disabled="disabled"
-                                // defaultValue={this.props.document_show.name1}
-                                ></input>
-                                <select className="edit-select grid_3 float-right" disabled="disabled">
-                                    {/* {current.props.list_job.map(function (list_job, index) {
-                                        if (current.props.document_show.job1 === list_job.status) {
-                                            return <option defaultValue={list_job.id} key={index} selected> {list_job.status} </option>
-                                        }
-                                        else {
-                                            return null
-                                        }
-                                    })} */}
-                                </select>
-                                <p className="cancel-default grid_1 float-right">ตำแหน่ง</p>
-                            </div>
-                        </div>
+            {/* === Left Column   ==== */}
+            <div className="grid_6" style={{paddingLeft: "10px"}}>
+                {/* Accident Name  */}
+                <Label>ชื่องาน</Label>
+                <div className="grid_4 alpha omega">
+                    <TextInput name="accident_name" 
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}/>
+                </div>
 
-                        <div className="grid_12">
-                            <div className="grid_2"><p className="cancel-default">ดำเนินการแก้ไขชื่อ</p></div>
-                            <div className="grid_8 pull_0">
-                                <input type="text" className="cancel-default grid_4 mt-1" disabled="disabled"
-                                // defaultValue={this.props.document_show.name2}
-                                ></input>
-                                <select className="edit-select grid_3 float-right" disabled="disabled" >
-                                    {/* {current.props.list_job.map(function (list_job, index) {
-                                        if (current.props.document_show.job2 === list_job.status) {
-                                            return <option defaultValue={list_job.id} key={index} selected> {list_job.status} </option>
-                                        }
-                                        else {
-                                            return null
-                                        }
-                                    })} */}
-                                </select>
-                                <p className="cancel-default grid_1 float-right">ตำแหน่ง</p>
-                            </div>
-                        </div>
+                <div class="clear" />
 
-                        <div className="grid_12">
-                            <div className="grid_2"><p className="cancel-default">รายชื่อเพื่อนร่วมงาน</p></div>
-                            <div className="grid_8 pull_0" >
-                                <input type="text" className="cancel-default grid_4 mt-1" disabled="disabled"
-                                // defaultValue={this.props.document_show.name3}
-                                ></input>
-                                <select className="edit-select grid_3 float-right" disabled="disabled">
-                                    {/* {current.props.list_job.map(function (list_job, index) {
-                                        if (current.props.document_show.job3 === list_job.status) {
-                                            return <option defaultValue={list_job.id} key={index} selected> {list_job.status} </option>
-                                        }
-                                        else {
-                                            return null
-                                        }
-                                    })} */}
-                                </select>
-                                <p className="cancel-default grid_1 float-right">ตำแหน่ง</p>
-                            </div>
-                        </div>
-                        <div className="grid_12">
-                            <div className="grid_2"><p className="cancel-default">รายชื่อเพื่อนร่วมงาน</p></div>
-                            <div className="grid_8 pull_0">
-                                <input type="text" className="cancel-default grid_4 mt-1" disabled="disabled"
-                                // defaultValue={this.props.document_show.name4}
-                                ></input>
-                                <select className="edit-select grid_3 float-right" disabled="disabled">
-                                    {/* {current.props.list_job.map(function (list_job, index) {
-                                        if (current.props.document_show.job4 === list_job.status) {
-                                            return <option defaultValue={list_job.id} key={index} selected> {list_job.status} </option>
-                                        }
-                                        else {
-                                            return null
-                                        }
-                                    })} */}
-                                </select>
-                                <p className="cancel-default grid_1 float-right">ตำแหน่ง</p>
-                            </div>
-                        </div>
-                        <div className="grid_12">
-                            <div className="grid_2"><p className="cancel-default">รายชื่อเพื่อนร่วมงาน</p></div>
-                            <div className="grid_8 pull_0">
-                                <input type="text" className="cancel-default grid_4 mt-1" disabled="disabled"
-                                // defaultValue={this.props.document_show.name5}
-                                ></input>
-                                <select className="edit-select grid_3 float-right" disabled="disabled" >
-                                    {/* {current.props.list_job.map(function (list_job, index) {
-                                        if (current.props.document_show.job5 === list_job.status) {
-                                            return <option defaultValue={list_job.id} key={index} selected> {list_job.status} </option>
-                                        }
-                                        else {
-                                            return null
-                                        }
-                                    })} */}
-                                </select>
-                                <p className="cancel-default grid_1 float-right">ตำแหน่ง</p>
-                            </div>
-                        </div>
-                        <div className="grid_12">
-                            <div className="grid_2"><p className="cancel-default">รายชื่อเพื่อนร่วมงาน</p></div>
-                            <div className="grid_8 pull_0">
-                                <input type="text" className="cancel-default grid_4 mt-1" disabled="disabled"
-                                // defaultValue={this.props.document_show.name6}
-                                ></input>
-                                <select className="edit-select grid_3 float-right" disabled="disabled">
-                                    {/* {current.props.list_job.map(function (list_job, index) {
-                                        if (current.props.document_show.job6 === list_job.status) {
-                                            return <option defaultValue={list_job.id} key={index} selected> {list_job.status} </option>
-                                        }
-                                        else {
-                                            return null
-                                        }
-                                    })} */}
-                                </select>
-                                <p className="cancel-default grid_1 float-right">ตำแหน่ง</p>
-                            </div>
-                        </div>
-                    </div>
+                {/* Accident On  */}
+                <Label>วันเวลาที่เกิดเหตุ</Label>
+                <div className="grid_4 alpha omega">
+                    <DateTimeInput name="accident_on" 
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}/>
+                </div>
 
-                    <div id="compensation_list_content" className="tabcontent">
-                        <h4 className="head-title-bottom mt-2">ข้อมูลรายการค่าเสียหาย</h4>
-                        <table className="table-many-column">
-                            <thead>
-                                <tr>
-                                    <th className="font text-center" style={{ minWidth: "50px" }}>#</th>
-                                    <th className="font text-center" style={{ minWidth: "300px" }}>รายการ</th>
-                                    <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
-                                    <th className="font text-center" style={{ minWidth: "80px" }}>หน่วย</th>
-                                    <th className="font text-center" style={{ minWidth: "80px" }}>จำนวนเงิน</th>
-                                    <th className="font text-center" style={{ minWidth: "80px" }}>เลขที่อุปกรณ์</th>
-                                    <th className="font text-center" style={{ minWidth: "400px" }}>หมายเหตุ</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {/* {this.props.list_show.map(function (list_show, row) {
-      return (
-        <tr key={row} id={row}>
-          <td className="edit-padding text-center">{list_show.id}</td>
-          <td className="edit-padding text-center">{list_show.no_part}</td>
-          <td className="edit-padding text-center">{list_show.count}</td>
-          <td className="edit-padding text-center">{list_show.unit}</td>
-          <td className="edit-padding text-center">{list_show.quility}</td>
-          <td className="edit-padding text-center">{list_show.no_tool}</td>
-          <td className="edit-padding text-center">{list_show.note}</td>
-        </tr>)
-    })} */}
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="clear" />
 
-                    <div id="attachment_content" className="tabcontent">
+                {/* request_on */}
+                <Label>วันเวลาที่รับแจ้ง</Label>
+                <div className="grid_4 alpha omega">
+                    <DateTimeInput name="request_on" 
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}/>
+                </div>
+
+                <div class="clear" />
+
+                {/* request_by */}
+                <Label>ได้รับเหตุจาก</Label>
+                <div className="grid_4 alpha omega">
+                    <TextInput name="request_by" 
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}/>
+                </div>
+
+                <div class="clear" />
+
+                {/* recv_accident_from_id */}
+                <Label>รับข้อมูลผ่านช่องทาง</Label>
+                <div className="grid_4 alpha omega"> 
+                    {/* Need to change to radio button later */}
+                    <SelectNoChildrenInput name="recv_accident_from_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                        <option value='' selected></option>
+                        <option value='1' >โทรศัพท์</option>
+                        <option value='2' >จดหมาย</option>
+                        <option value='3' >Work Request</option>
+                    </SelectNoChildrenInput>
+                </div>
+
+                <div class="clear" />
+
+                {/* car_type_id  */}
+                <Label>เดินทางโดย</Label>
+                <div className="grid_4 alpha omega">
+                    <SelectNoChildrenInput name="car_type_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                        <option value='' selected></option>
+                        <option value='1' >รถยนต์</option>
+                        <option value='2' >รถโดยสาร</option>
+                        <option value='3' >มอเตอร์ไซค์</option>
+                    </SelectNoChildrenInput>
+                </div>
+
+                <div class="clear" />
+
+                {/* departed_on  */}
+                <Label>ออกเดินทาง</Label>
+                <div className="grid_4 alpha omega">
+                    <DateTimeInput name="departed_on" 
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}/>
+                </div>
+
+                <div class="clear" />
+
+                {/* arrived_on  */}
+                <Label>เดินทางถึง</Label>
+                <div className="grid_4 alpha omega">
+                    <DateTimeInput name="arrived_on" 
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}/>
+                </div>
+
+                <div class="clear" />
+
+                {/* finished_on  */}
+                <Label>วันเวลาที่แล้วเสร็จ</Label>
+                <div className="grid_4 alpha omega">
+                    <DateTimeInput name="finished_on" 
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}/>
+                </div>
+
+                <div class="clear" />
+
+                {/* system_type_group_id  */}
+                <Label>ระบบตรวจซ่อม</Label>
+                <div className="grid_4 alpha omega">
+                    <SelectNoChildrenInput name="system_type_group_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                        <option value='' selected></option>
+                        <option value='1' >ระบบเครื่องกั้นถนน</option>
+                    </SelectNoChildrenInput>
+                </div>
+
+                <div class="clear" />
+
+                {/* system_type_id  */}
+                <Label>ชนิดระบบตรวจซ่อม</Label>
+                <div className="grid_4 alpha omega">
+                    <SelectNoChildrenInput name="system_type_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                        <option value='' selected></option>
+                        <option value='1' >ชนิดคานทำงานด้วยไฟฟ้า (ก.1)</option>
+                    </SelectNoChildrenInput>
+                </div>
+
+                <div class="clear" />
+
+                {/* hardware_type_id  */}
+                <Label>ชื่ออุปกรณ์ที่บำรุงรักษา</Label>
+                <div className="grid_4 alpha omega">
+                    <SelectNoChildrenInput name="hardware_type_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                        <option value='' selected></option>
+                        <option value='1' >เครื่องกั้นถนนชนิดคานทำงานด้วยไฟฟ้า (ก.1)</option>
+                    </SelectNoChildrenInput>
+                </div>
+
+                <div class="clear" />
+
+                
+            </div>
+
+            {/* === Right Column === */}
+            <div className="grid_6 prefix_1">
+                {/* District ID */}
+                <Label>สถานที่ แขวง</Label>
+                <div className="grid_4 alpha omega">
+                    <SelectNoChildrenInput name="location_district_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                        <option value=''></option>
+                        {factDistricts.items.map(function ({district_id, name, division_id}) {
+                            return <option value={district_id} key={district_id}> {name} </option>
+                        })}
+                    </SelectNoChildrenInput>
+                </div>
+
+                <div class="clear" />
+                
+                {/* Node ID */}
+                <Label>สถานที่ ตอน</Label>
+                <div className="grid_4 alpha omega">
+                    <SelectNoChildrenInput name="location_node_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                        <option value=''></option>
+                        {factNodes.items.map(function ({node_id, name, district_id}) {
+                            if(values.district_id == district_id){ // Shallow equality, district ID may be string
+                                return <option value={node_id} key={node_id}>{name}</option>
+                            }
+                        })}
+                    </SelectNoChildrenInput>
+                </div>
+
+                <div class="clear" />
+
+                {/* Station ID */}
+                <Label>สถานที่ สถานี</Label>
+                <div className="grid_4 alpha omega">
+                    <SelectNoChildrenInput name="location_station_id" 
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                        <option value=''></option>
+                        {factStations.items.map(function ({station_id, name, node_id}) {
+                            if (values.node_id == node_id) { // Shallow equality, node ID may be string
+                                return <option value={station_id} key={station_id}> {name} </option>
+                            }
+                        })}
+                    </SelectNoChildrenInput>
+                </div>
+
+                <div class="clear" />
+
+                {/* Station ID */}
+                <Label>รายละเอียดสถานที่</Label>
+                <div className="grid_4 alpha omega">
+                    <TextareaInput name="location_detail" 
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                </div>
+
+                <div class="clear" />
+
+                {/* summary_cause_condition link [root_cause] from WO */}
+                <Label>สาเหตุและอาการเสียโดยสรุป</Label>
+                <div className="grid_4 alpha omega">
+                    <TextareaInput name="summary_cause_condition" 
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}/>
+                </div>
+
+                <div class="clear" />
+
+                {/* cargo_id  */}
+                <Label>ขบวนรถที่</Label>
+                <div className="grid_4 alpha omega">
+                    <TextInput name="cargo_id" 
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}/>
+                </div>
+
+                <div class="clear" />
+
+                {/* total_fail_time  */}
+                <Label>เสียเวลาเพราะเหตุนี้</Label>
+                <div className="grid_3 alpha omega">
+                    <NumberInput name="total_fail_time" step={1}
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}/> 
+                </div>
+                <div className="grid_1  omega">
+                    <p className="top-text">
+                        นาที
+                    </p>
+                </div>
+
+                <div class="clear" />
+
+                {/* service_method_id */}
+                <Label>ประเภทการซ่อม</Label>
+                <div className="grid_4 alpha omega">
+                    <SelectNoChildrenInput name="service_method_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                        <option value='' selected></option>
+                    </SelectNoChildrenInput>
+                </div>
+
+                <div class="clear" />
+
+                {/* service_method_desc */}
+                <Label>สรุปการแก้ไขและการซ่อมแซม</Label>
+                <div className="grid_4 alpha omega">
+                    <TextareaInput name="service_method_desc" 
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}/>
+                </div>
+
+                <div class="clear" />
+
+                {/* interrupt_id */}
+                <Label>ยังไมไ่ด้จัดการแก้ไขเพราะเหตุนี้</Label>
+                <div className="grid_4 alpha omega">
+                    <SelectNoChildrenInput name="interrupt_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                        <option value='' selected></option>
+                    </SelectNoChildrenInput>
+                </div>
+
+                <div class="clear" />
+            </div>
+
+            <div className="grid_12" style={{marginTop: "10px"}}>
+                {/* Remark */}
+                <Label>หมายเหตุ</Label>
+                <div className="grid_11 alpha omega">
+                    <TextareaInput name="remark" 
+                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                </div>
+
+                <div class="clear" />
+            </div>
+
+        </div>
+        
+        {/* === Tab related_parties_content  === */}
+        <div id="related_parties_content" className="tabcontent">
+            {/* Component Title */}
+            <h3 className="head-title-bottom mt-2">ผู้ปฎิบัติงาน</h3>
+
+            {/* === One Column   ==== */}
+            <div className="grid_12">
+
+                {/* auditor_name  */}
+                <Label>ผู้ควบคุมตรวจสอบชื่อ</Label>
+                <div className="grid_4 alpha omega">
+                    <TextInput name="auditor_name" 
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}/>
+                </div>
+
+                <div class="clear" />
+
+                {/* fixer_name  */}
+                <Label>ดำเนินการแก้ไขชื่อ</Label>
+                <div className="grid_4 alpha omega">
+                    <TextInput name="fixer_name" 
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}/>
+                </div>
+
+                <div class="clear" />
+
+
+                {/* member_1  */}
+                <Label>รายชื่อเพื่อนร่วมงาน</Label>
+                <div className="grid_4 alpha omega">
+                    <TextInput name="member_1" 
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}/>
+                </div>
+
+                <div class="clear" />
+
+                {/* member_2  */}
+                <Label>รายชื่อเพื่อนร่วมงาน</Label>
+                <div className="grid_4 alpha omega">
+                    <TextInput name="member_2" 
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}/>
+                </div>
+
+                <div class="clear" />
+
+                {/* member_3  */}
+                <Label>รายชื่อเพื่อนร่วมงาน</Label>
+                <div className="grid_4 alpha omega">
+                    <TextInput name="member_3" 
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}/>
+                </div>
+
+                <div class="clear" />
+            </div>
+
+        </div>
+
+        {/* === Tab compensation_list_content  === */}
+        <div id="compensation_list_content" className="tabcontent">
+
+            {/* Component Title */}
+            <h4 className="head-title-bottom mt-2">ข้อมูลรายการค่าเสียหาย</h4>
+
+
+
+            <table className="table-many-column">
+                <thead>
+                    <tr>
+                        <th className="font text-center" style={{ minWidth: "20px" }}>#</th>
+                        <th className="font text-center" style={{ minWidth: "300px" }}>รายการ</th>
+                        <th className="font text-center" style={{ minWidth: "40px" }}>จำนวน</th>
+                        <th className="font text-center" style={{ minWidth: "40px" }}>หน่วย</th>
+                        <th className="font text-center" style={{ minWidth: "100px" }}>จำนวนเงิน</th>
+                        <th className="font text-center" style={{ minWidth: "80px" }}>เลขที่อุปกรณ์</th>
+                        <th className="font text-center" style={{ minWidth: "360px" }}>หมายเหตุ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {values.loss_line_items.map((line_item, index) => (
+                    <tr key={index}>
+                        <td className="edit-padding text-center">{line_item.line_number}</td>
+                        <td className="edit-padding text-center">{line_item.description}</td>
+                        <td className="edit-padding text-center">{line_item.quantity}</td>
+                        <td className="edit-padding text-center">{line_item.uom_id}</td>
+                        <td className="edit-padding text-center">{line_item.per_unit_price}</td>
+                        <td className="edit-padding text-center">{line_item.internal_item_id}</td>
+                        <td className="edit-padding text-center">{line_item.remark}</td>
+                    </tr>
+                ))}
+                </tbody>
+            </table>
+        </div>
+
+
+        <div id="attachment_content" className="tabcontent">
                     {/* <Files name="file[0].filename" desrciptionFiles={props.actionMode === TOOLBAR_MODE.SEARCH ? values.desrciption_files
               : values.file}
               desrciptionFilesLength={props.actionMode === TOOLBAR_MODE.SEARCH ? values.desrciption_files_length
@@ -328,48 +390,14 @@ const BottomContent = (props) => {
               HandleDownload={HandleDownload}
               HandleDeleteFile={HandleDeleteFile}
             /> */}
-                    </div>
-
-                    <div id="table_status_content" className="tabcontent">
-                    {/* <TableStatus bodyTableStatus = {values.step_approve} /> */}
-                    </div>
-
-                    <div id="assets-under-maintenance_content" className="tabcontent">
-                        <h4 className="head-title-bottom mt-2">สินทรัพย์ที่ดำเนินการซ่อมแล้ว</h4>
-                        <table className="table-many-column">
-                            <thead>
-                                <tr>
-                                    <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
-                                    <th className="font" style={{ minWidth: "130px" }}>เลขที่สินทรัพย์</th>
-                                    <th className="font" style={{ minWidth: "250px" }}>รายละเอียด</th>
-                                    <th className="font text-center" style={{ minWidth: "150px" }}>ที่อยู่ปัจจุบัน</th>
-                                    <th className="font text-center" style={{ minWidth: "100px" }}>สถานะ</th>
-                                    <th className="font text-center" style={{ minWidth: "500px" }}>หมายเหตุ</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {/* {current.props.list_show_master.map(function (list_show, row) {
-                return (
-                  <tr key={row} id={row}>
-                    <th className="edit-padding text-center" style={{ minWidth: "30px" }}>{list_show.id}</th>
-                    <td className="edit-padding" style={{ minWidth: "130px" }}>{list_show.no_part}</td>
-                    <td className="edit-padding text-left" style={{ minWidth: "250px" }}>{list_show.detail}</td>
-                    <td className="edit-padding text-center" style={{ minWidth: "80px" }}>{list_show.location}</td>
-                    <td className="edit-padding text-center" style={{ minWidth: "100px" }}>
-                      <select className="edit-select-table">
-                        <option defaultValue="1">{list_show.status}</option>
-                      </select>
-                    </td>
-                    <td className="edit-padding text-left" style={{ minWidth: "300px" }}>{list_show.note}</td>
-                  </tr>)
-              })} */}
-                            </tbody>
-                        </table>
-                    </div>
-
-                </div>
-            </div>
         </div>
+
+        <div id="table_status_content" className="tabcontent">
+            <TableStatus bodyTableStatus = {values.step_approve} />
+        </div>
+
+    </div>
+    </div>
     )
 }
 

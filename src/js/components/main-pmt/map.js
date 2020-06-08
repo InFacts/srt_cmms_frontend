@@ -49,7 +49,7 @@ class Map extends React.Component {
                                 <img alt='some value' src={Text1} className="Ptext1" />
                                 <img alt='some value' src={Text2} className="Ptext2" />
                                 <img alt='some value' src={Text3} className="Ptext3" />
-                                <Link to="/wo"><img alt='some value' src={Twoone} className="Ptwo-one" /></Link>
+                                <Link to="/pmt-work-order"><img alt='some value' src={Twoone} className="Ptwo-one" /></Link>
                                 <Link to="/assint"><img alt='some value' src={Twotwo} className="Ptwo-two" /></Link>
                                 <Link to="/fixed-asset"><img alt='some value' src={Twothree} className="Ptwo-three" /></Link>
                                 <img alt='some value' src={Text4} className="Ptext4" />
