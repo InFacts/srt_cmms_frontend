@@ -19,9 +19,9 @@ const BottomContent = (props) => {
   const identifyEndpoins = (document_type_id) => {
     let doc_type = document_type_id.toString().substring(0, 3);
     if (doc_type === "101") return "goods-receipt2";
-    if (doc_type === "103") return "good-good-issue-no-po";
-    if (doc_type === "111") return "good-issue-2";
-    if (doc_type === "112") return "good-take-out";
+    if (doc_type === "103") return "goods-return";
+    if (doc_type === "111") return "goods-usage";
+    if (doc_type === "112") return "goods-issue";
     if (doc_type === "121") return "inventory-transfer";
     else return "#";
   }
@@ -36,11 +36,11 @@ const BottomContent = (props) => {
                 <thead>
                   <tr>
                     <th className="font" style={{ minWidth: "150px" }}>วันเวลาสร้าง</th>
-                    <th className="font" style={{ minWidth: "10px" }}>เลขที่เอกสาร</th>
-                    <th className="font" style={{ minWidth: "250px" }}>ประเภทเอกสาร</th>
+                    <th className="font" style={{ minWidth: "150px" }}>เลขที่เอกสาร</th>
+                    <th className="font" style={{ minWidth: "500px" }}>ประเภทเอกสาร</th>
                     {/* <th className="font" style={{ minWidth: "150px" }}>ชื่องาน</th> */}
-                    <th className="font" style={{ minWidth: "10px" }}>ผู้นำเข้าระบบ</th>
-                    <th className="font" style={{ minWidth: "150px" }}>สถานะ</th>
+                    <th className="font" style={{ minWidth: "150px" }}>ผู้นำเข้าระบบ</th>
+                    {/* <th className="font" style={{ minWidth: "150px" }}>สถานะ</th> */}
                     {/* <th className="font" style={{ minWidth: "150px" }}>รายละเอียด</th> */}
                   </tr>
                 </thead>
@@ -60,9 +60,9 @@ const BottomContent = (props) => {
                             track_document_show.created_by_user_id === 0 && listUsers[0].username !== undefined ? "Server" :
                             Object.values(listUsers).find(user => user.user_id === track_document_show.created_by_user_id).username
                           }</td>
-                          <td className="edit-padding">{
+                          {/* <td className="edit-padding">{
                             Object.values(listDocumentStatus).find(status => status.document_status_id === track_document_show.document_status_id).status
-                          }</td>
+                          }</td> */}
                           {/* <td className="edit-padding">
                             <Link to={identifyEndpoins(track_document_show.document_type_id) + "?internal_document_id=" + track_document_show.internal_document_id + "&document_id=" + track_document_show.document_id}>รายละเอียด</Link>
                           </td> */}
