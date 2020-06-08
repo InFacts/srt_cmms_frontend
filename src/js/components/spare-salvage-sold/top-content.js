@@ -61,7 +61,8 @@ const TopContent = (props) => {
       setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(props.fact.users, props.decoded_token.id));
       setFieldValue("status_name_th", "ยังไม่ได้รับการบันทึก");
       setFieldValue("created_on", new Date().toISOString().slice(0, 16));
-      // validateField("created_by_admin_employee_id");
+      setFieldValue("src_warehouse_id", 100);
+      validateField("src_warehouse_id");
     }
   }, [props.decoded_token, props.fact.users, props.toolbar.mode, touched.internal_document_id, !values.internal_document_id])
 
@@ -175,7 +176,7 @@ const TopContent = (props) => {
     <div id="blackground-white">
       <div className="container_12 clearfix">
         <section className="container_12 ">
-          <h4 className="head-title">คืนซากอะไหล่</h4>
+          <h4 className="head-title">จำหน่ายซากอะไหล่</h4>
           <div className="container_12">
 
             {/* Document ID */}
@@ -242,7 +243,8 @@ const TopContent = (props) => {
             {/* Src Warehouse ID */}
             <div className="grid_3 float-right">
               <TextInput name="src_warehouse_id" validate={validateSrcWarehouseIDField}
-                disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                // disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                disabled
                 searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalInventory" tabIndex="5" />
             </div>
             <div className="grid_2 float-right">

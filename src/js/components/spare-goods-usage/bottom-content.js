@@ -18,7 +18,7 @@ import PopupModalNoPart from '../common/popup-modal-nopart'
 
 import '../../../css/table.css';
 
-import { fetchGoodsOnhandData, getNumberFromEscapedString } from '../../helper';
+import { fetchGoodsOnhandData, getNumberFromEscapedString, getLotFromQty } from '../../helper';
 const BottomContent = (props) => {
 
   const [lineNumber, setLineNumber] = useState('');
@@ -94,11 +94,11 @@ const BottomContent = (props) => {
       setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
       setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
       setFieldValue(fieldName + `.per_unit_price`, 0, false);
-      
+
       fetchGoodsOnhandData(getNumberFromEscapedString(values.src_warehouse_id), item.item_id)
-      .then((at_source) => {
-        setFieldValue(fieldName + `.at_source`, at_source, false);
-      })
+        .then((at_source) => {
+          setFieldValue(fieldName + `.at_source`, at_source, false);
+        })
       return resolve();
     } else {
       return resolve('Invalid Number ID');
@@ -106,17 +106,21 @@ const BottomContent = (props) => {
   });
 
   const validateLineNumberQuatityItemIDField = (fieldName, quantity, index) => {
-    // internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
-    //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
-    // if (values.line_items[index].quantity === quantity) {
-    //   return;
-    // }
     if (quantity === "") {
       return;
     }
 
     if (quantity !== 0) {
-      setFieldValue(fieldName, quantity, false);
+      // console.log("I AM CHECK VALUES", values.line_items[index])
+      let items = values.line_items[index].at_source;
+      let item = items.find(item => `${item.item_status_id}` === `${values.line_items[index].item_status_id}`); // Returns undefined if not found
+      if (item) {
+        if (quantity !== values.line_items[index].quantity) {
+          getLotFromQty(item.pricing.fifo, quantity);
+        }
+        setFieldValue(fieldName, quantity, false);
+        return;
+      }
       return;
     } else {
       return 'Invalid Quantity Line Item';

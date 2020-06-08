@@ -22,13 +22,13 @@ import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_I
 import { FOOTER_MODE, FOOTER_ACTIONS } from '../../redux/modules/footer.js';
 
 const responseToFormState = (userFact, data) => {
-  for (var i = data.line_items.length; i <= 9; i++) {
-    data.line_items.push(
+  for (var i = data.specific.line_items.length; i <= 9; i++) {
+    data.specific.line_items.push(
       {
         item_id: "",
         internal_item_id: "",
         description: "",
-        quantity: "",
+        unit_count: "",
         uom_group_id: "",
         unit: "",
         per_unit_price: "",
@@ -37,15 +37,15 @@ const responseToFormState = (userFact, data) => {
     );
   }
   return {
-    internal_document_id: data.internal_document_id,
-    created_by_user_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_user_id) || '',
-    created_by_admin_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_admin_id) || '',
-    created_on: data.created_on.split(".")[0],
-    line_items: data.line_items,
-    src_warehouse_id: data.src_warehouse_id,
-    remark: data.remark,
-    status_name_th: data.status_name,
-    refer_to_document_name: data.refer_to_document_name,
+    internal_document_id: data.document.internal_document_id,
+    created_by_user_employee_id: getEmployeeIDFromUserID(userFact, data.document.created_by_user_id) || '',
+    created_by_admin_employee_id: getEmployeeIDFromUserID(userFact, data.document.created_by_admin_id) || '',
+    created_on: data.document.created_on.split(".")[0],
+    line_items: data.specific.line_items,
+    src_warehouse_id: data.specific.warehouse_id,
+    remark: data.document.remark,
+    status_name_th: data.document.document_status_id,
+    refer_to_document_name: data.specific.refer_to_document_name,
   }
 }
 
@@ -88,10 +88,11 @@ const TopContent = (props) => {
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
       .then((res) => {
         console.log("res", res.data.document.internal_document_id, internal_document_id)
+        console.log("res.data.document.internal_document_id === internal_document_id", res.data.document.internal_document_id === internal_document_id)
         if (res.data.document.internal_document_id === internal_document_id) { // If input document ID exists
           if ((props.toolbar.mode === TOOLBAR_MODE.SEARCH || props.toolbar.mode === TOOLBAR_MODE.NONE || props.toolbar.mode === TOOLBAR_MODE.NONE_HOME)
             && !props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
-
+              console.log("I AM IN HEAR")
             setValues({ ...values, ...responseToFormState(props.fact.users, res.data) }, false); //Setvalues and don't validate
             validateField("src_warehouse_id");
             validateField("created_by_user_employee_id");

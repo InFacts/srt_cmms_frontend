@@ -67,7 +67,7 @@ const initialLineItem = {
     uom_id: '',
     per_unit_price: '',
     // item_id: '',
-    item_status_id: 1,
+    item_status_id: 5,
     
     //Field ที่ไม่ได้กรอก
     description: '',
