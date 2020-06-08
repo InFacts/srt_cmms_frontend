@@ -205,12 +205,11 @@ const BottomContent = (props) => {
           </div>
 
           <div id="attachment_content" className="tabcontent">
+            {console.log("values -----", values)}
             <Files 
               name="file[0].filename"
-              desrciptionFiles={props.actionMode === TOOLBAR_MODE.SEARCH ? values.desrciption_files
-              : values.file}
-              desrciptionFilesLength={props.actionMode === TOOLBAR_MODE.SEARCH ? values.desrciption_files_length
-                : values.file.length}
+              desrciptionFiles={props.actionMode === TOOLBAR_MODE.SEARCH ? values.desrciption_files : values.file}
+              desrciptionFilesLength={props.actionMode === TOOLBAR_MODE.SEARCH ? values.desrciption_files_length : values.file.length}
               disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
               disabledForModeAdd={props.actionMode === TOOLBAR_MODE.ADD}
               HandleDownload={HandleDownload}
