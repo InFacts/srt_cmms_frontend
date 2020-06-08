@@ -46,6 +46,7 @@ const responseToFormState = (userFact, data) => {
     src_warehouse_id: data.src_warehouse_id,
     remark: data.remark,
     status_name_th: data.status_name,
+    document_date: data.document_date.slice(0, 10)
   }
 }
 
