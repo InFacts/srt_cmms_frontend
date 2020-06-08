@@ -813,7 +813,7 @@ export const getLatestApprovalStep = (document_id, approval_step_action_id, user
 // Approve document in approval_step
 // POST /approval/{document_id}/approval_process_id/approve
 export const approveDocuement = (document_id, obj_body) => new Promise((resolve, reject) => {
-    console.log("approveDocuement obj_body ------>", obj_body)
+    console.log("approveDocuement obj_body ------>", obj_body);
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/${obj_body.approval_process_id}/approve`;
     axios.post(url, obj_body, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then(res => {
@@ -823,3 +823,11 @@ export const approveDocuement = (document_id, obj_body) => new Promise((resolve,
             reject(err);
         })
 });
+
+// Get Params from URL
+export const getUrlParamsLink = new Promise((resolve, reject) => {
+    let url = window.location.search;
+    const urlParams = new URLSearchParams(url);
+    const internal_document_id = urlParams.get('internal_document_id');
+    return resolve(internal_document_id);
+})

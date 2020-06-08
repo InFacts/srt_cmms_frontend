@@ -42,6 +42,7 @@ const responseToFormState = (userFact, data) => {
     created_by_user_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_user_id) || '',
     created_by_admin_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_admin_id) || '',
     created_on: data.created_on.split(".")[0],
+    document_date: data.document_date.slice(0, 10),
     line_items: data.line_items,
     dest_warehouse_id: data.dest_warehouse_id,
     remark: data.remark,
