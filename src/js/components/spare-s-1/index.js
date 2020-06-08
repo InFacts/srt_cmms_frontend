@@ -45,11 +45,15 @@ const GoodsReturnComponent = (props) => {
 }
 
 const initialLineYears = (n=10) => {
-    let rows_year = [];
     var new_date = new Date();
-    var start_year = new_date.getFullYear() + 543 - 10; //ปีปัจุบัน(ค.ศ.) + 543(แปลงเป็น พ.ศ.) - 10(ย้อนหลังสิบปี) 
+    var start_year = new_date.getFullYear() + 543; //ปีปัจุบัน(ค.ศ.) + 543(แปลงเป็น พ.ศ.) - 10(ย้อนหลังสิบปี) 
+    let rows_year = [
+        {
+            year_id: start_year
+        }
+    ];
     for (var i = 1; i <= n; i++) {
-        start_year = start_year + 1
+        start_year = start_year - 1
         rows_year.push({
             year_id: start_year
         });

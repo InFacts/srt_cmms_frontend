@@ -18,6 +18,8 @@ import { useFormikContext } from 'formik';
 
 import PopupModalNoPart from '../common/popup-modal-nopart'
 
+import { FACTS } from '../../redux/modules/api/fact.js';
+
 import '../../../css/table.css';
 
 const BottomContent = (props) => {
@@ -71,18 +73,23 @@ const BottomContent = (props) => {
           <div id="general_content" className="tabcontent">
 
             <div className="container_12 mt-2">
-              <div className="grid_2"><p className="cancel-default">สถานะคลัง</p></div>
+              <div className="grid_2"><p className="cancel-default">สถานะคลัง</p></div> {/* ปิด หรือ เปิด การใช้งาน เป็น boolean */}
               <div className="grid_4 pull_0">
-                <SelectNoChildrenInput name="warehouse_status"
+                <SelectNoChildrenInput name="active"
                   disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
-                  <option value=''></option>
-                  {/* {props.fact[FACTS.ITEM_TYPE].items.map((item_type) => (
-                    values.item_type_id === item_type.item_type_id
-                      ?
-                      <option value={item_type.item_type_id} key={item_type.item_type_id} selected> {item_type.name} </option>
-                      :
-                      <option value={item_type.item_type_id} key={item_type.item_type_id}> {item_type.name} </option>
-                  ))} */}
+                  {values.active === 1
+                    ?
+                    <>
+                      <option value=''></option>
+                      <option value='0'>ปิดการใช้งาน</option>
+                      <option value='1' selected>เปิดการใช้งาน</option>
+                    </>
+                    :
+                    <>
+                      <option value=''></option>
+                      <option value='0' selected>ปิดการใช้งาน</option>
+                      <option value='1'>เปิดการใช้งาน</option>
+                    </>}
                 </SelectNoChildrenInput>
               </div>
             </div>
@@ -90,98 +97,67 @@ const BottomContent = (props) => {
 
             <div className="container_12 mt-2">
               <div className="container_12">
-                <div className="grid_2"><p className="cancel-default">สถานที่</p></div>
+                <div className="grid_2"><p className="cancel-default">ที่อยู่</p></div>
                 <div className="grid_4 pull_0">
                   <TextInput name="location" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="4" />
                 </div>
               </div>
 
               <div className="container_12">
-                <div className="grid_2 cancel-default">
-                  <p className="cancel-default">ที่อยู่</p>
-                </div>
+                <div className="grid_2"><p className="cancel-default">ประเภทคลัง</p></div>
                 <div className="grid_4 pull_0">
-                  <TextInput name="address" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="4" />
-                </div>
-              </div>
-
-              <div className="container_12">
-                <div className="grid_2"><p className="cancel-default">แขวง/ตำบล</p></div>
-                <div className="grid_4 pull_0">
-                  <SelectNoChildrenInput name="district_id"
+                  <SelectNoChildrenInput name="warehouse_type_id"
                     disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
                     <option value=''></option>
-                    {/* {props.fact[FACTS.ITEM_TYPE].items.map((item_type) => (
-                    values.item_type_id === item_type.item_type_id
-                      ?
-                      <option value={item_type.item_type_id} key={item_type.item_type_id} selected> {item_type.name} </option>
-                      :
-                      <option value={item_type.item_type_id} key={item_type.item_type_id}> {item_type.name} </option>
-                  ))} */}
+                    {props.fact[FACTS.WAREHOUSES_TYPE].items.map((warehouse_type) => (
+                      values.warehouse_type_id === warehouse_type.warehouse_type_id
+                        ?
+                        <option value={warehouse_type.warehouse_type_id} key={warehouse_type.warehouse_type_id} selected> {warehouse_type.type} </option>
+                        :
+                        <option value={warehouse_type.warehouse_type_id} key={warehouse_type.warehouse_type_id}> {warehouse_type.type} </option>
+                    ))}
                   </SelectNoChildrenInput>
                 </div>
               </div>
 
               <div className="container_12">
-                <div className="grid_2"><p className="cancel-default">เขต/อำเภอ</p></div>
+                <div className="grid_2"><p className="cancel-default">กลุ่มคลัง</p></div>
                 <div className="grid_4 pull_0">
-                  <SelectNoChildrenInput name="county_id"
+                  <SelectNoChildrenInput name="use_central"
                     disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
-                    <option value=''></option>
-                    {/* {props.fact[FACTS.ITEM_TYPE].items.map((item_type) => (
-                    values.item_type_id === item_type.item_type_id
+                    {values.use_central === 1
                       ?
-                      <option value={item_type.item_type_id} key={item_type.item_type_id} selected> {item_type.name} </option>
+                      <>
+                        <option value=''></option>
+                        <option value='0'>คลังอื่นๆ</option>
+                        <option value='1' selected>คลังส่วนกลาง</option>
+                      </>
                       :
-                      <option value={item_type.item_type_id} key={item_type.item_type_id}> {item_type.name} </option>
-                  ))} */}
+                      <>
+                        <option value=''></option>
+                        <option value='0' selected>คลังอื่นๆ</option>
+                        <option value='1'>คลังส่วนกลาง</option>
+                      </>}
+
                   </SelectNoChildrenInput>
                 </div>
               </div>
 
-              <div className="container_12">
-                <div className="grid_2"><p className="cancel-default">จังหวัด</p></div>
-                <div className="grid_4 pull_0">
-                  <SelectNoChildrenInput name="province_id"
-                    disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
-                    <option value=''></option>
-                    {/* {props.fact[FACTS.ITEM_TYPE].items.map((item_type) => (
-                    values.item_type_id === item_type.item_type_id
-                      ?
-                      <option value={item_type.item_type_id} key={item_type.item_type_id} selected> {item_type.name} </option>
-                      :
-                      <option value={item_type.item_type_id} key={item_type.item_type_id}> {item_type.name} </option>
-                  ))} */}
-                  </SelectNoChildrenInput>
-                </div>
-              </div>
-
-              <div className="container_12 mt-1">
-                <div className="grid_2 cancel-default">
-                  <p className="cancel-default">รหัสไปรษณีย์</p>
-                </div>
-                <div className="grid_4 pull_0">
-                  <NumberInput step={1} name="post_code" tabIndex="7"
-                    // validate={quantity => props.validateLineNumberQuatityItemIDField(`line_items[${index}].quantity`, quantity, index)}
-                    disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
-                  />
-                </div>
-              </div>
             </div>
           </div>
 
           {/* Attachment Tab */}
           <div id="attachment_content" className="tabcontent">
-          <Files 
+            <Files
               name="file[0].filename"
               desrciptionFiles={props.actionMode === TOOLBAR_MODE.SEARCH ? values.desrciption_files
-              : values.file}
+                : values.file}
               desrciptionFilesLength={props.actionMode === TOOLBAR_MODE.SEARCH ? values.desrciption_files_length
                 : values.file.length}
               disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
               disabledForModeAdd={props.actionMode === TOOLBAR_MODE.ADD}
-              // HandleDownload={HandleDownload}
-              // HandleDeleteFile={HandleDeleteFile}
+            // HandleDownload={HandleDownload}
+            // HandleDeleteFile={HandleDeleteFile}
             />
           </div>
         </div>

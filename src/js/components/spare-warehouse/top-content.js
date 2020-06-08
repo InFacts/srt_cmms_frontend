@@ -24,8 +24,15 @@ const TopContent = (props) => {
     warehouse_id = `${warehouse_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
     let warehouses = props.fact.warehouses.items;
     let warehouse = warehouses.find(warehouse => `${warehouse.warehouse_id}` === `${warehouse_id}`); // Returns undefined if not found
+    console.log(warehouse, "<<warehouse")
     if (warehouse) {
-      setFieldValue(fieldName, `${warehouse_id}\\[${warehouse.abbreviation}] ${warehouse.name}`, false);
+      setFieldValue("warehouse_id", warehouse_id, false);
+      setFieldValue("name", warehouse.name, false);
+      setFieldValue("abbreviation", warehouse.abbreviation, false);
+      setFieldValue("active", warehouse.active.data[0], false);
+      setFieldValue("location", warehouse.location, false);
+      setFieldValue("warehouse_type_id", warehouse.warehouse_type_id, false);
+      setFieldValue("use_central", warehouse.use_central.data[0], false);
       return;
     } else {
       return 'Invalid Warehouse ID';
@@ -38,12 +45,33 @@ const TopContent = (props) => {
       <div className="container_12 clearfix">
         <section className="container_12 ">
           <h4 className="head-title">คลัง - Setup</h4>
+
           <div className="container_12">
             <div className="grid_1"><p className="top-text">เลขที่คลัง</p></div>
             <div className="grid_4">
-            <TextInput name="warehouse_id" validate={validateSrcWarehouseIDField}
-                searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalInventory" tabIndex="1" />
+            <TextInput name="warehouse_id" 
+                validate={validateSrcWarehouseIDField}
+                searchable={props.toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalInventory" tabIndex="1" />
             </div>
+
+            <div className="grid_4 float-right">
+            <TextInput name="name" 
+                // validate={validateSrcWarehouseIDField}
+                disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                searchable={props.toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalInventory" tabIndex="1" />
+            </div>
+            <div className="grid_1 float-right"><p className="top-text float-right">ชื่อคลัง</p></div>
+          </div>
+
+
+          <div className="container_12">
+            <div className="grid_4 float-right">
+            <TextInput name="abbreviation" 
+                // validate={validateSrcWarehouseIDField}
+                disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                searchable={props.toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalInventory" tabIndex="1" />
+            </div>
+            <div className="grid_1 float-right"><p className="top-text float-right">ชื่อย่อคลัง</p></div>
           </div>
         </section>
 

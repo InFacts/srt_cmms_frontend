@@ -57,7 +57,7 @@ const GoodsReceiptComponent = (props) => {
         <form onSubmit={props.handleSubmit}>
         {/* <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) handleSubmit(e) }}> */}
             <TopContent />
-            <TabBar tabNames={tabNames} initialTabbar={initialTabbar} setInitialTabbar={setInitialTabbar}>
+            <TabBar tabNames={tabNames} initialTabID="listItem">
                 <BottomContent />
             </TabBar>
             <Footer />

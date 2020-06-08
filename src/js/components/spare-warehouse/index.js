@@ -65,6 +65,14 @@ const GoodsReceiptComponent = (props) => {
 const EnhancedGoodsReceiptComponent = withFormik({
     mapPropsToValues: (props) => ({ 
         // Field ที่ให้ User กรอก
+        warehouse_id: '',
+        name: '',
+        abbreviation: '',
+        active: '',
+        location: '',
+        warehouse_type_id: '',
+        use_central: '',
+        
         file: [],
         
         // For Attactment

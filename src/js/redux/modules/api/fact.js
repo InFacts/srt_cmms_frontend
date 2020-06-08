@@ -19,7 +19,8 @@ export const FACTS = {
     ITEM_STATUS: "item-status",
     ITEM_GROUP: "item-group",
     UNIT_OF_MEASURE_GROUPS: "unit-of-measure-groups",
-    ITEM_TYPE: "item-type"
+    ITEM_TYPE: "item-type",
+    WAREHOUSES_TYPE: "warehouse-type"
 }
 
 // Actions

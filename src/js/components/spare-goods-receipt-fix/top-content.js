@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux'
+import { connect , useSelector, shallowEqual} from 'react-redux'
 
 import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
@@ -19,6 +19,8 @@ import PopupModalInventory from '../common/popup-modal-inventory'
 import PopupModalUsername from '../common/popup-modal-username'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID } from '../../helper';
+
+import { FOOTER_MODE, FOOTER_ACTIONS} from '../../redux/modules/footer.js';
 
 const responseToFormState = (userFact, data) => {
   for (var i = data.line_items.length; i <= 9; i++) {
@@ -70,6 +72,7 @@ const setLineItem = (data) => {
 
 const TopContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
+  const footer = useSelector((state) => ({...state.footer}), shallowEqual);
 
   // Fill Default Forms
   useEffect(() => {
@@ -132,8 +135,13 @@ const TopContent = (props) => {
             // End
 
           } else { //If Mode add, need to error duplicate Document ID
-            // console.log("I AM DUPLICATE")
-            error = 'Duplicate Document ID';
+            if (values.document_id || footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve
+              console.log("i am in mode add, saved and wanting to approve")
+              error = '';
+            } else {
+              console.log("I AM DUPLICATE")
+              error = 'Duplicate Document ID';
+            }
           }
         } else { // If input Document ID doesn't exists
           if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID

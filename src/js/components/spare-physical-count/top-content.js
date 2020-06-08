@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux'
+import { connect, useSelector, shallowEqual } from 'react-redux'
 
 import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
@@ -19,6 +19,7 @@ import PopupModalUsername from '../common/popup-modal-username'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID } from '../../helper';
 
+import { FOOTER_MODE, FOOTER_ACTIONS } from '../../redux/modules/footer.js';
 
 const responseToFormState = (userFact, data) => {
   for (var i = data.line_items.length; i <= 9; i++) {
@@ -48,16 +49,13 @@ const responseToFormState = (userFact, data) => {
   }
 }
 
-
-
-
 const TopContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
-
+  const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
   // Fill Default Forms
   useEffect(() => {
     if (props.toolbar.mode === TOOLBAR_MODE.ADD) {
-      if (!values.internal_document_id && touched.internal_document_id){
+      if (!values.internal_document_id && touched.internal_document_id) {
         setFieldValue('internal_document_id', `draft-${uuidv4()}`)
       }
       setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(props.fact.users, props.decoded_token.id));
@@ -89,8 +87,9 @@ const TopContent = (props) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/internal_document_id/${encodeURIComponent(internal_document_id)}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
       .then((res) => {
-        if (res.data.internal_document_id === internal_document_id) { // If input document ID exists
-          if ((props.toolbar.mode === TOOLBAR_MODE.SEARCH || props.toolbar.mode === TOOLBAR_MODE.NONE || props.toolbar.mode === TOOLBAR_MODE.NONE_HOME) 
+        console.log("res", res.data.document.internal_document_id, internal_document_id)
+        if (res.data.document.internal_document_id === internal_document_id) { // If input document ID exists
+          if ((props.toolbar.mode === TOOLBAR_MODE.SEARCH || props.toolbar.mode === TOOLBAR_MODE.NONE || props.toolbar.mode === TOOLBAR_MODE.NONE_HOME)
             && !props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
 
             setValues({ ...values, ...responseToFormState(props.fact.users, res.data) }, false); //Setvalues and don't validate
@@ -100,12 +99,12 @@ const TopContent = (props) => {
             // Start Axios Get step_approve and attachment By nuk
             // axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${res.data.document_id}/latest/plus`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
             //   .then((step_approve) => {
-              fetchStepApprovalDocumentData(res.data.document_id)
+            fetchStepApprovalDocumentData(res.data.document_id)
               .then((result) => {
                 axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${res.data.document_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
                   .then((desrciption_files) => {
                     console.log(" I AM STILL IN MODE SEARCH AND SET VALUE")
-                    
+
                     // validateField("internal_document_id");
                     // Setup value From Approve and Attachment
                     setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
@@ -114,15 +113,20 @@ const TopContent = (props) => {
                     setFieldValue("document_id", res.data.document_id, false);
                     return resolve(null);
                   });
-                
+
               })
-              
-              // });
+
+            // });
             // End
 
           } else { //If Mode add, need to error duplicate Document ID
-            console.log("I AM DUPLICATE")
-            error = 'Duplicate Document ID';
+            if (values.document_id || footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve
+              console.log("i am in mode add, saved and wanting to approve")
+              error = '';
+            } else {
+              console.log("I AM DUPLICATE")
+              error = 'Duplicate Document ID';
+            }
           }
         } else { // If input Document ID doesn't exists
           if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
@@ -262,15 +266,15 @@ const TopContent = (props) => {
       </div>
 
       {/* PopUp ค้นหาเลขที่เอกสาร */}
-      <PopupModalDocument documentTypeGroupID={DOCUMENT_TYPE_ID.PHYSICAL_COUNT} 
-      id="modalDocument" //For Open POPUP
-      name="internal_document_id" //For setFieldValue
+      <PopupModalDocument documentTypeGroupID={DOCUMENT_TYPE_ID.PHYSICAL_COUNT}
+        id="modalDocument" //For Open POPUP
+        name="internal_document_id" //For setFieldValue
       />
 
       {/* PopUp ค้นหาเลขที่คลัง MODE ADD */}
-      <PopupModalInventory 
-       id="modalInventory" //For Open POPUP
-      name="src_warehouse_id"/>
+      <PopupModalInventory
+        id="modalInventory" //For Open POPUP
+        name="src_warehouse_id" />
 
       {/* PopUp ค้นหาชื่อพนักงาน MODE ADD */}
       <PopupModalUsername />
