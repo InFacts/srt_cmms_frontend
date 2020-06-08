@@ -16,6 +16,7 @@ import { useFormikContext, useField } from 'formik';
 const TopContent = (props) => {
     const toolbar = useSelector((state) => ({...state.toolbar}), shallowEqual);
     const fact = useSelector((state) => ({...state.api.fact}), shallowEqual);
+    const footer = useSelector((state) => ({...state.footer}), shallowEqual);
     const decoded_token = useSelector((state) => ({...state.token.decoded_token}), shallowEqual);
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
@@ -32,7 +33,7 @@ const TopContent = (props) => {
   }, [ fact.users, toolbar.mode, touched.internal_document_id, !values.internal_document_id,
     toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]]) // This needs requiresHandleClick since it resetsForm AFTER the setField Value, making it not show anything
 
-    const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(toolbar, fact, values , setValues, setFieldValue, validateField, ...args)
+    const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(toolbar, footer, fact, values , setValues, setFieldValue, validateField, ...args);
     
     const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
     const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
