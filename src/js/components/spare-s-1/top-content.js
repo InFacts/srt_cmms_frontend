@@ -17,34 +17,6 @@ import PopupModalNoPartNoChildren from '../common/popup-modal-nopart-no-children
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, getNumberFromEscapedString } from '../../helper';
 
-// const responseToFormState = (userFact, data) => {
-//   for (var i = data.line_items.length; i <= 9; i++) {
-//     data.line_items.push(
-//       {
-//         item_id: "",
-//         internal_item_id: "",
-//         description: "",
-//         quantity: "",
-//         uom_group_id: "",
-//         unit: "",
-//         per_unit_price: "",
-//         list_uoms: [],
-//         at_source: []
-//       }
-//     );
-//   }
-//   return {
-//     internal_document_id: data.internal_document_id,
-//     created_by_user_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_user_id) || '',
-//     created_by_admin_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_admin_id) || '',
-//     created_on: data.created_on.split(".")[0],
-//     line_items: data.line_items,
-//     src_warehouse_id: data.src_warehouse_id,
-//     remark: data.remark,
-//     status_name_th: data.status_name,
-//   }
-// }
-
 const TopContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
@@ -189,11 +161,15 @@ const TopContent = (props) => {
               <div className="grid_3 float-right">
                 <SelectNoChildrenInput name="mouth_id" >
                   <option value=''></option>
-                  {values.mouth.map(function (mouth) {
-                    return (
-                      <option key={mouth.id} value={mouth.id}> {mouth.mouth} </option>
-                    )
-                  })}
+                  {values.mouth.map((mouth) => {
+                    var new_date = new Date();
+                    var mouth_now = new_date.getMonth() + 1;
+                    console.log("mouth_now", mouth_now, "mouth.id", mouth.id)
+                    if( mouth_now === mouth.id) { 
+                      return <option key={mouth.id} value={mouth.id} selected> {mouth.mouth} </option>
+                    }else {
+                      return <option key={mouth.id} value={mouth.id}> {mouth.mouth} </option>
+                    }})}
                 </SelectNoChildrenInput>
               </div>
               <div className="grid_2 float-right">

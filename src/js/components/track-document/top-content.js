@@ -36,21 +36,21 @@ const TopContent = (props) => {
                 <div className="grid_11"><p className="cancel-default">ค้นหาข้อมูล</p></div>
                 <div className="grid_7">
                   <input className="d-inline" type="radio" name="RadioOptions" id="Radio1" value="1" onChange={props.onChangeFindTrackDocument}  />
-                  <label htmlFor="Radio1" className="cancel-default d-inline">เอกสารของฉัน</label>
+                  <label htmlFor="Radio1" className="cancel-default d-inline" >เอกสารของฉัน</label>
                   <input className="d-inline ml-3" type="radio" name="RadioOptions" id="Radio2" value="2" onChange={props.onChangeFindTrackDocument} checked />
                   <label htmlFor="Radio2" className="cancel-default d-inline ml-3">เอกสารทั้งหมด</label>
                 </div>
               </div>
 
               <div className="container_12 mt-2">
-                <div className="grid_1 cancel-default">
+                <div className="grid_2 cancel-default">
                   <p className="cancel-default">ประเภทเอกสาร </p>
                 </div>
-                <div className="grid_2">
+                <div className="grid_2 pull_0">
                   <FormDropdown factList={props.type_document_list} onChange={props.onChangeTypeTrackDocument} 
                     idName="document_type_group_id" descriptionName="name" gridClass="grid_2"/>
                 </div>
-                <div className="grid_1  ">
+                <div className="grid_1">
                   <p className="cancel-default">วันเริ่มต้น </p>
                 </div>
                 <div className="grid_3">
@@ -58,10 +58,10 @@ const TopContent = (props) => {
                 </div>
               </div>
               <div className="container_12">
-                <div className="grid_1 cancel-default">
+                <div className="grid_2 cancel-default">
                   <p className="cancel-default">เลขที่เอกสาร </p>
                 </div>
-                <div className="grid_2">
+                <div className="grid_2 pull_0">
                   <input type="text" className="cancel-default grid_2 " value={props.no_track_document} onChange={props.onChangeNoTrackDocument}></input>
                 </div>
                 <div className="grid_1  ">
@@ -70,19 +70,19 @@ const TopContent = (props) => {
                 <div className="grid_3">
                   <input type="date" className="cancel-default grid_3 " value={props.date_end} onChange={props.onChangeDateEndTrackDocument}></input>
                 </div>
-                <div className="grid_1  ">
+                <div className="grid_2">
                   <p className="cancel-default">สถานะเอกสาร </p>
                 </div>
-                <div className="grid_2">
+                <div className="grid_2 pull_1">
                   <FormDropdown factList={props.status_document_list} onChange={props.onChangeStatusTrackDocument} 
                     idName="document_status_id" descriptionName="status" gridClass="grid_2"/>
                 </div>
             </div>
             <div className="container_12">
-              <div className="grid_1 cancel-default">
+              <div className="grid_2 cancel-default">
                 <p className="cancel-default">แขวง </p>
               </div>
-              <div className="grid_2">
+              <div className="grid_2 pull_0">
                 <FormDropdown factList={props.district_list} onChange={props.onChangeDistrictTrackDocument} 
                   idName="district_id" descriptionName="name" gridClass="grid_2"/>
               </div>

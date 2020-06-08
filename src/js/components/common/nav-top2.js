@@ -151,7 +151,6 @@ const setupAllSubNav = () => {
         }
     });
 }
-
 const MainModule = (props) => {
     useEffect(() => {
         // Setup DropDawn
@@ -245,7 +244,7 @@ const MainModule = (props) => {
 const mapStateToProps = (state) => ({
     notify: state.notify,
     not_read_count: state.not_read_count,
-    // fact: state.token.raw_token
+    fact: state.token,
 });
 
 const mapDispatchToProps = {
