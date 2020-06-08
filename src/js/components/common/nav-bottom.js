@@ -8,6 +8,7 @@ const NavBottomComponent = (props) => {
     // console.log("nav_bottom_status,", nav_bottom_status.mode)
     let colorStatus = ""
     if (nav_bottom_status.mode === NAV_BOTTOM_STATUS.ON_READY) { colorStatus="blue" }
+    else if (nav_bottom_status.mode === NAV_BOTTOM_STATUS.SENDING) { colorStatus="blue" }
     else if (nav_bottom_status.mode === NAV_BOTTOM_STATUS.WARNING) { colorStatus="orange" }
     else if (nav_bottom_status.mode === NAV_BOTTOM_STATUS.ERROR) { colorStatus="red" }
     else if (nav_bottom_status.mode === NAV_BOTTOM_STATUS.SUCCESS) { colorStatus="green" }

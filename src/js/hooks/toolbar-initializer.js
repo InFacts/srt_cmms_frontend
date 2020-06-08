@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import {   handleClickAdd, handleClickHomeToSpareMain,
     handleClickForward, handleClickBackward,handleClickRefresh, TOOLBAR_MODE,TOOLBAR_ACTIONS,
-    MODE_TO_ACTION_CREATOR } from '../redux/modules/toolbar.js';
+    MODE_TO_ACTION_CREATOR, handleClickHomeToPMTMain } from '../redux/modules/toolbar.js';
 import {useFormikContext } from 'formik';
 import { useDispatch, useSelector ,shallowEqual } from 'react-redux'
-import {fetchLastestInternalDocumentID, DOCUMENT_TYPE_ID} from '../helper'
+import {fetchLastestInternalDocumentID, DOCUMENT_TYPE_ID, isICD} from '../helper'
 import { navBottomOnReady, navBottomError, navBottomSuccess } from '../redux/modules/nav-bottom'
 
 export const useToolbarChangeModeInitializer = (initial_mode) => {
@@ -23,7 +23,7 @@ export const useToolbarChangeModeInitializer = (initial_mode) => {
     return;
 }
 
-const useToolbarInitializer = (initial_mode) => {
+const useToolbarInitializer = (initial_mode, documentTypeGroupID) => {
     const {resetForm, values, setFieldValue} = useFormikContext();
     const toolbar = useSelector((state) => ({...state.toolbar}));
     const dispatch = useDispatch();
@@ -45,7 +45,11 @@ const useToolbarInitializer = (initial_mode) => {
     // Handle home button, only re-subscribe if requiresHandleClick of HOME changes
     useEffect(()=> {
         if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.HOME]){
-            dispatch(handleClickHomeToSpareMain());
+            if(!documentTypeGroupID || isICD(documentTypeGroupID)){ //Handle undefined documentTypeGroupID for not breaking change, but need to remove it!!
+                dispatch(handleClickHomeToSpareMain());
+            }else{ // Assume going to Module #2, but TODO to other modules too isPMT... or something
+                dispatch(handleClickHomeToPMTMain());
+            }
         }
     }, [toolbar.requiresHandleClick[TOOLBAR_ACTIONS.HOME]]);
 

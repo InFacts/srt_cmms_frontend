@@ -15,7 +15,7 @@ import { DOCUMENT_TYPE_ID} from '../../helper';
 
 const WorkRequestComponent = () => {
 
-    useToolbarInitializer(TOOLBAR_MODE.SEARCH);
+    useToolbarInitializer(TOOLBAR_MODE.SEARCH, DOCUMENT_TYPE_ID.WORK_REQUEST);
     useTokenInitializer();
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.WORK_REQUEST);
