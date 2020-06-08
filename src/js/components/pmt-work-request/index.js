@@ -53,7 +53,7 @@ const EnhancedWorkRequestComponent = withFormik({
         location_station_id: '',                 // สถานที่ สถานี
         location_detail: '',       //รายละเอียดสถานที่
 
-        remark: '',                      // หมายเหตุ
+        remark: '',                      // หมายเหตุ  NVARCHAR
         
 
 
