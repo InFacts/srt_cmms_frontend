@@ -30,7 +30,7 @@ const GoodsReturnComponent = (props) => {
         {id:"listItem", name:"รายการ"},
     ]);
 
-    useToolbarInitializer(TOOLBAR_MODE.SEARCH);
+    useToolbarInitializer(TOOLBAR_MODE.NONE_HOME);
     useFactInitializer();
 
     return (
