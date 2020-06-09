@@ -456,12 +456,19 @@ const mutateDataFillDocumentID = (object, document_id) => {
 // Save a Document Draft (without getting beginning approval flow)
 //   1. POST /document/new/0: createDocumentEmptyRow()
 //   2. PUT /document/{document_id}/{document_type_group_id}: editDocument(document_id, document_type_group_id, data)
-export const saveDocument = (document_type_group_id, data) => new Promise((resolve, reject) => {
+export const saveDocument = (document_type_group_id, data, image) => new Promise((resolve, reject) => {
     createDocumentEmptyRow()
         .then(({ document_id, internal_document_id, status }) => { // Get the Document_ID
             editDocument(document_id, document_type_group_id, mutateDataFillDocumentID(data, document_id))
                 .then(() => {
-                    return resolve(document_id);
+                    let imageBody = {file: image}
+                    uploadAttachmentDocumentData(document_id, imageBody)
+                    .then(() => {
+                        return resolve(document_id);
+                    })
+                    .catch((err) => {
+                        return reject(err);
+                    });
                 })
                 .catch((err) => {
                     return reject(err);
@@ -508,6 +515,31 @@ export const fetchStepApprovalDocumentData = (document_id) => new Promise((resol
 export const fetchAttachmentDocumentData = (document_id) => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${document_id}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((desrciption_files) => {
+            resolve(desrciption_files.data);
+        })
+        .catch((err) => {
+            reject(err)
+        });
+});
+
+// POST Attachment after search Document (document_id changes)
+export const uploadAttachmentDocumentData = (document_id, imageBody) => new Promise((resolve, reject) => {
+    console.log("imageBody....", imageBody.filename)
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${document_id}`;
+    axios.post(url, imageBody.filename, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((desrciption_files) => {
+            resolve(desrciption_files.data);
+        })
+        .catch((err) => {
+            reject(err)
+        });
+});
+
+// Download Attachment
+export const downloadAttachmentDocumentData = (document_id, attachment_id) => new Promise((resolve, reject) => {
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${document_id}/download/${attachment_id}`;
+    axios.post(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((desrciption_files) => {
             resolve(desrciption_files.data);
         })
@@ -698,7 +730,7 @@ export const validateInternalDocumentIDFieldHelper = (toolbar, footer, fact, val
             if (data.internal_document_id === internal_document_id) { // If input document ID exists
                 if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
                     && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
-
+                        fetchAttachmentDocumentData(data.document_id)
                     console.log("validateInternalDocumentIDField:: I got document ID ", data.document_id)
                     setValues({ ...values, ...responseToFormState(fact, data) }, false); //Setvalues and don't validate
                     validateField("dest_warehouse_id");
