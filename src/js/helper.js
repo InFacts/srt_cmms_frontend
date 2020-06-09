@@ -30,6 +30,12 @@ export const DOCUMENT_TYPE_ID = {
     WORK_ORDER_PM: 203,
     SS101: 204,
 }
+export const DOCUMENT_TYPE_NOTGROUP_ID = {
+    WORK_REQUEST: 2011,
+    WORK_ORDER: 2021,
+    WORK_ORDER_PM: 2031,
+    SS101: 2041,
+}
 
 export const ICD_DOCUMENT_TYPE_GROUP_IDS = [
     DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO,
@@ -90,6 +96,7 @@ export const ICD_SCHEMA = {
 }
 
 export const WORK_REQUEST_SCHEMA = {
+    document_id: -1, // NEEDS TO HAVE!
     accident_on: '', // accident_on วันเวลาเกิดเหตุ
     accident: '', // accident_detail อาการขัดข้อง
     request_by: '', // informed_by ผู้แจ้งเหตุ
@@ -147,7 +154,7 @@ export const getNumberFromEscapedString = (escapedString) => {
     if (Number.isInteger(escapedString)) {
         return escapedString;
     }
-    return parseInt(escapedString.split('\\')[0]);
+    return parseInt(escapedString.split('\\')[0]) || null;
 }
 
 export const isValidInternalDocumentIDFormat = (internal_document_id) => {
@@ -310,10 +317,16 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             specific: icd_part,
         }
     } else if (document_type_id === DOCUMENT_TYPE_ID.WORK_REQUEST) {
-        document_part["document_type_id"] = DOCUMENT_TYPE_ID.WORK_REQUEST;
+        document_part["document_type_id"] = DOCUMENT_TYPE_NOTGROUP_ID.WORK_REQUEST;
         let work_request_part = {}
         Object.keys(WORK_REQUEST_SCHEMA).map((key) => {
-            work_request_part[key] = values[key]
+            if (Number.isInteger(WORK_REQUEST_SCHEMA[key]) && key !== "document_id"){ // Check if the number in the schema is a number
+                // Hack 'document_id' to not be null, so it would work in mutateData
+                // TODO needs to change ordering of the packDataFromValues!! to not use the mutate function
+                work_request_part[key] = getNumberFromEscapedString(values[key]);
+            }else{
+                work_request_part[key] = values[key]
+            }
         })
         return {
             document: document_part,
@@ -411,14 +424,14 @@ export const editDocument = (document_id, document_type_group_id, data) => new P
 
 const fillObjectOfName = (object, fieldName, value) => {
     for (let key1 in object) {
-        if (typeof object[key1] === "object") {
+        if (typeof object[key1] === "object" && object[key1] !== null) {
             for (let key2 in object[key1]) {
-                if (typeof object[key1][key2] === "object") {
+                if (typeof object[key1][key2] === "object" && object[key1] !== null) {
                     for (let key3 in object[key1][key2]) {
-                        if (typeof object[key1][key2][key3] === "object") {
+                        if (typeof object[key1][key2][key3] === "object" && object[key1] !== null) {
                             // recursive line items
                             let line_item = object[key1][key2][key3];
-                            if (typeof line_item === "object") {
+                            if (typeof line_item === "object" && object[key1] !== null) {
                                 if (line_item.hasOwnProperty(fieldName)) {
                                     object[key1][key2][key3][fieldName] = value;
                                 }
@@ -432,8 +445,11 @@ const fillObjectOfName = (object, fieldName, value) => {
                     }
                 } else {
                     // base case, stop recurring
+                    console.log("I am setting ",key2, " if it is ", fieldName, " as ", value)
                     if (key2 === fieldName) {
+                        console.log("i think it is!! i am setting now ", object)
                         object[key1][key2] = value;
+                        console.log("i think it is!! i am setting now ", object)
                     }
                 }
             }
