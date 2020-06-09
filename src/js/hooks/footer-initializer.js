@@ -171,6 +171,7 @@ const useFooterInitializer = (document_type_id) => {
                 dispatch(navBottomSending('[API]', 'Sending ...', ''));
                 setErrors(err);
                 if(isEmpty(err)){
+                    console.log("I AM SUBMITTING  .........", values.file );
                     let data = packDataFromValues(fact, values, document_type_id);
                     console.log("I AM SUBMITTING ", data );
                     if(values.document_id){ // If have document_id, no need to create new doc
@@ -188,7 +189,7 @@ const useFooterInitializer = (document_type_id) => {
                             dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
                         }); 
                     }else{ // If not have document_id
-                        saveDocument(document_type_id, data)
+                        saveDocument(document_type_id, data, values.file[0])
                         .then((document_id) => {
                             setFieldValue('document_id', document_id, true);
                             startDocumentApprovalFlow(document_id)
@@ -223,7 +224,7 @@ const useFooterInitializer = (document_type_id) => {
 
     // Handle Click Approval
     useEffect(()=> {
-        console.log("I AM Handle APPROVAL" );
+        console.log("I AM Handle APPROVAL", values );
         if (footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL]){
             validateForm()
             .then((err) => {
@@ -257,6 +258,7 @@ const useFooterInitializer = (document_type_id) => {
                 }
             })
             .catch((err) => {
+                console.warn("Validate Failed ", err);
                 console.warn("Submit Failed ", err.response);
             })
         }

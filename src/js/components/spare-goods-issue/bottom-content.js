@@ -72,7 +72,7 @@ const BottomContent = (props) => {
 
   const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => new Promise(resolve => {
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
-
+    console.log("HERE validateLineNumberInternalItemIDField -------")
     if (values.line_items[index].internal_item_id === internal_item_id) {
       return resolve();
     }
@@ -87,7 +87,7 @@ const BottomContent = (props) => {
     }
     let items = props.fact.items.items;
     let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
-    // console.log(item)
+    console.log("item -------", item)
     if (item) {
       setFieldValue(fieldName + `.description`, `${item.description}`, false);
       setFieldValue(fieldName + `.quantity`, 0, false);
@@ -97,6 +97,7 @@ const BottomContent = (props) => {
       
       fetchGoodsOnhandData(getNumberFromEscapedString(values.src_warehouse_id), item.item_id)
       .then((at_source) => {
+        console.log("at_source ---------- ", at_source)
         setFieldValue(fieldName + `.at_source`, at_source, false);
       })
       return resolve();
@@ -188,6 +189,7 @@ const BottomContent = (props) => {
 
           <div id="listItem_content" className="tabcontent">
             <div className="container_12 mt-1" style={{ paddingRight: "10px" }}>
+              {console.log("------- TableHaveStock -------")}
               <TableHaveStock line_items={values.line_items}
                 sumTotalLineItem={sumTotalLineItem}
                 validateLineNumberInternalItemIDField={validateLineNumberInternalItemIDField}

@@ -205,8 +205,17 @@ const BottomContent = (props) => {
           </div>
 
           <div id="attachment_content" className="tabcontent">
-            {console.log("values -----", values)}
-            <Files 
+            {console.log("values -----", values.file)}
+            <Files name="file[0].filename"
+            name="file[0].filename"
+            desrciptionFiles={props.actionMode === TOOLBAR_MODE.SEARCH ? values.desrciption_files : values.file}
+            desrciptionFilesLength={props.actionMode === TOOLBAR_MODE.SEARCH ? values.desrciption_files_length : values.file.length}
+            disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
+            disabledForModeAdd={props.actionMode === TOOLBAR_MODE.ADD}
+            HandleDownload={HandleDownload}
+            HandleDeleteFile={HandleDeleteFile}
+            />
+            {/* <Files 
               name="file[0].filename"
               desrciptionFiles={props.actionMode === TOOLBAR_MODE.SEARCH ? values.desrciption_files : values.file}
               desrciptionFilesLength={props.actionMode === TOOLBAR_MODE.SEARCH ? values.desrciption_files_length : values.file.length}
@@ -214,7 +223,7 @@ const BottomContent = (props) => {
               disabledForModeAdd={props.actionMode === TOOLBAR_MODE.ADD}
               HandleDownload={HandleDownload}
               HandleDeleteFile={HandleDeleteFile}
-            />
+            /> */}
           </div>
 
           <div id="table_status_content" className="tabcontent">

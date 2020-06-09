@@ -115,9 +115,12 @@ const BottomContent = (props) => {
       let items = values.line_items[index].at_source;
       let item = items.find(item => `${item.item_status_id}` === `${values.line_items[index].item_status_id}`); // Returns undefined if not found
       if (item) {
-        console.log("weightedAverage(getLotFromQty(item.pricing.fifo, quantity))", weightedAverage(getLotFromQty(item.pricing.fifo, quantity)))
-        setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(item.pricing.fifo, quantity)), false);
-        setFieldValue(fieldName, quantity, false);
+        if (item.pricing) {
+          console.log("weightedAverage(getLotFromQty(item.pricing.fifo, quantity))", weightedAverage(getLotFromQty(item.pricing.fifo, quantity)))
+          setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(item.pricing.fifo, quantity)), false);
+          setFieldValue(fieldName, quantity, false);
+          return;
+        }
         return;
       }
       return;

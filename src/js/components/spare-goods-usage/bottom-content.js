@@ -70,9 +70,13 @@ const BottomContent = (props) => {
     }
   }
 
+  // useEffect(() = > {
+
+  // })
+
+
   const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => new Promise(resolve => {
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
-
     if (values.line_items[index].internal_item_id === internal_item_id) {
       return resolve();
     }
@@ -87,7 +91,7 @@ const BottomContent = (props) => {
     }
     let items = props.fact.items.items;
     let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
-    // console.log(item)
+
     if (item) {
       setFieldValue(fieldName + `.description`, `${item.description}`, false);
       setFieldValue(fieldName + `.quantity`, 0, false);
@@ -97,7 +101,7 @@ const BottomContent = (props) => {
 
       fetchGoodsOnhandData(getNumberFromEscapedString(values.src_warehouse_id), item.item_id)
         .then((at_source) => {
-          console.log(at_source, "at_source")
+          // console.log("at_source ------", at_source)
           setFieldValue(fieldName + `.at_source`, at_source, false);
           // setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(at_source.pricing.fifo, values.line_items[index].quantity)), false);
         })
@@ -115,11 +119,16 @@ const BottomContent = (props) => {
     if (quantity !== 0) {
       // console.log("I AM CHECK VALUES", values.line_items[index])
       let items = values.line_items[index].at_source;
+      // console.log("items ------", items)
       let item = items.find(item => `${item.item_status_id}` === `${values.line_items[index].item_status_id}`); // Returns undefined if not found
       if (item) {
-        console.log("weightedAverage(getLotFromQty(item.pricing.fifo, quantity))", weightedAverage(getLotFromQty(item.pricing.fifo, quantity)))
-        setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(item.pricing.fifo, quantity)), false);
-        setFieldValue(fieldName, quantity, false);
+        // console.log("item ------", item)
+        if (item.pricing) {
+          // console.log("weightedAverage(getLotFromQty(item.pricing.fifo, quantity))", weightedAverage(getLotFromQty(item.pricing.fifo, quantity)))
+          setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(item.pricing.fifo, quantity)), false);
+          setFieldValue(fieldName, quantity, false);
+          return;
+        }
         return;
       }
       return;
