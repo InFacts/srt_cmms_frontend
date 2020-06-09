@@ -7,67 +7,6 @@ import { Link } from 'react-router-dom';
 import logo from '../../../images/logo.png';
 import { useDispatch, useSelector } from 'react-redux'
 
-// import useTokenInitializer from '../../hooks/token-initializer';
-
-// Start Function For Drop Dawn
-const toggleMenu = (element, show, top) => {
-    var target = document.getElementById(element.getAttribute('aria-controls'));
-    if (target) {
-        element.setAttribute('aria-expanded', show);
-        target.setAttribute('aria-hidden', !show);
-
-        if (typeof top !== 'undefined') {
-            target.style.top = top + 'px';
-        }
-    }
-}
-
-const setupContextualMenu = (menuToggle) => {
-    var curent = this;
-    menuToggle.addEventListener('click', function (event) {
-        event.preventDefault();
-        var menuAlreadyOpen = menuToggle.getAttribute('aria-expanded') === 'true';
-
-        var top = menuToggle.offsetHeight;
-
-        if (window.getComputedStyle(menuToggle).display === 'inline') {
-            top += 5;
-        }
-
-        toggleMenu(menuToggle, !menuAlreadyOpen, top);
-    });
-}
-
-const setupAllContextualMenus = (contextualMenuToggleSelector) => {
-    var toggles = document.querySelectorAll(contextualMenuToggleSelector);
-    for (var i = 0, l = toggles.length; i < l; i++) {
-        // console.log(toggles[i])
-
-        setupContextualMenu(toggles[i]);
-    }
-
-    // document.addEventListener('click', function (event) {
-    //     for (var i = 0, l = toggles.length; i < l; i++) {
-    //         var toggle = toggles[i];
-    //         var contextualMenu = document.getElementById(toggle.getAttribute('aria-controls'));
-    //         var clickOutside = !(toggle.contains(event.target) || contextualMenu.contains(event.target));
-    //         if (clickOutside) {
-    //             toggleMenu(toggle, false);
-    //         }
-    //     }
-    // });
-    document.addEventListener('keydown', function (e) {
-        e = e || window.event;
-
-        if (e.keyCode === 27) {
-            for (var i = 0, l = toggles.length; i < l; i++) {
-                toggleMenu(toggles[i], false);
-            }
-        }
-    });
-}
-// End Function For Drop Dawn
-
 //Sub Nav
 /**
 Toggles visibility of given subnav by toggling is-active className to it
@@ -122,6 +61,7 @@ const setupSubnavToggle = (subnavToggle) => {
 }
 
 const setupAllSubNav = () => {
+    console.log("SETUP NAV DROP DAWN", new Date())
     // Setup all subnav toggles on the page
     var subnavToggles = document.querySelectorAll('.p-subnav__toggle');
     // console.log(subnavToggles);
@@ -152,22 +92,17 @@ const setupAllSubNav = () => {
     });
 }
 const MainModule = (props) => {
-    useEffect(() => {
-        // Setup DropDawn
-        setupAllContextualMenus('.p-contextual-menu__toggle');
-        // Setup SubNav
-        setupAllSubNav();
-    }, []);
-
-    // Load Notify
-    useEffect(() => {
-        props.loadNotify();
-    }, []);
-
-    // useTokenInitializer();
-
     const toolbar = useSelector((state) => ({ ...state.toolbar }));
     const footer = useSelector((state) => ({ ...state.footer }));
+    console.log("toolbar.mode", toolbar.mode)
+    useEffect(() => {
+        // Setup SubNav
+        setupAllSubNav();
+        // Load Notify
+        props.loadNotify();
+    }, [toolbar.mode]);
+
+
     // console.log("nav.mode", toolbar.mode, footer.mode)
     if (toolbar.mode === "INVISIBLE" && footer.mode === "INVISIBLE") {
         return null
@@ -229,7 +164,7 @@ const MainModule = (props) => {
                                         <Link to="/profile" className="p-subnav__item sub">โปรไฟล์</Link>
                                     </li>
                                     <li>
-                                        <Link to="/" className="p-subnav__item sub" onClick={(e) => localStorage.removeItem('token_auth')} >ออกจากระบบ</Link>
+                                        <Link to="/" className="p-subnav__item sub" onClick={(e) => {if (window.confirm('คุณต้องการออกจากระบบใช่หรือไม่')) {return localStorage.removeItem('token_auth') } else { e.preventDefault(); }}} >ออกจากระบบ</Link>
                                     </li>
                                 </ul>
                             </li>
@@ -244,9 +179,6 @@ const MainModule = (props) => {
 const mapStateToProps = (state) => ({
     notify: state.notify,
     not_read_count: state.not_read_count,
-    toolbar: state.toolbar,
-    item: state.api.fact.item,
-    token: state.token,
 });
 
 const mapDispatchToProps = {

@@ -41,7 +41,71 @@ import Text13 from '../../../images/spare/text13.svg'
 
 import RedHouse from '../../../images/red-house.svg';
 
+// Start Function For Drop Dawn
+const toggleMenu = (element, show, top) => {
+    var target = document.getElementById(element.getAttribute('aria-controls'));
+    if (target) {
+        element.setAttribute('aria-expanded', show);
+        target.setAttribute('aria-hidden', !show);
+
+        if (typeof top !== 'undefined') {
+            target.style.top = top + 'px';
+        }
+    }
+}
+
+const setupContextualMenu = (menuToggle) => {
+    var curent = this;
+    menuToggle.addEventListener('click', function (event) {
+        event.preventDefault();
+        var menuAlreadyOpen = menuToggle.getAttribute('aria-expanded') === 'true';
+
+        var top = menuToggle.offsetHeight;
+
+        if (window.getComputedStyle(menuToggle).display === 'inline') {
+            top += 5;
+        }
+
+        toggleMenu(menuToggle, !menuAlreadyOpen, top);
+    });
+}
+
+const setupAllContextualMenus = (contextualMenuToggleSelector) => {
+    console.log("SET UP DROP DAWN")
+    var toggles = document.querySelectorAll(contextualMenuToggleSelector);
+    for (var i = 0, l = toggles.length; i < l; i++) {
+        // console.log(toggles[i])
+
+        setupContextualMenu(toggles[i]);
+    }
+
+    // document.addEventListener('click', function (event) {
+    //     for (var i = 0, l = toggles.length; i < l; i++) {
+    //         var toggle = toggles[i];
+    //         var contextualMenu = document.getElementById(toggle.getAttribute('aria-controls'));
+    //         var clickOutside = !(toggle.contains(event.target) || contextualMenu.contains(event.target));
+    //         if (clickOutside) {
+    //             toggleMenu(toggle, false);
+    //         }
+    //     }
+    // });
+    document.addEventListener('keydown', function (e) {
+        e = e || window.event;
+
+        if (e.keyCode === 27) {
+            for (var i = 0, l = toggles.length; i < l; i++) {
+                toggleMenu(toggles[i], false);
+            }
+        }
+    });
+}
+// End Function For Drop Dawn
+
 class Map extends React.Component {
+    componentDidMount() {
+        // Setup DropDawn
+        setupAllContextualMenus('.p-contextual-menu__toggle');
+      }
 
     render() {
         return (
