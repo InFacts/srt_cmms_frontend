@@ -159,13 +159,13 @@ export const SS101_SCHEMA = {
     departed_on: '',          // ออกเดินทาง DATETIME
     arrived_on: '',           // เดินทางถึง  DATETIME
     finished_on: '',          // วันเวลาที่แล้วเสร็จ DATETIME
-    system_type_group_id: -1,   // ระบบตรวจซ่อม FK_ID
+    // system_type_group_id: -1,   // ระบบตรวจซ่อม FK_ID - this is automatically infered from system_type_id
     system_type_id: -1,      //  ชนิดระบบตรวจซ่อม FK_ID
     hardware_type_id: -1,   // ชื่ออุปกรณ์ที่บำรุงรักษา FK_ID
 
     summary_cause_condition: '', // สาเหตุและอาการเสียโดยสรุป link [root_cause] from WO NVARCHAR
     cargo_id: -1, //ขบวนรถที่ NVARCHAR/INT (**not in DB)
-    total_fail_time: '', //เสียเวลาเพราะเหตุนี้ (นาที) DECIMAL(10,2)
+    total_fail_time: -1, //เสียเวลาเพราะเหตุนี้ (นาที) DECIMAL(10,2)
     service_method_id: -1, // ประเภทการซ่อม FK_ID
     service_method_desc: '', //สรุปการแก้ไขและการซ่อมแซม STRING
     interrupt_id: -1, //ยังไมไ่ด้จัดการแก้ไขเพราะเหตุนี้ FK_ID
@@ -181,7 +181,7 @@ export const SS101_SCHEMA = {
     member_2: '',              //รายชื่อเพื่อนร่วมงาน 2 NVARCHAR
     member_2_position_id: -1, //รายชื่อเพื่อนร่วมงาน 2 ตำแหน่ง FK_ID
     member_3: '',             //รายชื่อเพื่อนร่วมงาน 3
-    member_3_position_id: '',  //รายชื่อเพื่อนร่วมงาน 3 ตำแหน่ง
+    member_3_position_id: -1,  //รายชื่อเพื่อนร่วมงาน 3 ตำแหน่ง
 
     loss_line_items: [],
 }
@@ -437,11 +437,16 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                 ss101_part[key] = values[key]
             }
         })
+        ss101_part.loss_line_items = removeEmptyLineItems(ss101_part.loss_line_items);
         return {
             document: document_part,
             specific: ss101_part,
         }
     }
+}
+
+function removeEmptyLineItems(line_items) {
+    return line_items.filter( line_item => line_item.description != '');
 }
 
 
@@ -834,7 +839,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
             po_id: data.po_id,
         }
     } else if (document_type_group_id===DOCUMENT_TYPE_ID.WORK_REQUEST) {
-        // Select both DOCUMENT_SCHEMA_GET and WORK_REQUEST_SCHEMA_GET 
+        // Get Subset of Data from both DOCUMENT_SCHEMA_GET and WORK_REQUEST_SCHEMA_GET 
         // Object Destructuring and Property Shorthand https://stackoverflow.com/questions/17781472/how-to-get-a-subset-of-a-javascript-objects-properties
         let document_part = Object.fromEntries(
             Object.entries(data.document)
@@ -847,6 +852,19 @@ const responseToFormState = (fact, data, document_type_group_id) => {
         console.log("this is document_part 123  ",document_part)
         console.log("this is work_request_part ",work_request_part)
         return {...transformDocumentResponseToFormState(document_part, fact), ...transformWorkRequestResponseToFormState(work_request_part)}
+    }else if (document_type_group_id===DOCUMENT_TYPE_ID.SS101) {
+        // Get Subset of Data from both DOCUMENT_SCHEMA_GET and SS101_SCHEMA_GET 
+        let document_part = Object.fromEntries(
+            Object.entries(data.document)
+            .filter(([key]) => Object.keys(DOCUMENT_SCHEMA_GET).includes(key))
+        )
+        let ss101_part =  Object.fromEntries(
+            Object.entries(data.specific)
+            .filter(([key]) => Object.keys(SS101_SCHEMA).includes(key))
+        )
+        console.log("this is document_part 123  ",document_part)
+        console.log("this is ss101_part ",ss101_part)
+        return {...transformDocumentResponseToFormState(document_part, fact), ...transformSS101ResponseToFormState(ss101_part)}
     }
     
 }
@@ -875,6 +893,32 @@ function transformWorkRequestResponseToFormState(work_request_part) {
         location_station_id: returnEmptyStringIfNull(work_request_part.location_station_id),
     }
 }
+function transformSS101ResponseToFormState(ss101_part){
+    return {
+        ...ss101_part,
+        ...transformWorkRequestResponseToFormState(ss101_part),
+
+        // Bottom Content
+        car_type_id: returnEmptyStringIfNull(ss101_part.car_type_id),
+        departed_on: ss101_part.departed_on.split(".")[0],
+        arrived_on: ss101_part.arrived_on.split(".")[0],
+        finished_on: ss101_part.finished_on.split(".")[0],
+        system_type_group_id: returnEmptyStringIfNull(ss101_part.system_type_group_id),
+        system_type_id: returnEmptyStringIfNull(ss101_part.system_type_id),
+        hardware_type_id: returnEmptyStringIfNull(ss101_part.hardware_type_id),
+
+        cargo_id: returnEmptyStringIfNull(ss101_part.cargo_id),
+        service_method_id: returnEmptyStringIfNull(ss101_part.service_method_id),
+        interrupt_id: returnEmptyStringIfNull(ss101_part.interrupt_id),
+
+        // Bottom Content ผู้เกี่ยวข้อง
+        auditor_position_id: returnEmptyStringIfNull(ss101_part.auditor_position_id),
+        fixer_position_id: returnEmptyStringIfNull(ss101_part.fixer_position_id),
+        member_1_position_id: returnEmptyStringIfNull(ss101_part.member_1_position_id),
+        member_2_position_id: returnEmptyStringIfNull(ss101_part.member_2_position_id),
+        member_3_position_id: returnEmptyStringIfNull(ss101_part.member_3_position_id),
+    }
+}
 
 // Validation 
 export const validateInternalDocumentIDFieldHelper = (document_type_group_id, toolbar, footer, fact, values, setValues, setFieldValue, validateField, internal_document_id) => new Promise(resolve => {
@@ -892,100 +936,124 @@ export const validateInternalDocumentIDFieldHelper = (document_type_group_id, to
     // Checking from Database if Internal Document ID Exists
     let error;
     getDocumentbyInternalDocumentID(internal_document_id)
-        .then((data) => {
-            console.log(" i got data", data);
+    .then((data) => {
+        console.log(" i got data", data);
 
-            if (isICD(document_type_group_id)) { // If document type group ID is ICD
-                console.log("i know i am in ICD")
-                if (data.internal_document_id === internal_document_id) { // If input document ID exists
-                    if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
-                        && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
-                            // fetchAttachmentDocumentData(data.document_id)
-                        console.log("validateInternalDocumentIDField:: I got document ID ", data.document_id)
-                        setValues({ ...values, ...responseToFormState(fact, data) }, false); //Setvalues and don't validate
-                        validateField("dest_warehouse_id");
-                        validateField("created_by_user_employee_id");
-                        validateField("created_by_admin_employee_id");
-                        return resolve(null);
-    
-                    } else { //If Mode add, need to error duplicate Document ID
-                        // setFieldValue('document_id', '', false); 
-                        if (values.document_id || footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve
-                            console.log("i am in mode add, saved and wanting to approve")
-                            error = '';
-                        } else {
-                            console.log("I AM DUPLICATE")
-                            error = 'Duplicate Document ID';
-                        }
-    
-                    }
-                } else { // If input Document ID doesn't exists
-    
-                    setFieldValue('document_id', '', false);
-                    if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID  
-                        console.log("I KNOW IT'sINVALID")
-                        error = 'Invalid Document ID';
-                    } else {//If mode add, ok
-                        console.log("document ID doesn't exist but I am in mode add")
-                        error = '';
-                    }
-                }
-            }else if(document_type_group_id === DOCUMENT_TYPE_ID.WORK_REQUEST){
-                console.log("i know i am in workrequest!!")
-                    
-                if (data.document.internal_document_id === internal_document_id) { // If input document ID exists
-                    console.log("i am not ICD and toolbar mode in " ,toolbar)
-                    if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
-                        && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
+        if (isICD(document_type_group_id)) { // If document type group ID is ICD
+            console.log("i know i am in ICD")
+            if (data.internal_document_id === internal_document_id) { // If input document ID exists
+                if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
+                    && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
                         // fetchAttachmentDocumentData(data.document_id)
-                        console.log("validateInternalDocumentIDField:: I got document ID ", data.document.document_id)
-                        setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
-                        // validateField("dest_warehouse_id");
-                        validateField("created_by_user_employee_id");
-                        validateField("created_by_admin_employee_id");
-                        return resolve(null);
-    
-                    } else { //If Mode add, need to error duplicate Document ID
-                        // setFieldValue('document_id', '', false); 
-                        if (values.document_id || footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve
-                            console.log("i am in mode add, saved and wanting to approve")
-                            error = '';
-                        } else {
-                            console.log("I AM DUPLICATE")
-                            error = 'Duplicate Document ID';
-                        }
-    
-                    }
-                } else { // If input Document ID doesn't exists
-    
-                    setFieldValue('document_id', '', false);
-                    if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID  
-                        console.log("I KNOW IT'sINVALID")
-                        error = 'Invalid Document ID';
-                    } else {//If mode add, ok
-                        console.log("document ID doesn't exist but I am in mode add")
-                        error = '';
-                    }
-                }
-            }else{
-                console.log("IDK WHERE I AM", values.document_type_group_id)
-            }
-           
-        })
-        .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
-            console.log("I think I have 404 not found in doc id.")
-            setFieldValue('document_id', '', false);
+                    console.log("validateInternalDocumentIDField:: I got document ID ", data.document_id)
+                    setValues({ ...values, ...responseToFormState(fact, data) }, false); //Setvalues and don't validate
+                    validateField("dest_warehouse_id");
+                    validateField("created_by_user_employee_id");
+                    validateField("created_by_admin_employee_id");
+                    return resolve(null);
 
-            if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
-                error = 'Document ID not Found in System';
-            } else {//If mode add, ok
-                console.log("document ID doesn't exist but I am in mode add")
-                error = ''
+                } else { //If Mode add, need to error duplicate Document ID
+                    // setFieldValue('document_id', '', false); 
+                    if (values.document_id || footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve
+                        console.log("i am in mode add, saved and wanting to approve")
+                        error = '';
+                    } else {
+                        console.log("I AM DUPLICATE")
+                        error = 'Duplicate Document ID';
+                    }
+
+                }
+            } else { // If input Document ID doesn't exists
+
+                setFieldValue('document_id', '', false);
+                if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID  
+                    console.log("I KNOW IT'sINVALID")
+                    error = 'Invalid Document ID';
+                } else {//If mode add, ok
+                    console.log("document ID doesn't exist but I am in mode add")
+                    error = '';
+                }
             }
-        })
-        .finally(() => {
-            return resolve(error)
-        });
+        }else if(document_type_group_id === DOCUMENT_TYPE_ID.WORK_REQUEST){
+            console.log("i know i am in workrequest!!")
+                
+            if (data.document.internal_document_id === internal_document_id) { // If input document ID exists
+                console.log("i am not ICD and toolbar mode in " ,toolbar)
+                if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
+                    && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
+                    // fetchAttachmentDocumentData(data.document_id)
+                    console.log("validateInternalDocumentIDField:: I got document ID ", data.document.document_id)
+                    setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
+                    // validateField("dest_warehouse_id");
+                    validateField("created_by_user_employee_id");
+                    validateField("created_by_admin_employee_id");
+                    return resolve(null);
+
+                } else { //If Mode add, need to error duplicate Document ID
+                    // setFieldValue('document_id', '', false); 
+                    if (values.document_id || footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve
+                        console.log("i am in mode add, saved and wanting to approve")
+                        error = '';
+                    } else {
+                        console.log("I AM DUPLICATE")
+                        error = 'Duplicate Document ID';
+                    }
+
+                }
+            } else { // If input Document ID doesn't exists
+
+                setFieldValue('document_id', '', false);
+                if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID  
+                    console.log("I KNOW IT'sINVALID")
+                    error = 'Invalid Document ID';
+                } else {//If mode add, ok
+                    console.log("document ID doesn't exist but I am in mode add")
+                    error = '';
+                }
+            }
+        }else if (document_type_group_id === DOCUMENT_TYPE_ID.SS101) {
+            console.log("i know i am in ss101!!")
+            if ((toolbar.mode === TOOLBAR_MODE.SEARCH || 
+                toolbar.mode === TOOLBAR_MODE.NONE || 
+                toolbar.mode === TOOLBAR_MODE.NONE_HOME)
+                && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
+                console.log("validateInternalDocumentIDField:: I got document ID ", data.document.document_id)
+                setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
+                validateField("created_by_user_employee_id");
+                validateField("created_by_admin_employee_id");
+                return resolve(null);
+
+            } else { //If Mode add, need to error duplicate Document ID
+                // setFieldValue('document_id', '', false); 
+                if (values.document_id || footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve
+                    console.log("i am in mode add, saved and wanting to approve")
+                    error = '';
+                } else {
+                    console.log("I AM DUPLICATE")
+                    error = 'Duplicate Document ID';
+                }
+            }
+
+
+        }else {
+            console.log("IDK WHERE I AM", document_type_group_id)
+        }
+        
+    })
+    .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
+        console.log("I think I have 404 not found in doc id.")
+        setFieldValue('document_id', '', false);
+
+        if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
+            error = 'Document ID not Found in System';
+        } else {//If mode add, ok
+            console.log("document ID doesn't exist but I am in mode add")
+            error = ''
+        }
+    })
+    .finally(() => {
+        return resolve(error)
+    });
 });
 
 

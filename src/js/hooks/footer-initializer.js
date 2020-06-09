@@ -171,9 +171,6 @@ const useFooterInitializer = (document_type_id) => {
                 dispatch(navBottomSending('[API]', 'Sending ...', ''));
                 setErrors(err);
                 if(isEmpty(err)){
-                    console.log("I AM SUBMITTING  .........", values.file );
-                    let data = packDataFromValues(fact, values, document_type_id);
-                    console.log("I AM SUBMITTING ", data );
                     if(values.document_id){ // If have document_id, no need to create new doc
                         startDocumentApprovalFlow(values.document_id)
                         .then(() => {
@@ -189,6 +186,8 @@ const useFooterInitializer = (document_type_id) => {
                             dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
                         }); 
                     }else{ // If not have document_id
+                        let data = packDataFromValues(fact, values, document_type_id);
+                        console.log("I AM SUBMITTING ", data );
                         saveDocument(document_type_id, data)
                         .then((document_id) => {
                             setFieldValue('document_id', document_id, true);

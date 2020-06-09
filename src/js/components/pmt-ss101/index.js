@@ -46,7 +46,6 @@ const PmtSS101Componant = (props) => {
         if (internal_document_id !== "") {
             // action_approval
             console.log(" IA M NOT SETTING ", internal_document_id);
-            console.log(" THIS IS CURRENT VALUES ", values);
             setFieldValue("internal_document_id", internal_document_id, true);
             console.log(" THIS IS AFTER VALUES ", values);
         }

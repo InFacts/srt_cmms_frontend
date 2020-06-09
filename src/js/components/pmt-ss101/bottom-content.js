@@ -57,8 +57,8 @@ const BottomContent = (props) => {
     }
 
     return (
-        <div id="blackground-gray">
-            <div className="container_12 clearfix">
+    <div id="blackground-gray">
+    <div className="container_12 clearfix">
 
                 {/* === Tab breakdown_content  === */}
                 <div id="breakdown_content" className="tabcontent">
@@ -163,297 +163,297 @@ const BottomContent = (props) => {
                             <SelectNoChildrenInput name="system_type_group_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
                                 <option value='' selected></option>
                                 <option value='1' >ระบบเครื่องกั้นถนน</option>
-                            </SelectNoChildrenInput>
-                        </div>
-
-                        <div class="clear" />
-
-                        {/* system_type_id  */}
-                        <Label>ชนิดระบบตรวจซ่อม</Label>
-                        <div className="grid_4 alpha omega">
-                            <SelectNoChildrenInput name="system_type_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
-                                <option value='' selected></option>
-                                <option value='1' >ชนิดคานทำงานด้วยไฟฟ้า (ก.1)</option>
-                            </SelectNoChildrenInput>
-                        </div>
-
-                        <div class="clear" />
-
-                        {/* hardware_type_id  */}
-                        <Label>ชื่ออุปกรณ์ที่บำรุงรักษา</Label>
-                        <div className="grid_4 alpha omega">
-                            <SelectNoChildrenInput name="hardware_type_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
-                                <option value='' selected></option>
-                                <option value='1' >เครื่องกั้นถนนชนิดคานทำงานด้วยไฟฟ้า (ก.1)</option>
-                            </SelectNoChildrenInput>
-                        </div>
-
-                        <div class="clear" />
-
-
-                    </div>
-
-                    {/* === Right Column === */}
-                    <div className="grid_6 prefix_1">
-                        {/* District ID */}
-                        <Label>สถานที่ แขวง</Label>
-                        <div className="grid_4 alpha omega">
-                            <SelectNoChildrenInput name="location_district_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
-                                <option value=''></option>
-                                {factDistricts.items.map(function ({ district_id, name, division_id }) {
-                                    return <option value={district_id} key={district_id}> {name} </option>
-                                })}
-                            </SelectNoChildrenInput>
-                        </div>
-
-                        <div class="clear" />
-
-                        {/* Node ID */}
-                        <Label>สถานที่ ตอน</Label>
-                        <div className="grid_4 alpha omega">
-                            <SelectNoChildrenInput name="location_node_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
-                                <option value=''></option>
-                                {factNodes.items.map(function ({ node_id, name, district_id }) {
-                                    if (values.district_id == district_id) { // Shallow equality, district ID may be string
-                                        return <option value={node_id} key={node_id}>{name}</option>
-                                    }
-                                })}
-                            </SelectNoChildrenInput>
-                        </div>
-
-                        <div class="clear" />
-
-                        {/* Station ID */}
-                        <Label>สถานที่ สถานี</Label>
-                        <div className="grid_4 alpha omega">
-                            <SelectNoChildrenInput name="location_station_id"
-                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
-                                <option value=''></option>
-                                {factStations.items.map(function ({ station_id, name, node_id }) {
-                                    if (values.node_id == node_id) { // Shallow equality, node ID may be string
-                                        return <option value={station_id} key={station_id}> {name} </option>
-                                    }
-                                })}
-                            </SelectNoChildrenInput>
-                        </div>
-
-                        <div class="clear" />
-
-                        {/* Station ID */}
-                        <Label>รายละเอียดสถานที่</Label>
-                        <div className="grid_4 alpha omega">
-                            <TextareaInput name="location_detail"
-                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
-                        </div>
-
-                        <div class="clear" />
-
-                        {/* summary_cause_condition link [root_cause] from WO */}
-                        <Label>สาเหตุและอาการเสียโดยสรุป</Label>
-                        <div className="grid_4 alpha omega">
-                            <TextareaInput name="summary_cause_condition"
-                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
-                        </div>
-
-                        <div class="clear" />
-
-                        {/* cargo_id  */}
-                        <Label>ขบวนรถที่</Label>
-                        <div className="grid_4 alpha omega">
-                            <TextInput name="cargo_id"
-                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
-                        </div>
-
-                        <div class="clear" />
-
-                        {/* total_fail_time  */}
-                        <Label>เสียเวลาเพราะเหตุนี้</Label>
-                        <div className="grid_3 alpha omega">
-                            <NumberInput name="total_fail_time" step={1}
-                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
-                        </div>
-                        <div className="grid_1  omega">
-                            <p className="top-text">
-                                นาที
-                    </p>
-                        </div>
-
-                        <div class="clear" />
-
-                        {/* service_method_id */}
-                        <Label>ประเภทการซ่อม</Label>
-                        <div className="grid_4 alpha omega">
-                            <SelectNoChildrenInput name="service_method_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
-                                <option value='' selected></option>
-                            </SelectNoChildrenInput>
-                        </div>
-
-                        <div class="clear" />
-
-                        {/* service_method_desc */}
-                        <Label>สรุปการแก้ไขและการซ่อมแซม</Label>
-                        <div className="grid_4 alpha omega">
-                            <TextareaInput name="service_method_desc"
-                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
-                        </div>
-
-                        <div class="clear" />
-
-                        {/* interrupt_id */}
-                        <Label>ยังไมไ่ด้จัดการแก้ไขเพราะเหตุนี้</Label>
-                        <div className="grid_4 alpha omega">
-                            <SelectNoChildrenInput name="interrupt_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
-                                <option value='' selected></option>
-                            </SelectNoChildrenInput>
-                        </div>
-
-                        <div class="clear" />
-                    </div>
-
-                    <div className="grid_12" style={{ marginTop: "10px" }}>
-                        {/* Remark */}
-                        <Label>หมายเหตุ</Label>
-                        <div className="grid_11 alpha omega">
-                            <TextareaInput name="remark"
-                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
-                        </div>
-
-                        <div class="clear" />
-                    </div>
-
+                    </SelectNoChildrenInput>
                 </div>
 
-                {/* === Tab related_parties_content  === */}
-                <div id="related_parties_content" className="tabcontent">
-                    {/* Component Title */}
-                    <h3 className="head-title-bottom mt-2">ผู้ปฎิบัติงาน</h3>
+                <div class="clear" />
 
-                    {/* === One Column   ==== */}
-                    <div className="grid_12">
-
-                        {/* auditor_name  */}
-                        <Label>ผู้ควบคุมตรวจสอบชื่อ</Label>
-                        <div className="grid_4 alpha omega">
-                            <TextInput name="auditor_name"
-                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
-                        </div>
-
-                        <div class="clear" />
-
-                        {/* fixer_name  */}
-                        <Label>ดำเนินการแก้ไขชื่อ</Label>
-                        <div className="grid_4 alpha omega">
-                            <TextInput name="fixer_name"
-                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
-                        </div>
-
-                        <div class="clear" />
-
-
-                        {/* member_1  */}
-                        <Label>รายชื่อเพื่อนร่วมงาน</Label>
-                        <div className="grid_4 alpha omega">
-                            <TextInput name="member_1"
-                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
-                        </div>
-
-                        <div class="clear" />
-
-                        {/* member_2  */}
-                        <Label>รายชื่อเพื่อนร่วมงาน</Label>
-                        <div className="grid_4 alpha omega">
-                            <TextInput name="member_2"
-                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
-                        </div>
-
-                        <div class="clear" />
-
-                        {/* member_3  */}
-                        <Label>รายชื่อเพื่อนร่วมงาน</Label>
-                        <div className="grid_4 alpha omega">
-                            <TextInput name="member_3"
-                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
-                        </div>
-
-                        <div class="clear" />
-                    </div>
-
+                {/* system_type_id  */}
+                <Label>ชนิดระบบตรวจซ่อม</Label>
+                <div className="grid_4 alpha omega">
+                    <SelectNoChildrenInput name="system_type_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                        <option value='' selected></option>
+                        <option value='1' >ชนิดคานทำงานด้วยไฟฟ้า (ก.1)</option>
+                    </SelectNoChildrenInput>
                 </div>
 
-                {/* === Tab compensation_list_content  === */}
-                <div id="compensation_list_content" className="tabcontent">
+                <div class="clear" />
 
-                    {/* Component Title */}
-                    <h4 className="head-title-bottom mt-2">ข้อมูลรายการค่าเสียหาย</h4>
-
-
-
-                    <table className="table-many-column">
-                        <thead>
-                            <tr>
-                                <th className="font text-center" style={{ minWidth: "50px" }}>#</th>
-                                <th className="font text-center" style={{ minWidth: "300px" }}>รายการ</th>
-                                <th className="font text-center" style={{ minWidth: "100px" }}>จำนวน</th>
-                                <th className="font text-center" style={{ minWidth: "100px" }}>หน่วย</th>
-                                <th className="font text-center" style={{ minWidth: "100px" }}>จำนวนเงิน</th>
-                                <th className="font text-center" style={{ minWidth: "150px" }}>เลขที่อุปกรณ์</th>
-                                <th className="font text-center" style={{ minWidth: "300px" }}>หมายเหตุ</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {values.loss_line_items.map((loss_line_item, index) => (
-                                <tr key={index}>
-                                    <td className="edit-padding text-center">{loss_line_item.line_number}</td>
-                                    <td className="edit-padding text-center">
-                                        <TextInput name={`loss_line_items[${index}].description`} tabIndex="6"
-                                            disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-                                            redBorderForError="error-in-table"
-                                        />
-                                    </td>
-                                    <td className="edit-padding text-center">
-                                        <NumberInput step={0.01} name={`loss_line_items[${index}].quantity`} tabIndex="7"
-                                            disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-                                            redBorderForError="error-in-table"
-                                        />
-                                    </td>
-                                    <td className="edit-padding text-center">
-                                        <SelectInput name={`loss_line_items[${index}].uom_id`} listProps={loss_line_item.list_uoms} tabIndex="8"
-                                            tabIndex="8" disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-                                            optionValue='uom_id' optionName='name'
-                                            redBorderForError="error-in-table"
-                                        />
-                                    </td>
-                                    <td className="edit-padding text-center">
-                                        <NumberInput step={0.01} name={`loss_line_items[${index}].per_unit_price`} tabIndex="9"
-                                            disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-                                            redBorderForError="error-in-table"
-                                        />
-                                    </td>
-                                    <td className="edit-padding text-center">
-                                        <TextInput name={`loss_line_items[${index}].internal_item_id`}
-                                            validate={internal_item_id => validateLineNumberInternalItemIDField(`loss_line_items[${index}]`, internal_item_id, index)} tabIndex="6"
-                                            disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-                                            searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart"
-                                            handleModalClick={() => setLineNumber(loss_line_item.line_number)}
-                                            redBorderForError="error-in-table"
-                                        />
-                                    </td>
-                                    <td className="edit-padding text-center">
-                                        <TextInput name={`loss_line_items[${index}].remark`} tabIndex="11"
-                                            disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-                                            redBorderForError="error-in-table"
-                                        />
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                    {/* PopUp ค้นหาอะไหล่ MODE ADD */}
-                    <PopupModalNoPart 
-                    keyname='loss_line_items'
-                    lineNumber={lineNumber} 
-                    />
+                {/* hardware_type_id  */}
+                <Label>ชื่ออุปกรณ์ที่บำรุงรักษา</Label>
+                <div className="grid_4 alpha omega">
+                    <SelectNoChildrenInput name="hardware_type_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                        <option value='' selected></option>
+                        <option value='1' >เครื่องกั้นถนนชนิดคานทำงานด้วยไฟฟ้า (ก.1)</option>
+                    </SelectNoChildrenInput>
                 </div>
+
+                <div class="clear" />
+
+
+            </div>
+
+            {/* === Right Column === */}
+            <div className="grid_6 prefix_1">
+                {/* District ID */}
+                <Label>สถานที่ แขวง</Label>
+                <div className="grid_4 alpha omega">
+                    <SelectNoChildrenInput name="location_district_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                        <option value=''></option>
+                        {factDistricts.items.map(function ({ district_id, name, division_id }) {
+                            return <option value={district_id} key={district_id}> {name} </option>
+                        })}
+                    </SelectNoChildrenInput>
+                </div>
+
+                <div class="clear" />
+
+                {/* Node ID */}
+                <Label>สถานที่ ตอน</Label>
+                <div className="grid_4 alpha omega">
+                    <SelectNoChildrenInput name="location_node_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                        <option value=''></option>
+                        {factNodes.items.map(function ({ node_id, name, district_id }) {
+                            if (values.district_id == district_id) { // Shallow equality, district ID may be string
+                                return <option value={node_id} key={node_id}>{name}</option>
+                            }
+                        })}
+                    </SelectNoChildrenInput>
+                </div>
+
+                <div class="clear" />
+
+                {/* Station ID */}
+                <Label>สถานที่ สถานี</Label>
+                <div className="grid_4 alpha omega">
+                    <SelectNoChildrenInput name="location_station_id"
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                        <option value=''></option>
+                        {factStations.items.map(function ({ station_id, name, node_id }) {
+                            if (values.node_id == node_id) { // Shallow equality, node ID may be string
+                                return <option value={station_id} key={station_id}> {name} </option>
+                            }
+                        })}
+                    </SelectNoChildrenInput>
+                </div>
+
+                <div class="clear" />
+
+                {/* Station ID */}
+                <Label>รายละเอียดสถานที่</Label>
+                <div className="grid_4 alpha omega">
+                    <TextareaInput name="location_detail"
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                </div>
+
+                <div class="clear" />
+
+                {/* summary_cause_condition link [root_cause] from WO */}
+                <Label>สาเหตุและอาการเสียโดยสรุป</Label>
+                <div className="grid_4 alpha omega">
+                    <TextareaInput name="summary_cause_condition"
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                </div>
+
+                <div class="clear" />
+
+                {/* cargo_id  */}
+                <Label>ขบวนรถที่</Label>
+                <div className="grid_4 alpha omega">
+                    <TextInput name="cargo_id"
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                </div>
+
+                <div class="clear" />
+
+                {/* total_fail_time  */}
+                <Label>เสียเวลาเพราะเหตุนี้</Label>
+                <div className="grid_3 alpha omega">
+                    <NumberInput name="total_fail_time" step={1}
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                </div>
+                <div className="grid_1  omega">
+                    <p className="top-text">
+                        นาที
+            </p>
+                </div>
+
+                <div class="clear" />
+
+                {/* service_method_id */}
+                <Label>ประเภทการซ่อม</Label>
+                <div className="grid_4 alpha omega">
+                    <SelectNoChildrenInput name="service_method_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                        <option value='' selected></option>
+                    </SelectNoChildrenInput>
+                </div>
+
+                <div class="clear" />
+
+                {/* service_method_desc */}
+                <Label>สรุปการแก้ไขและการซ่อมแซม</Label>
+                <div className="grid_4 alpha omega">
+                    <TextareaInput name="service_method_desc"
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                </div>
+
+                <div class="clear" />
+
+                {/* interrupt_id */}
+                <Label>ยังไมไ่ด้จัดการแก้ไขเพราะเหตุนี้</Label>
+                <div className="grid_4 alpha omega">
+                    <SelectNoChildrenInput name="interrupt_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                        <option value='' selected></option>
+                    </SelectNoChildrenInput>
+                </div>
+
+                <div class="clear" />
+            </div>
+
+            <div className="grid_12" style={{ marginTop: "10px" }}>
+                {/* Remark */}
+                <Label>หมายเหตุ</Label>
+                <div className="grid_11 alpha omega">
+                    <TextareaInput name="remark"
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                </div>
+
+                <div class="clear" />
+            </div>
+
+        </div>
+
+        {/* === Tab related_parties_content  === */}
+        <div id="related_parties_content" className="tabcontent">
+            {/* Component Title */}
+            <h3 className="head-title-bottom mt-2">ผู้ปฎิบัติงาน</h3>
+
+            {/* === One Column   ==== */}
+            <div className="grid_12">
+
+                {/* auditor_name  */}
+                <Label>ผู้ควบคุมตรวจสอบชื่อ</Label>
+                <div className="grid_4 alpha omega">
+                    <TextInput name="auditor_name"
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                </div>
+
+                <div class="clear" />
+
+                {/* fixer_name  */}
+                <Label>ดำเนินการแก้ไขชื่อ</Label>
+                <div className="grid_4 alpha omega">
+                    <TextInput name="fixer_name"
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                </div>
+
+                <div class="clear" />
+
+
+                {/* member_1  */}
+                <Label>รายชื่อเพื่อนร่วมงาน</Label>
+                <div className="grid_4 alpha omega">
+                    <TextInput name="member_1"
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                </div>
+
+                <div class="clear" />
+
+                {/* member_2  */}
+                <Label>รายชื่อเพื่อนร่วมงาน</Label>
+                <div className="grid_4 alpha omega">
+                    <TextInput name="member_2"
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                </div>
+
+                <div class="clear" />
+
+                {/* member_3  */}
+                <Label>รายชื่อเพื่อนร่วมงาน</Label>
+                <div className="grid_4 alpha omega">
+                    <TextInput name="member_3"
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                </div>
+
+                <div class="clear" />
+            </div>
+
+        </div>
+
+        {/* === Tab compensation_list_content  === */}
+        <div id="compensation_list_content" className="tabcontent">
+
+            {/* Component Title */}
+            <h4 className="head-title-bottom mt-2">ข้อมูลรายการค่าเสียหาย</h4>
+
+
+
+            <table className="table-many-column">
+                <thead>
+                    <tr>
+                        <th className="font text-center" style={{ minWidth: "50px" }}>#</th>
+                        <th className="font text-center" style={{ minWidth: "300px" }}>รายการ</th>
+                        <th className="font text-center" style={{ minWidth: "100px" }}>จำนวน</th>
+                        <th className="font text-center" style={{ minWidth: "100px" }}>หน่วย</th>
+                        <th className="font text-center" style={{ minWidth: "100px" }}>จำนวนเงิน</th>
+                        <th className="font text-center" style={{ minWidth: "150px" }}>เลขที่อุปกรณ์</th>
+                        <th className="font text-center" style={{ minWidth: "300px" }}>หมายเหตุ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {values.loss_line_items.map((loss_line_item, index) => (
+                        <tr key={index}>
+                            <td className="edit-padding text-center">{loss_line_item.line_number}</td>
+                            <td className="edit-padding text-center">
+                                <TextInput name={`loss_line_items[${index}].description`} tabIndex="6"
+                                    disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
+                                    redBorderForError="error-in-table"
+                                />
+                            </td>
+                            <td className="edit-padding text-center">
+                                <NumberInput step={0.01} name={`loss_line_items[${index}].quantity`} tabIndex="7"
+                                    disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
+                                    redBorderForError="error-in-table"
+                                />
+                            </td>
+                            <td className="edit-padding text-center">
+                                {/* <SelectInput name={`loss_line_items[${index}].uom_id`} listProps={loss_line_item.list_uoms} tabIndex="8"
+                                    tabIndex="8" disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
+                                    optionValue='uom_id' optionName='name'
+                                    redBorderForError="error-in-table"
+                                /> */}
+                            </td>
+                            <td className="edit-padding text-center">
+                                <NumberInput step={1} name={`loss_line_items[${index}].per_unit_price`} tabIndex="9"
+                                    disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
+                                    redBorderForError="error-in-table"
+                                />
+                            </td>
+                            <td className="edit-padding text-center">
+                                <TextInput name={`loss_line_items[${index}].internal_item_id`}
+                                    validate={internal_item_id => validateLineNumberInternalItemIDField(`loss_line_items[${index}]`, internal_item_id, index)} tabIndex="6"
+                                    disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
+                                    searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart"
+                                    handleModalClick={() => setLineNumber(loss_line_item.line_number)}
+                                    redBorderForError="error-in-table"
+                                />
+                            </td>
+                            <td className="edit-padding text-center">
+                                <TextInput name={`loss_line_items[${index}].remark`} tabIndex="11"
+                                    disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
+                                    redBorderForError="error-in-table"
+                                />
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            {/* PopUp ค้นหาอะไหล่ MODE ADD */}
+            <PopupModalNoPart 
+            keyname='loss_line_items'
+            lineNumber={lineNumber} 
+            />
+        </div>
 
 
                 <div id="attachment_content" className="tabcontent">

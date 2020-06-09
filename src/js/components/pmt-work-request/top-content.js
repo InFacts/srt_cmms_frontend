@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux'
-import PopupModalWorkRequest from './popup-modal-work-request'
 import PopupModalDocument from '../common/popup-modal-document'
+import PopupModalUsername from '../common/popup-modal-username'
+
 import TextInput from '../common/formik-text-input'
 import DateTimeInput from '../common/formik-datetime-input'
 import DateInput from '../common/formik-date-input'
@@ -9,7 +10,7 @@ import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/to
 import { FACTS } from '../../redux/modules/api/fact';
 import Label from '../common/form-label'
 import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID , validateEmployeeIDField, validateWarehouseIDField, validateInternalDocumentIDFieldHelper} from '../../helper';
-import { v4 as uuidv4 } from 'uuid';
+import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
 
 import { useFormikContext, useField } from 'formik';
 
@@ -17,21 +18,12 @@ const TopContent = (props) => {
     const toolbar = useSelector((state) => ({...state.toolbar}), shallowEqual);
     const fact = useSelector((state) => ({...state.api.fact}), shallowEqual);
     const footer = useSelector((state) => ({...state.footer}), shallowEqual);
-    const decoded_token = useSelector((state) => ({...state.token.decoded_token}), shallowEqual);
+    
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
     // Fill Default Forms
-  useEffect(() => {
-    if (toolbar.mode === TOOLBAR_MODE.ADD) {
-      if (!values.internal_document_id && touched.internal_document_id){
-        setFieldValue('internal_document_id', `draft-${uuidv4()}`, true)
-      }
-      setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(fact.users, decoded_token.id));
-      setFieldValue("created_on", new Date().toISOString().slice(0, 16), false);
-    }
+    useFillDefaultsOnModeAdd();
     
-  }, [ fact.users, toolbar.mode, touched.internal_document_id, !values.internal_document_id,
-    toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]]) // This needs requiresHandleClick since it resetsForm AFTER the setField Value, making it not show anything
 
     const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(DOCUMENT_TYPE_ID.WORK_REQUEST, toolbar, footer, fact, values , setValues, setFieldValue, validateField, ...args);
     
@@ -64,6 +56,7 @@ const TopContent = (props) => {
                 <TextInput name="created_by_user_employee_id" 
                     validate={validateUserEmployeeIDField}
                     disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} 
+                    searchable={toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"
                     tabIndex="2"/>
             </div>
             <div class="clear" />
@@ -112,12 +105,15 @@ const TopContent = (props) => {
             <div class="clear" />
         </div>
     </div>
+    {/* PopUp ค้นหาเลขที่เอกสาร */}
     <PopupModalDocument 
         documentTypeGroupID={DOCUMENT_TYPE_ID.WORK_REQUEST} 
         id="modalDocument" //For Open POPUP
         name="internal_document_id" //For setFieldValue 
     />
-    {/* <PopupModalWorkRequest /> */}
+
+    {/* PopUp ค้นหาชื่อพนักงาน MODE ADD */}
+    <PopupModalUsername />
     </div>
     );
 }

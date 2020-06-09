@@ -1,11 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect , useSelector, shallowEqual} from 'react-redux'
 
-import axios from "axios";
-import { API_PORT_DATABASE } from '../../config_port.js';
-import { API_URL_DATABASE } from '../../config_url.js';
-import { v4 as uuidv4 } from 'uuid';
-
 import FormInput from '../common/form-input'
 import TextInput from '../common/formik-text-input'
 import DateTimeInput from '../common/formik-datetime-input'
@@ -24,25 +19,17 @@ import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData,
   validateInternalDocumentIDFieldHelper} from '../../helper';
 import { FACTS } from '../../redux/modules/api/fact.js';
 import { FOOTER_MODE, FOOTER_ACTIONS} from '../../redux/modules/footer.js';
-
+import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
 
 const TopContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm   } = useFormikContext();
   const footer = useSelector((state) => ({...state.footer}), shallowEqual);
 
   // Fill Default Forms
-  useEffect(() => {
-    if (props.toolbar.mode === TOOLBAR_MODE.ADD) {
-      if (!values.internal_document_id && touched.internal_document_id){
-        setFieldValue('internal_document_id', `draft-${uuidv4()}`, true)
-      }
-      setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(props.fact.users, props.decoded_token.id), true);
-      setFieldValue("created_on", new Date().toISOString().slice(0, 16), false);
-    }
-  }, [props.fact.users, props.toolbar.mode, touched.internal_document_id, !values.internal_document_id])
+  useFillDefaultsOnModeAdd();
 
   
-  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(props.toolbar, footer, props.fact, values , setValues, setFieldValue, validateField, ...args)
+  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO, props.toolbar, footer, props.fact, values , setValues, setFieldValue, validateField, ...args)
 
   const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", props.fact, setFieldValue, ...args);
   const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", props.fact, setFieldValue, ...args);

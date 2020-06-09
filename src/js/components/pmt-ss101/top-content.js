@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import { shallowEqual, useSelector  } from 'react-redux'
 
-import { v4 as uuidv4 } from 'uuid';
-
 import FormInput from '../common/form-input'
 import TextInput from '../common/formik-text-input'
 import DateTimeInput from '../common/formik-datetime-input'
@@ -12,8 +10,10 @@ import { useFormikContext, useField } from 'formik';
 
 import PopupModalDocument from '../common/popup-modal-document'
 import PopupModalUsername from '../common/popup-modal-username'
+
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID , validateEmployeeIDField, validateWarehouseIDField, validateInternalDocumentIDFieldHelper} from '../../helper';
+import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
 
 import Label from '../common/form-label'
 
@@ -21,75 +21,69 @@ const TopContent = (props) => {
     const toolbar = useSelector((state) => ({...state.toolbar}), shallowEqual);
     const fact = useSelector((state) => ({...state.api.fact}), shallowEqual);
     const footer = useSelector((state) => ({...state.footer}), shallowEqual);
-    const decoded_token = useSelector((state) => ({...state.token.decoded_token}), shallowEqual);
+
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
     // Fill Default Forms
-    useEffect(() => {
-        if (toolbar.mode === TOOLBAR_MODE.ADD) {
-            if (!values.internal_document_id && touched.internal_document_id){
-                setFieldValue('internal_document_id', `draft-${uuidv4()}`, true)
-            }
-            setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(fact.users, decoded_token.id));
-            setFieldValue("created_on", new Date().toISOString().slice(0, 16), false);
-        }        
-    }, [ fact.users, toolbar.mode, touched.internal_document_id, !values.internal_document_id,
-    toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]]) // This needs requiresHandleClick since it resetsForm AFTER the setField Value, making it not show anything
+    useFillDefaultsOnModeAdd();
 
-    const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(toolbar, footer, fact, values , setValues, setFieldValue, validateField, ...args);
+    const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(DOCUMENT_TYPE_ID.SS101, toolbar, footer, fact, values , setValues, setFieldValue, validateField, ...args);
     
     const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
     const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
 
     return (
-        <div id="blackground-white">
-        <div className="container_12 clearfix" style={{marginTop: "55px"}}>
-            {/* Section Title */}
-            <h4 className="head-title">แจ้งเหตุขัดข้อง/ชำรุด</h4>
-    
-            {/* === Left Column === */}
-            <div className="grid_6" style={{paddingLeft: "10px"}}>
-    
-                {/* Document ID */}
-                <Label>เลขที่เอกสาร</Label>
-                <div className="grid_3 alpha">
-                    <TextInput name='internal_document_id'
-                        validate={validateInternalDocumentIDField}
-                        searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} 
-                        ariaControls="modalDocument"
-                        tabIndex="1" />
-                </div>
-                <div class="clear" />
-    
-                {/* User Employee ID  */}
-                <Label>ผู้ดำเนินเรื่อง</Label>
-                <div className="grid_3 alpha">
-                    <TextInput name="created_by_user_employee_id" 
-                        validate={validateUserEmployeeIDField}
-                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} 
-                        tabIndex="2"/>
-                </div>
-                <div class="clear" />
-    
-                {/* Admin Employee ID  */}
-                <Label>ผู้สร้างเอกสาร</Label>
-                <div className="grid_3 alpha">
-                    <TextInput name="created_by_admin_employee_id" 
-                        validate={validateAdminEmployeeIDField}
-                        disabled 
-                        tabIndex="3"/>
-                </div>
-                <div class="clear" />
+    <div id="blackground-white">
+    <div className="container_12 clearfix" style={{marginTop: "55px"}}>
+        {/* Section Title */}
+        <h4 className="head-title">แจ้งเหตุขัดข้อง/ชำรุด</h4>
 
-                {/* wo_internal_document_id  */}
-                <Label>เลขที่เอกสารอ้างอิง</Label>
-                <div className="grid_3 alpha">
-                    <TextInput name="wo_internal_document_id" 
-                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} 
-                        tabIndex="4"/>
-                </div>
-                <div class="clear" />
+        {/* === Left Column === */}
+        <div className="grid_6" style={{paddingLeft: "10px"}}>
+
+            {/* Document ID */}
+            <Label>เลขที่เอกสาร</Label>
+            <div className="grid_3 alpha">
+                <TextInput name='internal_document_id'
+                    validate={validateInternalDocumentIDField}
+                    searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} 
+                    ariaControls="modalDocument"
+                    tabIndex="1" />
             </div>
+            <div class="clear" />
+
+            {/* User Employee ID  */}
+            <Label>ผู้ดำเนินเรื่อง</Label>
+            <div className="grid_3 alpha">
+                <TextInput name="created_by_user_employee_id" 
+                    validate={validateUserEmployeeIDField}
+                    disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} 
+                    searchable={toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"
+                    tabIndex="2"/>
+            </div>
+            <div class="clear" />
+
+            {/* Admin Employee ID  */}
+            <Label>ผู้สร้างเอกสาร</Label>
+            <div className="grid_3 alpha">
+                <TextInput name="created_by_admin_employee_id" 
+                    validate={validateAdminEmployeeIDField}
+                    disabled 
+                    tabIndex="3"/>
+            </div>
+            <div class="clear" />
+
+            {/* wo_internal_document_id  */}
+            <Label>เลขที่เอกสารอ้างอิง</Label>
+            <div className="grid_3 alpha">
+                <TextInput name="wo_internal_document_id" 
+                    disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} 
+                    searchable={toolbar.mode !== TOOLBAR_MODE.SEARCH} 
+                    ariaControls="modalWODocument"
+                    tabIndex="4"/>
+            </div>
+            <div class="clear" />
+        </div>
     
     
     
@@ -131,6 +125,15 @@ const TopContent = (props) => {
         name="internal_document_id" //For setFieldValue 
         />
 
+        {/* PopUp ค้นหาเลขที่เอกสาร WO*/}
+        <PopupModalDocument 
+        documentTypeGroupID={DOCUMENT_TYPE_ID.WORK_ORDER} 
+        id="modalWODocument" //For Open POPUP
+        name="wo_internal_document_id" //For setFieldValue 
+        />
+
+        {/* PopUp ค้นหาชื่อพนักงาน MODE ADD */}
+        <PopupModalUsername />
         </div>
     )
 }
