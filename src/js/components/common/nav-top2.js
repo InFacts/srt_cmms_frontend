@@ -24,9 +24,9 @@ const toggleSubnav = (subnav, open) => {
 
     if (toggle) {
         var dropdown = document.getElementById(toggle.getAttribute('aria-controls'));
-
+        console.log("dropdawn", dropdown)
         if (dropdown) {
-            dropdown.setAttribute('aria-hidden', open ? 'true' : false);
+            dropdown.setAttribute('aria-hidden', false ? 'true' : false);
         }
     }
 }
@@ -100,7 +100,7 @@ const MainModule = (props) => {
         setupAllSubNav();
         // Load Notify
         props.loadNotify();
-    }, [toolbar.mode]);
+    }, []);
 
 
     // console.log("nav.mode", toolbar.mode, footer.mode)
