@@ -823,7 +823,7 @@ const responseToFormState = (fact, data) => {
 }
 
 // Validation 
-export const validateInternalDocumentIDFieldHelper = (toolbar, footer, fact, values, setValues, setFieldValue, validateField, internal_document_id) => new Promise(resolve => {
+export const validateInternalDocumentIDFieldHelper = (document_type_group_id, toolbar, footer, fact, values, setValues, setFieldValue, validateField, internal_document_id) => new Promise(resolve => {
     // Internal Document ID
     //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
     //  ie. GR-PYO-2563/0001
@@ -835,14 +835,13 @@ export const validateInternalDocumentIDFieldHelper = (toolbar, footer, fact, val
         return resolve('Invalid Document ID Format Be sure to use the format ie. GR-PYO-2563/0001')
     }
 
-
     // Checking from Database if Internal Document ID Exists
     let error;
     getDocumentbyInternalDocumentID(internal_document_id)
         .then((data) => {
             console.log(" i got data", data);
 
-            if (isICD(values.document_type_group_id)) {
+            if (isICD(document_type_group_id)) { // If document type group ID is ICD
                 console.log("i know i am in ICD")
                 if (data.internal_document_id === internal_document_id) { // If input document ID exists
                     if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
@@ -877,7 +876,7 @@ export const validateInternalDocumentIDFieldHelper = (toolbar, footer, fact, val
                         error = '';
                     }
                 }
-            }else if(values.document_type_group_id === DOCUMENT_TYPE_ID.WORK_REQUEST){
+            }else if(document_type_group_id === DOCUMENT_TYPE_ID.WORK_REQUEST){
                 console.log("i know i am in workrequest!!")
                     
                 if (data.document.internal_document_id === internal_document_id) { // If input document ID exists
