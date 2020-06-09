@@ -861,20 +861,36 @@ export const approveDocuement = (document_id, obj_body) => new Promise((resolve,
         })
 });
 
-export const getLotFromQty = (fifo, quantity) => new Promise((resolve, reject) => {
-    var qty_for_cal_fifo = quantity;
-    var array_for_cal_fifo = [];
-    for (var i = 0; qty_for_cal_fifo = 0; i++) {
-        if (qty_for_cal_fifo >= fifo[0].quantity) {
-            qty_for_cal_fifo = qty_for_cal_fifo - fifo[0].quantity;
-            array_for_cal_fifo.push(fifo[0]);
-            fifo.shift();
-        } else {
-            qty_for_cal_fifo = 0;
-            array_for_cal_fifo.push(fifo[0]);
+export const weightedAverage = (lots) => {
+    var quantityTotal = 0;
+    var weightedTotal = 0;
+    lots.map((lot) => {
+        quantityTotal += lot.quantity;
+        weightedTotal += lot.quantity*lot.per_unit_price;
+    })
+    return weightedTotal/quantityTotal;
+}
+
+export const getLotFromQty = (fifo, quantity) => {
+    var fifoCopy = fifo.slice(); // make a copy
+    var quantityLeft = quantity; 
+    var lotsFrom = [];
+    fifo.forEach((currentLot) => {
+        if(quantityLeft >= currentLot.quantity){ // if Quantity Left >= Current Lot Quantity, shift and push
+            lotsFrom.push(fifoCopy.shift());
+            quantityLeft -= currentLot.quantity;
+        }else{ // if Quantity Left < Current Lot Quantity, shift and push only required # of lot
+            lotsFrom.push({...fifoCopy.shift(), quantity: quantityLeft});
+            quantityLeft = 0;
         }
+    })
+    // Artificial Lots if QTY leftover
+    if (quantityLeft > 0){
+        lotsFrom.push({quantity: quantityLeft, per_unit_price: weightedAverage(lotsFrom)});
     }
-});
+
+    return lotsFrom; 
+};
 
 // Get Params from URL
 export const getUrlParamsLink = new Promise((resolve, reject) => {

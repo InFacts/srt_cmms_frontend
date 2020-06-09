@@ -88,8 +88,7 @@ const TopContent = (props) => {
             <Label>เลขที่เอกสารแจ้งเหตุขัดข้อง</Label>
             <div className="grid_3 alpha">
                 <TextInput name="wr_internal_document_id" 
-                    validate={validateAdminEmployeeIDField}
-                    disabled 
+                    disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} 
                     tabIndex="4"/>
             </div>
             <div class="clear" />

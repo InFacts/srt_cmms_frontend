@@ -18,7 +18,7 @@ import PopupModalNoPart from '../common/popup-modal-nopart'
 
 import '../../../css/table.css';
 
-import { fetchGoodsOnhandData, getNumberFromEscapedString } from '../../helper';
+import { fetchGoodsOnhandData, getNumberFromEscapedString, getLotFromQty, weightedAverage } from '../../helper';
 const BottomContent = (props) => {
 
   const [lineNumber, setLineNumber] = useState('');
@@ -106,17 +106,20 @@ const BottomContent = (props) => {
   });
 
   const validateLineNumberQuatityItemIDField = (fieldName, quantity, index) => {
-    // internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
-    //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
-    // if (values.line_items[index].quantity === quantity) {
-    //   return;
-    // }
     if (quantity === "") {
       return;
     }
 
     if (quantity !== 0) {
-      setFieldValue(fieldName, quantity, false);
+      // console.log("I AM CHECK VALUES", values.line_items[index])
+      let items = values.line_items[index].at_source;
+      let item = items.find(item => `${item.item_status_id}` === `${values.line_items[index].item_status_id}`); // Returns undefined if not found
+      if (item) {
+        console.log("weightedAverage(getLotFromQty(item.pricing.fifo, quantity))", weightedAverage(getLotFromQty(item.pricing.fifo, quantity)))
+        setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(item.pricing.fifo, quantity)), false);
+        setFieldValue(fieldName, quantity, false);
+        return;
+      }
       return;
     } else {
       return 'Invalid Quantity Line Item';
@@ -230,7 +233,7 @@ const BottomContent = (props) => {
           </div>
 
           {/* PopUp ค้นหาอะไหล่ MODE ADD */}
-          <PopupModalNoPart lineNumber={lineNumber} />
+          <PopupModalNoPart keyname='line_items' lineNumber={lineNumber} />
 
         </div>
       </div>

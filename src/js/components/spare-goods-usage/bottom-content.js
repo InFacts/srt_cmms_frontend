@@ -18,7 +18,7 @@ import PopupModalNoPart from '../common/popup-modal-nopart'
 
 import '../../../css/table.css';
 
-import { fetchGoodsOnhandData, getNumberFromEscapedString, getLotFromQty } from '../../helper';
+import { fetchGoodsOnhandData, getNumberFromEscapedString, getLotFromQty, weightedAverage } from '../../helper';
 const BottomContent = (props) => {
 
   const [lineNumber, setLineNumber] = useState('');
@@ -97,7 +97,9 @@ const BottomContent = (props) => {
 
       fetchGoodsOnhandData(getNumberFromEscapedString(values.src_warehouse_id), item.item_id)
         .then((at_source) => {
+          console.log(at_source, "at_source")
           setFieldValue(fieldName + `.at_source`, at_source, false);
+          // setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(at_source.pricing.fifo, values.line_items[index].quantity)), false);
         })
       return resolve();
     } else {
@@ -115,9 +117,8 @@ const BottomContent = (props) => {
       let items = values.line_items[index].at_source;
       let item = items.find(item => `${item.item_status_id}` === `${values.line_items[index].item_status_id}`); // Returns undefined if not found
       if (item) {
-        if (quantity !== values.line_items[index].quantity) {
-          getLotFromQty(item.pricing.fifo, quantity);
-        }
+        console.log("weightedAverage(getLotFromQty(item.pricing.fifo, quantity))", weightedAverage(getLotFromQty(item.pricing.fifo, quantity)))
+        setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(item.pricing.fifo, quantity)), false);
         setFieldValue(fieldName, quantity, false);
         return;
       }
@@ -128,11 +129,6 @@ const BottomContent = (props) => {
   }
 
   const validateLineNumberPerUnitPriceItemIDField = (fieldName, per_unit_price, index) => {
-    // internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
-    //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
-    // if (values.line_items[index].per_unit_price === per_unit_price) {
-    //   return;
-    // }
     if (per_unit_price === "") {
       return;
     }
@@ -144,7 +140,6 @@ const BottomContent = (props) => {
       return 'Invalid Per Unit Price Line Item';
     }
   }
-
   // For Down File in Attactment by Nuk
   const HandleDownload = () => {
     axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/1/download/1`,
@@ -234,7 +229,7 @@ const BottomContent = (props) => {
           </div>
 
           {/* PopUp ค้นหาอะไหล่ MODE ADD */}
-          <PopupModalNoPart lineNumber={lineNumber} />
+          <PopupModalNoPart keyname='line_items' lineNumber={lineNumber} />
 
         </div>
       </div>

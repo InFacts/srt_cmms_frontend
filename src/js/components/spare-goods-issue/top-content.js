@@ -47,6 +47,7 @@ const responseToFormState = (userFact, data) => {
     remark: data.remark,
     status_name_th: data.status_name,
     refer_to_document_name: data.refer_to_document_name,
+    document_date: data.document_date.slice(0, 10)
   }
 }
 

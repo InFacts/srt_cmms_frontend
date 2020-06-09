@@ -33,7 +33,7 @@ const BottomContent = (props) => {
             {/* Component Title */}
             <h3 className="head-title-bottom mt-2">ข้อมูลเกี่ยวกับอาการขัดข้อง</h3>
 
-            {/* === One Column   ==== */}
+            {/* === Left Column   ==== */}
             <div className="grid_6" style={{paddingLeft: "10px"}}>
 
 
