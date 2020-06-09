@@ -898,5 +898,6 @@ export const getUrlParamsLink = new Promise((resolve, reject) => {
     let url = window.location.search;
     const urlParams = new URLSearchParams(url);
     const internal_document_id = urlParams.get('internal_document_id');
+    console.log(" getUrlParamsLink internal_document_id --------", internal_document_id)
     return resolve(internal_document_id);
 })

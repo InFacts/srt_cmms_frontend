@@ -18,11 +18,13 @@ const BottomContent = (props) => {
   
   const identifyEndpoins = (document_type_id) => {
     let doc_type = document_type_id.toString().substring(0, 3);
+    // console.log("doc_type", doc_type)
     if (doc_type === "101") return "goods-receipt2";
     if (doc_type === "103") return "goods-receipt-no-po";
     if (doc_type === "111") return "goods-usage";
     if (doc_type === "112") return "goods-issue";
     if (doc_type === "121") return "inventory-transfer";
+    if (doc_type === "132") return "goods-fix";
     else return "#";
   }
 
