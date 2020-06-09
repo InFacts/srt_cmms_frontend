@@ -224,7 +224,7 @@ const useFooterInitializer = (document_type_id) => {
 
     // Handle Click Approval
     useEffect(()=> {
-        console.log("I AM Handle APPROVAL" );
+        console.log("I AM Handle APPROVAL", values );
         if (footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL]){
             validateForm()
             .then((err) => {
@@ -258,6 +258,7 @@ const useFooterInitializer = (document_type_id) => {
                 }
             })
             .catch((err) => {
+                console.warn("Validate Failed ", err);
                 console.warn("Submit Failed ", err.response);
             })
         }
