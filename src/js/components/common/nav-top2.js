@@ -24,7 +24,7 @@ const toggleSubnav = (subnav, open) => {
 
     if (toggle) {
         var dropdown = document.getElementById(toggle.getAttribute('aria-controls'));
-        console.log("dropdawn", dropdown)
+        // console.log("dropdawn", dropdown)
         if (dropdown) {
             dropdown.setAttribute('aria-hidden', false ? 'true' : false);
         }

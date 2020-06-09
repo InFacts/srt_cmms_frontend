@@ -73,6 +73,19 @@ export const DOCUMENT_SCHEMA = {
     // document_action_type_id	string // NOT USED, handled by Backend
     // refer_to_document_id	string // NOT USED, handled by Backend
 }
+export const DOCUMENT_SCHEMA_GET = {
+    document_id: -1,
+    // document_type_id: -1, // NOT USED since Backend will get SRC and DEST WH and determine type
+    internal_document_id: "draft-SCHEMA",
+    created_on: "-1", // NOT USED since use DEFAULT NOW() of SQL
+    remark: '',
+    created_by_admin_id: -1,
+    created_by_user_id: -1,
+    document_date: "",
+    // document_status_id:	-1, // NOT USED, handled by Backend
+    // document_action_type_id	string // NOT USED, handled by Backend
+    // refer_to_document_id	string // NOT USED, handled by Backend
+}
 
 
 export const ICD_LINE_ITEM_SCHEMA = {
@@ -84,7 +97,6 @@ export const ICD_LINE_ITEM_SCHEMA = {
     item_id: -1,
     item_status_id: -1,
 }
-
 
 
 export const ICD_SCHEMA = {
@@ -107,7 +119,7 @@ export const WORK_REQUEST_SCHEMA = {
     location_node_id: -1, // location_node_id สถานที่ ตอน
     location_station_id: -1, // สถานที่ สถานี  [TODO DATABASE]
     location_detail: '', // location_detail รายละเอียดสถานที่
-    remark: '',
+    // remark: '', we will remove this in db TODO** - > will use doc's remark instead
 }
 
 export const WORK_ORDER_SCHEMA = {
@@ -791,34 +803,76 @@ export const checkDocumentStatus = (valuesContext) => new Promise((resolve, reje
 })
 
 
-const responseToFormState = (fact, data) => {
-    for (var i = data.line_items.length; i <= 9; i++) {
-        data.line_items.push(
-            {
-                item_id: "",
-                internal_item_id: "",
-                description: "",
-                quantity: "",
-                uom_group_id: "",
-                unit: "",
-                per_unit_price: "",
-                list_uoms: []
-            }
-        );
+const responseToFormState = (fact, data, document_type_group_id) => {
+    if (isICD(document_type_group_id)){
+        for (var i = data.line_items.length; i <= 9; i++) {
+            data.line_items.push(
+                {
+                    item_id: "",
+                    internal_item_id: "",
+                    description: "",
+                    quantity: "",
+                    uom_group_id: "",
+                    unit: "",
+                    per_unit_price: "",
+                    list_uoms: []
+                }
+            );
+        }
+        return {
+            document_id: data.document_id,
+            internal_document_id: data.internal_document_id,
+            document_date: data.document_date.split("T")[0],
+            created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.created_by_user_id) || '',
+            created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.created_by_admin_id) || '',
+            created_on: data.created_on.split(".")[0],
+            line_items: data.line_items,
+            dest_warehouse_id: data.dest_warehouse_id,
+            remark: data.remark,
+            status_name_th: "",
+            document_action_type_id: "",
+            po_id: data.po_id,
+        }
+    } else if (document_type_group_id===DOCUMENT_TYPE_ID.WORK_REQUEST) {
+        // Select both DOCUMENT_SCHEMA_GET and WORK_REQUEST_SCHEMA_GET 
+        // Object Destructuring and Property Shorthand https://stackoverflow.com/questions/17781472/how-to-get-a-subset-of-a-javascript-objects-properties
+        let document_part = Object.fromEntries(
+            Object.entries(data.document)
+            .filter(([key]) => Object.keys(DOCUMENT_SCHEMA_GET).includes(key))
+        )
+        let work_request_part =  Object.fromEntries(
+            Object.entries(data.specific)
+            .filter(([key]) => Object.keys(WORK_REQUEST_SCHEMA).includes(key))
+        )
+        console.log("this is document_part 123  ",document_part)
+        console.log("this is work_request_part ",work_request_part)
+        return {...transformDocumentResponseToFormState(document_part, fact), ...transformWorkRequestResponseToFormState(work_request_part)}
     }
+    
+}
+
+function transformDocumentResponseToFormState(document_part, fact) {
     return {
-        document_id: data.document_id,
-        internal_document_id: data.internal_document_id,
-        document_date: data.document_date.split("T")[0],
-        created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.created_by_user_id) || '',
-        created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.created_by_admin_id) || '',
-        created_on: data.created_on.split(".")[0],
-        line_items: data.line_items,
-        dest_warehouse_id: data.dest_warehouse_id,
-        remark: data.remark,
-        status_name_th: "",
-        document_action_type_id: "",
-        po_id: data.po_id,
+        document_id: document_part.document_id,
+        internal_document_id: document_part.internal_document_id,
+        document_date: document_part.document_date.split("T")[0],
+        created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_user_id) || '',
+        created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_admin_id) || '',
+        created_on: document_part.created_on.split(".")[0],
+    }
+}
+
+function returnEmptyStringIfNull(string){
+    return (string == null) ? '' : string;
+}
+
+function transformWorkRequestResponseToFormState(work_request_part) {
+    return {
+        ...work_request_part,
+        accident_on: work_request_part.accident_on.split(".")[0],
+        location_district_id: returnEmptyStringIfNull(work_request_part.location_district_id),
+        location_node_id: returnEmptyStringIfNull(work_request_part.location_node_id),
+        location_station_id: returnEmptyStringIfNull(work_request_part.location_station_id),
     }
 }
 
@@ -884,8 +938,8 @@ export const validateInternalDocumentIDFieldHelper = (document_type_group_id, to
                     if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
                         && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
                         // fetchAttachmentDocumentData(data.document_id)
-                        console.log("validateInternalDocumentIDField:: I got document ID ", data.document_id)
-                        setValues({ ...values, ...responseToFormState(fact, data) }, false); //Setvalues and don't validate
+                        console.log("validateInternalDocumentIDField:: I got document ID ", data.document.document_id)
+                        setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
                         // validateField("dest_warehouse_id");
                         validateField("created_by_user_employee_id");
                         validateField("created_by_admin_employee_id");
