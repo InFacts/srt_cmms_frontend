@@ -229,7 +229,7 @@ const BottomContent = (props) => {
           </div>
 
           {/* PopUp ค้นหาอะไหล่ MODE ADD */}
-          <PopupModalNoPart lineNumber={lineNumber} />
+          <PopupModalNoPart keyname='line_items' lineNumber={lineNumber} />
 
         </div>
       </div>
