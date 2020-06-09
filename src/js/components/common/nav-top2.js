@@ -94,12 +94,13 @@ const setupAllSubNav = () => {
 const MainModule = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }));
     const footer = useSelector((state) => ({ ...state.footer }));
-    console.log("toolbar.mode", toolbar.mode)
+    // console.log("toolbar.mode", toolbar.mode)
     useEffect(() => {
         // Setup SubNav
         setupAllSubNav();
         // Load Notify
         props.loadNotify();
+        // console.log("THIS IS NOTIFY", props.notify.notify);
     }, [toolbar.mode]);
 
 

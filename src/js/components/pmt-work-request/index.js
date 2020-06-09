@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
 import { useFormik , withFormik ,useFormikContext} from 'formik';
+
+import TabBar from '../common/tab-bar';
 
 import TopContent from './top-content';
 import BottomContent from './bottom-content';
@@ -20,11 +22,20 @@ const WorkRequestComponent = () => {
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.WORK_REQUEST);
 
+    // Initial tabbar & set default active
+    const [tabNames, setTabNames] = useState([
+        {id:"broken", name:"อาการเสีย"},
+        {id:"attachment", name:"แนบไฟล์"},
+        {id:"table_status", name:"สถานะเอกสาร"},
+    ]);
+
     return (
         <>
           <form>
              <TopContent />
-             <BottomContent  />
+             <TabBar tabNames={tabNames} initialTabID="broken">
+                <BottomContent />
+            </TabBar>
              <Footer /> 
          </form> 
         </>
