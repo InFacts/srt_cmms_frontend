@@ -8,7 +8,7 @@ import TopContent from './top-content';
 import BottomContent from './bottom-content';
 import Footer from '../common/footer.js';
 
-import {packDataFromValues, DOCUMENT_TYPE_ID, saveDocument} from '../../helper';
+import {packDataFromValues, DOCUMENT_TYPE_ID, saveDocument, getUrlParamsLink} from '../../helper';
 
 import useToolbarInitializer from '../../hooks/toolbar-initializer';
 import useFactInitializer from '../../hooks/fact-initializer';
@@ -17,8 +17,14 @@ import useFooterInitializer from '../../hooks/footer-initializer';
 
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
+// ADD FOR Link
+import { useDispatch, useSelector  } from 'react-redux'
+import useDocumentSubscription from '../../hooks/document-subscription';
+import useNavBottomStatusInitializer from '../../hooks/nav-bottom-status-initializer';
+import { footerToModeSearch } from '../../redux/modules/footer.js';
+
 const GoodsReturnComponent = (props) => {
-    
+    const dispatch = useDispatch();
     const {resetForm, setFieldValue, setValues, values, validateField,validateForm} = useFormikContext();
 
     // Initial tabbar & set default active
@@ -32,23 +38,41 @@ const GoodsReturnComponent = (props) => {
     useTokenInitializer();
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.GOODS_RETURN);
+    useNavBottomStatusInitializer();
+    useDocumentSubscription();
+    useEffect(()=>{
+        dispatch(footerToModeSearch());
+    }, []);
 
     // If Link to this url via Track Document
     useEffect(() => {
-        let url = window.location.search;
-        // console.log("URL IS", url)
-        const urlParams = new URLSearchParams(url);
-        const internal_document_id = urlParams.get('internal_document_id');
-        if (internal_document_id !== "") {
-            // action_approval
-            // console.log(" IA M NOT SETTING ", internal_document_id);
-            // console.log(" i think that toolbar mode is ", props.toolbar.mode)
-            // console.log(" THIS IS CURRENT VALUES ", values);
-            setFieldValue("internal_document_id", internal_document_id, true);
-            // console.log(" THIS IS AFTER VALUES ", values);
-            // setTimeout(validateForm, 2);
-        }
+        console.log("useEffect getUrlParamsLink")
+        getUrlParamsLink.then((internal_document_id) => {
+            console.log("internal_document_id --------", internal_document_id)
+            if (internal_document_id !== "") {
+                // action_approval
+                setFieldValue("status_name_th", "", true);
+                setFieldValue("internal_document_id", internal_document_id, true);
+            }
+        })
     }, [])
+    // // If Link to this url via Track Document
+    // useEffect(() => {
+    //     let url = window.location.search;
+    //     // console.log("URL IS", url)
+    //     const urlParams = new URLSearchParams(url);
+    //     const internal_document_id = urlParams.get('internal_document_id');
+    //     if (internal_document_id !== "") {
+    //         // action_approval
+    //         // console.log(" IA M NOT SETTING ", internal_document_id);
+    //         // console.log(" i think that toolbar mode is ", props.toolbar.mode)
+    //         // console.log(" THIS IS CURRENT VALUES ", values);
+    //         setFieldValue("status_name_th", "", true);
+    //         setFieldValue("internal_document_id", internal_document_id, true);
+    //         // console.log(" THIS IS AFTER VALUES ", values);
+    //         // setTimeout(validateForm, 2);
+    //     }
+    // }, [])
 
     return (
         <form onSubmit={props.handleSubmit}>
