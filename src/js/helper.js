@@ -477,14 +477,15 @@ export const saveDocument = (document_type_group_id, data, image) => new Promise
         .then(({ document_id, internal_document_id, status }) => { // Get the Document_ID
             editDocument(document_id, document_type_group_id, mutateDataFillDocumentID(data, document_id))
                 .then(() => {
-                    let imageBody = {file: image}
-                    uploadAttachmentDocumentData(document_id, imageBody)
-                    .then(() => {
-                        return resolve(document_id);
-                    })
-                    .catch((err) => {
-                        return reject(err);
-                    });
+                    return resolve(document_id);
+                    // let imageBody = {file: image}
+                    // uploadAttachmentDocumentData(document_id, imageBody)
+                    // .then(() => {
+                    //     return resolve(document_id);
+                    // })
+                    // .catch((err) => {
+                    //     return reject(err);
+                    // });
                 })
                 .catch((err) => {
                     return reject(err);
