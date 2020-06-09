@@ -34,7 +34,7 @@ const WorkRequestComponent = () => {
 const EnhancedWorkRequestComponent = withFormik({
     mapPropsToValues: () => ({ 
         // === Field ที่ให้ User กรอก ===
-        // Top Content
+        // Top Content  
         internal_document_id: '',       // เลขที่เอกสาร
         created_by_user_employee_id: '', // ผู้ดำเนินเรื่อง (Default === admin_employee_id)
         created_by_admin_employee_id: '',  //ผู้สร้างเอกสาร (Field ที่ไม่ได้กรอก)
@@ -56,6 +56,7 @@ const EnhancedWorkRequestComponent = withFormik({
         remark: '',                      // หมายเหตุ  NVARCHAR
         
 
+        file: [],
 
         document_status_id: '', // ?
         step_approve: [],               // (Field ที่ไม่ได้กรอก)

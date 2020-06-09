@@ -189,7 +189,7 @@ const useFooterInitializer = (document_type_id) => {
                             dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
                         }); 
                     }else{ // If not have document_id
-                        saveDocument(document_type_id, data, values.file[0])
+                        saveDocument(document_type_id, data)
                         .then((document_id) => {
                             setFieldValue('document_id', document_id, true);
                             startDocumentApprovalFlow(document_id)
