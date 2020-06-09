@@ -25,6 +25,7 @@ const BottomContent = (props) => {
     if (doc_type === "112") return "goods-issue";
     if (doc_type === "121") return "inventory-transfer";
     if (doc_type === "132") return "goods-fix";
+    if (doc_type === "102") return "goods-return";
     else return "#";
   }
 
