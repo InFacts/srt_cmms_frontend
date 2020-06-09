@@ -269,6 +269,7 @@ const useFooterInitializer = (document_type_id) => {
         if (footer.requiresHandleClick[FOOTER_ACTIONS.CHECK_APPROVAL]){
             validateForm()
             .then((err) => {
+                console.log("values", values)
                 dispatch(navBottomSending('[API]', 'Sending ...', ''));
                 setErrors(err);
                 if(isEmpty(err)){
