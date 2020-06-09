@@ -244,7 +244,9 @@ const MainModule = (props) => {
 const mapStateToProps = (state) => ({
     notify: state.notify,
     not_read_count: state.not_read_count,
-    fact: state.token,
+    toolbar: state.toolbar,
+    item: state.api.fact.item,
+    token: state.token,
 });
 
 const mapDispatchToProps = {
