@@ -18,6 +18,7 @@ import useToolbarInitializer from '../../hooks/toolbar-initializer';
 import useFactInitializer from '../../hooks/fact-initializer';
 import useTokenInitializer from '../../hooks/token-initializer';
 import useFooterInitializer from '../../hooks/footer-initializer';
+import useDocumentSubscription from '../../hooks/document-subscription';
 
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
@@ -36,7 +37,7 @@ const GoodsReturnComponent = (props) => {
     useTokenInitializer();
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX);
-
+    useDocumentSubscription();
     // If Link to this url via Track Document
     useEffect(() => {
         let url = window.location.search;

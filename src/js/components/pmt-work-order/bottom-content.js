@@ -86,7 +86,7 @@ const BottomContent = (props) => {
                 <Label>รับข้อมูลผ่านช่องทาง</Label>
                 <div className="grid_4 alpha omega"> 
                     {/* Need to change to radio button later */}
-                    <SelectNoChildrenInput name="recv_accident_from_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                    <SelectNoChildrenInput name="recv_accident_from_recv_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
                         <option value='' selected></option>
                         <option value='1' >โทรศัพท์</option>
                         <option value='2' >จดหมาย</option>
@@ -121,7 +121,7 @@ const BottomContent = (props) => {
                     <SelectNoChildrenInput name="location_node_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
                         <option value=''></option>
                         {factNodes.items.map(function ({node_id, name, district_id}) {
-                            if(values.district_id == district_id){ // Shallow equality, district ID may be string
+                            if(values.location_district_id == district_id){ // Shallow equality, district ID may be string
                                 return <option value={node_id} key={node_id}>{name}</option>
                             }
                         })}
@@ -137,7 +137,7 @@ const BottomContent = (props) => {
                         disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
                         <option value=''></option>
                         {factStations.items.map(function ({station_id, name, node_id}) {
-                            if (values.node_id == node_id) { // Shallow equality, node ID may be string
+                            if (values.location_node_id == node_id) { // Shallow equality, node ID may be string
                                 return <option value={station_id} key={station_id}> {name} </option>
                             }
                         })}

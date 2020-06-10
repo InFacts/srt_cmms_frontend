@@ -147,7 +147,7 @@ export const SS101_SCHEMA = {
     request_on: '',                 // วันเวลาที่รับแจ้ง DATETIME
     // root_cause: '',                 // อาการเสียโดยสรุป NVARCHAR [only WO]
     request_by: '',                //  ผู้แจ้งเหตุ [WR] ,  ได้รับเหตุจาก[WO] NVARCHAR
-    recv_accident_from_id: -1,     // ได้รับข้อมูลผ่านช่องทาง: Phone, Letter, WR   FK_ID
+    recv_accident_from_recv_id: -1,     // ได้รับข้อมูลผ่านช่องทาง: Phone, Letter, WR   FK_ID
 
     location_district_id: -1,        // สถานที่ แขวง  [รายงานการตรวจซ่อมอุปกรณ์แขวง] FK_ID
     location_node_id: -1,            // สถานที่ ตอน   [ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม (สถานที่/ที่ตั้ง)] FK_ID
@@ -421,6 +421,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                 work_order_part[key] = values[key]
             }
         })
+        work_order_part.accident_on = work_order_part.accident_on + ":00";
         return {
             document: document_part,
             specific: work_order_part,
@@ -1001,7 +1002,7 @@ function transformWorkRequestResponseToFormState(work_request_part) {
 function transformWorkOrderResponseToFormState(work_order_part) {
     return {
         ...work_order_part,
-        accident_on: work_order_part.accident_on.split(".")[0],
+        accident_on: work_order_part.accident_on.slice(0, 16),
         location_district_id: returnEmptyStringIfNull(work_order_part.location_district_id),
         location_node_id: returnEmptyStringIfNull(work_order_part.location_node_id),
         location_station_id: returnEmptyStringIfNull(work_order_part.location_station_id),

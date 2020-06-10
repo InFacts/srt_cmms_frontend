@@ -12,6 +12,8 @@ import useToolbarInitializer from '../../hooks/toolbar-initializer';
 import useFactInitializer from '../../hooks/fact-initializer';
 import useTokenInitializer from '../../hooks/token-initializer';
 import useFooterInitializer from '../../hooks/footer-initializer';
+import useDocumentSubscription from '../../hooks/document-subscription';
+
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 import { DOCUMENT_TYPE_ID} from '../../helper';
 
@@ -21,6 +23,7 @@ const WorkRequestComponent = () => {
     useTokenInitializer();
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.WORK_REQUEST);
+    useDocumentSubscription();
 
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([

@@ -103,11 +103,11 @@ const BottomContent = (props) => {
 
                         <div class="clear" />
 
-                        {/* recv_accident_from_id */}
+                        {/* recv_accident_from_recv_idid */}
                         <Label>รับข้อมูลผ่านช่องทาง</Label>
                         <div className="grid_4 alpha omega">
                             {/* Need to change to radio button later */}
-                            <SelectNoChildrenInput name="recv_accident_from_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                            <SelectNoChildrenInput name="recv_accident_from_recv_idid" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
                                 <option value='' selected></option>
                                 <option value='1' >โทรศัพท์</option>
                                 <option value='2' >จดหมาย</option>

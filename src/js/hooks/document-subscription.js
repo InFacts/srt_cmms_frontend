@@ -15,6 +15,7 @@ const useDocumentSubscription = () => {
 
     // Get approval Step when values.document_id changes
     useEffect(() => {
+        
         if(values.document_id && 
             !footer.requiresHandleClick[FOOTER_ACTIONS.SEND] && 
             !footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL] && 
@@ -30,6 +31,7 @@ const useDocumentSubscription = () => {
         // Start Axios Get step_approve and attachment By nuk
         fetchStepApprovalDocumentData(values.document_id)
         .then((result) => {
+            // console.log(" THIS IS FETCHED APPROVAL ", result    )
             // Setup value From Approve 
             setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
             if(result.is_canceled){

@@ -100,7 +100,7 @@ const MainModule = (props) => {
         setupAllSubNav();
         // Load Notify
         props.loadNotify();
-    }, []);
+    }, [toolbar.mode]);
 
 
     // console.log("nav.mode", toolbar.mode, footer.mode)

@@ -15,6 +15,7 @@ import useToolbarInitializer from '../../hooks/toolbar-initializer';
 import useFactInitializer from '../../hooks/fact-initializer';
 import useTokenInitializer from '../../hooks/token-initializer';
 import useFooterInitializer from '../../hooks/footer-initializer';
+import useDocumentSubscription from '../../hooks/document-subscription';
 
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
@@ -24,6 +25,7 @@ const WorkOrderComponent = (props) => {
     useTokenInitializer();
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.WORK_ORDER);
+    useDocumentSubscription();
 
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
@@ -68,7 +70,7 @@ const EnhancedWorkOrderComponent = withFormik({
         request_on: '',                 // วันเวลาที่รับแจ้ง DATETIME
         root_cause: '',                 // อาการเสียโดยสรุป NVARCHAR
         request_by: '' ,                //  ผู้แจ้งเหตุ [WR] ,  ได้รับเหตุจาก[WO] NVARCHAR
-        recv_accident_from_id: '' ,     // ได้รับข้อมูลผ่านช่องทาง: Phone, Letter, WR   FK_ID
+        recv_accident_from_recv_id: '' ,     // ได้รับข้อมูลผ่านช่องทาง: Phone, Letter, WR   FK_ID
 
 
         location_district_id: '',        // สถานที่ แขวง  [รายงานการตรวจซ่อมอุปกรณ์แขวง] FK_ID

@@ -166,6 +166,7 @@ const useFooterInitializer = (document_type_id) => {
         if (footer.requiresHandleClick[FOOTER_ACTIONS.SEND]){
             // Move Dispatch to `finally` in the async functions
             // dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
+
             validateForm()
             .then((err) => {
                 dispatch(navBottomSending('[API]', 'Sending ...', ''));
@@ -218,7 +219,7 @@ const useFooterInitializer = (document_type_id) => {
                 }
             })
             .catch((err) => {
-                console.log("NUK IN CATCH")
+                console.log("NUK IN CATCH <<<<<<<<")
             })
         }
     }, [footer.requiresHandleClick[FOOTER_ACTIONS.SEND]]);
