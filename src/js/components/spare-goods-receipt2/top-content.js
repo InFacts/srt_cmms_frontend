@@ -23,16 +23,18 @@ import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
 
 const TopContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm   } = useFormikContext();
+  const toolbar = useSelector((state) => ({...state.toolbar}), shallowEqual);
+  const fact = useSelector((state) => ({...state.api.fact}), shallowEqual);
   const footer = useSelector((state) => ({...state.footer}), shallowEqual);
 
   // Fill Default Forms
   useFillDefaultsOnModeAdd();
 
   
-  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO, props.toolbar, footer, props.fact, values , setValues, setFieldValue, validateField, ...args)
+  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO, toolbar, footer, fact, values , setValues, setFieldValue, validateField, ...args)
 
-  const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", props.fact, setFieldValue, ...args);
-  const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", props.fact, setFieldValue, ...args);
+  const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
+  const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
 
   const validateDestWarehouseIDField = (...args) => validateWarehouseIDField("dest_warehouse_id", props.fact, setFieldValue, ...args);
 

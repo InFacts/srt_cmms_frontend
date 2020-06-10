@@ -217,7 +217,9 @@ const useFooterInitializer = (document_type_id) => {
                     
                 }
             })
-            
+            .catch((err) => {
+                console.log("NUK IN CATCH")
+            })
         }
     }, [footer.requiresHandleClick[FOOTER_ACTIONS.SEND]]);
 

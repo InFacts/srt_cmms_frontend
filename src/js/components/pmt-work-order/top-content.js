@@ -39,7 +39,7 @@ const TopContent = (props) => {
     toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]]) // This needs requiresHandleClick since it resetsForm AFTER the setField Value, making it not show anything
 
 
-    const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(toolbar, footer, fact, values , setValues, setFieldValue, validateField, ...args);
+    const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(DOCUMENT_TYPE_ID.WORK_ORDER, toolbar, footer, fact, values , setValues, setFieldValue, validateField, ...args);
 
     const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
     const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);

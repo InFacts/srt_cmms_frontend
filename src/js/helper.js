@@ -125,12 +125,12 @@ export const WORK_REQUEST_SCHEMA = {
 export const WORK_ORDER_SCHEMA = {
     document_id: -1, // NEEDS TO HAVE!
 
-    accident_name: "", 
+    accident_name: "",
     accident_on: '', // accident_on วันเวลาเกิดเหตุ
     request_on: '',                 // วันเวลาที่รับแจ้ง DATETIME
     root_cause: '',                 // อาการเสียโดยสรุป NVARCHAR
-    request_by: '' ,                //  ผู้แจ้งเหตุ [WR] ,  ได้รับเหตุจาก[WO] NVARCHAR
-    recv_accident_from_id: -1 ,     // ได้รับข้อมูลผ่านช่องทาง: Phone, Letter, WR   FK_ID
+    request_by: '',                //  ผู้แจ้งเหตุ [WR] ,  ได้รับเหตุจาก[WO] NVARCHAR
+    recv_accident_from_recv_id: -1,     // ได้รับข้อมูลผ่านช่องทาง: Phone, Letter, WR   FK_ID
 
     location_district_id: -1, // location_district_id สถานที่ แขวง  [TODO DATABASE]
     location_node_id: -1, // location_node_id สถานที่ ตอน
@@ -146,8 +146,8 @@ export const SS101_SCHEMA = {
     accident_on: '',                // วันเวลาเกิดเหตุ  DATETIME
     request_on: '',                 // วันเวลาที่รับแจ้ง DATETIME
     // root_cause: '',                 // อาการเสียโดยสรุป NVARCHAR [only WO]
-    request_by: '' ,                //  ผู้แจ้งเหตุ [WR] ,  ได้รับเหตุจาก[WO] NVARCHAR
-    recv_accident_from_id: -1 ,     // ได้รับข้อมูลผ่านช่องทาง: Phone, Letter, WR   FK_ID
+    request_by: '',                //  ผู้แจ้งเหตุ [WR] ,  ได้รับเหตุจาก[WO] NVARCHAR
+    recv_accident_from_id: -1,     // ได้รับข้อมูลผ่านช่องทาง: Phone, Letter, WR   FK_ID
 
     location_district_id: -1,        // สถานที่ แขวง  [รายงานการตรวจซ่อมอุปกรณ์แขวง] FK_ID
     location_node_id: -1,            // สถานที่ ตอน   [ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม (สถานที่/ที่ตั้ง)] FK_ID
@@ -319,7 +319,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                     refer_to_document_id: values.refer_to_document_id
                 }
                 break;
-            case DOCUMENT_TYPE_ID.GOODS_RETURN_MAINTENANCE:
+            case DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX:
                 document_part = {
                     ...document_part,
                     refer_to_document_id: values.refer_to_document_id
@@ -397,11 +397,11 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         document_part["document_type_id"] = DOCUMENT_TYPE_NOTGROUP_ID.WORK_REQUEST;
         let work_request_part = {}
         Object.keys(WORK_REQUEST_SCHEMA).map((key) => {
-            if (Number.isInteger(WORK_REQUEST_SCHEMA[key]) && key !== "document_id"){ // Check if the number in the schema is a number
+            if (Number.isInteger(WORK_REQUEST_SCHEMA[key]) && key !== "document_id") { // Check if the number in the schema is a number
                 // Hack 'document_id' to not be null, so it would work in mutateData
                 // TODO needs to change ordering of the packDataFromValues!! to not use the mutate function
                 work_request_part[key] = getNumberFromEscapedString(values[key]);
-            }else{
+            } else {
                 work_request_part[key] = values[key]
             }
         })
@@ -413,11 +413,11 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         document_part["document_type_id"] = DOCUMENT_TYPE_NOTGROUP_ID.WORK_ORDER;
         let work_order_part = {}
         Object.keys(WORK_ORDER_SCHEMA).map((key) => {
-            if (Number.isInteger(WORK_ORDER_SCHEMA[key]) && key !== "document_id"){ // Check if the number in the schema is a number
+            if (Number.isInteger(WORK_ORDER_SCHEMA[key]) && key !== "document_id") { // Check if the number in the schema is a number
                 // Hack 'document_id' to not be null, so it would work in mutateData
                 // TODO needs to change ordering of the packDataFromValues!! to not use the mutate function
                 work_order_part[key] = getNumberFromEscapedString(values[key]);
-            }else{
+            } else {
                 work_order_part[key] = values[key]
             }
         })
@@ -429,11 +429,11 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         document_part["document_type_id"] = DOCUMENT_TYPE_NOTGROUP_ID.SS101;
         let ss101_part = {}
         Object.keys(SS101_SCHEMA).map((key) => {
-            if (Number.isInteger(SS101_SCHEMA[key]) && key !== "document_id"){ // Check if the number in the schema is a number
+            if (Number.isInteger(SS101_SCHEMA[key]) && key !== "document_id") { // Check if the number in the schema is a number
                 // Hack 'document_id' to not be null, so it would work in mutateData
                 // TODO needs to change ordering of the packDataFromValues!! to not use the mutate function
                 ss101_part[key] = getNumberFromEscapedString(values[key]);
-            }else{
+            } else {
                 ss101_part[key] = values[key]
             }
         })
@@ -446,7 +446,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
 }
 
 function removeEmptyLineItems(line_items) {
-    return line_items.filter( line_item => line_item.description != '');
+    return line_items.filter(line_item => line_item.description != '');
 }
 
 
@@ -559,7 +559,7 @@ const fillObjectOfName = (object, fieldName, value) => {
                     }
                 } else {
                     // base case, stop recurring
-                    console.log("I am setting ",key2, " if it is ", fieldName, " as ", value)
+                    console.log("I am setting ", key2, " if it is ", fieldName, " as ", value)
                     if (key2 === fieldName) {
                         console.log("i think it is!! i am setting now ", object)
                         object[key1][key2] = value;
@@ -809,7 +809,7 @@ export const checkDocumentStatus = (valuesContext) => new Promise((resolve, reje
 
 
 const responseToFormState = (fact, data, document_type_group_id) => {
-    if (isICD(document_type_group_id)){
+    if (isICD(document_type_group_id)) {
         for (var i = data.line_items.length; i <= 9; i++) {
             data.line_items.push(
                 {
@@ -824,7 +824,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                 }
             );
         }
-        return {
+        let form_state = {
             document_id: data.document_id,
             internal_document_id: data.internal_document_id,
             document_date: data.document_date.split("T")[0],
@@ -832,41 +832,146 @@ const responseToFormState = (fact, data, document_type_group_id) => {
             created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.created_by_admin_id) || '',
             created_on: data.created_on.split(".")[0],
             line_items: data.line_items,
-            dest_warehouse_id: data.dest_warehouse_id,
             remark: data.remark,
             status_name_th: "",
             document_action_type_id: "",
-            po_id: data.po_id,
         }
-    } else if (document_type_group_id===DOCUMENT_TYPE_ID.WORK_REQUEST) {
+        if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO) {
+            return {
+                ...form_state,
+                po_id: data.po_id,
+                dest_warehouse_id: data.dest_warehouse_id
+            }
+        }
+        if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RETURN) {
+            return {
+                ...form_state,
+                dest_warehouse_id: data.dest_warehouse_id
+            }
+        }
+        if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX) {
+            return {
+                ...form_state,
+                refer_to_document_id: data.refer_to_document_id,
+                dest_warehouse_id: data.dest_warehouse_id
+            }
+        }
+        if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO) {
+            return {
+                ...form_state,
+                refer_to_document_internal_document_id: data.refer_to_document_internal_document_id,
+                dest_warehouse_id: data.dest_warehouse_id
+            }
+        }
+        if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_USAGE) {
+            return {
+                ...form_state,
+                src_warehouse_id: data.src_warehouse_id
+            }
+        }
+        if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_FIX) {
+            return {
+                ...form_state,
+                src_warehouse_id: data.src_warehouse_id
+            }
+        }
+        if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_ISSUE) {
+            return {
+                ...form_state,
+                src_warehouse_id: data.src_warehouse_id,
+                refer_to_document_name: data.refer_to_document_name
+            }
+        }
+        if (document_type_group_id === DOCUMENT_TYPE_ID.INVENTORY_TRANSFER) {
+            return {
+                ...form_state,
+                src_warehouse_id: data.src_warehouse_id,
+                dest_warehouse_id: data.dest_warehouse_id,
+            }
+        }
+        if (document_type_group_id === DOCUMENT_TYPE_ID.SALVAGE_RETURN) {
+            return {
+                ...form_state,
+                src_warehouse_id: data.src_warehouse_id
+            }
+        }
+        if (document_type_group_id === DOCUMENT_TYPE_ID.SALVAGE_SOLD) {
+            return {
+                ...form_state,
+                src_warehouse_id: data.src_warehouse_id
+            }
+        }
+        if (document_type_group_id === DOCUMENT_TYPE_ID.PHYSICAL_COUNT) {
+            for (var i = data.specific.line_items.length; i <= 9; i++) {
+                data.specific.line_items.push(
+                    {
+                        item_id: "",
+                        internal_item_id: "",
+                        description: "",
+                        unit_count: "",
+                        uom_group_id: "",
+                        unit: "",
+                        per_unit_price: "",
+                        list_uoms: []
+                    }
+                );
+            }
+            return {
+                internal_document_id: data.document.internal_document_id,
+                created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.created_by_user_id) || '',
+                created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.created_by_admin_id) || '',
+                created_on: data.document.created_on.split(".")[0],
+                line_items: data.specific.line_items,
+                src_warehouse_id: data.specific.warehouse_id,
+                remark: data.document.remark,
+                status_name_th: data.document.document_status_id,
+                refer_to_document_name: data.specific.refer_to_document_name,
+                document_date: data.document_date.slice(0, 10)
+            }
+        }
+    } else if (document_type_group_id === DOCUMENT_TYPE_ID.WORK_REQUEST) {
         // Get Subset of Data from both DOCUMENT_SCHEMA_GET and WORK_REQUEST_SCHEMA_GET 
         // Object Destructuring and Property Shorthand https://stackoverflow.com/questions/17781472/how-to-get-a-subset-of-a-javascript-objects-properties
         let document_part = Object.fromEntries(
             Object.entries(data.document)
-            .filter(([key]) => Object.keys(DOCUMENT_SCHEMA_GET).includes(key))
+                .filter(([key]) => Object.keys(DOCUMENT_SCHEMA_GET).includes(key))
         )
-        let work_request_part =  Object.fromEntries(
+        let work_request_part = Object.fromEntries(
             Object.entries(data.specific)
-            .filter(([key]) => Object.keys(WORK_REQUEST_SCHEMA).includes(key))
+                .filter(([key]) => Object.keys(WORK_REQUEST_SCHEMA).includes(key))
         )
-        console.log("this is document_part 123  ",document_part)
-        console.log("this is work_request_part ",work_request_part)
-        return {...transformDocumentResponseToFormState(document_part, fact), ...transformWorkRequestResponseToFormState(work_request_part)}
-    }else if (document_type_group_id===DOCUMENT_TYPE_ID.SS101) {
+        console.log("this is document_part 123  ", document_part)
+        console.log("this is work_request_part ", work_request_part)
+        return { ...transformDocumentResponseToFormState(document_part, fact), ...transformWorkRequestResponseToFormState(work_request_part) }
+    } else if (document_type_group_id === DOCUMENT_TYPE_ID.WORK_ORDER) {
+        // Get Subset of Data from both DOCUMENT_SCHEMA_GET and WORK_REQUEST_SCHEMA_GET 
+        // Object Destructuring and Property Shorthand https://stackoverflow.com/questions/17781472/how-to-get-a-subset-of-a-javascript-objects-properties
+        let document_part = Object.fromEntries(
+            Object.entries(data.document)
+                .filter(([key]) => Object.keys(DOCUMENT_SCHEMA_GET).includes(key))
+        )
+        let work_order_part = Object.fromEntries(
+            Object.entries(data.specific)
+                .filter(([key]) => Object.keys(WORK_ORDER_SCHEMA).includes(key))
+        )
+        console.log("this is document_part 123  ", document_part)
+        console.log("this is work_order_part ", work_order_part)
+        return { ...transformDocumentResponseToFormState(document_part, fact), ...transformWorkOrderResponseToFormState(work_order_part) }
+    } else if (document_type_group_id === DOCUMENT_TYPE_ID.SS101) {
         // Get Subset of Data from both DOCUMENT_SCHEMA_GET and SS101_SCHEMA_GET 
         let document_part = Object.fromEntries(
             Object.entries(data.document)
-            .filter(([key]) => Object.keys(DOCUMENT_SCHEMA_GET).includes(key))
+                .filter(([key]) => Object.keys(DOCUMENT_SCHEMA_GET).includes(key))
         )
-        let ss101_part =  Object.fromEntries(
+        let ss101_part = Object.fromEntries(
             Object.entries(data.specific)
-            .filter(([key]) => Object.keys(SS101_SCHEMA).includes(key))
+                .filter(([key]) => Object.keys(SS101_SCHEMA).includes(key))
         )
-        console.log("this is document_part 123  ",document_part)
-        console.log("this is ss101_part ",ss101_part)
-        return {...transformDocumentResponseToFormState(document_part, fact), ...transformSS101ResponseToFormState(ss101_part)}
+        console.log("this is document_part 123  ", document_part)
+        console.log("this is ss101_part ", ss101_part)
+        return { ...transformDocumentResponseToFormState(document_part, fact), ...transformSS101ResponseToFormState(ss101_part) }
     }
-    
+
 }
 
 function transformDocumentResponseToFormState(document_part, fact) {
@@ -880,20 +985,29 @@ function transformDocumentResponseToFormState(document_part, fact) {
     }
 }
 
-function returnEmptyStringIfNull(string){
+function returnEmptyStringIfNull(string) {
     return (string == null) ? '' : string;
 }
 
 function transformWorkRequestResponseToFormState(work_request_part) {
     return {
         ...work_request_part,
-        accident_on: work_request_part.accident_on.split(".")[0],
+        accident_on: work_request_part.accident_on.slice(0, 16),
         location_district_id: returnEmptyStringIfNull(work_request_part.location_district_id),
         location_node_id: returnEmptyStringIfNull(work_request_part.location_node_id),
         location_station_id: returnEmptyStringIfNull(work_request_part.location_station_id),
     }
 }
-function transformSS101ResponseToFormState(ss101_part){
+function transformWorkOrderResponseToFormState(work_order_part) {
+    return {
+        ...work_order_part,
+        accident_on: work_order_part.accident_on.split(".")[0],
+        location_district_id: returnEmptyStringIfNull(work_order_part.location_district_id),
+        location_node_id: returnEmptyStringIfNull(work_order_part.location_node_id),
+        location_station_id: returnEmptyStringIfNull(work_order_part.location_station_id),
+    }
+}
+function transformSS101ResponseToFormState(ss101_part) {
     return {
         ...ss101_part,
         ...transformWorkRequestResponseToFormState(ss101_part),
@@ -936,55 +1050,142 @@ export const validateInternalDocumentIDFieldHelper = (document_type_group_id, to
     // Checking from Database if Internal Document ID Exists
     let error;
     getDocumentbyInternalDocumentID(internal_document_id)
-    .then((data) => {
-        console.log(" i got data", data);
+        .then((data) => {
+            console.log(" i got data", data);
 
-        if (isICD(document_type_group_id)) { // If document type group ID is ICD
-            console.log("i know i am in ICD")
-            if (data.internal_document_id === internal_document_id) { // If input document ID exists
-                if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
-                    && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
+            if (isICD(document_type_group_id)) { // If document type group ID is ICD
+                console.log("i know i am in ICD")
+                if (data.internal_document_id === internal_document_id) { // If input document ID exists
+                    if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
+                        && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
                         // fetchAttachmentDocumentData(data.document_id)
-                    console.log("validateInternalDocumentIDField:: I got document ID ", data.document_id)
-                    setValues({ ...values, ...responseToFormState(fact, data) }, false); //Setvalues and don't validate
-                    validateField("dest_warehouse_id");
-                    validateField("created_by_user_employee_id");
-                    validateField("created_by_admin_employee_id");
-                    return resolve(null);
+                        console.log("validateInternalDocumentIDField:: I got document ID ", data.document_id)
+                        setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
 
-                } else { //If Mode add, need to error duplicate Document ID
-                    // setFieldValue('document_id', '', false); 
-                    if (values.document_id || footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve
-                        console.log("i am in mode add, saved and wanting to approve")
-                        error = '';
-                    } else {
-                        console.log("I AM DUPLICATE")
-                        error = 'Duplicate Document ID';
+                        if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_USAGE || document_type_group_id === DOCUMENT_TYPE_ID.GOODS_FIX || document_type_group_id === DOCUMENT_TYPE_ID.GOODS_ISSUE || document_type_group_id === DOCUMENT_TYPE_ID.SALVAGE_RETURN || document_type_group_id === DOCUMENT_TYPE_ID.SALVAGE_SOLD || document_type_group_id === DOCUMENT_TYPE_ID.PHYSICAL_COUNT) {
+                            validateField("src_warehouse_id");
+                            validateField("created_by_user_employee_id");
+                            validateField("created_by_admin_employee_id");
+                            return resolve(null);
+                        }
+                        if (document_type_group_id === DOCUMENT_TYPE_ID.INVENTORY_TRANSFER) {
+                            validateField("src_warehouse_id");
+                            validateField("dest_warehouse_id");
+                            validateField("created_by_user_employee_id");
+                            validateField("created_by_admin_employee_id");
+                            return resolve(null);
+                        }
+                        else {
+                            validateField("dest_warehouse_id");
+                            validateField("created_by_user_employee_id");
+                            validateField("created_by_admin_employee_id");
+                            return resolve(null);
+                        }
+
+                    } else { //If Mode add, need to error duplicate Document ID
+                        // setFieldValue('document_id', '', false); 
+                        if (values.document_id || footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve
+                            console.log("i am in mode add, saved and wanting to approve")
+                            error = '';
+                        } else {
+                            console.log("I AM DUPLICATE")
+                            error = 'Duplicate Document ID';
+                        }
+
                     }
+                } else { // If input Document ID doesn't exists
 
+                    setFieldValue('document_id', '', false);
+                    if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID  
+                        console.log("I KNOW IT'sINVALID")
+                        error = 'Invalid Document ID';
+                    } else {//If mode add, ok
+                        console.log("document ID doesn't exist but I am in mode add")
+                        error = '';
+                    }
                 }
-            } else { // If input Document ID doesn't exists
+            } else if (document_type_group_id === DOCUMENT_TYPE_ID.WORK_REQUEST) {
+                console.log("i know i am in workrequest!!")
 
-                setFieldValue('document_id', '', false);
-                if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID  
-                    console.log("I KNOW IT'sINVALID")
-                    error = 'Invalid Document ID';
-                } else {//If mode add, ok
-                    console.log("document ID doesn't exist but I am in mode add")
-                    error = '';
+                if (data.document.internal_document_id === internal_document_id) { // If input document ID exists
+                    console.log("i am not ICD and toolbar mode in ", toolbar)
+                    if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
+                        && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
+                        // fetchAttachmentDocumentData(data.document_id)
+                        console.log("validateInternalDocumentIDField:: I got document ID ", data.document.document_id)
+                        setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
+                        // validateField("dest_warehouse_id");
+                        validateField("created_by_user_employee_id");
+                        validateField("created_by_admin_employee_id");
+                        return resolve(null);
+
+                    } else { //If Mode add, need to error duplicate Document ID
+                        // setFieldValue('document_id', '', false); 
+                        if (values.document_id || footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve
+                            console.log("i am in mode add, saved and wanting to approve")
+                            error = '';
+                        } else {
+                            console.log("I AM DUPLICATE")
+                            error = 'Duplicate Document ID';
+                        }
+
+                    }
+                } else { // If input Document ID doesn't exists
+
+                    setFieldValue('document_id', '', false);
+                    if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID  
+                        console.log("I KNOW IT'sINVALID")
+                        error = 'Invalid Document ID';
+                    } else {//If mode add, ok
+                        console.log("document ID doesn't exist but I am in mode add")
+                        error = '';
+                    }
                 }
-            }
-        }else if(document_type_group_id === DOCUMENT_TYPE_ID.WORK_REQUEST){
-            console.log("i know i am in workrequest!!")
-                
-            if (data.document.internal_document_id === internal_document_id) { // If input document ID exists
-                console.log("i am not ICD and toolbar mode in " ,toolbar)
-                if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
+            } else if (document_type_group_id === DOCUMENT_TYPE_ID.WORK_ORDER) {
+                console.log("i know i am in workorder!!")
+
+                if (data.document.internal_document_id === internal_document_id) { // If input document ID exists
+                    console.log("i am not ICD and toolbar mode in ", toolbar)
+                    if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
+                        && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
+                        // fetchAttachmentDocumentData(data.document_id)
+                        console.log("validateInternalDocumentIDField:: I got document ID ", data.document.document_id)
+                        setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
+                        // validateField("dest_warehouse_id");
+                        validateField("created_by_user_employee_id");
+                        validateField("created_by_admin_employee_id");
+                        return resolve(null);
+
+                    } else { //If Mode add, need to error duplicate Document ID
+                        // setFieldValue('document_id', '', false); 
+                        if (values.document_id || footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve
+                            console.log("i am in mode add, saved and wanting to approve")
+                            error = '';
+                        } else {
+                            console.log("I AM DUPLICATE")
+                            error = 'Duplicate Document ID';
+                        }
+
+                    }
+                } else { // If input Document ID doesn't exists
+
+                    setFieldValue('document_id', '', false);
+                    if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID  
+                        console.log("I KNOW IT'sINVALID")
+                        error = 'Invalid Document ID';
+                    } else {//If mode add, ok
+                        console.log("document ID doesn't exist but I am in mode add")
+                        error = '';
+                    }
+                }
+            } else if (document_type_group_id === DOCUMENT_TYPE_ID.SS101) {
+                console.log("i know i am in ss101!!")
+                if ((toolbar.mode === TOOLBAR_MODE.SEARCH ||
+                    toolbar.mode === TOOLBAR_MODE.NONE ||
+                    toolbar.mode === TOOLBAR_MODE.NONE_HOME)
                     && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
-                    // fetchAttachmentDocumentData(data.document_id)
                     console.log("validateInternalDocumentIDField:: I got document ID ", data.document.document_id)
                     setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
-                    // validateField("dest_warehouse_id");
                     validateField("created_by_user_employee_id");
                     validateField("created_by_admin_employee_id");
                     return resolve(null);
@@ -998,62 +1199,28 @@ export const validateInternalDocumentIDFieldHelper = (document_type_group_id, to
                         console.log("I AM DUPLICATE")
                         error = 'Duplicate Document ID';
                     }
-
                 }
-            } else { // If input Document ID doesn't exists
 
-                setFieldValue('document_id', '', false);
-                if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID  
-                    console.log("I KNOW IT'sINVALID")
-                    error = 'Invalid Document ID';
-                } else {//If mode add, ok
-                    console.log("document ID doesn't exist but I am in mode add")
-                    error = '';
-                }
-            }
-        }else if (document_type_group_id === DOCUMENT_TYPE_ID.SS101) {
-            console.log("i know i am in ss101!!")
-            if ((toolbar.mode === TOOLBAR_MODE.SEARCH || 
-                toolbar.mode === TOOLBAR_MODE.NONE || 
-                toolbar.mode === TOOLBAR_MODE.NONE_HOME)
-                && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
-                console.log("validateInternalDocumentIDField:: I got document ID ", data.document.document_id)
-                setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
-                validateField("created_by_user_employee_id");
-                validateField("created_by_admin_employee_id");
-                return resolve(null);
 
-            } else { //If Mode add, need to error duplicate Document ID
-                // setFieldValue('document_id', '', false); 
-                if (values.document_id || footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve
-                    console.log("i am in mode add, saved and wanting to approve")
-                    error = '';
-                } else {
-                    console.log("I AM DUPLICATE")
-                    error = 'Duplicate Document ID';
-                }
+            } else {
+                console.log("IDK WHERE I AM", document_type_group_id)
             }
 
+        })
+        .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
+            console.log("I think I have 404 not found in doc id.")
+            setFieldValue('document_id', '', false);
 
-        }else {
-            console.log("IDK WHERE I AM", document_type_group_id)
-        }
-        
-    })
-    .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
-        console.log("I think I have 404 not found in doc id.")
-        setFieldValue('document_id', '', false);
-
-        if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
-            error = 'Document ID not Found in System';
-        } else {//If mode add, ok
-            console.log("document ID doesn't exist but I am in mode add")
-            error = ''
-        }
-    })
-    .finally(() => {
-        return resolve(error)
-    });
+            if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
+                error = 'Document ID not Found in System';
+            } else {//If mode add, ok
+                console.log("document ID doesn't exist but I am in mode add")
+                error = ''
+            }
+        })
+        .finally(() => {
+            return resolve(error)
+        });
 });
 
 
@@ -1145,30 +1312,30 @@ export const weightedAverage = (lots) => {
     var weightedTotal = 0;
     lots.map((lot) => {
         quantityTotal += lot.quantity;
-        weightedTotal += lot.quantity*lot.per_unit_price;
+        weightedTotal += lot.quantity * lot.per_unit_price;
     })
-    return weightedTotal/quantityTotal;
+    return weightedTotal / quantityTotal;
 }
 
 export const getLotFromQty = (fifo, quantity) => {
     var fifoCopy = fifo.slice(); // make a copy
-    var quantityLeft = quantity; 
+    var quantityLeft = quantity;
     var lotsFrom = [];
     fifo.forEach((currentLot) => {
-        if(quantityLeft >= currentLot.quantity){ // if Quantity Left >= Current Lot Quantity, shift and push
+        if (quantityLeft >= currentLot.quantity) { // if Quantity Left >= Current Lot Quantity, shift and push
             lotsFrom.push(fifoCopy.shift());
             quantityLeft -= currentLot.quantity;
-        }else{ // if Quantity Left < Current Lot Quantity, shift and push only required # of lot
-            lotsFrom.push({...fifoCopy.shift(), quantity: quantityLeft});
+        } else { // if Quantity Left < Current Lot Quantity, shift and push only required # of lot
+            lotsFrom.push({ ...fifoCopy.shift(), quantity: quantityLeft });
             quantityLeft = 0;
         }
     })
     // Artificial Lots if QTY leftover
-    if (quantityLeft > 0){
-        lotsFrom.push({quantity: quantityLeft, per_unit_price: weightedAverage(lotsFrom)});
+    if (quantityLeft > 0) {
+        lotsFrom.push({ quantity: quantityLeft, per_unit_price: weightedAverage(lotsFrom) });
     }
 
-    return lotsFrom; 
+    return lotsFrom;
 };
 
 // Get Params from URL

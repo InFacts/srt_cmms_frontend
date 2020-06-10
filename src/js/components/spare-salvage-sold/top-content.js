@@ -17,7 +17,11 @@ import PopupModalDocument from '../common/popup-modal-document'
 import PopupModalInventory from '../common/popup-modal-inventory'
 import PopupModalUsername from '../common/popup-modal-username'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
-import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID } from '../../helper';
+import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, 
+  DOCUMENT_TYPE_ID, getDocumentbyInternalDocumentID,
+  isValidInternalDocumentIDFormat, isValidInternalDocumentIDDraftFormat ,
+  fetchAttachmentDocumentData, validateEmployeeIDField, validateWarehouseIDField,
+  validateInternalDocumentIDFieldHelper} from '../../helper';
 
 import { FOOTER_MODE, FOOTER_ACTIONS} from '../../redux/modules/footer.js';
 
@@ -51,7 +55,9 @@ const responseToFormState = (userFact, data) => {
 }
 
 const TopContent = (props) => {
-  const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
+  const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm   } = useFormikContext();
+  const toolbar = useSelector((state) => ({...state.toolbar}), shallowEqual);
+  const fact = useSelector((state) => ({...state.api.fact}), shallowEqual);
   const footer = useSelector((state) => ({...state.footer}), shallowEqual);
   // Fill Default Forms
   useEffect(() => {
@@ -65,113 +71,15 @@ const TopContent = (props) => {
       setFieldValue("src_warehouse_id", 100);
       validateField("src_warehouse_id");
     }
-  }, [props.decoded_token, props.fact.users, props.toolbar.mode, touched.internal_document_id, !values.internal_document_id])
+  }, [props.fact.users, props.toolbar.mode, touched.internal_document_id, !values.internal_document_id])
 
-  const validateInternalDocumentIDField = internal_document_id => new Promise(resolve => {
-    // Internal Document ID
-    //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
-    //  ie. GR-PYO-2563/0001
-    console.log("I am validating document id")
-    let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS|SD)-[A-Z]{3}-\d{4}\/\d{4}$/g
-    let draftInternalDocumentIDRegex = /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
-    // let draftInternalDocumentIDRegex = /^heh/g
-    if (!internal_document_id) {
-      return resolve('Required');
-    } else if (!internalDocumentIDRegex.test(internal_document_id) && !draftInternalDocumentIDRegex.test(internal_document_id)) { //
-      console.log(' document not in the form')
-      return resolve('Invalid Document ID Format\nBe sure to use the format ie. GR-PYO-2563/0001')
-    }
-    // if (!internal_document_id) {
-    //   return resolve(); // Resolve doesn't return
-    // }
-    let error;
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/internal_document_id/${encodeURIComponent(internal_document_id)}`;
-    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-      .then((res) => {
-        if (res.data.internal_document_id === internal_document_id) { // If input document ID exists
-          if ((props.toolbar.mode === TOOLBAR_MODE.SEARCH || props.toolbar.mode === TOOLBAR_MODE.NONE || props.toolbar.mode === TOOLBAR_MODE.NONE_HOME) 
-            && !props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
-              setValues({ ...values, ...responseToFormState(props.fact.users, res.data) }, false); //Setvalues and don't validate
-              validateField("src_warehouse_id");
-              validateField("created_by_user_employee_id");
-              validateField("created_by_admin_employee_id");
-            // Start Axios Get step_approve and attachment By nuk
-            // axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${res.data.document_id}/latest/plus`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-            //   .then((step_approve) => {
-              fetchStepApprovalDocumentData(res.data.document_id)
-              .then((result) => {
-                axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${res.data.document_id}`, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-                  .then((desrciption_files) => {
-                    console.log(" I AM STILL IN MODE SEARCH AND SET VALUE")
-                    // Setup value From Approve and Attachment
-                    setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
-                    setFieldValue("desrciption_files_length", desrciption_files.data.results.length, false);
-                    setFieldValue("desrciption_files", desrciption_files.data.results, false);
-                    setFieldValue("document_id", res.data.document_id, false);
-                    return resolve(null);
-                  });
-                
-              })
-              
-              // });
-            // End
+  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(DOCUMENT_TYPE_ID.SALVAGE_SOLD, toolbar, footer, fact, values , setValues, setFieldValue, validateField, ...args)
 
-          } else { //If Mode add, need to error duplicate Document ID
-            if (values.document_id || footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve
-            console.log("i am in mode add, saved and wanting to approve")
-            error = '';
-          } else {
-            console.log("I AM DUPLICATE")
-            error = 'Duplicate Document ID';
-          }
-          }
-        } else { // If input Document ID doesn't exists
-          if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
-            console.log("I KNOW IT'sINVALID")
-            error = 'Invalid Document ID';
-          } else {//If mode add, ok
-          }
-        }
-      })
-      .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
-        if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
-          error = 'Invalid Document ID';
-        }//If mode add, ok
-      })
-      .finally(() => {
-        return resolve(error)
-      });
-  });
+  const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
+  const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
 
-  const validateEmployeeIDField = (fieldName, employee_id) => {
-    // console.log("I am validating employee id")
-    employee_id = employee_id.split('\\')[0]; // Escape Character USERNAME CANT HAVE ESCAPE CHARACTER!
-    let users = props.fact.users.items;
-    let user = users.find(user => user.employee_id === employee_id); // Returns undefined if not found
-    if (user) {
-      setFieldValue(fieldName, `${employee_id}\\${user.firstname_th} ${user.lastname_th}`, false);
-      return;
-    } else {
-      return 'Invalid Employee ID';
-    }
-  };
+  const validateSrcWarehouseIDField = (...args) => validateWarehouseIDField("src_warehouse_id", fact, setFieldValue, ...args);
 
-  const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", ...args);
-  const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", ...args);
-
-  const validateWarehouseIDField = (fieldName, warehouse_id) => {
-    // console.log("I am validating warehouse id")
-    warehouse_id = `${warehouse_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
-    let warehouses = props.fact.warehouses.items;
-    let warehouse = warehouses.find(warehouse => `${warehouse.warehouse_id}` === `${warehouse_id}`); // Returns undefined if not found
-    if (warehouse) {
-      setFieldValue(fieldName, `${warehouse_id}\\[${warehouse.abbreviation}] ${warehouse.name}`, false);
-      return;
-    } else {
-      return 'Invalid Warehouse ID';
-    }
-  }
-  const validateSrcWarehouseIDField = (...args) => validateWarehouseIDField("src_warehouse_id", ...args);
 
   return (
     <div id="blackground-white">
