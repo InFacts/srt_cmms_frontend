@@ -20,6 +20,7 @@ import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/to
 import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID } from '../../helper';
 
 import { FOOTER_MODE, FOOTER_ACTIONS } from '../../redux/modules/footer.js';
+import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
 
 const responseToFormState = (userFact, data) => {
   for (var i = data.line_items.length; i <= 9; i++) {
@@ -50,24 +51,12 @@ const responseToFormState = (userFact, data) => {
   }
 }
 
-
-
-
 const TopContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
+
   // Fill Default Forms
-  useEffect(() => {
-    if (props.toolbar.mode === TOOLBAR_MODE.ADD) {
-      if (!values.internal_document_id && touched.internal_document_id) {
-        setFieldValue('internal_document_id', `draft-${uuidv4()}`)
-      }
-      setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(props.fact.users, props.decoded_token.id));
-      setFieldValue("status_name_th", "ยังไม่ได้รับการบันทึก");
-      setFieldValue("created_on", new Date().toISOString().slice(0, 16));
-      // validateField("created_by_admin_employee_id");
-    }
-  }, [props.decoded_token, props.fact.users, props.toolbar.mode, touched.internal_document_id, !values.internal_document_id])
+  useFillDefaultsOnModeAdd();
 
   const validateInternalDocumentIDField = internal_document_id => new Promise(resolve => {
     // Internal Document ID

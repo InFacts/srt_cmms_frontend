@@ -53,7 +53,7 @@ const Files = ({ ...props }) => {
     // console.log("field", field)
     // console.log("meta", meta)
     // console.log("props", props)
-    console.log("props.desrciptionFiles", props.desrciptionFiles)
+    // console.log("props.desrciptionFiles", props.desrciptionFiles)
     return (
         <div>
             <h4 className="head-title-bottom mt-2">ข้อมูลแนบไฟล์</h4>

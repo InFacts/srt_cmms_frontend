@@ -21,6 +21,7 @@ const Home = (props) => {
     useEffect(()=>{
         dispatch(toModeInvisible());
     }, []);
+
     return (
         <>
             <Login />

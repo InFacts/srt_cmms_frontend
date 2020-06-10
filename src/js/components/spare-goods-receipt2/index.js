@@ -125,28 +125,7 @@ const EnhancedGoodsReceiptComponent = withFormik({
         desrciption_files: [],
         // For Step Approval
         step_approve: [],
-    }),
-    validate: (values, props) => {
-        const errors = {};
-
-        if (!values.document_date){
-            errors.document_date = "Required";
-        }
-        return errors;
-    },
-    handleSubmit: (values, formikBag) => new Promise ((resolve, reject) => { //handle Submit will just POST the Empty Document and PUT information inside
-        let data = packDataFromValues(formikBag.props.fact, values, DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO);
-        // console.log("I AM SUBMITTING ", data );
-        saveDocument(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO, data)
-        .then((document_id) => {
-            formikBag.setFieldValue('document_id', document_id, false);
-            return resolve(document_id); // Document_id is not passed on in submitForm, only Promise for isSubmitting https://jaredpalmer.com/formik/docs/api/withFormik#handlesubmit-values-values-formikbag-formikbag--void--promiseany
-        })
-        .catch((err) => {
-            return reject(err)
-        })
-      }),    
-    // validateOnChange: false,
+    })
 })(GoodsReceiptComponent);
 
 

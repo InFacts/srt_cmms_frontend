@@ -55,10 +55,11 @@ const Table = (props) => {
               <td className="edit-padding gray-column">{/* จำนวนสุทธิ */}
                 {list.description !== '' ? list.at_source.length !== 0 ? list.at_source[0].current_unit_count - list.at_source[0].committed_unit_count + 0 : 0 : ''}
               </td>
-              
+
               {/* สถานะของอะไหล่ */}
               <td className="edit-padding text-center">
                 <SelectInput name={`line_items[${index}].item_status_id`} listProps={props.fact['item-status'].items}
+                  validate={item_status_id => props.validateLineNumberItemStatusIDField(`line_items[${index}].item_status_id`, item_status_id, index)}
                   tabIndex="8" disabled={props.disabledBothMode !== true ? props.actionMode === TOOLBAR_MODE.SEARCH : true}
                   checkDescription={list.description}
                   optionValue='item_status_id' optionName='description_th'
@@ -82,11 +83,7 @@ const Table = (props) => {
               </td>
 
               <td className="edit-padding text-center">
-                <NumberInput step={0.0001} name={`line_items[${index}].per_unit_price`}
-                  // validate={per_unit_price => props.validateLineNumberPerUnitPriceItemIDField(`line_items[${index}].per_unit_price`, per_unit_price, index)}
-                  disabled={props.disabledBothMode !== true ? props.actionMode === TOOLBAR_MODE.SEARCH : true}
-                  redBorderForError="error-in-table"
-                />
+                <NumberInput step={0.0001} name={`line_items[${index}].per_unit_price`} disabled />
               </td>
               <td className="edit-padding text-right">{props.sumTotalLineItem(list.quantity, list.per_unit_price, list.description)}</td>
             </tr>

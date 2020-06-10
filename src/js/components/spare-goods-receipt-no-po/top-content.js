@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { connect , useSelector, shallowEqual} from 'react-redux'
+import { connect, useSelector, shallowEqual } from 'react-redux'
 
 import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
@@ -19,43 +19,16 @@ import PopupModalInventory from '../common/popup-modal-inventory'
 import PopupModalUsername from '../common/popup-modal-username'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 
-import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, 
+import {
+  getEmployeeIDFromUserID, fetchStepApprovalDocumentData,
   DOCUMENT_TYPE_ID, getDocumentbyInternalDocumentID,
-  isValidInternalDocumentIDFormat, isValidInternalDocumentIDDraftFormat ,
+  isValidInternalDocumentIDFormat, isValidInternalDocumentIDDraftFormat,
   fetchAttachmentDocumentData, validateEmployeeIDField, validateWarehouseIDField,
-  validateInternalDocumentIDFieldHelper} from '../../helper';
+  validateInternalDocumentIDFieldHelper
+} from '../../helper';
 
-import { FOOTER_MODE, FOOTER_ACTIONS} from '../../redux/modules/footer.js';
-
-// const responseToFormState = (userFact, data) => {
-//   for (var i = data.line_items.length; i <= 9; i++) {
-//     data.line_items.push(
-//       {
-//         item_id: "",
-//         internal_item_id: "",
-//         description: "",
-//         quantity: "",
-//         uom_group_id: "",
-//         unit: "",
-//         per_unit_price: "",
-//         list_uoms: []
-//       }
-//     );
-//   }
-//   return {
-//     internal_document_id: data.internal_document_id,
-//     created_by_user_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_user_id) || '',
-//     created_by_admin_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_admin_id) || '',
-//     created_on: data.created_on.split(".")[0],
-//     document_date: data.document_date.slice(0, 10),
-//     line_items: data.line_items,
-//     dest_warehouse_id: data.dest_warehouse_id,
-//     remark: data.remark,
-//     status_name_th: data.status_name,
-//     refer_to_document_internal_document_id: data.refer_to_document_internal_document_id,
-//     document_date: data.document_date.slice(0, 10)
-//   }
-// }
+import { FOOTER_MODE, FOOTER_ACTIONS } from '../../redux/modules/footer.js';
+import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
 
 // For Search S16/46
 const setLineItem = (data) => {
@@ -78,26 +51,16 @@ const setLineItem = (data) => {
 
 
 const TopContent = (props) => {
-  const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm   } = useFormikContext();
-  const toolbar = useSelector((state) => ({...state.toolbar}), shallowEqual);
-  const fact = useSelector((state) => ({...state.api.fact}), shallowEqual);
-  const footer = useSelector((state) => ({...state.footer}), shallowEqual);
+  const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
+  const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
+  const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
+  const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
 
 
   // Fill Default Forms
-  useEffect(() => {
-    if (props.toolbar.mode === TOOLBAR_MODE.ADD) {
-      if (!values.internal_document_id && touched.internal_document_id) {
-        setFieldValue('internal_document_id', `draft-${uuidv4()}`)
-      }
-      setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(props.fact.users, props.decoded_token.id));
-      setFieldValue("status_name_th", "ยังไม่ได้รับการบันทึก");
-      setFieldValue("created_on", new Date().toISOString().slice(0, 16));
-      // validateField("created_by_admin_employee_id");
-    }
-  }, [props.fact.users, props.toolbar.mode, touched.internal_document_id, !values.internal_document_id])
+  useFillDefaultsOnModeAdd();
 
-  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO, toolbar, footer, fact, values , setValues, setFieldValue, validateField, ...args)
+  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args)
 
   const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
   const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
@@ -127,19 +90,19 @@ const TopContent = (props) => {
       .then((res) => {
         if (res.data.internal_document_id === refer_to_document_internal_document_id) { // If input document ID exists
           // if (props.toolbar.mode === TOOLBAR_MODE.SEARCH && !props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
-            // console.log(" I AM STILL IN MODE ADD AND SET VALUE")
-            // setValues({ ...values, ...responseToFormState(res.data) }, false); //Setvalues and don't validate
-            setFieldValue("line_items", setLineItem(res.data), false)
-            setFieldValue("refer_to_document_id", res.data.document_id, false)
-            // setFieldValue("line_items", setLineItem(res.data), false)
-            return resolve(null);
+          // console.log(" I AM STILL IN MODE ADD AND SET VALUE")
+          // setValues({ ...values, ...responseToFormState(res.data) }, false); //Setvalues and don't validate
+          setFieldValue("line_items", setLineItem(res.data), false)
+          setFieldValue("refer_to_document_id", res.data.document_id, false)
+          // setFieldValue("line_items", setLineItem(res.data), false)
+          return resolve(null);
           // } else { //If Mode add, need to error duplicate Document ID
           //   console.log("I AM DUPLICATE")
           //   error = 'Duplicate Document ID';
           // }
         } else { // If input Document ID doesn't exists
-            // console.log("I KNOW IT'sINVALID")
-            error = 'Invalid Document ID';
+          // console.log("I KNOW IT'sINVALID")
+          error = 'Invalid Document ID';
         }
       })
       .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
@@ -257,9 +220,9 @@ const TopContent = (props) => {
       />
 
       {/* PopUp ค้นหาเลขที่คลัง MODE ADD */}
-      <PopupModalInventory 
-       id="modalInventory" //For Open POPUP
-      name="dest_warehouse_id"
+      <PopupModalInventory
+        id="modalInventory" //For Open POPUP
+        name="dest_warehouse_id"
       />
 
       {/* PopUp ค้นหาชื่อพนักงาน MODE ADD */}

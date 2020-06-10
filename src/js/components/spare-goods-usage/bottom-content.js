@@ -18,62 +18,17 @@ import PopupModalNoPart from '../common/popup-modal-nopart'
 
 import '../../../css/table.css';
 
-import { fetchGoodsOnhandData, getNumberFromEscapedString, getLotFromQty, weightedAverage } from '../../helper';
+import { fetchGoodsOnhandData, getNumberFromEscapedString, getLotFromQty, weightedAverage, sumTotalLineItemHelper, sumTotalHelper } from '../../helper';
+
 const BottomContent = (props) => {
 
   const [lineNumber, setLineNumber] = useState('');
 
   const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
-  const sumTotalLineItem = (quantity, per_unit_price, description) => {
-    let sumValueInLineItem = 0;
-    sumValueInLineItem = quantity * per_unit_price
-    if (description !== '') {
-      var conventToString = sumValueInLineItem.toString();
-      var findDot = conventToString.indexOf(".")
-      if (findDot == -1) {
-        conventToString = conventToString + ".00"
-        return conventToString;
-      }
-      else {
-        conventToString = conventToString.slice(0, findDot + 3)
-        var addOneDot = conventToString.length - findDot;
-        if (addOneDot === 2) {
-          return conventToString + "0";
-        }
-        else {
-          return conventToString;
-        }
-      }
-    } else {
-      return '';
-    }
-  }
+  const sumTotalLineItem = (quantity, per_unit_price, description) => sumTotalLineItemHelper(quantity, per_unit_price, description);
 
-  const sumTotal = (list_show) => {
-    var sumTotal = 0;
-    list_show.map(function (list, index) {
-      var sum = 0;
-      sum = list.quantity * list.per_unit_price;
-      sumTotal = sumTotal + sum;
-      // return sumTotal
-    })
-    var s = sumTotal.toString();
-    var n = s.indexOf(".")
-    if (n == -1) {
-      s = s + ".00"
-      return s;
-    }
-    else {
-      s = s.slice(0, n + 3)
-      return s;
-    }
-  }
-
-  // useEffect(() = > {
-
-  // })
-
+  const sumTotal = (list_show) => sumTotalHelper(list_show);
 
   const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => new Promise(resolve => {
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
@@ -97,13 +52,22 @@ const BottomContent = (props) => {
       setFieldValue(fieldName + `.quantity`, 0, false);
       setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
       setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
-      setFieldValue(fieldName + `.per_unit_price`, 0, false);
+      // setFieldValue(fieldName + `.per_unit_price`, 0, false);
+      setFieldValue(fieldName + `.item_id`, item.item_id, false);
 
       fetchGoodsOnhandData(getNumberFromEscapedString(values.src_warehouse_id), item.item_id)
         .then((at_source) => {
-          // console.log("at_source ------", at_source)
-          setFieldValue(fieldName + `.at_source`, at_source, false);
-          // setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(at_source.pricing.fifo, values.line_items[index].quantity)), false);
+          var at_sources = at_source;
+          var at_source = at_sources.find(at_source => `${at_source.item_status_id}` === `${values.line_items[index].item_status_id}`); // Returns undefined if not found
+          if (at_sources) {
+            setFieldValue(`line_items[${index}].at_source`, [at_source], false);
+            setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(at_source.pricing.fifo, values.line_items[index].quantity)), false);
+            return resolve();
+          }
+          else {
+            console.log(" NOT FOUND AT SOURCES FOR CALCULATE FIFO")
+            return resolve();
+          }
         })
       return resolve();
     } else {
@@ -112,43 +76,44 @@ const BottomContent = (props) => {
   });
 
   const validateLineNumberQuatityItemIDField = (fieldName, quantity, index) => {
+    if (values.line_items[index].quantity === quantity) {
+      return;
+    }
     if (quantity === "") {
       return;
     }
-
     if (quantity !== 0) {
-      // console.log("I AM CHECK VALUES", values.line_items[index])
-      let items = values.line_items[index].at_source;
-      // console.log("items ------", items)
-      let item = items.find(item => `${item.item_status_id}` === `${values.line_items[index].item_status_id}`); // Returns undefined if not found
-      if (item) {
-        // console.log("item ------", item)
-        if (item.pricing) {
-          // console.log("weightedAverage(getLotFromQty(item.pricing.fifo, quantity))", weightedAverage(getLotFromQty(item.pricing.fifo, quantity)))
-          setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(item.pricing.fifo, quantity)), false);
-          setFieldValue(fieldName, quantity, false);
-          return;
-        }
-        return;
-      }
+      setFieldValue(fieldName, quantity, false);
+      setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(values.line_items[index].at_source[0].pricing.fifo, quantity)), false);
       return;
     } else {
       return 'Invalid Quantity Line Item';
     }
   }
 
-  const validateLineNumberPerUnitPriceItemIDField = (fieldName, per_unit_price, index) => {
-    if (per_unit_price === "") {
+  const validateLineNumberItemStatusIDField = (fieldName, item_status_id, index) => {
+    if (values.line_items[index].item_status_id === item_status_id) {
       return;
     }
-
-    if (per_unit_price !== "") {
-      setFieldValue(fieldName, per_unit_price, false);
-      return;
-    } else {
-      return 'Invalid Per Unit Price Line Item';
-    }
+    fetchGoodsOnhandData(getNumberFromEscapedString(values.src_warehouse_id), values.line_items[index].item_id)
+      .then((at_source) => {
+        var at_sources = at_source;
+        var at_source = at_sources.find(at_source => `${at_source.item_status_id}` === `${item_status_id}`); // Returns undefined if not found
+        console.log("at_source", at_source)
+        if (at_source) {
+          setFieldValue(`line_items[${index}].at_source`, [at_source], false);
+          setFieldValue(`line_items[${index}].item_status_id`, item_status_id, false);
+          setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(at_source.pricing.fifo, values.line_items[index].quantity)), false);
+        }
+        else {
+          console.log(" NOT FOUND AT SOURCES FOR CALCULATE FIFO")
+          setFieldValue(`line_items[${index}].at_source`, [{"current_unit_count": 0, "committed_unit_count": 0}], false);
+          setFieldValue(`line_items[${index}].item_status_id`, item_status_id, false);
+          setFieldValue(`line_items[${index}].per_unit_price`, 0, false);
+        }
+      })
   }
+
   // For Down File in Attactment by Nuk
   const HandleDownload = () => {
     axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/1/download/1`,
@@ -197,7 +162,7 @@ const BottomContent = (props) => {
                 sumTotalLineItem={sumTotalLineItem}
                 validateLineNumberInternalItemIDField={validateLineNumberInternalItemIDField}
                 validateLineNumberQuatityItemIDField={validateLineNumberQuatityItemIDField}
-                validateLineNumberPerUnitPriceItemIDField={validateLineNumberPerUnitPriceItemIDField}
+                validateLineNumberItemStatusIDField={validateLineNumberItemStatusIDField}
                 setLineNumber={setLineNumber}
               />
             </div>

@@ -58,25 +58,8 @@ const GoodsReturnComponent = (props) => {
         })
     }, [])
 
-    // // If Link to this url via Track Document
-    // useEffect(() => {
-    //     let url = window.location.search;
-    //     console.log("URL IS", url)
-    //     const urlParams = new URLSearchParams(url);
-    //     const internal_document_id = urlParams.get('internal_document_id');
-    //     if (internal_document_id !== "") {
-    //         // action_approval
-    //         // console.log(" IA M NOT SETTING ", internal_document_id);
-    //         // console.log(" THIS IS CURRENT VALUES ", values);
-    //         setFieldValue("status_name_th", "", true);
-    //         setFieldValue("internal_document_id", internal_document_id, true);
-    //         // console.log(" THIS IS AFTER VALUES ", values);
-    //     }
-    // }, [])
-
     return (
-        <form onSubmit={props.handleSubmit}>
-        {/* <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) handleSubmit(e) }}> */}
+        <form>
             <TopContent />
             <TabBar tabNames={tabNames} initialTabID="listItem">
                 <BottomContent />
@@ -140,40 +123,7 @@ const EnhancedGoodsReturnComponent = withFormik({
         desrciption_files: [],
         // For Step Approval
         step_approve: [],
-    }),
-    validate: (values, props) => {
-        const errors = {};
-
-        // Internal Document ID
-        //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
-        //  ie. GR-PYO-2563/0001
-        // let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS)-[A-Z]{3}-\d{4}\/\d{4}$/g
-        // let draftInternalDocumentIDRegex= /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
-        // if (!values.internal_document_id) {
-        //     errors.internal_document_id = 'Required';
-        // }else if (!internalDocumentIDRegex.test(values.internal_document_id)){ //&& !draftInternalDocumentIDRegex.text(values.internal_document_id)
-        //     errors.internal_document_id = 'Invalid Document ID Format\nBe sure to use the format ie. GR-PYO-2563/0001'
-        // }
-        // MOVED TO FIELD
-        if (!values.document_date){
-            errors.document_date = "Required";
-        }
-        return errors;
-    },
-    handleSubmit: (values, formikBag) => new Promise ((resolve, reject) => { //handle Submit will just POST the Empty Document and PUT information inside
-        console.log("DOCUMENT_TYPE_ID.GOODS_FIX", DOCUMENT_TYPE_ID.GOODS_FIX)
-        let data = packDataFromValues(formikBag.props.fact, values);
-        console.log("I AM SUBMITTING ", data );
-        saveDocument(DOCUMENT_TYPE_ID.GOODS_FIX, data)
-        .then((document_id) => {
-            formikBag.setFieldValue('document_id', document_id, false);
-            return resolve(document_id);
-        })
-        .catch((err) => {
-            return reject(err)
-        })
-      }),    
-    // validateOnChange: false,
+    })
 })(GoodsReturnComponent);
 
 

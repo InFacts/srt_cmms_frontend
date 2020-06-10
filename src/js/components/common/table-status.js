@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const TableSatus = (props) => {
-  console.log("props.bodyTableStatus", props.bodyTableStatus)
+  // console.log("props.bodyTableStatus", props.bodyTableStatus)
   return (
     <>
       <table className="table-many-column mt-2">
