@@ -8,6 +8,7 @@ export const FOOTER_MODE = {
     SEARCH: "SEARCH",
     ADD_DRAFT: "ADD_DRAFT",
     EDIT: "EDIT",
+    SAVE: "SAVE",
     OWN_DOCUMENT: "OWN_DOCUMENT",
     FAST_TRACK: "FAST_TRACK",
     VOID: "VOID",
@@ -56,6 +57,7 @@ const TO_MODE_INVISIBLE = "footer/TO_MODE_INVISIBLE";
 const TO_MODE_NONE = "footer/TO_MODE_NONE";
 const TO_MODE_SEARCH = "footer/TO_MODE_SEARCH";
 const TO_MODE_EDIT = "footer/TO_MODE_EDIT";
+const TO_MODE_SAVE = "footer/TO_MODE_SAVE";
 const TO_MODE_OWN_DOCUMENT = "footer/TO_MODE_OWN_DOCUMENT";
 const TO_MODE_ADD_DRAFT = "footer/TO_MODE_ADD_DRAFT";
 const TO_MODE_FAST_TRACK = "footer/TO_MODE_FAST_TRACK";
@@ -134,6 +136,11 @@ export default function reducer(state = initialState, action){
             return {
                 ...state,
                 mode: FOOTER_MODE.EDIT
+            }
+        case TO_MODE_SAVE:
+            return {
+                ...state,
+                mode: FOOTER_MODE.SAVE
             }
         case TO_MODE_OWN_DOCUMENT:
             return {
@@ -351,6 +358,7 @@ export const footerToModeInvisible = makeActionCreator(TO_MODE_INVISIBLE);
 export const footerToModeNone = makeActionCreator(TO_MODE_NONE);
 export const footerToModeSearch = makeActionCreator(TO_MODE_SEARCH);
 export const footerToModeEdit = makeActionCreator(TO_MODE_EDIT);
+export const footerToModeSave = makeActionCreator(TO_MODE_SAVE);
 export const footerToModeOwnDocument = makeActionCreator(TO_MODE_OWN_DOCUMENT);
 export const footerToModeAddDraft = makeActionCreator(TO_MODE_ADD_DRAFT);
 export const footerToModeVoid = makeActionCreator(TO_MODE_VOID);
