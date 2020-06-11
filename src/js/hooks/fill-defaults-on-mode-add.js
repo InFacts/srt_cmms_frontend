@@ -15,12 +15,14 @@ const useFillDefaultsOnModeAdd = () => {
 
     // Fill Default Forms
     useEffect(() => {
+        var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+        var localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0, -1);
         if (toolbar.mode === TOOLBAR_MODE.ADD) {
             if (!values.internal_document_id && touched.internal_document_id){
                 setFieldValue('internal_document_id', `draft-${uuidv4()}`, true)
             }
             setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(fact.users, decoded_token.id));
-            setFieldValue("created_on", new Date().toISOString().slice(0, 16), false);
+            setFieldValue("created_on", localISOTime.slice(0, 16), false);
         }
         
     }, [fact.users, toolbar.mode, touched.internal_document_id, !values.internal_document_id,

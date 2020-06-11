@@ -1252,8 +1252,6 @@ export const validateWarehouseIDField = (fieldName, fact, setFieldValue, warehou
     }
 }
 
-
-
 // Approve a Document
 //   1. GET /approval/{document_id}/latest/step : getLatestApprovalStep()
 //   2. POST /approval/{document_id}/approval_process_id/approve : approveDocuement(document_id, objBody)
@@ -1315,7 +1313,10 @@ export const weightedAverage = (lots) => {
         quantityTotal += lot.quantity;
         weightedTotal += lot.quantity * lot.per_unit_price;
     })
-    return weightedTotal / quantityTotal;
+   var averageFifo = weightedTotal / quantityTotal;
+   if (averageFifo) {
+       return averageFifo.toFixed(4);
+   }else return 0;
 }
 
 export const getLotFromQty = (fifo, quantity) => {
@@ -1348,3 +1349,128 @@ export const getUrlParamsLink = new Promise((resolve, reject) => {
     console.log(" getUrlParamsLink internal_document_id --------", internal_document_id)
     return resolve(internal_document_id);
 })
+
+// START FOR SETUP DROP DAWN IN NAV BAR
+/**
+Toggles visibility of given subnav by toggling is-active className to it
+and setting aria-hidden attribute on dropdown contents.
+@param {HTMLElement} subnav Root element of subnavigation to open.
+*/
+const toggleSubnav = (subnav, open) => {
+    if (open) {
+        subnav.classList.add('is-active');
+    } else {
+        subnav.classList.remove('is-active');
+    }
+
+    var toggle = subnav.querySelector('.p-subnav__toggle');
+
+    if (toggle) {
+        var dropdown = document.getElementById(toggle.getAttribute('aria-controls'));
+        // console.log("dropdawn", dropdown)
+        if (dropdown) {
+            dropdown.setAttribute('aria-hidden', false ? 'true' : false);
+        }
+    }
+}
+/**
+Closes all subnavs on the page.
+*/
+const closeAllSubnavs = () => {
+    var subnavs = document.querySelectorAll('.p-subnav');
+    for (var i = 0, l = subnavs.length; i < l; i++) {
+        toggleSubnav(subnavs[i], false);
+    }
+}
+/**
+ Attaches click event listener to subnav toggle.
+@param {HTMLElement} subnavToggle Toggle element of subnavigation.
+*/
+const setupSubnavToggle = (subnavToggle) => {
+    subnavToggle.addEventListener('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        var subnav = subnavToggle.parentElement;
+        var isActive = subnav.classList.contains('is-active');
+
+        closeAllSubnavs();
+        if (!isActive) {
+            toggleSubnav(subnav, true);
+        }
+    });
+}
+export const setupAllSubNav = () => {
+    // Setup all subnav toggles on the page
+    var subnavToggles = document.querySelectorAll('.p-subnav__toggle');
+
+    for (var i = 0, l = subnavToggles.length; i < l; i++) {
+        setupSubnavToggle(subnavToggles[i]);
+    }
+    // Close all menus if anything else on the page is clicked
+    document.addEventListener('click', function (event) {
+        var target = event.target;
+
+        if (target.closest) {
+            if (!target.closest('.p-subnav__toggle') && !target.closest('.p-subnav__item')) {
+                closeAllSubnavs();
+            }
+        } else if (target.msMatchesSelector) {
+            do {
+                if (target.msMatchesSelector('.p-subnav__toggle') || target.msMatchesSelector('.p-subnav__item')) {
+                    return;
+                }
+                target = target.parentElement || target.parentNode;
+            } while (target !== null && target.nodeType === 1);
+
+            closeAllSubnavs();
+        }
+    });
+}
+
+// สำหรับตาราง Table have stock
+export const sumTotalLineItemHelper = (quantity, per_unit_price, description) => {
+    let sumValueInLineItem = 0;
+    sumValueInLineItem = quantity * per_unit_price
+    if (description !== '') {
+      var conventToString = sumValueInLineItem.toString();
+      var findDot = conventToString.indexOf(".")
+      if (findDot == -1) {
+        conventToString = conventToString + ".00"
+        return conventToString;
+      }
+      else {
+        conventToString = conventToString.slice(0, findDot + 3)
+        var addOneDot = conventToString.length - findDot;
+        if (addOneDot === 2) {
+          return conventToString + "0";
+        }
+        else {
+          return conventToString;
+        }
+      }
+    } else {
+      return '';
+    }
+}
+
+// สำหรับคำนวณจำนวนสุทธิทั้งหมดภายใน table
+export const sumTotalHelper = (list_show) => {
+    var sumTotal = 0;
+    list_show.map(function (list, index) {
+      var sum = 0;
+      sum = list.quantity * list.per_unit_price;
+      sumTotal = sumTotal + sum;
+      // return sumTotal
+    })
+    var s = sumTotal.toString();
+    var n = s.indexOf(".")
+    if (n == -1) {
+      s = s + ".00"
+      return s;
+    }
+    else {
+      s = s.slice(0, n + 3)
+      return s;
+    }
+}

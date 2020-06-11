@@ -47,21 +47,24 @@ const PopupModalInventory = (props) => {
               </thead>
               <tbody>
                 {data.map(function (inventory_show_popup, index) {
-                  return (
-                    <tr key={index} id={index}>
-                      <td className="edit-padding" style={{ minWidth: "150px" }}> {inventory_show_popup.warehouse_id} </td>
-                      <td className="edit-padding" style={{ minWidth: "300px" }}> {inventory_show_popup.name} </td>
-                      <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
-                        <button type="button" className="button-blue" onClick={() => setFieldValue(`${props.name}`, inventory_show_popup.warehouse_id, true)} aria-label="Close active modal" aria-controls={props.id} id="closeModalInventory" >เลือก</button>
-                      </td>
-                    </tr>
-                  )
+                  if (props.hiddenWarehouse !== inventory_show_popup.warehouse_id) {
+                    return (
+                      <tr key={index} id={index}>
+                        <td className="edit-padding" style={{ minWidth: "150px" }}> {inventory_show_popup.warehouse_id} </td>
+                        <td className="edit-padding" style={{ minWidth: "300px" }}> {inventory_show_popup.name} </td>
+                        <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
+                          <button type="button" className="button-blue" onClick={() => setFieldValue(`${props.name}`, inventory_show_popup.warehouse_id, true)} aria-label="Close active modal" aria-controls={props.id} id="closeModalInventory" >เลือก</button>
+                        </td>
+                      </tr>
+                    )
+                  }
+                  else return null
                 })}
               </tbody>
             </table>
           </div>
 
-            <button className="button-blue float-right grid_1 mr-5 mt-3" type="button" aria-label="Close active modal" aria-controls={props.id} id="closeModalInventory">กลับ</button>
+          <button className="button-blue float-right grid_1 mr-5 mt-3" type="button" aria-label="Close active modal" aria-controls={props.id} id="closeModalInventory">กลับ</button>
 
         </div>
       </div>
