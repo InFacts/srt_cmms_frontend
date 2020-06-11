@@ -770,7 +770,7 @@ export const checkDocumentStatus = (valuesContext) => new Promise((resolve, reje
     let document_action_type_id = 1; //TODO valuesContext.document_action_type_id
     let approval_process_is_canceled = valuesContext.document_is_canceled;
     let approval_step = valuesContext.step_approve;
-    console.log("approval_step", valuesContext)
+    // console.log("approval_step", valuesContext)
     if (_lookup_document_action_type.FastTrack === document_action_type_id) { return DOCUMENT_STATUS.FastTrack; }
     else if (_lookup_document_action_type.Void === document_action_type_id) { return DOCUMENT_STATUS.VOID; }
     else {
@@ -785,7 +785,7 @@ export const checkDocumentStatus = (valuesContext) => new Promise((resolve, reje
                 let checkWaitApproval = false;
                 approval_step.map(apStep => {
                     if (apStep.approval_by.length === 0) {
-                        console.log("------> WAIT_APPROVE", apStep)
+                        // console.log("------> WAIT_APPROVE", apStep)
                         checkWaitApproval = true;
                         return resolve(DOCUMENT_STATUS.WAIT_APPROVE);
                     }
@@ -796,7 +796,7 @@ export const checkDocumentStatus = (valuesContext) => new Promise((resolve, reje
                     }
                 })
                 if (!checkWaitApproval) {
-                    console.log("------> APPROVE_DONE")
+                    // console.log("------> APPROVE_DONE")
                     return resolve(DOCUMENT_STATUS.APPROVE_DONE);
                 }
             }
