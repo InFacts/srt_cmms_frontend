@@ -36,20 +36,6 @@ const GoodsReceiptComponent = (props) => {
     useTokenInitializer();
     useFactInitializer();
     useFooterInitializer();
-    // useFooterInitializer(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO);
-
-    // If Link to this url via Track Document
-    // useEffect(() => {
-    //     let url = window.location.search;
-    //     console.log("URL IS", url)
-    //     const urlParams = new URLSearchParams(url);
-    //     const internal_document_id = urlParams.get('internal_document_id');
-    //     if (internal_document_id !== "") {
-    //         // action_approval
-    //         console.log(" IA M NOT SETTING ", internal_document_id);
-    //         setFieldValue("internal_document_id", internal_document_id, true);
-    //     }
-    // }, [])
 
     return (
         <form onSubmit={props.handleSubmit}>
@@ -72,9 +58,9 @@ const EnhancedGoodsReceiptComponent = withFormik({
         
         item_type_id: '',
         item_group_id: '',
-        uom_group_id: '',       //UOM
-        name: '',               //UOM ตัวย่อ
-        abbreviation: '',       //UOM
+        uom_group_id: '',       
+        uom_id: '',           //UOM 
+        uom_abbreviation: '',       //UOM ตัวย่อ
         minimum_order_quantity: '',  //ขั้นต่ำการสั่งซื้อ
         lead_time: '',
         tolerance_time: '',
@@ -102,8 +88,6 @@ const EnhancedGoodsReceiptComponent = withFormik({
         desrciption_files: [],
     })
 })(GoodsReceiptComponent);
-
-
 
 const mapStateToProps = (state) => ({
     toolbar: state.toolbar,

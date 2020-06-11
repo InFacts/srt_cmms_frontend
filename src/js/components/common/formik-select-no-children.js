@@ -13,7 +13,7 @@ const SelectNoChildrenInput = ({ ...props }) => {
       </select>
       {meta.touched && meta.error ? (
           <div className="error">
-            <span class="tooltiptext">{meta.error}</span>
+            <span className={`tooltiptext ${props.cssClass}`}>{meta.error}</span>
           </div>
         ) : null
       }
