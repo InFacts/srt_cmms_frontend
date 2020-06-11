@@ -35,20 +35,6 @@ const GoodsReceiptComponent = (props) => {
     useTokenInitializer();
     useFactInitializer();
     useFooterInitializer();
-    // useFooterInitializer(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO);
-
-    // If Link to this url via Track Document
-    // useEffect(() => {
-    //     let url = window.location.search;
-    //     console.log("URL IS", url)
-    //     const urlParams = new URLSearchParams(url);
-    //     const internal_document_id = urlParams.get('internal_document_id');
-    //     if (internal_document_id !== "") {
-    //         // action_approval
-    //         console.log(" IA M NOT SETTING ", internal_document_id);
-    //         setFieldValue("internal_document_id", internal_document_id, true);
-    //     }
-    // }, [])
 
     return (
         <form onSubmit={props.handleSubmit}>
@@ -80,8 +66,6 @@ const EnhancedGoodsReceiptComponent = withFormik({
         desrciption_files: [],
     })
 })(GoodsReceiptComponent);
-
-
 
 const mapStateToProps = (state) => ({
     toolbar: state.toolbar,

@@ -63,6 +63,17 @@ const BottomContent = (props) => {
     setFieldValue('file', [], false);
   };
 
+  const validateWarehouseField = (fieldName, name) => {
+    if (!name) {
+      return 'Required'
+    }
+    setFieldValue(fieldName, name, false);
+  };
+  const validateLocationWarehouseIDField = (...args) => validateWarehouseField("location", ...args);
+  const validateActionWarehouseIDField = (...args) => validateWarehouseField("active", ...args);
+
+  const validateWarehouseTypeIDField = (...args) => validateWarehouseField("warehouse_type_id", ...args);
+  const validateUseCentralWarehouseIDField = (...args) => validateWarehouseField("use_central", ...args);
   return (
     <>
       {/* THIS MAKES THE BACKGROUND NOT GRAY!! NEEDS TO FIX */}
@@ -75,7 +86,7 @@ const BottomContent = (props) => {
             <div className="container_12 mt-2">
               <div className="grid_2"><p className="cancel-default">สถานะคลัง</p></div> {/* ปิด หรือ เปิด การใช้งาน เป็น boolean */}
               <div className="grid_4 pull_0">
-                <SelectNoChildrenInput name="active"
+                <SelectNoChildrenInput name="active" validate={validateActionWarehouseIDField} cssClass="error-for-select"
                   disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
                   {values.active === 1
                     ?
@@ -99,14 +110,14 @@ const BottomContent = (props) => {
               <div className="container_12">
                 <div className="grid_2"><p className="cancel-default">ที่อยู่</p></div>
                 <div className="grid_4 pull_0">
-                  <TextInput name="location" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="4" />
+                  <TextInput name="location" validate={validateLocationWarehouseIDField} disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="4" />
                 </div>
               </div>
 
               <div className="container_12">
                 <div className="grid_2"><p className="cancel-default">ประเภทคลัง</p></div>
                 <div className="grid_4 pull_0">
-                  <SelectNoChildrenInput name="warehouse_type_id"
+                  <SelectNoChildrenInput name="warehouse_type_id" validate={validateWarehouseTypeIDField} cssClass="error-for-select"
                     disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
                     <option value=''></option>
                     {props.fact[FACTS.WAREHOUSES_TYPE].items.map((warehouse_type) => (
@@ -123,7 +134,7 @@ const BottomContent = (props) => {
               <div className="container_12">
                 <div className="grid_2"><p className="cancel-default">กลุ่มคลัง</p></div>
                 <div className="grid_4 pull_0">
-                  <SelectNoChildrenInput name="use_central"
+                  <SelectNoChildrenInput name="use_central"  validate={validateUseCentralWarehouseIDField} cssClass="error-for-select"
                     disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
                     {values.use_central === 1
                       ?
