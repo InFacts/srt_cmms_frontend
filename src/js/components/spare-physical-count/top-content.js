@@ -110,14 +110,13 @@ const TopContent = (props) => {
 
           </div>
 
-          {/* PO ID */}
           <div className="container_12">
-            <div className="grid_2">
+            {/* <div className="grid_2">
               <p className="top-text">เลขที่เอกสารอ้างอิง</p>
             </div>
             <div className="grid_3 pull_0">
               <TextInput name="refer_to_document_name" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="4" />
-            </div>
+            </div> */}
 
             {/* SRC Warehouse ID */}
             <div className="grid_3 float-right">

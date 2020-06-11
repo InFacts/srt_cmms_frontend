@@ -54,8 +54,7 @@ const GoodsReceiptComponent = (props) => {
     }, [])
 
     return (
-        <form onSubmit={props.handleSubmit}>
-        {/* <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) handleSubmit(e) }}> */}
+        <form>
             <TopContent />
             <TabBar tabNames={tabNames} initialTabID="listItem">
                 <BottomContent />
@@ -78,6 +77,7 @@ const initialLineItem = {
     line_number: '',
     // document_id: '', // maybe not needed
     list_uoms: [],
+    item: {}
 }
 const initialRows = (n=10) => {
     let rows = [];
@@ -99,7 +99,7 @@ const EnhancedGoodsReceiptComponent = withFormik({
         dest_warehouse_id: 0, // Need to fill for user's own WH
         src_warehouse_id: '', // for Goods Receipt
         created_by_user_employee_id: '',
-        refer_to_document_name: '',
+        // refer_to_document_name: '',
         remark: '',
         line_items: initialRows(),
 
@@ -120,46 +120,13 @@ const EnhancedGoodsReceiptComponent = withFormik({
         desrciption_files: [],
         // For Step Approval
         step_approve: [],
-    }),
-    validate: (values, props) => {
-        const errors = {};
-
-        // Internal Document ID
-        //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
-        //  ie. GR-PYO-2563/0001
-        // let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS)-[A-Z]{3}-\d{4}\/\d{4}$/g
-        // let draftInternalDocumentIDRegex= /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
-        // if (!values.internal_document_id) {
-        //     errors.internal_document_id = 'Required';
-        // }else if (!internalDocumentIDRegex.test(values.internal_document_id)){ //&& !draftInternalDocumentIDRegex.text(values.internal_document_id)
-        //     errors.internal_document_id = 'Invalid Document ID Format\nBe sure to use the format ie. GR-PYO-2563/0001'
-        // }
-        // MOVED TO FIELD
-        if (!values.document_date){
-            errors.document_date = "Required";
-        }
-        return errors;
-    },
-    handleSubmit: (values, formikBag) => new Promise ((resolve, reject) => { //handle Submit will just POST the Empty Document and PUT information inside
-        let data = packDataFromValues(formikBag.props.fact, values, DOCUMENT_TYPE_ID.PHYSICAL_COUNT);
-        console.log("I AM SUBMITTING ", data );
-        saveDocument(DOCUMENT_TYPE_ID.PHYSICAL_COUNT, data)
-        .then((document_id) => {
-            formikBag.setFieldValue('document_id', document_id, false);
-            return resolve(document_id); // Document_id is not passed on in submitForm, only Promise for isSubmitting https://jaredpalmer.com/formik/docs/api/withFormik#handlesubmit-values-values-formikbag-formikbag--void--promiseany
-        })
-        .catch((err) => {
-            return reject(err)
-        })
-      }),    
-    // validateOnChange: false,
+    })
 })(GoodsReceiptComponent);
 
 
 
 const mapStateToProps = (state) => ({
     toolbar: state.toolbar,
-    // decoded_token: state.token.decoded_token,
     fact: state.api.fact,
 })
 

@@ -24,9 +24,9 @@ const BottomContent = (props) => {
 
   const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
-  const sumTotalLineItem = (quantity, per_unit_price, description) => {
+  const sumTotalLineItem = (unit_count, per_unit_price, description) => {
     let sumValueInLineItem = 0;
-    sumValueInLineItem = quantity * per_unit_price
+    sumValueInLineItem = unit_count * per_unit_price
     if (description !== '') {
       var conventToString = sumValueInLineItem.toString();
       var findDot = conventToString.indexOf(".")
@@ -53,7 +53,7 @@ const BottomContent = (props) => {
     var sumTotal = 0;
     list_show.map(function (list, index) {
       var sum = 0;
-      sum = list.quantity * list.per_unit_price;
+      sum = list.unit_count * list.per_unit_price;
       sumTotal = sumTotal + sum;
       // return sumTotal
     })
@@ -77,7 +77,7 @@ const BottomContent = (props) => {
     }
     if (internal_item_id === "") {
       setFieldValue(fieldName + `.description`, '', false);
-      setFieldValue(fieldName + `.quantity`, '', false);
+      setFieldValue(fieldName + `.unit_count`, '', false);
       setFieldValue(fieldName + `.list_uoms`, [], false);
       setFieldValue(fieldName + `.uom_id`, '', false);
       setFieldValue(fieldName + `.per_unit_price`, '', false);
@@ -88,7 +88,7 @@ const BottomContent = (props) => {
     console.log(item)
     if (item) {
       setFieldValue(fieldName + `.description`, `${item.description}`, false);
-      setFieldValue(fieldName + `.quantity`, 0, false);
+      setFieldValue(fieldName + `.unit_count`, 0, false);
       setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
       setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
       setFieldValue(fieldName + `.per_unit_price`, 0, false);
@@ -98,21 +98,21 @@ const BottomContent = (props) => {
     }
   }
 
-  const validateLineNumberQuatityItemIDField = (fieldName, quantity, index) => {
+  const validateLineNumberQuatityItemIDField = (fieldName, unit_count, index) => {
     // internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
-    // if (values.line_items[index].quantity === quantity) {
+    // if (values.line_items[index].unit_count === unit_count) {
     //   return;
     // }
-    if (quantity === "") {
+    if (unit_count === "") {
       return;
     }
 
-    if (quantity !== 0) {
-      setFieldValue(fieldName, quantity, false);
+    if (unit_count !== 0) {
+      setFieldValue(fieldName, unit_count, false);
       return;
     } else {
-      return 'Invalid Quantity Line Item';
+      return 'Invalid unit_count Line Item';
     }
   }
 
@@ -178,7 +178,7 @@ const BottomContent = (props) => {
 
           <div id="listItem_content" className="tabcontent">
             <div className="container_12 mt-1" style={{ paddingRight: "10px" }}>
-              <Table line_items={values.line_items}
+              <Table line_items={values.line_items} document_type_group_id={141}
                 sumTotalLineItem={sumTotalLineItem}
                 validateLineNumberInternalItemIDField={validateLineNumberInternalItemIDField}
                 validateLineNumberQuatityItemIDField={validateLineNumberQuatityItemIDField}
