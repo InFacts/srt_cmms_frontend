@@ -18,8 +18,6 @@ const TableSatus = (props) => {
         <tbody>
           {props.bodyTableStatus.map((resApprove, i) => {
             return (
-            resApprove.position_group.name !== "This"
-            ?
               <tr key={i} id={i}>
                 <td className="edit-padding">
                   {resApprove.approval_by.length === 0 ? <i className="fas fa-check-circle" style={{ color: "gray" }}></i> : <i className="fas fa-check-circle" style={{ color: "green" }}></i>}
@@ -30,8 +28,6 @@ const TableSatus = (props) => {
                 <td className="edit-padding">{resApprove.approval_by.length === 0 ? "-" : resApprove.approval_by[0].approved_on.slice(0, 10)}</td>
                 <td className="edit-padding">{resApprove.approval_by.length === 0 ? "รอการลงนาม" : "อนุมัติเรียบร้อย"}</td>
               </tr>
-            :
-            null
           )
           })}
         </tbody>
