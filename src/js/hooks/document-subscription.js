@@ -15,7 +15,6 @@ const useDocumentSubscription = () => {
 
     // Get approval Step when values.document_id changes
     useEffect(() => {
-        
         if(values.document_id && 
             !footer.requiresHandleClick[FOOTER_ACTIONS.SEND] && 
             !footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL] && 
