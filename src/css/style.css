@@ -731,3 +731,13 @@ button.none-border {
   top: 0;
   opacity: 0;
 }
+
+div.error .tooltiptext.error-for-select {
+  left: -240px;
+  top: 10px;
+}
+
+div.error .tooltiptext.error-for-select-right {
+  left: -160px;
+  top: 10px;
+}

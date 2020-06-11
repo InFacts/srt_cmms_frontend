@@ -296,21 +296,21 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             case DOCUMENT_TYPE_ID.PHYSICAL_COUNT:
                 movement_part = {
                     ...movement_part,
-                    refer_to_document_name: values.refer_to_document_name
+                    // refer_to_document_name: values.refer_to_document_name
                 }
                 document_part = {
                     ...document_part,
-                    refer_to_document_id: null
+                    // refer_to_document_id: null
                 }
                 break;
             case DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT:
                 movement_part = {
                     ...movement_part,
-                    refer_to_document_name: values.refer_to_document_name
+                    // refer_to_document_name: values.refer_to_document_name
                 }
                 document_part = {
                     ...document_part,
-                    refer_to_document_id: null
+                    // refer_to_document_id: null
                 }
                 break;
             case DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO:
@@ -351,7 +351,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                         line_items_part.push({
                             document_id: values.document_id,
                             line_number: line_item.line_number,
-                            unit_count: line_item.quantity,
+                            unit_count: line_item.unit_count,
                             per_unit_price: line_item.per_unit_price,
                             item_id: getItemIDFromInternalItemID(fact[FACTS.ITEM], line_item.internal_item_id),
                             item_status_id: line_item.item_status_id,
@@ -362,7 +362,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                 icd_part = {
                     document_id: values.document_id,
                     warehouse_id: getNumberFromEscapedString(values.src_warehouse_id),
-                    refer_to_document_name: values.refer_to_document_name,
+                    // refer_to_document_name: values.refer_to_document_name,
                     line_items: line_items_part,
                 }
                 break;
@@ -373,7 +373,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                         line_items_part.push({
                             document_id: values.document_id,
                             line_number: line_item.line_number,
-                            unit_count: line_item.quantity,
+                            unit_count: line_item.unit_count,
                             per_unit_price: line_item.per_unit_price,
                             item_id: getItemIDFromInternalItemID(fact[FACTS.ITEM], line_item.internal_item_id),
                             item_status_id: line_item.item_status_id,
@@ -384,7 +384,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                 icd_part = {
                     document_id: values.document_id,
                     warehouse_id: getNumberFromEscapedString(values.src_warehouse_id),
-                    refer_to_document_name: values.refer_to_document_name,
+                    // refer_to_document_name: values.refer_to_document_name,
                     line_items: line_items_part,
                 }
                 break;
@@ -770,7 +770,7 @@ export const checkDocumentStatus = (valuesContext) => new Promise((resolve, reje
     let document_action_type_id = 1; //TODO valuesContext.document_action_type_id
     let approval_process_is_canceled = valuesContext.document_is_canceled;
     let approval_step = valuesContext.step_approve;
-    console.log("approval_step", valuesContext)
+    // console.log("approval_step", valuesContext)
     if (_lookup_document_action_type.FastTrack === document_action_type_id) { return DOCUMENT_STATUS.FastTrack; }
     else if (_lookup_document_action_type.Void === document_action_type_id) { return DOCUMENT_STATUS.VOID; }
     else {
@@ -785,7 +785,7 @@ export const checkDocumentStatus = (valuesContext) => new Promise((resolve, reje
                 let checkWaitApproval = false;
                 approval_step.map(apStep => {
                     if (apStep.approval_by.length === 0) {
-                        console.log("------> WAIT_APPROVE", apStep)
+                        // console.log("------> WAIT_APPROVE", apStep)
                         checkWaitApproval = true;
                         return resolve(DOCUMENT_STATUS.WAIT_APPROVE);
                     }
@@ -796,7 +796,7 @@ export const checkDocumentStatus = (valuesContext) => new Promise((resolve, reje
                     }
                 })
                 if (!checkWaitApproval) {
-                    console.log("------> APPROVE_DONE")
+                    // console.log("------> APPROVE_DONE")
                     return resolve(DOCUMENT_STATUS.APPROVE_DONE);
                 }
             }
@@ -811,105 +811,14 @@ export const checkDocumentStatus = (valuesContext) => new Promise((resolve, reje
 
 const responseToFormState = (fact, data, document_type_group_id) => {
     if (isICD(document_type_group_id)) {
-        for (var i = data.line_items.length; i <= 9; i++) {
-            data.line_items.push(
-                {
-                    item_id: "",
-                    internal_item_id: "",
-                    description: "",
-                    quantity: "",
-                    uom_group_id: "",
-                    unit: "",
-                    per_unit_price: "",
-                    list_uoms: []
-                }
-            );
-        }
-        let form_state = {
-            document_id: data.document_id,
-            internal_document_id: data.internal_document_id,
-            document_date: data.document_date.split("T")[0],
-            created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.created_by_user_id) || '',
-            created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.created_by_admin_id) || '',
-            created_on: data.created_on.split(".")[0],
-            line_items: data.line_items,
-            remark: data.remark,
-            status_name_th: "",
-            document_action_type_id: "",
-        }
-        if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO) {
-            return {
-                ...form_state,
-                po_id: data.po_id,
-                dest_warehouse_id: data.dest_warehouse_id
-            }
-        }
-        if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RETURN) {
-            return {
-                ...form_state,
-                dest_warehouse_id: data.dest_warehouse_id
-            }
-        }
-        if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX) {
-            return {
-                ...form_state,
-                refer_to_document_id: data.refer_to_document_id,
-                dest_warehouse_id: data.dest_warehouse_id
-            }
-        }
-        if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO) {
-            return {
-                ...form_state,
-                refer_to_document_internal_document_id: data.refer_to_document_internal_document_id,
-                dest_warehouse_id: data.dest_warehouse_id
-            }
-        }
-        if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_USAGE) {
-            return {
-                ...form_state,
-                src_warehouse_id: data.src_warehouse_id
-            }
-        }
-        if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_FIX) {
-            return {
-                ...form_state,
-                src_warehouse_id: data.src_warehouse_id
-            }
-        }
-        if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_ISSUE) {
-            return {
-                ...form_state,
-                src_warehouse_id: data.src_warehouse_id,
-                refer_to_document_name: data.refer_to_document_name
-            }
-        }
-        if (document_type_group_id === DOCUMENT_TYPE_ID.INVENTORY_TRANSFER) {
-            return {
-                ...form_state,
-                src_warehouse_id: data.src_warehouse_id,
-                dest_warehouse_id: data.dest_warehouse_id,
-            }
-        }
-        if (document_type_group_id === DOCUMENT_TYPE_ID.SALVAGE_RETURN) {
-            return {
-                ...form_state,
-                src_warehouse_id: data.src_warehouse_id
-            }
-        }
-        if (document_type_group_id === DOCUMENT_TYPE_ID.SALVAGE_SOLD) {
-            return {
-                ...form_state,
-                src_warehouse_id: data.src_warehouse_id
-            }
-        }
-        if (document_type_group_id === DOCUMENT_TYPE_ID.PHYSICAL_COUNT) {
-            for (var i = data.specific.line_items.length; i <= 9; i++) {
-                data.specific.line_items.push(
+        if (document_type_group_id !== DOCUMENT_TYPE_ID.PHYSICAL_COUNT && document_type_group_id !== DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT) {
+            for (var i = data.line_items.length; i <= 9; i++) {
+                data.line_items.push(
                     {
                         item_id: "",
                         internal_item_id: "",
                         description: "",
-                        unit_count: "",
+                        quantity: "",
                         uom_group_id: "",
                         unit: "",
                         per_unit_price: "",
@@ -917,17 +826,141 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                     }
                 );
             }
-            return {
-                internal_document_id: data.document.internal_document_id,
+            let form_state = {
+                document_id: data.document_id,
+                internal_document_id: data.internal_document_id,
+                document_date: data.document_date.split("T")[0],
                 created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.created_by_user_id) || '',
                 created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.created_by_admin_id) || '',
-                created_on: data.document.created_on.split(".")[0],
-                line_items: data.specific.line_items,
-                src_warehouse_id: data.specific.warehouse_id,
-                remark: data.document.remark,
-                status_name_th: data.document.document_status_id,
-                refer_to_document_name: data.specific.refer_to_document_name,
-                document_date: data.document_date.slice(0, 10)
+                created_on: data.created_on.split(".")[0],
+                line_items: data.line_items,
+                remark: data.remark,
+                status_name_th: "",
+                document_action_type_id: "",
+            }
+            if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO) {
+                return {
+                    ...form_state,
+                    po_id: data.po_id,
+                    dest_warehouse_id: data.dest_warehouse_id
+                }
+            }
+            if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RETURN) {
+                return {
+                    ...form_state,
+                    dest_warehouse_id: data.dest_warehouse_id
+                }
+            }
+            if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX) {
+                return {
+                    ...form_state,
+                    refer_to_document_id: data.refer_to_document_id,
+                    dest_warehouse_id: data.dest_warehouse_id
+                }
+            }
+            if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO) {
+                return {
+                    ...form_state,
+                    refer_to_document_internal_document_id: data.refer_to_document_internal_document_id,
+                    dest_warehouse_id: data.dest_warehouse_id
+                }
+            }
+            if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_USAGE) {
+                return {
+                    ...form_state,
+                    src_warehouse_id: data.src_warehouse_id
+                }
+            }
+            if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_FIX) {
+                return {
+                    ...form_state,
+                    src_warehouse_id: data.src_warehouse_id
+                }
+            }
+            if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_ISSUE) {
+                return {
+                    ...form_state,
+                    src_warehouse_id: data.src_warehouse_id,
+                    refer_to_document_name: data.refer_to_document_name
+                }
+            }
+            if (document_type_group_id === DOCUMENT_TYPE_ID.INVENTORY_TRANSFER) {
+                return {
+                    ...form_state,
+                    src_warehouse_id: data.src_warehouse_id,
+                    dest_warehouse_id: data.dest_warehouse_id,
+                }
+            }
+            if (document_type_group_id === DOCUMENT_TYPE_ID.SALVAGE_RETURN) {
+                return {
+                    ...form_state,
+                    src_warehouse_id: data.src_warehouse_id
+                }
+            }
+            if (document_type_group_id === DOCUMENT_TYPE_ID.SALVAGE_SOLD) {
+                return {
+                    ...form_state,
+                    src_warehouse_id: data.src_warehouse_id
+                }
+            }
+        } else {
+            if (document_type_group_id === DOCUMENT_TYPE_ID.PHYSICAL_COUNT) {
+                for (var i = data.specific.line_items.length; i <= 9; i++) {
+                    data.specific.line_items.push(
+                        {
+                            item_id: "",
+                            internal_item_id: "",
+                            description: "",
+                            unit_count: "",
+                            uom_group_id: "",
+                            unit: "",
+                            per_unit_price: "",
+                            list_uoms: [],
+                            item: {}
+                        }
+                    );
+                }
+                return {
+                    internal_document_id: data.document.internal_document_id,
+                    created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_user_id) || '',
+                    created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_admin_id) || '',
+                    created_on: data.document.created_on.split(".")[0],
+                    line_items: data.specific.line_items,
+                    src_warehouse_id: data.specific.warehouse_id,
+                    remark: data.document.remark,
+                    status_name_th: data.document.document_status.status,
+                    // refer_to_document_name: data.specific.refer_to_document_name,
+                    document_date: data.document.document_date.slice(0, 10)
+                }
+            }
+            if (document_type_group_id === DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT) {
+                for (var i = data.specific.line_items.length; i <= 9; i++) {
+                    data.specific.line_items.push(
+                        {
+                            item_id: "",
+                            internal_item_id: "",
+                            description: "",
+                            unit_count: "",
+                            uom_group_id: "",
+                            unit: "",
+                            per_unit_price: "",
+                            list_uoms: [],
+                            item: {}
+                        }
+                    );
+                }
+                return {
+                    internal_document_id: data.document.internal_document_id,
+                    created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_user_id) || '',
+                    created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_admin_id) || '',
+                    created_on: data.document.created_on.split(".")[0],
+                    line_items: data.specific.line_items,
+                    src_warehouse_id: data.specific.warehouse_id,
+                    remark: data.document.remark,
+                    status_name_th: data.document.document_status.status,
+                    // refer_to_document_name: data.specific.refer_to_document_name,
+                    document_date: data.document.document_date.slice(0, 10)
+                }
             }
         }
     } else if (document_type_group_id === DOCUMENT_TYPE_ID.WORK_REQUEST) {
@@ -1055,54 +1088,89 @@ export const validateInternalDocumentIDFieldHelper = (document_type_group_id, to
             console.log(" i got data", data);
 
             if (isICD(document_type_group_id)) { // If document type group ID is ICD
-                console.log("i know i am in ICD")
-                if (data.internal_document_id === internal_document_id) { // If input document ID exists
-                    if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
-                        && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
-                        // fetchAttachmentDocumentData(data.document_id)
-                        console.log("validateInternalDocumentIDField:: I got document ID ", data.document_id)
-                        setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
+                if (document_type_group_id !== DOCUMENT_TYPE_ID.PHYSICAL_COUNT && document_type_group_id !== DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT) {
+                    if (data.internal_document_id === internal_document_id) { // If input document ID exists
+                        if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
+                            && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
+                            // fetchAttachmentDocumentData(data.document_id)
+                            console.log("validateInternalDocumentIDField:: I got document ID ", data.document_id)
+                            setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
 
-                        if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_USAGE || document_type_group_id === DOCUMENT_TYPE_ID.GOODS_FIX || document_type_group_id === DOCUMENT_TYPE_ID.GOODS_ISSUE || document_type_group_id === DOCUMENT_TYPE_ID.SALVAGE_RETURN || document_type_group_id === DOCUMENT_TYPE_ID.SALVAGE_SOLD || document_type_group_id === DOCUMENT_TYPE_ID.PHYSICAL_COUNT) {
-                            validateField("src_warehouse_id");
-                            validateField("created_by_user_employee_id");
-                            validateField("created_by_admin_employee_id");
-                            return resolve(null);
-                        }
-                        if (document_type_group_id === DOCUMENT_TYPE_ID.INVENTORY_TRANSFER) {
-                            validateField("src_warehouse_id");
-                            validateField("dest_warehouse_id");
-                            validateField("created_by_user_employee_id");
-                            validateField("created_by_admin_employee_id");
-                            return resolve(null);
-                        }
-                        else {
-                            validateField("dest_warehouse_id");
-                            validateField("created_by_user_employee_id");
-                            validateField("created_by_admin_employee_id");
-                            return resolve(null);
-                        }
+                            if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_USAGE || document_type_group_id === DOCUMENT_TYPE_ID.GOODS_FIX || document_type_group_id === DOCUMENT_TYPE_ID.GOODS_ISSUE || document_type_group_id === DOCUMENT_TYPE_ID.SALVAGE_RETURN || document_type_group_id === DOCUMENT_TYPE_ID.SALVAGE_SOLD) {
+                                validateField("src_warehouse_id");
+                                validateField("created_by_user_employee_id");
+                                validateField("created_by_admin_employee_id");
+                                return resolve(null);
+                            }
+                            if (document_type_group_id === DOCUMENT_TYPE_ID.INVENTORY_TRANSFER) {
+                                validateField("src_warehouse_id");
+                                validateField("dest_warehouse_id");
+                                validateField("created_by_user_employee_id");
+                                validateField("created_by_admin_employee_id");
+                                return resolve(null);
+                            }
+                            else {
+                                validateField("dest_warehouse_id");
+                                validateField("created_by_user_employee_id");
+                                validateField("created_by_admin_employee_id");
+                                return resolve(null);
+                            }
 
-                    } else { //If Mode add, need to error duplicate Document ID
-                        // setFieldValue('document_id', '', false); 
-                        if (values.document_id || footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve
-                            console.log("i am in mode add, saved and wanting to approve")
+                        } else { //If Mode add, need to error duplicate Document ID
+                            // setFieldValue('document_id', '', false); 
+                            if (values.document_id || footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve
+                                console.log("i am in mode add, saved and wanting to approve")
+                                error = '';
+                            } else {
+                                console.log("I AM DUPLICATE")
+                                error = 'Duplicate Document ID';
+                            }
+
+                        }
+                    } else { // If input Document ID doesn't exists
+
+                        setFieldValue('document_id', '', false);
+                        if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID  
+                            console.log("I KNOW IT'sINVALID")
+                            error = 'Invalid Document ID';
+                        } else {//If mode add, ok
+                            console.log("document ID doesn't exist but I am in mode add")
                             error = '';
-                        } else {
-                            console.log("I AM DUPLICATE")
-                            error = 'Duplicate Document ID';
                         }
-
                     }
-                } else { // If input Document ID doesn't exists
+                } else {
+                    if (data.document.internal_document_id === internal_document_id) { // If input document ID exists
+                        if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
+                            && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
+                            // fetchAttachmentDocumentData(data.document_id)
+                            console.log("validateInternalDocumentIDField:: I got document ID ", data.document.document_id)
+                            setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
+                            validateField("src_warehouse_id");
+                            validateField("created_by_user_employee_id");
+                            validateField("created_by_admin_employee_id");
+                            return resolve(null);
 
-                    setFieldValue('document_id', '', false);
-                    if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID  
-                        console.log("I KNOW IT'sINVALID")
-                        error = 'Invalid Document ID';
-                    } else {//If mode add, ok
-                        console.log("document ID doesn't exist but I am in mode add")
-                        error = '';
+                        } else { //If Mode add, need to error duplicate Document ID
+                            // setFieldValue('document_id', '', false); 
+                            if (values.document_id || footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve
+                                console.log("i am in mode add, saved and wanting to approve")
+                                error = '';
+                            } else {
+                                console.log("I AM DUPLICATE")
+                                error = 'Duplicate Document ID';
+                            }
+
+                        }
+                    } else { // If input Document ID doesn't exists
+
+                        setFieldValue('document_id', '', false);
+                        if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID  
+                            console.log("I KNOW IT'sINVALID")
+                            error = 'Invalid Document ID';
+                        } else {//If mode add, ok
+                            console.log("document ID doesn't exist but I am in mode add")
+                            error = '';
+                        }
                     }
                 }
             } else if (document_type_group_id === DOCUMENT_TYPE_ID.WORK_REQUEST) {
@@ -1327,10 +1395,10 @@ export const weightedAverage = (lots) => {
         quantityTotal += lot.quantity;
         weightedTotal += lot.quantity * lot.per_unit_price;
     })
-   var averageFifo = weightedTotal / quantityTotal;
-   if (averageFifo) {
-       return averageFifo.toFixed(4);
-   }else return 0;
+    var averageFifo = weightedTotal / quantityTotal;
+    if (averageFifo) {
+        return averageFifo.toFixed(4);
+    } else return 0;
 }
 
 export const getLotFromQty = (fifo, quantity) => {
@@ -1447,24 +1515,24 @@ export const sumTotalLineItemHelper = (quantity, per_unit_price, description) =>
     let sumValueInLineItem = 0;
     sumValueInLineItem = quantity * per_unit_price
     if (description !== '') {
-      var conventToString = sumValueInLineItem.toString();
-      var findDot = conventToString.indexOf(".")
-      if (findDot == -1) {
-        conventToString = conventToString + ".00"
-        return conventToString;
-      }
-      else {
-        conventToString = conventToString.slice(0, findDot + 3)
-        var addOneDot = conventToString.length - findDot;
-        if (addOneDot === 2) {
-          return conventToString + "0";
+        var conventToString = sumValueInLineItem.toString();
+        var findDot = conventToString.indexOf(".")
+        if (findDot == -1) {
+            conventToString = conventToString + ".00"
+            return conventToString;
         }
         else {
-          return conventToString;
+            conventToString = conventToString.slice(0, findDot + 3)
+            var addOneDot = conventToString.length - findDot;
+            if (addOneDot === 2) {
+                return conventToString + "0";
+            }
+            else {
+                return conventToString;
+            }
         }
-      }
     } else {
-      return '';
+        return '';
     }
 }
 
@@ -1472,19 +1540,19 @@ export const sumTotalLineItemHelper = (quantity, per_unit_price, description) =>
 export const sumTotalHelper = (list_show) => {
     var sumTotal = 0;
     list_show.map(function (list, index) {
-      var sum = 0;
-      sum = list.quantity * list.per_unit_price;
-      sumTotal = sumTotal + sum;
-      // return sumTotal
+        var sum = 0;
+        sum = list.quantity * list.per_unit_price;
+        sumTotal = sumTotal + sum;
+        // return sumTotal
     })
     var s = sumTotal.toString();
     var n = s.indexOf(".")
     if (n == -1) {
-      s = s + ".00"
-      return s;
+        s = s + ".00"
+        return s;
     }
     else {
-      s = s.slice(0, n + 3)
-      return s;
+        s = s.slice(0, n + 3)
+        return s;
     }
 }

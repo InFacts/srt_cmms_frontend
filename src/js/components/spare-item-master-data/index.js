@@ -34,8 +34,6 @@ const GoodsReceiptComponent = (props) => {
     useFactInitializer();
     useFooterInitializer();
     const loggedIn = useSelector(state => state.token.isLoggedIn); 
-    // useFooterInitializer(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO);
-
 
     return (
         <>
@@ -60,9 +58,9 @@ const EnhancedGoodsReceiptComponent = withFormik({
         
         item_type_id: '',
         item_group_id: '',
-        uom_group_id: '',       //UOM
-        name: '',               //UOM ตัวย่อ
-        abbreviation: '',       //UOM
+        uom_group_id: '',       
+        uom_id: '',           //UOM 
+        uom_abbreviation: '',       //UOM ตัวย่อ
         minimum_order_quantity: '',  //ขั้นต่ำการสั่งซื้อ
         lead_time: '',
         tolerance_time: '',

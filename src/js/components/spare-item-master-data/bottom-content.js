@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux'
+import { connect, useSelector, shallowEqual } from 'react-redux';
 
 import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
@@ -19,8 +19,10 @@ import { useFormikContext } from 'formik';
 import '../../../css/table.css';
 
 const BottomContent = (props) => {
-
-  const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm, resetForm } = useFormikContext();
+  const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
+  const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
+  const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
+  const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
 
   // For Down File in Attactment by Nuk
   const HandleDownload = () => {
@@ -58,7 +60,7 @@ const BottomContent = (props) => {
   const HandleDeleteFile = () => {
     setFieldValue('file', [], false);
   };
-
+  console.log("fact[unit-of-measures]", fact['unit-of-measures'])
   return (
     <>
       {/* THIS MAKES THE BACKGROUND NOT GRAY!! NEEDS TO FIX */}
@@ -72,15 +74,15 @@ const BottomContent = (props) => {
                 <p className="cancel-default">ชื่อย่อหน่วยนับ </p>
               </div>
               <div className="grid_2">
-                <SelectNoChildrenInput name="name" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                <SelectNoChildrenInput name="uom_id" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
                   <option value=''></option>
-                  {values.list_uoms.map((list_uoms) => (
+                  {/* {fact[unit-of-measures].list_uoms.map((list_uoms) => (
                     list_uoms.name === values.name
                       ?
                       <option value={list_uoms.name} key={list_uoms.name} selected> {list_uoms.name} </option>
                       :
                       <option value={list_uoms.name} key={list_uoms.name}> {list_uoms.name} </option>
-                  ))}
+                  ))} */}
                 </SelectNoChildrenInput>
               </div>
 

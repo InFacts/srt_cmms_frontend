@@ -67,7 +67,7 @@ const GoodsReceiptComponent = (props) => {
 }
 const initialLineItem = {
     internal_item_id: '',
-    quantity: '',
+    unit_count: '',
     uom_id: '',
     per_unit_price: '',
     // item_id: '',

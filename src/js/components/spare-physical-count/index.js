@@ -77,6 +77,7 @@ const initialLineItem = {
     line_number: '',
     // document_id: '', // maybe not needed
     list_uoms: [],
+    item: {}
 }
 const initialRows = (n=10) => {
     let rows = [];
@@ -98,7 +99,7 @@ const EnhancedGoodsReceiptComponent = withFormik({
         dest_warehouse_id: 0, // Need to fill for user's own WH
         src_warehouse_id: '', // for Goods Receipt
         created_by_user_employee_id: '',
-        refer_to_document_name: '',
+        // refer_to_document_name: '',
         remark: '',
         line_items: initialRows(),
 

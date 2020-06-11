@@ -33,7 +33,6 @@ const GoodsReceiptComponent = (props) => {
     useFactInitializer();
     useFooterInitializer();
     const loggedIn = useSelector(state => state.token.isLoggedIn); 
-    // useFooterInitializer(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO);
 
     return (
         <>

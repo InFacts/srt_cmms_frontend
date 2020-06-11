@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux'
+import { connect, useSelector, shallowEqual } from 'react-redux';
 
 import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
@@ -30,6 +30,9 @@ const FormTitle = ({ children }) => (
 
 const TopContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm, resetForm } = useFormikContext();
+  const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
+  const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
+  const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
 
   const responseToFormState = (data) => {
     console.log("!data.quantity_required", !data.quantity_required, data.quantity_required)
@@ -53,48 +56,51 @@ const TopContent = (props) => {
       list_uoms: data.list_uoms
     }
   }
+  
   const validateInternalItemIDField = internal_item_id => {
-    //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
-
-    if (values.internal_item_id === internal_item_id) {
-      return;
+    if (!internal_item_id) {
+      return 'Required';
     }
-    if (internal_item_id === "") {
-      resetForm();
-      return;
-    }
-    let items = props.fact.items.items;
-    let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
-    if (item) {
-      setValues({ ...values, ...responseToFormState(item) }, false); //Setvalues and don't validate
-      validateField("item_type_id");
+    if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
+      && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) {
+      let items = props.fact.items.items;
+      let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+      if (item) {
+        setValues({ ...values, ...responseToFormState(item) }, false); //Setvalues and don't validate
+        validateField("item_type_id");
 
-      fetchGoodsOnhandDataForItemmasterData(item.item_id)
-        .then((goods_onhand) => {
-          console.log("good on hand", goods_onhand)
-          setFieldValue('goods_onhand', goods_onhand, false);
-        })
-      return;
-    } else {
-      return 'Invalid Number ID';
+        fetchGoodsOnhandDataForItemmasterData(item.item_id)
+          .then((goods_onhand) => {
+            console.log("good on hand", goods_onhand)
+            setFieldValue('goods_onhand', goods_onhand, false);
+          })
+        return;
+      } else {
+        return 'Invalid Number ID';
+      }
+    } else {//If mode add, ok
+      console.log("document ID doesn't exist but I am in mode add")
+      if (internal_item_id) {
+        let items = props.fact.items.items;
+        let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+        console.log("warehouse", item)
+        if (!item) { // Check Dulplication
+          setFieldValue("internal_item_id", internal_item_id, false);
+        } else return 'Internal Item Id Duplication'
+      } else return 'Required';
     }
   };
 
-  const validateItemTypeID = (fieldName, item_type_id) => {
-    item_type_id = `${item_type_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
-    let item_types = props.fact[FACTS.ITEM_TYPE].items;
-    let item_type = item_types.find(item_type => `${item_type.item_type_id}` === `${item_type_id}`); // Returns undefined if not found
-    console.log("item_type", item_type)
-    if (item_type) {
-      console.log("in")
-      setFieldValue(fieldName, item_type_id, false);
-      return;
-    } else {
-      console.log("out")
-      return 'Invalid Item Type ID';
+  const validateItemMasterdataField = (fieldName, name) => {
+    if (!name) {
+      return 'Required'
     }
-  }
-  const validateItemTypeIDField = (...args) => validateItemTypeID("item_type_id", ...args);
+    setFieldValue(fieldName, name, false);
+  };
+  const validateItemTypeIDField = (...args) => validateItemMasterdataField("item_type_id", ...args);
+  const validateItemGroupIDField = (...args) => validateItemMasterdataField("item_group_id", ...args);
+  const validateUomGroupIDField = (...args) => validateItemMasterdataField("uom_group_id", ...args);
+  const validateItemDescriptionField = (...args) => validateItemMasterdataField("description", ...args);
 
   return (
     <div id="blackground-white">
@@ -110,7 +116,7 @@ const TopContent = (props) => {
             </div>
             <div className="float-right">
               <div className="grid_3 float-right">
-                <SelectNoChildrenInput name="item_type_id" validate={validateItemTypeIDField}
+                <SelectNoChildrenInput name="item_type_id" validate={validateItemTypeIDField} cssClass="error-for-select-right"
                   disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
                   <option value=''></option>
                   {props.fact[FACTS.ITEM_TYPE].items.map((item_type) => (
@@ -131,11 +137,11 @@ const TopContent = (props) => {
           <div className="container_12">
             <FormLabel>รายละเอียด</FormLabel>
             <div className="grid_3 pull_1">
-              <TextInput name="description" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="2" />
+              <TextInput name="description" validate={validateItemDescriptionField} disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="2" />
             </div>
             <div className="float-right">
               <div className="grid_3 float-right">
-                <SelectNoChildrenInput name="item_group_id" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                <SelectNoChildrenInput name="item_group_id" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateItemGroupIDField} cssClass="error-for-select-right"> 
                   <option value=''></option>
                   {props.fact[FACTS.ITEM_GROUP].items.map((item_group) => (
                     values.item_group_id === item_group.item_group_id
@@ -155,7 +161,7 @@ const TopContent = (props) => {
           <div className="container_12">
             <div className="float-right">
               <div className="grid_3 float-right">
-                <SelectNoChildrenInput name="uom_group_id" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                <SelectNoChildrenInput name="uom_group_id" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomGroupIDField} cssClass="error-for-select-right">
                   <option value=''></option>
                   {props.fact[FACTS.UNIT_OF_MEASURE_GROUPS].items.map((uom) => (
                     values.uom_group_id === uom.uom_group_id

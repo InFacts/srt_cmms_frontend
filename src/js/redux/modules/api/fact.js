@@ -19,6 +19,7 @@ export const FACTS = {
     ITEM_STATUS: "item-status",
     ITEM_GROUP: "item-group",
     UNIT_OF_MEASURE_GROUPS: "unit-of-measure-groups",
+    UNIT_OF_MEASURE: "unit-of-measures",
     ITEM_TYPE: "item-type",
     WAREHOUSES_TYPE: "warehouse-type"
 }
