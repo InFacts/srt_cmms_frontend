@@ -13,7 +13,7 @@ import history from '../history';
 
 const spacialPage = {
     ITEM_MASTER_DATA: "/item-master-data",
-    WAREHOUSE: "/item-master-data"
+    WAREHOUSE: "/warehouse"
 }
 function isEmpty(obj) {
     for(var key in obj) {
