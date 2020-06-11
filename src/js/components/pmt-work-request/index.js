@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from 'react';
+import { Redirect } from 'react-router-dom';
+import { useSelector  } from 'react-redux'
 
 import { useFormik , withFormik ,useFormikContext} from 'formik';
 
@@ -24,6 +26,7 @@ const WorkRequestComponent = () => {
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.WORK_REQUEST);
     useDocumentSubscription();
+    const loggedIn = useSelector(state => state.token.isLoggedIn); 
 
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
@@ -34,6 +37,7 @@ const WorkRequestComponent = () => {
 
     return (
         <>
+            {!loggedIn ? <Redirect to="/" /> : null}
           <form>
              <TopContent />
              <TabBar tabNames={tabNames} initialTabID="broken">
