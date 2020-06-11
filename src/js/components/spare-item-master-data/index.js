@@ -60,6 +60,7 @@ const EnhancedGoodsReceiptComponent = withFormik({
         item_group_id: '',
         uom_group_id: '',       
         uom_id: '',           //UOM 
+        uom_name: '',       //UOM ตัวเต็ม
         uom_abbreviation: '',       //UOM ตัวย่อ
         minimum_order_quantity: '',  //ขั้นต่ำการสั่งซื้อ
         lead_time: '',
