@@ -1,14 +1,20 @@
 import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom'
 import {  toModeSearch, handleClickAdd, handleClickHomeToSpareMain,
     handleClickForward, handleClickBackward,handleClickRefresh, TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../redux/modules/toolbar.js';
-import { FOOTER_MODE, FOOTER_ACTIONS, handleClickBackToSpareMain, ACTION_TO_HANDLE_CLICK, footerToModeInvisible, footerToModeNone, footerToModeSearch, footerToModeEdit, footerToModeOwnDocument, footerToModeAddDraft, footerToModeApApproval, footerToModeApCheckApproval, footerToModeApGotIt, footerToModeApCheckOrder, footerToModeApCheckMaintenance, footerToModeApGuarnteeMaintenance, footerToModeVoid, footerToModeFastTrack, footerToModeApApprovalDone} from '../redux/modules/footer.js';
+import { FOOTER_MODE, FOOTER_ACTIONS, handleClickBackToSpareMain, ACTION_TO_HANDLE_CLICK, footerToModeInvisible, footerToModeNone, footerToModeSearch, footerToModeEdit, footerToModeOwnDocument, footerToModeAddDraft, footerToModeApApproval, footerToModeApCheckApproval, footerToModeApGotIt, footerToModeApCheckOrder, footerToModeApCheckMaintenance, footerToModeApGuarnteeMaintenance, footerToModeVoid, footerToModeFastTrack, footerToModeApApprovalDone, footerToModeSave} from '../redux/modules/footer.js';
 import { useDispatch, useSelector  } from 'react-redux';
 import useTokenInitializer from '../hooks/token-initializer';
 import { useFormikContext} from 'formik';
 import {startDocumentApprovalFlow, APPROVAL_STATUS, DOCUMENT_TYPE_ID, saveDocument, packDataFromValues, fetchLatestStepApprovalDocumentData, getUserIDFromEmployeeID, DOCUMENT_STATUS, APPROVAL_STEP_ACTION, checkDocumentStatus, approveDocument} from '../helper';
 import { FACTS } from '../redux/modules/api/fact';
 import {navBottomError, navBottomSuccess, navBottomSending } from '../redux/modules/nav-bottom'
+import history from '../history';
 
+const spacialPage = {
+    ITEM_MASTER_DATA: "/item-master-data",
+    WAREHOUSE: "/item-master-data"
+}
 function isEmpty(obj) {
     for(var key in obj) {
         if(obj.hasOwnProperty(key))
@@ -16,6 +22,11 @@ function isEmpty(obj) {
     }
     return true;
 }
+
+function getRouteLocation() {
+    return history.location.pathname;
+}
+  
 
 const useFooterInitializer = (document_type_id) => {
     const dispatch = useDispatch();
@@ -26,11 +37,10 @@ const useFooterInitializer = (document_type_id) => {
 
     const {values, submitForm, validateForm, setFieldValue, setErrors} = useFormikContext();
     useTokenInitializer();
-
+    
     //Handle Document Status TODO: move it out of footer!!
     const hadleDocumentStatusWithFooter = (document_id) => {
         checkDocumentStatus(values).then(function(docuementStatus) {
-            // console.log("HI document_status", docuementStatus, "toolbar>>", toolbar.mode)
             setFieldValue("status_name_th", docuementStatus, false);
             let userInfo = {
                 id: user_id.id, // TEST: User ID
@@ -43,9 +53,8 @@ const useFooterInitializer = (document_type_id) => {
             let created_by_admin_employee_id = getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id); // TEST: values.created_by_admin_employee_id;
 
             // Check That user who create document?
-            console.log("userInfo.id", userInfo.id,"created_by_admin_employee_id", created_by_admin_employee_id)
+            // console.log("userInfo.id", userInfo.id,"created_by_admin_employee_id", created_by_admin_employee_id)
             if (userInfo.id === created_by_admin_employee_id) {
-                // console.log("HI Check Who's create document---->", document_status)
                 if (document_status === DOCUMENT_STATUS.DRAFT) { dispatch(footerToModeAddDraft()); }
                 else if (document_status === DOCUMENT_STATUS.WAIT_APPROVE) { dispatch(footerToModeOwnDocument()); }
                 else if (document_status === DOCUMENT_STATUS.APPROVE_DONE) { dispatch(footerToModeApApprovalDone()); }
@@ -70,16 +79,16 @@ const useFooterInitializer = (document_type_id) => {
                 // Check Next Approver from postion_id
                 fetchLatestStepApprovalDocumentData(track_document_id).then((latestApprovalInfo) => {
                     if (latestApprovalInfo !== undefined || latestApprovalInfo.length !== 0) {
-                        console.log("latestApprovalInfo------> ", latestApprovalInfo)
-                        console.log("user------> ", latestApprovalInfo.position_id, userInfo.position_id)
-                        console.log("approval_step_action_id------> ", latestApprovalInfo.approval_step_action_id, APPROVAL_STEP_ACTION.APPROVAL)
+                        // console.log("latestApprovalInfo------> ", latestApprovalInfo)
+                        // console.log("user------> ", latestApprovalInfo.position_id, userInfo.position_id)
+                        // console.log("approval_step_action_id------> ", latestApprovalInfo.approval_step_action_id, APPROVAL_STEP_ACTION.APPROVAL)
                         if (latestApprovalInfo.position_id === userInfo.position_id) {
-                            console.log(" ------ APPROVALLLL------> ")
+                            // console.log(" ------ APPROVALLLL------> ")
                             if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_APPROVAL) {
                                 dispatch(footerToModeApApproval());
                             }
                             else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.APPROVAL) {
-                                console.log(" ------ APPROVAL_STEP_ACTION.APPROVAL------> ")
+                                // console.log(" ------ APPROVAL_STEP_ACTION.APPROVAL------> ")
                                 dispatch(footerToModeApCheckApproval());
                             }
                             else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.GOT_IT) {
@@ -116,14 +125,24 @@ const useFooterInitializer = (document_type_id) => {
             // SEARCH mode
             hadleDocumentStatusWithFooter(document_id);
         }
-        else if (toolbar.mode === TOOLBAR_MODE.ADD){
+        else if (toolbar.mode === TOOLBAR_MODE.ADD && document_id !== "" && document_id !== undefined){
             // ADD_DRAFT mode
             if ( document_id !== "" && document_id !== undefined) { hadleDocumentStatusWithFooter(document_id); }
             dispatch(footerToModeAddDraft());
         }
         else {
             // INVISIBLE mode
-            dispatch(footerToModeSearch());
+            let routeLocation = getRouteLocation();
+            if (routeLocation === spacialPage.ITEM_MASTER_DATA || routeLocation === spacialPage.WAREHOUSE) {
+                if (toolbar.mode === TOOLBAR_MODE.SEARCH) {
+                    if (values.active !== undefined && values.active !== ""){ dispatch(footerToModeSave()); }
+                    else { dispatch(footerToModeSearch()); }
+                }
+                else if (toolbar.mode === TOOLBAR_MODE.ADD) {
+                    dispatch(footerToModeSave());
+                }
+            }
+            else{ dispatch(footerToModeSearch()); }
         }
     }, [toolbar.mode, values.document_id, values.step_approve, values.created_by_admin_employee_id]);
 

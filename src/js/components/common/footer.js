@@ -92,6 +92,9 @@ const mapStateToProps = (state) => {
     case FOOTER_MODE.EDIT:
       // console.log(">>>>> EDIT")
       return getPropButtonVisible(FOOTER_ACTIONS.SEND, [FOOTER_ACTIONS.SEND, FOOTER_ACTIONS.SAVE, FOOTER_ACTIONS.VOID, FOOTER_ACTIONS.BACK]);
+    case FOOTER_MODE.SAVE:
+      // console.log(">>>>> SAVE")
+      return getPropButtonVisible(FOOTER_ACTIONS.SAVE, [FOOTER_ACTIONS.SAVE, FOOTER_ACTIONS.BACK]);
     case FOOTER_MODE.OWN_DOCUMENT:
       // console.log(">>>>> OWN_DOCUMENT")
       return getPropButtonVisible(FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS, [FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS, FOOTER_ACTIONS.BACK]);
