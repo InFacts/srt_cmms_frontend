@@ -127,7 +127,7 @@ const useFooterInitializer = (document_type_id) => {
             // SEARCH mode
             hadleDocumentStatusWithFooter(document_id);
         }
-        else if (toolbar.mode === TOOLBAR_MODE.ADD && document_id !== "" && document_id !== undefined) {
+        else if (toolbar.mode === TOOLBAR_MODE.ADD){
             // ADD_DRAFT mode
             if (document_id !== "" && document_id !== undefined) { hadleDocumentStatusWithFooter(document_id); }
             dispatch(footerToModeAddDraft());
