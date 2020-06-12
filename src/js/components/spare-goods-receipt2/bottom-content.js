@@ -16,6 +16,8 @@ import Files from '../common/files2'
 import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
 import { useFormikContext } from 'formik';
 
+import { sumTotalLineItemHelper, sumTotalHelper } from '../../helper';
+
 import '../../../css/table.css';
 
 const BottomContent = (props) => {
@@ -24,50 +26,9 @@ const BottomContent = (props) => {
 
   const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
-  const sumTotalLineItem = (quantity, per_unit_price, description) => {
-    let sumValueInLineItem = 0;
-    sumValueInLineItem = quantity * per_unit_price
-    if (description !== '') {
-      var conventToString = sumValueInLineItem.toString();
-      var findDot = conventToString.indexOf(".")
-      if (findDot == -1) {
-        conventToString = conventToString + ".00"
-        return conventToString;
-      }
-      else {
-        conventToString = conventToString.slice(0, findDot + 3)
-        var addOneDot = conventToString.length - findDot;
-        if (addOneDot === 2) {
-          return conventToString + "0";
-        }
-        else {
-          return conventToString;
-        }
-      }
-    } else {
-      return '';
-    }
-  }
+  const sumTotalLineItem = (quantity, per_unit_price, description) => sumTotalLineItemHelper(quantity, per_unit_price, description);
 
-  const sumTotal = (list_show) => {
-    var sumTotal = 0;
-    list_show.map(function (list, index) {
-      var sum = 0;
-      sum = list.quantity * list.per_unit_price;
-      sumTotal = sumTotal + sum;
-      // return sumTotal
-    })
-    var s = sumTotal.toString();
-    var n = s.indexOf(".")
-    if (n == -1) {
-      s = s + ".00"
-      return s;
-    }
-    else {
-      s = s.slice(0, n + 3)
-      return s;
-    }
-  }
+  const sumTotal = (list_show) => sumTotalHelper(list_show);
 
   const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => {
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
