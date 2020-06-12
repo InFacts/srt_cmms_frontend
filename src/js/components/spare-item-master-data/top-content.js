@@ -35,15 +35,16 @@ const TopContent = (props) => {
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
 
   const responseToFormState = (data) => {
-    console.log("!data.quantity_required", !data.quantity_required, data.quantity_required)
+    let uoms = props.fact['unit-of-measures'].items;
+    let uom = uoms.find(uom => `${uom.uom_id}` === `${data.uom_id_inventory}`); // Returns undefined if not found
     return {
       internal_item_id: data.internal_item_id,
       description: data.description,
       item_group_id: data.item_group_id,
       item_type_id: data.item_type_id,
       uom_group_id: data.uom_group_id,                    //UOM
-      name: data.list_uoms[0].name,                       //UOM ตัวย่อ
-      abbreviation: data.list_uoms[0].abbreviation,       //UOM
+      uom_id: data.uom_id_inventory,  
+      uom_name: uom.name,           
       minimum_order_quantity: !data.minimum_order_quantity ? 0 : data.minimum_order_quantity,  //ขั้นต่ำการสั่งซื้อ
       lead_time: !data.lead_time ? 0 : data.lead_time,
       tolerance_time: !data.tolerance_time ? 0 : data.tolerance_time,
@@ -52,7 +53,7 @@ const TopContent = (props) => {
       quantity_highest: !data.quantity_highest ? 0 : data.quantity_highest,   //ขั้นสูง
       remark: data.remark,
       active: data.active.data[0],
-
+      accounting_type: data.accounting_type,
       list_uoms: data.list_uoms
     }
   }

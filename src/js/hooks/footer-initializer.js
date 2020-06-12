@@ -166,9 +166,9 @@ const useFooterInitializer = (document_type_id) => {
                     dispatch(navBottomSending('[API]', 'Sending ...', ''));
                     setErrors(err);
                     if (isEmpty(err)) {
+                        let data = packDataFromValues(fact, values, document_type_id);
+                        console.log("I AM SUBMITTING ", data);
                         if (document_type_id !== DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA && document_type_id !== DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
-                            let data = packDataFromValues(fact, values, document_type_id);
-                            console.log("I AM SUBMITTING ", data);
                             saveDocument(document_type_id, data)
                                 .then((document_id) => {
                                     setFieldValue('document_id', document_id, true);
@@ -183,8 +183,6 @@ const useFooterInitializer = (document_type_id) => {
                                     dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
                                 });
                         } else { // For POST MASTER DATA
-                            let data = packDataFromValuesMasterdata(fact, values, document_type_id);
-                            console.log("I AM SUBMITTING ", data);
                             saveMasterData(document_type_id, data)
                                 .then(() => {
                                     dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));

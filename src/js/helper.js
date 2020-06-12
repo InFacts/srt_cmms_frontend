@@ -252,6 +252,44 @@ export function isICD(document_type_group_id) {
 }
 
 export const packDataFromValues = (fact, values, document_type_id) => {
+    if (document_type_id === DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA) {
+        return {
+            warehouse_id: values.warehouse_id,
+            name: values.name,
+            abbreviation: values.abbreviation,
+            location: values.location,
+            warehouse_type_id: values.warehouse_type_id,
+            node_id: 1,
+            active: values.active === "1" ? true : false,
+            use_central: values.use_central === "1" ? true : false
+        }
+    } else if (document_type_id === DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
+        let last = 0;
+        fact[FACTS.ITEM].items.map(item => {
+            if (item.item_id > last) {
+                last = item.item_id;
+            }
+        });
+        return {
+            item_id: last + 1,
+            internal_item_id: values.internal_item_id,
+            description: values.description,
+            item_type_id: values.item_type_id,
+            item_group_id: values.item_group_id,
+            uom_group_id: values.uom_group_id,
+            active: values.active === "1" ? true : false,
+            remark: values.remark,
+            uom_id_inventory: values.uom_id,
+            default_warehouse_id: 100,
+            quantity_lowest: values.quantity_lowest,
+            quantity_highest: values.quantity_highest,
+            quantity_required: values.quantity_required,
+            minimum_order_quantity: values.minimum_order_quantity,
+            // lead_item: values.lead_item,
+            tolerance_time: values.tolerance_time,
+            accounting_type: values.accounting_type
+        }
+    }
     let document_part = {
         ...DOCUMENT_SCHEMA,
         document_status_id: 1,
@@ -446,44 +484,9 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             document: document_part,
             specific: ss101_part,
         }
-    }
+    } 
 }
 
-export const packDataFromValuesMasterdata = (fact, values, document_type_id) => {
-    if (document_type_id === DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA) {
-        return {
-            warehouse_id: values.warehouse_id,
-            name: values.name,
-            abbreviation: values.abbreviation,
-            location: values.location,
-            warehouse_type_id: values.warehouse_type_id,
-            node_id: 1,
-            active: values.active === "1" ? true : false,
-            use_central: values.use_central === "1" ? true : false
-        }
-    }
-    if (document_type_id === DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
-        return {
-            // item_id: 102,
-            internal_item_id: values.internal_item_id,
-            description: values.description,
-            item_type_id: values.item_type_id,
-            item_group_id: values.item_group_id,
-            uom_group_id: values.uom_group_id,
-            active: values.active === "1" ? true : false,
-            remark: values.remark,
-            uom_id_inventory: values.uom_id,
-            default_warehouse_id: 100,
-            quantity_lowest: values.quantity_lowest,
-            quantity_highest: values.quantity_highest,
-            quantity_required: values.quantity_required,
-            minimum_order_quantity: values.minimum_order_quantity,
-            // lead_item: values.lead_item,
-            tolerance_time: values.tolerance_time,
-            accounting_type: values.accounting_type
-        }
-    }
-}
 
 
 function removeEmptyLineItems(line_items) {

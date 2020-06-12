@@ -50,10 +50,28 @@ import Document from '../../../images/document.svg';
 const Files = ({ ...props }) => {
     const { setFieldValue } = useFormikContext();
     const [field, meta] = useField(props);
-    // console.log("field", field)
-    // console.log("meta", meta)
-    // console.log("props", props)
-    // console.log("props.desrciptionFiles", props.desrciptionFiles)
+
+    const fileExtension = (file) => {
+        let extensionSplit = file.name.split('.')
+        if (extensionSplit.length > 1) {
+            return extensionSplit[extensionSplit.length - 1]
+        } else {
+            return 'none'
+        }
+    }
+
+    const fileSizeReadable = (size) => {
+        if (size >= 1000000000) {
+            return Math.ceil(size / 1000000000) + 'GB'
+        } else if (size >= 1000000) {
+            return Math.ceil(size / 1000000) + 'MB'
+        } else if (size >= 1000) {
+            return Math.ceil(size / 1000) + 'kB'
+        } else {
+            return Math.ceil(size) + 'B'
+        }
+    }
+
     return (
         <div>
             <h4 className="head-title-bottom mt-2">ข้อมูลแนบไฟล์</h4>
@@ -63,9 +81,11 @@ const Files = ({ ...props }) => {
                 </div>
                 <div className="u-float-right">
                     <div className="upload-btn-wrapper">
-                        <button type="button" className="btn" disabled={props.disabled}>เพิ่มไฟล์</button>
                         {/* <input type="file" disabled={props.disabled} {...field} {...props}/> */}
-                        <input id="file" name="file" type="file" onChange={(event) => {setFieldValue("file[0].filename", event.currentTarget.files[0]);}} disabled={props.disabled} {...props} />
+                        <button type="button" className="btn" disabled={props.disabled}>เพิ่มไฟล์</button>
+                        <input id="file" name="file" type="file" 
+                            onChange={(event) => {setFieldValue("file", event.currentTarget.files[0]);}}
+                            disabled={props.disabled} />
                     </div>
                 </div>
             </div>
@@ -100,4 +120,7 @@ const Files = ({ ...props }) => {
     )
 }
 
-export default Files
+
+
+
+export default Files;
