@@ -15,7 +15,7 @@ const NumberInput = ({ ...props }) => {
         ?
         meta.touched && meta.error ? (
           <div className="error">
-            <span className="tooltiptextForNumber">{meta.error}</span>
+            <span className="tooltiptextForNumber" style={props.cssStyle}>{meta.error}</span>
           </div>
         ) : null
         :

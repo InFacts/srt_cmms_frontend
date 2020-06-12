@@ -29,6 +29,8 @@ export const DOCUMENT_TYPE_ID = {
     WORK_ORDER: 202,
     WORK_ORDER_PM: 203,
     SS101: 204,
+
+    WAREHOUSE_MASTER_DATA: 1,
 }
 export const DOCUMENT_TYPE_NOTGROUP_ID = {
     WORK_REQUEST: 2011,
@@ -443,8 +445,24 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             document: document_part,
             specific: ss101_part,
         }
+    } 
+}
+
+export const packDataFromValuesMasterdata = (fact, values, document_type_id) => {
+    if (document_type_id === DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA) {
+        return {
+            warehouse_id: values.warehouse_id,
+            name: values.name,
+            abbreviation: values.abbreviation,
+            location: values.location,
+            warehouse_type_id: values.warehouse_type_id,
+            node_id: 1,
+            active: values.active === "1" ? true : false,
+            use_central: values.use_central  === "1" ? true : false
+        }
     }
 }
+
 
 function removeEmptyLineItems(line_items) {
     return line_items.filter(line_item => line_item.description != '');
@@ -475,6 +493,19 @@ export const createDocumentEmptyRow = () => new Promise((resolve, reject) => {
                 document_id: res.data.document_id,  //"document_id": 14
                 status: res.status,
             });
+        })
+        .catch((err) => {
+            reject(err)
+        });
+});
+
+// POST /document/new/0
+export const createMasterData = (data) => new Promise((resolve, reject) => {
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/warehouses`;
+    axios.post(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((res) => {
+            console.log(" I am successful in creating master data ", res)
+            resolve();
         })
         .catch((err) => {
             reject(err)
@@ -608,6 +639,19 @@ export const saveDocument = (document_type_group_id, data, image) => new Promise
 
         })
         .catch((err) => {
+            reject(err)
+        });
+});
+
+// POST /fact/warehouses
+export const saveMasterData = (document_type_group_id, data, image) => new Promise((resolve, reject) => {
+    createMasterData(data)
+        .then(() => { // Get the Document_ID
+            console.log(">>>>>>")
+            return resolve();
+        })
+        .catch((err) => {
+            console.log(">>>>>> err")
             reject(err)
         });
 });
@@ -1370,6 +1414,20 @@ export const approveDocuement = (document_id, obj_body) => new Promise((resolve,
             console.log(" I am successful in creating approval to document with document_id ", res.data);
             resolve(res);
         }).catch(function (err) {
+            reject(err);
+        })
+});
+
+
+// Validate Token: 200 if token is valid and not expired, 400 otherwise. + requestBody {'refresh_token': true} 201 and token is refreshed [if not expired]
+// POST /auth/token-validation
+export const validateToken = (willRefreshToken) => new Promise((resolve, reject) => {
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/auth/token-validation`;
+    const requestBody = willRefreshToken ? {'refresh_token': true} : null;
+    axios.post(url, requestBody, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then(res => {
+            resolve(res);
+        }).catch(function (err) { // 400 and 500 errors default validateStatus valid code is >= 200 and < 300. https://stackoverflow.com/questions/47679543/axios-400-error-request-call-then-instead-of-catch
             reject(err);
         })
 });

@@ -1,12 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import { connect } from 'react-redux';
 import { useFormik , withFormik ,useFormikContext} from 'formik';
+import { Redirect } from 'react-router-dom';
+import { useSelector  } from 'react-redux';
 
 import TabBar from '../common/tab-bar';
-
-import axios from "axios";
-import { API_PORT_DATABASE } from '../../config_port.js';
-import { API_URL_DATABASE } from '../../config_url.js';
 
 import TopContent from './top-content';
 import BottomContent from './bottom-content';
@@ -36,16 +33,19 @@ const GoodsReceiptComponent = (props) => {
     useTokenInitializer();
     useFactInitializer();
     useFooterInitializer();
+    const loggedIn = useSelector(state => state.token.isLoggedIn); 
 
     return (
-        <form onSubmit={props.handleSubmit}>
+        <>
+        {!loggedIn ? <Redirect to="/" /> : null}
+        <form>
             <TopContent />
             <TabBar tabNames={tabNames} initialTabID="general">
                 <BottomContent />
             </TabBar>
             <Footer />
         </form>
-
+        </>
     )
 }
 
@@ -60,6 +60,7 @@ const EnhancedGoodsReceiptComponent = withFormik({
         item_group_id: '',
         uom_group_id: '',       
         uom_id: '',           //UOM 
+        uom_name: '',       //UOM ตัวเต็ม
         uom_abbreviation: '',       //UOM ตัวย่อ
         minimum_order_quantity: '',  //ขั้นต่ำการสั่งซื้อ
         lead_time: '',
@@ -89,13 +90,4 @@ const EnhancedGoodsReceiptComponent = withFormik({
     })
 })(GoodsReceiptComponent);
 
-const mapStateToProps = (state) => ({
-    toolbar: state.toolbar,
-    fact: state.api.fact,
-})
-
-const mapDispatchToProps = {
-
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(EnhancedGoodsReceiptComponent);
+export default EnhancedGoodsReceiptComponent;

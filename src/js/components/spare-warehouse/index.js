@@ -1,12 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import { connect } from 'react-redux';
 import { useFormik , withFormik ,useFormikContext} from 'formik';
+import { Redirect } from 'react-router-dom';
+import { useSelector  } from 'react-redux';
 
 import TabBar from '../common/tab-bar';
-
-import axios from "axios";
-import { API_PORT_DATABASE } from '../../config_port.js';
-import { API_URL_DATABASE } from '../../config_url.js';
 
 import TopContent from './top-content';
 import BottomContent from './bottom-content';
@@ -34,17 +31,20 @@ const GoodsReceiptComponent = (props) => {
     useToolbarInitializer(TOOLBAR_MODE.SEARCH);
     useTokenInitializer();
     useFactInitializer();
-    useFooterInitializer();
+    useFooterInitializer(DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA);
+    const loggedIn = useSelector(state => state.token.isLoggedIn); 
 
     return (
-        <form onSubmit={props.handleSubmit}>
+        <>
+        {!loggedIn ? <Redirect to="/" /> : null}
+        <form>
             <TopContent />
             <TabBar tabNames={tabNames} initialTabID="general">
                 <BottomContent />
             </TabBar>
             <Footer />
         </form>
-
+        </>
     )
 }
 
@@ -67,13 +67,4 @@ const EnhancedGoodsReceiptComponent = withFormik({
     })
 })(GoodsReceiptComponent);
 
-const mapStateToProps = (state) => ({
-    toolbar: state.toolbar,
-    fact: state.api.fact,
-})
-
-const mapDispatchToProps = {
-
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(EnhancedGoodsReceiptComponent);
+export default EnhancedGoodsReceiptComponent;

@@ -1,12 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import { connect } from 'react-redux';
 import { useFormik , withFormik ,useFormikContext} from 'formik';
+import { Redirect } from 'react-router-dom';
+import { useSelector  } from 'react-redux';
 
 import TabBar from '../common/tab-bar';
 
-import axios from "axios";
-import { API_PORT_DATABASE } from '../../config_port.js';
-import { API_URL_DATABASE } from '../../config_url.js';
 
 import TopContent from './top-content';
 import BottomContent from './bottom-content';
@@ -32,9 +30,11 @@ const GoodsReturnComponent = (props) => {
 
     useToolbarInitializer(TOOLBAR_MODE.NONE_HOME);
     useFactInitializer();
+    const loggedIn = useSelector(state => state.token.isLoggedIn); 
 
     return (
         <>
+            {!loggedIn ? <Redirect to="/" /> : null}
             <TopContent />
             <TabBar tabNames={tabNames} initialTabID="listItem">
                 <BottomContent />
@@ -127,16 +127,4 @@ const EnhancedGoodsReturnComponent = withFormik({
     }),
 })(GoodsReturnComponent);
 
-
-
-const mapStateToProps = (state) => ({
-    toolbar: state.toolbar,
-    // decoded_token: state.token.decoded_token,
-    fact: state.api.fact,
-})
-
-const mapDispatchToProps = {
-
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(EnhancedGoodsReturnComponent);
+export default EnhancedGoodsReturnComponent;

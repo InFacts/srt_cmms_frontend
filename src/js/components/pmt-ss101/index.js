@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useFormik, withFormik, useFormikContext } from 'formik';
+import { Redirect } from 'react-router-dom';
+import { useSelector  } from 'react-redux'
 
 import TabBar from '../common/tab-bar';
 
@@ -25,6 +27,8 @@ const PmtSS101Componant = (props) => {
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.SS101);
     useDocumentSubscription();
+    const loggedIn = useSelector(state => state.token.isLoggedIn); 
+
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
         { id: "breakdown", name: "อาการเสีย"},
@@ -53,6 +57,8 @@ const PmtSS101Componant = (props) => {
     }, []);
 
     return (
+        <>
+        {!loggedIn ? <Redirect to="/" /> : null}
         <form onSubmit={props.handleSubmit}>
             <TopContent />
             <TabBar tabNames={tabNames} initialTabID="breakdown">
@@ -60,6 +66,7 @@ const PmtSS101Componant = (props) => {
             </TabBar>
             <Footer />
         </form>
+        </>
     )
 }
 

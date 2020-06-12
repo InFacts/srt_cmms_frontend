@@ -60,7 +60,34 @@ const BottomContent = (props) => {
   const HandleDeleteFile = () => {
     setFieldValue('file', [], false);
   };
-  console.log("fact[unit-of-measures]", fact['unit-of-measures'])
+
+  const validateUomItemmasterDataIDField = (fieldName, uom_id) => {
+    if (!uom_id) {
+      return 'Required'
+    }
+    setFieldValue(fieldName, uom_id, false);
+    let uoms = props.fact['unit-of-measures'].items;
+    let uom = uoms.find(uom => `${uom.uom_id}` === `${uom_id}`); // Returns undefined if not found
+    setFieldValue("uom_name", uom.name, false);
+  };
+  const validateUomIDField = (...args) => validateUomItemmasterDataIDField("uom_id", ...args);
+
+
+  const validateItemMasterdataField = (fieldName, name) => {
+    if (!name) {
+      return 'Required'
+    }
+    setFieldValue(fieldName, name, false);
+  };
+  const validateMinimumOrderQuantityField = (...args) => validateItemMasterdataField("minimum_order_quantity", ...args);
+  const validateLeadTimeField = (...args) => validateItemMasterdataField("lead_time", ...args);
+  const validateToleranceTimeField = (...args) => validateItemMasterdataField("tolerance_time", ...args);
+  const validateActiveField = (...args) => validateItemMasterdataField("active", ...args);
+
+  const validateQuantityRequiredField = (...args) => validateItemMasterdataField("quantity_required", ...args);
+  const validateQuantityLowestField = (...args) => validateItemMasterdataField("quantity_lowest", ...args);
+  const validateQuantityHighestField = (...args) => validateItemMasterdataField("quantity_highest", ...args);
+
   return (
     <>
       {/* THIS MAKES THE BACKGROUND NOT GRAY!! NEEDS TO FIX */}
@@ -73,16 +100,16 @@ const BottomContent = (props) => {
               <div className="grid_2 cancel-default">
                 <p className="cancel-default">ชื่อย่อหน่วยนับ </p>
               </div>
-              <div className="grid_2">
-                <SelectNoChildrenInput name="uom_id" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
+              <div className="grid_3 pull_1">
+                <SelectNoChildrenInput name="uom_id" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomIDField} cssStyle={{left: "-160px", top: "10px"}}> 
                   <option value=''></option>
-                  {/* {fact[unit-of-measures].list_uoms.map((list_uoms) => (
-                    list_uoms.name === values.name
+                  {fact['unit-of-measures'].items.map((list_uoms) => (
+                    list_uoms.uom_id === values.uom_id
                       ?
-                      <option value={list_uoms.name} key={list_uoms.name} selected> {list_uoms.name} </option>
+                      <option value={list_uoms.uom_id} key={list_uoms.uom_id} selected> {list_uoms.abbreviation} </option>
                       :
-                      <option value={list_uoms.name} key={list_uoms.name}> {list_uoms.name} </option>
-                  ))} */}
+                      <option value={list_uoms.uom_id} key={list_uoms.uom_id}> {list_uoms.abbreviation} </option>
+                  ))}
                 </SelectNoChildrenInput>
               </div>
 
@@ -91,8 +118,8 @@ const BottomContent = (props) => {
                   <p className="cancel-default float-right">ขั้นต่ำการสั่งซื้อ</p>
                 </div>
                 <div className="grid_2">
-                  <NumberInput step={0.01} name="minimum_order_quantity" tabIndex="7"
-                    // validate={quantity => props.validateLineNumberQuatityItemIDField(`line_items[${index}].quantity`, quantity, index)}
+                  <NumberInput step={0.01} name="minimum_order_quantity" tabIndex="7" cssStyle={{left: "60px", top: "-5px"}}
+                    validate={validateMinimumOrderQuantityField}
                     disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
                   />
                 </div>
@@ -106,11 +133,8 @@ const BottomContent = (props) => {
               <div className="grid_2 cancel-default">
                 <p className="cancel-default">ชื่อหน่วยนับ  </p>
               </div>
-              <div className="grid_2">
-                <TextInput name='name'
-                  // validate={validateInternalItemIDField}
-                  disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
-                  tabIndex="1" />
+              <div className="grid_3 pull_1">
+                <TextInput name='uom_name' disabled tabIndex="1" />
               </div>
 
               <div className="float-right">
@@ -118,8 +142,7 @@ const BottomContent = (props) => {
                   <p className="cancel-default float-right">Lead Time</p>
                 </div>
                 <div className="grid_2">
-                  <NumberInput step={1} name="lead_time" tabIndex="7"
-                    // validate={quantity => props.validateLineNumberQuatityItemIDField(`line_items[${index}].quantity`, quantity, index)}
+                  <NumberInput step={1} name="lead_time" tabIndex="7" validate={validateLeadTimeField} cssStyle={{left: "60px", top: "-5px"}}
                     disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
                   />
                 </div>
@@ -136,7 +159,7 @@ const BottomContent = (props) => {
                 </div>
                 <div className="grid_2">
                   <NumberInput step={1} name="tolerance_time" tabIndex="7"
-                    // validate={quantity => props.validateLineNumberQuatityItemIDField(`line_items[${index}].quantity`, quantity, index)}
+validate={validateToleranceTimeField} cssStyle={{left: "60px", top: "-5px"}}
                     disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
                   />
                 </div>
@@ -150,8 +173,9 @@ const BottomContent = (props) => {
               <div className="grid_2 cancel-default">
                 <p className="cancel-default">สถานะอะไหล่ </p>
               </div>
-              <div className="grid_2">
-                <SelectNoChildrenInput name="active" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
+              <div className="grid_3 pull_1">
+                <SelectNoChildrenInput name="active" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} 
+                validate={validateActiveField} cssStyle={{left: "-160px", top: "10px"}}>
                   <option value=''></option>
                   {values.active === 0
                     ?
@@ -194,8 +218,8 @@ const BottomContent = (props) => {
                 <p className="cancel-default">จำนวนที่ต้องการ</p>
               </div>
               <div className="grid_2 pull_0">
-                <NumberInput step={0.01} name="quantity_required" tabIndex="7"
-                  // validate={quantity => props.validateLineNumberQuatityItemIDField(`line_items[${index}].quantity`, quantity, index)}
+                <NumberInput step={0.01} name="quantity_required" tabIndex="7" 
+validate={validateQuantityRequiredField} cssStyle={{left: "60px", top: "-5px"}}
                   disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
                 />
               </div>
@@ -208,12 +232,11 @@ const BottomContent = (props) => {
               </div>
               <div className="grid_2 pull_0">
                 <NumberInput step={0.01} name="quantity_lowest" tabIndex="7"
-                  // validate={quantity => props.validateLineNumberQuatityItemIDField(`line_items[${index}].quantity`, quantity, index)}
+validate={validateQuantityLowestField} cssStyle={{left: "60px", top: "-5px"}}
                   disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
                 />
               </div>
               <div className="grid_1 ml-0 pull_0">
-
               </div>
             </div>
 
@@ -223,7 +246,7 @@ const BottomContent = (props) => {
               </div>
               <div className="grid_2 pull_0">
                 <NumberInput step={0.01} name="quantity_highest" tabIndex="7"
-                  // validate={quantity => props.validateLineNumberQuatityItemIDField(`line_items[${index}].quantity`, quantity, index)}
+                validate={validateQuantityHighestField} cssStyle={{left: "60px", top: "-5px"}}
                   disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
                 />
               </div>

@@ -86,7 +86,7 @@ const BottomContent = (props) => {
             <div className="container_12 mt-2">
               <div className="grid_2"><p className="cancel-default">สถานะคลัง</p></div> {/* ปิด หรือ เปิด การใช้งาน เป็น boolean */}
               <div className="grid_4 pull_0">
-                <SelectNoChildrenInput name="active" validate={validateActionWarehouseIDField} cssClass="error-for-select"
+                <SelectNoChildrenInput name="active" validate={validateActionWarehouseIDField} cssStyle={{left: "-240px", top: "10px"}}
                   disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
                   {values.active === 1
                     ?
@@ -117,7 +117,7 @@ const BottomContent = (props) => {
               <div className="container_12">
                 <div className="grid_2"><p className="cancel-default">ประเภทคลัง</p></div>
                 <div className="grid_4 pull_0">
-                  <SelectNoChildrenInput name="warehouse_type_id" validate={validateWarehouseTypeIDField} cssClass="error-for-select"
+                  <SelectNoChildrenInput name="warehouse_type_id" validate={validateWarehouseTypeIDField} cssStyle={{left: "-240px", top: "10px"}}
                     disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
                     <option value=''></option>
                     {props.fact[FACTS.WAREHOUSES_TYPE].items.map((warehouse_type) => (
@@ -134,7 +134,7 @@ const BottomContent = (props) => {
               <div className="container_12">
                 <div className="grid_2"><p className="cancel-default">กลุ่มคลัง</p></div>
                 <div className="grid_4 pull_0">
-                  <SelectNoChildrenInput name="use_central"  validate={validateUseCentralWarehouseIDField} cssClass="error-for-select"
+                  <SelectNoChildrenInput name="use_central"  validate={validateUseCentralWarehouseIDField} cssStyle={{left: "-240px", top: "10px"}}
                     disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
                     {values.use_central === 1
                       ?
