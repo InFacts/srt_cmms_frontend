@@ -6,7 +6,7 @@ import { FOOTER_MODE, FOOTER_ACTIONS, handleClickBackToSpareMain, ACTION_TO_HAND
 import { useDispatch, useSelector  } from 'react-redux';
 import useTokenInitializer from '../hooks/token-initializer';
 import { useFormikContext} from 'formik';
-import {startDocumentApprovalFlow, APPROVAL_STATUS, DOCUMENT_TYPE_ID, saveDocument, packDataFromValues, fetchLatestStepApprovalDocumentData, getUserIDFromEmployeeID, DOCUMENT_STATUS, APPROVAL_STEP_ACTION, checkDocumentStatus, approveDocument} from '../helper';
+import {startDocumentApprovalFlow, APPROVAL_STATUS, DOCUMENT_TYPE_ID, saveDocument, packDataFromValues, fetchLatestStepApprovalDocumentData, getUserIDFromEmployeeID, DOCUMENT_STATUS, APPROVAL_STEP_ACTION, checkDocumentStatus, approveDocument, packDataFromValuesMasterdata, saveMasterData} from '../helper';
 import { FACTS } from '../redux/modules/api/fact';
 import {navBottomError, navBottomSuccess, navBottomSending } from '../redux/modules/nav-bottom'
 import history from '../history';
@@ -163,6 +163,7 @@ const useFooterInitializer = (document_type_id) => {
                 dispatch(navBottomSending('[API]', 'Sending ...', ''));
                 setErrors(err);
                 if(isEmpty(err)){
+                    if (document_type_id !== DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA) {
                     let data = packDataFromValues(fact, values, document_type_id);
                     console.log("I AM SUBMITTING ", data );
                     saveDocument(document_type_id, data)
@@ -178,6 +179,21 @@ const useFooterInitializer = (document_type_id) => {
                         console.log(" I submitted and i am now handling click")
                         dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
                     }); 
+                } else { // For POST MASTER DATA
+                    let data = packDataFromValuesMasterdata(fact, values, document_type_id);
+                    console.log("I AM SUBMITTING ", data );
+                    saveMasterData(document_type_id, data)
+                    .then(() => {
+                        dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
+                    })
+                    .catch((err) => {
+                        console.log("Submit Failed ", err.response);
+                        dispatch(navBottomError('[PUT]', 'Submit Failed', err));
+                    })
+                    .finally(() => { // Set that I already handled the Click
+                        console.log(" I submitted and i am now handling click")
+                    }); 
+                }
                 }
             })
         }

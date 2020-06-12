@@ -53,7 +53,6 @@ const TopContent = (props) => {
       if (warehouse_id) {
         let warehouses = props.fact.warehouses.items;
         let warehouse = warehouses.find(warehouse => `${warehouse.warehouse_id}` === `${warehouse_id}`); // Returns undefined if
-        console.log("warehouse", warehouse)
         if (!warehouse) { // Check Dulplication
           setFieldValue("warehouse_id", warehouse_id, false);
         } else return 'Warehouse Duplication'

@@ -34,7 +34,7 @@ const GoodsReceiptComponent = (props) => {
     useToolbarInitializer(TOOLBAR_MODE.SEARCH);
     useTokenInitializer();
     useFactInitializer();
-    useFooterInitializer();
+    useFooterInitializer(DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA);
 
     return (
         <form onSubmit={props.handleSubmit}>
