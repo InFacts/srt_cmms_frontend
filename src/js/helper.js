@@ -1418,6 +1418,20 @@ export const approveDocuement = (document_id, obj_body) => new Promise((resolve,
         })
 });
 
+
+// Validate Token: 200 if token is valid and not expired, 400 otherwise. + requestBody {'refresh_token': true} 201 and token is refreshed [if not expired]
+// POST /auth/token-validation
+export const validateToken = (willRefreshToken) => new Promise((resolve, reject) => {
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/auth/token-validation`;
+    const requestBody = willRefreshToken ? {'refresh_token': true} : null;
+    axios.post(url, requestBody, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then(res => {
+            resolve(res);
+        }).catch(function (err) { // 400 and 500 errors default validateStatus valid code is >= 200 and < 300. https://stackoverflow.com/questions/47679543/axios-400-error-request-call-then-instead-of-catch
+            reject(err);
+        })
+});
+
 export const weightedAverage = (lots) => {
     var quantityTotal = 0;
     var weightedTotal = 0;

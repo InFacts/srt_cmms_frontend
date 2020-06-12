@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import { connect } from 'react-redux';
 import { useFormik , withFormik ,useFormikContext} from 'formik';
+import { Redirect } from 'react-router-dom';
+import { useDispatch, useSelector, shallowEqual  } from 'react-redux'
 
 import TabBar, {TAB_BAR_ACTIVE} from '../common/tab-bar';
-
 
 import TopContent from './top-content';
 import BottomContent from './bottom-content';
@@ -20,7 +20,6 @@ import useNavBottomStatusInitializer from '../../hooks/nav-bottom-status-initial
 
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 import { footerToModeSearch } from '../../redux/modules/footer.js';
-import { useDispatch, useSelector  } from 'react-redux'
 
 const GoodsReceiptComponent = (props) => {
     
@@ -39,6 +38,7 @@ const GoodsReceiptComponent = (props) => {
     useFooterInitializer(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO);
     useNavBottomStatusInitializer();
     useDocumentSubscription();
+    const loggedIn = useSelector(state => state.token.isLoggedIn); 
 
     useEffect(()=>{
         dispatch(footerToModeSearch());
@@ -57,15 +57,16 @@ const GoodsReceiptComponent = (props) => {
     }, [])
 
     return (
-        <form onSubmit={props.handleSubmit}>
-        {/* <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) handleSubmit(e) }}> */}
+        <>
+        {!loggedIn ? <Redirect to="/" /> : null}
+        <form>
             <TopContent />
             <TabBar tabNames={tabNames} initialTabID="listItem">
                 <BottomContent />
             </TabBar>
             <Footer />
         </form>
-
+        </>
     )
 }
 const initialLineItem = {
@@ -128,16 +129,4 @@ const EnhancedGoodsReceiptComponent = withFormik({
     })
 })(GoodsReceiptComponent);
 
-
-
-const mapStateToProps = (state) => ({
-    toolbar: state.toolbar,
-    // decoded_token: state.token.decoded_token,
-    fact: state.api.fact,
-})
-
-const mapDispatchToProps = {
-
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(EnhancedGoodsReceiptComponent);
+export default EnhancedGoodsReceiptComponent;

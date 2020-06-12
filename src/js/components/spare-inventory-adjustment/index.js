@@ -1,12 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import { connect } from 'react-redux';
 import { useFormik , withFormik ,useFormikContext} from 'formik';
+import { Redirect } from 'react-router-dom';
+import { useSelector  } from 'react-redux';
 
 import TabBar, {TAB_BAR_ACTIVE} from '../common/tab-bar';
-
-import axios from "axios";
-import { API_PORT_DATABASE } from '../../config_port.js';
-import { API_URL_DATABASE } from '../../config_url.js';
 
 import TopContent from './top-content';
 import BottomContent from './bottom-content';
@@ -39,6 +36,7 @@ const GoodsReceiptComponent = (props) => {
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT);
     useDocumentSubscription();
+    const loggedIn = useSelector(state => state.token.isLoggedIn); 
     // If Link to this url via Track Document
     useEffect(() => {
         let url = window.location.search;
@@ -55,14 +53,16 @@ const GoodsReceiptComponent = (props) => {
     }, [])
 
     return (
-        <form>
+        <>
+        {!loggedIn ? <Redirect to="/" /> : null}
+        <form >
             <TopContent />
             <TabBar tabNames={tabNames} initialTabID="listItem">
                 <BottomContent />
             </TabBar>
             <Footer />
         </form>
-
+        </>
     )
 }
 const initialLineItem = {
@@ -120,19 +120,15 @@ const EnhancedGoodsReceiptComponent = withFormik({
         desrciption_files: [],
         // For Step Approval
         step_approve: [],
-    })
+    }),
+    validate: (values, props) => {
+        const errors = {};
+
+        if (!values.document_date){
+            errors.document_date = "Required";
+        }
+        return errors;
+    },
 })(GoodsReceiptComponent);
 
-
-
-const mapStateToProps = (state) => ({
-    toolbar: state.toolbar,
-    // decoded_token: state.token.decoded_token,
-    fact: state.api.fact,
-})
-
-const mapDispatchToProps = {
-
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(EnhancedGoodsReceiptComponent);
+export default EnhancedGoodsReceiptComponent;
