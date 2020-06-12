@@ -35,15 +35,16 @@ const TopContent = (props) => {
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
 
   const responseToFormState = (data) => {
-    console.log("!data.quantity_required", !data.quantity_required, data.quantity_required)
+    let uoms = props.fact['unit-of-measures'].items;
+    let uom = uoms.find(uom => `${uom.uom_id}` === `${data.uom_id_inventory}`); // Returns undefined if not found
     return {
       internal_item_id: data.internal_item_id,
       description: data.description,
       item_group_id: data.item_group_id,
       item_type_id: data.item_type_id,
       uom_group_id: data.uom_group_id,                    //UOM
-      name: data.list_uoms[0].name,                       //UOM ตัวย่อ
-      abbreviation: data.list_uoms[0].abbreviation,       //UOM
+      uom_id: data.uom_id_inventory,  
+      uom_name: uom.name,           
       minimum_order_quantity: !data.minimum_order_quantity ? 0 : data.minimum_order_quantity,  //ขั้นต่ำการสั่งซื้อ
       lead_time: !data.lead_time ? 0 : data.lead_time,
       tolerance_time: !data.tolerance_time ? 0 : data.tolerance_time,
@@ -52,11 +53,11 @@ const TopContent = (props) => {
       quantity_highest: !data.quantity_highest ? 0 : data.quantity_highest,   //ขั้นสูง
       remark: data.remark,
       active: data.active.data[0],
-
+      accounting_type: data.accounting_type,
       list_uoms: data.list_uoms
     }
   }
-  
+
   const validateInternalItemIDField = internal_item_id => {
     if (!internal_item_id) {
       return 'Required';
@@ -116,7 +117,7 @@ const TopContent = (props) => {
             </div>
             <div className="float-right">
               <div className="grid_3 float-right">
-                <SelectNoChildrenInput name="item_type_id" validate={validateItemTypeIDField} cssStyle={{left: "-160px", top: "10px"}}
+                <SelectNoChildrenInput name="item_type_id" validate={validateItemTypeIDField} cssStyle={{ left: "-160px", top: "10px" }}
                   disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
                   <option value=''></option>
                   {props.fact[FACTS.ITEM_TYPE].items.map((item_type) => (
@@ -141,7 +142,7 @@ const TopContent = (props) => {
             </div>
             <div className="float-right">
               <div className="grid_3 float-right">
-                <SelectNoChildrenInput name="item_group_id" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateItemGroupIDField} cssStyle={{left: "-160px", top: "10px"}}> 
+                <SelectNoChildrenInput name="item_group_id" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateItemGroupIDField} cssStyle={{ left: "-160px", top: "10px" }}>
                   <option value=''></option>
                   {props.fact[FACTS.ITEM_GROUP].items.map((item_group) => (
                     values.item_group_id === item_group.item_group_id
@@ -161,7 +162,7 @@ const TopContent = (props) => {
           <div className="container_12">
             <div className="float-right">
               <div className="grid_3 float-right">
-                <SelectNoChildrenInput name="uom_group_id" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomGroupIDField} cssStyle={{left: "-160px", top: "10px"}}>
+                <SelectNoChildrenInput name="uom_group_id" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomGroupIDField} cssStyle={{ left: "-160px", top: "10px" }}>
                   <option value=''></option>
                   {props.fact[FACTS.UNIT_OF_MEASURE_GROUPS].items.map((uom) => (
                     values.uom_group_id === uom.uom_group_id

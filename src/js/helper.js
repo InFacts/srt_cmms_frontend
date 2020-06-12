@@ -31,6 +31,7 @@ export const DOCUMENT_TYPE_ID = {
     SS101: 204,
 
     WAREHOUSE_MASTER_DATA: 1,
+    ITEM_MASTER_DATA: 2,
 }
 export const DOCUMENT_TYPE_NOTGROUP_ID = {
     WORK_REQUEST: 2011,
@@ -251,6 +252,44 @@ export function isICD(document_type_group_id) {
 }
 
 export const packDataFromValues = (fact, values, document_type_id) => {
+    if (document_type_id === DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA) {
+        return {
+            warehouse_id: values.warehouse_id,
+            name: values.name,
+            abbreviation: values.abbreviation,
+            location: values.location,
+            warehouse_type_id: values.warehouse_type_id,
+            node_id: 1,
+            active: values.active === "1" ? true : false,
+            use_central: values.use_central === "1" ? true : false
+        }
+    } else if (document_type_id === DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
+        let last = 0;
+        fact[FACTS.ITEM].items.map(item => {
+            if (item.item_id > last) {
+                last = item.item_id;
+            }
+        });
+        return {
+            item_id: last + 1,
+            internal_item_id: values.internal_item_id,
+            description: values.description,
+            item_type_id: values.item_type_id,
+            item_group_id: values.item_group_id,
+            uom_group_id: values.uom_group_id,
+            active: values.active === "1" ? true : false,
+            remark: values.remark,
+            uom_id_inventory: values.uom_id,
+            default_warehouse_id: 100,
+            quantity_lowest: values.quantity_lowest,
+            quantity_highest: values.quantity_highest,
+            quantity_required: values.quantity_required,
+            minimum_order_quantity: values.minimum_order_quantity,
+            // lead_item: values.lead_item,
+            tolerance_time: values.tolerance_time,
+            accounting_type: values.accounting_type
+        }
+    }
     let document_part = {
         ...DOCUMENT_SCHEMA,
         document_status_id: 1,
@@ -448,20 +487,6 @@ export const packDataFromValues = (fact, values, document_type_id) => {
     } 
 }
 
-export const packDataFromValuesMasterdata = (fact, values, document_type_id) => {
-    if (document_type_id === DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA) {
-        return {
-            warehouse_id: values.warehouse_id,
-            name: values.name,
-            abbreviation: values.abbreviation,
-            location: values.location,
-            warehouse_type_id: values.warehouse_type_id,
-            node_id: 1,
-            active: values.active === "1" ? true : false,
-            use_central: values.use_central  === "1" ? true : false
-        }
-    }
-}
 
 
 function removeEmptyLineItems(line_items) {
@@ -500,8 +525,13 @@ export const createDocumentEmptyRow = () => new Promise((resolve, reject) => {
 });
 
 // POST /document/new/0
-export const createMasterData = (data) => new Promise((resolve, reject) => {
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/warehouses`;
+export const createMasterData = (data, document_type_group_id) => new Promise((resolve, reject) => {
+    if (document_type_group_id === DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA) {
+        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/warehouses`;
+    }
+    if (document_type_group_id === DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
+        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items/new`;
+    }
     axios.post(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             console.log(" I am successful in creating master data ", res)
@@ -645,7 +675,7 @@ export const saveDocument = (document_type_group_id, data, image) => new Promise
 
 // POST /fact/warehouses
 export const saveMasterData = (document_type_group_id, data, image) => new Promise((resolve, reject) => {
-    createMasterData(data)
+    createMasterData(data, document_type_group_id)
         .then(() => { // Get the Document_ID
             console.log(">>>>>>")
             return resolve();
@@ -1423,7 +1453,7 @@ export const approveDocuement = (document_id, obj_body) => new Promise((resolve,
 // POST /auth/token-validation
 export const validateToken = (willRefreshToken) => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/auth/token-validation`;
-    const requestBody = willRefreshToken ? {'refresh_token': true} : null;
+    const requestBody = willRefreshToken ? { 'refresh_token': true } : null;
     axios.post(url, requestBody, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then(res => {
             resolve(res);
