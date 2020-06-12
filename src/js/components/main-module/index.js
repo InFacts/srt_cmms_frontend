@@ -20,9 +20,6 @@ const MainModule = (props) => {
     const loggedIn = useSelector(state => state.token.isLoggedIn); 
 
     const dispatch = useDispatch();
-    useEffect(()=>{
-        dispatch(toModeNone());
-    }, []);
 
     useEffect(()=>{
         dispatch(footerToModeInvisible());

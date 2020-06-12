@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { connect, useSelector, shallowEqual } from 'react-redux'
+import { useSelector, shallowEqual } from 'react-redux'
 
 import FormInput from '../common/form-input'
 import TextInput from '../common/formik-text-input'
@@ -38,7 +38,7 @@ const TopContent = (props) => {
   const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
   const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
 
-  const validateDestWarehouseIDField = (...args) => validateWarehouseIDField("dest_warehouse_id", props.fact, setFieldValue, ...args);
+  const validateDestWarehouseIDField = (...args) => validateWarehouseIDField("dest_warehouse_id", fact, setFieldValue, ...args);
 
   return (
     <div id="blackground-white">
@@ -53,7 +53,7 @@ const TopContent = (props) => {
             </div>
             <div className="grid_3 pull_1">
               <TextInput name='internal_document_id' validate={validateInternalDocumentIDField}
-                searchable={props.toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalDocument" tabIndex="1" />
+                searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalDocument" tabIndex="1" />
             </div>
 
             {/* Document Status  */}
@@ -74,8 +74,8 @@ const TopContent = (props) => {
             <div className="grid_3 pull_1">
               {/* Q: If this is user name in thai, how do we get ID? */}
               <TextInput name="created_by_user_employee_id" validate={validateUserEmployeeIDField}
-                disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
-                searchable={props.toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName" tabIndex="2" />
+                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                searchable={toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName" tabIndex="2" />
             </div>
 
             {/* Created On */}
@@ -100,7 +100,7 @@ const TopContent = (props) => {
             {/* Document date */}
             <div className="grid_3 float-right">
               <DateInput name="document_date"
-                disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="3" />
+                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="3" />
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">วันที่เอกสาร</p>
@@ -114,14 +114,14 @@ const TopContent = (props) => {
               <p className="top-text">เลขที่ใบสั่งซื้อ/เลขที่เอกสารอ้างอิง</p>
             </div>
             <div className="grid_3 pull_0">
-              <TextInput name="po_id" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="4" />
+              <TextInput name="po_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="4" />
             </div>
 
             {/* Dest Warehouse ID */}
             <div className="grid_3 float-right">
               <TextInput name="dest_warehouse_id" validate={validateDestWarehouseIDField}
-                disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
-                searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalInventory" tabIndex="5" />
+                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                searchable={toolbar.mode  !== TOOLBAR_MODE.SEARCH} ariaControls="modalInventory" tabIndex="5" />
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">เลขที่คลัง</p>
@@ -148,14 +148,5 @@ const TopContent = (props) => {
   )
 
 }
-const mapStateToProps = (state) => ({
-  fact: state.api.fact,
-  toolbar: state.toolbar,
-  decoded_token: state.token.decoded_token,
-})
 
-const mapDispatchToProps = {
-
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(TopContent);
+export default TopContent;

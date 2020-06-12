@@ -1,11 +1,12 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import {Switch, Route } from 'react-router-dom';
 
 import Login from './components/signin';
 import ForgotPassword from './components/forgot-password';
 import Main4Module from './components/main-module';
 import MainSpare from './components/main-spare';
 import MainPmt from './components/main-pmt';
+import NotFoundComponent from './components/404-not-found';
 
 // SPARE PAGE
 import ItemMasterData from './components/spare-item-master-data';
@@ -28,10 +29,12 @@ import SpareWarehouse from './components/spare-warehouse';
 import PmtWorkOrder from './components/pmt-work-order';
 import WorkRequestComponent from './components/pmt-work-request';
 import PmtSS101 from './components/pmt-ss101';
+import PmtEquipmentInstallation from './components/pmt-equipment-install';
 
 import Track from './components/track-document';
 const FrontEnd = () => (
-    <>
+    <Switch>
+    {/* Wrap the routes in a Switch which only renders the first matched component. Otherwise you would see multiple components rendered. */}
         <Route exact path="/" component={Login} />
         <Route exact path="/forgot-password" component={ForgotPassword} />
         <Route exact path="/main" component={Main4Module} />
@@ -62,9 +65,13 @@ const FrontEnd = () => (
         <Route exact path="/pmt-work-order" component={PmtWorkOrder} />
         <Route exact path="/ss-101" component={PmtSS101} />
         
+        <Route exact path="/pmt-equipment-installation" component={PmtEquipmentInstallation} />
 
         <Route exact path="/track" component={Track} />
-    </>
+
+        {/* Handle routes that are not found */}
+        <Route component={NotFoundComponent} />
+    </Switch>
 );
 
 export default FrontEnd;
