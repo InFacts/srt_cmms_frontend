@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import TopContent from './top-content';
+import { useFormik , withFormik ,useFormikContext} from 'formik';
 import BottomContent from './bottom-content';
 import { Redirect } from 'react-router-dom';
 import { useDispatch, useSelector  } from 'react-redux';
@@ -11,7 +12,7 @@ import { footerToModeInvisible } from '../../redux/modules/footer.js';
 import useFactInitializer from '../../hooks/fact-initializer';
 import useToolbarInitializer from '../../hooks/toolbar-initializer';
 
-const Track = (props) => {
+const TrackComponent = (props) => {
 
     useFactInitializer();
     useToolbarInitializer(TOOLBAR_MODE.NONE_HOME); // TODO: Needs to find where to go when we press "HOME"!!
@@ -39,4 +40,11 @@ const Track = (props) => {
     )
 }
 
-export default Track;
+const EnhancedTrackComponent = withFormik({
+    mapPropsToValues: (props) => ({ 
+        // document_id: '',
+    })
+})(TrackComponent);
+
+
+export default EnhancedTrackComponent;

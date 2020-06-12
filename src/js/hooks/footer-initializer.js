@@ -165,6 +165,7 @@ const useFooterInitializer = (document_type_id) => {
                 if(isEmpty(err)){
                     if (document_type_id !== DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA) {
                     let data = packDataFromValues(fact, values, document_type_id);
+                    console.log("I AM values :K ", values );
                     console.log("I AM SUBMITTING ", data );
                     saveDocument(document_type_id, data)
                     .then((document_id) => {

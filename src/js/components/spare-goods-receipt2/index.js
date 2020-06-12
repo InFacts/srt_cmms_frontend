@@ -110,7 +110,6 @@ const EnhancedGoodsReceiptComponent = withFormik({
         file: [],
     
         //Field ที่ไม่ได้กรอก
-        
         created_on: '',
         status_name_th: '',
         document_status_id: '',
