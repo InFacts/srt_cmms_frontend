@@ -200,7 +200,7 @@ const useFooterInitializer = (document_type_id) => {
                             dispatch(navBottomSuccess('[PUT]', 'Started Approval Flow Success', ''));
                         })
                         .catch((err) => {
-                            //         //TODO Do something if Submit Fails
+                            //TODO Do something if Submit Fails
                             console.warn("Adding Approval Flow Failed ", err.response);
                             dispatch(navBottomError('[PUT]', 'Adding Approval Flow Failed', err));
                         })
@@ -208,7 +208,8 @@ const useFooterInitializer = (document_type_id) => {
                             console.log(" I submitted and i am now handling click")
                             dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
                         }); 
-                    }else{ // If not have document_id
+                    }
+                    else{ // If not have document_id
                         let data = packDataFromValues(fact, values, document_type_id);
                         console.log("I AM SUBMITTING ", data );
                         saveDocument(document_type_id, data)
