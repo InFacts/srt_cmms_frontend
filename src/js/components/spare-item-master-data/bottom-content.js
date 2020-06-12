@@ -101,7 +101,7 @@ const BottomContent = (props) => {
                 <p className="cancel-default">ชื่อย่อหน่วยนับ </p>
               </div>
               <div className="grid_3 pull_1">
-                <SelectNoChildrenInput name="uom_id" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomIDField} cssStyle={{left: "-160px", top: "10px"}}> 
+                <SelectNoChildrenInput name="uom_id" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomIDField} cssStyle={{ left: "-160px", top: "10px" }}>
                   <option value=''></option>
                   {fact['unit-of-measures'].items.map((list_uoms) => (
                     list_uoms.uom_id === values.uom_id
@@ -118,7 +118,7 @@ const BottomContent = (props) => {
                   <p className="cancel-default float-right">ขั้นต่ำการสั่งซื้อ</p>
                 </div>
                 <div className="grid_2">
-                  <NumberInput step={0.01} name="minimum_order_quantity" tabIndex="7" cssStyle={{left: "60px", top: "-5px"}}
+                  <NumberInput step={0.01} name="minimum_order_quantity" tabIndex="7" cssStyle={{ left: "60px", top: "-5px" }}
                     validate={validateMinimumOrderQuantityField}
                     disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
                   />
@@ -142,7 +142,7 @@ const BottomContent = (props) => {
                   <p className="cancel-default float-right">Lead Time</p>
                 </div>
                 <div className="grid_2">
-                  <NumberInput step={1} name="lead_time" tabIndex="7" validate={validateLeadTimeField} cssStyle={{left: "60px", top: "-5px"}}
+                  <NumberInput step={1} name="lead_time" tabIndex="7" validate={validateLeadTimeField} cssStyle={{ left: "60px", top: "-5px" }}
                     disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
                   />
                 </div>
@@ -159,7 +159,7 @@ const BottomContent = (props) => {
                 </div>
                 <div className="grid_2">
                   <NumberInput step={1} name="tolerance_time" tabIndex="7"
-validate={validateToleranceTimeField} cssStyle={{left: "60px", top: "-5px"}}
+                    validate={validateToleranceTimeField} cssStyle={{ left: "60px", top: "-5px" }}
                     disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
                   />
                 </div>
@@ -174,8 +174,8 @@ validate={validateToleranceTimeField} cssStyle={{left: "60px", top: "-5px"}}
                 <p className="cancel-default">สถานะอะไหล่ </p>
               </div>
               <div className="grid_3 pull_1">
-                <SelectNoChildrenInput name="active" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} 
-                validate={validateActiveField} cssStyle={{left: "-160px", top: "10px"}}>
+                <SelectNoChildrenInput name="active" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  validate={validateActiveField} cssStyle={{ left: "-160px", top: "10px" }}>
                   <option value=''></option>
                   {values.active === 0
                     ?
@@ -190,6 +190,18 @@ validate={validateToleranceTimeField} cssStyle={{left: "60px", top: "-5px"}}
                     </>
                   }
                 </SelectNoChildrenInput>
+              </div>
+              <div className="float-right">
+                <div className="grid_2 cancel-default">
+                  <p className="cancel-default float-right">ประเภทบัญชี</p>
+                </div>
+                <div className="grid_2">
+                  <TextInput name="accounting_type"
+                    disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="2" />
+                </div>
+                <div className="grid_1">
+                  <p className="cancel-default"></p>
+                </div>
               </div>
             </div>
 
@@ -218,8 +230,8 @@ validate={validateToleranceTimeField} cssStyle={{left: "60px", top: "-5px"}}
                 <p className="cancel-default">จำนวนที่ต้องการ</p>
               </div>
               <div className="grid_2 pull_0">
-                <NumberInput step={0.01} name="quantity_required" tabIndex="7" 
-validate={validateQuantityRequiredField} cssStyle={{left: "60px", top: "-5px"}}
+                <NumberInput step={0.01} name="quantity_required" tabIndex="7"
+                  validate={validateQuantityRequiredField} cssStyle={{ left: "60px", top: "-5px" }}
                   disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
                 />
               </div>
@@ -232,7 +244,7 @@ validate={validateQuantityRequiredField} cssStyle={{left: "60px", top: "-5px"}}
               </div>
               <div className="grid_2 pull_0">
                 <NumberInput step={0.01} name="quantity_lowest" tabIndex="7"
-validate={validateQuantityLowestField} cssStyle={{left: "60px", top: "-5px"}}
+                  validate={validateQuantityLowestField} cssStyle={{ left: "60px", top: "-5px" }}
                   disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
                 />
               </div>
@@ -246,12 +258,12 @@ validate={validateQuantityLowestField} cssStyle={{left: "60px", top: "-5px"}}
               </div>
               <div className="grid_2 pull_0">
                 <NumberInput step={0.01} name="quantity_highest" tabIndex="7"
-                validate={validateQuantityHighestField} cssStyle={{left: "60px", top: "-5px"}}
+                  validate={validateQuantityHighestField} cssStyle={{ left: "60px", top: "-5px" }}
                   disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
                 />
               </div>
               <div className="grid_3 float-right">
-                <SelectNoChildrenInput name="name" disabled>
+                <SelectNoChildrenInput name="valuation_method" disabled>
                   {values.description
                     ?
                     <option value=''></option>
@@ -286,20 +298,20 @@ validate={validateQuantityLowestField} cssStyle={{left: "60px", top: "-5px"}}
                 <tbody>
                   {values.goods_onhand.map((goods_onhand, index) => (
                     goods_onhand.warehouse_id !== 0 && goods_onhand.warehouse_id !== 999 &&
-                      <tr>
-                        <th className="edit-padding text-center">{index}</th>
-                        <td className="edit-padding">{goods_onhand.warehouse_id}</td>
-                        <td className="edit-padding">{goods_onhand.warehouse_name}</td>
-                        <td className="edit-padding text-center disable">{goods_onhand.current_unit_count}</td>
-                        <td className="edit-padding text-center disable">{goods_onhand.committed_unit_count}</td>
-                        <td className="edit-padding text-center disable">0</td>  {/* ระหว่างจัดซื้อ */}
-                        <td className="edit-padding text-center disable">{goods_onhand.current_unit_count - goods_onhand.committed_unit_count + 0}</td>  {/* จำนวนสุทธิ */}
-                        <td className="edit-padding text-center disable">{goods_onhand.item_status_description_th}</td>  {/* สถานะเอกอะไหล่ */}
-                        {/* <td className="edit-padding text-center blue font-red">{goods_onhand.broken}</td>
+                    <tr>
+                      <th className="edit-padding text-center">{index}</th>
+                      <td className="edit-padding">{goods_onhand.warehouse_id}</td>
+                      <td className="edit-padding">{goods_onhand.warehouse_name}</td>
+                      <td className="edit-padding text-center disable">{goods_onhand.current_unit_count}</td>
+                      <td className="edit-padding text-center disable">{goods_onhand.committed_unit_count}</td>
+                      <td className="edit-padding text-center disable">0</td>  {/* ระหว่างจัดซื้อ */}
+                      <td className="edit-padding text-center disable">{goods_onhand.current_unit_count - goods_onhand.committed_unit_count + 0}</td>  {/* จำนวนสุทธิ */}
+                      <td className="edit-padding text-center disable">{goods_onhand.item_status_description_th}</td>  {/* สถานะเอกอะไหล่ */}
+                      {/* <td className="edit-padding text-center blue font-red">{goods_onhand.broken}</td>
                         <td className="edit-padding text-center blue">{goods_onhand.send_fix}</td>
                         <td className="edit-padding text-center blue">{goods_onhand.old_part}</td>
                         <td className="edit-padding text-center blue">{goods_onhand.carcass}</td> */}
-                      </tr>
+                    </tr>
                   ))}
                 </tbody>
               </table>
