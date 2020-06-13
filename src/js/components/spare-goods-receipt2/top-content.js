@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffectm, useState } from 'react';
 import { connect, useSelector, shallowEqual } from 'react-redux'
 
 import FormInput from '../common/form-input'
@@ -17,7 +17,7 @@ import {
   DOCUMENT_TYPE_ID, getDocumentbyInternalDocumentID,
   isValidInternalDocumentIDFormat, isValidInternalDocumentIDDraftFormat,
   fetchAttachmentDocumentData, validateEmployeeIDField, validateWarehouseIDField,
-  validateInternalDocumentIDFieldHelper
+  validateInternalDocumentIDFieldHelper, DOCUMENT_STATUS, getUserIDFromEmployeeID
 } from '../../helper';
 import { FACTS } from '../../redux/modules/api/fact.js';
 import { FOOTER_MODE, FOOTER_ACTIONS } from '../../redux/modules/footer.js';
@@ -28,17 +28,29 @@ const TopContent = (props) => {
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
+  const decoded_token = useSelector((state) => ({...state.token.decoded_token}), shallowEqual);
+
+  const [statusDocumentForEdit, setStatusDocumentForEdit] = useState(true);
 
   // Fill Default Forms
   useFillDefaultsOnModeAdd();
-
-
+ 
   const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args)
 
   const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
   const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
 
   const validateDestWarehouseIDField = (...args) => validateWarehouseIDField("dest_warehouse_id", props.fact, setFieldValue, ...args);
+
+  // console.log("DOCUMENT_STATUS", DOCUMENT_STATUS.FAST_TRACK)
+  // console.log("WHO CREATE DOCUMENT", getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id))
+  // console.log("WHO LOGIN", decoded_token.id);
+  // console.log("values", values.status_name_th)
+  // console.log("statusDocumentForEdit", statusDocumentForEdit)
+  const checkBooleanForEdit = values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.FAST_TRACK 
+  && getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id
+  const checkForEdit = checkBooleanForEdit === true ? false : true;
+  console.log(">>>>>", props.toolbar.mode === TOOLBAR_MODE.SEARCH && checkForEdit)
 
   return (
     <div id="blackground-white">
@@ -58,7 +70,6 @@ const TopContent = (props) => {
 
             {/* Document Status  */}
             <div className="grid_3 float-right">
-              {console.log("--> values -->", values)}
               <TextInput name="status_name_th" disabled />
             </div>
             <div className="grid_2 float-right">

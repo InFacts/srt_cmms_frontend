@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { shallowEqual, useSelector } from 'react-redux'
 import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
 import Files from '../common/files2'
@@ -9,57 +9,99 @@ import DateTimeInput from '../common/formik-datetime-input';
 import SelectNoChildrenInput from '../common/formik-select-no-children';
 import { useFormik, withFormik, useFormikContext } from 'formik';
 import Label from '../common/form-label'
-
-
+import PopupModalNoPart from '../common/popup-modal-nopart'
+import TableLineItem from './table-line-item.js';
+import TableEquipment from './table-equipment.js';
 
 const BottomContent = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
-    const factDistricts = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
-    const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
-    const factStations = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
-    const { values } = useFormikContext();
+    const factItems = useSelector((state) => ({ ...state.api.fact.items }), shallowEqual);
+    const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
+
+    const [lineNumber, setLineNumber] = useState('');
+    const [lineNumberEquipment, setLineNumberEquipment] = useState('');
+
+    {/* === Tab broken_content  === */}
+     const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => {
+        //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
+        if (values.line_items[index].internal_item_id === internal_item_id) {
+            return;
+        }
+        if (internal_item_id === "") {
+            setFieldValue(fieldName + `.description`, '', false);
+            setFieldValue(fieldName + `.quantity_fix`, '', false);
+            setFieldValue(fieldName + `.quantity_salvage`, '', false);
+            setFieldValue(fieldName + `.list_uoms`, [], false);
+            setFieldValue(fieldName + `.uom_id`, '', false);
+            return;
+        }
+        let items = factItems.items;
+        let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+        console.log(item)
+        if (item) {
+            setFieldValue(fieldName + `.description`, `${item.description}`, false);
+            setFieldValue(fieldName + `.quantity_fix`, '0.00', false);
+            setFieldValue(fieldName + `.quantity_salvage`, '0.00', false);
+            setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+            setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+            return;
+        } else {
+            return 'Invalid Number ID';
+        }
+    }
+
+    {/* === Tab equipment_content  === */}
+    {/*const validateLineNumberInternalItemIDFieldEquipment = (fieldName, internal_item_id, index) => {
+        //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
+        if (values.line_items[index].internal_item_id === internal_item_id) {
+            return;
+        }
+        if (internal_item_id === "") {
+            setFieldValue(fieldName + `.description`, '', false);
+            setFieldValue(fieldName + `.quantity`, '', false);
+            setFieldValue(fieldName + `.uom_id`, '', false);
+            setFieldValue(fieldName + `.list_uoms`, [], false);
+            setFieldValue(fieldName + `.remark`, '', false);
+            return;
+        }
+        let items = factItems.items;
+        let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+        console.log(item)
+        if (item) {
+            setFieldValue(fieldName + `.description`, item.description, false);
+            setFieldValue(fieldName + `.quantity`, '0.00', false);
+            setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+            setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+            setFieldValue(fieldName + `.remark`, item.remark , false);
+            return;
+        } else {
+            return 'Invalid Number ID';
+        }
+    }*/}
+
     return (
         <div id="blackground-gray">
             <div className="container_12 clearfix">
 
                 {/* === Tab broken_content  === */}
                 <div id="broken_content" className="tabcontent">
-                    <table className="table-many-column mt-3">
-                        <thead>
-                            <tr>
-                                <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
-                                <th className="font" style={{ minWidth: "130px" }}>เลขที่อะไหล่</th>
-                                <th className="font" style={{ minWidth: "368px" }}>รายละเอียด</th>
-                                <th className="font" style={{ minWidth: "130px" }}>เลขที่สินทรัพย์</th>
+                    <TableLineItem line_items={values.line_items}
+                        validateLineNumberInternalItemIDField={validateLineNumberInternalItemIDField}
+                        // validateLineNumberQuatityItemIDField={validateLineNumberQuatityItemIDField}
+                        // validateLineNumberPerUnitPriceItemIDField={validateLineNumberPerUnitPriceItemIDField}
+                        setLineNumber={setLineNumber}
+                    />
 
-                                <th className="font text-center" style={{ minWidth: "80px" }}>หน่วยนับ</th>
+                    <div className="grid_12" style={{ marginTop: "10px" }}>
+                        {/* Remark */}
+                        <Label>หมายเหตุ</Label>
+                        <div className="grid_11 alpha omega">
+                            <TextareaInput name="remark"
+                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                        </div>
 
-                                <th className="font text-center" style={{ minWidth: "80px" }}>ของเสีย</th>
-                                <th className="font text-center" style={{ minWidth: "80px" }}>ซาก</th>
-                                <th className="font text-center" style={{ minWidth: "80px" }}>ของเก่าพร้อมใช้งาน</th>
-
-                                <th className="font text-center" style={{ minWidth: "80px" }}>จำนวนทั้งหมด</th>
-                                <th className="font text-center" style={{ minWidth: "200px" }}>หมายเหตุ</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th className="edit-padding text-center"></th>
-                                <td className="edit-padding"></td>
-                                <td className="edit-padding"></td>
-                                <td className="edit-padding"></td>
-
-                                <td className="edit-padding text-center"></td>
-
-                                <td className="edit-padding text-center"></td>
-                                <td className="edit-padding text-center"></td>
-                                <td className="edit-padding text-right"></td>
-
-                                <td className="edit-padding text-center"></td>
-                                <td className="edit-padding text-center"></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                        <div className="clear" />
+                    </div>
                 </div>
 
                 <div id="related_parties_content" className="tabcontent">
@@ -76,7 +118,7 @@ const BottomContent = (props) => {
                                 disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
-                        <div class="clear" />
+                        <div className="clear" />
 
                         {/* fixer_name  */}
                         <Label>ดำเนินการแก้ไขชื่อ</Label>
@@ -85,7 +127,7 @@ const BottomContent = (props) => {
                                 disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
-                        <div class="clear" />
+                        <div className="clear" />
 
 
                         {/* member_1  */}
@@ -95,7 +137,7 @@ const BottomContent = (props) => {
                                 disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
-                        <div class="clear" />
+                        <div className="clear" />
 
                         {/* member_2  */}
                         <Label>รายชื่อเพื่อนร่วมงาน</Label>
@@ -104,7 +146,7 @@ const BottomContent = (props) => {
                                 disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
-                        <div class="clear" />
+                        <div className="clear" />
 
                         {/* member_3  */}
                         <Label>รายชื่อเพื่อนร่วมงาน</Label>
@@ -113,37 +155,19 @@ const BottomContent = (props) => {
                                 disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
-                        <div class="clear" />
+                        <div className="clear" />
                     </div>
 
                 </div>
 
-                <div id="equipment_content" className="tabcontent">
-                    <table className="table-many-column mt-3">
-                        <thead>
-                            <tr>
-                                <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
-                                <th className="font" style={{ minWidth: "130px" }}>เลขที่อะไหล่</th>
-                                <th className="font" style={{ minWidth: "368px" }}>รายละเอียด</th>
-                                <th className="font text-center" style={{ minWidth: "130px" }}>จำนวน</th>
-
-                                <th className="font text-center" style={{ minWidth: "130px" }}>หน่วยนับ</th>
-                                <th className="font" style={{ minWidth: "300px" }}>หมายเหตุ</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th className="edit-padding text-center"></th>
-                                <td className="edit-padding"></td>
-                                <td className="edit-padding"></td>
-                                <td className="edit-padding"></td>
-
-                                <td className="edit-padding text-center"></td>
-                                <td className="edit-padding text-center"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                {/* <div id="equipment_content" className="tabcontent">
+                    <TableEquipment line_items={values.line_equipments}
+                        validateLineNumberInternalItemIDFieldEquipment={validateLineNumberInternalItemIDFieldEquipment}
+                        // validateLineNumberQuatityItemIDField={validateLineNumberQuatityItemIDField}
+                        // validateLineNumberPerUnitPriceItemIDField={validateLineNumberPerUnitPriceItemIDField}
+                        setLineNumberEquipment={setLineNumberEquipment}
+                    />
+                </div> */}
 
                 <div id="attachment_content" className="tabcontent">
                     <div className="container_12 ">
@@ -154,6 +178,12 @@ const BottomContent = (props) => {
                 <div id="table_status_content" className="tabcontent">
                     <TableStatus bodyTableStatus={values.step_approve} />
                 </div>
+
+                {/* PopUp ค้นหาอะไหล่ broken_content */}
+                <PopupModalNoPart keyname='line_items' lineNumber={lineNumber} nameModal="modalNoPart" />
+
+                {/* PopUp ค้นหาอะไหล่ equipment_content */}
+                <PopupModalNoPart keyname='line_equipments' lineNumber={lineNumberEquipment} nameModal="modalNoPart2" />
 
             </div>
         </div>

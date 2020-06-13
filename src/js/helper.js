@@ -38,6 +38,7 @@ export const DOCUMENT_TYPE_NOTGROUP_ID = {
     WORK_ORDER: 2021,
     WORK_ORDER_PM: 2031,
     SS101: 2041,
+    MAINTENANT_ITEM: 207,
 }
 
 export const ICD_DOCUMENT_TYPE_GROUP_IDS = [
@@ -1345,7 +1346,33 @@ export const validateInternalDocumentIDFieldHelper = (document_type_group_id, to
                 }
 
 
-            } else {
+            } 
+            // else if (document_type_group_id === DOCUMENT_TYPE_ID.MAINTENANT_ITEM) {
+            //     console.log("i know i am in maintenant item!!")
+            //     if ((toolbar.mode === TOOLBAR_MODE.SEARCH ||
+            //         toolbar.mode === TOOLBAR_MODE.NONE ||
+            //         toolbar.mode === TOOLBAR_MODE.NONE_HOME)
+            //         && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
+            //         console.log("validateInternalDocumentIDField:: I got document ID ", data.document.document_id)
+            //         setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
+            //         validateField("created_by_user_employee_id");
+            //         validateField("created_by_admin_employee_id");
+            //         return resolve(null);
+
+            //     } else { //If Mode add, need to error duplicate Document ID
+            //         // setFieldValue('document_id', '', false); 
+            //         if (values.document_id || footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve
+            //             console.log("i am in mode add, saved and wanting to approve")
+            //             error = '';
+            //         } else {
+            //             console.log("I AM DUPLICATE")
+            //             error = 'Duplicate Document ID';
+            //         }
+            //     }
+
+
+            // }  
+            else {
                 console.log("IDK WHERE I AM", document_type_group_id)
             }
 

@@ -166,7 +166,6 @@ const BottomContent = (props) => {
           </div>
 
           <div id="attachment_content" className="tabcontent">
-            {console.log("values -----", values.file)}
             <Files name="file[0].filename"
               name="file[0].filename"
               desrciptionFiles={props.actionMode === TOOLBAR_MODE.SEARCH ? values.desrciption_files : values.file}
@@ -193,7 +192,7 @@ const BottomContent = (props) => {
 
         </div>
         {/* PopUp ค้นหาอะไหล่ MODE ADD */}
-        <PopupModalNoPart keyname='line_items' lineNumber={lineNumber} />
+        <PopupModalNoPart keyname='line_items' lineNumber={lineNumber} nameModal="modalNoPart" />
       </div>
     </div >
   )

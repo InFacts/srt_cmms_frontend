@@ -330,7 +330,6 @@ const BottomContent = (props) => {
 
             {/* === One Column   ==== */}
             <div className="grid_12">
-
                 {/* auditor_name  */}
                 <Label>ผู้ควบคุมตรวจสอบชื่อ</Label>
                 <div className="grid_4 alpha omega">
@@ -452,6 +451,7 @@ const BottomContent = (props) => {
             <PopupModalNoPart 
             keyname='loss_line_items'
             lineNumber={lineNumber} 
+            nameModal="modalNoPart" 
             />
         </div>
 
