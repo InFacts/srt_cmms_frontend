@@ -57,7 +57,6 @@ const GoodsReturnComponent = (props) => {
         <>
         {!loggedIn ? <Redirect to="/" /> : null}
         <form>
-        {/* <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) handleSubmit(e) }}> */}
             <TopContent />
             <TabBar tabNames={tabNames} initialTabID="listItem">
                 <BottomContent />
@@ -65,7 +64,6 @@ const GoodsReturnComponent = (props) => {
             <Footer />
         </form>
         </>
-
     )
 }
 const initialLineItem = {
