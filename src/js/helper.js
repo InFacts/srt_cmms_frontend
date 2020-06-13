@@ -1424,6 +1424,14 @@ export const validateWarehouseIDField = (fieldName, fact, setFieldValue, warehou
     }
 }
 
+export const validatedataDocumentField = (fieldName, setFieldValue, name) => {
+    console.log(name, "name")
+    if (!name) {
+      return 'Required'
+    }
+    setFieldValue(fieldName, name, false);
+  };
+
 // Approve a Document
 //   1. GET /approval/{document_id}/latest/step : getLatestApprovalStep()
 //   2. POST /approval/{document_id}/approval_process_id/approve : approveDocuement(document_id, objBody)
