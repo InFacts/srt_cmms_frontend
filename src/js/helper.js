@@ -648,25 +648,22 @@ const mutateDataFillDocumentID = (object, document_id) => {
 // Save a Document Draft (without getting beginning approval flow)
 //   1. POST /document/new/0: createDocumentEmptyRow()
 //   2. PUT /document/{document_id}/{document_type_group_id}: editDocument(document_id, document_type_group_id, data)
-export const saveDocument = (document_type_group_id, data, image) => new Promise((resolve, reject) => {
+export const saveDocument = (document_type_group_id, data, files) => new Promise((resolve, reject) => {
     createDocumentEmptyRow()
         .then(({ document_id, internal_document_id, status }) => { // Get the Document_ID
             editDocument(document_id, document_type_group_id, mutateDataFillDocumentID(data, document_id))
                 .then(() => {
-                    return resolve(document_id);
-                    // let imageBody = {file: image}
-                    // uploadAttachmentDocumentData(document_id, imageBody)
-                    // .then(() => {
-                    //     return resolve(document_id);
-                    // })
-                    // .catch((err) => {
-                    //     return reject(err);
-                    // });
+                    uploadAttachmentDocumentData(document_id, files)
+                        .then(() => {
+                            return resolve(document_id, internal_document_id, status);
+                        })
+                        .catch((err) => {
+                            return reject(err);
+                        });
                 })
                 .catch((err) => {
                     return reject(err);
                 });
-
         })
         .catch((err) => {
             reject(err)
@@ -721,33 +718,45 @@ export const fetchStepApprovalDocumentData = (document_id) => new Promise((resol
 export const fetchAttachmentDocumentData = (document_id) => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${document_id}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-        .then((desrciption_files) => {
-            resolve(desrciption_files.data);
+        .then((res) => {
+            resolve(res);
         })
         .catch((err) => {
             reject(err)
         });
 });
 
-// POST Attachment after search Document (document_id changes)
-export const uploadAttachmentDocumentData = (document_id, imageBody) => new Promise((resolve, reject) => {
-    console.log("imageBody....", imageBody.filename)
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${document_id}`;
-    axios.post(url, imageBody.filename, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-        .then((desrciption_files) => {
-            resolve(desrciption_files.data);
+// POST Attachment after SaveDocument (document_id changes)
+export const uploadAttachmentDocumentData = (document_id, files) => new Promise((resolve, reject) => {
+    var formData = new FormData();
+    files.map((file) => { formData.append('file', file); })
+    let url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${document_id}`
+    axios.post(url, formData,
+        { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((res) => {
+            resolve(res);
+        }).catch(function (err) {
+            reject(err);
         })
-        .catch((err) => {
-            reject(err)
-        });
 });
 
 // Download Attachment
+// important -> responseType: 'blob'
 export const downloadAttachmentDocumentData = (document_id, attachment_id) => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${document_id}/download/${attachment_id}`;
-    axios.post(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-        .then((desrciption_files) => {
-            resolve(desrciption_files.data);
+    axios.get(url, { responseType: 'blob', headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        // 1. Convert the data into 'blob'    
+        .then((response) => {
+            // 2. Create blob link to download
+            console.log("response", response)
+            let url = window.URL.createObjectURL(new Blob([response.data]));
+            console.log("url", url)
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `sample.${(response.data.type).split("/")[1]}`);
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
         })
         .catch((err) => {
             reject(err)
@@ -1166,7 +1175,6 @@ export const validateInternalDocumentIDFieldHelper = (document_type_group_id, to
                     if (data.internal_document_id === internal_document_id) { // If input document ID exists
                         if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
                             && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
-                            // fetchAttachmentDocumentData(data.document_id)
                             console.log("validateInternalDocumentIDField:: I got document ID ", data.document_id)
                             setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
 
@@ -1216,7 +1224,6 @@ export const validateInternalDocumentIDFieldHelper = (document_type_group_id, to
                     if (data.document.internal_document_id === internal_document_id) { // If input document ID exists
                         if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
                             && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
-                            // fetchAttachmentDocumentData(data.document_id)
                             console.log("validateInternalDocumentIDField:: I got document ID ", data.document.document_id)
                             setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
                             validateField("src_warehouse_id");
@@ -1254,7 +1261,6 @@ export const validateInternalDocumentIDFieldHelper = (document_type_group_id, to
                     console.log("i am not ICD and toolbar mode in ", toolbar)
                     if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
                         && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
-                        // fetchAttachmentDocumentData(data.document_id)
                         console.log("validateInternalDocumentIDField:: I got document ID ", data.document.document_id)
                         setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
                         // validateField("dest_warehouse_id");
@@ -1291,7 +1297,6 @@ export const validateInternalDocumentIDFieldHelper = (document_type_group_id, to
                     console.log("i am not ICD and toolbar mode in ", toolbar)
                     if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
                         && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
-                        // fetchAttachmentDocumentData(data.document_id)
                         console.log("validateInternalDocumentIDField:: I got document ID ", data.document.document_id)
                         setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
                         // validateField("dest_warehouse_id");

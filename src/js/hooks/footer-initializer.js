@@ -159,17 +159,15 @@ const useFooterInitializer = (document_type_id) => {
     // Handle Click Save
     useEffect(() => {
         if (footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) {
-            console.log(">>>>>>>>>>>>>>")
             validateForm()
                 .then((err) => {
-                    console.log("THIS IS ErR I GET ", err)
                     dispatch(navBottomSending('[API]', 'Sending ...', ''));
                     setErrors(err);
                     if (isEmpty(err)) {
                         let data = packDataFromValues(fact, values, document_type_id);
                         console.log("I AM SUBMITTING ", data);
                         if (document_type_id !== DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA && document_type_id !== DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
-                            saveDocument(document_type_id, data)
+                            saveDocument(document_type_id, data, values.file)
                                 .then((document_id) => {
                                     setFieldValue('document_id', document_id, true);
                                     dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
@@ -205,7 +203,6 @@ const useFooterInitializer = (document_type_id) => {
         if (footer.requiresHandleClick[FOOTER_ACTIONS.SEND]) {
             // Move Dispatch to `finally` in the async functions
             // dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
-
             validateForm()
                 .then((err) => {
                     dispatch(navBottomSending('[API]', 'Sending ...', ''));
@@ -227,8 +224,8 @@ const useFooterInitializer = (document_type_id) => {
                                 });
                         } else { // If not have document_id
                             let data = packDataFromValues(fact, values, document_type_id);
-                            console.log("I AM SUBMITTING ", data);
-                            saveDocument(document_type_id, data)
+                            console.log("I AM SUBMITTING ", data, values.file);
+                            saveDocument(document_type_id, data, values.file)
                                 .then((document_id) => {
                                     setFieldValue('document_id', document_id, true);
                                     startDocumentApprovalFlow(document_id)

@@ -51,14 +51,12 @@ const useDocumentSubscription = () => {
     
     // Get  attachment when values.document_id changes
     useEffect(() => {
-        if(values.document_id  && ! footer.requiresHandleClick[FOOTER_ACTIONS.SEND]) { // If not an empty string AND isn't handlingSEND process
-        console.log("fetchAttachmentDocumentData: SEND/Doc ID Changed")
+        if(values.document_id  && ! footer.requiresHandleClick[FOOTER_ACTIONS.SEND]) { // If not an empty string AND isn't handlingSEND process)
         // Start Axios Get step_approve and attachment By nuk
         fetchAttachmentDocumentData(values.document_id)
-        .then((desrciption_files) => {
+        .then((data_files) => {
             // Setup value From Attachment
-            setFieldValue("desrciption_files_length", desrciption_files.results.length, false);
-            setFieldValue("desrciption_files", desrciption_files.results, false);
+            setFieldValue("files_in_database", data_files.data.results, false);
         });
         }
     }, [values.document_id, footer.requiresHandleClick[FOOTER_ACTIONS.SEND]]);

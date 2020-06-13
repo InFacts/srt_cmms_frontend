@@ -12,14 +12,14 @@ import Table from '../common/table';
 import PopupModalNoPart from '../common/popup-modal-nopart'
 
 import Files from '../common/files2'
-
+import { shallowEqual, useSelector } from 'react-redux'
 import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
 import { useFormikContext } from 'formik';
 
 import '../../../css/table.css';
 
 const BottomContent = (props) => {
-
+  const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const [lineNumber, setLineNumber] = useState('');
 
   const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
@@ -133,43 +133,6 @@ const BottomContent = (props) => {
     }
   }
 
-  // For Down File in Attactment by Nuk
-  const HandleDownload = () => {
-    axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/1/download/1`,
-      { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-      .then((response) => {
-        console.log("response", response)
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        console.log("url", url)
-        const link = document.createElement('a');
-        console.log("link", link)
-        link.href = url;
-        link.setAttribute('download', 'Screen Shot 2563-05-28 at 20.11.15.png');
-        document.body.appendChild(link);
-        link.click();
-      }).catch(function (err) {
-        console.log(err);
-      })
-  };
-
-  // const HandleUpLoad = () => {
-  //   console.log("<<<<<<")
-  //   const data = {
-  //     file: values.file
-  //   }
-  //   axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/1`, data,
-  //     { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-  //     .then((res) => {
-  //       console.log("response", res)
-  //     }).catch(function (err) {
-  //       console.log(err);
-  //     })
-  // };
-
-  const HandleDeleteFile = () => {
-    setFieldValue('file', [], false);
-  };
-
   return (
     <div id="blackground-gray">
       <div className="container_12 clearfix">
@@ -206,23 +169,7 @@ const BottomContent = (props) => {
 
           <div id="attachment_content" className="tabcontent">
             {console.log("values -----", values.file)}
-            <Files name="file[0].filename"
-              name="file[0].filename"
-              desrciptionFiles={props.actionMode === TOOLBAR_MODE.SEARCH ? values.desrciption_files : values.file}
-              desrciptionFilesLength={props.actionMode === TOOLBAR_MODE.SEARCH ? values.desrciption_files_length : values.file.length}
-              disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-              disabledForModeAdd={props.actionMode === TOOLBAR_MODE.ADD}
-              HandleDownload={HandleDownload}
-              HandleDeleteFile={HandleDeleteFile} />
-            {/* <Files 
-              name="file[0].filename"
-              desrciptionFiles={props.actionMode === TOOLBAR_MODE.SEARCH ? values.desrciption_files : values.file}
-              desrciptionFilesLength={props.actionMode === TOOLBAR_MODE.SEARCH ? values.desrciption_files_length : values.file.length}
-              disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-              disabledForModeAdd={props.actionMode === TOOLBAR_MODE.ADD}
-              HandleDownload={HandleDownload}
-              HandleDeleteFile={HandleDeleteFile}
-            /> */}
+            <Files />
           </div>
 
           <div id="table_status_content" className="tabcontent">
