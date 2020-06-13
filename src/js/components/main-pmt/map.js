@@ -108,7 +108,7 @@ class Map extends React.Component {
                             <h4 className="head-title" style={{ color: "black" }}>ระบบบริหารงานซ่อมบำรุง - PMT</h4>
                             <div style={{ height: "350px" }} id="blackground-white">
                                 <Link to="/pmt-work-request"><img alt='some value' src={Oneone} className="Pone-one" /></Link>
-                                <Link to="/assmas"><img alt='some value' src={Onetwo} className="Pone-two" /></Link>
+                                <Link to="/pmt-equipment-master"><img alt='some value' src={Onetwo} className="Pone-two" /></Link>
                                 <Link to="/plan"><img alt='some value' src={Onethree} className="Pone-three" /></Link>
                                 <img alt='some value' src={Arrow1} className="Parrow1" />
                                 <img alt='some value' src={Text1} className="Ptext1" />

@@ -32,8 +32,10 @@ export const DOCUMENT_TYPE_ID = {
 
     EQUIPMENT_INSTALLATION: 206,
 
+    // These needs to change later!!! since Doc Type Group ID will need to be used in other API's
     WAREHOUSE_MASTER_DATA: 1,
     ITEM_MASTER_DATA: 2,
+    EQUIPMENT_MASTER_DATA: 3,
     
 }
 export const DOCUMENT_TYPE_NOTGROUP_ID = {
