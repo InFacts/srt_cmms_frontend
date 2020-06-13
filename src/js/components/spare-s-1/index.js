@@ -18,6 +18,7 @@ import useToolbarInitializer from '../../hooks/toolbar-initializer';
 import useFactInitializer from '../../hooks/fact-initializer';
 import useTokenInitializer from '../../hooks/token-initializer';
 import useFooterInitializer from '../../hooks/footer-initializer';
+import useExportPdfInitializer from '../../hooks/export-pdf-initializer';
 
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
@@ -30,8 +31,9 @@ const GoodsReturnComponent = (props) => {
         {id:"listItem", name:"รายการ"},
     ]);
 
-    useToolbarInitializer(TOOLBAR_MODE.NONE_HOME);
+    useToolbarInitializer(TOOLBAR_MODE.SEARCH);
     useFactInitializer();
+    useExportPdfInitializer();
 
     return (
         <>
