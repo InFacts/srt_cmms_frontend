@@ -29,6 +29,7 @@ import SpareWarehouse from './components/spare-warehouse';
 import PmtWorkOrder from './components/pmt-work-order';
 import WorkRequestComponent from './components/pmt-work-request';
 import PmtSS101 from './components/pmt-ss101';
+import PmtMaintenantItem from './components/pmt-maintenant-item';
 import PmtEquipmentInstallation from './components/pmt-equipment-install';
 import PmtEquipmentMasterData from './components/pmt-equipment-master';
 
@@ -58,13 +59,12 @@ const FrontEnd = () => (
         <Route exact path="/report-s-1" component={SpareS1} />
         <Route exact path="/warehouse" component={SpareWarehouse} />
 
-        {/* PMT PAGE */}
-        <Route exact path="/main-pmt" component={MainPmt} />
-
         {/* PMT Routes */}
+        <Route exact path="/main-pmt" component={MainPmt} />
         <Route exact path="/pmt-work-request" component={WorkRequestComponent} />
         <Route exact path="/pmt-work-order" component={PmtWorkOrder} />
         <Route exact path="/ss-101" component={PmtSS101} />
+        <Route exact path="/maitenant-item" component={PmtMaintenantItem} />
         
         <Route exact path="/pmt-equipment-master" component={PmtEquipmentMasterData} />
         <Route exact path="/pmt-equipment-installation" component={PmtEquipmentInstallation} />

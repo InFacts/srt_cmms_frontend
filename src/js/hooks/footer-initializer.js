@@ -37,7 +37,7 @@ const useFooterInitializer = (document_type_id) => {
     const footer = useSelector((state) => ({ ...state.footer }));
     const fact = useSelector((state) => ({ ...state.api.fact }));
 
-    const { values, submitForm, validateForm, setFieldValue, setErrors } = useFormikContext();
+    const { values, touched, setFieldTouched, setTouched, submitForm, validateForm, setFieldValue, setErrors } = useFormikContext();
     useTokenInitializer();
 
     //Handle Document Status TODO: move it out of footer!!
@@ -155,14 +155,41 @@ const useFooterInitializer = (document_type_id) => {
         }
     }, [footer.requiresHandleClick[FOOTER_ACTIONS.BACK]]);
 
+    const isObject = (obj) =>
+  obj !== null && typeof obj === 'object';
 
+     function setNestedObjectValues(
+        object,
+        value,
+        visited = new WeakMap(),
+        response = {}
+      ){
+        for (let k of Object.keys(object)) {
+          const val = object[k];
+          if (isObject(val)) {
+            if (!visited.get(val)) {
+              visited.set(val, true);
+              // In order to keep array values consistent for both dot path  and
+              // bracket syntax, we need to check if this is an array so that
+              // this will output  { friends: [true] } and not { friends: { "0": true } }
+              response[k] = Array.isArray(val) ? [] : {};
+              setNestedObjectValues(val, value, visited, response[k]);
+            }
+          } else {
+            response[k] = value;
+          }
+        }
+      
+        return response;
+      }
     // Handle Click Save
     useEffect(() => {
         if (footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) {
             console.log(">>>>>>>>>>>>>>")
             validateForm()
                 .then((err) => {
-                    console.log("THIS IS ErR I GET ", err)
+                    console.log("THIS IS ErR I GET ", err, " i dont think it is touched ", touched)
+                    setTouched(setNestedObjectValues(values, true))
                     dispatch(navBottomSending('[API]', 'Sending ...', ''));
                     setErrors(err);
                     if (isEmpty(err)) {
@@ -208,6 +235,7 @@ const useFooterInitializer = (document_type_id) => {
 
             validateForm()
                 .then((err) => {
+                    setTouched(setNestedObjectValues(values, true))
                     dispatch(navBottomSending('[API]', 'Sending ...', ''));
                     setErrors(err);
                     if (isEmpty(err)) {
