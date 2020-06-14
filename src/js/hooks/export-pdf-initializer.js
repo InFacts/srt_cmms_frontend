@@ -22,11 +22,11 @@ const useExportPdfInitializer = () => {
     // Handle Toolbar Mode
     useEffect(() => {
         // let document_id = values.src_warehouse_id;
-        let document_item = values.line_items;
+        let document_item = values.internal_document_id;
         console.log(values)
         let routeLocation = getRouteLocation();
         console.log(routeLocation)
-        if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF] && document_item && document_item.length > 0) {
+        if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF] && document_item) {
             exportPDF(routeLocation, values).then(function (htmlCode) {
                 var w = window.open();
                 w.document.write(htmlCode);
@@ -181,7 +181,7 @@ const createCategory = (item) =>
     <h2  style=" text-align:center ; vertical-align: middle;align-items:center">(${item})</h2>
 `
 
-const createPageS1Header = (category_group, date, source,index,img) => `
+const createPageS1Header = (category_group, date, source, index, img) => `
 <div class="invoice-box">
     <br></br>
     <img src=${img} style="display: block;margin-left: auto;margin-right: auto;width: 20%;" >
@@ -212,15 +212,1299 @@ const createPageS1Header = (category_group, date, source,index,img) => `
 </div>
 `
 
-const createPageS1Category = (index,category) => `
+const createPageS1Category = (index, category) => `
 <div class="invoice-box" style=" justify-content:center ;align-items:center">
     <h1 style=" text-align:center ; vertical-align: middle;align-items:center;margin-top: 50%;">${index}. (${category})</h1>
 </div>
 `
 
 
+
+const createHtmlS16_46 = (table) => `
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+      @page {
+        size: A4;
+        margin:0 ;
+      }
+     .invoice-box {
+           width: 210mm;
+           height: 29.7cm;
+           margin: 0 auto;
+           margin-bottom: 0.5cm;
+           border: 0.1px solid #eee;
+           font-size: 16px;
+           font-family: 'AngsanaUPC', 'MS Sans Serif';
+           
+      }
+      .invoice-box table {
+          width: 95%;
+          margin: auto;
+          border: 0px solid #eee;
+      }
+
+      .invoice-box table td {
+           vertical-align: top;
+      }
+
+      .invoice-box table tr.heading td {
+           background: #eee;
+           border: 1px solid #ddd;
+           font-weight: bold;
+      }
+
+      .invoice-box table tr.item td {
+           border: 1px solid #eee;
+      }
+
+      .invoice-box table tr.item2 td {
+           border-bottom: 0px solid #eee;
+      }
+
+
+      .invoice-box p {
+           width: 95%;
+      }
+
+      .invoice-box h2 {
+          margin-top: 1cm;
+          margin-right: 0;
+          margin-left:0;
+          margin-bottom: 0;
+      }
+
+      .invoice-box h3 {
+           margin: 0;
+      }
+
+      @media print {
+        html, body {
+          width: 210mm;
+          height: 297mm;  
+          margin-bottom: 0;
+          margin-left: 0;
+          margin-right: 0;
+          margin-top: 0;
+        }
+      }
+
+      .invoice-box pr {
+        float: right;
+        margin-right: 2.5%;
+      }
+
+      .invoice-box pl {
+        float: left;
+        margin-left: 2.5%;
+      }
+
+      .invoice-box pc {
+        float: center;
+        
+      }
+
+      .invoice-box table tr.top table td.title {
+           
+           line-height: 45px;
+           color: #333;
+      }
+
+      .invoice-box pp {
+        margin-top: 0.5cm;
+        float: right;
+        margin: 0;
+        width: 15%;
+      }
+
+
+
+      .invoice-box table tr.information table td {
+           padding-bottom: 40px;
+      }
+
+    </style>
+  </head>
+  <body>
+    ${table}
+  </body>
+</html>
+`;
+
+const createRowS16_46 = (item) =>
+    `<tr class="item">
+  <td style=" text-align:center ; vertical-align: middle;">${item.item_id}</td>
+  <td style=" text-align:center ; vertical-align: middle;">${item.internal_item_id}</td>
+  <td style=" text-align:left ; vertical-align: middle;">${item.description}</td>
+  <td style=" text-align:center ; vertical-align: middle;">${item.price_quantity}</td>
+  <td style=" text-align:center ; vertical-align: middle;">${item.unit}</td>
+  <td style=" text-align:center ; vertical-align: middle;">${item.quantity}</td>
+  <td style=" text-align:center ; vertical-align: middle;">${item.price}</td>
+  <td style=" text-align:center ; vertical-align: middle;">${item.type}</td>
+</tr>`
+    ;
+
+const createTableS16_46 = (head, rows, content, total) => `
+<table cellpadding="0" cellspacing="0" >
+  <tr class="heading">
+    <td  style="width: 4%; text-align:center ; vertical-align: middle; border: 0px solid #ffffff;background:#ffffff" ></td>
+    <td  style="width: 15%; text-align:center ; vertical-align: middle; border: 0px solid #ffffff;background:#ffffff"></td>
+    <td  style="width: 25%; text-align:center ; vertical-align: middle; border: 0px solid #ffffff;background:#ffffff"></td>
+    <td  style="width: 8%; text-align:center; vertical-align: middle;" colSpan="2">ประเภทบัญชี</td>
+    <td  style="width: 5%; text-align:center; vertical-align: middle;" >รหัสความรับผิดชอบ</td>
+    <td style=" text-align:center; vertical-align: middle;" >เลขที่ งทป. คสง. งกน. รอฯ</td>   
+    <td style=" text-align:center; vertical-align: middle;" >รหัส</td>  
+  </tr>
+  <tr class="item">
+    <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;"></td>
+    <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;"></td>
+    <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"></td>
+    <td style=" text-align:center ; vertical-align: middle;" colSpan="2">${content.AccountType}</td>
+    <td style=" text-align:center ; vertical-align: middle;" >${content.ResponsibilityCode}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${content.Number}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${content.Code}</td>
+  </tr>
+  <tr class="heading">
+    <td  style="width: 4%; text-align:center ; vertical-align: middle;"  rowspan="2">${head.item_id}</td>
+    <td  style="width: 15%; text-align:center ; vertical-align: middle;" rowspan="2">${head.internal_item_id}</td>
+    <td  style="width: 25%; text-align:center ; vertical-align: middle;" rowspan="2">${head.description}</td>
+    <td  style="width: 8%; text-align:center; vertical-align: middle;" rowspan="2">${head.price_quantity}</td>
+    <td  style="width: 5%; text-align:center; vertical-align: middle;" rowspan="2">${head.unit}</td>
+    <td style=" text-align:center; vertical-align: middle;" colSpan="3">การดำเนินการ</td>    
+  </tr>
+  <tr class="heading" >
+      <td  style="width: 7%; text-align:center; vertical-align: middle;">${head.quantity}</td>
+      <td  style="width: 7%; text-align:center; vertical-align: middle;">${head.price}</td>
+      <td  style="width: 7%; text-align:center; vertical-align: middle;">${head.type}</td>
+  </tr>
+  ${rows}
+  <tr class="item">
+    <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;"></td>
+    <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;"></td>
+    <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"></td>
+    <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;"></td>
+    <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;"></td>
+    <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;">รวม</td>
+    <td style=" text-align:center ; vertical-align: middle;">${total}</td>
+    <td style=" text-align:center ; vertical-align: middle;"></td>
+  </tr>
+</table>
+`;
+
+const createPageS16_46 = (table, date, content) => `
+  <div class="invoice-box">
+
+    <pp>ส.๑๑๔๕๑/๑</pp>
+    </br>
+    <pp>แบบ ส.๑๖/๔๖</pp>
+    </br>
+    <pp>ฉบับที่๑</pp>
+
+
+    <u><h2  style=" text-align:center ; vertical-align: middle;">ใบเบิกและใบส่งสิ่งของ</h2></u>
+
+    <table>
+      <tr>
+        <td>
+            เลขที่ .....${content.NoDocument}.....
+        </td>
+        <td>
+            <pr>พัสดุส่งเลขที่ .....${content.NoInternal}.....</pr>
+        </td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <td>
+            ลงวันที่ .....${date}.....
+        </td>
+        <td>
+            <pr>ลงวันที่ .....${date}.....</pr>
+        </td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <td>
+            เบิกจากงานคลังพัสดุ .....${content.SourceWarehouseName}.....
+        </td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <td>
+            ผู้เบิก .....${content.CreatedByUserNameTh}.....
+        </td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <td>
+            ให้ส่งสิ่งของไปที่ .....${content.DestWarehouseName}.....
+        </td>
+      </tr>
+    </table>
+
+  
+    ${table}
+
+
+    <table>
+      <tr class="item2">
+        <td style="width: 33%; text-align:center ; vertical-align: middle;">
+            ลงชื่อผู้เบิก......................................
+        </td>
+        <td style="width: 33%; text-align:center ; vertical-align: middle;">
+        </td>
+        <td style="width: 33%; text-align:center ; vertical-align: middle;">   
+        </td>
+      </tr>
+    </table>
+
+    <table>
+      <tr class="item2">
+        <td style="width: 33%; text-align:center ; vertical-align: middle;">
+            ตำแหน่ง........................................
+        </td>
+        <td style="width: 33%; text-align:center ; vertical-align: middle;">
+            บันทึกเสนอ........................................
+        </td>
+        <td style="width: 33%; text-align:center ; vertical-align: middle;">
+            ตรวจแล้วถูกต้อง
+        </td>
+      </tr>
+    </table>
+
+
+    <table>
+      <tr class="item2">
+        <td style="width: 33%; text-align:center ; vertical-align: middle;">
+            อนุญาตให้เบิกได้
+        </td>
+         <td style="width: 33%; text-align:center ; vertical-align: middle;">
+        </td>
+        <td style="width: 33%; text-align:center ; vertical-align: middle;">   
+        </td>
+      </tr>
+    </table>
+
+    <table>
+      <tr class="item2">
+        <td style="width: 33%; text-align:center ; vertical-align: middle;">
+            .....................................................
+        </td>
+        <td style="width: 33%; text-align:center ; vertical-align: middle;">
+            ........................................
+        </td>
+        <td style="width: 33%; text-align:center ; vertical-align: middle;">
+            ........................................
+        </td>
+      </tr>
+    </table>
+
+    <table>
+      <tr class="item2">
+        <td style="width: 33%; text-align:center ; vertical-align: middle;">
+            ตำแหน่ง........................................
+        </td>
+        <td style="width: 33%; text-align:center ; vertical-align: middle;">
+            เจ้าหน้าที่พัสดุ
+        </td>
+        <td style="width: 33%; text-align:center ; vertical-align: middle;">
+            หัวหน้างานคลังพัสดุ
+        </td>
+      </tr>
+    </table>
+
+
+    <table>
+      <tr class="item2">
+        <td style="width: 33%; text-align:center ; vertical-align: middle;">
+            ได้รับของตามรายการข้างบนนี้ ถูกต้องแล้ว
+        </td>
+        <td style="width: 33%; text-align:center ; vertical-align: middle;">
+            ส่งผ่านจ่ายได้........................................
+        </td>
+        <td style="width: 33%; text-align:center ; vertical-align: middle;">   
+        </td>
+      </tr>
+    </table>
+
+    <table>
+      <tr class="item2">
+        <td style="width: 33%; text-align:center ; vertical-align: middle;">
+            ........................................ผู้รับ
+        </td>
+        <td style="width: 33%; text-align:center ; vertical-align: middle;">   
+        </td>
+        <td style="width: 33%; text-align:center ; vertical-align: middle;">   
+        </td>
+      </tr>
+    </table>
+
+    <table>
+      <tr class="item2">
+        <td style="width: 33%; text-align:center ; vertical-align: middle;">
+            (........................................)
+        </td>
+        <td style="width: 33%; text-align:center ; vertical-align: middle;">
+            ........................................
+        </td>
+        <td style="width: 33%; text-align:center ; vertical-align: middle;">   
+        </td>
+      </tr>
+    </table>
+
+    <table>
+    <tr class="item2">
+      <td style="width: 33%; text-align:center ; vertical-align: middle;">
+      ตำแหน่ง........................................
+      </td>
+      <td style="width: 33%; text-align:center ; vertical-align: middle;">
+          แทนหัวหน้ากองจัดการพัสดุ </br> ปฎิบัติการแทน ผู้อำนวยการฝ่ายการพัสดุ
+      </td>
+      <td style="width: 33%; text-align:center ; vertical-align: middle;">   
+      </td>
+    </tr>
+  </table>
+
+  
+
+
+
+  </div>
+`;
+
+
+
+
+
+const createHtmlB22 = (table) => `
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+
+
+    @page {
+        size: landscape;
+        margin:0 ;
+      }
+    @media print {
+        html, body {
+            width:29.7cm;
+            height: 210mm ; 
+          margin-bottom: 0;
+          margin-left: 0;
+          margin-right: 0;
+          margin-top: 0;
+        }
+      }
+    
+     
+
+     .invoice-box {
+        width:29.7cm;
+        height: 210mm ;
+           margin: 0 auto;
+           margin-bottom: 0.5cm;
+           border: 0.1px solid #ffffff;
+           font-size: 16px;
+           font-family: 'AngsanaUPC', 'MS Sans Serif';  
+      }
+      .invoice-box table {
+          width: 95%;
+          margin: auto;
+          border: 0px solid #eee;
+      }
+      .invoice-box table td {
+           vertical-align: top;
+      }
+      .invoice-box table tr.heading td {
+           background: #eee;
+           border: 1px solid #ddd;
+           font-weight: bold;
+      }
+      .invoice-box table tr.item td {
+           border: 1px solid #eee;
+      }
+      .invoice-box table tr.item2 td {
+           border-bottom: 0px solid #eee;
+      }
+      .invoice-box p {
+           width: 95%;
+      }
+      .invoice-box h3 {
+           margin-top: 1cm;
+           margin-right: 0;
+           margin-left:0;
+           margin-bottom: 0;
+      }
+      .invoice-box table tr.top table td.title {
+        line-height: 45px;
+        color: #333;
+      }
+
+     .invoice-box pp {
+        margin-top: 0.5cm;
+        float: right;
+        margin: 0;
+        width: 10%;
+     }
+
+     .invoice-box table tr.information table td {
+        padding-bottom: 40px;
+     }
+
+   
+
+    
+
+    </style>
+  </head>
+  <body>
+    ${table}
+  </body>
+</html>
+`;
+
+const createRowB22Page1 = (item) =>
+    `<tr class="item">
+<td style=" text-align:center ; vertical-align: middle;">${item.item_id}</td>
+<td style=" text-align:left ; vertical-align: middle;">${item.description}</td>
+<td style=" text-align:center ; vertical-align: middle;">${item.unit}</td>
+<td style=" text-align:center ; vertical-align: middle;">${item.left_month_unit}</td>
+<td style=" text-align:center ; vertical-align: middle;">${item.left_month_price}</td>
+<td style=" text-align:center ; vertical-align: middle;">${item.get_month_unit}</td>
+<td style=" text-align:center ; vertical-align: middle;">${item.get_month_price}</td>
+<td style=" text-align:center ; vertical-align: middle;">${item.from_accept}</td>
+<td style=" text-align:center ; vertical-align: middle;">${item.internal_item_create_on}</td>
+<td style=" text-align:center ; vertical-align: middle;">${item.petition_item_create_on}</td>
+<td style=" text-align:center ; vertical-align: middle;">${item.pay_month_unit}</td>
+<td style=" text-align:center ; vertical-align: middle;">${item.pay_month_price}</td>
+<td style=" text-align:center ; vertical-align: middle;">${item.balance_month_unit}</td>
+<td style=" text-align:center ; vertical-align: middle;">${item.balance_month_price}</td>
+<td style=" text-align:center ; vertical-align: middle;">${item.pay_for_internal_item}</td>
+<td style=" text-align:center ; vertical-align: middle;">${item.type}</td>
+</tr>`
+    ;
+
+const createRowB22Page2 = (item) =>
+    `<tr class="item">
+
+<td style=" text-align:center ; vertical-align: middle;">${item.item_id}</td>
+<td style=" text-align:left ; vertical-align: middle;">${item.description}</td>
+<td style=" text-align:center ; vertical-align: middle;">${item.unit}</td>
+<td style=" text-align:center ; vertical-align: middle;">${item.left_month_unit}</td>
+<td style=" text-align:center ; vertical-align: middle;">${item.left_month_price}</td>
+</tr>`
+    ;
+
+const createTableB22Page1 = (head, rows) => `
+  <table cellpadding="0" cellspacing="0" >
+    <tr class="heading">
+      <td  style="width: 4%; text-align:center ; vertical-align: middle;"  rowspan="2">${head.item_id}</td>
+      <td  style="width: 26%; text-align:center ; vertical-align: middle;" rowspan="2">${head.description}</td>
+      <td  style="width: 5%; text-align:center ; vertical-align: middle;" rowspan="2">${head.unit}</td>
+      <td style=" text-align:center; vertical-align: middle;" colSpan="2">เหลือเดือนก่อน</td>
+      <td style=" text-align:center; vertical-align: middle;" colSpan="2">รับเดือนนี้</td>
+      <td  style="width: 5%; text-align:center; vertical-align: middle;" rowspan="2">${head.from_accept}</td>
+      <td  style="width: 5%; text-align:center; vertical-align: middle;" rowspan="2">${head.internal_item_create_on}</td>
+      <td  style="width: 5%; text-align:center; vertical-align: middle;" rowspan="2">${head.petition_item_create_on}</td>
+      <td style=" text-align:center; vertical-align: middle;" colSpan="2">จ่ายเดือนนี้</td>
+      <td style=" text-align:center; vertical-align: middle;" colSpan="2">คงเหลือ</td>
+      <td  style="width: 5%; text-align:center; vertical-align: middle;" rowspan="2">${head.pay_for_internal_item}</td>
+      <td  style="width: 5%; text-align:center; vertical-align: middle;" rowspan="2">${head.type}</td>
+    </tr>
+    <tr class="heading" >
+        <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.left_month_unit}</td>
+        <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.left_month_price}</td>
+        <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.get_month_unit}</td>
+        <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.get_month_price}</td>
+        <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.pay_month_unit}</td>
+        <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.pay_month_price}</td>
+        <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.balance_month_unit}</td>
+        <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.balance_month_price}</td>
+    </tr>
+    ${rows}
+  </table>
+`;
+
+const createTableB22Page2 = (head, rows) => `
+  <table cellpadding="0" cellspacing="0" >
+    <tr class="heading">
+      <td  style="width: 4%; text-align:center ; vertical-align: middle;"  rowspan="2">${head.item_id}</td>
+      <td  style="width: 36%; text-align:center ; vertical-align: middle;" rowspan="2">${head.description}</td>
+      <td  style="width: 10%; text-align:center ; vertical-align: middle;" rowspan="2">${head.unit}</td>
+      <td style=" text-align:center; vertical-align: middle;" colSpan="2">รับเดือนนี้</td>
+    </tr>
+    <tr class="heading" >
+        <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.left_month_unit}</td>
+        <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.left_month_price}</td>
+    </tr>
+    ${rows}
+
+    <tr class="item">
+    <td style=" text-align:center ; vertical-align: middle;"></td>
+    <td style=" text-align:center ; vertical-align: middle; "></td>
+    <td style=" text-align:center ; vertical-align: middle; ">รวม</td>
+    <td style=" text-align:center ; vertical-align: middle;">0</td>
+    <td style=" text-align:center ; vertical-align: middle;"></td>
+  </tr>
+  </table>
+`;
+
+const createPageB22Page1 = (table, date) => `
+<div class="invoice-box">
+  <pp>แบบ บ.๒๒</pp>
+  <h3  style=" text-align:center ; vertical-align: middle;">บัญชีรายละเอียดแสดงรายการ รับ-จ่าย สิ่งของและคงเหลือ</h3>
+  <h3  style=" text-align:center ; vertical-align: middle; margin-bottom: 0.5cm;margin: 0">ประจำเดือน ${date}</h3>
+  ${table}
+</div>
+`;
+
+const createPageB22Page2 = (table, inventory, date) => `
+<div class="invoice-box">
+  <h3  style=" text-align:center ; vertical-align: middle;">บัญชีรายละเอียดแสดงรายรับสิ่งของตอน ${inventory}</h3>
+  <h3  style=" text-align:center ; vertical-align: middle; margin-bottom: 0.5cm;margin: 0">ประจำเดือน ${date}</h3>
+  ${table}
+</div>
+`;
+
+
+
+const createHtmlS101 = (table) => `
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+      @page {
+        size: A4;
+        margin:0 ;
+      }
+     .invoice-box {
+           width: 210mm;
+           height: 29.7cm;
+           margin: 0 auto;
+           margin-bottom: 0.5cm;
+           border: 0.1px solid #eee;
+           font-size: 16px;
+           font-family: 'AngsanaUPC', 'MS Sans Serif';
+           
+      }
+      .invoice-box table {
+          width: 95%;
+          margin: auto;
+          border: 0px solid #eee;
+      }
+
+      .invoice-box table td {
+           vertical-align: top;
+      }
+
+      .invoice-box table tr.heading td {
+           background: #eee;
+           border: 1px solid #ddd;
+           font-weight: bold;
+      }
+
+      .invoice-box table tr.item td {
+           border: 1px solid #eee;
+      }
+
+      .invoice-box table tr.item2 td {
+           border-bottom: 0px solid #eee;
+      }
+
+
+      .invoice-box p {
+           width: 95%;
+      }
+
+      .invoice-box h2 {
+          margin-top: 1cm;
+          margin-right: 0;
+          margin-left:0;
+          margin-bottom: 0;
+      }
+
+      .invoice-box h3 {
+           margin: 0;
+      }
+
+      @media print {
+        html, body {
+          width: 210mm;
+          height: 297mm;  
+          margin-bottom: 0;
+          margin-left: 0;
+          margin-right: 0;
+          margin-top: 0;
+        }
+      }
+
+      .invoice-box pr {
+        float: right;
+        margin-right: 2.5%;
+      }
+
+      .invoice-box pl {
+        float: left;
+        margin-left: 2.5%;
+      }
+
+      .invoice-box pc {
+        float: center;
+        
+      }
+
+      .invoice-box table tr.top table td.title {
+           
+           line-height: 45px;
+           color: #333;
+      }
+
+      .invoice-box pp {
+        margin-top: 0.5cm;
+        float: right;
+        margin: 0;
+        width: 15%;
+      }
+
+
+
+      .invoice-box table tr.information table td {
+           padding-bottom: 40px;
+      }
+
+    </style>
+  </head>
+  <body>
+    ${table}
+  </body>
+</html>
+`;
+
+const createPageS101Page1 = (date, content) => `
+  <div class="invoice-box">
+    <pp>แบบ สส. 101</pp>
+    <h2  style=" text-align:center ; vertical-align: middle;">ฝ่ายกรอาณัติสัญญาณและโทรคมนาคม การรถไฟ</h2>
+    
+
+    
+    <table>
+        <tr>
+        <td>
+            <pr>เลขที่ .....${content.NoInternal}.....</pr>
+        </td>
+        </tr>
+    </table>
+
+    <table>
+        <tr>
+        <td>
+            รายงานการตรวจซ่อมอุปกรณ์แขวง .....${content.NoInternal}.....
+        </td>
+        <td>
+            <pr>วันที่ .....${content.NoInternal}.....</pr>
+        </td>
+        </tr>
+    </table>
+
+
+  
+
+    <table cellpadding="0" cellspacing="0" >
+        <tr class="item">
+            <td class="item" style="width: 61%; text-align:left ; vertical-align: middle; border: 0px solid #ffffff;background:#ffffff" >(1) ชนิดของงาน <label>ติดตั้ง</label> <input type="checkbox" /> <label>บำรุงรักษา</label> <input type="checkbox" /> <label>ซ่อมแซม</label><input type="checkbox"/></td>
+            <td  style="width: 15%; text-align:center ; vertical-align: middle; border: 0px solid #ffffff;background:#ffffff"></td>
+            <td  style="width: 6%; text-align:center; vertical-align: middle;" >เวลา</td>
+            <td  style="width: 6%; text-align:center; vertical-align: middle;" >วันที่</td>
+            <td style="width: 6%; text-align:center; vertical-align: middle;" >เดือน</td>   
+            <td style="width: 6%; text-align:center; vertical-align: middle;" >พ.ศ.</td>  
+        </tr>
+        <tr class="item">
+            <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;">(2) ได้รับแจ้งเหตุจาก .....${content.NoInternal}.....</td>
+            <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;">วันเวลาที่รับแจ้ง</td>
+            <td style=" text-align:center ; vertical-align: middle;" >-</td>
+            <td style=" text-align:center ; vertical-align: middle;" >-</td>
+            <td style=" text-align:center ; vertical-align: middle;">-</td>
+            <td style=" text-align:center ; vertical-align: middle;">-</td>
+        </tr>
+        <tr class="item">
+            <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;">    โดยจดหมายหรือโทรเลขที่ .....${content.NoInternal}.....</td>
+            <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;">วันเวลาที่เกิดเหตุ</td>
+            <td style=" text-align:center ; vertical-align: middle;" >-</td>
+            <td style=" text-align:center ; vertical-align: middle;" >-</td>
+            <td style=" text-align:center ; vertical-align: middle;">-</td>
+            <td style=" text-align:center ; vertical-align: middle;">-</td>
+        </tr>
+        <tr class="item">
+            <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;">(3) งาน .....${content.NoInternal}.....</td>
+            <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;">ออกเดินทาง</td>
+            <td style=" text-align:center ; vertical-align: middle;" >-</td>
+            <td style=" text-align:center ; vertical-align: middle;" >-</td>
+            <td style=" text-align:center ; vertical-align: middle;">-</td>
+            <td style=" text-align:center ; vertical-align: middle;">-</td>
+        </tr>
+        <tr class="item">
+            <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;">(4) เดินทางโดย .....${content.NoInternal}.....</td>
+            <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;">เดินทางถึง</td>
+            <td style=" text-align:center ; vertical-align: middle;" >-</td>
+            <td style=" text-align:center ; vertical-align: middle;" >-</td>
+            <td style=" text-align:center ; vertical-align: middle;">-</td>
+            <td style=" text-align:center ; vertical-align: middle;">-</td>
+        </tr>
+        <tr class="item">
+            <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;">(5) ระบบที่ตรวจซ่อม</td>
+            <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;">วันเวลาแล้วเสร็จ</td>
+            <td style=" text-align:center ; vertical-align: middle;" >-</td>
+            <td style=" text-align:center ; vertical-align: middle;" >-</td>
+            <td style=" text-align:center ; vertical-align: middle;">-</td>
+            <td style=" text-align:center ; vertical-align: middle;">-</td>
+        </tr>
+  </table>
+
+   
+ 
+
+    <table >
+      <tr class="item2">
+        <td style="width: 40%; text-align:left ; vertical-align: middle;">
+            ก. ระบบอาณัติสัญญาณ .....${content.NoInternal}.....
+        </td>
+        <td style="width: 40%; text-align:left ; vertical-align: middle;">
+            ข. ระบบสายส่ง .....${content.NoInternal}.....
+        </td>
+           
+      </tr>
+    </table>
+
+    <table >
+      <tr class="item2">
+        <td style="width: 40%; text-align:left ; vertical-align: middle;">
+            ค. ระบบเครื่องกั้นถนน .....${content.NoInternal}.....
+        </td>
+        <td style="width: 40%; text-align:left ; vertical-align: middle;">
+            ง. ระบบเครื่องทางสะดวก .....${content.NoInternal}.....
+        </td>
+           
+      </tr>
+    </table>
+    <table >
+    <tr class="item2">
+      <td style="width: 40%; text-align:left ; vertical-align: middle;">
+          จ. ระบบโทรศัพท์ .....${content.NoInternal}.....
+      </td>
+      <td style="width: 40%; text-align:left ; vertical-align: middle;">
+          ฉ. ระบบไฟฟ้า .....${content.NoInternal}.....
+      </td>
+         
+    </tr>
+  </table>
+
+  <table >
+    <tr class="item2">
+      <td style="width: 40%; text-align:left ; vertical-align: middle;">
+          ช. ระบบโทรพิมพ์ .....${content.NoInternal}.....
+      </td>
+      <td style="width: 40%; text-align:left ; vertical-align: middle;">
+          ซ. ระบบวิทยุ .....${content.NoInternal}.....
+      </td>
+         
+    </tr>
+  </table>
+
+  <table >
+    <tr class="item2">
+      <td style="width: 40%; text-align:left ; vertical-align: middle;">
+          ฌ. ระบบอิเลคทรอนิคส์ .....${content.NoInternal}.....
+      </td>
+      <td style="width: 40%; text-align:left ; vertical-align: middle;">
+          
+      </td>
+    </tr>
+  </table>
+
+    <table>
+        <tr>
+        <td>
+            (6) ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม (สถานี/ตำแหน่งที่ตั้ง) .....${content.NoInternal}.....
+        </td>
+        </tr>
+    </table>
+
+    <table>
+        <tr>
+        <td>
+            (7) ซื้ออุปกรณ์ที่บำรุงรักษา .....${content.NoInternal}.....
+        </td>
+        </tr>
+    </table>
+    
+    <table>
+        <tr>
+        <td>
+            (8) สาเหตุและอาการเสียโดยสรุป .....${content.NoInternal}.....
+        </td>
+        </tr>
+    </table>       
+
+    <table>
+        <tr>
+        <td>
+            (9) ขบวนรถที่ .....${content.NoInternal}..... เสียเวลาเพราะเหตุนี้ .....${content.NoInternal}..... นาที
+        </td>
+        </tr>
+    </table>  
+
+    <table>
+        <tr>
+        <td>
+            (10) สรุปการแก้ไขและการซ่อมแซม .....${content.NoInternal}.....
+        </td>
+        </tr>
+    </table>   
+
+    <table>
+        <tr>
+        <td>
+            (11) ยังไม่ได้จัดการแก้ไขเพราะ .....${content.NoInternal}.....
+        </td>
+        </tr>
+    </table>   
+
+    <table>
+        <tr>
+        <td>
+            (12) ผู้ควบคุมทดสอบ ชื่อ .....${content.NoInternal}..... ตำแหน่ง .....${content.NoInternal}..... ลงนาม .....${content.NoInternal}....
+        </td>
+        </tr>
+    </table>   
+
+    <table>
+        <tr>
+        <td>
+            (13) ผู้ควบคุมแก้ไข ชื่อ .....${content.NoInternal}..... ตำแหน่ง .....${content.NoInternal}..... ลงนาม .....${content.NoInternal}....
+        </td>
+        </tr>
+    </table> 
+
+    <table>
+        <tr>
+        <td>
+            (14) รายชื่อผู้ร่วมวาน (ชื่อและตำแหน่ง) .....${content.NoInternal}..... 
+        </td>
+        </tr>
+    </table>   
+
+    <table>
+        <tr>
+        <td>
+            (15) ข้าพเจ้ารับรองว่าข้อความข้างบนนี้เป็นความจริง
+        </td>
+        <td>
+            <pr>(ลงชื่อ) .....${content.NoInternal}..... </pr>
+        </td>
+        </tr>
+    </table> 
+
+    <table>
+        <tr>
+      
+        <td>
+            <pr>(.....${content.NoInternal}.....)</pr>
+        </td>
+        </tr>
+    </table>
+
+    <table>
+        <tr>
+        
+        <td>
+            <pr>ตำแหน่ง .....${content.NoInternal}..... </pr>
+        </td>
+        </tr>
+    </table> 
+
+
+  </div>
+`;
+
+const createPageS101Page2 = (table, date, content) => `
+  <div class="invoice-box" >
+    <table style="margin-top: 1cm;">
+        <tr>
+        <td>
+            (16) รายละเอียดมีดังต่อไปนี้ .....${content.NoInternal}.....
+        </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+        <td>
+            (17) รายการอะไหล่ที่เปลี่ยนซ่อมหรือค่าเสียหาย
+        </td>
+        </tr>
+    </table>
+    ${table}
+    <table>
+        <tr>
+        <td>
+            (18) ความเห็นของนายตรวจลายหัวหน้าแขวง .....${content.NoInternal}.....
+        </td>
+        </tr>
+    </table>
+
+    <table>
+        <tr>
+        <td>
+            <pr>(ลงชื่อ) .....${content.NoInternal}.....</pr>
+        </td>
+        </tr>
+    </table>
+
+    <table>
+    <tr>
+    <td>
+        <pr>นายตรวจสายหัวหน้าแขวง .....${content.NoInternal}.....</pr>
+    </td>
+    </tr>
+</table>
+
+  </div>
+`;
+
+const createPageS101Page3 = (date, content) => `
+  <div class="invoice-box" >
+
+
+    <table style="margin-top: 1cm;">
+      <tr class="item2">
+        <td style="width: 40%; text-align:center ; vertical-align: middle;">
+            <img src=${img}   >
+        </td>
+       
+        <td style="width: 40%; text-align:center ; vertical-align: middle;">
+            <img src=${img}   >
+        </td>
+        
+      </tr>
+    </table>
+    <table >
+      <tr class="item2">
+        <td style="width: 40%; text-align:center ; vertical-align: middle;">
+            <img src=${img} >
+        </td>
+        <td style="width: 40%; text-align:center ; vertical-align: middle;">
+            <img src=${img}  >
+        </td>
+           
+      </tr>
+    </table>
+    <table >
+      <tr class="item2">
+        <td style="width: 40%; text-align:center ; vertical-align: middle;">
+            <img src=${img}  >
+        </td>
+        <td style="width: 40%; text-align:center ; vertical-align: middle;">
+            <img src=${img}  >
+        </td>
+            
+      </tr>
+    </table>
+    
+  </div>
+`;
+
+const createTableSS101 = (head, rows) => `
+<table cellpadding="0" cellspacing="0" >
+  <tr class="heading" >
+      <td  style="width: 5%; text-align:center ; vertical-align: middle;">${head.item_id}</td>
+      <td  style="width: 45%; text-align:center ; vertical-align: middle;">${head.description}</td>
+      <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.unit}</td>
+      <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.quantity}</td>
+      <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.internal_item_id}</td>
+      <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.remark}</td>
+  </tr>
+  ${rows}
+</table>
+`;
+
+
+const createRowSS101 = (item) =>
+    `<tr class="item">
+  <td style=" text-align:center ; vertical-align: middle;">${item.item_id}</td>
+  <td style=" text-align:left ; vertical-align: middle;">${item.description}</td>
+  <td style=" text-align:center ; vertical-align: middle;">${item.unit}</td>
+  <td style=" text-align:center ; vertical-align: middle;">${item.quantity}</td>
+  <td style=" text-align:right ; vertical-align: middle;">${item.internal_item_id}</td>
+  <td style=" text-align:right ; vertical-align: middle;">${item.remark}</td>
+</tr>`
+    ;
+
+
+
+
+
+const createHtmlReport = (table) => `
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+    
+    
+        @page {
+            size: landscape;
+            margin:0 ;
+          }
+        @media print {
+            html, body {
+                width:29.7cm;
+                height: 210mm ; 
+              margin-bottom: 0;
+              margin-left: 0;
+              margin-right: 0;
+              margin-top: 0;
+            }
+          }
+        
+         
+    
+         .invoice-box {
+            width:29.7cm;
+            height: 210mm ;
+               margin: 0 auto;
+               margin-bottom: 0.5cm;
+               border: 0.1px solid #ffffff;
+               font-size: 16px;
+               font-family: 'AngsanaUPC', 'MS Sans Serif';  
+          }
+          .invoice-box table {
+              width: 95%;
+              margin: auto;
+              border: 0px solid #eee;
+          }
+          .invoice-box table td {
+               vertical-align: top;
+          }
+          .invoice-box table tr.heading td {
+               background: #eee;
+               border: 1px solid #ddd;
+               font-weight: bold;
+          }
+          .invoice-box table tr.item td {
+               border: 1px solid #eee;
+          }
+          .invoice-box table tr.item2 td {
+               border-bottom: 0px solid #eee;
+          }
+          .invoice-box p {
+               width: 95%;
+          }
+          .invoice-box h3 {
+               margin-top: 1cm;
+               margin-right: 0;
+               margin-left:0;
+               margin-bottom: 0;
+          }
+          .invoice-box table tr.top table td.title {
+            line-height: 45px;
+            color: #333;
+          }
+    
+         .invoice-box pp {
+            margin-top: 0.5cm;
+            float: right;
+            margin: 0;
+            width: 10%;
+         }
+    
+         .invoice-box table tr.information table td {
+            padding-bottom: 40px;
+         }
+    
+       
+    
+        
+    
+        </style>
+      </head>
+      <body>
+        ${table}
+      </body>
+    </html>
+    `;
+
+const createTableReportPage1 = (head, rows) => `
+    <table cellpadding="0" cellspacing="0" >
+      <tr class="heading">
+        <td  style="width: 4%; text-align:center ; vertical-align: middle;"  rowspan="2">${head.item_id}</td>
+        <td  style="width: 26%; text-align:center ; vertical-align: middle;" rowspan="2">${head.description}</td>
+        <td  style="width: 5%; text-align:center ; vertical-align: middle;" rowspan="2">${head.unit}</td>
+        <td style=" text-align:center; vertical-align: middle;" colSpan="2">เหลือเดือนก่อน</td>
+        <td style=" text-align:center; vertical-align: middle;" colSpan="2">รับเดือนนี้</td>
+        <td  style="width: 5%; text-align:center; vertical-align: middle;" rowspan="2">${head.from_accept}</td>
+        <td  style="width: 5%; text-align:center; vertical-align: middle;" rowspan="2">${head.internal_item_create_on}</td>
+        <td  style="width: 5%; text-align:center; vertical-align: middle;" rowspan="2">${head.petition_item_create_on}</td>
+        <td style=" text-align:center; vertical-align: middle;" colSpan="2">จ่ายเดือนนี้</td>
+        <td style=" text-align:center; vertical-align: middle;" colSpan="2">คงเหลือ</td>
+        <td  style="width: 5%; text-align:center; vertical-align: middle;" rowspan="2">${head.pay_for_internal_item}</td>
+        <td  style="width: 5%; text-align:center; vertical-align: middle;" rowspan="2">${head.type}</td>
+      </tr>
+      <tr class="heading" >
+          <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.left_month_unit}</td>
+          <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.left_month_price}</td>
+          <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.get_month_unit}</td>
+          <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.get_month_price}</td>
+          <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.pay_month_unit}</td>
+          <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.pay_month_price}</td>
+          <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.balance_month_unit}</td>
+          <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.balance_month_price}</td>
+      </tr>
+      ${rows}
+    </table>
+  `;
+
+const createRowReportPage1 = (item) =>
+    `<tr class="item">
+    <td style=" text-align:center ; vertical-align: middle;">${item.item_id}</td>
+    <td style=" text-align:left ; vertical-align: middle;">${item.description}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${item.unit}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${item.left_month_unit}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${item.left_month_price}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${item.get_month_unit}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${item.get_month_price}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${item.from_accept}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${item.internal_item_create_on}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${item.petition_item_create_on}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${item.pay_month_unit}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${item.pay_month_price}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${item.balance_month_unit}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${item.balance_month_price}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${item.pay_for_internal_item}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${item.type}</td>
+    </tr>`
+    ;
+
+const createRowReportPage2_1 = (item) =>
+    `<tr class="item">
+    
+    <td style=" text-align:center ; vertical-align: middle;">${item.item_id}</td>
+    <td style=" text-align:left ; vertical-align: middle;">${item.description}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${item.unit}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${item.left_month_unit}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${item.left_month_price}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${item.left_month_sum}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${item.remark}</td>
+    </tr>`
+    ;
+
+
+const createRowReportPage2_2 = (item) =>
+    `<tr class="item">
+    
+    <td style=" text-align:center ; vertical-align: middle;">${item.item_id}</td>
+    <td style=" text-align:left ; vertical-align: middle;">${item.name}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${item.positional}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${item.left_month_unit}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${item.left_month_price}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${item.left_month_sum}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${item.left_month_sum}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${item.left_month_sum}</td>
+    <td style=" text-align:center ; vertical-align: middle;">${item.remark}</td>
+    </tr>`
+    ;
+
+const createTableReportPage2_1 = (head, rows) => `
+      <table cellpadding="0" cellspacing="0" >
+        <tr class="heading">
+          <td  style="width: 4%; text-align:center ; vertical-align: middle;"  rowspan="2">${head.item_id}</td>
+          <td  style="width: 36%; text-align:center ; vertical-align: middle;" rowspan="2">${head.description}</td>
+          <td  style="width: 10%; text-align:center ; vertical-align: middle;" rowspan="2">${head.unit}</td>
+          <td style=" text-align:center; vertical-align: middle;" >ราคา/หน่วย</td>
+          <td style=" text-align:center; vertical-align: middle;" >จำนวน</td>
+          <td style=" text-align:center; vertical-align: middle;" >รวมเป็นเงิน</td>
+          <td  style="width: 10%; text-align:center ; vertical-align: middle;" rowspan="2">${head.remark}</td>
+        </tr>
+        <tr class="heading" >
+            <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.left_month_unit}</td>
+            <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.left_month_price}</td>
+            <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.left_month_sum}</td>
+        </tr>
+        ${rows}
+    
+        <tr class="item">
+    
+            <td style=" text-align:center ; vertical-align: middle;"></td>
+            <td style=" text-align:left ; vertical-align: middle;">รวมเป็นเงินทั้งสิ้น</td>
+            <td style=" text-align:center ; vertical-align: middle;"></td>
+            <td style=" text-align:center ; vertical-align: middle;">}</td>
+            <td style=" text-align:center ; vertical-align: middle;"></td>
+            <td style=" text-align:center ; vertical-align: middle;"></td>
+            <td style=" text-align:center ; vertical-align: middle;"></td>
+        </tr>
+      </table>
+    `;
+
+
+const createTableReportPage2_2 = (head, rows) => `
+    <table cellpadding="0" cellspacing="0" >
+      <tr class="heading">
+        <td  style="width: 4%; text-align:center ; vertical-align: middle;"  rowspan="2">${head.item_id}</td>
+        <td  style="width: 36%; text-align:center ; vertical-align: middle;" rowspan="2">${head.name}</td>
+        <td  style="width: 10%; text-align:center ; vertical-align: middle;" rowspan="2">${head.positional}</td>
+        <td style=" text-align:center; vertical-align: middle;" >ค่าแรงวันละ</td>
+        <td style=" text-align:center; vertical-align: middle;" >ค่าเบี้ยเลี้ยง</td>
+        <td style=" text-align:center; vertical-align: middle;" >ค่าที่พัก</td>
+        <td style=" text-align:center; vertical-align: middle;" >รวมวัน</td>
+        <td style=" text-align:center; vertical-align: middle;" >รวมเป็นเงิน</td>
+        <td  style="width: 10%; text-align:center ; vertical-align: middle;" rowspan="2">${head.remark}</td>
+      </tr>
+      <tr class="heading" >
+          <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.left_month_unit}</td>
+          <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.left_month_price}</td>
+          <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.left_month_sum}</td>
+          <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.left_month_sum}</td>
+          <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.left_month_sum}</td>
+      </tr>
+      ${rows}
+  
+    </table>
+  `;
+
+
+
+
+const createPageReportPage1 = (table, date) => `
+    <div class="invoice-box">
+      <h3  style=" text-align:center ; vertical-align: middle;">งานระบบเสาสาย</h3>
+      <h3  style=" text-align:center ; vertical-align: middle;">บัญชีแสดงรายการ รับ-จ่าย สิ่งของ</h3>
+      <h3  style=" text-align:center ; vertical-align: middle; margin-bottom: 0.5cm;margin: 0">ประจำเดือน ${date}</h3>
+      ${table}
+    </div>
+    `;
+
+const createPageReportPage2 = (table1, table2) => `
+    <div class="invoice-box">
+      <h3  style=" text-align:center ; vertical-align: middle; margin-bottom: 0.5cm;margin: 0">รายการวัสดุของที่ใช้ดำเนินการ</h3>
+      ${table1}
+      <h3  style=" text-align:center ; vertical-align: middle; margin-bottom: 0.5cm;margin: 0">ผู้ปฎิบัติการดังนี้</h3>
+      ${table2}
+    </div>
+    `;
+
+
+
+
+
 export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve, reject) => {
-    if (routeLocation == '/report-s-1') {
+    if (routeLocation === '/report-s-1') {
         let newDate = new Date()
         let date = newDate.getDate();
         let mouth = newDate.getMonth() + 1;
@@ -307,13 +1591,13 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
             group.push(id)
         })
         const row_groups = group.map(createCategory).join('');
-        
-        const head_doc = createPageS1Header(row_groups, data_json.CreateOn, data_json.SourceWarehouse,group.length,img);
+
+        const head_doc = createPageS1Header(row_groups, data_json.CreateOn, data_json.SourceWarehouse, group.length, img);
         console.log(head_doc)
         pageAll = pageAll + head_doc
         var index = 1
         Object.keys(data_json.ItemInWarehouse).map((id) => {
-            const category_doc = createPageS1Category(index,id);
+            const category_doc = createPageS1Category(index, id);
             pageAll = pageAll + category_doc
             var R = [];
             for (var i = 0; i < data_json.ItemInWarehouse[id].Item.length; i += 25) {
@@ -331,10 +1615,361 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
                     pageAll = pageAll + tablePage
                 }
             }
-            index = index+1;
+            index = index + 1;
         })
         const html = createHtmlS1(pageAll);
         return resolve(html);
+    }
+    else if (routeLocation === '/inventory-transfer') {
+
+        console.log(valuesContext)
+        let data = [];
+        let p = 1
+        let total = 0
+
+        valuesContext.line_items.map(lineItem => {
+            data.push({
+                "item_id": p,
+                "description": lineItem.description,
+                "internal_item_id": lineItem.internal_item_id,
+                "unit": lineItem.unit,
+                "price_quantity": lineItem.quantity,
+                "quantity": " ",
+                "price": " ",
+                "type": " "
+            });
+            p = p + 1;
+            total = total + lineItem.quantity
+
+        })
+
+
+
+        const data_json = {
+            "HeadersTilte": "ส.16/46",
+            "CreateOn": valuesContext.created_on,
+            "Content": {
+                "NoDocument": valuesContext.document_id,
+                "NoInternal": valuesContext.internal_document_id,
+                "SourceWarehouseName": valuesContext.src_warehouse_id,
+                "CreatedByUserNameTh": valuesContext.created_by_user_employee_id,
+                "DestWarehouseName": valuesContext.status_name_th,
+                "AccountType": "-",
+                "ResponsibilityCode": "-",
+                "Number": "-",
+                "Code": "-"
+            },
+
+            "Headers":
+            {
+                "item_id": "ข้อที่",
+                "description": "รายการสิ่งของ",
+                "internal_item_id": "สิ่งของเลขที่",
+                "unit": "หน่วย",
+                "price_quantity": "เบิกจำนวน",
+                "quantity": "จ่ายจำนวน",
+                "price": "บาท",
+                "type": "สด."
+            },
+            "ItemInWarehouse": data,
+            "ApprovalBy": {
+
+
+
+            }
+            ,
+            "Totol": total
+        }
+
+
+
+
+
+        let pageAll = ``;
+        var R = [];
+        for (var i = 0; i < data_json.ItemInWarehouse.length; i += 12) {
+            R.push(data_json.ItemInWarehouse.slice(i, i + 12));
+        }
+        let page = R;
+
+        for (let i = 0; i < page.length; i++) {
+            if (page[i].length === 12) {
+            }
+            else {
+                for (let j = page[i].length; j < 12; j++) {
+                    page[i].push({
+                        "item_id": j + 1,
+                        "description": " ",
+                        "internal_item_id": " ",
+                        "unit": " ",
+                        "price_quantity": " ",
+                        "quantity": " ",
+                        "price": " ",
+                        "type": " "
+                    });
+                }
+            }
+        }
+
+
+        for (let i = 0; i < page.length; i++) {
+            const rows = page[i].map(createRowS16_46).join('');
+            const table = createTableS16_46(data_json.Headers, rows, data_json.Content, data_json.Totol);
+            const tablePage = createPageS16_46(table, data_json.CreateOn, data_json.Content)
+            pageAll = pageAll + tablePage
+
+        }
+
+
+        const html = createHtmlS16_46(pageAll);
+        return resolve(html);
+    }
+    else if (routeLocation === '/warehouse') {
+
+
+        const data_json = {
+            "HeadersTilte": "บ.22",
+            "CreateOn": "30 กันยายน 2562",
+            "Headers":
+            {
+                "Page_1": {
+                    "item_id": "ลำดับที่",
+                    "description": "รายการ",
+                    "unit": "หน่วย",
+                    "left_month_unit": "จำนวน",
+                    "left_month_price": "ราคา",
+                    "get_month_unit": "จำนวน",
+                    "get_month_price": "ราคา",
+                    "from_accept": "รับจาก",
+                    "internal_item_create_on": "ใบส่งเลขที่ลงวันที่",
+                    "petition_item_create_on": "ใบส่งเลขที่ลงวันที่",
+                    "pay_month_unit": "จำนวน",
+                    "pay_month_price": "ราคา",
+                    "balance_month_unit": "จำนวน",
+                    "balance_month_price": "ราคา",
+                    "pay_for_internal_item": "จ่ายให้ใครใบส่งเลขที่ใช้งานอะไร",
+                    "type": "ประเภทบัญชี2031515"
+
+                },
+                "Page_2": {
+                    "item_id": "ลำดับที่",
+                    "description": "รายการสิ่งของ",
+                    "unit": "หน่วย",
+                    "left_month_unit": "จำนวน",
+                    "left_month_price": "ราคา"
+                }
+            },
+
+            "ItemInWarehouse": {
+                "Page_1": {
+                    "Item": [
+                        {
+                            "item_id": "ลำดับที่",
+                            "description": "รายการ",
+                            "unit": "หน่วย",
+                            "left_month_unit": "จำนวน",
+                            "left_month_price": "ราคา",
+                            "get_month_unit": "จำนวน",
+                            "get_month_price": "ราคา",
+                            "from_accept": "รับจาก",
+                            "internal_item_create_on": "ใบส่งเลขที่ลงวันที่",
+                            "petition_item_create_on": "ใบส่งเลขที่ลงวันที่",
+                            "pay_month_unit": "จำนวน",
+                            "pay_month_price": "ราคา",
+                            "balance_month_unit": "จำนวน",
+                            "balance_month_price": "ราคา",
+                            "pay_for_internal_item": "จ่ายให้ใครใบส่งเลขที่ใช้งานอะไร",
+                            "type": "ประเภทบัญชี2031515"
+                        },
+                        {
+                            "item_id": "ลำดับที่",
+                            "description": "รายการ",
+                            "unit": "หน่วย",
+                            "left_month_unit": "จำนวน",
+                            "left_month_price": "ราคา",
+                            "get_month_unit": "จำนวน",
+                            "get_month_price": "ราคา",
+                            "from_accept": "รับจาก",
+                            "internal_item_create_on": "ใบส่งเลขที่ลงวันที่",
+                            "petition_item_create_on": "ใบส่งเลขที่ลงวันที่",
+                            "pay_month_unit": "จำนวน",
+                            "pay_month_price": "ราคา",
+                            "balance_month_unit": "จำนวน",
+                            "balance_month_price": "ราคา",
+                            "pay_for_internal_item": "จ่ายให้ใครใบส่งเลขที่ใช้งานอะไร",
+                            "type": "ประเภทบัญชี2031515"
+                        }, {
+                            "item_id": "ลำดับที่",
+                            "description": "รายการ",
+                            "unit": "หน่วย",
+                            "left_month_unit": "จำนวน",
+                            "left_month_price": "ราคา",
+                            "get_month_unit": "จำนวน",
+                            "get_month_price": "ราคา",
+                            "from_accept": "รับจาก",
+                            "internal_item_create_on": "ใบส่งเลขที่ลงวันที่",
+                            "petition_item_create_on": "ใบส่งเลขที่ลงวันที่",
+                            "pay_month_unit": "จำนวน",
+                            "pay_month_price": "ราคา",
+                            "balance_month_unit": "จำนวน",
+                            "balance_month_price": "ราคา",
+                            "pay_for_internal_item": "จ่ายให้ใครใบส่งเลขที่ใช้งานอะไร",
+                            "type": "ประเภทบัญชี2031515"
+                        }
+                    ]
+                },
+                "Page_2": {
+                    "Item": [
+                        {
+                            "item_id": "ลำดับที่ๅ",
+                            "description": "รายการสิ่งของๅ",
+                            "unit": "หน่วยๅ",
+                            "left_month_unit": "จำนวนๅ",
+                            "left_month_price": "ราคาๅ"
+                        }
+                    ],
+                    "Inventory": "",
+                    "Totol": "10,251,315.00"
+                }
+
+            }
+
+
+
+
+        }
+        let pageAll = ``;
+
+        Object.keys(data_json.ItemInWarehouse).map((id) => {
+
+            if (id === "Page_1") {
+                var R = [];
+                for (var i = 0; i < data_json.ItemInWarehouse[id].Item.length; i += 2) {
+                    R.push(data_json.ItemInWarehouse[id].Item.slice(i, i + 2));
+                }
+                let page = R;
+                for (let i = 0; i < page.length; i++) {
+                    const rows = page[i].map(createRowB22Page1).join('');
+                    const table = createTableB22Page1(data_json.Headers.Page_1, rows);
+                    const tablePage = createPageB22Page1(table, data_json.CreateOn)
+                    pageAll = pageAll + tablePage
+                }
+            }
+            else {
+                var R = [];
+                for (var i = 0; i < data_json.ItemInWarehouse[id].Item.length; i += 2) {
+                    R.push(data_json.ItemInWarehouse[id].Item.slice(i, i + 2));
+                }
+                let page = R;
+                for (let i = 0; i < page.length; i++) {
+                    const rows = page[i].map(createRowB22Page2).join('');
+                    const table = createTableB22Page2(data_json.Headers.Page_2, rows);
+                    const tablePage = createPageB22Page2(table, "", data_json.CreateOn)
+                    pageAll = pageAll + tablePage
+                }
+            }
+
+        })
+        const html = createHtmlB22(pageAll);
+        return resolve(html);
+    }
+    else if (routeLocation === '/ss-101') {
+
+
+        const data_json = {
+            "HeadersTilte": "สส.101",
+            "CreateOn": valuesContext.created_on,
+            "Content": {
+                "NoDocument": valuesContext.document_id,
+                "NoInternal": valuesContext.internal_document_id,
+                "SourceWarehouseName": valuesContext.src_warehouse_id,
+                "CreatedByUserNameTh": valuesContext.created_by_user_employee_id,
+                "DestWarehouseName": valuesContext.status_name_th,
+                "AccountType": "-",
+                "ResponsibilityCode": "-",
+                "Number": "-",
+                "Code": "-"
+            },
+
+            "Headers":
+            {
+                "item_id": "ข้อที่",
+                "description": "รายการสิ่งของ",
+                "internal_item_id": "สิ่งของเลขที่",
+                "unit": "หน่วย",
+                "price_quantity": "เบิกจำนวน",
+                "quantity": "จ่ายจำนวน",
+                "price": "บาท",
+                "type": "สด."
+            },
+            "ItemInWarehouse": [
+                {
+                    "item_id": "ข้อที่",
+                    "description": "รายการสิ่งของ",
+                    "internal_item_id": "สิ่งของเลขที่",
+                    "unit": "หน่วย",
+                    "price_quantity": "เบิกจำนวน",
+                    "quantity": "จ่ายจำนวน",
+                    "price": "บาท",
+                    "type": "สด."
+                }
+            ],
+            "ApprovalBy": {
+
+
+
+            }
+            ,
+            "Images": [],
+            "Totol": total
+        }
+        let pageAll = ``;
+
+        const tablePage = createPageS101Page1(data_json.CreateOn, data_json.Content)
+        pageAll = pageAll + tablePage
+
+        var R = [];
+        for (var i = 0; i < data_json.ItemInWarehouse.length; i += 25) {
+            R.push(data_json.ItemInWarehouse.slice(i, i + 25));
+        }
+        let pageSS101 = R;
+
+        for (let i = 0; i < pageSS101.length; i++) {
+            if (pageSS101[i].length === 12) {
+            }
+            else {
+                for (let j = pageSS101[i].length; j < 12; j++) {
+                    pageSS101[i].push({
+                        "item_id": j + 1,
+                        "description": " ",
+                        "internal_item_id": " ",
+                        "unit": " ",
+                        "price_quantity": " ",
+                        "quantity": " ",
+                        "price": " ",
+                        "type": " "
+                    });
+                }
+            }
+        }
+
+        for (let i = 0; i < pageSS101.length; i++) {
+            const rows = pageSS101[i].map(createRowSS101).join('');
+            console.log(rows)
+            const table = createTableSS101(data_json.Headers, rows);
+            const tablePage2 = createPageS101Page2(table, data_json.CreateOn, data_json.Content)
+            pageAll = pageAll + tablePage2
+        }
+
+
+        const tablePage3 = createPageS101Page3(data_json.CreateOn, data_json.Content)
+        pageAll = pageAll + tablePage3
+
+        const html = createHtmlS101(pageAll);
+        return resolve(html);
+
+
+
     }
 
 })

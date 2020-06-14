@@ -19,6 +19,7 @@ import useFactInitializer from '../../hooks/fact-initializer';
 import useTokenInitializer from '../../hooks/token-initializer';
 import useFooterInitializer from '../../hooks/footer-initializer';
 import useDocumentSubscription from '../../hooks/document-subscription';
+import useExportPdfInitializer from '../../hooks/export-pdf-initializer';
 
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
@@ -38,6 +39,7 @@ const GoodsReturnComponent = (props) => {
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.INVENTORY_TRANSFER);
     useDocumentSubscription();
+    useExportPdfInitializer();
     // If Link to this url via Track Document
     useEffect(() => {
         let url = window.location.search;

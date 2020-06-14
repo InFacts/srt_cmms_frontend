@@ -14,7 +14,7 @@ import useFactInitializer from '../../hooks/fact-initializer';
 import useTokenInitializer from '../../hooks/token-initializer';
 import useFooterInitializer from '../../hooks/footer-initializer';
 import useDocumentSubscription from '../../hooks/document-subscription';
-
+import useExportPdfInitializer from '../../hooks/export-pdf-initializer';
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
 
@@ -25,6 +25,7 @@ const PmtSS101Componant = (props) => {
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.SS101);
     useDocumentSubscription();
+    useExportPdfInitializer();
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
         { id: "breakdown", name: "อาการเสีย"},
