@@ -289,7 +289,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             quantity_highest: values.quantity_highest,
             quantity_required: values.quantity_required,
             minimum_order_quantity: values.minimum_order_quantity,
-            // lead_item: values.lead_item,
+            lead_time: values.lead_time,
             tolerance_time: values.tolerance_time,
             accounting_type: values.accounting_type
         }
@@ -528,15 +528,32 @@ export const createDocumentEmptyRow = () => new Promise((resolve, reject) => {
         });
 });
 
-// POST /document/new/0
+// POST 
 export const createMasterData = (data, document_type_group_id) => new Promise((resolve, reject) => {
     if (document_type_group_id === DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA) {
-        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/warehouses`;
+        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/warehouses/new`;
     }
     if (document_type_group_id === DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
         var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items/new`;
     }
     axios.post(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((res) => {
+            console.log(" I am successful in creating master data ", res)
+            resolve();
+        })
+        .catch((err) => {
+            reject(err)
+        });
+});
+// PUT
+export const editMasterData = (data, document_type_group_id) => new Promise((resolve, reject) => {
+    if (document_type_group_id === DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA) {
+        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/warehouses/${data.warehouse_id}`;
+    }
+    if (document_type_group_id === DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
+        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items/${data.item_id}`;
+    }
+    axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             console.log(" I am successful in creating master data ", res)
             resolve();
@@ -680,6 +697,18 @@ export const saveDocument = (document_type_group_id, data, image) => new Promise
 // POST /fact/warehouses
 export const saveMasterData = (document_type_group_id, data, image) => new Promise((resolve, reject) => {
     createMasterData(data, document_type_group_id)
+        .then(() => { // Get the Document_ID
+            console.log(">>>>>>")
+            return resolve();
+        })
+        .catch((err) => {
+            console.log(">>>>>> err")
+            reject(err)
+        });
+});
+// EDIT /fact/warehouses
+export const editMasterDataHelper = (document_type_group_id, data, image) => new Promise((resolve, reject) => {
+    editMasterData(data, document_type_group_id)
         .then(() => { // Get the Document_ID
             console.log(">>>>>>")
             return resolve();
@@ -937,9 +966,10 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                 }
             }
             if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO) {
+                console.log("data", data)
                 return {
                     ...form_state,
-                    refer_to_document_internal_document_id: data.refer_to_document_internal_document_id,
+                    refer_to_document_internal_id: data.refer_to_document_internal_id,
                     dest_warehouse_id: data.dest_warehouse_id
                 }
             }
@@ -1006,7 +1036,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                     line_items: data.specific.line_items,
                     src_warehouse_id: data.specific.warehouse_id,
                     remark: data.document.remark,
-                    status_name_th: data.document.document_status.status,
+                    status_name_th: '',
                     // refer_to_document_name: data.specific.refer_to_document_name,
                     document_date: data.document.document_date.slice(0, 10)
                 }
@@ -1035,7 +1065,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                     line_items: data.specific.line_items,
                     src_warehouse_id: data.specific.warehouse_id,
                     remark: data.document.remark,
-                    status_name_th: data.document.document_status.status,
+                    status_name_th: '',
                     // refer_to_document_name: data.specific.refer_to_document_name,
                     document_date: data.document.document_date.slice(0, 10)
                 }
@@ -1147,10 +1177,13 @@ function transformSS101ResponseToFormState(ss101_part) {
 }
 
 // Validation 
-export const validateInternalDocumentIDFieldHelper = (document_type_group_id, toolbar, footer, fact, values, setValues, setFieldValue, validateField, internal_document_id) => new Promise(resolve => {
+export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, document_type_group_id, toolbar, footer, fact, values, setValues, setFieldValue, validateField, internal_document_id) => new Promise(resolve => {
     // Internal Document ID
     //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
     //  ie. GR-PYO-2563/0001
+    if (checkBooleanForEdit === true) {
+        return resolve();
+    }
     console.log("I am validating internal document id ", internal_document_id)
     if (!internal_document_id) {
         console.log("I dont have any internal doc id")

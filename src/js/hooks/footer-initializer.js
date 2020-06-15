@@ -8,7 +8,7 @@ import { FOOTER_MODE, FOOTER_ACTIONS, handleClickBackToSpareMain, ACTION_TO_HAND
 import { useDispatch, useSelector } from 'react-redux';
 import useTokenInitializer from '../hooks/token-initializer';
 import { useFormikContext } from 'formik';
-import { startDocumentApprovalFlow, APPROVAL_STATUS, DOCUMENT_TYPE_ID, saveDocument, packDataFromValues, fetchLatestStepApprovalDocumentData, getUserIDFromEmployeeID, DOCUMENT_STATUS, APPROVAL_STEP_ACTION, checkDocumentStatus, approveDocument, packDataFromValuesMasterdata, saveMasterData } from '../helper';
+import { startDocumentApprovalFlow, APPROVAL_STATUS, DOCUMENT_TYPE_ID, saveDocument, editDocument, packDataFromValues, fetchLatestStepApprovalDocumentData, getUserIDFromEmployeeID, DOCUMENT_STATUS, APPROVAL_STEP_ACTION, checkDocumentStatus, approveDocument, packDataFromValuesMasterdata, saveMasterData, editMasterDataHelper } from '../helper';
 import { FACTS } from '../redux/modules/api/fact';
 import { navBottomError, navBottomSuccess, navBottomSending } from '../redux/modules/nav-bottom'
 import history from '../history';
@@ -39,7 +39,7 @@ const useFooterInitializer = (document_type_id) => {
 
     const { values, touched, setFieldTouched, setTouched, submitForm, validateForm, setFieldValue, setErrors } = useFormikContext();
     useTokenInitializer();
-
+    
     //Handle Document Status TODO: move it out of footer!!
     const hadleDocumentStatusWithFooter = (document_id) => {
         checkDocumentStatus(values).then(function (docuementStatus) {
@@ -127,7 +127,7 @@ const useFooterInitializer = (document_type_id) => {
             // SEARCH mode
             hadleDocumentStatusWithFooter(document_id);
         }
-        else if (toolbar.mode === TOOLBAR_MODE.ADD){
+        else if (toolbar.mode === TOOLBAR_MODE.ADD) {
             // ADD_DRAFT mode
             if (document_id !== "" && document_id !== undefined) { hadleDocumentStatusWithFooter(document_id); }
             dispatch(footerToModeAddDraft());
@@ -156,36 +156,35 @@ const useFooterInitializer = (document_type_id) => {
     }, [footer.requiresHandleClick[FOOTER_ACTIONS.BACK]]);
 
     const isObject = (obj) =>
-  obj !== null && typeof obj === 'object';
+        obj !== null && typeof obj === 'object';
 
-     function setNestedObjectValues(
+    function setNestedObjectValues(
         object,
         value,
         visited = new WeakMap(),
         response = {}
-      ){
+    ) {
         for (let k of Object.keys(object)) {
-          const val = object[k];
-          if (isObject(val)) {
-            if (!visited.get(val)) {
-              visited.set(val, true);
-              // In order to keep array values consistent for both dot path  and
-              // bracket syntax, we need to check if this is an array so that
-              // this will output  { friends: [true] } and not { friends: { "0": true } }
-              response[k] = Array.isArray(val) ? [] : {};
-              setNestedObjectValues(val, value, visited, response[k]);
+            const val = object[k];
+            if (isObject(val)) {
+                if (!visited.get(val)) {
+                    visited.set(val, true);
+                    // In order to keep array values consistent for both dot path  and
+                    // bracket syntax, we need to check if this is an array so that
+                    // this will output  { friends: [true] } and not { friends: { "0": true } }
+                    response[k] = Array.isArray(val) ? [] : {};
+                    setNestedObjectValues(val, value, visited, response[k]);
+                }
+            } else {
+                response[k] = value;
             }
-          } else {
-            response[k] = value;
-          }
         }
-      
+
         return response;
-      }
+    }
     // Handle Click Save
     useEffect(() => {
         if (footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) {
-            console.log(">>>>>>>>>>>>>>")
             validateForm()
                 .then((err) => {
                     console.log("THIS IS ErR I GET ", err, " i dont think it is touched ", touched)
@@ -193,34 +192,66 @@ const useFooterInitializer = (document_type_id) => {
                     dispatch(navBottomSending('[API]', 'Sending ...', ''));
                     setErrors(err);
                     if (isEmpty(err)) {
-                        let data = packDataFromValues(fact, values, document_type_id);
-                        console.log("I AM SUBMITTING ", data);
-                        if (document_type_id !== DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA && document_type_id !== DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
-                            saveDocument(document_type_id, data)
-                                .then((document_id) => {
-                                    setFieldValue('document_id', document_id, true);
-                                    dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
-                                })
-                                .catch((err) => {
-                                    console.log("Submit Failed ", err.response);
-                                    dispatch(navBottomError('[PUT]', 'Submit Failed', err));
-                                })
-                                .finally(() => { // Set that I already handled the Click
-                                    console.log(" I submitted and i am now handling click")
-                                    dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
-                                });
-                        } else { // For POST MASTER DATA
-                            saveMasterData(document_type_id, data)
-                                .then(() => {
-                                    dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
-                                })
-                                .catch((err) => {
-                                    console.log("Submit Failed ", err.response);
-                                    dispatch(navBottomError('[PUT]', 'Submit Failed', err));
-                                })
-                                .finally(() => { // Set that I already handled the Click
-                                    console.log(" I submitted and i am now handling click")
-                                });
+                        if (values.document_id) { // If have document_id, no need to create new doc
+                            let data = packDataFromValues(fact, values, document_type_id);
+                            console.log("I AM SUBMITTING ", data);
+                            if (document_type_id !== DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA && document_type_id !== DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
+                                editDocument(values.document_id, document_type_id, data)
+                                    .then((document_id) => {
+                                        setFieldValue('document_id', values.document_id, true);
+                                        dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
+                                    })
+                                    .catch((err) => {
+                                        console.log("Submit Failed ", err.response);
+                                        dispatch(navBottomError('[PUT]', 'Submit Failed', err));
+                                    })
+                                    .finally(() => { // Set that I already handled the Click
+                                        console.log(" I submitted and i am now handling click")
+                                        dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
+                                    });
+                            } else { // For POST MASTER DATA
+                                editMasterDataHelper(document_type_id, data)
+                                    .then(() => {
+                                        dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
+                                    })
+                                    .catch((err) => {
+                                        console.log("Submit Failed ", err.response);
+                                        dispatch(navBottomError('[PUT]', 'Submit Failed', err));
+                                    })
+                                    .finally(() => { // Set that I already handled the Click
+                                        console.log(" I submitted and i am now handling click")
+                                    });
+                            }
+                        } else { // If not have document_id
+                            let data = packDataFromValues(fact, values, document_type_id);
+                            console.log("I AM SUBMITTING ", data);
+                            if (document_type_id !== DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA && document_type_id !== DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
+                                saveDocument(document_type_id, data)
+                                    .then((document_id) => {
+                                        setFieldValue('document_id', document_id, true);
+                                        dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
+                                    })
+                                    .catch((err) => {
+                                        console.log("Submit Failed ", err.response);
+                                        dispatch(navBottomError('[PUT]', 'Submit Failed', err));
+                                    })
+                                    .finally(() => { // Set that I already handled the Click
+                                        console.log(" I submitted and i am now handling click")
+                                        dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
+                                    });
+                            } else { // For POST MASTER DATA
+                                saveMasterData(document_type_id, data)
+                                    .then(() => {
+                                        dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
+                                    })
+                                    .catch((err) => {
+                                        console.log("Submit Failed ", err.response);
+                                        dispatch(navBottomError('[PUT]', 'Submit Failed', err));
+                                    })
+                                    .finally(() => { // Set that I already handled the Click
+                                        console.log(" I submitted and i am now handling click")
+                                    });
+                            }
                         }
                     }
                 })
@@ -240,18 +271,33 @@ const useFooterInitializer = (document_type_id) => {
                     setErrors(err);
                     if (isEmpty(err)) {
                         if (values.document_id) { // If have document_id, no need to create new doc
-                            startDocumentApprovalFlow(values.document_id)
-                                .then(() => {
-                                    dispatch(navBottomSuccess('[PUT]', 'Started Approval Flow Success', ''));
+                            let data = packDataFromValues(fact, values, document_type_id);
+                            console.log("I AM SUBMITTING ", data);
+                            editDocument(values.document_id, document_type_id, data)
+                                .then((document_id) => {
+                                    console.log("document_id", values.document_id)
+                                    setFieldValue('document_id', values.document_id, true);
+                                    startDocumentApprovalFlow(values.document_id)
+                                        .then(() => {
+                                            dispatch(navBottomSuccess('[PUT]', 'Started Approval Flow Success', ''));
+                                        })
+                                        .catch((err) => {
+                                            //         //TODO Do something if Submit Fails
+                                            console.warn("Adding Approval Flow Failed ", err.response);
+                                            dispatch(navBottomError('[PUT]', 'Adding Approval Flow Failed', err));
+                                        })
+                                        .finally(() => { // Set that I already handled the Click
+                                            console.log(" I submitted and i am now handling click")
+                                            dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
+                                        });
                                 })
                                 .catch((err) => {
-                                    //         //TODO Do something if Submit Fails
-                                    console.warn("Adding Approval Flow Failed ", err.response);
-                                    dispatch(navBottomError('[PUT]', 'Adding Approval Flow Failed', err));
+                                    console.warn("Submit Failed ", err.response);
+                                    dispatch(navBottomError('[PUT]', 'Submit Failed', err));
+                                    dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
                                 })
                                 .finally(() => { // Set that I already handled the Click
-                                    console.log(" I submitted and i am now handling click")
-                                    dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
+                                    console.log(" I submitted ")
                                 });
                         } else { // If not have document_id
                             let data = packDataFromValues(fact, values, document_type_id);
@@ -287,6 +333,7 @@ const useFooterInitializer = (document_type_id) => {
                 })
                 .catch((err) => {
                     console.log("NUK IN CATCH <<<<<<<<")
+                    console.log("err", err)
                 })
         }
     }, [footer.requiresHandleClick[FOOTER_ACTIONS.SEND]]);

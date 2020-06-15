@@ -85,6 +85,8 @@ const EnhancedGoodsReceiptComponent = withFormik({
         //Field ที่ไม่ได้ display
         document_id: '', // changes when document is displayed (internal_document_id field validation)
 
+        // FOR CHECK USER_ID ADMIN FOR EDIT
+        modeEdit: false,
         // For Attactment
         desrciption_files_length: '',
         desrciption_files: [],

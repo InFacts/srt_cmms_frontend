@@ -21,7 +21,16 @@ export const FACTS = {
     UNIT_OF_MEASURE_GROUPS: "unit-of-measure-groups",
     UNIT_OF_MEASURE: "unit-of-measures",
     ITEM_TYPE: "item-type",
-    WAREHOUSES_TYPE: "warehouse-type"
+    WAREHOUSES_TYPE: "warehouse-type",
+
+    // FOR SS101 LOOK UP
+    SS101_RECV_ACCIDENT_FROM: "ss101/recv-accident-from",
+    SS101_ACCIDENT_CAUSE: "ss101/accident-cause",
+    SS101_SERVICE_METHOD: "ss101/service-method",
+    SS101_HARDWARE_TYPE: "ss101/hardware-type",
+    SS101_CAR_TYPE: "ss101/car-type",
+    SS101_CASE_TYPE: "ss101/case-type",
+    SS101_INTERRUPT: "ss101/interrupt",
 }
 
 // Actions

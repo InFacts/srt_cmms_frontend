@@ -287,7 +287,7 @@ const BottomContent = (props) => {
                     <th className="font text-center" style={{ minWidth: "100px" }}>คงคลัง</th>
                     <th className="font text-center" style={{ minWidth: "100px" }}>รอส่งมอบ</th>
                     <th className="font text-center" style={{ minWidth: "100px" }}>ระหว่างการจัดซื้อ</th>
-                    <th className="font text-center" style={{ minWidth: "100px" }}>จำนวนสุทธิ</th>
+                    <th className="font text-center" style={{ minWidth: "100px" }}>รวมทั้งสิ้น</th>
                     <th className="font text-center" style={{ minWidth: "100px" }}>สถานะ</th>
                     {/* <th className="font blue text-center" style={{ minWidth: "80px" }}>ของเสีย</th>
                     <th className="font blue text-center" style={{ minWidth: "80px" }}>ส่งซ่อม</th>
@@ -305,7 +305,7 @@ const BottomContent = (props) => {
                       <td className="edit-padding text-center disable">{goods_onhand.current_unit_count}</td>
                       <td className="edit-padding text-center disable">{goods_onhand.committed_unit_count}</td>
                       <td className="edit-padding text-center disable">0</td>  {/* ระหว่างจัดซื้อ */}
-                      <td className="edit-padding text-center disable">{goods_onhand.current_unit_count - goods_onhand.committed_unit_count + 0}</td>  {/* จำนวนสุทธิ */}
+                      <td className="edit-padding text-center disable">{goods_onhand.current_unit_count - goods_onhand.committed_unit_count + 0}</td>  {/* รวมทั้งสิ้น */}
                       <td className="edit-padding text-center disable">{goods_onhand.item_status_description_th}</td>  {/* สถานะเอกอะไหล่ */}
                       {/* <td className="edit-padding text-center blue font-red">{goods_onhand.broken}</td>
                         <td className="edit-padding text-center blue">{goods_onhand.send_fix}</td>

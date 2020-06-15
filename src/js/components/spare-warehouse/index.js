@@ -61,6 +61,8 @@ const EnhancedGoodsReceiptComponent = withFormik({
         
         file: [],
         
+        // FOR CHECK USER_ID ADMIN FOR EDIT
+        modeEdit: false,
         // For Attactment
         desrciption_files_length: '',
         desrciption_files: [],

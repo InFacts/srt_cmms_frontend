@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux'
+import React, { useEffectm, useState } from 'react';
+import { connect, useSelector, shallowEqual } from 'react-redux';
 
 import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
@@ -8,28 +8,35 @@ import { API_URL_DATABASE } from '../../config_url.js';
 import TextareaInput from '../common/formik-textarea-input';
 import TableStatus from '../common/table-status';
 import Table from '../common/table';
-
 import PopupModalNoPart from '../common/popup-modal-nopart'
 
 import Files from '../common/files2'
 
 import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
 import { useFormikContext } from 'formik';
-
-import { sumTotalLineItemHelper, sumTotalHelper } from '../../helper';
-
+import { FACTS } from '../../redux/modules/api/fact.js';
+import {
+  getEmployeeIDFromUserID, fetchStepApprovalDocumentData,
+  DOCUMENT_TYPE_ID, getDocumentbyInternalDocumentID,
+  isValidInternalDocumentIDFormat, isValidInternalDocumentIDDraftFormat,
+  fetchAttachmentDocumentData, validateEmployeeIDField, validateWarehouseIDField,
+  validateInternalDocumentIDFieldHelper, DOCUMENT_STATUS, getUserIDFromEmployeeID,
+  validatedataDocumentField,sumTotalLineItemHelper, sumTotalHelper
+} from '../../helper';
 import '../../../css/table.css';
 
 const BottomContent = (props) => {
+  const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
+  const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
+  const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
+  const decoded_token = useSelector((state) => ({...state.token.decoded_token}), shallowEqual);
 
   const [lineNumber, setLineNumber] = useState('');
-
   const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
   const sumTotalLineItem = (quantity, per_unit_price, description) => sumTotalLineItemHelper(quantity, per_unit_price, description);
-
   const sumTotal = (list_show) => sumTotalHelper(list_show);
-
+  
   const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => {
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
     if (values.line_items[index].internal_item_id === internal_item_id) {
@@ -51,13 +58,14 @@ const BottomContent = (props) => {
       setFieldValue(fieldName + `.quantity`, 0, false);
       setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
       setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+      setFieldValue(fieldName + `.line_number`, index+1, false);
+      setFieldValue(fieldName + `.item_status_id`, 1, false);
       setFieldValue(fieldName + `.per_unit_price`, 0, false);
       return;
     } else {
       return 'Invalid Number ID';
     }
   }
-
   const validateLineNumberQuatityItemIDField = (fieldName, quantity, index) => {
     // internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
@@ -75,7 +83,6 @@ const BottomContent = (props) => {
       return 'Invalid Quantity Line Item';
     }
   }
-
   const validateLineNumberPerUnitPriceItemIDField = (fieldName, per_unit_price, index) => {
     // internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
@@ -131,6 +138,9 @@ const BottomContent = (props) => {
     setFieldValue('file', [], false);
   };
 
+  const checkBooleanForEdit = (values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.FAST_TRACK )
+  && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
+
   return (
     <div id="blackground-gray">
       <div className="container_12 clearfix">
@@ -144,6 +154,7 @@ const BottomContent = (props) => {
                 validateLineNumberQuatityItemIDField={validateLineNumberQuatityItemIDField}
                 validateLineNumberPerUnitPriceItemIDField={validateLineNumberPerUnitPriceItemIDField}
                 setLineNumber={setLineNumber}
+                checkBooleanForEdit={checkBooleanForEdit}
               />
             </div>
 
@@ -152,14 +163,13 @@ const BottomContent = (props) => {
               <div className="grid_3 float-right push_0">
                 <input type="text" className="cancel-default" value={sumTotal(values.line_items)} disabled="disabled"></input>
               </div>
-              <div className="grid_2 float-right push_0"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
+              <div className="grid_2 float-right push_0"><p className="cancel-default float-right">รวมเป็นเงิน</p></div>
             </div>
             <div className="container_12">
               <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
               <div className="grid_11">
                 <TextareaInput name="remark" tabIndex="6"
-                  disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-                  searchable={props.actionMode !== TOOLBAR_MODE.SEARCH}
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                 />
               </div>
             </div>

@@ -10,7 +10,7 @@ const DateTimeInput = ({ ...props }) => {
       <input type="datetime-local" className="cancel-default" {...field} {...props}></input>
       {meta.touched && meta.error ? (
         <div className="error">
-          <span class="tooltiptext">{meta.error}</span>
+          <span class="tooltiptext" style={props.cssStyle}>{meta.error}</span>
         </div>
       ) : null}
     </>

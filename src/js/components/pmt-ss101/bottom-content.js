@@ -17,11 +17,25 @@ import PopupModalNoPart from '../common/popup-modal-nopart';
 
 import { useFormikContext } from 'formik';
 
+import { validatedataDocumentField, DOCUMENT_STATUS, getUserIDFromEmployeeID } from '../../helper';
+import { FACTS } from '../../redux/modules/api/fact';
+
 const BottomContent = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
     const factDistricts = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
     const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
     const factStations = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
+    const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
+    const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
+
+    const factRecvAccidentFrom = useSelector((state) => ({ ...state.api.fact.SS101_RECV_ACCIDENT_FROM }), shallowEqual);
+    const factAccidentCause = useSelector((state) => ({ ...state.api.fact.SS101_ACCIDENT_CAUSE }), shallowEqual);
+    const factServiceMethod = useSelector((state) => ({ ...state.api.fact.SS101_SERVICE_METHOD }), shallowEqual);
+    const factHardwareType = useSelector((state) => ({ ...state.api.fact.SS101_HARDWARE_TYPE }), shallowEqual);
+    const factCarType = useSelector((state) => ({ ...state.api.fact.SS101_CAR_TYPE }), shallowEqual);
+    const factCaseType = useSelector((state) => ({ ...state.api.fact.SS101_CASE_TYPE }), shallowEqual);
+    const factInterrupt = useSelector((state) => ({ ...state.api.fact.SS101_INTERRUPT }), shallowEqual);
+
     const { values, setFieldValue } = useFormikContext();
 
     const [lineNumber, setLineNumber] = useState('');
@@ -56,6 +70,23 @@ const BottomContent = (props) => {
         }
     }
 
+    const validateDocumentAccidentNameField = (...args) => validatedataDocumentField("accident_name", setFieldValue, ...args)
+    const validateDocumentAccidentOnField = (...args) => validatedataDocumentField("accident_on", setFieldValue, ...args)
+    const validateDocumentRequestOnField = (...args) => validatedataDocumentField("request_on", setFieldValue, ...args)
+    const validateDocumentRequestByField = (...args) => validatedataDocumentField("request_by", setFieldValue, ...args)
+    const validateDocumentRecvAccidentFromRecvIDField = (...args) => validatedataDocumentField("recv_accident_from_recv_id", setFieldValue, ...args)
+    const validateDocumentCarTypeIDField = (...args) => validatedataDocumentField("car_type_id", setFieldValue, ...args)
+    const validateDocumentDepartedOnField = (...args) => validatedataDocumentField("departed_on", setFieldValue, ...args)
+    const validateDocumentArrivedOnField = (...args) => validatedataDocumentField("arrived_on", setFieldValue, ...args)
+    const validateDocumentFinishedOnField = (...args) => validatedataDocumentField("finished_on", setFieldValue, ...args)
+    const validateDocumentSystemTypeGroupIDnField = (...args) => validatedataDocumentField("system_type_group_id", setFieldValue, ...args)
+    const validateDocumentSystemTypeIDField = (...args) => validatedataDocumentField("system_type_id", setFieldValue, ...args)
+
+    const validateDocumentLocationDistrictIDField = (...args) => validatedataDocumentField("location_district_id", setFieldValue, ...args)
+    const validateDocumentLocationNodeIDField = (...args) => validatedataDocumentField("location_node_id", setFieldValue, ...args)
+    const validateDocumentLocationStationIDField = (...args) => validatedataDocumentField("location_station_id", setFieldValue, ...args)
+
+    const checkBooleanForEdit = (values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.FAST_TRACK) && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
     return (
     <div id="blackground-gray">
     <div className="container_12 clearfix">
@@ -70,8 +101,8 @@ const BottomContent = (props) => {
                         {/* Accident Name  */}
                         <Label>ชื่องาน</Label>
                         <div className="grid_4 alpha omega">
-                            <TextInput name="accident_name"
-                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                            <TextInput name="accident_name" validate={validateDocumentAccidentNameField}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
                         <div class="clear" />
@@ -79,8 +110,8 @@ const BottomContent = (props) => {
                         {/* Accident On  */}
                         <Label>วันเวลาที่เกิดเหตุ</Label>
                         <div className="grid_4 alpha omega">
-                            <DateTimeInput name="accident_on"
-                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                            <DateTimeInput name="accident_on" validate={validateDocumentAccidentOnField}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
                         <div class="clear" />
@@ -88,8 +119,8 @@ const BottomContent = (props) => {
                         {/* request_on */}
                         <Label>วันเวลาที่รับแจ้ง</Label>
                         <div className="grid_4 alpha omega">
-                            <DateTimeInput name="request_on"
-                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                            <DateTimeInput name="request_on" validate={validateDocumentRequestOnField}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
                         <div class="clear" />
@@ -97,8 +128,8 @@ const BottomContent = (props) => {
                         {/* request_by */}
                         <Label>ได้รับเหตุจาก</Label>
                         <div className="grid_4 alpha omega">
-                            <TextInput name="request_by"
-                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                            <TextInput name="request_by" validate={validateDocumentRequestByField}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
                         <div class="clear" />
@@ -107,7 +138,7 @@ const BottomContent = (props) => {
                         <Label>รับข้อมูลผ่านช่องทาง</Label>
                         <div className="grid_4 alpha omega">
                             {/* Need to change to radio button later */}
-                            <SelectNoChildrenInput name="recv_accident_from_recv_idid" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                            <SelectNoChildrenInput name="recv_accident_from_recv_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentRecvAccidentFromRecvIDField}>
                                 <option value='' selected></option>
                                 <option value='1' >โทรศัพท์</option>
                                 <option value='2' >จดหมาย</option>
@@ -120,7 +151,7 @@ const BottomContent = (props) => {
                         {/* car_type_id  */}
                         <Label>เดินทางโดย</Label>
                         <div className="grid_4 alpha omega">
-                            <SelectNoChildrenInput name="car_type_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                            <SelectNoChildrenInput name="car_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentCarTypeIDField}>
                                 <option value='' selected></option>
                                 <option value='1' >รถยนต์</option>
                                 <option value='2' >รถโดยสาร</option>
@@ -133,8 +164,8 @@ const BottomContent = (props) => {
                         {/* departed_on  */}
                         <Label>ออกเดินทาง</Label>
                         <div className="grid_4 alpha omega">
-                            <DateTimeInput name="departed_on"
-                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                            <DateTimeInput name="departed_on" validate={validateDocumentDepartedOnField}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
                         <div class="clear" />
@@ -142,8 +173,8 @@ const BottomContent = (props) => {
                         {/* arrived_on  */}
                         <Label>เดินทางถึง</Label>
                         <div className="grid_4 alpha omega">
-                            <DateTimeInput name="arrived_on"
-                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                            <DateTimeInput name="arrived_on" validate={validateDocumentArrivedOnField}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
                         <div class="clear" />
@@ -151,8 +182,8 @@ const BottomContent = (props) => {
                         {/* finished_on  */}
                         <Label>วันเวลาที่แล้วเสร็จ</Label>
                         <div className="grid_4 alpha omega">
-                            <DateTimeInput name="finished_on"
-                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                            <DateTimeInput name="finished_on" validate={validateDocumentFinishedOnField}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
                         <div class="clear" />
@@ -160,7 +191,7 @@ const BottomContent = (props) => {
                         {/* system_type_group_id  */}
                         <Label>ระบบตรวจซ่อม</Label>
                         <div className="grid_4 alpha omega">
-                            <SelectNoChildrenInput name="system_type_group_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                            <SelectNoChildrenInput name="system_type_group_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentSystemTypeGroupIDnField}>
                                 <option value='' selected></option>
                                 <option value='1' >ระบบเครื่องกั้นถนน</option>
                     </SelectNoChildrenInput>
@@ -171,7 +202,7 @@ const BottomContent = (props) => {
                 {/* system_type_id  */}
                 <Label>ชนิดระบบตรวจซ่อม</Label>
                 <div className="grid_4 alpha omega">
-                    <SelectNoChildrenInput name="system_type_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                    <SelectNoChildrenInput name="system_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentSystemTypeIDField}>
                         <option value='' selected></option>
                         <option value='1' >ชนิดคานทำงานด้วยไฟฟ้า (ก.1)</option>
                     </SelectNoChildrenInput>
@@ -182,7 +213,7 @@ const BottomContent = (props) => {
                 {/* hardware_type_id  */}
                 <Label>ชื่ออุปกรณ์ที่บำรุงรักษา</Label>
                 <div className="grid_4 alpha omega">
-                    <SelectNoChildrenInput name="hardware_type_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                    <SelectNoChildrenInput name="hardware_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
                         <option value='' selected></option>
                         <option value='1' >เครื่องกั้นถนนชนิดคานทำงานด้วยไฟฟ้า (ก.1)</option>
                     </SelectNoChildrenInput>
@@ -197,45 +228,50 @@ const BottomContent = (props) => {
             <div className="grid_6 prefix_1">
                 {/* District ID */}
                 <Label>สถานที่ แขวง</Label>
-                <div className="grid_4 alpha omega">
-                    <SelectNoChildrenInput name="location_district_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
-                        <option value=''></option>
-                        {factDistricts.items.map(function ({ district_id, name, division_id }) {
-                            return <option value={district_id} key={district_id}> {name} </option>
-                        })}
-                    </SelectNoChildrenInput>
-                </div>
+                        <div className="grid_4 alpha omega">
+                            <SelectNoChildrenInput name="location_district_id" validate={validateDocumentLocationDistrictIDField}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                cssStyle={{ left: "-240px", top: "10px" }}>
+                                <option value=''></option>
+                                {factDistricts.items.map(function ({ district_id, name, division_id }) {
+                                    return <option value={district_id} key={district_id}> {name} </option>
+                                })}
+                            </SelectNoChildrenInput>
+                        </div>
 
-                <div class="clear" />
+                        <div class="clear" />
 
-                {/* Node ID */}
-                <Label>สถานที่ ตอน</Label>
-                <div className="grid_4 alpha omega">
-                    <SelectNoChildrenInput name="location_node_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
-                        <option value=''></option>
-                        {factNodes.items.map(function ({ node_id, name, district_id }) {
-                            if (values.district_id == district_id) { // Shallow equality, district ID may be string
-                                return <option value={node_id} key={node_id}>{name}</option>
-                            }
-                        })}
-                    </SelectNoChildrenInput>
-                </div>
+                        {/* Node ID */}
+                        <Label>สถานที่ ตอน</Label>
+                        <div className="grid_4 alpha omega">
+                            <SelectNoChildrenInput name="location_node_id" validate={validateDocumentLocationNodeIDField}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                cssStyle={{ left: "-240px", top: "10px" }}>
+                                <option value=''></option>
+                                {factNodes.items.map(function ({ node_id, name, district_id }) {
+                                    if (values.location_district_id == district_id) { // Shallow equality, district ID may be string
+                                        return <option value={node_id} key={node_id}>{name}</option>
+                                    }
+                                })}
+                            </SelectNoChildrenInput>
+                        </div>
 
-                <div class="clear" />
+                        <div class="clear" />
 
-                {/* Station ID */}
-                <Label>สถานที่ สถานี</Label>
-                <div className="grid_4 alpha omega">
-                    <SelectNoChildrenInput name="location_station_id"
-                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
-                        <option value=''></option>
-                        {factStations.items.map(function ({ station_id, name, node_id }) {
-                            if (values.node_id == node_id) { // Shallow equality, node ID may be string
-                                return <option value={station_id} key={station_id}> {name} </option>
-                            }
-                        })}
-                    </SelectNoChildrenInput>
-                </div>
+                        {/* Station ID */}
+                        <Label>สถานที่ สถานี</Label>
+                        <div className="grid_4 alpha omega">
+                            <SelectNoChildrenInput name="location_station_id" validate={validateDocumentLocationStationIDField}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                cssStyle={{ left: "-240px", top: "10px" }}>
+                                <option value=''></option>
+                                {factStations.items.map(function ({ station_id, name, node_id }) {
+                                    if (values.location_node_id == node_id) { // Shallow equality, node ID may be string
+                                        return <option value={station_id} key={station_id}> {name} </option>
+                                    }
+                                })}
+                            </SelectNoChildrenInput>
+                        </div>
 
                 <div class="clear" />
 
@@ -243,7 +279,7 @@ const BottomContent = (props) => {
                 <Label>รายละเอียดสถานที่</Label>
                 <div className="grid_4 alpha omega">
                     <TextareaInput name="location_detail"
-                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                        disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                 </div>
 
                 <div class="clear" />
@@ -252,7 +288,7 @@ const BottomContent = (props) => {
                 <Label>สาเหตุและอาการเสียโดยสรุป</Label>
                 <div className="grid_4 alpha omega">
                     <TextareaInput name="summary_cause_condition"
-                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                        disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                 </div>
 
                 <div class="clear" />
@@ -261,7 +297,7 @@ const BottomContent = (props) => {
                 <Label>ขบวนรถที่</Label>
                 <div className="grid_4 alpha omega">
                     <TextInput name="cargo_id"
-                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                        disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                 </div>
 
                 <div class="clear" />
@@ -270,7 +306,7 @@ const BottomContent = (props) => {
                 <Label>เสียเวลาเพราะเหตุนี้</Label>
                 <div className="grid_3 alpha omega">
                     <NumberInput name="total_fail_time" step={1}
-                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                        disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                 </div>
                 <div className="grid_1  omega">
                     <p className="top-text">
@@ -283,7 +319,7 @@ const BottomContent = (props) => {
                 {/* service_method_id */}
                 <Label>ประเภทการซ่อม</Label>
                 <div className="grid_4 alpha omega">
-                    <SelectNoChildrenInput name="service_method_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                    <SelectNoChildrenInput name="service_method_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
                         <option value='' selected></option>
                     </SelectNoChildrenInput>
                 </div>
@@ -294,7 +330,7 @@ const BottomContent = (props) => {
                 <Label>สรุปการแก้ไขและการซ่อมแซม</Label>
                 <div className="grid_4 alpha omega">
                     <TextareaInput name="service_method_desc"
-                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                        disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                 </div>
 
                 <div class="clear" />
@@ -302,7 +338,7 @@ const BottomContent = (props) => {
                 {/* interrupt_id */}
                 <Label>ยังไมไ่ด้จัดการแก้ไขเพราะเหตุนี้</Label>
                 <div className="grid_4 alpha omega">
-                    <SelectNoChildrenInput name="interrupt_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                    <SelectNoChildrenInput name="interrupt_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
                         <option value='' selected></option>
                     </SelectNoChildrenInput>
                 </div>
@@ -315,7 +351,7 @@ const BottomContent = (props) => {
                 <Label>หมายเหตุ</Label>
                 <div className="grid_11 alpha omega">
                     <TextareaInput name="remark"
-                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                        disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                 </div>
 
                 <div class="clear" />
@@ -334,7 +370,7 @@ const BottomContent = (props) => {
                 <Label>ผู้ควบคุมตรวจสอบชื่อ</Label>
                 <div className="grid_4 alpha omega">
                     <TextInput name="auditor_name"
-                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                        disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                 </div>
 
                 <div class="clear" />
@@ -343,7 +379,7 @@ const BottomContent = (props) => {
                 <Label>ดำเนินการแก้ไขชื่อ</Label>
                 <div className="grid_4 alpha omega">
                     <TextInput name="fixer_name"
-                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                        disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                 </div>
 
                 <div class="clear" />
@@ -353,7 +389,7 @@ const BottomContent = (props) => {
                 <Label>รายชื่อเพื่อนร่วมงาน</Label>
                 <div className="grid_4 alpha omega">
                     <TextInput name="member_1"
-                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                        disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                 </div>
 
                 <div class="clear" />
@@ -362,7 +398,7 @@ const BottomContent = (props) => {
                 <Label>รายชื่อเพื่อนร่วมงาน</Label>
                 <div className="grid_4 alpha omega">
                     <TextInput name="member_2"
-                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                        disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                 </div>
 
                 <div class="clear" />
@@ -371,7 +407,7 @@ const BottomContent = (props) => {
                 <Label>รายชื่อเพื่อนร่วมงาน</Label>
                 <div className="grid_4 alpha omega">
                     <TextInput name="member_3"
-                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                        disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                 </div>
 
                 <div class="clear" />

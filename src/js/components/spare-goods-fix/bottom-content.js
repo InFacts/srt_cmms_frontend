@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux'
+import { connect, useSelector, shallowEqual } from 'react-redux';
 
 import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
@@ -13,15 +13,22 @@ import Files from '../common/files2'
 
 import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
 import { useFormikContext } from 'formik';
+import { FACTS } from '../../redux/modules/api/fact.js';
 
 import PopupModalNoPart from '../common/popup-modal-nopart'
 
 import '../../../css/table.css';
 
-import { fetchGoodsOnhandData, getNumberFromEscapedString, getLotFromQty, weightedAverage, sumTotalLineItemHelper, sumTotalHelper } from '../../helper';
+import {
+  fetchGoodsOnhandData, getNumberFromEscapedString, getLotFromQty, weightedAverage,
+  sumTotalLineItemHelper, sumTotalHelper, DOCUMENT_STATUS, getUserIDFromEmployeeID
+} from '../../helper';
 
 const BottomContent = (props) => {
-
+  const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
+  const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
+  const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
+  const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
   const [lineNumber, setLineNumber] = useState('');
 
   const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
@@ -53,19 +60,25 @@ const BottomContent = (props) => {
       setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
       setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
       // setFieldValue(fieldName + `.per_unit_price`, 0, false);
+      setFieldValue(fieldName + `.line_number`, index + 1, false);
+      setFieldValue(fieldName + `.item_status_id`, 1, false);
       setFieldValue(fieldName + `.item_id`, item.item_id, false);
+      setFieldValue(fieldName + `.at_source`, [], false);
 
       fetchGoodsOnhandData(getNumberFromEscapedString(values.src_warehouse_id), item.item_id)
         .then((at_source) => {
           var at_sources = at_source;
-          var at_source = at_sources.find(at_source => `${at_source.item_status_id}` === `${values.line_items[index].item_status_id}`); // Returns undefined if not found
-          if (at_sources) {
+          var at_source = at_sources.find(at_source => `${at_source.item_status_id}` === `1`); // Returns undefined if not found
+          console.log("at_source", at_source)
+          if (at_source) {
             setFieldValue(`line_items[${index}].at_source`, [at_source], false);
             setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(at_source.pricing.fifo, values.line_items[index].quantity)), false);
             return resolve();
           }
           else {
             console.log(" NOT FOUND AT SOURCES FOR CALCULATE FIFO")
+            setFieldValue(`line_items[${index}].at_source`, [], false);
+            setFieldValue(`line_items[${index}].per_unit_price`, 0, false);
             return resolve();
           }
         })
@@ -107,7 +120,7 @@ const BottomContent = (props) => {
         }
         else {
           console.log(" NOT FOUND AT SOURCES FOR CALCULATE FIFO")
-          setFieldValue(`line_items[${index}].at_source`, [{"current_unit_count": 0, "committed_unit_count": 0}], false);
+          setFieldValue(`line_items[${index}].at_source`, [{ "current_unit_count": 0, "committed_unit_count": 0 }], false);
           setFieldValue(`line_items[${index}].item_status_id`, item_status_id, false);
           setFieldValue(`line_items[${index}].per_unit_price`, 0, false);
         }
@@ -152,6 +165,9 @@ const BottomContent = (props) => {
     setFieldValue('file', [], false);
   };
 
+  const checkBooleanForEdit = (values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.FAST_TRACK )
+  && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
+
   return (
     <div id="blackground-gray">
       <div className="container_12 clearfix">
@@ -165,6 +181,7 @@ const BottomContent = (props) => {
                 validateLineNumberQuatityItemIDField={validateLineNumberQuatityItemIDField}
                 validateLineNumberItemStatusIDField={validateLineNumberItemStatusIDField}
                 setLineNumber={setLineNumber}
+                checkBooleanForEdit={checkBooleanForEdit}
               />
             </div>
 
@@ -173,14 +190,13 @@ const BottomContent = (props) => {
               <div className="grid_3 float-right push_0">
                 <input type="text" className="cancel-default" value={sumTotal(values.line_items)} disabled="disabled"></input>
               </div>
-              <div className="grid_2 float-right push_0"><p className="cancel-default float-right">จำนวนสุทธิ</p></div>
+              <div className="grid_2 float-right push_0"><p className="cancel-default float-right">รวมเป็นเงิน</p></div>
             </div>
             <div className="container_12">
               <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
               <div className="grid_11">
                 <TextareaInput name="remark" tabIndex="6"
-                  disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-                  searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart"
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                 />
               </div>
             </div>

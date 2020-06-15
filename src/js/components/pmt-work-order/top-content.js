@@ -13,9 +13,11 @@ import { useFormikContext, useField } from 'formik';
 import PopupModalDocument from '../common/popup-modal-document'
 import PopupModalUsername from '../common/popup-modal-username'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
-import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, validateEmployeeIDField, validateWarehouseIDField, validateInternalDocumentIDFieldHelper } from '../../helper';
-
+import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, validateEmployeeIDField, 
+    validateWarehouseIDField, validateInternalDocumentIDFieldHelper, DOCUMENT_STATUS, validatedataDocumentField, getUserIDFromEmployeeID } from '../../helper';
+import { FACTS } from '../../redux/modules/api/fact';
 import Label from '../common/form-label'
+import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
 
 const TopContent = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
@@ -26,24 +28,16 @@ const TopContent = (props) => {
 
 
     // Fill Default Forms
-    useEffect(() => {
-        if (toolbar.mode === TOOLBAR_MODE.ADD) {
-            if (!values.internal_document_id && touched.internal_document_id) {
-                setFieldValue('internal_document_id', `draft-${uuidv4()}`, true)
-            }
-            setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(fact.users, decoded_token.id));
-            setFieldValue("created_on", new Date().toISOString().slice(0, 16), false);
-        }
+    useFillDefaultsOnModeAdd();
 
-    }, [fact.users, toolbar.mode, touched.internal_document_id, !values.internal_document_id,
-    toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]]) // This needs requiresHandleClick since it resetsForm AFTER the setField Value, making it not show anything
-
-
-    const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(DOCUMENT_TYPE_ID.WORK_ORDER, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
+    const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.WORK_ORDER, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
 
     const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
     const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
 
+    const validateDocumentDateField = (...args) => validatedataDocumentField("document_date", setFieldValue, ...args)
+
+    const checkBooleanForEdit = (values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.FAST_TRACK) && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
     return (
         <div id="blackground-white">
             <div className="container_12 clearfix" style={{ marginTop: "55px" }}>
@@ -68,8 +62,8 @@ const TopContent = (props) => {
                     <div className="grid_3 alpha">
                         <TextInput name="created_by_user_employee_id"
                             validate={validateUserEmployeeIDField}
-                            searchable={toolbar.mode !== TOOLBAR_MODE.SEARCH}
-                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                            searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH}
+                            disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                             ariaControls="modalUserName"
                             tabIndex="2" />
                     </div>
@@ -90,7 +84,7 @@ const TopContent = (props) => {
                     <Label>เลขที่เอกสารแจ้งเหตุขัดข้อง</Label>
                     <div className="grid_3 alpha">
                         <TextInput name="wr_internal_document_id"
-                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                            disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                             tabIndex="4" />
                     </div>
                     <div class="clear" />
@@ -119,8 +113,8 @@ const TopContent = (props) => {
                     {/* Document date */}
                     <Label>วันที่เอกสาร</Label>
                     <div className="grid_3 alpha">
-                        <DateInput name="document_date"
-                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                        <DateInput name="document_date" validate={validateDocumentDateField}
+                            disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                             tabIndex="7" />
                     </div>
                     <div class="clear" />
