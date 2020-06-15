@@ -11,7 +11,7 @@ const TextInput = ({ ...props }) => {
   return (
     <>
       <div className="p-search-box cancel-margin">
-        <input type='text' className='p-search-box__input cancel-default' onClick={props.handleModalClick} {...field} {...props} />
+        <input type='text' className='p-search-box__input cancel-default' {...field} {...props} />
         {props.searchable &&
           <button type="button" className="p-search-box__button cancel-padding hidden" >
             <i className="p-icon--search" aria-controls={props.ariaControls} onClick={props.handleModalClick} />
