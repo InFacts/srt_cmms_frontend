@@ -174,7 +174,7 @@
     margin-left: auto;
   }
   
-  .bootstrap-wrapper .row {
+  .bootstrap-wrapper .row_bootstrap {
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -189,11 +189,6 @@
   .bootstrap-wrapper .no-gutters {
     margin-right: 0;
     margin-left: 0;
-  }
-  
-  .bootstrap-wrapper .row .no-padding {
-    padding-right: 0 !important;
-    padding-left: 0 !important;
   }
   
   
@@ -220,9 +215,9 @@
         -ms-flex-preferred-size: 0;
             flex-basis: 0;
     -webkit-box-flex: 1;
-    -webkit-flex-grow: 1;
+    -webkit-flex-grow_bootstrap: 1;
         -ms-flex-positive: 1;
-            flex-grow: 1;
+            flex-grow_bootstrap: 1;
     max-width: 100%;
   }
   
@@ -486,9 +481,9 @@
           -ms-flex-preferred-size: 0;
               flex-basis: 0;
       -webkit-box-flex: 1;
-      -webkit-flex-grow: 1;
+      -webkit-flex-grow_bootstrap: 1;
           -ms-flex-positive: 1;
-              flex-grow: 1;
+              flex-grow_bootstrap: 1;
       max-width: 100%;
     }
     .bootstrap-wrapper .col-sm-auto {
@@ -717,9 +712,9 @@
           -ms-flex-preferred-size: 0;
               flex-basis: 0;
       -webkit-box-flex: 1;
-      -webkit-flex-grow: 1;
+      -webkit-flex-grow_bootstrap: 1;
           -ms-flex-positive: 1;
-              flex-grow: 1;
+              flex-grow_bootstrap: 1;
       max-width: 100%;
     }
     .bootstrap-wrapper .col-md-auto {
@@ -948,9 +943,9 @@
           -ms-flex-preferred-size: 0;
               flex-basis: 0;
       -webkit-box-flex: 1;
-      -webkit-flex-grow: 1;
+      -webkit-flex-grow_bootstrap: 1;
           -ms-flex-positive: 1;
-              flex-grow: 1;
+              flex-grow_bootstrap: 1;
       max-width: 100%;
     }
     .bootstrap-wrapper .col-lg-auto {
@@ -1179,9 +1174,9 @@
           -ms-flex-preferred-size: 0;
               flex-basis: 0;
       -webkit-box-flex: 1;
-      -webkit-flex-grow: 1;
+      -webkit-flex-grow_bootstrap: 1;
           -ms-flex-positive: 1;
-              flex-grow: 1;
+              flex-grow_bootstrap: 1;
       max-width: 100%;
     }
     .bootstrap-wrapper .col-xl-auto {

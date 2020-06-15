@@ -14,6 +14,8 @@ import useTokenInitializer from '../../hooks/token-initializer';
 import Scatter from './d3-scatter';
 import LineGraph from './d3-line-graph';
 
+
+
 const AlsSpareComponent = () => {
   const dispatch = useDispatch();
   const loggedIn = useSelector(state => state.token.isLoggedIn);
@@ -31,14 +33,14 @@ const AlsSpareComponent = () => {
       {!loggedIn ? <Redirect to="/" /> : null}
 
       <div id="blackground-white" >
-        <div class="bootstrap-wrapper">
+        <div className="bootstrap-wrapper">
           <div class="container" style={{ marginTop: "80px" }}>
             {/* Section Title */}
             <h4 className="head-title">ระบบวิเคราะห์การวางแผนสำรองอะไหล่</h4>
 
 
             {/* Columns have horizontal padding to create the gutters between individual columns, however, you can remove the margin from rows and padding from columns with .no-gutters on the .row. */}
-            <div class="row no-gutters no-padding">
+            <div className="row_bootstrap no-gutters">
               {/* === Annual Average Inventory Month Line Graph :1st Row, 1st Column === */}
               <div class="col-4">
                 <LineGraph />
@@ -46,16 +48,20 @@ const AlsSpareComponent = () => {
 
 
               {/* === Current Average Inventory Month Text :1st Row, 2nd Column === */}
-              <div class="col-4">.col-md-4</div>
+              <div className="col-4">
+              {/* <LineGraph /> */}
+              </div>
 
               {/* === Current Inventory Month vs Planned Inventory Month Scatter Plot :1st Row, 2nd Column === */}
-              <div class="col-4">.col-md-4</div>
+              <div className="col-4">
+              {/* <LineGraph /> */}
+              </div>
             </div>
-            <div class="row hidden-sm-down">
-              <div class="col-md-6">.col-md-6</div>
-              <div class="col-md-6">.col-md-6</div>
+            <div className="row hidden-sm-down">
+              <div className="col-md-6">.col-md-6</div>
+              <div className="col-md-6">.col-md-6</div>
             </div>
-            <Scatter />
+            {/* <Scatter /> */}
           </div>
         </div>
       </div>
