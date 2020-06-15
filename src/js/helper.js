@@ -36,7 +36,7 @@ export const DOCUMENT_TYPE_ID = {
     WAREHOUSE_MASTER_DATA: 1,
     ITEM_MASTER_DATA: 2,
     EQUIPMENT_MASTER_DATA: 3,
-    
+
 }
 export const DOCUMENT_TYPE_NOTGROUP_ID = {
     WORK_REQUEST: 2011,
@@ -490,7 +490,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             document: document_part,
             specific: ss101_part,
         }
-    } 
+    }
 }
 
 
@@ -1393,7 +1393,7 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
                 }
 
 
-            } 
+            }
             // else if (document_type_group_id === DOCUMENT_TYPE_ID.MAINTENANT_ITEM) {
             //     console.log("i know i am in maintenant item!!")
             //     if ((toolbar.mode === TOOLBAR_MODE.SEARCH ||
@@ -1469,12 +1469,11 @@ export const validateWarehouseIDField = (fieldName, fact, setFieldValue, warehou
 }
 
 export const validatedataDocumentField = (fieldName, setFieldValue, name) => {
-    console.log(name, "name")
     if (!name) {
-      return 'Required'
+        return 'Required'
     }
     setFieldValue(fieldName, name, false);
-  };
+};
 
 // Approve a Document
 //   1. GET /approval/{document_id}/latest/step : getLatestApprovalStep()
@@ -1711,4 +1710,22 @@ export const sumTotalHelper = (list_show) => {
         s = s.slice(0, n + 3)
         return s;
     }
+}
+
+export const identifyEndpoinsHelper = (document_type_id) => {
+    let doc_type = document_type_id.toString().substring(0, 3);
+    // console.log("doc_type", doc_type)
+    if (doc_type === "101") return "goods-receipt2";
+    if (doc_type === "102") return "goods-return";
+    if (doc_type === "103") return "goods-receipt-no-po";
+    if (doc_type === "111") return "goods-usage";
+    if (doc_type === "112") return "goods-issue";
+    if (doc_type === "121") return "inventory-transfer";
+    if (doc_type === "131") return "goods-receipt-fix";
+    if (doc_type === "132") return "goods-fix";
+    if (doc_type === "141") return "physical-count";
+    if (doc_type === "142") return "inventory-adjustment";
+    if (doc_type === "151") return "salvage-return";
+    if (doc_type === "152") return "salvage-sold";
+    else return "#";
 }
