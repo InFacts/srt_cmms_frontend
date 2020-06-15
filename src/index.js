@@ -15,6 +15,9 @@ import './css/notification.css';
 import './css/style-nav.css';
 import './css/table.css';
 
+// Bootstrap grid css only from https://github.com/dmhendricks/bootstrap-grid-css
+import './css/bootstrap-grid.css';
+
 import store from './js/redux/store.js'
 import { Provider } from 'react-redux';
 

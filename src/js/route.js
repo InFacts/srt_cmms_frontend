@@ -33,6 +33,9 @@ import PmtMaintenantItem from './components/pmt-maintenant-item';
 import PmtEquipmentInstallation from './components/pmt-equipment-install';
 import PmtEquipmentMasterData from './components/pmt-equipment-master';
 
+// ALS Page
+import AlsSpareComponent from './components/als-spare';
+
 import Track from './components/track-document';
 const FrontEnd = () => (
     <Switch>
@@ -70,6 +73,9 @@ const FrontEnd = () => (
         <Route exact path="/pmt-equipment-installation" component={PmtEquipmentInstallation} />
 
         <Route exact path="/track" component={Track} />
+
+        {/* ALS Routes */}
+        <Route exact path="/als-spare" component={AlsSpareComponent} />
 
         {/* Handle routes that are not found */}
         <Route component={NotFoundComponent} />
