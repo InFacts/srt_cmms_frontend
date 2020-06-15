@@ -935,13 +935,15 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                     }
                 );
             }
+            var created_on = new Date(data.created_on);
+            created_on.setHours(created_on.getHours() + 7)
             let form_state = {
                 document_id: data.document_id,
                 internal_document_id: data.internal_document_id,
                 document_date: data.document_date.split("T")[0],
                 created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.created_by_user_id) || '',
                 created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.created_by_admin_id) || '',
-                created_on: data.created_on.split(".")[0],
+                created_on: created_on.toISOString().split(".")[0],
                 line_items: data.line_items,
                 remark: data.remark,
                 status_name_th: "",
@@ -1030,11 +1032,13 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                         }
                     );
                 }
+                var created_on = new Date(data.document.created_on);
+                created_on.setHours(created_on.getHours() + 7)
                 return {
                     internal_document_id: data.document.internal_document_id,
                     created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_user_id) || '',
                     created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_admin_id) || '',
-                    created_on: data.document.created_on.split(".")[0],
+                    created_on: created_on.toISOString().split(".")[0],
                     line_items: data.specific.line_items,
                     src_warehouse_id: data.specific.warehouse_id,
                     remark: data.document.remark,
@@ -1059,11 +1063,13 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                         }
                     );
                 }
+                var created_on = new Date(data.document.created_on);
+                created_on.setHours(created_on.getHours() + 7)
                 return {
                     internal_document_id: data.document.internal_document_id,
                     created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_user_id) || '',
                     created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_admin_id) || '',
-                    created_on: data.document.created_on.split(".")[0],
+                    created_on: created_on.toISOString().split(".")[0],
                     line_items: data.specific.line_items,
                     src_warehouse_id: data.specific.warehouse_id,
                     remark: data.document.remark,
@@ -1119,13 +1125,16 @@ const responseToFormState = (fact, data, document_type_group_id) => {
 }
 
 function transformDocumentResponseToFormState(document_part, fact) {
+    var created_on = new Date(document_part.created_on);
+    created_on.setHours(created_on.getHours() + 7)
     return {
         document_id: document_part.document_id,
         internal_document_id: document_part.internal_document_id,
         document_date: document_part.document_date.split("T")[0],
         created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_user_id) || '',
         created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_admin_id) || '',
-        created_on: document_part.created_on.split(".")[0],
+        // created_on: document_part.created_on.split(".")[0],
+        created_on: created_on.toISOString().split(".")[0],
     }
 }
 
