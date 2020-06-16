@@ -57,7 +57,7 @@ const Table = (props) => {
               <td className="edit-padding text-center">
                 <SelectInput name={`line_items[${index}].uom_id`} listProps={list.list_uoms}
                   tabIndex="8" disabled={props.disabledBothMode !== true ? props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true}
-                  optionValue='uom_id' optionName='name'
+                  optionValue='uom_id' optionName='name' checkDescription={list.description}
                   redBorderForError="error-in-table"
                 />
               </td>
