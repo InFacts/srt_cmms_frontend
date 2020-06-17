@@ -22,7 +22,7 @@ const PermisstionAdminComponent = (props) => {
     useToolbarInitializer(TOOLBAR_MODE.NONE);
     useTokenInitializer();
     useFactInitializer();
-    useFooterInitializer(DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA); // TODO Need to not be document type group id, and need to not check for values.document_id since this is not a document. 
+    // useFooterInitializer(DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA); // TODO Need to not be document type group id, and need to not check for values.document_id since this is not a document. 
     useDocumentSubscription();
     const loggedIn = useSelector(state => state.token.isLoggedIn);
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
@@ -53,7 +53,7 @@ const PermisstionAdminComponent = (props) => {
             <form>
                 <TopContent />
                 <BottomContent />
-                <Footer />
+                {/* <Footer /> */}
             </form>
         </>
     )

@@ -15,26 +15,39 @@ const BottomContent = (props) => {
     const { values } = useFormikContext();
 
     const postPermission = () => new Promise(resolve => {
-        console.log("values", values)
-        // var data = {
-        //     "enable_permission": true,
-        //     "position_id": values.line_position_permission.position_id,
-        //     "function": [
-        //         values.line_position_permission.module_1 && 1,
-        //         values.line_position_permission.module_2 && 2,
-        //         values.line_position_permission.module_3 && 3,
-        //         values.line_position_permission.module_4 && 4,
-        //     ]
-        // }
-        // console.log("data", data)
-        // const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/admin/position-permission`;
-        // axios.post(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-        //     .then((res) => {
-        //         resolve(res.data);
-        //     })
-        //     .catch((err) => {
-        //         resolve(err)
-        //     });
+        // console.log("values", values)
+        {
+            values.line_position_permission.map((list, index) => {
+                var data = {
+                    "enable_permission": true,
+                    "position_id": list.position_id,
+                    "function": [
+                        list.module_1 === true ? 1 : 0,
+                        list.module_2 === true ? 2 : 0,
+                        list.module_3 === true ? 3 : 0,
+                        list.module_4 === true ? 4 : 0,
+                    ]
+                }
+                // console.log(data.function.indexOf(0))
+                data.function.map((list) => {
+                    if (data.function.indexOf(0) !== -1) {
+                        data.function.splice(data.function.indexOf(0), data.function.indexOf(0) + 1);
+                    }
+                })
+                console.log(data)
+                // console.log("data", data)
+                const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/admin/position-permission`;
+                axios.post(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+                    .then((res) => {
+                        // console.log("res AFTER POST POSITION PERMISSION", res)
+                        resolve(res.data);
+                    })
+                    .catch((err) => {
+                        resolve(err)
+                    });
+
+            })
+        };
     });
 
     return (
@@ -79,9 +92,8 @@ const BottomContent = (props) => {
                         })}
                     </tbody>
                 </table>
-                <div className="grid_1">
-                    <button type="button" className="button-blue" onClick={postPermission}>ค้นหา</button>
-                </div>
+
+                <button type="button" className="button-blue float-right mt-3" onClick={postPermission}>บันทึก</button>
             </div>
         </div>
     );
