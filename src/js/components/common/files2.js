@@ -15,16 +15,6 @@ const Files = () => {
     // const extRegexp = /\.[a-zA-Z0-9]*$/;
     const { values, setFieldValue } = useFormikContext();
 
-    // Fill Default Forms
-    useEffect(() => {
-        if (values.document_id !== 0 && values.document_id !== undefined) {
-            fetchAttachmentDocumentData(values.document_id)
-            .then((result) => {
-                setFieldValue("files", result.data.results);
-            });
-        }
-    }, [values.document_id, footer.mode]) 
-
     const fileExtension = (file) => {
         let extensionSplit = file.name.split('.')
         if (extensionSplit.length > 1) {
@@ -89,6 +79,12 @@ const Files = () => {
         setFieldValue("files", files);
     }
 
+    const deleteFileInState = (e) => {
+        let index = e.target.parentNode.parentNode.parentNode.id;
+        values.files.splice(index, 1);
+        setFieldValue("files", values.files);
+    }
+
     return (
         <div>
             <h4 className="head-title-bottom mt-2">ข้อมูลแนบไฟล์</h4>
@@ -107,14 +103,17 @@ const Files = () => {
             {values.files.length !== 0 && values.files !== undefined ?
                 <div className="dropZone-list">
                     {values.files.map((file, index) => (
-                        <li className="list-group-item" key={index}>
+                        <li className="list-group-item" key={index} id={index}>
                             <div className="media-body">
                                 <h4 className="media-heading grid_5" style={{ fontWeight: 'bold' }}>{file.filename}</h4>
                                 <h4 className="media-heading grid_2">ขนาดไฟล์ : {file.isNew ? file.sizeReadable : fileSizeReadable(file.sizeReadable)}</h4>
                                 <div className="float-right">
-                                    <button type="button" className="btn media-heading grid_1" style={{ color: "blue", padding: "4px" }} onClick={ () => downloadAttachmentDocumentData(values.document_id, file.id) }>ดาวน์โหลด</button>
+                                    {toolbar.mode === TOOLBAR_MODE.SEARCH &&
+                                        <button type="button" className="btn media-heading grid_1" style={{ color: "blue", padding: "4px" }} onClick={ () => downloadAttachmentDocumentData(values.document_id, file.id) }>ดาวน์โหลด</button>
+                                    }
                                     {toolbar.mode !== TOOLBAR_MODE.SEARCH &&
-                                        <button type="button" className="btn media-heading grid_1" style={{ color: "blue", padding: "4px" }}>ลบ</button> }
+                                        <button type="button" className="btn media-heading grid_1" style={{ color: "blue", padding: "4px" }} onClick={ (e) => deleteFileInState(e) }>ลบ</button>
+                                    }
                                 </div>
                             </div>
                         </li>
