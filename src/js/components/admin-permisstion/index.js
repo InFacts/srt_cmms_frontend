@@ -27,11 +27,23 @@ const PermisstionAdminComponent = (props) => {
     const loggedIn = useSelector(state => state.token.isLoggedIn);
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
+    let module = [];
     useEffect(() => {
         fetchPositionPermissionData()
             .then((position_permission) => {
                 // console.log("position_permission", position_permission)
-                setFieldValue('line_position_permission', position_permission, false);
+                position_permission.map((list_module) => {
+                    module.push({
+                        position_id: list_module.position_id,
+                        name: list_module.name,
+                        abbreviation: list_module.abbreviation,
+                        module_1: list_module.function.indexOf(1) !== -1,
+                        module_2: list_module.function.indexOf(2) !== -1,
+                        module_3: list_module.function.indexOf(3) !== -1,
+                        module_4: list_module.function.indexOf(4) !== -1,
+                    })
+                })
+                setFieldValue('line_position_permission', module, false);
             })
     }, []);
 
@@ -56,7 +68,6 @@ const EnhancedPermisstionAdminDataComponent = withFormik({
 
         // Bottom Content
         line_position_permission: [],
-        module: []
     }),
     validate: (values, props) => {
         const errors = {};

@@ -10,23 +10,11 @@ const BottomContent = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
     const { values } = useFormikContext();
 
-    // const validatePermission = (fieldName, per_unit_price, index) => {
-    //     if (per_unit_price === "") {
-    //       return;
-    //     }
-
-    //     if (per_unit_price !== "") {
-    //       setFieldValue(fieldName, per_unit_price, false);
-    //       return;
-    //     } else {
-    //       return 'Invalid Per Unit Price Line Item';
-    //     }
-    //   }
     return (
         <div id="blackground-gray">
             <div className="container_12 clearfix">
 
-                <table className="table-many-column mt-2">
+                <table className="table-many-column mt-2" style={{ height: "450px"}}>
                     <thead>
                         <tr>
                             <th className="font" style={{ width: "200px" }}></th>
@@ -39,25 +27,25 @@ const BottomContent = (props) => {
                     </thead>
                     <tbody>
                         {values.line_position_permission.map((list, index) => {
-                            // console.log(String(list.function))
                             return (
                                 <tr>
                                     <td className="edit-padding">{index + 1}</td>
                                     <td className="edit-padding">{list.abbreviation} - {list.name}</td>
                                     <td className="edit-padding" style={{ padding: "5px 60px" }}>
-                                        <CheckboxInput name={`line_position_permission[${index}].function`}
-                                            // checked={list.function.indexOf(1) !== -1} 
-                                            // validate={validatePermission}
-                                            value={1} />
+                                        <CheckboxInput name={`line_position_permission[${index}].module_1`} 
+                                        checked={values.line_position_permission[index].module_1} value={true}/>
                                     </td>
                                     <td className="edit-padding" style={{ padding: "5px 60px" }}>
-                                        <CheckboxInput name={`line_position_permission[${index}].function`} value={2} />
+                                        <CheckboxInput name={`line_position_permission[${index}].module_2`} 
+                                        checked={values.line_position_permission[index].module_2} value={true} />
                                     </td>
                                     <td className="edit-padding" style={{ padding: "5px 95px" }}>
-                                        <CheckboxInput name={`line_position_permission[${index}].function`} value={3} />
+                                        <CheckboxInput name={`line_position_permission[${index}].module_3`} 
+                                        checked={values.line_position_permission[index].module_3} value={true} />
                                     </td>
                                     <td className="edit-padding" style={{ padding: "5px 60px" }}>
-                                        <CheckboxInput name={`line_position_permission[${index}].function`} value={4} />
+                                        <CheckboxInput name={`line_position_permission[${index}].module_4`} 
+                                        checked={values.line_position_permission[index].module_4} value={true} />
                                     </td>
                                 </tr>
                             )

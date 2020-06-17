@@ -45,11 +45,11 @@ const TopContent = (props) => {
   let error;
   function isEmpty1(obj) {
     for (var key in obj) {
-        if (obj.hasOwnProperty(key))
-            return false;
+      if (obj.hasOwnProperty(key))
+        return false;
     }
     return true;
-}
+  }
   const isObject = (obj) =>
     obj !== null && typeof obj === 'object';
 
@@ -189,8 +189,8 @@ const TopContent = (props) => {
 
               {/* Drop Dawn month */}
               <div className="grid_3 float-right">
-                <SelectNoChildrenInput name="mouth_id" validate={validateMouthIDField} 
-                cssStyle={{ left: "-160px", top: "10px" }}>
+                <SelectNoChildrenInput name="mouth_id" validate={validateMouthIDField}
+                  cssStyle={{ left: "-160px", top: "10px" }}>
                   <option value=''></option>
                   {values.mouth.map((mouth) => {
                     var new_date = new Date();
@@ -214,7 +214,7 @@ const TopContent = (props) => {
               </div>
               <div className="grid_3 pull_1">
                 <SelectNoChildrenInput name="item_status_id" validate={validateInternalDocumentStatusIDField}
-                cssStyle={{ left: "-160px", top: "10px" }}>
+                  cssStyle={{ left: "-160px", top: "10px" }}>
                   <option value=''></option>
                   {fact[FACTS.ITEM_STATUS].items.map((status) => (
                     <option key={status.item_status_id} value={status.item_status_id} selected> {status.description_th} </option>

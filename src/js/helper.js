@@ -838,10 +838,11 @@ export const fetchGoodsOnhandDataForItemmasterData = (item_id) => new Promise((r
 });
 
 // Get Position Permission For Admin
-export const fetchPositionPermissionData = () => new Promise((resolve, reject) => {
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/admin/position-permission`;
+export const fetchPositionPermissionData = (position_id) => new Promise((resolve, reject) => {
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/admin/position-permission?${position_id ? `position_id=${position_id}` : null}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
+            console.log("res", res)
             resolve(res.data.results);
         })
         .catch((err) => {
