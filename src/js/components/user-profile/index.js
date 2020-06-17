@@ -41,7 +41,7 @@ const Home = (props) => {
         console.log("URL IS", url)
         const urlParams = new URLSearchParams(url);
         const user_id = urlParams.get('user_id');
-        if (user_id !== "") {
+        if (user_id !== null && user_id !== '') {
             console.log(" IA M NOT SETTING ", user_id);
             setFieldValue("user_id", user_id, true);
             console.log(" THIS IS AFTER VALUES ", values);
@@ -63,6 +63,12 @@ const Home = (props) => {
                 setFieldValue("updated_at", data.results[0].updated_at);
             })
         }else{
+
+
+
+
+
+            
         }
     }, []);
 

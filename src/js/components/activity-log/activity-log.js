@@ -19,7 +19,8 @@ const ActivityLog = (props) => {
 
     const factDocumentType = useSelector((state) => ({ ...state.api.fact[FACTS.DOCUMENT_TYPE_GROUPS] }), shallowEqual);
     const factDocumentStatus = useSelector((state) => ({ ...state.api.fact[FACTS.DOCUMENT_STATUS] }), shallowEqual);
-
+    const factUser = useSelector((state) => ({ ...state.api.fact.users }), shallowEqual);
+    console.log(factUser)
     // Initial Fetch
     useEffect(() => {
         props.fetchDocuments();
@@ -35,9 +36,19 @@ const ActivityLog = (props) => {
     }, [props.track_document_show]);
 
 
+    const formatDate = (dateISOString) => {
+        let date = new Date(dateISOString);
+        // year = date.getFullYear();
+        // month = date.getMonth()+1;
+        // dt = date.getDate();
+        return date.toLocaleDateString('en-GB') + " " + date.toLocaleTimeString();
+    }
+
     const searchDetail = () => {
         // ตัวแปร item ยังไม่แน่ชัดเพราะเรื่อง API
         setFieldValue("item_list", props.track_document_show.filter(item => {
+
+            console.log(item)
             const query = values.date_start.toLowerCase();
             const query2 = values.date_end.toLowerCase();
             const query3 = values.type_document.toLowerCase();
@@ -47,10 +58,10 @@ const ActivityLog = (props) => {
             return (
                 // (item.date_start.toLowerCase().indexOf(query) >= 0 || !query) &&
                 // (item.date_end.toLowerCase().indexOf(query2) >= 0 || !query2) &&
-                (item.document_type_name.toLowerCase().indexOf(query3) >= 0 || !query3) &&
-                (item.document_action_type_id.toLowerCase().indexOf(query4) >= 0 || !query4) &&
-                // (item.username.toLowerCase().indexOf(query5) >= 0 || !query5) &&
-                (item.document_id.toLowerCase().indexOf(query6) >= 0 || !query6)
+                // (item.document_type_name.toLowerCase().indexOf(query3) >= 0 || !query3) &&
+                // (item.document_action_type_id.toLowerCase().indexOf(query4) >= 0 || !query4) &&
+                // (item.created_by_user_id.toLowerCase().indexOf(query5) >= 0 || !query5) &&
+                (item.internal_document_id.toLowerCase().indexOf(query6) >= 0 || !query6)
             )
         })
         );
@@ -70,7 +81,7 @@ const ActivityLog = (props) => {
     }
 
     return (
-        <div id="blackground-white">
+        <div id="blackground-white" >
             <div className="container_12 clearfix" style={{ marginTop: "55px" }}>
                 {/* Section Title */}
                 <h4 className="head-title">Activity Log</h4>
@@ -83,10 +94,10 @@ const ActivityLog = (props) => {
                         <DateInput name='date_start'
                             tabIndex="1" />
                     </div>
-                    <div className="grid_2  ">
+                    <div className="grid_1  ">
                         <p className="cancel-default">ถึง </p>
                     </div>
-                    <div className="grid_3">
+                    <div className="grid_3  pull_0">
                         <DateInput name='date_end'
                             tabIndex="1" />
                     </div>
@@ -113,9 +124,10 @@ const ActivityLog = (props) => {
                     <div className="grid_3 pull_0">
                         <SelectNoChildrenInput name="type_action" >
                             <option value=''></option>
-                            {factDocumentStatus.items.map(function ({ type_action, name }) {
-                                return <option value={type_action} key={type_action}> {name} </option>
+                            {factDocumentStatus.items.map(function ({ type_action, status }) {
+                                return <option value={type_action} key={type_action}> {status} </option>
                             })}
+                            
                         </SelectNoChildrenInput>
                     </div>
                 </div>
@@ -158,12 +170,25 @@ const ActivityLog = (props) => {
                         {values.item_list.map(function (item, index) {
                             return (
                                 <tr key={index} id={index}>
-                                    <td className="edit-padding" > {item.created_on}</td>
-                                    <td className="edit-padding" > {}</td>
+                                    <td className="edit-padding" > {formatDate(item.created_on)}</td>
+                                    <td className="edit-padding" >
+                                        {factUser.items.map(function ({ type_action, status }) {
+                                            // if (doc_type === "") {
+                                            //     return
+                                            // }
+                                            // return <option value={type_action} key={type_action}> {status} </option>
+                                        })}
+                                    </td>
                                     <td className="edit-padding" > {item.document_type_name}</td>
-                                    <td className="edit-padding" > {item.document_action_type_id}</td>
-                                    <td className="edit-padding" > {item.created_on}</td>
-                                    <td className="edit-padding" > {item.document_id}</td>
+                                    <td className="edit-padding" >
+                                        {factDocumentStatus.items.map(function ({document_status_id,status}) {
+                                            if(item.document_action_type_id === document_status_id){
+                                                return status   
+                                            }
+                                        })}
+                                    </td>
+                                    <td className="edit-padding" > {formatDate(item.created_on)}</td>
+                                    <td className="edit-padding" > {item.internal_document_id}</td>
                                     <td className="edit-padding text-center" >
                                         <button type="button" className="button-yellow"><Link className="button-yellow" to={identifyEndpoins(item.document_type_id) + "?internal_document_id=" + item.internal_document_id + "&document_id=" + item.document_id}>รายละเอียด</Link></button>
                                     </td>
