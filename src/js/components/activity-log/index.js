@@ -31,6 +31,10 @@ const Home = (props) => {
 }
 const EnhancedActivityLogComponent = withFormik({
     mapPropsToValues: () => ({
+        // ฟิวที่ให้ user กรอก
+        internal_document_id: '',
+        created_by_user_employee_id: '',
+
         date_start: '',
         date_end: '',
         type_document: '',

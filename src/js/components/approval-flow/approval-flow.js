@@ -35,7 +35,7 @@ const ApprovalFlow = (props) => {
                 {/* Section Title */}
                 <h4 className="head-title">บริหารจัดการเส้นทางเอกสาร</h4>
 
-                <table className="table-many-column mt-2">
+                <table className="table-many-column mt-2" style={{ height: "450px"}}>
                     <thead>
                         <tr>
                             <th className="font text-center" style={{ width: "350px" }}>ประเภทเอกสาร</th>
@@ -46,6 +46,7 @@ const ApprovalFlow = (props) => {
                     <tbody>
 
                         {values.item_list.map(function (item, index) {
+                            if(item.approval_process_lookup_id !== 0) {
                             return (
                                 <tr key={index} id={index}>
                                     <td className="edit-padding" >{item.approval_process_lookup_id} </td>
@@ -55,6 +56,7 @@ const ApprovalFlow = (props) => {
                                     </td>
                                 </tr>
                             )
+                            }
                         })}
                     </tbody>
                 </table>

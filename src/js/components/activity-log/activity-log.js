@@ -11,12 +11,20 @@ import DateInput from '../common/formik-date-input'
 import SelectNoChildrenInput from '../common/formik-select-no-children';
 import TextInput from '../common/formik-text-input'
 
+import { validateEmployeeIDField, DOCUMENT_TYPE_ID, validateInternalDocumentIDFieldHelper, getUserIDFromEmployeeID } from '../../helper';
+
 import { FACTS } from '../../redux/modules/api/fact.js'
 import { fetchDocuments } from '../../redux/modules/track_doc.js';
+
+import PopupModalDocument from '../common/popup-modal-document'
+import PopupModalUsername from '../common/popup-modal-username'
+
 const ActivityLog = (props) => {
 
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
-
+    const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
+    const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
+    const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
     const factDocumentType = useSelector((state) => ({ ...state.api.fact[FACTS.DOCUMENT_TYPE_GROUPS] }), shallowEqual);
     const factDocumentStatus = useSelector((state) => ({ ...state.api.fact[FACTS.DOCUMENT_STATUS] }), shallowEqual);
     const factUser = useSelector((state) => ({ ...state.api.fact.users }), shallowEqual);
@@ -28,6 +36,7 @@ const ActivityLog = (props) => {
 
     // ไม่แน่ใจ get API activity log ใช้ตัวนี้ไหม 
     //  = useSelector((state) => ({ ...state.api.fact.items }), shallowEqual);
+    console.log("values", values.internal_document_id, "created_by_admin_id", getUserIDFromEmployeeID(factUser, values.created_by_user_employee_id))
 
     useEffect(() => {
         // setFieldValue("item_list", factItems.items);
@@ -58,7 +67,7 @@ const ActivityLog = (props) => {
             return (
                 // (item.date_start.toLowerCase().indexOf(query) >= 0 || !query) &&
                 // (item.date_end.toLowerCase().indexOf(query2) >= 0 || !query2) &&
-                // (item.document_type_name.toLowerCase().indexOf(query3) >= 0 || !query3) &&
+                (item.document_type_name.toLowerCase().indexOf(query3) >= 0 || !query3) &&
                 // (item.document_action_type_id.toLowerCase().indexOf(query4) >= 0 || !query4) &&
                 // (item.created_by_user_id.toLowerCase().indexOf(query5) >= 0 || !query5) &&
                 (item.internal_document_id.toLowerCase().indexOf(query6) >= 0 || !query6)
@@ -79,6 +88,19 @@ const ActivityLog = (props) => {
         if (doc_type === "102") return "goods-return";
         else return "#";
     }
+
+    const coverntUserIDToName = (user_id) => {
+        // console.log("employee_id", user_id)
+        // console.log("factUser.items", factUser.items)
+        let users = factUser.items;
+        let user = users.find(user => user.user_id === user_id); // Returns undefined if not found
+        // console.log(user, "user")
+        if (user) {
+            return user.username;
+        }
+    }
+
+    const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
 
     return (
         <div id="blackground-white" >
@@ -117,7 +139,7 @@ const ActivityLog = (props) => {
                     </div>
                 </div>
 
-                <div className="container_12">
+                {/* <div className="container_12">
                     <div className="grid_2 cancel-default">
                         <p className="cancel-default">ประเภท Actions </p>
                     </div>
@@ -127,18 +149,19 @@ const ActivityLog = (props) => {
                             {factDocumentStatus.items.map(function ({ type_action, status }) {
                                 return <option value={type_action} key={type_action}> {status} </option>
                             })}
-                            
+
                         </SelectNoChildrenInput>
                     </div>
-                </div>
+                </div> */}
 
+                {/* Username  */}
                 <div className="container_12">
                     <div className="grid_2 cancel-default">
-                        <p className="cancel-default">Username </p>
+                        <p className="cancel-default">รหัสพนักงาน </p>
                     </div>
                     <div className="grid_3 pull_0">
-                        <TextInput name='username'
-                            tabIndex="1" />
+                    <TextInput name="created_by_user_employee_id" 
+                    validate={validateUserEmployeeIDField} searchable={true} ariaControls="modalUserName"/>
                     </div>
                 </div>
 
@@ -148,8 +171,8 @@ const ActivityLog = (props) => {
                         <p className="cancel-default">เลขที่เอกสาร </p>
                     </div>
                     <div className="grid_3 pull_0">
-                        <TextInput name='document_id'
-                            tabIndex="1" />
+                        <TextInput name='internal_document_id'
+                            searchable={true} ariaControls="modalDocument" tabIndex="1" />
                     </div>
                     <button className="button-blue edit grid_1 float-right mr-5" type="button" onClick={searchDetail}>ค้นหา</button>
                 </div>
@@ -160,34 +183,29 @@ const ActivityLog = (props) => {
                             <th className="font text-center" style={{ width: "350px" }}>วันเวลา</th>
                             <th className="font text-center" style={{ width: "350px" }}>Username</th>
                             <th className="font text-center" style={{ width: "350px" }}>ประเภทของเอกสาร</th>
-                            <th className="font text-center" style={{ width: "350px" }}>ประเภทของ Actions</th>
-                            <th className="font text-center" style={{ width: "350px" }}>ข้อมูลที่เปลี่ยนแปลง</th>
+                            {/* TODO รอคุยกับพี่นัท */}
+                            {/* <th className="font text-center" style={{ width: "350px" }}>ประเภทของ Actions</th>
+                            <th className="font text-center" style={{ width: "350px" }}>ข้อมูลที่เปลี่ยนแปลง</th> */}
                             <th className="font text-center" style={{ width: "350px" }}>เลขที่เอกสาร</th>
                             <th className="font text-center" style={{ width: "300px" }}>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         {values.item_list.map(function (item, index) {
+                            // console.log("item", item)
                             return (
                                 <tr key={index} id={index}>
                                     <td className="edit-padding" > {formatDate(item.created_on)}</td>
-                                    <td className="edit-padding" >
-                                        {factUser.items.map(function ({ type_action, status }) {
-                                            // if (doc_type === "") {
-                                            //     return
-                                            // }
-                                            // return <option value={type_action} key={type_action}> {status} </option>
-                                        })}
-                                    </td>
+                                    <td className="edit-padding" >{coverntUserIDToName(item.created_by_admin_id)}</td>
                                     <td className="edit-padding" > {item.document_type_name}</td>
-                                    <td className="edit-padding" >
+                                    {/* <td className="edit-padding" >
                                         {factDocumentStatus.items.map(function ({document_status_id,status}) {
                                             if(item.document_action_type_id === document_status_id){
                                                 return status   
                                             }
                                         })}
                                     </td>
-                                    <td className="edit-padding" > {formatDate(item.created_on)}</td>
+                                    <td className="edit-padding" > {formatDate(item.created_on)}</td> */}
                                     <td className="edit-padding" > {item.internal_document_id}</td>
                                     <td className="edit-padding text-center" >
                                         <button type="button" className="button-yellow"><Link className="button-yellow" to={identifyEndpoins(item.document_type_id) + "?internal_document_id=" + item.internal_document_id + "&document_id=" + item.document_id}>รายละเอียด</Link></button>
@@ -198,6 +216,15 @@ const ActivityLog = (props) => {
                     </tbody>
                 </table>
             </div>
+
+            {/* PopUp ค้นหาเลขที่เอกสาร */}
+            <PopupModalDocument documentTypeGroupID={"document_all_type"}
+                id="modalDocument" //For Open POPUP
+                name="internal_document_id" //For setFieldValue
+            />
+
+            {/* PopUp ค้นหาชื่อพนักงาน MODE ADD */}
+            <PopupModalUsername />
         </div>
     )
 };
