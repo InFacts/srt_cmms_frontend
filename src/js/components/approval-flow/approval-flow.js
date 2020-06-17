@@ -46,6 +46,7 @@ const ApprovalFlow = (props) => {
                     <tbody>
 
                         {values.item_list.map(function (item, index) {
+                            console.log("ITEM ????", item)
                             if(item.approval_process_lookup_id !== 0) {
                             return (
                                 <tr key={index} id={index}>

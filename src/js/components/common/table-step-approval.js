@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
-const TableSatusApproval = (props) => {
-  console.log("props.bodyTableStatus", props.bodyTableStatus)
+const TableStepApproval = (props) => {
+  console.log("props.bodyTableStepApproval", props.bodyTableStepApproval)
   return (
     <>
       <table className="table-many-column mt-2">
         <thead>
           <tr>
-            <th className="font" style={{ width: "50px" }}></th>
-            <th className="font" style={{ width: "200px" }}>ตำแหน่ง</th>
-            <th className="font" style={{ width: "200px" }}>หน่วยงาน</th>
-            <th className="font" style={{ width: "250px" }}>ชื่อผู้ลงนาม</th>
-            <th className="font" style={{ width: "150px" }}>วันที่ลงนาม</th>
-            <th className="font" style={{ width: "150px" }}>สถานะ</th>
+            <th className="font text-center" style={{ width: "30px" }}>#</th>
+            <th className="font" style={{ width: "500px" }}>ตำแหน่ง</th>
+            <th className="font" style={{ width: "500px" }}>หน่วยงาน</th>
           </tr>
         </thead>
         <tbody>
@@ -21,7 +18,7 @@ const TableSatusApproval = (props) => {
             resApprove.position_group.name !== "This"
             ?
               <tr key={i} id={i}>
-                <td className="edit-padding">
+                <td className="edit-padding text-center">
                   {resApprove.approval_by.length === 0 ? <i className="fas fa-check-circle" style={{ color: "gray" }}></i> : <i className="fas fa-check-circle" style={{ color: "green" }}></i>}
                 </td>
                 <td className="edit-padding">{resApprove.position_group.name}</td>
@@ -34,10 +31,20 @@ const TableSatusApproval = (props) => {
             null
           )
           })} */}
+          <tr>
+            <td className="edit-padding text-center">1</td>
+            <td className="edit-padding">SEVER</td>
+            <td className="edit-padding"></td>
+          </tr>
+          <tr>
+            <td className="edit-padding text-center">2</td>
+            <td className="edit-padding">หัวหน้าแขวง/คลัง</td>
+            <td className="edit-padding">แผนกควบคุมพัสดุ</td>
+          </tr>
         </tbody>
       </table>
     </>
   )
 }
 
-export default TableSatusApproval;
+export default TableStepApproval;

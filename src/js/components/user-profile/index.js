@@ -63,11 +63,6 @@ const Home = (props) => {
                 setFieldValue("updated_at", data.results[0].updated_at);
             })
         }else{
-
-
-
-
-
             
         }
     }, []);

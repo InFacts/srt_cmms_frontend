@@ -42,7 +42,7 @@ const Home = (props) => {
             setFieldValue("approval_process_lookup_id", approval_process_lookup_id, true);
             console.log(" THIS IS AFTER VALUES ", values);
             fetchSearchApprovalProcessLookup(approval_process_lookup_id).then(function (data) {
-                console.log(data.approval_process_lookup.approval_step_lookup)
+                console.log(">>>>>>", data.approval_process_lookup.approval_step_lookup)
                 // console.log(data.approval_process_lookup.approval_process_lookup_id)
                 setFieldValue("step_approve", data.approval_process_lookup.approval_step_lookup);
             })

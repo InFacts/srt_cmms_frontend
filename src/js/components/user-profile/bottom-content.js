@@ -31,10 +31,12 @@ const BottomContent = (props) => {
 
     const onSave = (content) => {
 
-        if(content === "information"){
+        if (content === "information") {
 
             const information =
             {
+                "user_id": values.user_id,
+                "employee_id": values.employee_id,
                 "firstname_th": values.firstname,
                 "lastname_th": values.lastname,
                 "email": values.email
@@ -44,8 +46,9 @@ const BottomContent = (props) => {
                 .then(res => {
                     console.log(res);
                 }).catch(function (err) {
+                    console.log("err", err)
                 })
-        }else{
+        } else {
 
             if (values.password !== values.confirmpassword) {
                 alert("Password did not match: Please try again...");
@@ -62,27 +65,37 @@ const BottomContent = (props) => {
                     }).catch(function (err) {
                     })
             }
-           
-
-
         }
-
-
-
     }
 
     return (
         <div id="blackground-gray">
             <div className="container_12 clearfix">
 
-
                 {/* === Tab breakdown_content  === */}
                 <div id="officia_document_content" className="tabcontent">
                     <h3 className="head-title-bottom mt-2">เอกสารราชการ</h3>
-                    
-                    
-                    <TabBar tabNames={subTabNames} initialTabID="process">
-                        <div id="process_content" className="tabcontent">
+
+                    {/* <TabBar tabNames={subTabNames} initialTabID="process"> */}
+                    {/* <div id="process_content" className="tabcontent"> */}
+                    <div className="grid_12">
+                        <table className="table-many-column">
+                            <thead>
+                                <tr>
+                                    <th className="font" style={{ minWidth: "150px" }}>เลขที่เอกสาร</th>
+                                    <th className="font" style={{ minWidth: "150px" }}>ประเภทเอกสาร</th>
+                                    {/* <th className="font" style={{ minWidth: "300px" }}>รายละเอียด</th> */}
+                                    <th className="font" style={{ minWidth: "180px" }}>วันเวลาที่สร้าง</th>
+                                    {/* <th className="font" style={{ minWidth: "150px" }}>สถานะเอกสาร Actions</th> */}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {/*  */}
+                            </tbody>
+                        </table>
+                    </div>
+                    {/* </div> */}
+                    {/* <div id="complete_content" className="tabcontent">
                             <div className="grid_12">
                                 <table className="table-many-column mt-3">
                                     <thead>
@@ -95,30 +108,12 @@ const BottomContent = (props) => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {/*  */}
+
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
-                        <div id="complete_content" className="tabcontent">
-                            <div className="grid_12">
-                                <table className="table-many-column mt-3">
-                                    <thead>
-                                        <tr>
-                                            <th className="font" style={{ minWidth: "150px" }}>เลขที่เอกสาร</th>
-                                            <th className="font" style={{ minWidth: "150px" }}>ประเภทเอกสาร</th>
-                                            <th className="font" style={{ minWidth: "150px" }}>วันที่</th>
-                                            <th className="font" style={{ minWidth: "150px" }}>สถานะเอกสาร Actions</th>
-                                            <th className="font" style={{ minWidth: "150px" }}>รายละเอียด</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {/*  */}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </TabBar>
+                        </div> */}
+                    {/* </TabBar> */}
                 </div>
 
 
@@ -153,11 +148,10 @@ const BottomContent = (props) => {
                                 </div>
                             </div>
 
-
                             <div className="grid_12">
                                 <div className="grid_2 pull_0 float-right ">
-                                    <button className="button-blue edit  mr-5" type="button" onClick={(e) => { if (window.confirm('คุณต้องการแก้ไขข้อมูลส่วนตัวหรือไม่')) {onSave('information')} }} >บันทึก</button>
-                                    
+                                    <button className="button-blue edit  mr-5" type="button" onClick={(e) => { if (window.confirm('คุณต้องการแก้ไขข้อมูลส่วนตัวหรือไม่')) { onSave('information') } }} >บันทึก</button>
+
                                 </div>
                             </div>
 
@@ -192,7 +186,7 @@ const BottomContent = (props) => {
                                         tabIndex="1" />
                                 </div>
                                 <div className="grid_2 pull_0 float-right ">
-                                    <button className="button-blue edit  mr-5" type="button" onClick={(e) => { if (window.confirm('คุณต้องการแก้ไขรหัสผ่านหรือไม่')) {onSave('password')} }} >บันทึก</button>
+                                    <button className="button-blue edit  mr-5" type="button" onClick={(e) => { if (window.confirm('คุณต้องการแก้ไขรหัสผ่านหรือไม่')) { onSave('password') } }} >บันทึก</button>
                                 </div>
                             </div>
 
@@ -205,7 +199,7 @@ const BottomContent = (props) => {
                         <div class="card-profile-header">ตำแหน่งงาน</div>
                         <div class="card-profile-main">
 
-                            <div className="grid_12">
+                            {/* <div className="grid_12">
                                 <div className="grid_2"><p className="cancel-default">ศูนย์</p></div>
                                 <div className="grid_3 pull_0">
                                     <SelectNoChildrenInput name="station" >
@@ -215,9 +209,9 @@ const BottomContent = (props) => {
                                         })}
                                     </SelectNoChildrenInput>
                                 </div>
-                            </div>
+                            </div> */}
 
-                            <div className="grid_12">
+                            {/* <div className="grid_12">
                                 <div className="grid_2"><p className="cancel-default">กอง</p></div>
                                 <div className="grid_3 pull_0">
                                     <SelectNoChildrenInput name="divisions" >
@@ -227,7 +221,7 @@ const BottomContent = (props) => {
                                         })}
                                     </SelectNoChildrenInput>
                                 </div>
-                            </div>
+                            </div> */}
 
                             <div className="grid_12">
                                 <div className="grid_2"><p className="cancel-default">หน่วยงาน/แขวง</p></div>
@@ -242,7 +236,7 @@ const BottomContent = (props) => {
                             </div>
 
                             <div className="grid_12">
-                                <div className="grid_2"><p className="cancel-default">ตอน</p></div>
+                                {/* <div className="grid_2"><p className="cancel-default">ตอน</p></div>
                                 <div className="grid_3 pull_0">
                                     <SelectNoChildrenInput name="zone" >
                                         <option value=''></option>
@@ -250,9 +244,9 @@ const BottomContent = (props) => {
                                             return <option value={node_id} key={node_id}> {name} </option>
                                         })}
                                     </SelectNoChildrenInput>
-                                </div>
+                                </div> */}
                                 <div className="grid_2 pull_0 float-right ">
-                                    <button className="button-blue edit  mr-5" type="button" onClick={(e) => { if (window.confirm('คุณต้องการแก้ไขตำแหน่งงานหรือไม่')) {onSave('position')} }} >บันทึก</button>
+                                    <button className="button-blue edit  mr-5" type="button" onClick={(e) => { if (window.confirm('คุณต้องการแก้ไขตำแหน่งงานหรือไม่')) { onSave('position') } }} >บันทึก</button>
 
                                 </div>
                             </div>

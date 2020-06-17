@@ -56,17 +56,6 @@ const TopContent = (props) => {
                                 })}
                             </SelectNoChildrenInput>
                         </div>
-                        <div className="grid_2  ">
-                            <p className="cancel-default">ตำแหน่งงาน </p>
-                        </div>
-                        <div className="grid_3">
-                            <SelectNoChildrenInput name="zone" >
-                                <option value=''></option>
-                                {factNodes.items.map(function ({ node_id, name }) {
-                                    return <option value={node_id} key={node_id}> {name} </option>
-                                })}
-                            </SelectNoChildrenInput>
-                        </div>
                     </div>
                     <div className="container_12">
                         <div className="grid_2 cancel-default">
@@ -74,13 +63,6 @@ const TopContent = (props) => {
                         </div>
                         <div className="grid_3 pull_0">
                             <TextInput name='user_id'
-                                tabIndex="1" />
-                        </div>
-                        <div className="grid_2  ">
-                            <p className="cancel-default">ชื่อ-นามสกุล </p>
-                        </div>
-                        <div className="grid_3">
-                            <TextInput name='name'
                                 tabIndex="1" />
                         </div>
                     </div>

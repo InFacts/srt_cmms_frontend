@@ -14,13 +14,15 @@ const TopContent = (props) => {
                 <div className="grid_12">
                     <div className="grid_2">
                         <p className="top-text">ชื่อ-สกุล</p>
-                        <p className="top-text mt-1">ตำแหน่งงาน</p>
-                        <p className="top-text">สังกัด</p>
+                        <p className="top-text mt-1">รหัสพนักงาน</p>
+                        <p className="top-text mt-1">หน่วยงาน</p>
+                        {/* <p className="top-text">สังกัด</p> */}
                     </div>
                     <div className="grid_8 pull_0">
                         <p className="top-text" >{values.firstname_th} {values.lastname_th}</p>
-                        <p className="top-text" >{values.username}</p>
-                        <p className="top-text">{values.username}</p>
+                        <p className="top-text" >{values.employee_id}</p> 
+                        <p className="top-text" >{values.username}</p> {/* รอ API พี่ลี ส่งมาให้ที่เป็น position */}
+                        {/* <p className="top-text">{values.username}</p> */}
                     </div>
                 </div>
             </div>
