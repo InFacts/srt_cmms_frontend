@@ -130,7 +130,7 @@ const useFooterInitializer = (document_type_id) => {
         else if (toolbar.mode === TOOLBAR_MODE.ADD){
             // ADD_DRAFT mode
             if (document_id !== "" && document_id !== undefined) { hadleDocumentStatusWithFooter(document_id); }
-            dispatch(footerToModeAddDraft());
+            else { dispatch(footerToModeAddDraft()); }
         }
         else {
             // INVISIBLE mode
@@ -167,7 +167,7 @@ const useFooterInitializer = (document_type_id) => {
                         let data = packDataFromValues(fact, values, document_type_id);
                         console.log("I AM SUBMITTING ", data);
                         if (document_type_id !== DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA && document_type_id !== DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
-                            saveDocument(document_type_id, data, values.file)
+                            saveDocument(document_type_id, data, values.files)
                                 .then((document_id) => {
                                     setFieldValue('document_id', document_id, true);
                                     dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
@@ -307,7 +307,6 @@ const useFooterInitializer = (document_type_id) => {
         if (footer.requiresHandleClick[FOOTER_ACTIONS.CHECK_APPROVAL]) {
             validateForm()
                 .then((err) => {
-                    console.log("values", values)
                     dispatch(navBottomSending('[API]', 'Sending ...', ''));
                     setErrors(err);
                     if (isEmpty(err)) {

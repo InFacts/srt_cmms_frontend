@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { useFormikContext } from 'formik';
 
 import Document from '../../../images/document.svg';
-import {downloadAttachmentDocumentData} from '../../helper';
+import {downloadAttachmentDocumentData, fetchAttachmentDocumentData} from '../../helper';
 import { TOOLBAR_MODE } from '../../redux/modules/toolbar'
 import { navBottomOnReady, navBottomWarning } from '../../redux/modules/nav-bottom'
 import { useDispatch, shallowEqual, useSelector } from 'react-redux'
@@ -10,10 +10,22 @@ import { useDispatch, shallowEqual, useSelector } from 'react-redux'
 const Files = () => {
     const dispatch = useDispatch();
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
-    const mimeTypeRegexp = /^(application|audio|example|image|message|model|multipart|text|video)\/[a-z0-9\.\+\*-]+$/;
-    const extRegexp = /\.[a-zA-Z0-9]*$/;
+    const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
+    // const mimeTypeRegexp = /^(application|audio|example|image|message|model|multipart|text|video)\/[a-z0-9\.\+\*-]+$/;
+    // const extRegexp = /\.[a-zA-Z0-9]*$/;
     const { values, setFieldValue } = useFormikContext();
-    
+
+    // Fill Default Forms
+    useEffect(() => {
+        if (values.document_id !== 0 && values.document_id !== undefined) {
+            console.log("------ fetchAttachmentDocumentData values.document_id", values.document_id)
+            fetchAttachmentDocumentData(values.document_id)
+            .then((result) => {
+                setFieldValue("files", result.data.results);
+            });
+        }
+    }, [values.document_id, footer.mode]) 
+
     const fileExtension = (file) => {
         let extensionSplit = file.name.split('.')
         if (extensionSplit.length > 1) {
@@ -54,15 +66,18 @@ const Files = () => {
     const convertFormFileToAPI = (e) => {
         let filesAdded = [];
         let files = [];
-        let filesOld = values.files;
-        console.log("filesOld", filesOld)
         for (let i = 0; i < e.target.files.length; i++) {
             filesAdded.push(e.target.files[i]);
         }
+        for (let i = 0; i < values.files.length; i++) {
+            filesAdded.push(values.files[i]);
+        }
         filesAdded.map((newFile, index) => {
             newFile.id = 'files-' + index;
+            newFile.filename = newFile.name;
             newFile.extension = fileExtension(newFile);
             newFile.sizeReadable = fileSizeReadable(newFile.size);
+            newFile.isNew = true;
             if (newFile.type && mimeTypeLeft(newFile.type) === 'image') {
                 newFile.preview = { type: 'image', url: window.URL.createObjectURL(newFile) };
             } else {
@@ -72,10 +87,7 @@ const Files = () => {
                 files.push(newFile);
             }
         })
-        setFieldValue("file", files);
-
-        
-        // setFieldValue("files_in_database", files);
+        setFieldValue("files", files);
     }
 
     return (
@@ -93,15 +105,15 @@ const Files = () => {
                     </div>
                 </div>
             </div>
-            {values.files_in_database.length !== 0 && values.files_in_database !== undefined ?
+            {values.files.length !== 0 && values.files !== undefined ?
                 <div className="dropZone-list">
-                    {values.files_in_database.map((oldFile, index) => (
+                    {values.files.map((file, index) => (
                         <li className="list-group-item" key={index}>
                             <div className="media-body">
-                                <h4 className="media-heading grid_5" style={{ fontWeight: 'bold' }}>{oldFile.filename}</h4>
-                                <h4 className="media-heading grid_2">ขนาดไฟล์ : {fileSizeReadable(oldFile.sizeReadable)}</h4>
+                                <h4 className="media-heading grid_5" style={{ fontWeight: 'bold' }}>{file.filename}</h4>
+                                <h4 className="media-heading grid_2">ขนาดไฟล์ : {file.isNew ? file.sizeReadable : fileSizeReadable(file.sizeReadable)}</h4>
                                 <div className="float-right">
-                                    <button type="button" className="btn media-heading grid_1" style={{ color: "blue", padding: "4px" }} onClick={ () => downloadAttachmentDocumentData(values.document_id, oldFile.id) }>ดาวน์โหลด</button>
+                                    <button type="button" className="btn media-heading grid_1" style={{ color: "blue", padding: "4px" }} onClick={ () => downloadAttachmentDocumentData(values.document_id, file.id) }>ดาวน์โหลด</button>
                                     {toolbar.mode !== TOOLBAR_MODE.SEARCH &&
                                         <button type="button" className="btn media-heading grid_1" style={{ color: "blue", padding: "4px" }}>ลบ</button> }
                                 </div>

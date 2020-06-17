@@ -58,7 +58,6 @@ const TopContent = (props) => {
 
             {/* Document Status  */}
             <div className="grid_3 float-right">
-              {console.log("--> values -->", values)}
               <TextInput name="status_name_th" disabled />
             </div>
             <div className="grid_2 float-right">

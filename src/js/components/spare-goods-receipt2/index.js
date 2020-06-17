@@ -107,7 +107,7 @@ const EnhancedGoodsReceiptComponent = withFormik({
         remark: '',
         line_items: initialRows(),
 
-        file: [], // Send File to API
+        files: [], // Send File to API
     
         //Field ที่ไม่ได้กรอก
         created_on: '',
@@ -120,8 +120,6 @@ const EnhancedGoodsReceiptComponent = withFormik({
         //Field ที่ไม่ได้ display
         document_id: '', // changes when document is displayed (internal_document_id field validation)
 
-        // For Attactment
-        files_in_database: [], // Recived File from API
         // For Step Approval
         step_approve: [],
     })
