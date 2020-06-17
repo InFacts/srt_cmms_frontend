@@ -1,8 +1,5 @@
 import React, { useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
-import axios from "axios";
-import { API_PORT_DATABASE } from '../../config_port.js';
-import { API_URL_DATABASE } from '../../config_url.js';
 
 import TextInput from '../common/formik-text-input';
 import Label from '../common/form-label'
