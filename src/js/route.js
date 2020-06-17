@@ -33,6 +33,9 @@ import PmtMaintenantItem from './components/pmt-maintenant-item';
 import PmtEquipmentInstallation from './components/pmt-equipment-install';
 import PmtEquipmentMasterData from './components/pmt-equipment-master';
 
+// Admin
+import PermistionAdmin from './components/admin-permisstion';
+
 import Track from './components/track-document';
 const FrontEnd = () => (
     <Switch>
@@ -65,11 +68,12 @@ const FrontEnd = () => (
         <Route exact path="/pmt-work-order" component={PmtWorkOrder} />
         <Route exact path="/ss-101" component={PmtSS101} />
         <Route exact path="/maitenant-item" component={PmtMaintenantItem} />
-        
         <Route exact path="/pmt-equipment-master" component={PmtEquipmentMasterData} />
         <Route exact path="/pmt-equipment-installation" component={PmtEquipmentInstallation} />
-
         <Route exact path="/track" component={Track} />
+
+        {/* Admin Page */}
+        <Route exact path="/permissiton-admin" component={PermistionAdmin} />
 
         {/* Handle routes that are not found */}
         <Route component={NotFoundComponent} />
