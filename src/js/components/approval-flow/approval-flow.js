@@ -53,7 +53,7 @@ const ApprovalFlow = (props) => {
                                     <td className="edit-padding" >{item.approval_process_lookup_id} </td>
                                     <td className="edit-padding" >{item.description} </td>
                                     <td className="edit-padding text-center" >
-                                        <button type="button" className="button-yellow"><Link className="button-yellow" to={"/approval-flow-step"+ "?approval_process_lookup_id=" + item.approval_process_lookup_id}>รายละเอียด</Link></button>
+                                        <Link className="button-yellow" to={"/approval-flow-step"+ "?approval_process_lookup_id=" + item.approval_process_lookup_id}><button type="button" className="button-yellow">รายละเอียด</button></Link>
                                     </td>
                                 </tr>
                             )

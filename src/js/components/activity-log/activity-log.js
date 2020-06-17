@@ -221,7 +221,7 @@ const ActivityLog = (props) => {
                                     <td className="edit-padding" > {formatDate(item.created_on)}</td> */}
                                     <td className="edit-padding" > {item.internal_document_id}</td>
                                     <td className="edit-padding text-center" >
-                                        <button type="button" className="button-yellow"><Link className="button-yellow" to={identifyEndpoins(item.document_type_id) + "?internal_document_id=" + item.internal_document_id + "&document_id=" + item.document_id}>รายละเอียด</Link></button>
+                                        <Link className="button-yellow" to={identifyEndpoins(item.document_type_id) + "?internal_document_id=" + item.internal_document_id + "&document_id=" + item.document_id}><button type="button" className="button-yellow">รายละเอียด</button></Link>
                                     </td>
                                 </tr>
                             )

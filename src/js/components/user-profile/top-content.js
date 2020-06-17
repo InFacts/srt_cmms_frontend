@@ -6,7 +6,7 @@ import { useFormikContext, useField } from 'formik';
 
 const TopContent = (props) => {
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
-    const token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
+    // const token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
     return (
         <div id="blackground-white">
             <div className="container_12 clearfix" style={{ marginTop: "55px" }}>

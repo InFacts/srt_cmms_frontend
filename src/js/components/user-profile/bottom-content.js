@@ -14,7 +14,13 @@ import TextInput from '../common/formik-text-input'
 const BottomContent = (props) => {
 
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
-
+    const formatDate = (dateISOString) => {
+        let date = new Date(dateISOString);
+        // year = date.getFullYear();
+        // month = date.getMonth()+1;
+        // dt = date.getDate();
+        return date.toLocaleDateString('en-GB') + " " + date.toLocaleTimeString();
+    }
 
     const factDistricts = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
     const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
@@ -27,45 +33,64 @@ const BottomContent = (props) => {
         { id: "complete", name: "เสร็จสิน" },
     ]);
 
-
+    const identifyEndpoins = (document_type_id) => {
+        let doc_type = document_type_id.toString().substring(0, 3);
+        // console.log("doc_type", doc_type)
+        if (doc_type === "101") return "goods-receipt2";
+        if (doc_type === "103") return "goods-receipt-no-po";
+        if (doc_type === "111") return "goods-usage";
+        if (doc_type === "112") return "goods-issue";
+        if (doc_type === "121") return "inventory-transfer";
+        if (doc_type === "132") return "goods-fix";
+        if (doc_type === "102") return "goods-return";
+        else return "#";
+    }
 
     const onSave = (content) => {
-
-        if (content === "information") {
-
-            const information =
-            {
-                "user_id": values.user_id,
-                "employee_id": values.employee_id,
-                "firstname_th": values.firstname,
-                "lastname_th": values.lastname,
-                "email": values.email
-            }
-            console.log("information", information)
-            axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/profile`, information)
-                .then(res => {
-                    console.log(res);
-                }).catch(function (err) {
-                    console.log("err", err)
-                })
-        } else {
-
-            if (values.password !== values.confirmpassword) {
-                alert("Password did not match: Please try again...");
-            } else {
-                const pass =
+        if (values.user_my === "user-profile") {
+            if (content === "information") {
+                const information =
                 {
-                    "password_old": values.password,
-                    "password_new": values.newpassword
+                    "user_id": values.user_id,
+                    "employee_id": values.employee_id,
+                    "firstname_th": values.firstname,
+                    "lastname_th": values.lastname,
+                    "email": values.email
                 }
-                console.log("inpasswordformation", pass)
-                axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/profile`, pass)
+                console.log("information", information)
+                axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/profile`, information)
                     .then(res => {
                         console.log(res);
                     }).catch(function (err) {
+                        console.log("err", err)
                     })
+            } else if (content === "password") {
+                if (values.password !== values.confirmpassword) {
+                    alert("Password did not match: Please try again...");
+                } else {
+                    const pass =
+                    {
+                        "password_old": values.password,
+                        "password_new": values.newpassword
+                    }
+                    console.log("inpasswordformation", pass)
+                    axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/profile/change-password`, pass)
+                        .then(res => {
+                            console.log(res);
+                        }).catch(function (err) {
+                        })
+                }
+            } else if (content === "position") {
+
+
             }
+
+        } else {
+
+
         }
+
+
     }
 
     return (
@@ -83,14 +108,24 @@ const BottomContent = (props) => {
                             <thead>
                                 <tr>
                                     <th className="font" style={{ minWidth: "150px" }}>เลขที่เอกสาร</th>
-                                    <th className="font" style={{ minWidth: "150px" }}>ประเภทเอกสาร</th>
+                                    <th className="font" style={{ minWidth: "500px" }}>ประเภทเอกสาร</th>
                                     {/* <th className="font" style={{ minWidth: "300px" }}>รายละเอียด</th> */}
                                     <th className="font" style={{ minWidth: "180px" }}>วันเวลาที่สร้าง</th>
                                     {/* <th className="font" style={{ minWidth: "150px" }}>สถานะเอกสาร Actions</th> */}
                                 </tr>
                             </thead>
                             <tbody>
-                                {/*  */}
+
+                                {values.items.map(function (item, index) {
+                                    console.log("item", item)
+                                    return (
+                                        <tr key={index} id={index}>
+                                            <td className="edit-padding" >{item.internal_document_id} </td>
+                                            <td className="edit-padding" >{item.document_type_name} </td>
+                                            <td className="edit-padding" >{formatDate(item.created_on)} </td>
+                                        </tr>
+                                    )
+                                })}
                             </tbody>
                         </table>
                     </div>
@@ -226,7 +261,9 @@ const BottomContent = (props) => {
                             <div className="grid_12">
                                 <div className="grid_2"><p className="cancel-default">หน่วยงาน/แขวง</p></div>
                                 <div className="grid_3 pull_0">
-                                    <SelectNoChildrenInput name="district" >
+                                    <SelectNoChildrenInput name="district"
+                                        disabled={values.user_my === "user-profile"}
+                                    >
                                         <option value=''></option>
                                         {factDistricts.items.map(function ({ district_id, name }) {
                                             return <option value={district_id} key={district_id}> {name} </option>
@@ -246,7 +283,14 @@ const BottomContent = (props) => {
                                     </SelectNoChildrenInput>
                                 </div> */}
                                 <div className="grid_2 pull_0 float-right ">
-                                    <button className="button-blue edit  mr-5" type="button" onClick={(e) => { if (window.confirm('คุณต้องการแก้ไขตำแหน่งงานหรือไม่')) { onSave('position') } }} >บันทึก</button>
+                                    {values.user_my === "user-profile" ?
+
+                                        <button className="button-blue edit  mr-5" disabled="disabled" type="button" onClick={(e) => { if (window.confirm('คุณต้องการแก้ไขตำแหน่งงานหรือไม่')) { onSave('position') } }} >บันทึก</button>
+                                        :
+                                        <button className="button-blue edit  mr-5" type="button" onClick={(e) => { if (window.confirm('คุณต้องการแก้ไขตำแหน่งงานหรือไม่')) { onSave('position') } }} >บันทึก</button>
+
+                                    }
+
 
                                 </div>
                             </div>
@@ -263,14 +307,31 @@ const BottomContent = (props) => {
                             <thead>
                                 <tr>
                                     <th className="font" style={{ minWidth: "150px" }}>วันเวลา</th>
-                                    <th className="font" style={{ minWidth: "150px" }}>ประเภทของเอกสาร</th>
-                                    <th className="font" style={{ minWidth: "150px" }}>ประเภทของ Actions</th>
-                                    <th className="font" style={{ minWidth: "150px" }}>ข้อมูลที่เปลี่ยนแปลง</th>
+                                    <th className="font" style={{ minWidth: "380px" }}>ประเภทของเอกสาร</th>
+                                    {/* <th className="font" style={{ minWidth: "150px" }}>ประเภทของ Actions</th> */}
+                                    <th className="font" style={{ minWidth: "150px" }}>เลขที่เอกสาร</th>
                                     <th className="font" style={{ minWidth: "150px" }}>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {/*  */}
+                                {values.items.map(function (item, index) {
+                                    console.log(item)
+                                    return (
+                                        <tr key={index} id={index}>
+                                            <td className="edit-padding" >{formatDate(item.created_on)} </td>
+                                            <td className="edit-padding" >{item.document_type_name} </td>
+                                            {/* <td className="edit-padding" >{formatDate(item.created_on)} </td> */}
+                                            <td className="edit-padding" > {item.internal_document_id}</td>
+                                            <td className="edit-padding text-center" >
+                                                <Link className="button-yellow" to={identifyEndpoins(item.document_type_id) + "?internal_document_id=" + item.internal_document_id + "&document_id=" + item.document_id}><button type="button" className="button-yellow">รายละเอียด</button></Link>
+                                            </td>
+
+
+                                        </tr>
+                                    )
+                                })}
+
+
                             </tbody>
                         </table>
                     </div>

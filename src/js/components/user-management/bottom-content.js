@@ -10,7 +10,13 @@ import { useSelector, shallowEqual } from 'react-redux';
 
 const BottomContent = (props) => {
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
-
+    const formatDate = (dateISOString) => {
+        let date = new Date(dateISOString);
+        // year = date.getFullYear();
+        // month = date.getMonth()+1;
+        // dt = date.getDate();
+        return date.toLocaleDateString('en-GB') + " " + date.toLocaleTimeString();
+    }
 
     const identifyEndpoins = (document_type_id) => {
         let doc_type = document_type_id.toString().substring(0, 3);
@@ -51,9 +57,9 @@ const BottomContent = (props) => {
                                             <td className="edit-padding" >{user.username} </td>
                                             <td className="edit-padding" >{user.firstname_th} {user.lastname_th} </td>
                                             <td className="edit-padding" > </td>
-                                            <td className="edit-padding" >{user.updated_at} </td>
+                                            <td className="edit-padding" >{formatDate(user.updated_at)} </td>
                                             <td className="edit-padding text-center" >
-                                                <button type="button" className="button-yellow"><Link className="button-yellow" to={"profile" + "?user_id=" + user.user_id}>รายละเอียด</Link></button>
+                                                <Link className="button-yellow" to={"profile" + "?user_id=" + user.user_id}><button type="button" className="button-yellow">รายละเอียด</button></Link>
                                                 {/* identifyEndpoins(item.document_type_id) + "?internal_document_id=" + item.internal_document_id + "&document_id=" + item.document_id */}
                                             </td>
                                         </tr>

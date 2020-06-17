@@ -9,7 +9,7 @@ import TopContent from './top-content.js';
 import BottomContent from './bottom-content.js';
 import { toModeInvisible } from '../../redux/modules/toolbar';
 import { footerToModeInvisible } from '../../redux/modules/footer.js';
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector, shallowEqual } from 'react-redux'
 import { useToolbarChangeModeInitializer } from '../../hooks/toolbar-initializer';
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 import useFactInitializer from '../../hooks/fact-initializer';
@@ -28,6 +28,8 @@ const Home = (props) => {
     useToolbarChangeModeInitializer(TOOLBAR_MODE.NONE);
     useFactInitializer();
     useTokenInitializer();
+
+    const token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
     const [tabNames, setTabNames] = useState([
         { id: "officia_document", name: "เอกสารราชการ" },
@@ -62,8 +64,38 @@ const Home = (props) => {
                 setFieldValue("created_at", data.results[0].created_at);
                 setFieldValue("updated_at", data.results[0].updated_at);
             })
-        }else{
+            fetchDocumentUsers(user_id).then(function (data) {
+                setFieldValue("items", data.results);
+                console.log(data.results)
+            })
+            setFieldValue("user_my", "user-management");
+        } else {
+
+            fetchMyUsers().then(function (data) {
+                console.log(data.user_id)
+                setFieldValue("user_id", data.user_id);
+                setFieldValue("username", data.username);
+                setFieldValue("firstname", data.firstname_th);
+                setFieldValue("lastname", data.lastname_th);
+                setFieldValue("employee_id", data.employee_id);
+                setFieldValue("email", data.email);
+                setFieldValue("national_id", data.national_id);
+                setFieldValue("firstname_en", data.firstname_en);
+                setFieldValue("firstname_th", data.firstname_th);
+                setFieldValue("lastname_th", data.lastname_th);
+                setFieldValue("address", data.address);
+                setFieldValue("birthdate", data.birthdate);
+                setFieldValue("phone", data.phone);
+                setFieldValue("created_at", data.created_at);
+                setFieldValue("updated_at", data.updated_at);
+
+                fetchDocumentUsers(data.user_id).then(function (data2) {
+                    setFieldValue("items", data2.results);
+                    console.log(data2.results)
+                })
+            })
             
+            setFieldValue("user_my", "user-profile");
         }
     }, []);
 
@@ -81,6 +113,9 @@ const Home = (props) => {
 }
 const EnhancedUserProfileComponent = withFormik({
     mapPropsToValues: () => ({
+
+
+        user_my: '',
 
         user_id: "",
         username: '',
@@ -111,6 +146,10 @@ const EnhancedUserProfileComponent = withFormik({
         station: '',
 
         user_profile: [],
+
+        items: [],
+
+
     }),
 })(Home);
 export default EnhancedUserProfileComponent;
@@ -118,6 +157,30 @@ export default EnhancedUserProfileComponent;
 
 export const fetchUsers = (user_id) => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/users?user_id=${user_id}`;
+    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((user_id) => {
+            resolve(user_id.data);
+        })
+        .catch((err) => {
+            reject(err)
+        });
+});
+
+
+export const fetchDocumentUsers = (user_id) => new Promise((resolve, reject) => {
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?created_by_user_id=${user_id}`;
+    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((user_id) => {
+            resolve(user_id.data);
+        })
+        .catch((err) => {
+            reject(err)
+        });
+});
+
+
+export const fetchMyUsers = () => new Promise((resolve, reject) => {
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/profile`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((user_id) => {
             resolve(user_id.data);

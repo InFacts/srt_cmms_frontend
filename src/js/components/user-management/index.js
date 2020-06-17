@@ -10,10 +10,10 @@ import BottomContent from './bottom-content.js';
 import { toModeInvisible } from '../../redux/modules/toolbar';
 import { footerToModeInvisible } from '../../redux/modules/footer.js';
 import { useDispatch, useSelector } from 'react-redux'
-import {useToolbarChangeModeInitializer} from '../../hooks/toolbar-initializer';
-import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
+import { useToolbarChangeModeInitializer } from '../../hooks/toolbar-initializer';
+import { TOOLBAR_MODE, TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 import useFactInitializer from '../../hooks/fact-initializer';
-import { useFormik , withFormik ,useFormikContext} from 'formik';
+import { useFormik, withFormik, useFormikContext } from 'formik';
 import useTokenInitializer from '../../hooks/token-initializer';
 const Home = (props) => {
     const dispatch = useDispatch();
@@ -32,10 +32,15 @@ const Home = (props) => {
 }
 const EnhancedUserManagementComponent = withFormik({
     mapPropsToValues: () => ({
+
+        // ฟิวที่ให้ user กรอก
+        internal_document_id: '',
+        created_by_user_employee_id: '',
+        
         user_id: '',
         name: '',
-        employee_id:'',
-        item_list: [], 
+        employee_id: '',
+        item_list: [],
         district: '',
         zone: '',
     }),
