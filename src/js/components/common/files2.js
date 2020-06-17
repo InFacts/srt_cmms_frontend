@@ -18,7 +18,6 @@ const Files = () => {
     // Fill Default Forms
     useEffect(() => {
         if (values.document_id !== 0 && values.document_id !== undefined) {
-            console.log("------ fetchAttachmentDocumentData values.document_id", values.document_id)
             fetchAttachmentDocumentData(values.document_id)
             .then((result) => {
                 setFieldValue("files", result.data.results);
