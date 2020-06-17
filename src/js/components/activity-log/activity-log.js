@@ -54,26 +54,39 @@ const ActivityLog = (props) => {
     }
 
     const searchDetail = () => {
-        // ตัวแปร item ยังไม่แน่ชัดเพราะเรื่อง API
-        setFieldValue("item_list", props.track_document_show.filter(item => {
 
-            console.log(item)
-            const query = values.date_start.toLowerCase();
-            const query2 = values.date_end.toLowerCase();
-            const query3 = values.type_document.toLowerCase();
-            const query4 = values.type_action.toLowerCase();
-            const query5 = values.username.toLowerCase();
-            const query6 = values.document_id.toLowerCase();
-            return (
-                // (item.date_start.toLowerCase().indexOf(query) >= 0 || !query) &&
-                // (item.date_end.toLowerCase().indexOf(query2) >= 0 || !query2) &&
-                (item.document_type_name.toLowerCase().indexOf(query3) >= 0 || !query3) &&
-                // (item.document_action_type_id.toLowerCase().indexOf(query4) >= 0 || !query4) &&
-                // (item.created_by_user_id.toLowerCase().indexOf(query5) >= 0 || !query5) &&
-                (item.internal_document_id.toLowerCase().indexOf(query6) >= 0 || !query6)
-            )
-        })
-        );
+        let url =`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?internal_document_id=${values.internal_document_id}&document_type_name=${values.type_document}`
+        const created_by_admin_id = getUserIDFromEmployeeID(factUser, values.created_by_user_employee_id)
+        if(created_by_admin_id !== null) {
+            url =`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?internal_document_id=${values.internal_document_id}&document_type_name=${values.type_document}&created_by_admin_id=${created_by_admin_id}`
+        }
+        const fetchData = () => {
+            axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+                .then((res) => {
+                    setFieldValue("item_list",res.data.results)
+                })
+        };
+        fetchData();
+        // ตัวแปร item ยังไม่แน่ชัดเพราะเรื่อง API
+        // setFieldValue("item_list", props.track_document_show.filter(item => {
+
+        //     console.log(item)
+        //     const query = values.date_start.toLowerCase();
+        //     const query2 = values.date_end.toLowerCase();
+        //     const query3 = values.type_document.toLowerCase();
+        //     const query4 = values.type_action.toLowerCase();
+        //     const query5 = values.username.toLowerCase();
+        //     const query6 = values.document_id.toLowerCase();
+        //     return (
+        //         // (item.date_start.toLowerCase().indexOf(query) >= 0 || !query) &&
+        //         // (item.date_end.toLowerCase().indexOf(query2) >= 0 || !query2) &&
+        //         (item.document_type_name.toLowerCase().indexOf(query3) >= 0 || !query3) &&
+        //         // (item.document_action_type_id.toLowerCase().indexOf(query4) >= 0 || !query4) &&
+        //         // (item.created_by_user_id.toLowerCase().indexOf(query5) >= 0 || !query5) &&
+        //         (item.internal_document_id.toLowerCase().indexOf(query6) >= 0 || !query6)
+        //     )
+        // })
+        // );
     }
 
     const identifyEndpoins = (document_type_id) => {
@@ -177,7 +190,7 @@ const ActivityLog = (props) => {
                     <button className="button-blue edit grid_1 float-right mr-5" type="button" onClick={searchDetail}>ค้นหา</button>
                 </div>
 
-                <table className="table-many-column mt-2">
+                <table className="table-many-column mt-2" style={{ height: "450px"}}>
                     <thead>
                         <tr>
                             <th className="font text-center" style={{ width: "350px" }}>วันเวลา</th>
