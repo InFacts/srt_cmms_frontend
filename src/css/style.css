@@ -731,3 +731,16 @@ button.none-border {
   top: 0;
   opacity: 0;
 }
+
+.button-yellow {
+  background-color: #f3c910;
+  border: none;
+  color: white;
+  font-family: Anakotmai-Light;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 0;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  width: auto;
+}

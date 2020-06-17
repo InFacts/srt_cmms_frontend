@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useFormikContext } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import {handleClickExportPDF,TOOLBAR_ACTIONS} from '../redux/modules/toolbar.js';
+import { handleClickExportPDF, TOOLBAR_ACTIONS } from '../redux/modules/toolbar.js';
 import history from '../history';
 
 function getRouteLocation() {
@@ -29,7 +29,7 @@ const useExportPdfInitializer = () => {
         }, 500);
       })
       dispatch(handleClickExportPDF())
-    } 
+    }
     else if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF] && document_item_list && document_item_list.length > 0 && routeLocation === "/report-s-1") {
       exportPDF(routeLocation, values).then(function (htmlCode) {
         var w = window.open();
@@ -60,7 +60,7 @@ const createRowS1 = (item) =>
     <td style=" text-align:right ; vertical-align: middle;">${item.per_unit_price}</td>
   </tr>`;
 
-const createTableS1 = (head, rows) => 
+const createTableS1 = (head, rows) =>
   `<table cellpadding="0" cellspacing="0" >
       <tr class="heading" >
           <td  style="width: 5%; text-align:center ; vertical-align: middle;">${head.item_id}</td>
@@ -74,7 +74,7 @@ const createTableS1 = (head, rows) =>
       ${rows}
   </table>`;
 
-const createHtmlS1 = (table) => 
+const createHtmlS1 = (table) =>
   `<html>
     <head>
       <meta charset="utf-8">
@@ -143,7 +143,7 @@ const createHtmlS1 = (table) =>
     </body>
   </html>`;
 
-const createPageS1 = (table, date) => 
+const createPageS1 = (table, date) =>
   `<div class="invoice-box">
       <pp>ส.1</pp>
       <h2 style=" text-align:center ; vertical-align: middle;">การรถไฟแห่งประเทศไทย</h2>
@@ -152,7 +152,7 @@ const createPageS1 = (table, date) =>
       ${table}
   </div>`;
 
-const createPageS1LastPage = (table, date, total) => 
+const createPageS1LastPage = (table, date, total) =>
   `<div class="invoice-box">
       <pp>ส.1</pp>
       <h2  style=" text-align:center ; vertical-align: middle;">การรถไฟแห่งประเทศไทย</h2>
@@ -166,7 +166,7 @@ const createPageS1LastPage = (table, date, total) =>
 const createCategory = (item) =>
   `<h2 style=" text-align:center ; vertical-align: middle;align-items:center">(${item})</h2>`;
 
-const createPageS1Header = (category_group, date, source, index, img) => 
+const createPageS1Header = (category_group, date, source, index, img) =>
   `<div class="invoice-box">
       <br></br>
       <img src=${img} style="display: block;margin-left: auto;margin-right: auto;width:20%;" >
@@ -196,14 +196,14 @@ const createPageS1Header = (category_group, date, source, index, img) =>
       </div>
   </div>`;
 
-const createPageS1Category = (index, category) => 
+const createPageS1Category = (index, category) =>
   `<div class="invoice-box" style=" justify-content:center ;align-items:center">
       <h1 style=" text-align:center ; vertical-align: middle;align-items:center;margin-top: 50%;">${index}. (${category})</h1>
   </div>`;
 
 
 
-const createHtmlS16_46 = (table) => 
+const createHtmlS16_46 = (table) =>
   `<html>
       <head>
         <meta charset="utf-8">
@@ -321,7 +321,7 @@ const createRowS16_46 = (item) =>
     <td style=" text-align:center ; vertical-align: middle;">${item.type}</td>
   </tr>`;
 
-const createTableS16_46 = (head, rows, content, total) => 
+const createTableS16_46 = (head, rows, content, total) =>
   `<table cellpadding="0" cellspacing="0" >
       <tr class="heading">
         <td  style="width: 4%; text-align:center ; vertical-align: middle; border: 0px solid #ffffff;background:#ffffff" ></td>
@@ -367,7 +367,7 @@ const createTableS16_46 = (head, rows, content, total) =>
       </tr>
   </table>`;
 
-const createPageS16_46 = (table, date, content) => 
+const createPageS16_46 = (table, date, content) =>
   `<div class="invoice-box">
       <pp>ส.๑๑๔๕๑/๑</pp>
       </br>
@@ -744,7 +744,7 @@ const createPageB22Page2 = (table, inventory, date) => `
 
 
 
-const createHtmlS101 = (table) => 
+const createHtmlS101 = (table) =>
   `<html>
       <head>
         <meta charset="utf-8">
@@ -850,7 +850,7 @@ const createHtmlS101 = (table) =>
       </body>
   </html>`;
 
-const createPageS101Page1 = (date, content) => 
+const createPageS101Page1 = (date, content) =>
   `<div class="invoice-box">
       <pp>แบบ สส. 101</pp>
       <h2 style=" text-align:center ; vertical-align: middle;">ฝ่ายการอาณัติสัญญาณและโทรคมนาคม การรถไฟ</h2>
@@ -897,7 +897,7 @@ const createPageS101Page1 = (date, content) =>
               <td style=" text-align:center ; vertical-align: middle;">-</td>
           </tr>
           <tr class="item">
-              <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">โดยจดหมายหรือโทรเลขที่</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>${content.NoInternal}</label></div></div></td>
+              <td style="padding-left: 15px; text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">โดยจดหมายหรือโทรเลขที่</div><div contenteditable="true"><div class="dotted" style="width: 435px;"><label>${content.NoInternal}</label></div></div></td>
               <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">วันเวลาที่เกิดเหตุ</td>
               <td style=" text-align:center ; vertical-align: middle;" >-</td>
               <td style=" text-align:center ; vertical-align: middle;" >-</td>
@@ -934,7 +934,9 @@ const createPageS101Page1 = (date, content) =>
   
 
       <table >
-        <tr class="item2">
+        <tr class="item2" >
+          <td style="width: 1%; text-align:left ; vertical-align: middle;">
+          </td>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
               <div class="left">ก. ระบบอาณัติสัญญาณ</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.NoInternal}</label></div></div>
           </td>
@@ -947,6 +949,8 @@ const createPageS101Page1 = (date, content) =>
 
       <table >
         <tr class="item2">
+          <td style="width: 1%; text-align:left ; vertical-align: middle;">
+          </td>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
               <div class="left">ค. ระบบเครื่องกั้นถนน</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.NoInternal}</label></div></div>
           </td>
@@ -958,6 +962,8 @@ const createPageS101Page1 = (date, content) =>
       </table>
       <table >
       <tr class="item2">
+        <td style="width: 1%; text-align:left ; vertical-align: middle;">
+        </td>
         <td style="width: 40%; text-align:left ; vertical-align: middle;">
             <div class="left">จ. ระบบโทรศัพท์</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.NoInternal}</label></div></div>
         </td>
@@ -970,6 +976,8 @@ const createPageS101Page1 = (date, content) =>
 
     <table >
       <tr class="item2">
+        <td style="width: 1%; text-align:left ; vertical-align: middle;">
+        </td>
         <td style="width: 40%; text-align:left ; vertical-align: middle;">
             <div class="left">ช. ระบบโทรพิมพ์</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.NoInternal}</label></div></div>
         </td>
@@ -982,6 +990,8 @@ const createPageS101Page1 = (date, content) =>
 
     <table >
       <tr class="item2">
+        <td style="width: 1%; text-align:left ; vertical-align: middle;">
+        </td>
         <td style="width: 40%; text-align:left ; vertical-align: middle;">
             <div class="left">ฌ. ระบบอิเลคทรอนิคส์</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.NoInternal}</label></div></div>
         </td>
@@ -1096,7 +1106,7 @@ const createPageS101Page1 = (date, content) =>
               <div class="left">(15) ข้าพเจ้ารับรองว่าข้อความข้างบนนี้เป็นความจริง</div>
           </td>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
-              <div class="left">(ลงชื่อ)</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.NoInternal}</label></div></div>
+              <div class="left">(ลงชื่อ)</div><pr><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.NoInternal}</label></div></div></pr>
           </td>
         </tr>
       </table>
@@ -1106,7 +1116,7 @@ const createPageS101Page1 = (date, content) =>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
           </td>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
-              <div class="left">(</div><div class="right">)</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.NoInternal}</label></div></div>
+          <pr><div class="left">(</div><div class="right">)</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.NoInternal}</label></div></div></pr>
           </td>
         </tr>
       </table>
@@ -1115,15 +1125,15 @@ const createPageS101Page1 = (date, content) =>
         <tr class="item2">
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
           </td>
-          <td style="width: 40%; text-align:left ; vertical-align: middle;">
-              <div class="left">ตำแหน่ง</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.NoInternal}</label></div></div>
+          <td style="width: 50%; text-align:left ; vertical-align: middle;">
+          <div class="left">ตำแหน่ง</div><pr><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.NoInternal}</label></div></div></pr>
           </td>
         </tr>
       </table>
 
     </div>`;
 
-const createPageS101Page2 = (table, date, content) => 
+const createPageS101Page2 = (table, date, content) =>
   `<div class="invoice-box" >
         <table style="margin-top: 1cm;">
             <tr>
@@ -1174,24 +1184,24 @@ const createPageS101Page2 = (table, date, content) =>
             <td style="width: 40%; text-align:left ; vertical-align: middle;">
             </td>
             <td style="width: 40%; text-align:left ; vertical-align: middle;">
-                <div class="left">(ลงชื่อ)</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.NoInternal}</label></div></div>
+                <div class="left">(ลงชื่อ)</div><pr><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.NoInternal}</label></div></div></pr>
             </td>
           </tr>
         </table>
 
         <table>
           <tr class="item2">
-            <td style="width: 40%; text-align:left ; vertical-align: middle;">
+            <td style="width: 35%; text-align:left ; vertical-align: middle;">
             </td>
-            <td style="width: 40%; text-align:left ; vertical-align: middle;">
-                <div class="left">นายตรวจสายหัวหน้าแขวง</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.NoInternal}</label></div></div>
+            <td style="width: 63%; text-align:left ; vertical-align: middle;">
+                <div class="left">นายตรวจสายหัวหน้าแขวง</div><pr><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.NoInternal}</label></div></div></pr>
             </td>
           </tr>
         </table>
 
     </div>`;
 
-const createPageS101Page3 = (date, content) => 
+const createPageS101Page3 = (date, content) =>
   `<div class="invoice-box" >
       <table style="margin-top: 1cm;">
         <tr class="item2">
@@ -1230,7 +1240,7 @@ const createPageS101Page3 = (date, content) =>
       
     </div>`;
 
-const createTableSS101 = (head, rows) => 
+const createTableSS101 = (head, rows) =>
   `<table cellpadding="0" cellspacing="0" >
       <tr class="heading" >
           <td  style="width: 5%; text-align:center ; vertical-align: middle;">${head.item_id}</td>

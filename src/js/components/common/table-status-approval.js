@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const TableSatus = (props) => {
+const TableSatusApproval = (props) => {
   console.log("props.bodyTableStatus", props.bodyTableStatus)
   return (
     <>
@@ -16,7 +16,7 @@ const TableSatus = (props) => {
           </tr>
         </thead>
         <tbody>
-          {props.bodyTableStatus.map((resApprove, i) => {
+          {/* {props.bodyTableStatus.map((resApprove, i) => {
             return (
             resApprove.position_group.name !== "This"
             ?
@@ -33,11 +33,11 @@ const TableSatus = (props) => {
             :
             null
           )
-          })}
+          })} */}
         </tbody>
       </table>
     </>
   )
 }
 
-export default TableSatus;
+export default TableSatusApproval;

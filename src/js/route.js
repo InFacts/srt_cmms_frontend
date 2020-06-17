@@ -2,6 +2,7 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 
 import Login from './components/signin';
+import Register from './components/register';
 import ForgotPassword from './components/forgot-password';
 import Main4Module from './components/main-module';
 import MainSpare from './components/main-spare';
@@ -29,12 +30,21 @@ import PmtWorkOrder from './components/pmt-work-order';
 import WorkRequestComponent from './components/pmt-work-request';
 import PmtSS101 from './components/pmt-ss101';
 
+// APPROVAL PAGE
+import ApprovalFlow from './components/approval-flow'
+import ApprovalFlowStep from './components/approval-flow-step'
+// ADMIN PAGE
+import UserManagement from './components/user-management'
+import ActivityLog from './components/activity-log'
+import Profile from './components/user-profile'
+
 import Track from './components/track-document';
 const FrontEnd = () => (
     <>
         <Route exact path="/" component={Login} />
         <Route exact path="/forgot-password" component={ForgotPassword} />
         <Route exact path="/main" component={Main4Module} />
+        <Route exact path="/register" component={Register} />
         
         {/* SPARE PAGE */}
         <Route exact path="/main-spare" component={MainSpare} />
@@ -56,6 +66,15 @@ const FrontEnd = () => (
 
         {/* PMT PAGE */}
         <Route exact path="/main-pmt" component={MainPmt} />
+
+        {/* APPROVAL PAGE */}
+        <Route exact path="/approval-flow" component={ApprovalFlow} />
+        <Route exact path="/approval-flow-step" component={ApprovalFlowStep} />
+
+        {/* ADMIN PAGE */}
+        <Route exact path="/user-management" component={UserManagement} />
+        <Route exact path="/activity-log" component={ActivityLog} />
+        <Route exact path="/profile" component={Profile} />
 
         {/* PMT Routes */}
         <Route exact path="/pmt-work-request" component={WorkRequestComponent} />

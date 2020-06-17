@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-const TableSatus = (props) => {
-  console.log("props.bodyTableStatus", props.bodyTableStatus)
+const TableUserMenagement = (props) => {
+  // console.log("props.bodyTableStatus", props.bodyTableStatus)
   return (
     <>
       <table className="table-many-column mt-2">
@@ -40,4 +40,4 @@ const TableSatus = (props) => {
   )
 }
 
-export default TableSatus;
+export default TableUserMenagement;
