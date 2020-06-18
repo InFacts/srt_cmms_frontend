@@ -7,6 +7,7 @@ import ForgotPassword from './components/forgot-password';
 import Main4Module from './components/main-module';
 import MainSpare from './components/main-spare';
 import MainPmt from './components/main-pmt';
+import MainAdmin from './components/main-admin';
 import NotFoundComponent from './components/404-not-found';
 
 // SPARE PAGE
@@ -36,66 +37,67 @@ import PmtEquipmentMasterData from './components/pmt-equipment-master';
 
 // Admin
 import PermistionAdmin from './components/admin-permisstion';
+import ActivityLog from './components/admin-activity-log'
+import UserManagement from './components/admin-user-management'
 
 // APPROVAL PAGE
 import ApprovalFlow from './components/approval-flow'
 import ApprovalFlowStep from './components/approval-flow-step'
-// ADMIN PAGE
-import UserManagement from './components/user-management'
-import ActivityLog from './components/activity-log'
+
 import Profile from './components/user-profile'
 
 import Track from './components/track-document';
 const FrontEnd = () => (
     <>
-    <Switch>
-    {/* Wrap the routes in a Switch which only renders the first matched component. Otherwise you would see multiple components rendered. */}
-        <Route exact path="/" component={Login} />
-        <Route exact path="/forgot-password" component={ForgotPassword} />
-        <Route exact path="/main" component={Main4Module} />
-        <Route exact path="/register" component={Register} />
-        
-        {/* SPARE PAGE */}
-        <Route exact path="/main-spare" component={MainSpare} />
-        <Route exact path="/item-master-data" component={ItemMasterData} />
-        <Route exact path="/goods-receipt2" component={SpareGoodsReceipt2} />
-        <Route exact path="/goods-receipt-no-po" component={SpareGoodsReceiptNoPo} />
-        <Route exact path="/goods-return" component={SpareGoodsReturn} />
-        <Route exact path="/goods-fix" component={SpareGoodsFix} />
-        <Route exact path="/goods-usage" component={SpareGoodsUsage} />
-        <Route exact path="/goods-receipt-fix" component={SpareGoodsReceiptFix} />
-        <Route exact path="/goods-issue" component={SpareGoodsIssue} />
-        <Route exact path="/inventory-transfer" component={SpareInventoryTransfer} />
-        <Route exact path="/salvage-return" component={SpareSalvageReturn} />
-        <Route exact path="/salvage-sold" component={SpareSalvageSold} />
-        <Route exact path="/physical-count" component={SparePhysicalCount} />
-        <Route exact path="/inventory-adjustment" component={SpareInventoryAdjustment} />
-        <Route exact path="/report-s-1" component={SpareS1} />
-        <Route exact path="/warehouse" component={SpareWarehouse} />
+        <Switch>
+            {/* Wrap the routes in a Switch which only renders the first matched component. Otherwise you would see multiple components rendered. */}
+            <Route exact path="/" component={Login} />
+            <Route exact path="/forgot-password" component={ForgotPassword} />
+            <Route exact path="/main" component={Main4Module} />
+            <Route exact path="/register" component={Register} />
 
-        {/* PMT Routes */}
-        <Route exact path="/main-pmt" component={MainPmt} />
-        <Route exact path="/pmt-work-request" component={WorkRequestComponent} />
-        <Route exact path="/pmt-work-order" component={PmtWorkOrder} />
-        <Route exact path="/ss-101" component={PmtSS101} />
-        <Route exact path="/maitenant-item" component={PmtMaintenantItem} />
-        <Route exact path="/pmt-equipment-master" component={PmtEquipmentMasterData} />
-        <Route exact path="/pmt-equipment-installation" component={PmtEquipmentInstallation} />
-        <Route exact path="/track" component={Track} />
+            {/* SPARE PAGE */}
+            <Route exact path="/main-spare" component={MainSpare} />
+            <Route exact path="/item-master-data" component={ItemMasterData} />
+            <Route exact path="/goods-receipt2" component={SpareGoodsReceipt2} />
+            <Route exact path="/goods-receipt-no-po" component={SpareGoodsReceiptNoPo} />
+            <Route exact path="/goods-return" component={SpareGoodsReturn} />
+            <Route exact path="/goods-fix" component={SpareGoodsFix} />
+            <Route exact path="/goods-usage" component={SpareGoodsUsage} />
+            <Route exact path="/goods-receipt-fix" component={SpareGoodsReceiptFix} />
+            <Route exact path="/goods-issue" component={SpareGoodsIssue} />
+            <Route exact path="/inventory-transfer" component={SpareInventoryTransfer} />
+            <Route exact path="/salvage-return" component={SpareSalvageReturn} />
+            <Route exact path="/salvage-sold" component={SpareSalvageSold} />
+            <Route exact path="/physical-count" component={SparePhysicalCount} />
+            <Route exact path="/inventory-adjustment" component={SpareInventoryAdjustment} />
+            <Route exact path="/report-s-1" component={SpareS1} />
+            <Route exact path="/warehouse" component={SpareWarehouse} />
 
-        {/* Admin Page */}
-        <Route exact path="/permissiton-admin" component={PermistionAdmin} />
-        <Route exact path="/user-management" component={UserManagement} />
-        <Route exact path="/activity-log" component={ActivityLog} />
-        <Route exact path="/profile" component={Profile} />
+            {/* PMT Routes */}
+            <Route exact path="/main-pmt" component={MainPmt} />
+            <Route exact path="/pmt-work-request" component={WorkRequestComponent} />
+            <Route exact path="/pmt-work-order" component={PmtWorkOrder} />
+            <Route exact path="/ss-101" component={PmtSS101} />
+            <Route exact path="/maitenant-item" component={PmtMaintenantItem} />
+            <Route exact path="/pmt-equipment-master" component={PmtEquipmentMasterData} />
+            <Route exact path="/pmt-equipment-installation" component={PmtEquipmentInstallation} />
+            <Route exact path="/track" component={Track} />
 
-{/* APPROVAL PAGE */}
-<Route exact path="/approval-flow" component={ApprovalFlow} />
-        <Route exact path="/approval-flow-step" component={ApprovalFlowStep} />
+            {/* Admin Page */}
+            <Route exact path="/main-admin" component={MainAdmin} />
+            <Route exact path="/permissiton-admin" component={PermistionAdmin} />
+            <Route exact path="/user-management" component={UserManagement} />
+            <Route exact path="/activity-log" component={ActivityLog} />
+            <Route exact path="/profile" component={Profile} />
 
-        {/* Handle routes that are not found */}
-        <Route component={NotFoundComponent} />
-    </Switch>
+            {/* APPROVAL PAGE */}
+            <Route exact path="/approval-flow" component={ApprovalFlow} />
+            <Route exact path="/approval-flow-step" component={ApprovalFlowStep} />
+
+            {/* Handle routes that are not found */}
+            <Route component={NotFoundComponent} />
+        </Switch>
     </>
 );
 

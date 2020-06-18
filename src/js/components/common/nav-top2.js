@@ -33,7 +33,7 @@ const MainModule = (props) => {
     }
     else {
         // setCheckNav(1);
-        console.log("checkNav", checkNav)
+        // console.log("checkNav", checkNav)
         return (
             <div>
                 <div id="header">

@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
 const TableStepApproval = (props) => {
-  console.log("props.bodyTableStepApprovaldddddd", props.bodyTableStepApproval)
-  const item = props.bodyTableStepApproval
   return (
     <>
-      <table className="table-many-column mt-2">
+      <table className="table-many-column mt-2" style={{ height: "600px" }}>
         <thead>
           <tr>
             <th className="font text-center" style={{ width: "30px" }}>#</th>
@@ -14,15 +12,19 @@ const TableStepApproval = (props) => {
           </tr>
         </thead>
         <tbody>
-          {item.map((resApprove, i) => {
+          {props.bodyTableStepApproval.approval_step_lookup && props.bodyTableStepApproval.approval_step_lookup.map((resApprove, i) => {
+            if (resApprove.position_group.position.length !== 0) {
               return (
                 <tr key={i} id={i}>
-                  <td className="edit-padding text-center">{resApprove.position_id+1}</td>
-                  <td className="edit-padding">{resApprove.name}</td>
-                  <td className="edit-padding">{resApprove.abbreviation}</td>
+                  <td className="edit-padding text-center">{i + 1}</td>
+                  <td className="edit-padding">{resApprove.position_group.name}</td>
+                  <td className="edit-padding">{resApprove.position_group.position[0].name}</td>
                 </tr>
               )
-            })}
+            } else {
+              return null;
+            }
+          })}
         </tbody>
       </table>
     </>

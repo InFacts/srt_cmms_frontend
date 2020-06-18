@@ -24,7 +24,7 @@ import { API_URL_DATABASE } from '../../config_url.js';
 const Home = (props) => {
     const dispatch = useDispatch();
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
-    useToolbarChangeModeInitializer(TOOLBAR_MODE.NONE);
+    useToolbarChangeModeInitializer(TOOLBAR_MODE.NONE_HOME);
     useFactInitializer();
     useTokenInitializer();
     useEffect(() => {
@@ -42,9 +42,9 @@ const Home = (props) => {
             setFieldValue("approval_process_lookup_id", approval_process_lookup_id, true);
             console.log(" THIS IS AFTER VALUES ", values);
             fetchSearchApprovalProcessLookup(approval_process_lookup_id).then(function (data) {
-                console.log(">>>>>>", data.approval_process_lookup.approval_step_lookup)
+                console.log(">>>>>>", data.approval_process_lookup)
                 // console.log(data.approval_process_lookup.approval_process_lookup_id)
-                setFieldValue("step_approve", data.approval_process_lookup.approval_step_lookup.position_group.position);
+                setFieldValue("step_approve", data.approval_process_lookup);
             })
         }
     }, []);

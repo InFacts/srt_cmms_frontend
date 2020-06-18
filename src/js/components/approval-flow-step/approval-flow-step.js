@@ -26,7 +26,7 @@ const ApprovalFlow = (props) => {
         <div id="blackground-white" style={{minHeight: "100vh"}}>
             <div className="container_12 clearfix">
                 {/* Section Title */}
-                <h4 className="head-title" style={{ marginTop: "80px" }}>บริหารจัดการเส้นทางเอกสาร</h4>
+                <h4 className="head-title" style={{ marginTop: "80px" }}>บริหารจัดการเส้นทางเอกสาร : {values.step_approve.description}</h4>
                 <TableSatusApproval bodyTableStepApproval={values.step_approve} />
             </div>
         </div>

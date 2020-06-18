@@ -1,0 +1,65 @@
+.Aone-one{
+    position: absolute;
+    left: 65px;
+    top: 80px;
+}
+
+.Atext1{
+    /* นำเข้าอะไหล่โดยมีใบสั่งซื้อ */
+    position: absolute;
+    left: 39px;
+    top: 145px;
+
+    font-family: Kanit;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+    /* identical to box height */
+    text-align: center;
+
+    color: #000000;
+}
+
+.Atwo-one{
+    position: absolute;
+    left: 230px;
+    top: 80px;
+}
+
+.Atext4{
+    position: absolute;
+    left: 210px;
+    top: 145px;
+
+    font-family: Kanit;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+    text-align: center;
+
+    color: #000000;
+}
+
+.Athree-one{
+    position: absolute;
+    left: 395px;
+    top: 80px;
+}
+
+.Atext7{
+    /* นำเข้าอะไหล่โดยมีใบสั่งซื้อ */
+    position: absolute;
+    left: 390px;
+    top: 147px;
+    font-family: Kanit;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+    /* identical to box height */
+    text-align: center;
+
+    color: #000000;
+}

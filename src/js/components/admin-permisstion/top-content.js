@@ -43,7 +43,7 @@ const TopContent = (props) => {
         <div id="blackground-white">
             <div className="container_12 clearfix" style={{ marginTop: "55px" }}>
                 {/* Section Title */}
-                <h4 className="head-title">สิทธิการเข้าถึงแต่ละฟังก์ชั่น</h4>
+                <h4 className="head-title">สิทธิการเข้าถึงระบบ</h4>
 
                 {/* === One Column === */}
                 <div className="grid_11`" style={{ paddingLeft: "10px" }}>
