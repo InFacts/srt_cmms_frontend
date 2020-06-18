@@ -11,8 +11,9 @@ import { TOOLBAR_MODE, TOOLBAR_ACTIONS, MODE_TO_ACTION_CREATOR } from '../../red
 import useFactInitializer from '../../hooks/fact-initializer';
 import useTokenInitializer from '../../hooks/token-initializer';
 
-import Scatter from './d3-scatter';
+import ScatterPlot from './d3-scatter-plot';
 import LineGraph from './d3-line-graph';
+import BarDivergingGraph from './d3-bar-diverging';
 
 const getAnnualInventoryMonthData = () => {
   let results= [];
@@ -25,6 +26,24 @@ const getAnnualInventoryMonthData = () => {
     });
     date.setMonth(date.getMonth() + 1);
   }
+  return results;
+}
+
+const randomDivergingBarGraphData = () => {
+  let results = [];
+
+  //set the default value of i & j to print A to Z
+	var charCodeA = 65;
+  var charCodeZ = 91;
+  
+  for (let charCode = charCodeA; charCode<charCodeZ; charCode++){
+    results.push({
+      name: String.fromCharCode(charCode),
+      value_out: Math.random()*200,
+      value_in: Math.random()*200,
+    });
+  }
+
   return results;
 }
 
@@ -62,17 +81,22 @@ const AlsSpareComponent = () => {
 
               {/* === Current Average Inventory Month Text :1st Row, 2nd Column === */}
               <div className="col-4">
+              Average Inventory Month ปัจจุบัน
               {/* <LineGraph /> */}
               </div>
 
               {/* === Current Inventory Month vs Planned Inventory Month Scatter Plot :1st Row, 2nd Column === */}
               <div className="col-4">
-              {/* <LineGraph /> */}
+              <ScatterPlot />
               </div>
             </div>
-            <div className="row hidden-sm-down">
-              <div className="col-md-6">.col-md-6</div>
-              <div className="col-md-6">.col-md-6</div>
+            {/*=== Second Row ===*/}
+            <div className="row_bootstrap">
+              <div className="col-2">.col-md-2 ปรับแต่งข้อมูลของภาพรวม</div>
+              <div className="col-5">
+                <BarDivergingGraph data={getAnnualInventoryMonthData()}/>  
+              </div>
+              <div className="col-5">.col-md-5</div>
             </div>
             {/* <Scatter /> */}
           </div>

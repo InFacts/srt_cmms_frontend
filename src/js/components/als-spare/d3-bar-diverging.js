@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { scaleLinear ,scaleTime} from "d3-scale";
+import { scaleLinear ,scaleTime, scaleBand } from "d3-scale";
 import { extent, max } from "d3-array";
 import {line} from "d3-shape";
 
@@ -9,14 +9,14 @@ import useChartDimensions from './chart-dimensions-hook'
 
 const chartSettings = {
     "marginLeft": 20,
-    "marginBottom": 20,
-    "marginTop": 10,
+    "marginBottom": 10,
+    "marginTop": 20,
     "marginRight": 10,
 
-    "height": 200,
+    "height": 400,
 }
 
-function LineGraph({data}) {
+function DivergingBarGraph({data}) {
     // useChartDimensions will have a ref to the Chart_wrapper and get its own Height and Width
     // See reference of Amelia Wattenberger https://wattenberger.com/blog/react-and-d3#sizing-responsivity
     const [ref, dms] = useChartDimensions(chartSettings);
@@ -25,11 +25,7 @@ function LineGraph({data}) {
     const [timeDomain, setTimeDomain] = useState([new Date(2000, 0, 1), new Date(2000, 0, 2)]);
     const [inventoryMonthDomain, setInventoryMonthDomain] = useState([0, 100]);
     const [inventoryMonthPath, setInventoryMonthPath] = useState("");
-    // const xScale = useMemo(() => (
-    //     scaleLinear()
-    //         .domain([0, 100])
-    //         .range([0, dms.boundedWidth])
-    // ), [dms.boundedWidth])
+
     const xScale = useMemo(() => {
         console.log("LineGraph: i got new timeDomain ", timeDomain)
         return scaleTime()
@@ -42,10 +38,9 @@ function LineGraph({data}) {
             .domain(inventoryMonthDomain)
             .range([dms.boundedHeight, 0])
     ), [dms.boundedHeight, inventoryMonthDomain.join("-")])
-    // console.log('this is yscale ', yScale.range())
 
     
-    // set Domain of x and y after new data.
+    // set Domain of x and y after new data
     useEffect(() => {
         if(!data) {
             console.log("There is no data! Line Graph.");
@@ -92,7 +87,7 @@ function LineGraph({data}) {
 
                     
 
-                    <g transform={`translate(0, ${dms.boundedHeight})`}>
+                    <g >
                         <AxisBottom xScale={xScale} />
                     </g>
                     <g >
@@ -106,7 +101,7 @@ function LineGraph({data}) {
     );
 }
 
-export default LineGraph;
+export default DivergingBarGraph;
 
 
 const data = [{
