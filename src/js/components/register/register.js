@@ -37,6 +37,8 @@ const Register = (props) => {
     const factStations = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
     const factDivisions = useSelector((state) => ({ ...state.api.fact.divisions }), shallowEqual);
 
+    const factPosition = useSelector((state) => ({ ...state.api.fact.position }), shallowEqual);
+
     const handleSubmit = event => {
         event.preventDefault();
         if (values.password !== values.confirmpassword) {
@@ -170,7 +172,7 @@ const Register = (props) => {
                                 <div class="card-profile-header">ตำแหน่งงาน</div>
                                 <div class="card-profile-main">
 
-                                    <div className="grid_12">
+                                    {/* <div className="grid_12">
                                         <div className="grid_12"><p className="cancel-default">ศูนย์</p></div>
                                         <div className="grid_4 ">
 
@@ -180,13 +182,11 @@ const Register = (props) => {
                                                     return <option value={station_id} key={station_id}> {name} </option>
                                                 })}
                                             </SelectNoChildrenInput>
-                                            {/* 
-                                            <FormDropdown factList={props.station_list} onChange={props.onChangeStationTrackDocument}
-                                                idName="station_id" descriptionName="name" gridClass="grid_4" /> */}
+                                            
                                         </div>
-                                    </div>
+                                    </div> */}
 
-                                    <div className="grid_12">
+                                    {/* <div className="grid_12">
                                         <div className="grid_12"><p className="cancel-default">กอง</p></div>
                                         <div className="grid_4">
 
@@ -199,21 +199,21 @@ const Register = (props) => {
                                             </SelectNoChildrenInput>
 
                                         </div>
-                                    </div>
+                                    </div> */}
 
                                     <div className="grid_12">
-                                        <div className="grid_12"><p className="cancel-default">หน่วยงาน/แขวง</p></div>
+                                        <div className="grid_12"><p className="cancel-default">หน่วยงาน</p></div>
                                         <div className="grid_4 ">
                                             <SelectNoChildrenInput name="district" >
                                                 <option value=''></option>
-                                                {factDistricts.items.map(function ({ district_id, name }) {
-                                                    return <option value={district_id} key={district_id}> {name} </option>
+                                                {factPosition.items.map(function ({ position_id, name }) {
+                                                    return <option value={position_id} key={position_id}> {name} </option>
                                                 })}
                                             </SelectNoChildrenInput>
                                         </div>
                                     </div>
 
-                                    <div className="grid_12">
+                                    {/* <div className="grid_12">
                                         <div className="grid_12"><p className="cancel-default">ตอน</p></div>
                                         <div className="grid_4 ">
 
@@ -225,7 +225,7 @@ const Register = (props) => {
                                             </SelectNoChildrenInput>
                                             
                                         </div>
-                                    </div>
+                                    </div> */}
 
                                 </div>
                             </div>
