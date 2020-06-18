@@ -28,13 +28,22 @@ const BottomContent = (props) => {
                         list.module_4 === true ? 4 : 0,
                     ]
                 }
-                // console.log(data.function.indexOf(0))
-                data.function.map((list) => {
+                // console.log("data.function", data.function);
+                // data.function.map((list, index) => {
+                //     console.log("data.function.indexOf(0)", data.function.indexOf(0))
+                //     if (data.function.indexOf(0) !== -1) {
+                //         data.function.splice(data.function.indexOf(0), data.function.indexOf(0) + 1);
+                //         console.log("data.function>>>>", data.function);
+                //     }
+                // })
+                for (var i = 0; i < 4; i++) {
+                    console.log("data.function.indexOf(0)", data.function.indexOf(0))
                     if (data.function.indexOf(0) !== -1) {
                         data.function.splice(data.function.indexOf(0), data.function.indexOf(0) + 1);
+                        console.log("data.function>>>>", data.function);
                     }
-                })
-                console.log(data)
+                }
+                console.log("data", data)
                 // console.log("data", data)
                 const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/admin/position-permission`;
                 axios.post(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
