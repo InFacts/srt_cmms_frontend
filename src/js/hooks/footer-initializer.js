@@ -121,30 +121,32 @@ const useFooterInitializer = (document_type_id) => {
     // Handle Toolbar Mode
     useEffect(() => {
         let document_id = values.document_id;
-        if (toolbar.mode === TOOLBAR_MODE.SEARCH && document_id !== "" && document_id !== undefined) {
-            // SEARCH mode
-            hadleDocumentStatusWithFooter(document_id);
-        }
-        else if (toolbar.mode === TOOLBAR_MODE.ADD) {
-            // ADD_DRAFT mode
-            if (document_id !== "" && document_id !== undefined) { hadleDocumentStatusWithFooter(document_id); }
-            else { dispatch(footerToModeAddDraft()); }
-        }
-        else {
-            // INVISIBLE mode
-            let routeLocation = getRouteLocation();
-            if (routeLocation === spacialPage.ITEM_MASTER_DATA || routeLocation === spacialPage.WAREHOUSE) {
-                if (toolbar.mode === TOOLBAR_MODE.SEARCH) {
-                    if (values.active !== undefined && values.active !== "") { dispatch(footerToModeSave()); }
-                    else { dispatch(footerToModeSearch()); }
-                }
-                else if (toolbar.mode === TOOLBAR_MODE.ADD) {
-                    dispatch(footerToModeSave());
-                }
+        let routeLocation = getRouteLocation();
+        if (routeLocation === spacialPage.ITEM_MASTER_DATA || routeLocation === spacialPage.WAREHOUSE) {
+            if (toolbar.mode === TOOLBAR_MODE.SEARCH) {
+                // TODO: Check is_Admin
+                if (values.active !== undefined && values.active !== "") { dispatch(footerToModeSave()); }
+                else { dispatch(footerToModeSearch()); }
             }
-            else { dispatch(footerToModeSearch()); }
+            else if (toolbar.mode === TOOLBAR_MODE.ADD) {
+                dispatch(footerToModeSave());
+            }
         }
-    }, [toolbar.mode, values.document_id, values.step_approve]);
+        else {  
+            // In General
+            if (toolbar.mode === TOOLBAR_MODE.SEARCH && document_id !== "" && document_id !== undefined) {
+                // SEARCH mode
+                hadleDocumentStatusWithFooter(document_id);
+            }
+            else if (toolbar.mode === TOOLBAR_MODE.ADD) {
+                // ADD_DRAFT mode
+                dispatch(footerToModeAddDraft());
+            }
+            else {
+                dispatch(footerToModeSearch());
+            }
+        }
+    }, [toolbar.mode, values.document_id, values.step_approve, values.warehouse_id]);
 
     // Handle Back
     useEffect(() => {
@@ -264,7 +266,6 @@ const useFooterInitializer = (document_type_id) => {
                 .then((err) => {
                     setTouched(setNestedObjectValues(values, true))
                     dispatch(navBottomSending('[API]', 'Sending ... ธฎธฆธฆธ', ''));
-                    console.log("[[[[[[[[[[[[[[[FOOTER_ACTIONS.SEND BEFORE IF", values)
                     setErrors(err);
                     if (isEmpty(err)) {
                         if (values.document_id) { // If have document_id, no need to create new doc

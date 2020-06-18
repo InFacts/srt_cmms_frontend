@@ -17,7 +17,7 @@ const TableSatus = (props) => {
         </thead>
         <tbody>
           {props.bodyTableStatus.map((resApprove, i) => {
-            console.log("resApprove", resApprove)
+            // console.log("resApprove", resApprove)
             return (
               <tr key={i} id={i}>
                 <td className="edit-padding">
