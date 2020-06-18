@@ -14,7 +14,19 @@ import useTokenInitializer from '../../hooks/token-initializer';
 import Scatter from './d3-scatter';
 import LineGraph from './d3-line-graph';
 
-
+const getAnnualInventoryMonthData = () => {
+  let results= [];
+  let dataPoints=10;
+  let date = new Date("October 13, 2014");
+  for (let i = 0 ; i< dataPoints; i++){
+    results.push({
+      date: new Date(date),
+      inventory_month: Math.random()*10,
+    });
+    date.setMonth(date.getMonth() + 1);
+  }
+  return results;
+}
 
 const AlsSpareComponent = () => {
   const dispatch = useDispatch();
@@ -26,6 +38,7 @@ const AlsSpareComponent = () => {
   useFactInitializer();
   useEffect(() => {
     dispatch(footerToModeInvisible());
+    console.log("THIS IS ANNUAL ", getAnnualInventoryMonthData())
   }, []);
 
   return (
@@ -43,7 +56,7 @@ const AlsSpareComponent = () => {
             <div className="row_bootstrap no-gutters">
               {/* === Annual Average Inventory Month Line Graph :1st Row, 1st Column === */}
               <div class="col-4">
-                <LineGraph />
+                <LineGraph data={getAnnualInventoryMonthData()}/>
               </div>
 
 
