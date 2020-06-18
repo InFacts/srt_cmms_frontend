@@ -44,7 +44,7 @@ const Home = (props) => {
             fetchSearchApprovalProcessLookup(approval_process_lookup_id).then(function (data) {
                 console.log(">>>>>>", data.approval_process_lookup.approval_step_lookup)
                 // console.log(data.approval_process_lookup.approval_process_lookup_id)
-                setFieldValue("step_approve", data.approval_process_lookup.approval_step_lookup);
+                setFieldValue("step_approve", data.approval_process_lookup.approval_step_lookup.position_group.position);
             })
 
         }
