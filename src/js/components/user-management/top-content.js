@@ -22,6 +22,7 @@ const TopContent = (props) => {
     const factDistricts = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
     const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
     const factUser = useSelector((state) => ({ ...state.api.fact.users }), shallowEqual);
+    const factPosition = useSelector((state) => ({ ...state.api.fact.position }), shallowEqual);
     useEffect(() => {
         setFieldValue("item_list", factUser.items);
     }, [factUser.items]);
@@ -89,8 +90,8 @@ const TopContent = (props) => {
                         <div className="grid_3 pull_0">
                             <SelectNoChildrenInput name="district" >
                                 <option value=''></option>
-                                {factDistricts.items.map(function ({ district_id, name }) {
-                                    return <option value={district_id} key={district_id}> {name} </option>
+                                {factPosition.items.map(function ({ position_id, name }) {
+                                    return <option value={position_id} key={position_id}> {name} </option>
                                 })}
                             </SelectNoChildrenInput>
                         </div>

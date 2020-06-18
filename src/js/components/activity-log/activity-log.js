@@ -55,15 +55,15 @@ const ActivityLog = (props) => {
 
     const searchDetail = () => {
 
-        let url =`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?internal_document_id=${values.internal_document_id}&document_type_name=${values.type_document}`
+        let url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?internal_document_id=${values.internal_document_id}&document_type_name=${values.type_document}&start_date=${values.date_start}&end_date=${values.date_end}`
         const created_by_admin_id = getUserIDFromEmployeeID(factUser, values.created_by_user_employee_id)
-        if(created_by_admin_id !== null) {
-            url =`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?internal_document_id=${values.internal_document_id}&document_type_name=${values.type_document}&created_by_admin_id=${created_by_admin_id}`
+        if (created_by_admin_id !== null) {
+            url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?internal_document_id=${values.internal_document_id}&document_type_name=${values.type_document}&created_by_admin_id=${created_by_admin_id}&start_date=${values.date_start}&end_date=${values.date_end}`
         }
         const fetchData = () => {
             axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
                 .then((res) => {
-                    setFieldValue("item_list",res.data.results)
+                    setFieldValue("item_list", res.data.results)
                 })
         };
         fetchData();
@@ -173,8 +173,8 @@ const ActivityLog = (props) => {
                         <p className="cancel-default">รหัสพนักงาน </p>
                     </div>
                     <div className="grid_3 pull_0">
-                    <TextInput name="created_by_user_employee_id" 
-                    validate={validateUserEmployeeIDField} searchable={true} ariaControls="modalUserName"/>
+                        <TextInput name="created_by_user_employee_id"
+                            validate={validateUserEmployeeIDField} searchable={true} ariaControls="modalUserName" />
                     </div>
                 </div>
 
@@ -190,7 +190,7 @@ const ActivityLog = (props) => {
                     <button className="button-blue edit grid_1 float-right mr-5" type="button" onClick={searchDetail}>ค้นหา</button>
                 </div>
 
-                <table className="table-many-column mt-2" style={{ height: "450px"}}>
+                <table className="table-many-column mt-2" style={{ height: "450px" }}>
                     <thead>
                         <tr>
                             <th className="font text-center" style={{ width: "350px" }}>วันเวลา</th>

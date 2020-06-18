@@ -22,6 +22,7 @@ export const FACTS = {
     ITEM_TYPE: "item-type",
     WAREHOUSES_TYPE: "warehouse-type",
     APPROVAL_PROCESS_LOOKUP: "approval-process-lookup",
+    POSITION:"position",
 }
 
 // Actions
