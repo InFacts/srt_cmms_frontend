@@ -263,7 +263,8 @@ const useFooterInitializer = (document_type_id) => {
             validateForm()
                 .then((err) => {
                     setTouched(setNestedObjectValues(values, true))
-                    dispatch(navBottomSending('[API]', 'Sending ...', ''));
+                    dispatch(navBottomSending('[API]', 'Sending ... ธฎธฆธฆธ', ''));
+                    console.log("[[[[[[[[[[[[[[[FOOTER_ACTIONS.SEND BEFORE IF", values)
                     setErrors(err);
                     if (isEmpty(err)) {
                         if (values.document_id) { // If have document_id, no need to create new doc
@@ -297,7 +298,6 @@ const useFooterInitializer = (document_type_id) => {
                                 });
                         } else { // If not have document_id
                             let data = packDataFromValues(fact, values, document_type_id);
-                            // console.log("I AM SUBMITTING ", data, values,files);
                             saveDocument(document_type_id, data, values.files)
                                 .then((document_id) => {
                                     setFieldValue('document_id', document_id, true);

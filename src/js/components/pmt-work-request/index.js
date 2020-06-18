@@ -74,7 +74,7 @@ const EnhancedWorkRequestComponent = withFormik({
         remark: '',                      // หมายเหตุ  NVARCHAR
         
 
-        file: [],
+        files: [],
 
         document_status_id: '', // ?
         step_approve: [],               // (Field ที่ไม่ได้กรอก)

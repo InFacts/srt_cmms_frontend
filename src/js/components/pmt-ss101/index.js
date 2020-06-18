@@ -157,7 +157,7 @@ const EnhancedPmtSS101Component = withFormik({
         remark: '',
         loss_line_items: initialRows(),
 
-        file: [],
+        files: [],
 
         //Field ที่ไม่ได้กรอก
         document_status_id: '', // ?

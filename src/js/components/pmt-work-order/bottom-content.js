@@ -192,7 +192,7 @@ const BottomContent = (props) => {
         
         <div id="attachment_content" className="tabcontent">
             <div className="grid_12 ">
-            {/* <Files /> */}
+            <Files />
             </div>
         </div>
 
