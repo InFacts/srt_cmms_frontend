@@ -1,7 +1,41 @@
 import React, { useState, useEffect } from 'react';
+import {APPROVAL_STATUS, APPROVAL_STATUS_TH} from '../../helper';
 
-const TableSatus = (props) => {
-  console.log("props.bodyTableStatus", props.bodyTableStatus)
+const TableStatus = (props) => {
+
+  const status = (approval_status_id, is_icon) => {
+    if (approval_status_id === APPROVAL_STATUS.UNCOMPLETE) {
+      if (is_icon) {
+        return <i className="fas fa-check-circle" style={{ color: "gray" }}></i>;
+      }
+      return APPROVAL_STATUS_TH.UNCOMPLETE;
+    }
+    else if (approval_status_id === APPROVAL_STATUS.APPROVED) {
+      if (is_icon) {
+        return <i className="fas fa-check-circle" style={{ color: "green" }}></i>;
+      }
+      return APPROVAL_STATUS_TH.APPROVED;
+    }
+    else if (approval_status_id === APPROVAL_STATUS.REJECTED) {
+      if (is_icon) {
+        return <i className="fas fa-times-circle" style={{ color: "red" }}></i>;
+      }
+      return APPROVAL_STATUS_TH.REJECTED;
+    }
+    else if (approval_status_id === APPROVAL_STATUS.FAST_TRACKED) {
+      if (is_icon) {
+        return <i className="fas fa-tag" style={{ color: "green" }}></i>;
+      }
+      return APPROVAL_STATUS_TH.FAST_TRACKED;
+    }
+    else if (approval_status_id === APPROVAL_STATUS.ESCALATED) {
+      if (is_icon) {
+        return <i className="fas fa-users" style={{ color: "green" }}></i>;
+      }
+      return APPROVAL_STATUS_TH.ESCALATED;
+    }
+  }
+
   return (
     <>
       <table className="table-many-column mt-2">
@@ -17,17 +51,18 @@ const TableSatus = (props) => {
         </thead>
         <tbody>
           {props.bodyTableStatus.map((resApprove, i) => {
-            // console.log("resApprove", resApprove)
+
             return (
               <tr key={i} id={i}>
                 <td className="edit-padding">
-                  {resApprove.approval_by.length === 0 ? <i className="fas fa-check-circle" style={{ color: "gray" }}></i> : <i className="fas fa-check-circle" style={{ color: "green" }}></i>}
+                  {status(resApprove.approval_by[0].approval_status_id, true)}
+                  {/* {resApprove.approval_by.length === 0 ? <i className="fas fa-check-circle" style={{ color: "gray" }}></i> : <i className="fas fa-check-circle" style={{ color: "green" }}></i>} */}
                 </td>
                 <td className="edit-padding">{resApprove.position_group.name}</td>
                 <td className="edit-padding">{resApprove.position.length === 0 ? "" : resApprove.position[0].name}</td>
                 <td className="edit-padding">{resApprove.approval_by.length === 0 || resApprove.position_group.name === "SERVER" ? "-" : resApprove.approval_by[0].user.firstname_th + " " + resApprove.approval_by[0].user.lastname_th}</td>
                 <td className="edit-padding">{resApprove.approval_by.length === 0 ? "-" : resApprove.approval_by[0].approved_on.slice(0, 10)}</td>
-                <td className="edit-padding">{resApprove.approval_by.length === 0 ? "รอการลงนาม" : "อนุมัติเรียบร้อย"}</td>
+                <td className="edit-padding">{status(resApprove.approval_by[0].approval_status_id, false)}</td>
               </tr>
           )
           })}
@@ -37,4 +72,4 @@ const TableSatus = (props) => {
   )
 }
 
-export default TableSatus;
+export default TableStatus;
