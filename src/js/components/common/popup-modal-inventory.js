@@ -37,7 +37,7 @@ const PopupModalInventory = (props) => {
           </div>
 
           <div className="grid_12">
-            <table className="table-many-column mt-3">
+            <table className="table-many-column mt-3" style={{height: "270px"}}>
               <thead>
                 <tr>
                   <th className="font" style={{ minWidth: "300px" }}>เลขที่คลัง</th>
