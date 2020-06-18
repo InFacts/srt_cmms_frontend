@@ -35,6 +35,7 @@ import PmtEquipmentMasterData from './components/pmt-equipment-master';
 
 // ALS Page
 import AlsSpareComponent from './components/als-spare';
+import AlsEquipmentStatusComponent from './components/als-equipment-status';
 
 import Track from './components/track-document';
 const FrontEnd = () => (
@@ -76,6 +77,7 @@ const FrontEnd = () => (
 
         {/* ALS Routes */}
         <Route exact path="/als-spare" component={AlsSpareComponent} />
+        <Route exact path="/als-equipment-status" component={AlsEquipmentStatusComponent} />
 
         {/* Handle routes that are not found */}
         <Route component={NotFoundComponent} />

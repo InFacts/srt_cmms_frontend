@@ -6,7 +6,7 @@ import {schemeSet1} from "d3-scale-chromatic";
 
 import AxisBottom from './d3-axis-bottom';
 import AxisLeft from './d3-axis-left';
-import useChartDimensions from './chart-dimensions-hook'
+import useChartDimensions from '../../hooks/chart-dimensions-hook'
 
 const chartSettings = {
     "marginLeft": 20,
@@ -17,6 +17,7 @@ const chartSettings = {
     "height": 400,
 }
 
+// Reference: D3 Diverging Barchart https://observablehq.com/@d3/diverging-bar-chart
 function DivergingBarGraph({data}) {
     // useChartDimensions will have a ref to the Chart_wrapper and get its own Height and Width
     // See reference of Amelia Wattenberger https://wattenberger.com/blog/react-and-d3#sizing-responsivity
@@ -109,6 +110,11 @@ function DivergingBarGraph({data}) {
                             height={yScale.bandwidth()}
                             fill={schemeSet1[0]}
                         />
+                        <text
+                            x={0-dms.marginLeft}
+                            y={yScale(index)+ yScale.bandwidth()/2}
+                            dy="0.35em"
+                        >{name}</text>
                         </>
                         )
                         

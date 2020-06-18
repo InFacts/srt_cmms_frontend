@@ -5,7 +5,7 @@ import {line} from "d3-shape";
 
 import AxisBottom from './d3-axis-bottom';
 import AxisLeft from './d3-axis-left';
-import useChartDimensions from './chart-dimensions-hook'
+import useChartDimensions from '../../hooks/chart-dimensions-hook'
 
 const chartSettings = {
     "marginLeft": 20,

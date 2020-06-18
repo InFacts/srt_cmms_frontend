@@ -72,7 +72,7 @@ const AlsSpareComponent = () => {
     const interval = setTimeout(() => {
       // var randomMonthData = randomDivergingBarGraphData()
       setBarDivergingGraphData(randomDivergingBarGraphData());
-    }, 3000);
+    }, 1500);
     return () => clearInterval(interval);
   }, [])
 
@@ -103,7 +103,7 @@ const AlsSpareComponent = () => {
 
               {/* === Current Inventory Month vs Planned Inventory Month Scatter Plot :1st Row, 2nd Column === */}
               <div className="col-4">
-              {/* <ScatterPlot /> */}
+              <ScatterPlot />
               </div>
             </div>
             {/*=== Second Row ===*/}
@@ -112,9 +112,8 @@ const AlsSpareComponent = () => {
               <div className="col-5">
                 <BarDivergingGraph data={BarDivergingGraphData}/>  
               </div>
-              <div className="col-5">.col-md-5</div>
+              <div className="col-5">.col-md-5 <ScatterPlot /></div>
             </div>
-            {/* <Scatter /> */}
           </div>
         </div>
       </div>

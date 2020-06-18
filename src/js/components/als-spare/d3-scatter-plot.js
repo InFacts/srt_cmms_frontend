@@ -3,7 +3,7 @@ import { scaleLinear } from "d3-scale";
 import { extent } from "d3-array"
 import AxisBottom from './d3-axis-bottom';
 import AxisLeft from './d3-axis-left';
-import useChartDimensions from './chart-dimensions-hook'
+import useChartDimensions from '../../hooks/chart-dimensions-hook'
 
 function RandomData() {
     const data = [...Array(100)].map((e, i) => {
