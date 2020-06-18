@@ -20,7 +20,7 @@ const TopContent = (props) => {
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
-  const decoded_token = useSelector((state) => ({...state.token.decoded_token}), shallowEqual);
+  const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
   const validateWarehouseIDField = (fieldName, warehouse_id) => {
     console.log("I am validating warehouse id ", warehouse_id)
@@ -37,6 +37,7 @@ const TopContent = (props) => {
       warehouse_id = `${warehouse_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
       let warehouses = props.fact.warehouses.items;
       let warehouse = warehouses.find(warehouse => `${warehouse.warehouse_id}` === `${warehouse_id}`); // Returns undefined if not found
+      console.log("warehouse", warehouse)
       if (warehouse) {
         setFieldValue("warehouse_id", warehouse_id, false);
         setFieldValue("name", warehouse.name, false);
@@ -47,7 +48,7 @@ const TopContent = (props) => {
         setFieldValue("use_central", warehouse.use_central.data[0], false);
 
         // IF Check user If User is Admin -> return true Else -> return false
-        if(decoded_token.id === 4) { //{/* TODO USER_ID FOR ADMIN */}
+        if (decoded_token.id === 4) { //{/* TODO USER_ID FOR ADMIN */}
           console.log(" YES I AM ADMIN ")
           setFieldValue("modeEdit", true, false);
         } else {
@@ -75,7 +76,7 @@ const TopContent = (props) => {
     if (!name) {
       return 'Required'
     }
-    setFieldValue(fieldName, name, false);
+    return '';
   };
   const validateNameWarehouseIDField = (...args) => validateWarehouseField("name", ...args);
   const validateAbbreviationWarehouseIDField = (...args) => validateWarehouseField("abbreviation", ...args);
@@ -107,7 +108,7 @@ const TopContent = (props) => {
             <div className="grid_4 float-right">
               <TextInput name="abbreviation"
                 validate={validateAbbreviationWarehouseIDField}
-                disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}tabIndex="1" />
+                disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="1" />
             </div>
             <div className="grid_1 float-right"><p className="top-text float-right">ชื่อย่อคลัง</p></div>
           </div>

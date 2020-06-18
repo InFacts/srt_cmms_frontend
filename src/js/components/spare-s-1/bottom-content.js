@@ -32,6 +32,7 @@ const BottomContent = (props) => {
                   <th className="font text-center" style={{ minWidth: "80px" }}>เลขที่สิ่งของคงคลัง</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>สถานะ</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>หน่วย</th>
+
                   <th className="font text-center" style={{ minWidth: "100px" }}>จำนวนเหลือ ณ วันนี้</th>
                   <th className="font text-center" style={{ minWidth: "96px" }}>รวมเป็นเงิน</th>
                   <th className="font text-center" style={{ minWidth: "96px" }}>ราคาต่อหน่วย</th>
@@ -46,8 +47,13 @@ const BottomContent = (props) => {
                       <td className="edit-padding">{line_items.internal_item_id}</td>
                       <td className="edit-padding">{line_items.item_status_description_th}</td>
                       <td className="edit-padding text-center">{line_items.uom_name}</td>
-                      <td className="edit-padding text-center">{!line_items.committed_unit_count ? line_items.current_unit_count - line_items.committed_unit_count : line_items.current_unit_count}</td>
-                      <td className="edit-padding text-center">{line_items.pricing.average_price ? (line_items.pricing.average_price.toFixed(2) * (line_items.current_unit_count - line_items.committed_unit_count)).toFixed(2) : 0}</td>
+
+                      {/* <td className="edit-padding text-center">{!line_items.committed_unit_count ? line_items.current_unit_count - line_items.committed_unit_count : line_items.current_unit_count}</td> */}
+
+                      <td className="edit-padding text-center">{line_items.current_unit_count - line_items.committed_unit_count }</td>
+
+                      <td className="edit-padding text-center">{line_items.pricing.average_price ? (line_items.pricing.average_price.toFixed(4) * (line_items.current_unit_count - line_items.committed_unit_count)).toFixed(2) : 0}</td>
+
                       <td className="edit-padding text-center">{line_items.pricing.average_price ? line_items.pricing.average_price.toFixed(4) : 0}</td>
                     </tr>
                   )

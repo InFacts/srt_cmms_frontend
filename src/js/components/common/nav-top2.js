@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
 
 import { loadNotify, readNotify } from '../../redux/modules/notify.js';
 
 import { Link } from 'react-router-dom';
 import logo from '../../../images/logo.png';
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector , shallowEqual} from 'react-redux'
 
 import { setupAllSubNav } from '../../helper';
 import {identifyEndpoinsHelper} from '../../helper';
@@ -13,13 +13,17 @@ import {identifyEndpoinsHelper} from '../../helper';
 const MainModule = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }));
     const footer = useSelector((state) => ({ ...state.footer }));
-    // console.log("toolbar.mode", toolbar.mode)
+    const [checkNav, setCheckNav] = useState(0);
+
     useEffect(() => {
-        // Setup SubNav
-        setupAllSubNav();
         // Load Notify
         props.loadNotify();
     }, [toolbar.mode]);
+
+    useEffect(() => {
+        // Setup SubNav
+        setupAllSubNav();
+    }, [checkNav]);
 
     const identifyEndpoins = (document_type_id) => identifyEndpoinsHelper(document_type_id)
 
@@ -28,6 +32,8 @@ const MainModule = (props) => {
         return null
     }
     else {
+        // setCheckNav(1);
+        console.log("checkNav", checkNav)
         return (
             <div>
                 <div id="header">
@@ -41,7 +47,7 @@ const MainModule = (props) => {
                             </li>
 
                             <li className="p-navigation__item p-subnav a nav-li" style={{ marginRight: "10px", marginLeft: "auto" }} role="menuitem" id="link-1">
-                                <Link to="#" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu" style={{ paddingRight: "10px" }} >
+                                <Link to="#" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu" style={{ paddingRight: "10px" }} onClick={() => setCheckNav(1)}>
                                     <i className="fas fa-bell" style={{ fontSize: "22px", color: "white" }}></i>
                                     {props.notify.not_read_count !== 0
                                         ?

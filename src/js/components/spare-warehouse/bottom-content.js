@@ -121,9 +121,9 @@ const BottomContent = (props) => {
           </div>
 
           {/* Attachment Tab */}
-          <div id="attachment_content" className="tabcontent">
+          {/* <div id="attachment_content" className="tabcontent">
             <Files />
-          </div>
+          </div> */}
         </div>
       </div>
       {/* </div > */}
