@@ -121,10 +121,10 @@ const useFooterInitializer = (document_type_id) => {
     // Handle Toolbar Mode
     useEffect(() => {
         let document_id = values.document_id;
-        console.log("values = ======", values)
         let routeLocation = getRouteLocation();
         if (routeLocation === spacialPage.ITEM_MASTER_DATA || routeLocation === spacialPage.WAREHOUSE) {
             if (toolbar.mode === TOOLBAR_MODE.SEARCH) {
+                // TODO: Check is_Admin
                 if (values.active !== undefined && values.active !== "") { dispatch(footerToModeSave()); }
                 else { dispatch(footerToModeSearch()); }
             }
@@ -146,7 +146,7 @@ const useFooterInitializer = (document_type_id) => {
                 dispatch(footerToModeSearch());
             }
         }
-    }, [toolbar.mode, values.document_id, values.step_approve]);
+    }, [toolbar.mode, values.document_id, values.step_approve, values.warehouse_id]);
 
     // Handle Back
     useEffect(() => {
