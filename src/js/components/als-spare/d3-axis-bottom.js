@@ -35,8 +35,7 @@ const AxisBottom = ({xScale}) => {
                 value,
                 xOffset: xScale(value)
             }))
-    }, [ xScale.range().join("-")]);
-
+    }, [ xScale.range().join("-"), xScale.domain().join("-")]);
 
     return (
         <>

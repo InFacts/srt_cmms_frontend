@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { scaleLinear ,scaleTime, scaleBand } from "d3-scale";
-import { extent, max } from "d3-array";
+import { extent, max, min, range } from "d3-array";
 import {line} from "d3-shape";
+import {schemeSet1} from "d3-scale-chromatic";
 
 import AxisBottom from './d3-axis-bottom';
 import AxisLeft from './d3-axis-left';
@@ -26,18 +27,27 @@ function DivergingBarGraph({data}) {
     const [inventoryMonthDomain, setInventoryMonthDomain] = useState([0, 100]);
     const [inventoryMonthPath, setInventoryMonthPath] = useState("");
 
-    const xScale = useMemo(() => {
-        console.log("LineGraph: i got new timeDomain ", timeDomain)
-        return scaleTime()
-            .domain(timeDomain)
-            .range([0, dms.boundedWidth]);
-    }, [dms.boundedWidth, timeDomain.join("-")])
+    // const xScale = useMemo(() => (
+    //     scaleLinear()
+    //         .domain([min(data, d => d.value_neg), max(data, d => d.value_pos)])
+    //         .range([dms.boundedWidth, 0])
+    // ), [dms.boundedWidth]) 
+    const xScale = scaleLinear()
+    .domain([min(data, d => d.value_neg), max(data, d => d.value_pos)])
+    .range([0, dms.boundedWidth])
 
-    const yScale = useMemo(() => (
-        scaleLinear()
-            .domain(inventoryMonthDomain)
-            .range([dms.boundedHeight, 0])
-    ), [dms.boundedHeight, inventoryMonthDomain.join("-")])
+    // const yScale = useMemo(() => (
+    //     scaleBand()
+    //         .domain(range(data.length))
+    //         .range([0, dms.boundedHeight])
+    //         .padding(0.1)
+    // ), [dms.boundedHeight])
+    const yScale = scaleBand()
+    .domain(range(data.length))
+    .range([0, dms.boundedHeight])
+    .padding(0.1)
+
+    
 
     
     // set Domain of x and y after new data
@@ -45,22 +55,20 @@ function DivergingBarGraph({data}) {
         if(!data) {
             console.log("There is no data! Line Graph.");
         }else { // There is data
-            console.log("i got data ", data)
+            console.log("DivergeBar: i got data ", data)
+            console.log("DivergeBar xScale: ", [min(data, d => d.value_neg), max(data, d => d.value_pos)])
             // const timeDomain = extent(data, d => d.date);
             // const inventoryMonthDomain = [0, max(data, d => d.inventory_month)];
             // xScale.domain(timeDomain);
             // yScale.domain(inventoryMonthDomain);
-            setTimeDomain(extent(data, d => d.date));
-            setInventoryMonthDomain([0, max(data, d => d.inventory_month)*1.1]); // Move up by 10% of the max
+            // setTimeDomain(extent(data, d => d.date));
+            // setInventoryMonthDomain([0, max(data, d => d.inventory_month)*1.1]); // Move up by 10% of the max
         }
     }, [data]);
 
     // Draw Line after data, xScale/yScale is updated
     useEffect(()=> {
         if(data){
-            for (var d of data){
-                console.log("LineGraph: var d", xScale(d.date))
-            }
             const lineGenerator = line()
                 .x(d => xScale(d.date))
                 .y(d => yScale(d.inventory_month));
@@ -75,14 +83,36 @@ function DivergingBarGraph({data}) {
         <div className="Chart_wrapper" ref={ref}>
             <svg width={dms.width} height={dms.height} style={{ border: "1.5px solid gold" }} >
                 <g transform={`translate(${dms.marginLeft}, ${dms.marginTop})`}>
-                                        
+                    
                     <rect
                         width={dms.boundedWidth}
                         height={dms.boundedHeight}
                         fill="#FEF9E7"
                     />
-                    {/* Line Path */}
-                    <path d={inventoryMonthPath} fill='none' stroke='steelblue'/>
+
+
+                    {data.map( ({name, value_neg, value_pos}, index) => {
+                        return(<>
+                        {/* value_pos */}
+                        <rect
+                            x={xScale(0)}
+                            y={yScale(index)}
+                            width={Math.abs(xScale(value_pos) - xScale(0))}
+                            height={yScale.bandwidth()}
+                            fill={schemeSet1[1]}
+                        />
+                        {/* value_neg */}
+                        <rect
+                            x={xScale(value_neg)}
+                            y={yScale(index)}
+                            width={Math.abs(xScale(value_neg) - xScale(0))}
+                            height={yScale.bandwidth()}
+                            fill={schemeSet1[0]}
+                        />
+                        </>
+                        )
+                        
+                    })}
 
 
                     
@@ -90,7 +120,8 @@ function DivergingBarGraph({data}) {
                     <g >
                         <AxisBottom xScale={xScale} />
                     </g>
-                    <g >
+                    {/* Move Axis Left to the Middle */}
+                    <g transform={`translate(${xScale(0)}, 0)`}>
                         <AxisLeft domain={yScale.domain()} range={yScale.range()} />
                     </g>
 

@@ -39,8 +39,8 @@ const randomDivergingBarGraphData = () => {
   for (let charCode = charCodeA; charCode<charCodeZ; charCode++){
     results.push({
       name: String.fromCharCode(charCode),
-      value_out: Math.random()*200,
-      value_in: Math.random()*200,
+      value_neg: -Math.random()*200,
+      value_pos: Math.random()*200,
     });
   }
 
@@ -57,8 +57,24 @@ const AlsSpareComponent = () => {
   useFactInitializer();
   useEffect(() => {
     dispatch(footerToModeInvisible());
-    console.log("THIS IS ANNUAL ", getAnnualInventoryMonthData())
   }, []);
+
+  const [IVMonthData, setIVMonthData] = useState([])
+  const [BarDivergingGraphData, setBarDivergingGraphData] = useState([])
+  useEffect(()=> {
+    const interval = setTimeout(() => {
+      var randomMonthData = getAnnualInventoryMonthData()
+      setIVMonthData(randomMonthData);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [])
+  useEffect(()=> {
+    const interval = setTimeout(() => {
+      // var randomMonthData = randomDivergingBarGraphData()
+      setBarDivergingGraphData(randomDivergingBarGraphData());
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [])
 
   return (
     <>
@@ -75,7 +91,7 @@ const AlsSpareComponent = () => {
             <div className="row_bootstrap no-gutters">
               {/* === Annual Average Inventory Month Line Graph :1st Row, 1st Column === */}
               <div class="col-4">
-                <LineGraph data={getAnnualInventoryMonthData()}/>
+                <LineGraph data={IVMonthData}/>
               </div>
 
 
@@ -87,14 +103,14 @@ const AlsSpareComponent = () => {
 
               {/* === Current Inventory Month vs Planned Inventory Month Scatter Plot :1st Row, 2nd Column === */}
               <div className="col-4">
-              <ScatterPlot />
+              {/* <ScatterPlot /> */}
               </div>
             </div>
             {/*=== Second Row ===*/}
             <div className="row_bootstrap">
               <div className="col-2">.col-md-2 ปรับแต่งข้อมูลของภาพรวม</div>
               <div className="col-5">
-                <BarDivergingGraph data={getAnnualInventoryMonthData()}/>  
+                <BarDivergingGraph data={BarDivergingGraphData}/>  
               </div>
               <div className="col-5">.col-md-5</div>
             </div>
