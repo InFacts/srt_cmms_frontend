@@ -1,49 +1,37 @@
 import React, {useEffect} from 'react';
 import TopContent from './top-content';
+import { useFormik , withFormik ,useFormikContext} from 'formik';
 import BottomContent from './bottom-content';
-import Footer from '../common/footer.js';
+import { Redirect } from 'react-router-dom';
+import { useDispatch, useSelector  } from 'react-redux';
 
-import { connect } from 'react-redux'
-import {FACTS, fetchFact} from '../../redux/modules/api/fact.js'
-import {TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeSearch, toModeAdd, toModeNoneHome,handleClickHomeToSpareMain } from '../../redux/modules/toolbar.js';
+import {TOOLBAR_MODE } from '../../redux/modules/toolbar.js';
 
 import {fetchDocuments } from '../../redux/modules/track_doc.js';
 import { footerToModeInvisible } from '../../redux/modules/footer.js';
-import { useDispatch, useSelector  } from 'react-redux'
+import useFactInitializer from '../../hooks/fact-initializer';
+import useToolbarInitializer from '../../hooks/toolbar-initializer';
 
-const Track = (props) => {
+const TrackComponent = (props) => {
 
-    // Fetch all Facts
-    useEffect(() => {
-        for (let factName in FACTS){
-            props.fetchFact(FACTS[factName]);
-        }
-    }, []);
-
-    // Change toolbar to Mode NoneHome
-    useEffect(() => {
-        props.toModeNoneHome();
-    }, []);
+    useFactInitializer();
+    useToolbarInitializer(TOOLBAR_MODE.NONE_HOME); // TODO: Needs to find where to go when we press "HOME"!!
+    const loggedIn = useSelector(state => state.token.isLoggedIn); 
 
     // Initial Fetch
     useEffect(() => {
-        props.fetchDocuments();
+        dispatch(fetchDocuments());
     }, []);
-
-    // Handle home button, only re-subscribe if requiresHandleClick of HOME changes
-    useEffect(()=> {
-        if (props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.HOME]){
-            props.handleClickHomeToSpareMain();
-        }
-    }, [props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.HOME]]);
 
     // Footer invisible
     const dispatch = useDispatch();
     useEffect(()=>{
         dispatch(footerToModeInvisible());
     }, []);
+
     return (
         <>
+            {!loggedIn ? <Redirect to="/" /> : null}
             <form>
                 <TopContent />
                 <BottomContent  />
@@ -52,12 +40,11 @@ const Track = (props) => {
     )
 }
 
-const mapStateToProps = (state) => ({
-    toolbar: state.toolbar
-});
+const EnhancedTrackComponent = withFormik({
+    mapPropsToValues: (props) => ({ 
+        // document_id: '',
+    })
+})(TrackComponent);
 
-const mapDispatchToProps = {
-    fetchFact, toModeNoneHome, handleClickHomeToSpareMain, fetchDocuments
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(Track);
+export default EnhancedTrackComponent;

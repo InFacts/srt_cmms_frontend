@@ -1,15 +1,15 @@
 import React, {useState, useEffect} from 'react';
-import { connect } from 'react-redux';
 import { useFormik , withFormik ,useFormikContext} from 'formik';
+import { Redirect } from 'react-router-dom';
+import { useDispatch, useSelector, shallowEqual  } from 'react-redux'
 
 import TabBar, {TAB_BAR_ACTIVE} from '../common/tab-bar';
-
 
 import TopContent from './top-content';
 import BottomContent from './bottom-content';
 import Footer from '../common/footer.js';
 
-import {packDataFromValues, DOCUMENT_TYPE_ID, saveDocument} from '../../helper';
+import {packDataFromValues, DOCUMENT_TYPE_ID, saveDocument, getUrlParamsLink} from '../../helper';
 
 import useToolbarInitializer from '../../hooks/toolbar-initializer';
 import useFactInitializer from '../../hooks/fact-initializer';
@@ -20,7 +20,6 @@ import useNavBottomStatusInitializer from '../../hooks/nav-bottom-status-initial
 
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 import { footerToModeSearch } from '../../redux/modules/footer.js';
-import { useDispatch, useSelector  } from 'react-redux'
 
 const GoodsReceiptComponent = (props) => {
     
@@ -39,6 +38,7 @@ const GoodsReceiptComponent = (props) => {
     useFooterInitializer(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO);
     useNavBottomStatusInitializer();
     useDocumentSubscription();
+    const loggedIn = useSelector(state => state.token.isLoggedIn); 
 
     useEffect(()=>{
         dispatch(footerToModeSearch());
@@ -46,26 +46,26 @@ const GoodsReceiptComponent = (props) => {
 
     // If Link to this url via Track Document
     useEffect(() => {
-        let url = window.location.search;
-        const urlParams = new URLSearchParams(url);
-        const internal_document_id = urlParams.get('internal_document_id');
-        if (internal_document_id !== "") {
-            // action_approval
-            setFieldValue("status_name_th", "", true);
-            setFieldValue("internal_document_id", internal_document_id, true);
-        }
+        getUrlParamsLink.then((internal_document_id) => {
+            if (internal_document_id !== "") {
+                // action_approval
+                setFieldValue("status_name_th", "", true);
+                setFieldValue("internal_document_id", internal_document_id, true);
+            }
+        })
     }, [])
 
     return (
-        <form onSubmit={props.handleSubmit}>
-        {/* <form onSubmit={(e) => { if (window.confirm('คุณต้องการบันทึกใช่หรือไม่')) handleSubmit(e) }}> */}
+        <>
+        {!loggedIn ? <Redirect to="/" /> : null}
+        <form>
             <TopContent />
             <TabBar tabNames={tabNames} initialTabID="listItem">
                 <BottomContent />
             </TabBar>
             <Footer />
         </form>
-
+        </>
     )
 }
 const initialLineItem = {
@@ -106,10 +106,9 @@ const EnhancedGoodsReceiptComponent = withFormik({
         remark: '',
         line_items: initialRows(),
 
-        file: [],
+        files: [], // Send File to API
     
         //Field ที่ไม่ได้กรอก
-        
         created_on: '',
         status_name_th: '',
         document_status_id: '',
@@ -120,24 +119,9 @@ const EnhancedGoodsReceiptComponent = withFormik({
         //Field ที่ไม่ได้ display
         document_id: '', // changes when document is displayed (internal_document_id field validation)
 
-        // For Attactment
-        desrciption_files_length: '',
-        desrciption_files: [],
         // For Step Approval
         step_approve: [],
     })
 })(GoodsReceiptComponent);
 
-
-
-const mapStateToProps = (state) => ({
-    toolbar: state.toolbar,
-    // decoded_token: state.token.decoded_token,
-    fact: state.api.fact,
-})
-
-const mapDispatchToProps = {
-
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(EnhancedGoodsReceiptComponent);
+export default EnhancedGoodsReceiptComponent;

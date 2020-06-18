@@ -108,14 +108,14 @@ class Map extends React.Component {
                             <h4 className="head-title" style={{ color: "black" }}>ระบบบริหารงานซ่อมบำรุง - PMT</h4>
                             <div style={{ height: "350px" }} id="blackground-white">
                                 <Link to="/pmt-work-request"><img alt='some value' src={Oneone} className="Pone-one" /></Link>
-                                <Link to="/assmas"><img alt='some value' src={Onetwo} className="Pone-two" /></Link>
+                                <Link to="/pmt-equipment-master"><img alt='some value' src={Onetwo} className="Pone-two" /></Link>
                                 <Link to="/plan"><img alt='some value' src={Onethree} className="Pone-three" /></Link>
                                 <img alt='some value' src={Arrow1} className="Parrow1" />
                                 <img alt='some value' src={Text1} className="Ptext1" />
                                 <img alt='some value' src={Text2} className="Ptext2" />
                                 <img alt='some value' src={Text3} className="Ptext3" />
                                 <Link to="/pmt-work-order"><img alt='some value' src={Twoone} className="Ptwo-one" /></Link>
-                                <Link to="/assint"><img alt='some value' src={Twotwo} className="Ptwo-two" /></Link>
+                                <Link to="/pmt-equipment-installation"><img alt='some value' src={Twotwo} className="Ptwo-two" /></Link>
                                 <Link to="/fixed-asset"><img alt='some value' src={Twothree} className="Ptwo-three" /></Link>
                                 <img alt='some value' src={Text4} className="Ptext4" />
                                 <img alt='some value' src={Text5} className="Ptext5" />
@@ -124,7 +124,7 @@ class Map extends React.Component {
                                 <img alt='some value' src={Arrow2} className="Parrow2" />
                                 <img alt='some value' src={Text7} className="Ptext7" />
                                 <Link to="/track"><img alt='some value' src={Fourone} className="Pfour-one" /></Link>
-                                <Link to="/maintenance"><img alt='some value' src={Fourtwo} className="Pfour-two" /></Link>
+                                <Link to="/maitenant-item"><img alt='some value' src={Fourtwo} className="Pfour-two" /></Link>
                                 <img alt='some value' src={Text8} className="Ptext8" />
                                 <img alt='some value' src={Text9} className="Ptext9" />
                                 <Link to="/report"><img alt='some value' src={Fiveone} className="Pfive-one" /></Link>

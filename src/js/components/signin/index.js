@@ -1,19 +1,19 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import thunk from "redux-thunk";
-// import reducers from './reducers';
+import { Redirect } from 'react-router-dom';
+import { useDispatch, useSelector  } from 'react-redux'
 
 import { useState, useEffect } from 'react';
 
 import Login from './login.js';
 import { toModeInvisible } from '../../redux/modules/toolbar';
 import { footerToModeInvisible } from '../../redux/modules/footer.js';
-import { useDispatch, useSelector  } from 'react-redux'
-import { connect } from 'react-redux'
+import useTokenInitializer from '../../hooks/token-initializer';
 
 const Home = (props) => {
     const dispatch = useDispatch();
+    useTokenInitializer();
+    const loggedIn = useSelector(state => state.token.isLoggedIn);  // Check if Login, if yes the Redirect to /main
+
     useEffect(()=>{
         dispatch(footerToModeInvisible());
     }, []);
@@ -24,17 +24,10 @@ const Home = (props) => {
 
     return (
         <>
+            {loggedIn ? <Redirect to="/main" /> : null}
             <Login />
         </>
     )
 }
 
-const mapStateToProps = (state) => ({
-    
-});
-
-const mapDispatchToProps = {
-
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default Home;

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useFormik, withFormik, useFormikContext } from 'formik';
+import { Redirect } from 'react-router-dom';
+import { useSelector  } from 'react-redux'
 
 import TabBar from '../common/tab-bar';
 
@@ -26,6 +28,8 @@ const PmtSS101Componant = (props) => {
     useFooterInitializer(DOCUMENT_TYPE_ID.SS101);
     useDocumentSubscription();
     useExportPdfInitializer();
+    const loggedIn = useSelector(state => state.token.isLoggedIn); 
+
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
         { id: "breakdown", name: "อาการเสีย"},
@@ -54,6 +58,8 @@ const PmtSS101Componant = (props) => {
     }, []);
 
     return (
+        <>
+        {!loggedIn ? <Redirect to="/" /> : null}
         <form onSubmit={props.handleSubmit}>
             <TopContent />
             <TabBar tabNames={tabNames} initialTabID="breakdown">
@@ -61,6 +67,7 @@ const PmtSS101Componant = (props) => {
             </TabBar>
             <Footer />
         </form>
+        </>
     )
 }
 
@@ -151,7 +158,7 @@ const EnhancedPmtSS101Component = withFormik({
         remark: '',
         loss_line_items: initialRows(),
 
-        file: [],
+        files: [],
 
         //Field ที่ไม่ได้กรอก
         document_status_id: '', // ?

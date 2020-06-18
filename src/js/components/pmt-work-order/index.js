@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import { connect } from 'react-redux';
 import { useFormik , withFormik ,useFormikContext} from 'formik';
+import { Redirect } from 'react-router-dom';
+import { useSelector  } from 'react-redux'
 
 import TabBar from '../common/tab-bar';
 
@@ -26,6 +27,7 @@ const WorkOrderComponent = (props) => {
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.WORK_ORDER);
     useDocumentSubscription();
+    const loggedIn = useSelector(state => state.token.isLoggedIn); 
 
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
@@ -37,6 +39,8 @@ const WorkOrderComponent = (props) => {
 
     
     return (
+        <>
+        {!loggedIn ? <Redirect to="/" /> : null}
         <form onSubmit={props.handleSubmit}>
             <TopContent />
             <TabBar tabNames={tabNames} initialTabID="broken">
@@ -44,7 +48,7 @@ const WorkOrderComponent = (props) => {
             </TabBar>
             <Footer />
         </form>
-
+        </>
     )
 }
 
@@ -82,7 +86,7 @@ const EnhancedWorkOrderComponent = withFormik({
         // line_items: initialRows(),
         remark: '',                      // หมายเหตุ  NVARCHAR
 
-        file: [],
+        files: [],
     
         //Field ที่ไม่ได้กรอก
         document_status_id: '', // ?

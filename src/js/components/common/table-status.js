@@ -17,21 +17,18 @@ const TableSatus = (props) => {
         </thead>
         <tbody>
           {props.bodyTableStatus.map((resApprove, i) => {
+            console.log("resApprove", resApprove)
             return (
-            resApprove.position_group.name !== "This"
-            ?
               <tr key={i} id={i}>
                 <td className="edit-padding">
                   {resApprove.approval_by.length === 0 ? <i className="fas fa-check-circle" style={{ color: "gray" }}></i> : <i className="fas fa-check-circle" style={{ color: "green" }}></i>}
                 </td>
                 <td className="edit-padding">{resApprove.position_group.name}</td>
                 <td className="edit-padding">{resApprove.position.length === 0 ? "" : resApprove.position[0].name}</td>
-                <td className="edit-padding">{resApprove.approval_by.length === 0 ? "-" : resApprove.approval_by[0].user.firstname_th + " " + resApprove.approval_by[0].user.lastname_th}</td>
+                <td className="edit-padding">{resApprove.approval_by.length === 0 || resApprove.position_group.name === "SERVER" ? "-" : resApprove.approval_by[0].user.firstname_th + " " + resApprove.approval_by[0].user.lastname_th}</td>
                 <td className="edit-padding">{resApprove.approval_by.length === 0 ? "-" : resApprove.approval_by[0].approved_on.slice(0, 10)}</td>
                 <td className="edit-padding">{resApprove.approval_by.length === 0 ? "รอการลงนาม" : "อนุมัติเรียบร้อย"}</td>
               </tr>
-            :
-            null
           )
           })}
         </tbody>

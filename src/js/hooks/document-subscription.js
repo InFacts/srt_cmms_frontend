@@ -15,7 +15,6 @@ const useDocumentSubscription = () => {
 
     // Get approval Step when values.document_id changes
     useEffect(() => {
-        
         if(values.document_id && 
             !footer.requiresHandleClick[FOOTER_ACTIONS.SEND] && 
             !footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL] && 
@@ -27,12 +26,13 @@ const useDocumentSubscription = () => {
             !footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]
         ){ 
         // If not an empty string AND isn't handlingSEND process
-        console.log("fetchStepApprovalDocumentData: SEND/Doc ID Changed")
+        // console.log("fetchStepApprovalDocumentData: SEND/Doc ID Changed")
         // Start Axios Get step_approve and attachment By nuk
         fetchStepApprovalDocumentData(values.document_id)
         .then((result) => {
             // console.log(" THIS IS FETCHED APPROVAL ", result    )
             // Setup value From Approve 
+            // console.log("values.document_id", values.document_id);
             setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
             if(result.is_canceled){
                 setFieldValue("document_is_canceled", result.is_canceled.data, false);
@@ -50,17 +50,26 @@ const useDocumentSubscription = () => {
     
     // Get  attachment when values.document_id changes
     useEffect(() => {
-        if(values.document_id  && ! footer.requiresHandleClick[FOOTER_ACTIONS.SEND]) { // If not an empty string AND isn't handlingSEND process
-        console.log("fetchAttachmentDocumentData: SEND/Doc ID Changed")
+        if(values.document_id  && ! footer.requiresHandleClick[FOOTER_ACTIONS.SEND]) { // If not an empty string AND isn't handlingSEND process)
         // Start Axios Get step_approve and attachment By nuk
         fetchAttachmentDocumentData(values.document_id)
-        .then((desrciption_files) => {
+        .then((data_files) => {
             // Setup value From Attachment
-            setFieldValue("desrciption_files_length", desrciption_files.results.length, false);
-            setFieldValue("desrciption_files", desrciption_files.results, false);
+            setFieldValue("files", data_files.data.results, false);
         });
         }
     }, [values.document_id, footer.requiresHandleClick[FOOTER_ACTIONS.SEND]]);
+
+    // Fill Default Forms
+    useEffect(() => {
+        if (values.document_id !== 0 && values.document_id !== undefined) {
+            console.log("--- fetchAttachmentDocumentData", values.document_id)
+            fetchAttachmentDocumentData(values.document_id)
+            .then((result) => {
+                setFieldValue("files", result.data.results);
+            });
+        }
+    }, [values.document_id]) 
 
     return;
 }

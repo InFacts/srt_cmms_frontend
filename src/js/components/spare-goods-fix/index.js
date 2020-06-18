@@ -1,12 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import { connect } from 'react-redux';
 import { useFormik , withFormik ,useFormikContext} from 'formik';
+import { Redirect } from 'react-router-dom';
+import { useDispatch, useSelector  } from 'react-redux'
 
 import TabBar from '../common/tab-bar';
-
-import axios from "axios";
-import { API_PORT_DATABASE } from '../../config_port.js';
-import { API_URL_DATABASE } from '../../config_url.js';
 
 import TopContent from './top-content';
 import BottomContent from './bottom-content';
@@ -20,7 +18,6 @@ import useTokenInitializer from '../../hooks/token-initializer';
 import useFooterInitializer from '../../hooks/footer-initializer';
 import useDocumentSubscription from '../../hooks/document-subscription';
 import useNavBottomStatusInitializer from '../../hooks/nav-bottom-status-initializer';
-import { useDispatch, useSelector  } from 'react-redux'
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 import { footerToModeSearch } from '../../redux/modules/footer.js';
 
@@ -41,6 +38,8 @@ const GoodsReturnComponent = (props) => {
     useFooterInitializer(DOCUMENT_TYPE_ID.GOODS_FIX);
     useNavBottomStatusInitializer();
     useDocumentSubscription();
+    const loggedIn = useSelector(state => state.token.isLoggedIn); 
+
     useEffect(()=>{
         dispatch(footerToModeSearch());
     }, []);
@@ -59,6 +58,8 @@ const GoodsReturnComponent = (props) => {
     }, [])
 
     return (
+        <>
+        {!loggedIn ? <Redirect to="/" /> : null}
         <form>
             <TopContent />
             <TabBar tabNames={tabNames} initialTabID="listItem">
@@ -66,7 +67,7 @@ const GoodsReturnComponent = (props) => {
             </TabBar>
             <Footer />
         </form>
-
+        </>
     )
 }
 const initialLineItem = {
@@ -107,7 +108,7 @@ const EnhancedGoodsReturnComponent = withFormik({
         remark: '',
         line_items: initialRows(),
 
-        file: [],
+        files: [],
     
         //Field ที่ไม่ได้กรอก
         
@@ -118,9 +119,7 @@ const EnhancedGoodsReturnComponent = withFormik({
 
         //Field ที่ไม่ได้ display
         document_id: '', // changes when document is displayed (internal_document_id field validation)
-        // For Attactment
-        desrciption_files_length: '',
-        desrciption_files: [],
+
         // For Step Approval
         step_approve: [],
     })

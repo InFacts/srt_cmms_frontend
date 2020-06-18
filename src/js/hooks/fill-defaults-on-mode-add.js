@@ -6,12 +6,13 @@ import { getEmployeeIDFromUserID} from '../helper';
 
 import { useFormikContext } from 'formik';
 
-const useFillDefaultsOnModeAdd = () => {
+import {DOCUMENT_TYPE_ID} from '../helper';
+const useFillDefaultsOnModeAdd = (document_type_group_id) => {
 
     const fact = useSelector((state) => ({...state.api.fact}), shallowEqual);
     const toolbar = useSelector((state) => ({...state.toolbar}), shallowEqual);
     const decoded_token = useSelector((state) => ({...state.token.decoded_token}), shallowEqual);
-    const { values, touched, setFieldValue} = useFormikContext();
+    const { values, touched, setFieldValue, validateField} = useFormikContext();
 
     // Fill Default Forms
     useEffect(() => {
@@ -23,6 +24,9 @@ const useFillDefaultsOnModeAdd = () => {
             }
             setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(fact.users, decoded_token.id));
             setFieldValue("created_on", localISOTime.slice(0, 16), false);
+            if (document_type_group_id === DOCUMENT_TYPE_ID.SALVAGE_SOLD) {
+                setFieldValue("src_warehouse_id", 100, true);
+            }
         }
         
     }, [fact.users, toolbar.mode, touched.internal_document_id, !values.internal_document_id,
