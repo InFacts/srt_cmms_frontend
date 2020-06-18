@@ -548,15 +548,7 @@ const BottomContent = (props) => {
 
 
                 <div id="attachment_content" className="tabcontent">
-                    {/* <Files name="file[0].filename" desrciptionFiles={props.actionMode === TOOLBAR_MODE.SEARCH ? values.desrciption_files
-                    : values.file}
-                    desrciptionFilesLength={props.actionMode === TOOLBAR_MODE.SEARCH ? values.desrciption_files_length
-                        : values.file.length}
-                    disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-                    disabledForModeAdd={props.actionMode === TOOLBAR_MODE.ADD}
-                    HandleDownload={HandleDownload}
-                    HandleDeleteFile={HandleDeleteFile}
-                    /> */}
+                    <Files />
                 </div>
 
                 <div id="table_status_content" className="tabcontent">

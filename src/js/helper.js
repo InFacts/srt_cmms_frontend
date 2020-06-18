@@ -675,7 +675,8 @@ export const saveDocument = (document_type_group_id, data, files) => new Promise
         .then(({ document_id, internal_document_id, status }) => { // Get the Document_ID
             editDocument(document_id, document_type_group_id, mutateDataFillDocumentID(data, document_id))
                 .then(() => {
-                    if (files !== [] && files !== undefined) {
+                    // console.log("[[[saveDocument.SEND", files, files.length)
+                    if (files.length !== 0 && files !== undefined) {
                         uploadAttachmentDocumentData(document_id, files)
                         .then(() => {
                             return resolve(document_id, internal_document_id, status);
