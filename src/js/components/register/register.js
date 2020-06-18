@@ -23,6 +23,7 @@ const Register = (props) => {
 
 
     const validateEmployeeIDField = (...args) => validatedataDocumentField("employee_id", setFieldValue, ...args)
+    const validateUsernameField = (...args) => validatedataDocumentField("username", setFieldValue, ...args)
     const validateFirstnameField = (...args) => validatedataDocumentField("firstname", setFieldValue, ...args)
     const validateLastnameField = (...args) => validatedataDocumentField("lastname", setFieldValue, ...args)
     const validatePasswordField = (...args) => validatedataDocumentField("password", setFieldValue, ...args)
@@ -43,19 +44,13 @@ const Register = (props) => {
         } else {
             const register =
             {
-                "create_account": false,
+                "create_account": true,
                 "data": {
                     "employee_id": values.employee_id,
-                    "username": values.firstname,
+                    "username": values.username,
                     "email": values.email,
-                    "national_id": "",
-                    "firstname_en": "",
                     "firstname_th": values.firstname,
-                    "lastname_en": "",
                     "lastname_th": values.lastname,
-                    "address": "",
-                    "birthdate": "",
-                    "phone": ""
                 }
             }
             console.log("Register", register)
@@ -102,6 +97,15 @@ const Register = (props) => {
                                         <div className="grid_4">
                                             <TextInput name='employee_id'
                                                 validate={validateEmployeeIDField}
+                                                tabIndex="1" required/>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid_12">
+                                        <div className="grid_12"><p className="cancel-default">Username</p></div>
+                                        <div className="grid_4">
+                                            <TextInput name='username'
+                                                validate={validateUsernameField}
                                                 tabIndex="1" required/>
                                         </div>
                                     </div>
