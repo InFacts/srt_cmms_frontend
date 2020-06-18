@@ -701,14 +701,11 @@ export const saveDocument = (document_type_group_id, data, files) => new Promise
 
 // POST /fact/warehouses
 export const saveMasterData = (document_type_group_id, data, image) => new Promise((resolve, reject) => {
-    console.log(">>>>>>>>")
     createMasterData(data, document_type_group_id)
         .then(() => { // Get the Document_ID
-            console.log(">>>>>>")
             return resolve();
         })
         .catch((err) => {
-            console.log(">>>>>> err")
             reject(err)
         });
 });
@@ -716,11 +713,9 @@ export const saveMasterData = (document_type_group_id, data, image) => new Promi
 export const editMasterDataHelper = (document_type_group_id, data, image) => new Promise((resolve, reject) => {
     editMasterData(data, document_type_group_id)
         .then(() => { // Get the Document_ID
-            console.log(">>>>>>")
             return resolve();
         })
         .catch((err) => {
-            console.log(">>>>>> err")
             reject(err)
         });
 });
@@ -975,7 +970,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                 created_on: created_on.toISOString().split(".")[0],
                 line_items: data.line_items,
                 remark: data.remark,
-                status_name_th: "",
+                // status_name_th: "",
                 document_action_type_id: "",
             }
             if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO) {
@@ -1071,7 +1066,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                     line_items: data.specific.line_items,
                     src_warehouse_id: data.specific.warehouse_id,
                     remark: data.document.remark,
-                    status_name_th: '',
+                    // status_name_th: '',
                     // refer_to_document_name: data.specific.refer_to_document_name,
                     document_date: data.document.document_date.slice(0, 10)
                 }
@@ -1102,7 +1097,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                     line_items: data.specific.line_items,
                     src_warehouse_id: data.specific.warehouse_id,
                     remark: data.document.remark,
-                    status_name_th: '',
+                    // status_name_th: '',
                     // refer_to_document_name: data.specific.refer_to_document_name,
                     document_date: data.document.document_date.slice(0, 10)
                 }
@@ -1225,7 +1220,6 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
         return resolve();
     }
     console.log("I am validating internal document id ", internal_document_id)
-    console.log(">>>>>> values", values)
     if (!internal_document_id) {
         console.log("I dont have any internal doc id")
         return resolve('Required');
@@ -1302,7 +1296,9 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
 
                         } else { //If Mode add, need to error duplicate Document ID
                             // setFieldValue('document_id', '', false); 
-                            if (values.document_id || footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve
+                            // if (values.document_id || footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve
+                            if (footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve 
+                            //TODO - need to check whether it needs to be approved - Donut
                                 console.log("i am in mode add, saved and wanting to approve")
                                 error = '';
                             } else {

@@ -65,6 +65,7 @@ const useToolbarInitializer = (initial_mode, documentTypeGroupID) => {
     useEffect(()=> {
         if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.REFRESH]){
             resetForm();
+            // setFieldValue("status_name_th", "kuyped", false)
             dispatch(handleClickRefresh()); // make handle click False
         }
     }, [toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]]);

@@ -24,6 +24,7 @@ const useFillDefaultsOnModeAdd = (document_type_group_id) => {
             }
             setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(fact.users, decoded_token.id));
             setFieldValue("created_on", localISOTime.slice(0, 16), false);
+            
             if (document_type_group_id === DOCUMENT_TYPE_ID.SALVAGE_SOLD) {
                 setFieldValue("src_warehouse_id", 100, true);
             }
