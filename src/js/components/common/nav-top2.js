@@ -1,30 +1,39 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
 
 import { loadNotify, readNotify } from '../../redux/modules/notify.js';
 
 import { Link } from 'react-router-dom';
 import logo from '../../../images/logo.png';
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector , shallowEqual} from 'react-redux'
 
 import { setupAllSubNav } from '../../helper';
+import {identifyEndpoinsHelper} from '../../helper';
 
 const MainModule = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }));
     const footer = useSelector((state) => ({ ...state.footer }));
-    // console.log("toolbar.mode", toolbar.mode)
+    const [checkNav, setCheckNav] = useState(0);
+
     useEffect(() => {
-        // Setup SubNav
-        setupAllSubNav();
         // Load Notify
         props.loadNotify();
     }, [toolbar.mode]);
+
+    useEffect(() => {
+        // Setup SubNav
+        setupAllSubNav();
+    }, [checkNav]);
+
+    const identifyEndpoins = (document_type_id) => identifyEndpoinsHelper(document_type_id)
 
     // console.log("nav.mode", toolbar.mode, footer.mode)
     if (toolbar.mode === "INVISIBLE" && footer.mode === "INVISIBLE") {
         return null
     }
     else {
+        // setCheckNav(1);
+        // console.log("checkNav", checkNav)
         return (
             <div>
                 <div id="header">
@@ -38,7 +47,7 @@ const MainModule = (props) => {
                             </li>
 
                             <li className="p-navigation__item p-subnav a nav-li" style={{ marginRight: "10px", marginLeft: "auto" }} role="menuitem" id="link-1">
-                                <Link to="#" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu" style={{ paddingRight: "10px" }} >
+                                <Link to="#" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu" style={{ paddingRight: "10px" }} onClick={() => setCheckNav(1)}>
                                     <i className="fas fa-bell" style={{ fontSize: "22px", color: "white" }}></i>
                                     {props.notify.not_read_count !== 0
                                         ?
@@ -54,16 +63,16 @@ const MainModule = (props) => {
                                             <Link to="#" className="p-subnav__item sub">ไม่มีข้อมูลการแจ้งเตือนในระบบ</Link>
                                         </li>
                                         :
-                                        props.notify.notify.map(function (notify, index) {
+                                        props.notify.notify.map(function (notify) {
                                             return (
                                                 <li key={notify.notification_id} id={notify.notification_id}>
-                                                    <Link to="#" className="p-subnav__item sub_notify" onClick={(e) => props.readNotify(e)} style={notify.is_read.data[0] === 1 ? {} : { backgroundColor: "#edf2fa" }} >
+                                                    <Link to={identifyEndpoins(notify.document_type_id) + "?internal_document_id=" + notify.internal_document_id + "&document_id=" + notify.document_id} className="p-subnav__item sub_notify" onClick={(e) => props.readNotify(e)} style={notify.is_read.data[0] === 1 ? {} : { backgroundColor: "#edf2fa" }} >
                                                         <div>
-                                                            <i className="fas fa-file-alt float-left" style={{ fontSize: "30px", "marginTop": "16px", "marginLeft": "10px" }}></i>
-                                                            <p className="cancel-default_notify">{notify.created_on.replace("T", " เวลา ").slice(0, 21) + " น."}</p>
-                                                            <p className="cancel-default_notify">ประเภท: {notify.document_type_name}</p>
-                                                            <p className="cancel-default_notify">เลขที่: {notify.internal_document_id}</p>
-                                                            <p className="cancel-default_notify">{notify.action_document}</p>
+                                                            <i className="fas fa-file-alt float-left" style={{ fontSize: "30px", "marginTop": "16px", "marginLeft": "10px", "color": "#111" }}></i>
+                                                            <p className="cancel-default_notify" style={{"color": "#111"}}>{notify.created_on.replace("T", " เวลา ").slice(0, 21) + " น."}</p>
+                                                            <p className="cancel-default_notify" style={{"color": "#111"}}>ประเภท: {notify.document_type_name}</p>
+                                                            <p className="cancel-default_notify" style={{"color": "#111"}}>เลขที่: {notify.internal_document_id}</p>
+                                                            <p className="cancel-default_notify" style={{"color": "#111"}}>{notify.action_document}</p>
                                                         </div>
                                                     </Link>
                                                 </li>

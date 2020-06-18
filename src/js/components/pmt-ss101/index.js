@@ -16,7 +16,7 @@ import useFactInitializer from '../../hooks/fact-initializer';
 import useTokenInitializer from '../../hooks/token-initializer';
 import useFooterInitializer from '../../hooks/footer-initializer';
 import useDocumentSubscription from '../../hooks/document-subscription';
-
+import useExportPdfInitializer from '../../hooks/export-pdf-initializer';
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
 
@@ -27,6 +27,7 @@ const PmtSS101Componant = (props) => {
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.SS101);
     useDocumentSubscription();
+    useExportPdfInitializer();
     const loggedIn = useSelector(state => state.token.isLoggedIn); 
 
     // Initial tabbar & set default active
@@ -157,7 +158,7 @@ const EnhancedPmtSS101Component = withFormik({
         remark: '',
         loss_line_items: initialRows(),
 
-        file: [],
+        files: [],
 
         //Field ที่ไม่ได้กรอก
         document_status_id: '', // ?

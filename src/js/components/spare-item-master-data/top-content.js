@@ -33,6 +33,7 @@ const TopContent = (props) => {
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
+  const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
   const responseToFormState = (data) => {
     let uoms = props.fact['unit-of-measures'].items;
@@ -43,8 +44,8 @@ const TopContent = (props) => {
       item_group_id: data.item_group_id,
       item_type_id: data.item_type_id,
       uom_group_id: data.uom_group_id,                    //UOM
-      uom_id: data.uom_id_inventory,  
-      uom_name: uom.name,           
+      uom_id: data.uom_id_inventory,
+      uom_name: uom.name,
       minimum_order_quantity: !data.minimum_order_quantity ? 0 : data.minimum_order_quantity,  //ขั้นต่ำการสั่งซื้อ
       lead_time: !data.lead_time ? 0 : data.lead_time,
       tolerance_time: !data.tolerance_time ? 0 : data.tolerance_time,
@@ -70,9 +71,17 @@ const TopContent = (props) => {
         setValues({ ...values, ...responseToFormState(item) }, false); //Setvalues and don't validate
         validateField("item_type_id");
 
+        // IF Check user If User is Admin -> return true Else -> return false
+        if (decoded_token.id === 4) { //{/* TODO USER_ID FOR ADMIN */}
+          console.log(" YES I AM ADMIN ")
+          setFieldValue("modeEdit", true, false);
+        } else {
+          console.log(" NO I NOT ADMIN ")
+          setFieldValue("modeEdit", false, false);
+        }
         fetchGoodsOnhandDataForItemmasterData(item.item_id)
           .then((goods_onhand) => {
-            console.log("good on hand", goods_onhand)
+            // console.log("good on hand", goods_onhand)
             setFieldValue('goods_onhand', goods_onhand, false);
           })
         return;
@@ -84,7 +93,7 @@ const TopContent = (props) => {
       if (internal_item_id) {
         let items = props.fact.items.items;
         let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
-        console.log("warehouse", item)
+        // console.log("warehouse", item)
         if (!item) { // Check Dulplication
           setFieldValue("internal_item_id", internal_item_id, false);
         } else return 'Internal Item Id Duplication'
@@ -96,7 +105,7 @@ const TopContent = (props) => {
     if (!name) {
       return 'Required'
     }
-    setFieldValue(fieldName, name, false);
+    return '';
   };
   const validateItemTypeIDField = (...args) => validateItemMasterdataField("item_type_id", ...args);
   const validateItemGroupIDField = (...args) => validateItemMasterdataField("item_group_id", ...args);
@@ -118,7 +127,7 @@ const TopContent = (props) => {
             <div className="float-right">
               <div className="grid_3 float-right">
                 <SelectNoChildrenInput name="item_type_id" validate={validateItemTypeIDField} cssStyle={{ left: "-160px", top: "10px" }}
-                  disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                  disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
                   <option value=''></option>
                   {props.fact[FACTS.ITEM_TYPE].items.map((item_type) => (
                     values.item_type_id === item_type.item_type_id
@@ -138,11 +147,11 @@ const TopContent = (props) => {
           <div className="container_12">
             <FormLabel>รายละเอียด</FormLabel>
             <div className="grid_3 pull_1">
-              <TextInput name="description" validate={validateItemDescriptionField} disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="2" />
+              <TextInput name="description" validate={validateItemDescriptionField} disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="2" />
             </div>
             <div className="float-right">
               <div className="grid_3 float-right">
-                <SelectNoChildrenInput name="item_group_id" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateItemGroupIDField} cssStyle={{ left: "-160px", top: "10px" }}>
+                <SelectNoChildrenInput name="item_group_id" disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateItemGroupIDField} cssStyle={{ left: "-160px", top: "10px" }}>
                   <option value=''></option>
                   {props.fact[FACTS.ITEM_GROUP].items.map((item_group) => (
                     values.item_group_id === item_group.item_group_id
@@ -162,7 +171,7 @@ const TopContent = (props) => {
           <div className="container_12">
             <div className="float-right">
               <div className="grid_3 float-right">
-                <SelectNoChildrenInput name="uom_group_id" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomGroupIDField} cssStyle={{ left: "-160px", top: "10px" }}>
+                <SelectNoChildrenInput name="uom_group_id" disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomGroupIDField} cssStyle={{ left: "-160px", top: "10px" }}>
                   <option value=''></option>
                   {props.fact[FACTS.UNIT_OF_MEASURE_GROUPS].items.map((uom) => (
                     values.uom_group_id === uom.uom_group_id

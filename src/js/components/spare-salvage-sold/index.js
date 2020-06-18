@@ -102,7 +102,7 @@ const EnhancedGoodsReturnComponent = withFormik({
         remark: '',
         line_items: initialRows(),
 
-        file: [],
+        files: [],
     
         //Field ที่ไม่ได้กรอก
         
@@ -113,9 +113,7 @@ const EnhancedGoodsReturnComponent = withFormik({
 
         //Field ที่ไม่ได้ display
         document_id: '', // changes when document is displayed (internal_document_id field validation)
-        // For Attactment
-        desrciption_files_length: '',
-        desrciption_files: [],
+
         // For Step Approval
         step_approve: [],
     }),

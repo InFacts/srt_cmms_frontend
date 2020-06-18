@@ -10,7 +10,7 @@ import { useFormikContext } from 'formik';
 const PopupModalDocument = (props) => {
     const [data, setData] = useState([]);
     const [documentID, setDocumentID] = useState("");
-    const [url, setUrl] = useState(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=${props.documentTypeGroupID}&internal_document_id=${documentID}`)
+    const [url, setUrl] = useState(props.documentTypeGroupID !== "document_all_type" ? `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=${props.documentTypeGroupID}&internal_document_id=${documentID}` : `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?&internal_document_id=${documentID}`)
     const { setFieldValue } = useFormikContext();
     const [forceRefresh, setForceRefresh] = useState(false);
     const toolbar = useSelector((state ) => ({...state.toolbar}), shallowEqual);
@@ -35,7 +35,7 @@ const PopupModalDocument = (props) => {
                         <div className="grid_2"><p className="cancel-default">เลขที่เอกสาร</p></div>
                         <div className="grid_8 pull_0">
                             <input type="text" className="cancel-default grid_3" value={documentID} onChange={e => setDocumentID(e.target.value)} />
-                            <button className="button-blue edit grid_1 mr-5" type="button" onClick={() => setUrl(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=${props.documentTypeGroupID}&internal_document_id=${documentID}`)}>ค้นหา</button>
+                            <button className="button-blue edit grid_1 mr-5" type="button" onClick={() => setUrl(props.documentTypeGroupID !== "document_all_type" ? `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=${props.documentTypeGroupID}&internal_document_id=${documentID}` : `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?&internal_document_id=${documentID}`)}>ค้นหา</button>
                         </div>
                     </div>
 
@@ -50,10 +50,12 @@ const PopupModalDocument = (props) => {
                             </thead>
                             <tbody>
                                 {data.map(function (document, index) {
+                                    var created_on = new Date(document.created_on);
+                                    created_on.setHours(created_on.getHours() + 7)
                                     return (
                                         <tr key={index} id={index}>
                                             <td className="edit-padding" style={{ minWidth: "150px" }}> {document.internal_document_id} </td>
-                                            <td className="edit-padding" style={{ minWidth: "300px" }}> {document.created_on.replace("T", " เวลา ").slice(0, 21) + " น."} </td>
+                                            <td className="edit-padding" style={{ minWidth: "300px" }}> {created_on.toISOString().split(".")[0].replace("T", " เวลา ") + " น."} </td>
                                             <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
                                                 <button type="button" className="button-blue" onClick={() => setFieldValue(`${props.name}`, document.internal_document_id, true)} aria-label="Close active modal" aria-controls={props.id} >เลือก</button>
                                             </td>

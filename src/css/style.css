@@ -731,3 +731,47 @@ button.none-border {
   top: 0;
   opacity: 0;
 }
+
+.button-yellow {
+  background-color: #f3c910;
+  border: none;
+  color: white;
+  font-family: Anakotmai-Light;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 0;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  width: auto;
+}
+
+[type='checkbox'] + label{
+  padding-left: 0;
+  position: relative;
+}
+
+[type='checkbox'] + label:not(.is-h1)::before, [type='checkbox'] + label:not(.is-h2)::before, [type='checkbox'] + label:not(.is-h3)::before, [type='checkbox'] + label:not(.is-h4)::before, [type='checkbox'] + label:not(.is-muted-heading)::before,[type='checkbox'] + label:not(.is-inline-label)::before {
+    top: 0;
+}
+
+[type='checkbox'] + label:not(.is-h1)::after, [type='checkbox'] + label:not(.is-h2)::after, [type='checkbox'] + label:not(.is-h3)::after, [type='checkbox'] + label:not(.is-h4)::after, [type='checkbox'] + label:not(.is-muted-heading)::after, [type='checkbox'] + label:not(.is-inline-label)::after {
+  top: 0.254rem;
+}
+
+label.checkbox {
+  max-width: 40em;
+  cursor: pointer;
+  display: block;
+  margin-bottom: 0;
+  margin-top: 0;
+  padding-top: 0;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
+label [type='checkbox'] {
+  float: left;
+  margin: 0;
+  opacity: 1;
+  position: static;
+}

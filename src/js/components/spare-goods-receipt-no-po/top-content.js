@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffectm, useState } from 'react';
 import { connect, useSelector, shallowEqual } from 'react-redux'
 
 import axios from "axios";
@@ -24,8 +24,10 @@ import {
   DOCUMENT_TYPE_ID, getDocumentbyInternalDocumentID,
   isValidInternalDocumentIDFormat, isValidInternalDocumentIDDraftFormat,
   fetchAttachmentDocumentData, validateEmployeeIDField, validateWarehouseIDField,
-  validateInternalDocumentIDFieldHelper
+  validateInternalDocumentIDFieldHelper, DOCUMENT_STATUS, getUserIDFromEmployeeID,
+  validatedataDocumentField
 } from '../../helper';
+import { FACTS } from '../../redux/modules/api/fact.js';
 
 import { FOOTER_MODE, FOOTER_ACTIONS } from '../../redux/modules/footer.js';
 import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
@@ -55,19 +57,19 @@ const TopContent = (props) => {
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
-
+  const decoded_token = useSelector((state) => ({...state.token.decoded_token}), shallowEqual);
 
   // Fill Default Forms
   useFillDefaultsOnModeAdd();
 
-  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args)
+  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args)
 
   const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
   const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
 
   const validateDestWarehouseIDField = (...args) => validateWarehouseIDField("dest_warehouse_id", props.fact, setFieldValue, ...args);
 
-  const validateInternalDocumentSS1646ID = refer_to_document_internal_document_id => new Promise(resolve => {
+  const validateInternalDocumentSS1646ID = refer_to_document_internal_id => new Promise(resolve => {
     // Internal Document ID
     //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
     //  ie. GR-PYO-2563/0001
@@ -75,20 +77,20 @@ const TopContent = (props) => {
     let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS)-[A-Z]{3}-\d{4}\/\d{4}$/g
     let draftInternalDocumentIDRegex = /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
     // let draftInternalDocumentIDRegex = /^heh/g
-    if (!refer_to_document_internal_document_id) {
+    if (!refer_to_document_internal_id) {
       return resolve('Required');
-    } else if (!internalDocumentIDRegex.test(refer_to_document_internal_document_id) && !draftInternalDocumentIDRegex.test(refer_to_document_internal_document_id)) { //
+    } else if (!internalDocumentIDRegex.test(refer_to_document_internal_id) && !draftInternalDocumentIDRegex.test(refer_to_document_internal_id)) { //
       return resolve('Invalid Document ID Format\nBe sure to use the format ie. S1646-PYO-2563/0001')
     }
 
-    // if (!refer_to_document_internal_document_id) {
+    // if (!refer_to_document_internal_id) {
     //   return resolve(); // Resolve doesn't return
     // }
     let error;
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/internal_document_id/${encodeURIComponent(refer_to_document_internal_document_id)}`;
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/internal_document_id/${encodeURIComponent(refer_to_document_internal_id)}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
       .then((res) => {
-        if (res.data.internal_document_id === refer_to_document_internal_document_id) { // If input document ID exists
+        if (res.data.internal_document_id === refer_to_document_internal_id) { // If input document ID exists
           // if (props.toolbar.mode === TOOLBAR_MODE.SEARCH && !props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
           // console.log(" I AM STILL IN MODE ADD AND SET VALUE")
           // setValues({ ...values, ...responseToFormState(res.data) }, false); //Setvalues and don't validate
@@ -114,6 +116,9 @@ const TopContent = (props) => {
         return resolve(error)
       });
   });
+
+  const checkBooleanForEdit = (values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.FAST_TRACK )
+  && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
 
   return (
     <div id="blackground-white">
@@ -148,8 +153,8 @@ const TopContent = (props) => {
             <div className="grid_3 pull_1">
               {/* Q: If this is user name in thai, how do we get ID? */}
               <TextInput name="created_by_user_employee_id" validate={validateUserEmployeeIDField}
-                disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
-                searchable={props.toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName" tabIndex="2" />
+                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName" tabIndex="2" />
             </div>
 
             {/* Created On */}
@@ -174,7 +179,7 @@ const TopContent = (props) => {
             {/* Document date */}
             <div className="grid_3 float-right">
               <DateInput name="document_date"
-                disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="3" />
+                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="3" />
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">วันที่เอกสาร</p>
@@ -188,16 +193,16 @@ const TopContent = (props) => {
               <p className="top-text">เอกสารอ้างอิง ส.16/46</p>
             </div>
             <div className="grid_3">
-              <TextInput name="refer_to_document_internal_document_id"
+              <TextInput name="refer_to_document_internal_id"
                 validate={validateInternalDocumentSS1646ID}
-                disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
-                searchable={props.toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalDocument2" tabIndex="4" />
+                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalDocument2" tabIndex="4" />
             </div>
 
             {/* Dest Warehouse ID */}
             <div className="grid_3 float-right">
               <TextInput name="dest_warehouse_id" validate={validateDestWarehouseIDField}
-                disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                 searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalInventory" tabIndex="5" />
             </div>
             <div className="grid_2 float-right">
@@ -216,7 +221,7 @@ const TopContent = (props) => {
       {/* PopUp ค้นหาเลขที่เอกสาร ส.16/46 */}
       <PopupModalDocumentS1646 documentTypeGroupID={DOCUMENT_TYPE_ID.INVENTORY_TRANSFER}
         id="modalDocument2"
-        name="refer_to_document_internal_document_id" //For setFieldValue
+        name="refer_to_document_internal_id" //For setFieldValue
       />
 
       {/* PopUp ค้นหาเลขที่คลัง MODE ADD */}

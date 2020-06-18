@@ -103,7 +103,7 @@ const EnhancedGoodsReturnComponent = withFormik({
         created_by_user_employee_id: '',
         remark: '',
         line_items: initialRows(),
-        file: [],
+        files: [], // Send File to API
         refer_to_document_name: '',
     
         //Field ที่ไม่ได้กรอก        
@@ -114,9 +114,7 @@ const EnhancedGoodsReturnComponent = withFormik({
 
         //Field ที่ไม่ได้ display
         document_id: '', // changes when document is displayed (internal_document_id field validation)
-        // For Attactment
-        desrciption_files_length: '',
-        desrciption_files: [],
+
         // For Step Approval
         step_approve: [],
     }),

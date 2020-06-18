@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { connect, useSelector, shallowEqual } from 'react-redux'
+import React, { useEffect, useState } from 'react';
+import { connect, useSelector, shallowEqual } from 'react-redux';
 
 import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
@@ -17,12 +17,14 @@ import PopupModalDocument from '../common/popup-modal-document'
 import PopupModalInventory from '../common/popup-modal-inventory'
 import PopupModalUsername from '../common/popup-modal-username'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
+import { FACTS } from '../../redux/modules/api/fact.js';
 import {
   getEmployeeIDFromUserID, fetchStepApprovalDocumentData,
   DOCUMENT_TYPE_ID, getDocumentbyInternalDocumentID,
   isValidInternalDocumentIDFormat, isValidInternalDocumentIDDraftFormat,
   fetchAttachmentDocumentData, validateEmployeeIDField, validateWarehouseIDField,
-  validateInternalDocumentIDFieldHelper
+  validateInternalDocumentIDFieldHelper, DOCUMENT_STATUS, getUserIDFromEmployeeID,
+  validatedataDocumentField
 } from '../../helper';
 
 import { FOOTER_MODE, FOOTER_ACTIONS } from '../../redux/modules/footer.js';
@@ -33,17 +35,22 @@ const TopContent = (props) => {
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
+  const decoded_token = useSelector((state) => ({...state.token.decoded_token}), shallowEqual);
 
   // Fill Default Forms
   useFillDefaultsOnModeAdd();
 
-  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(DOCUMENT_TYPE_ID.GOODS_ISSUE, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args)
+  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.GOODS_ISSUE, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args)
 
   const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
   const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
 
   const validateSrcWarehouseIDField = (...args) => validateWarehouseIDField("src_warehouse_id", props.fact, setFieldValue, ...args);
 
+  const validateDocumentDateField = (...args) => validatedataDocumentField("document_date", setFieldValue, ...args)
+
+  const checkBooleanForEdit = (values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.FAST_TRACK )
+  && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
   return (
     <div id="blackground-white">
       <div className="container_12 clearfix">
@@ -77,8 +84,8 @@ const TopContent = (props) => {
             <div className="grid_3 pull_1">
               {/* Q: If this is user name in thai, how do we get ID? */}
               <TextInput name="created_by_user_employee_id" validate={validateUserEmployeeIDField}
-                disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
-                searchable={props.toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName" tabIndex="2" />
+                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName" tabIndex="2" />
             </div>
 
             {/* Created On */}
@@ -102,8 +109,8 @@ const TopContent = (props) => {
 
             {/* Document date */}
             <div className="grid_3 float-right">
-              <DateInput name="document_date"
-                disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="3" />
+              <DateInput name="document_date" validate={validateDocumentDateField}
+                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="3" />
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">วันที่เอกสาร</p>
@@ -116,14 +123,14 @@ const TopContent = (props) => {
               <p className="top-text">เลขที่เอกสารอ้างอิง</p>
             </div>
             <div className="grid_3 pull_0">
-              <TextInput name="refer_to_document_name" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="4" />
+              <TextInput name="refer_to_document_name" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="4" />
             </div>
 
             {/* Src Warehouse ID */}
             <div className="grid_3 float-right">
               <TextInput name="src_warehouse_id" validate={validateSrcWarehouseIDField}
-                disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
-                searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalInventory" tabIndex="5" />
+                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalInventory" tabIndex="5" />
             </div>
             <div className="grid_2 float-right">
               <p className="top-text float-right">เลขที่คลัง</p>

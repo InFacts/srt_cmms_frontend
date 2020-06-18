@@ -9,8 +9,8 @@ const SelectInput = ({ ...props }) => {
   return (
     <>
       <select className="edit-select-top" {...field} {...props}>
-        {props.checkDescription !== '' &&
-          props.listProps.map(function (list_uoms, index) {
+        {props.checkDescription &&
+          props.listProps.map((list_uoms, index) => {
             return <option value={list_uoms[props.optionValue]} key={index}>{list_uoms[props.optionName]}</option>
           })
         }

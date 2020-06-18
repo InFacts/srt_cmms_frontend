@@ -48,9 +48,7 @@ const GoodsReturnComponent = (props) => {
 
     // If Link to this url via Track Document
     useEffect(() => {
-        console.log("useEffect getUrlParamsLink")
         getUrlParamsLink.then((internal_document_id) => {
-            console.log("internal_document_id --------", internal_document_id)
             if (internal_document_id !== "") {
                 // action_approval
                 setFieldValue("status_name_th", "", true);
@@ -58,23 +56,7 @@ const GoodsReturnComponent = (props) => {
             }
         })
     }, [])
-    // // If Link to this url via Track Document
-    // useEffect(() => {
-    //     let url = window.location.search;
-    //     // console.log("URL IS", url)
-    //     const urlParams = new URLSearchParams(url);
-    //     const internal_document_id = urlParams.get('internal_document_id');
-    //     if (internal_document_id !== "") {
-    //         // action_approval
-    //         // console.log(" IA M NOT SETTING ", internal_document_id);
-    //         // console.log(" i think that toolbar mode is ", props.toolbar.mode)
-    //         // console.log(" THIS IS CURRENT VALUES ", values);
-    //         setFieldValue("status_name_th", "", true);
-    //         setFieldValue("internal_document_id", internal_document_id, true);
-    //         // console.log(" THIS IS AFTER VALUES ", values);
-    //         // setTimeout(validateForm, 2);
-    //     }
-    // }, [])
+
 
     return (
         <>
@@ -126,7 +108,7 @@ const EnhancedGoodsReturnComponent = withFormik({
         remark: '',
         line_items: initialRows(),
 
-        file: [],
+        files: [],
     
         //Field ที่ไม่ได้กรอก
         
@@ -138,9 +120,6 @@ const EnhancedGoodsReturnComponent = withFormik({
         //Field ที่ไม่ได้ display
         document_id: '', // changes when document is displayed (internal_document_id field validation)
 
-        // For Attactment
-        desrciption_files_length: '',
-        desrciption_files: [],
         // For Step Approval
         step_approve: [],
     }),

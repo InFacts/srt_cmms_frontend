@@ -24,43 +24,6 @@ const BottomContent = (props) => {
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
 
-  // For Down File in Attactment by Nuk
-  const HandleDownload = () => {
-    axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/1/download/1`,
-      { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-      .then((response) => {
-        console.log("response", response)
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        console.log("url", url)
-        const link = document.createElement('a');
-        console.log("link", link)
-        link.href = url;
-        link.setAttribute('download', 'Screen Shot 2563-05-28 at 20.11.15.png');
-        document.body.appendChild(link);
-        link.click();
-      }).catch(function (err) {
-        console.log(err);
-      })
-  };
-
-  // const HandleUpLoad = () => {
-  //   console.log("<<<<<<")
-  //   const data = {
-  //     file: values.file
-  //   }
-  //   axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/1`, data,
-  //     { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-  //     .then((res) => {
-  //       console.log("response", res)
-  //     }).catch(function (err) {
-  //       console.log(err);
-  //     })
-  // };
-
-  const HandleDeleteFile = () => {
-    setFieldValue('file', [], false);
-  };
-
   const validateUomItemmasterDataIDField = (fieldName, uom_id) => {
     if (!uom_id) {
       return 'Required'
@@ -287,7 +250,7 @@ const BottomContent = (props) => {
                     <th className="font text-center" style={{ minWidth: "100px" }}>คงคลัง</th>
                     <th className="font text-center" style={{ minWidth: "100px" }}>รอส่งมอบ</th>
                     <th className="font text-center" style={{ minWidth: "100px" }}>ระหว่างการจัดซื้อ</th>
-                    <th className="font text-center" style={{ minWidth: "100px" }}>จำนวนสุทธิ</th>
+                    <th className="font text-center" style={{ minWidth: "100px" }}>รวมทั้งสิ้น</th>
                     <th className="font text-center" style={{ minWidth: "100px" }}>สถานะ</th>
                     {/* <th className="font blue text-center" style={{ minWidth: "80px" }}>ของเสีย</th>
                     <th className="font blue text-center" style={{ minWidth: "80px" }}>ส่งซ่อม</th>
@@ -305,7 +268,7 @@ const BottomContent = (props) => {
                       <td className="edit-padding text-center disable">{goods_onhand.current_unit_count}</td>
                       <td className="edit-padding text-center disable">{goods_onhand.committed_unit_count}</td>
                       <td className="edit-padding text-center disable">0</td>  {/* ระหว่างจัดซื้อ */}
-                      <td className="edit-padding text-center disable">{goods_onhand.current_unit_count - goods_onhand.committed_unit_count + 0}</td>  {/* จำนวนสุทธิ */}
+                      <td className="edit-padding text-center disable">{goods_onhand.current_unit_count - goods_onhand.committed_unit_count + 0}</td>  {/* รวมทั้งสิ้น */}
                       <td className="edit-padding text-center disable">{goods_onhand.item_status_description_th}</td>  {/* สถานะเอกอะไหล่ */}
                       {/* <td className="edit-padding text-center blue font-red">{goods_onhand.broken}</td>
                         <td className="edit-padding text-center blue">{goods_onhand.send_fix}</td>
@@ -325,7 +288,7 @@ const BottomContent = (props) => {
 
           {/* Attachment Tab */}
           <div id="attachment_content" className="tabcontent">
-            {/* <Files /> */}
+            <Files />
           </div>
         </div>
       </div>

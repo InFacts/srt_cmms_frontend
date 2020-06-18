@@ -103,7 +103,7 @@ const EnhancedGoodsReceiptNoPoComponent = withFormik({
         dest_warehouse_id: '', // Need to fill for user's own WH
         src_warehouse_id: 999, // for Goods Receipt
         created_by_user_employee_id: '',
-        refer_to_document_internal_document_id: '',
+        refer_to_document_internal_id: '',
         remark: '',
         line_items: initialRows(),
 

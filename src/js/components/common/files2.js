@@ -1,55 +1,19 @@
-// import React from 'react';
-// import { useField } from 'formik';
-
-// import Document from '../../../images/document.svg';
-
-// const handleFileSelect = (e) => {
-//     console.log("--- handleFileSelect - ---- ")
-// 	if(!e.target.files) return;
-//     var files = e.target.files;
-//     console.log("--- handleFileSelect - ---- ", files)
-// 	for(var i=0; i < files.length; i++) {
-// 		var f = files[i];
-// 	}
-// }
-
-// const Files = ({...props}) => {
-//     const [field, meta] = useField();
-//     // console.log("field", field)
-//     // console.log("meta", meta)
-//     // console.log("props", props)
-//     return (
-//         <div>
-//             <h4 className="head-title-bottom mt-2">ข้อมูลแนบไฟล์</h4>
-//             <div className="u-clearfix">
-//                 <div className="u-float-left">
-//                     <span className="top-text">ไฟล์เอกสาร</span>
-//                 </div>
-//                 <div className="u-float-right">
-//                     <div className="upload-btn-wrapper">
-//                         <button type="button" className="btn">เพิ่มไฟล์</button>
-//                         <input type="file" onChange={handleFileSelect}  multiple/>
-//                     </div>
-//                 </div>
-//             </div>
-//         </div>
-//     )
-// }
-
-// export default Files
-
-
-
-
-import React from 'react';
-import { useField } from 'formik';
+import React, {useEffect} from 'react';
 import { useFormikContext } from 'formik';
 
 import Document from '../../../images/document.svg';
+import {downloadAttachmentDocumentData, fetchAttachmentDocumentData} from '../../helper';
+import { TOOLBAR_MODE } from '../../redux/modules/toolbar'
+import { navBottomOnReady, navBottomWarning } from '../../redux/modules/nav-bottom'
+import { useDispatch, shallowEqual, useSelector } from 'react-redux'
 
-const Files = ({ ...props }) => {
-    const { setFieldValue } = useFormikContext();
-    const [field, meta] = useField(props);
+const Files = () => {
+    const dispatch = useDispatch();
+    const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
+    const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
+    // const mimeTypeRegexp = /^(application|audio|example|image|message|model|multipart|text|video)\/[a-z0-9\.\+\*-]+$/;
+    // const extRegexp = /\.[a-zA-Z0-9]*$/;
+    const { values, setFieldValue } = useFormikContext();
 
     const fileExtension = (file) => {
         let extensionSplit = file.name.split('.')
@@ -72,36 +36,84 @@ const Files = ({ ...props }) => {
         }
     }
 
+    const mimeTypeLeft = (mime) => {
+        return mime.split('/')[0]
+    }
+
+    const fileSizeAcceptable = (file) => {
+        let maxFileSize = 10 ** 9; // 10^9 = 1GB
+        if (file.size > maxFileSize) {
+            dispatch(navBottomWarning('Attachment', file.name, 'ขนาดใหญ่เกิน 1GB'));
+            dispatch(navBottomWarning('Attachment', file.name, 'ขนาดใหญ่เกิน 1GB'));
+            setTimeout(function(){ dispatch(navBottomOnReady('', '', '')); }, 5000);
+            return false
+        } else {
+            return true
+        }
+    }
+
+    const convertFormFileToAPI = (e) => {
+        let filesAdded = [];
+        let files = [];
+        for (let i = 0; i < e.target.files.length; i++) {
+            filesAdded.push(e.target.files[i]);
+        }
+        for (let i = 0; i < values.files.length; i++) {
+            filesAdded.push(values.files[i]);
+        }
+        filesAdded.map((newFile, index) => {
+            newFile.id = 'files-' + index;
+            newFile.filename = newFile.name;
+            newFile.extension = fileExtension(newFile);
+            newFile.sizeReadable = fileSizeReadable(newFile.size);
+            newFile.isNew = true;
+            if (newFile.type && mimeTypeLeft(newFile.type) === 'image') {
+                newFile.preview = { type: 'image', url: window.URL.createObjectURL(newFile) };
+            } else {
+                newFile.preview = { type: 'file' };
+            }
+            if (fileSizeAcceptable(newFile)) {
+                files.push(newFile);
+            }
+        })
+        setFieldValue("files", files);
+    }
+
+    const deleteFileInState = (e) => {
+        let index = e.target.parentNode.parentNode.parentNode.id;
+        values.files.splice(index, 1);
+        setFieldValue("files", values.files);
+    }
+
     return (
         <div>
             <h4 className="head-title-bottom mt-2">ข้อมูลแนบไฟล์</h4>
             <div className="u-clearfix">
                 <div className="u-float-left">
-                    <span className="top-text">ไฟล์เอกสาร</span>
+                    <span className="top-text">ไฟล์เอกสาร </span>
+                    <span className="top-text" style={{color:"red"}}>(ขนาดไฟล์ไม่เกิน 1GB)</span>
                 </div>
                 <div className="u-float-right">
                     <div className="upload-btn-wrapper">
-                        {/* <input type="file" disabled={props.disabled} {...field} {...props}/> */}
-                        <button type="button" className="btn" disabled={props.disabled}>เพิ่มไฟล์</button>
-                        <input id="file" name="file" type="file" 
-                            onChange={(event) => {setFieldValue("file", event.currentTarget.files[0]);}}
-                            disabled={props.disabled} />
+                        <button type="button" className="btn" disabled={toolbar.mode !== TOOLBAR_MODE.SEARCH ? false:true}>เพิ่มไฟล์</button>
+                        <input id="file" name="file" type="file" onChange={convertFormFileToAPI} multiple disabled={toolbar.mode !== TOOLBAR_MODE.SEARCH ? false:true}/>
                     </div>
                 </div>
             </div>
-            {props.desrciptionFilesLength !== 0 && props.desrciptionFilesLength !== undefined
-                ?
+            {values.files.length !== 0 && values.files !== undefined ?
                 <div className="dropZone-list">
-                    {props.desrciptionFiles.map((desrciptionFiles, index) => (
-                        <li className="list-group-item">
-                            <div className="media-body" key={index}>
-                                <h4 className="media-heading grid_5" style={{ fontWeight: 'bold' }}>{desrciptionFiles.filename.name}</h4>
-                                <h4 className="media-heading grid_2">ขนาดไฟล์ : {desrciptionFiles.filename.size}</h4>
+                    {values.files.map((file, index) => (
+                        <li className="list-group-item" key={index} id={index}>
+                            <div className="media-body">
+                                <h4 className="media-heading grid_5" style={{ fontWeight: 'bold' }}>{file.filename}</h4>
+                                <h4 className="media-heading grid_2">ขนาดไฟล์ : {file.isNew ? file.sizeReadable : fileSizeReadable(file.sizeReadable)}</h4>
                                 <div className="float-right">
-                                    <button type="button" className="btn media-heading grid_1" style={{ color: "blue", padding: "4px" }} onClick={(e) => props.HandleDownload(e)} disabled={props.disabledForModeAdd}>ดาวน์โหลด</button>
-                                    <button type="button" className="btn media-heading grid_1" style={{ color: "blue", padding: "4px" }} 
-                                    onClick={(e) => props.HandleDeleteFile(e)}
-                                    disabled={props.disabled}>ลบ</button>
+                                    {toolbar.mode === TOOLBAR_MODE.SEARCH &&
+                                        <button type="button" className="btn media-heading grid_1" style={{ color: "blue", padding: "4px" }} onClick={ () => downloadAttachmentDocumentData(values.document_id, file.id) }>ดาวน์โหลด</button>
+                                    }
+                                    {toolbar.mode !== TOOLBAR_MODE.SEARCH &&
+                                        <button type="button" className="btn media-heading grid_1" style={{ color: "blue", padding: "4px" }} onClick={ (e) => deleteFileInState(e) }>ลบ</button>
+                                    }
                                 </div>
                             </div>
                         </li>
