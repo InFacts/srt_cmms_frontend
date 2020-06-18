@@ -233,13 +233,6 @@ const Register = (props) => {
                     </div>
                 </form>
             </div>
-            <div id="red-house2">
-                <div className="container_12 clearfix">
-                    <div className="grid_12 from-red-house">
-                        <img alt='red house' src={RedHouse} />
-                    </div>
-                </div>
-            </div>
         </div >
     )
 
