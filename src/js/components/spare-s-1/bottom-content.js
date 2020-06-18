@@ -47,8 +47,8 @@ const BottomContent = (props) => {
                       <td className="edit-padding">{line_items.item_status_description_th}</td>
                       <td className="edit-padding text-center">{line_items.uom_name}</td>
                       <td className="edit-padding text-center">{!line_items.committed_unit_count ? line_items.current_unit_count - line_items.committed_unit_count : line_items.current_unit_count}</td>
-                      <td className="edit-padding text-center">-</td>
-                      <td className="edit-padding text-center">-</td>
+                      <td className="edit-padding text-center">{line_items.pricing.average_price ? (line_items.pricing.average_price.toFixed(2) * (line_items.current_unit_count - line_items.committed_unit_count)).toFixed(2) : 0}</td>
+                      <td className="edit-padding text-center">{line_items.pricing.average_price ? line_items.pricing.average_price.toFixed(4) : 0}</td>
                     </tr>
                   )
                 })}

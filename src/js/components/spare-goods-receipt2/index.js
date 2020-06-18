@@ -9,7 +9,7 @@ import TopContent from './top-content';
 import BottomContent from './bottom-content';
 import Footer from '../common/footer.js';
 
-import {packDataFromValues, DOCUMENT_TYPE_ID, saveDocument} from '../../helper';
+import {packDataFromValues, DOCUMENT_TYPE_ID, saveDocument, getUrlParamsLink} from '../../helper';
 
 import useToolbarInitializer from '../../hooks/toolbar-initializer';
 import useFactInitializer from '../../hooks/fact-initializer';
@@ -46,14 +46,13 @@ const GoodsReceiptComponent = (props) => {
 
     // If Link to this url via Track Document
     useEffect(() => {
-        let url = window.location.search;
-        const urlParams = new URLSearchParams(url);
-        const internal_document_id = urlParams.get('internal_document_id');
-        if (internal_document_id !== "") {
-            // action_approval
-            setFieldValue("status_name_th", "", true);
-            setFieldValue("internal_document_id", internal_document_id, true);
-        }
+        getUrlParamsLink.then((internal_document_id) => {
+            if (internal_document_id !== "") {
+                // action_approval
+                setFieldValue("status_name_th", "", true);
+                setFieldValue("internal_document_id", internal_document_id, true);
+            }
+        })
     }, [])
 
     return (

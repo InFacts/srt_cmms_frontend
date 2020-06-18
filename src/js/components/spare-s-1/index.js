@@ -65,7 +65,9 @@ const EnhancedGoodsReturnComponent = withFormik({
     mapPropsToValues: (props) => ({ 
         // Field ที่ให้ User กรอก
         internal_document_id: '',
+        internal_item_id: '',
         src_warehouse_id: '', 
+        item_status_id: '',
         document_date: '', 
         line_items: [],
         year_id: 0,

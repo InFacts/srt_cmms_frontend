@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux'
+import React, { useEffectm, useState } from 'react';
+import { connect, useSelector, shallowEqual } from 'react-redux';
 import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
 
 import TextInput from '../common/formik-text-input';
@@ -7,6 +7,7 @@ import NumberInput from '../common/formik-number-input';
 import SelectInput from '../common/formik-select-input';
 
 const Table = (props) => {
+  const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   return (
     <table className="table-many-column">
       <thead>
@@ -30,8 +31,8 @@ const Table = (props) => {
               <td className="edit-padding">
                 <TextInput name={`line_items[${index}].internal_item_id`}
                   validate={internal_item_id => props.validateLineNumberInternalItemIDField(`line_items[${index}]`, internal_item_id, index)} tabIndex="6"
-                  disabled={props.disabledBothMode !== true ? props.actionMode === TOOLBAR_MODE.SEARCH : true}
-                  searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart"
+                  disabled={props.disabledBothMode !== true ? props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true}
+                  searchable={props.checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart"
                   handleModalClick={() => props.setLineNumber(line_number)}
                   redBorderForError="error-in-table"
                 />
@@ -42,12 +43,12 @@ const Table = (props) => {
                   ?
                   <NumberInput step={1} name={`line_items[${index}].quantity`} tabIndex="7"
                     validate={quantity => props.validateLineNumberQuatityItemIDField(`line_items[${index}].quantity`, quantity, index)}
-                    disabled={props.disabledBothMode !== true ? props.actionMode === TOOLBAR_MODE.SEARCH : true}
+                    disabled={props.disabledBothMode !== true ? props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true}
                     redBorderForError="error-in-table" />
                   :
                   <NumberInput step={1} name={`line_items[${index}].unit_count`} tabIndex="7"
                     validate={unit_count => props.validateLineNumberQuatityItemIDField(`line_items[${index}].unit_count`, unit_count, index)}
-                    disabled={props.disabledBothMode !== true ? props.actionMode === TOOLBAR_MODE.SEARCH : true}
+                    disabled={props.disabledBothMode !== true ? props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true}
                     redBorderForError="error-in-table" />
                 }
               </td>
@@ -55,8 +56,8 @@ const Table = (props) => {
               {/* หน่วยนับ */}
               <td className="edit-padding text-center">
                 <SelectInput name={`line_items[${index}].uom_id`} listProps={list.list_uoms}
-                  tabIndex="8" disabled={props.disabledBothMode !== true ? props.actionMode === TOOLBAR_MODE.SEARCH : true}
-                  optionValue='uom_id' optionName='name'
+                  tabIndex="8" disabled={props.disabledBothMode !== true ? props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true}
+                  optionValue='uom_id' optionName='name' checkDescription={list.description}
                   redBorderForError="error-in-table"
                 />
               </td>
@@ -64,7 +65,7 @@ const Table = (props) => {
               {/* สถานะของอะไหล่ */}
               <td className="edit-padding text-center">
                 <SelectInput name={`line_items[${index}].item_status_id`} listProps={props.fact['item-status'].items}
-                  tabIndex="8" disabled={props.disabledBothMode !== true ? props.actionMode === TOOLBAR_MODE.SEARCH : true}
+                  tabIndex="8" disabled={props.disabledBothMode !== true ? props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true}
                   checkDescription={list.description}
                   optionValue='item_status_id' optionName='description_th'
                 />
@@ -73,7 +74,7 @@ const Table = (props) => {
               <td className="edit-padding text-center">
                 <NumberInput step={1.0} name={`line_items[${index}].per_unit_price`}
                   validate={per_unit_price => props.validateLineNumberPerUnitPriceItemIDField(`line_items[${index}].per_unit_price`, per_unit_price, index)}
-                  disabled={props.disabledBothMode !== true ? props.actionMode === TOOLBAR_MODE.SEARCH : true}
+                  disabled={props.disabledBothMode !== true ? props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true}
                   redBorderForError="error-in-table"
                 />
               </td>

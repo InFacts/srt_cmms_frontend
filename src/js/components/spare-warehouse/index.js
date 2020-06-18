@@ -25,7 +25,7 @@ const GoodsReceiptComponent = (props) => {
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
         {id:"general", name:"ทั่วไป"},
-        {id:"attachment", name:"แนบไฟล์"},
+        // {id:"attachment", name:"แนบไฟล์"},
     ]);
 
     useToolbarInitializer(TOOLBAR_MODE.SEARCH);
@@ -59,11 +59,10 @@ const EnhancedGoodsReceiptComponent = withFormik({
         warehouse_type_id: '',
         use_central: '',
         
-        file: [],
+        files: [],
         
-        // For Attactment
-        desrciption_files_length: '',
-        desrciption_files: [],
+        // FOR CHECK USER_ID ADMIN FOR EDIT
+        modeEdit: false,
     })
 })(GoodsReceiptComponent);
 

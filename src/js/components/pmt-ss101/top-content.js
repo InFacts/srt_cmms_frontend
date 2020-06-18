@@ -12,7 +12,8 @@ import PopupModalDocument from '../common/popup-modal-document'
 import PopupModalUsername from '../common/popup-modal-username'
 
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
-import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID , validateEmployeeIDField, validateWarehouseIDField, validateInternalDocumentIDFieldHelper} from '../../helper';
+import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID , validateEmployeeIDField, validateWarehouseIDField, validateInternalDocumentIDFieldHelper, validatedataDocumentField, DOCUMENT_STATUS, getUserIDFromEmployeeID} from '../../helper';
+import { FACTS } from '../../redux/modules/api/fact';
 import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
 
 import Label from '../common/form-label'
@@ -21,17 +22,21 @@ const TopContent = (props) => {
     const toolbar = useSelector((state) => ({...state.toolbar}), shallowEqual);
     const fact = useSelector((state) => ({...state.api.fact}), shallowEqual);
     const footer = useSelector((state) => ({...state.footer}), shallowEqual);
+    const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
     // Fill Default Forms
     useFillDefaultsOnModeAdd();
 
-    const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(DOCUMENT_TYPE_ID.SS101, toolbar, footer, fact, values , setValues, setFieldValue, validateField, ...args);
+    const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.SS101, toolbar, footer, fact, values , setValues, setFieldValue, validateField, ...args);
     
     const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
     const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
 
+    const validateDocumentDateField = (...args) => validatedataDocumentField("document_date", setFieldValue, ...args)
+
+    const checkBooleanForEdit = (values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.FAST_TRACK) && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
     return (
     <div id="blackground-white">
     <div className="container_12 clearfix" style={{marginTop: "55px"}}>
@@ -57,8 +62,8 @@ const TopContent = (props) => {
             <div className="grid_3 alpha">
                 <TextInput name="created_by_user_employee_id" 
                     validate={validateUserEmployeeIDField}
-                    disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} 
-                    searchable={toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"
+                    disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} 
+                    searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"
                     tabIndex="2"/>
             </div>
             <div class="clear" />
@@ -77,8 +82,8 @@ const TopContent = (props) => {
             <Label>เลขที่เอกสารอ้างอิง</Label>
             <div className="grid_3 alpha">
                 <TextInput name="wo_internal_document_id" 
-                    disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} 
-                    searchable={toolbar.mode !== TOOLBAR_MODE.SEARCH} 
+                    disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} 
+                    searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} 
                     ariaControls="modalWODocument"
                     tabIndex="4"/>
             </div>
@@ -110,8 +115,8 @@ const TopContent = (props) => {
             {/* Document date */}
             <Label>วันที่เอกสาร</Label>
             <div className="grid_3 alpha">
-                <DateInput name="document_date"
-                    disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} 
+                <DateInput name="document_date" validate={validateDocumentDateField}
+                    disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} 
                     tabIndex="7" />
             </div>
             <div class="clear" />

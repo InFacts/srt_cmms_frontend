@@ -26,43 +26,6 @@ const BottomContent = (props) => {
 
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm, resetForm } = useFormikContext();
 
-  // For Down File in Attactment by Nuk
-  const HandleDownload = () => {
-    axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/1/download/1`,
-      { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-      .then((response) => {
-        console.log("response", response)
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        console.log("url", url)
-        const link = document.createElement('a');
-        console.log("link", link)
-        link.href = url;
-        link.setAttribute('download', 'Screen Shot 2563-05-28 at 20.11.15.png');
-        document.body.appendChild(link);
-        link.click();
-      }).catch(function (err) {
-        console.log(err);
-      })
-  };
-
-  // const HandleUpLoad = () => {
-  //   console.log("<<<<<<")
-  //   const data = {
-  //     file: values.file
-  //   }
-  //   axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/1`, data,
-  //     { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-  //     .then((res) => {
-  //       console.log("response", res)
-  //     }).catch(function (err) {
-  //       console.log(err);
-  //     })
-  // };
-
-  const HandleDeleteFile = () => {
-    setFieldValue('file', [], false);
-  };
-
   const validateWarehouseField = (fieldName, name) => {
     if (!name) {
       return 'Required'
@@ -87,7 +50,7 @@ const BottomContent = (props) => {
               <div className="grid_2"><p className="cancel-default">สถานะคลัง</p></div> {/* ปิด หรือ เปิด การใช้งาน เป็น boolean */}
               <div className="grid_4 pull_0">
                 <SelectNoChildrenInput name="active" validate={validateActionWarehouseIDField} cssStyle={{left: "-240px", top: "10px"}}
-                  disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                  disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
                   {values.active === 1
                     ?
                     <>
@@ -110,7 +73,7 @@ const BottomContent = (props) => {
               <div className="container_12">
                 <div className="grid_2"><p className="cancel-default">ที่อยู่</p></div>
                 <div className="grid_4 pull_0">
-                  <TextInput name="location" validate={validateLocationWarehouseIDField} disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="4" />
+                  <TextInput name="location" validate={validateLocationWarehouseIDField} disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="4" />
                 </div>
               </div>
 
@@ -118,7 +81,7 @@ const BottomContent = (props) => {
                 <div className="grid_2"><p className="cancel-default">ประเภทคลัง</p></div>
                 <div className="grid_4 pull_0">
                   <SelectNoChildrenInput name="warehouse_type_id" validate={validateWarehouseTypeIDField} cssStyle={{left: "-240px", top: "10px"}}
-                    disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                    disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
                     <option value=''></option>
                     {props.fact[FACTS.WAREHOUSES_TYPE].items.map((warehouse_type) => (
                       values.warehouse_type_id === warehouse_type.warehouse_type_id
@@ -135,7 +98,7 @@ const BottomContent = (props) => {
                 <div className="grid_2"><p className="cancel-default">กลุ่มคลัง</p></div>
                 <div className="grid_4 pull_0">
                   <SelectNoChildrenInput name="use_central"  validate={validateUseCentralWarehouseIDField} cssStyle={{left: "-240px", top: "10px"}}
-                    disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                    disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
                     {values.use_central === 1
                       ?
                       <>
@@ -159,17 +122,7 @@ const BottomContent = (props) => {
 
           {/* Attachment Tab */}
           <div id="attachment_content" className="tabcontent">
-            <Files
-              name="file[0].filename"
-              desrciptionFiles={props.actionMode === TOOLBAR_MODE.SEARCH ? values.desrciption_files
-                : values.file}
-              desrciptionFilesLength={props.actionMode === TOOLBAR_MODE.SEARCH ? values.desrciption_files_length
-                : values.file.length}
-              disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-              disabledForModeAdd={props.actionMode === TOOLBAR_MODE.ADD}
-            // HandleDownload={HandleDownload}
-            // HandleDeleteFile={HandleDeleteFile}
-            />
+            <Files />
           </div>
         </div>
       </div>

@@ -9,7 +9,7 @@ import TopContent from './top-content';
 import BottomContent from './bottom-content';
 import Footer from '../common/footer.js';
 
-import {packDataFromValues, DOCUMENT_TYPE_ID, saveDocument} from '../../helper';
+import {packDataFromValues, DOCUMENT_TYPE_ID, getUrlParamsLink} from '../../helper';
 
 import useToolbarInitializer from '../../hooks/toolbar-initializer';
 import useFactInitializer from '../../hooks/fact-initializer';
@@ -38,16 +38,13 @@ const GoodsReturnComponent = (props) => {
     const loggedIn = useSelector(state => state.token.isLoggedIn); 
     // If Link to this url via Track Document
     useEffect(() => {
-        let url = window.location.search;
-        console.log("URL IS", url)
-        const urlParams = new URLSearchParams(url);
-        const internal_document_id = urlParams.get('internal_document_id');
-        if (internal_document_id !== "") {
-            // action_approval
-            console.log(" IA M NOT SETTING ", internal_document_id);
-            setFieldValue("internal_document_id", internal_document_id, true);
-            console.log(" THIS IS AFTER VALUES ", values);
-        }
+        getUrlParamsLink.then((internal_document_id) => {
+            if (internal_document_id !== "") {
+                // action_approval
+                setFieldValue("status_name_th", "", true);
+                setFieldValue("internal_document_id", internal_document_id, true);
+            }
+        })
     }, [])
 
     return (
@@ -101,7 +98,7 @@ const EnhancedGoodsReturnComponent = withFormik({
         remark: '',
         line_items: initialRows(),
 
-        file: [],
+        files: [],
     
         //Field ที่ไม่ได้กรอก
         
@@ -112,9 +109,7 @@ const EnhancedGoodsReturnComponent = withFormik({
 
         //Field ที่ไม่ได้ display
         document_id: '', // changes when document is displayed (internal_document_id field validation)
-        // For Attactment
-        desrciption_files_length: '',
-        desrciption_files: [],
+
         // For Step Approval
         step_approve: [],
     }),

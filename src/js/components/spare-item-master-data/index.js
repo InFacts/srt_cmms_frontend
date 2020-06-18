@@ -26,7 +26,7 @@ const GoodsReceiptComponent = (props) => {
     const [tabNames, setTabNames] = useState([
         { id: "general", name: "ทั่วไป" },
         { id: "warehouse", name: "คลัง" },
-        { id: "attachment", name: "แนบไฟล์" },
+        // { id: "attachment", name: "แนบไฟล์" },
     ]);
 
     useToolbarInitializer(TOOLBAR_MODE.SEARCH);
@@ -75,7 +75,7 @@ const EnhancedGoodsReceiptComponent = withFormik({
         //Field ที่ไม่ได้กรอก
         list_uoms: [],
         line_items: [],
-        file: [],
+        files: [],
         goods_onhand: [],       //อะไหล่ที่มีอยู่ในทุกคลัง
 
         // NOT USE FOR FOOTER
@@ -85,9 +85,8 @@ const EnhancedGoodsReceiptComponent = withFormik({
         //Field ที่ไม่ได้ display
         document_id: '', // changes when document is displayed (internal_document_id field validation)
 
-        // For Attactment
-        desrciption_files_length: '',
-        desrciption_files: [],
+        // FOR CHECK USER_ID ADMIN FOR EDIT
+        modeEdit: false,
     })
 })(GoodsReceiptComponent);
 
