@@ -1498,7 +1498,7 @@ export const validatedataDocumentField = (fieldName, setFieldValue, name) => {
     if (!name) {
         return 'Required'
     }
-    setFieldValue(fieldName, name, false);
+    return '';
 };
 
 // Approve a Document

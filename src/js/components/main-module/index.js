@@ -4,15 +4,17 @@ import { Redirect } from 'react-router-dom';
 import { useFormik, withFormik, useFormikContext } from 'formik';
 import { toModeNone } from '../../redux/modules/toolbar.js';
 import { footerToModeInvisible } from '../../redux/modules/footer.js';
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux';
 
 import {useToolbarChangeModeInitializer} from '../../hooks/toolbar-initializer';
-import {  TOOLBAR_MODE} from '../../redux/modules/toolbar.js';
+import {TOOLBAR_MODE} from '../../redux/modules/toolbar.js';
 import useFactInitializer from '../../hooks/fact-initializer';
 import useTokenInitializer from '../../hooks/token-initializer';
 
+import {setupAllSubNav} from '../../helper';
 
 const MainModule = (props) => {
+    const toolbar = useSelector((state) => ({ ...state.toolbar }));
 
     // Initializer: Change Toolbar to Mode None
     useToolbarChangeModeInitializer(TOOLBAR_MODE.NONE);

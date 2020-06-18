@@ -34,7 +34,6 @@ const TopContent = (props) => {
               setFieldValue('line_position_permission', module, false);
           })
   }, [decoded_token]);
-  console.log("values.line_position_permission",values.line_position_permission)
 
   return (
     <div>

@@ -105,7 +105,7 @@ const TopContent = (props) => {
     if (!name) {
       return 'Required'
     }
-    setFieldValue(fieldName, name, false);
+    return '';
   };
   const validateItemTypeIDField = (...args) => validateItemMasterdataField("item_type_id", ...args);
   const validateItemGroupIDField = (...args) => validateItemMasterdataField("item_group_id", ...args);
