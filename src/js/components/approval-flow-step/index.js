@@ -46,7 +46,6 @@ const Home = (props) => {
                 // console.log(data.approval_process_lookup.approval_process_lookup_id)
                 setFieldValue("step_approve", data.approval_process_lookup.approval_step_lookup.position_group.position);
             })
-
         }
     }, []);
 
@@ -70,6 +69,7 @@ export const fetchSearchApprovalProcessLookup = (approval_process_lookup_id) => 
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/approval-process-lookup/${approval_process_lookup_id}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((approval) => {
+            console.log("NUKKKKK>>>>>",approval )
             resolve(approval.data);
         })
         .catch((err) => {
