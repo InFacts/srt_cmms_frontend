@@ -533,11 +533,12 @@ export const createDocumentEmptyRow = () => new Promise((resolve, reject) => {
 // POST 
 export const createMasterData = (data, document_type_group_id) => new Promise((resolve, reject) => {
     if (document_type_group_id === DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA) {
-        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/warehouses/new`;
+        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/warehouses`;
     }
     if (document_type_group_id === DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
-        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items/new`;
+        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items`;
     }
+    console.log("data", data, "url", url)
     axios.post(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             console.log(" I am successful in creating master data ", res)
@@ -700,6 +701,7 @@ export const saveDocument = (document_type_group_id, data, files) => new Promise
 
 // POST /fact/warehouses
 export const saveMasterData = (document_type_group_id, data, image) => new Promise((resolve, reject) => {
+    console.log(">>>>>>>>")
     createMasterData(data, document_type_group_id)
         .then(() => { // Get the Document_ID
             console.log(">>>>>>")
