@@ -732,12 +732,12 @@ button.none-border {
   opacity: 0;
 }
 
-[type='checkbox'] + label, [type='radio'] + label {
+[type='checkbox'] + label{
   padding-left: 0;
   position: relative;
 }
 
-[type='checkbox'] + label:not(.is-h1)::before, [type='radio'] + label:not(.is-h1)::before, [type='checkbox'] + label:not(.is-h2)::before, [type='radio'] + label:not(.is-h2)::before, [type='checkbox'] + label:not(.is-h3)::before, [type='radio'] + label:not(.is-h3)::before, [type='checkbox'] + label:not(.is-h4)::before, [type='radio'] + label:not(.is-h4)::before, [type='checkbox'] + label:not(.is-muted-heading)::before, [type='radio'] + label:not(.is-muted-heading)::before, [type='checkbox'] + label:not(.is-inline-label)::before, [type='radio'] + label:not(.is-inline-label)::before {
+[type='checkbox'] + label:not(.is-h1)::before, [type='checkbox'] + label:not(.is-h2)::before, [type='checkbox'] + label:not(.is-h3)::before, [type='checkbox'] + label:not(.is-h4)::before, [type='checkbox'] + label:not(.is-muted-heading)::before,[type='checkbox'] + label:not(.is-inline-label)::before {
     top: 0;
 }
 
