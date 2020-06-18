@@ -9,8 +9,8 @@ const TopContent = (props) => {
     // const token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
     return (
         <div id="blackground-white">
-            <div className="container_12 clearfix" style={{ marginTop: "55px" }}>
-                <h4 className="head-title">โปรไฟล์ส่วนตัว</h4>
+            <div className="container_12 clearfix">
+                <h4 className="head-title" style={{ marginTop: "80px" }}>โปรไฟล์ส่วนตัว</h4>
                 <div className="grid_12">
                     <div className="grid_2">
                         <p className="top-text">ชื่อ-สกุล</p>

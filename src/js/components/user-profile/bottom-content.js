@@ -104,7 +104,7 @@ const BottomContent = (props) => {
                     {/* <TabBar tabNames={subTabNames} initialTabID="process"> */}
                     {/* <div id="process_content" className="tabcontent"> */}
                     <div className="grid_12">
-                        <table className="table-many-column">
+                        <table className="table-many-column" style={{ height: "350px" }}>
                             <thead>
                                 <tr>
                                     <th className="font" style={{ minWidth: "150px" }}>เลขที่เอกสาร</th>

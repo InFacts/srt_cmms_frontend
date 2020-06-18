@@ -30,12 +30,12 @@ const ApprovalFlow = (props) => {
     // }, [props.track_document_show]);
 
     return (
-        <div id="blackground-white">
-            <div className="container_12 clearfix" style={{ marginTop: "55px" }}>
+        <div id="blackground-white" style={{minHeight: "100vh"}}>
+            <div className="container_12 clearfix">
                 {/* Section Title */}
-                <h4 className="head-title">บริหารจัดการเส้นทางเอกสาร</h4>
+                <h4 className="head-title" style={{ marginTop: "80px" }}>บริหารจัดการเส้นทางเอกสาร</h4>
 
-                <table className="table-many-column mt-2" style={{ height: "450px"}}>
+                <table className="table-many-column mt-2" style={{ height: "500px"}}>
                     <thead>
                         <tr>
                             <th className="font text-center" style={{ width: "350px" }}>ประเภทเอกสาร</th>
@@ -61,12 +61,6 @@ const ApprovalFlow = (props) => {
                         })}
                     </tbody>
                 </table>
-
-
-
-
-
-
 
                 {/* <TableStatus bodyTableStatus={values.step_approve} /> */}
             </div>

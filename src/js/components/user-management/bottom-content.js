@@ -56,7 +56,7 @@ const BottomContent = (props) => {
                                             <td className="edit-padding" >{user.employee_id} </td>
                                             <td className="edit-padding" >{user.username} </td>
                                             <td className="edit-padding" >{user.firstname_th} {user.lastname_th} </td>
-                                            <td className="edit-padding" > </td>
+                                            <td className="edit-padding" >{user.position.length !== 0 ? user.position[0].name : ''} </td>
                                             <td className="edit-padding" >{formatDate(user.updated_at)} </td>
                                             <td className="edit-padding text-center" >
                                                 <Link className="button-yellow" to={"profile" + "?user_id=" + user.user_id}><button type="button" className="button-yellow">รายละเอียด</button></Link>
