@@ -11,7 +11,7 @@ import DateInput from '../common/formik-date-input'
 import SelectNoChildrenInput from '../common/formik-select-no-children';
 import TextInput from '../common/formik-text-input'
 
-import { getUserIDFromEmployeeID } from '../../helper';
+import { getUserIDFromEmployeeID, identifyEndpoinsHelper } from '../../helper';
 
 import { FACTS } from '../../redux/modules/api/fact.js'
 import { fetchDocuments } from '../../redux/modules/track_doc.js';
@@ -45,11 +45,10 @@ const ActivityLog = (props) => {
     }
 
     const searchDetail = () => {
-        let url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?internal_document_id=${values.internal_document_id}&document_type_name=${values.type_document}`
-        const created_by_admin_id = getUserIDFromEmployeeID(factUser, values.created_by_user_employee_id)
-        if (created_by_admin_id !== null) {
-            url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?internal_document_id=${values.internal_document_id}&document_type_name=${values.type_document}&created_by_admin_id=${created_by_admin_id}`
-        }
+        const created_by_user_id = getUserIDFromEmployeeID(factUser, values.created_by_user_employee_id)
+
+        let url = ` http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?internal_document_id=${values.internal_document_id}&document_type_name=${values.type_document}&${created_by_user_id && `created_by_user_id=${created_by_user_id}`}&${values.date_start && values.date_end && `before_created_on=${values.date_end}&after_created_on=${values.date_start}`} `
+        console.log("url", url)
         const fetchData = () => {
             axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
                 .then((res) => {
@@ -59,17 +58,7 @@ const ActivityLog = (props) => {
         fetchData();
     }
 
-    const identifyEndpoins = (document_type_id) => {
-        let doc_type = document_type_id.toString().substring(0, 3);
-        if (doc_type === "101") return "goods-receipt2";
-        if (doc_type === "103") return "goods-receipt-no-po";
-        if (doc_type === "111") return "goods-usage";
-        if (doc_type === "112") return "goods-issue";
-        if (doc_type === "121") return "inventory-transfer";
-        if (doc_type === "132") return "goods-fix";
-        if (doc_type === "102") return "goods-return";
-        else return "#";
-    }
+    const identifyEndpoins = (document_type_id) => identifyEndpoinsHelper(document_type_id)
 
     const coverntUserIDToName = (user_id) => {
         // console.log("employee_id", user_id)
@@ -95,10 +84,10 @@ const ActivityLog = (props) => {
     const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
 
     return (
-        <div id="blackground-white" >
-            <div className="container_12 clearfix" style={{ marginTop: "55px" }}>
+        <div id="blackground-white" style={{ height: "100vh" }}>
+            <div className="container_12 clearfix">
                 {/* Section Title */}
-                <h4 className="head-title">Activity Log</h4>
+                <h4 className="head-title"  style={{ marginTop: "80px" }}>Activity Log</h4>
 
                 <div className="container_12">
                     <div className="grid_2 cancel-default">
@@ -113,21 +102,6 @@ const ActivityLog = (props) => {
                         </SelectNoChildrenInput>
                     </div>
                 </div>
-
-                {/* <div className="container_12">
-                    <div className="grid_2 cancel-default">
-                        <p className="cancel-default">ประเภท Actions </p>
-                    </div>
-                    <div className="grid_3 pull_0">
-                        <SelectNoChildrenInput name="type_action" >
-                            <option value=''></option>
-                            {factDocumentStatus.items.map(function ({ type_action, status }) {
-                                return <option value={type_action} key={type_action}> {status} </option>
-                            })}
-
-                        </SelectNoChildrenInput>
-                    </div>
-                </div> */}
 
                 {/* Username  */}
                 <div className="container_12">
@@ -170,7 +144,7 @@ const ActivityLog = (props) => {
 
                 </div>
 
-                <table className="table-many-column mt-2" style={{ height: "450px" }}>
+                <table className="table-many-column mt-2" style={{ height: "400px" }}>
                     <thead>
                         <tr>
                             <th className="font text-center" style={{ width: "350px" }}>วันเวลา</th>
@@ -189,7 +163,7 @@ const ActivityLog = (props) => {
                             return (
                                 <tr key={index} id={index}>
                                     <td className="edit-padding" > {formatDate(item.created_on)}</td>
-                                    <td className="edit-padding" >{coverntUserIDToName(item.created_by_admin_id)}</td>
+                                    <td className="edit-padding" >{coverntUserIDToName(item.created_by_user_id)}</td>
                                     <td className="edit-padding" > {item.document_type_name}</td>
                                     {/* <td className="edit-padding" >
                                         {factDocumentStatus.items.map(function ({document_status_id,status}) {

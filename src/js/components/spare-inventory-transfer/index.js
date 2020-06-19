@@ -40,7 +40,8 @@ const GoodsReturnComponent = (props) => {
     const loggedIn = useSelector(state => state.token.isLoggedIn); 
     // If Link to this url via Track Document
     useEffect(() => {
-        getUrlParamsLink.then((internal_document_id) => {
+        getUrlParamsLink()
+            .then((internal_document_id) => {
             if (internal_document_id !== "") {
                 // action_approval
                 setFieldValue("status_name_th", "", true);

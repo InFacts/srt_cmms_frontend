@@ -62,7 +62,6 @@ const BottomContent = (props) => {
     return (
         <div id="blackground-gray">
             <div className="container_12 clearfix">
-
                 <table className="table-many-column mt-2" style={{ height: "450px" }}>
                     <thead>
                         <tr>

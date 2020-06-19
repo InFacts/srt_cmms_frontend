@@ -1600,12 +1600,12 @@ export const getLotFromQty = (fifo, quantity) => {
 };
 
 // Get Params from URL
-export const getUrlParamsLink = new Promise((resolve, reject) => {
+export const getUrlParamsLink = () => new Promise((resolve, reject) => {
     let url = window.location.search;
-    // console.log("URL IS", url)
+    console.log("URL IS", url)
     const urlParams = new URLSearchParams(url);
     const internal_document_id = urlParams.get('internal_document_id');
-    // console.log(" getUrlParamsLink internal_document_id --------", internal_document_id)
+    console.log(" getUrlParamsLink internal_document_id --------", internal_document_id)
     return resolve(internal_document_id);
 })
 
