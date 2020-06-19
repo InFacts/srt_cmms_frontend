@@ -193,7 +193,7 @@ const useFooterInitializer = (document_type_id) => {
                     if (isEmpty(err)) {
                         if (values.document_id) { // If have document_id, no need to create new doc
                             let data = packDataFromValues(fact, values, document_type_id);
-                            // console.log("I AM SUBMITTING ", data, values.files);
+                            console.log("I AM SUBMITTING ", data);
                             if (document_type_id !== DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA && document_type_id !== DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
                                 editDocument(values.document_id, document_type_id, data)
                                     .then((document_id) => {
