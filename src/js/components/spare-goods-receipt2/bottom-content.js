@@ -146,7 +146,7 @@ const BottomContent = (props) => {
           </div>
 
           <div id="table_status_content" className="tabcontent">
-            <TableStatus bodyTableStatus = {values.step_approve} />
+            <TableStatus bodyTableStatus={values.step_approve} />
           </div>
 
         </div>

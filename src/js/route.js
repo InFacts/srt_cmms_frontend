@@ -34,6 +34,9 @@ import PmtMaintenantItem from './components/pmt-maintenant-item';
 import PmtEquipmentInstallation from './components/pmt-equipment-install';
 import PmtEquipmentMasterData from './components/pmt-equipment-master';
 
+// ALS Page
+import AlsSpareComponent from './components/als-spare';
+import AlsEquipmentStatusComponent from './components/als-equipment-status';
 // Admin
 import PermistionAdmin from './components/admin-permisstion';
 import ActivityLog from './components/admin-activity-log'
@@ -48,7 +51,6 @@ import Profile from './components/user-profile'
 
 import Track from './components/track-document';
 const FrontEnd = () => (
-    <>
         <Switch>
             {/* Wrap the routes in a Switch which only renders the first matched component. Otherwise you would see multiple components rendered. */}
             <Route exact path="/" component={Login} />
@@ -95,10 +97,13 @@ const FrontEnd = () => (
             <Route exact path="/approval-flow" component={ApprovalFlow} />
             <Route exact path="/approval-flow-step" component={ApprovalFlowStep} />
 
-            {/* Handle routes that are not found */}
-            <Route component={NotFoundComponent} />
-        </Switch>
-    </>
+        {/* ALS Routes */}
+        <Route exact path="/als-spare" component={AlsSpareComponent} />
+        <Route exact path="/als-equipment-status" component={AlsEquipmentStatusComponent} />
+
+        {/* Handle routes that are not found */}
+        <Route component={NotFoundComponent} />
+    </Switch>
 );
 
 export default FrontEnd;

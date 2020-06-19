@@ -882,11 +882,20 @@ export const APPROVAL_STEP_ACTION = {
 
 // approval_status
 export const APPROVAL_STATUS = {
-    UNCOMPLETE: 0, // "ตรวจสอบและรับทราบลงนาม",
-    APPROVED: 1, // "รับทราบลงนาม",
-    REJECTED: 2, // "รับทราบ",
-    FAST_TRACKED: 4, // "ตรวจสอบและสั่งจ่าย",
-    ESCALATED: 5, // "ตรวจสอบรับทราบลงนาม และเลือกวิธีจัดซ่อม",
+    UNCOMPLETE: 0, // "รอการลงนาม",
+    APPROVED: 1, // "อนุมัติเรียบร้อย",
+    REJECTED: 2, // "ส่งเอกสารไปยังต้นทาง",
+    FAST_TRACKED: 3, // "FAST TRACK",
+    ESCALATED: 4, // "ส่งเอกสารต่อ",
+}
+
+// approval_status
+export const APPROVAL_STATUS_TH = {
+    UNCOMPLETE: "รอการลงนาม",
+    APPROVED: "อนุมัติเรียบร้อย",
+    REJECTED: "ส่งเอกสารกลับไปยังต้นทาง",
+    FAST_TRACKED: "FAST TRACK",
+    ESCALATED: "ส่งเอกสารต่อ",
 }
 
 // Check document_action_type table in database -> CreateNew(DRAFT/WAIT_APPROVE/APPROVED), FastTrack(FAST_TRACK), Void(VOID)
