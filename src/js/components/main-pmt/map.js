@@ -130,7 +130,7 @@ class Map extends React.Component {
                                 <Link to="/report"><img alt='some value' src={Fiveone} className="Pfive-one" /></Link>
                                 <img alt='some value' src={Text10} className="Ptext10" />
 
-                                <span className="p-contextual-menu--left Pdrop-dawn1">
+                                {/* <span className="p-contextual-menu--left Pdrop-dawn1">
                                     <button className="p-contextual-menu__toggle" style={{ border: "none", padding: "0" }} aria-controls="menu-1" aria-expanded="false" aria-haspopup="true"><img alt='some value' src={Dropdown} /></button>
                                     <span className="p-contextual-menu__dropdown" id="menu-1" aria-hidden="true" aria-label="submenu">
                                         <span className="p-contextual-menu__group">
@@ -148,7 +148,7 @@ class Map extends React.Component {
                                             <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>Deploy</Link>
                                         </span>
                                     </span>
-                                </span>
+                                </span> */}
 
                             </div>
                         </section>

@@ -48,10 +48,6 @@ const BottomContent = (props) => {
   const validateToleranceTimeField = (...args) => validateItemMasterdataField("tolerance_time", ...args);
   const validateActiveField = (...args) => validateItemMasterdataField("active", ...args);
 
-  const validateQuantityRequiredField = (...args) => validateItemMasterdataField("quantity_required", ...args);
-  const validateQuantityLowestField = (...args) => validateItemMasterdataField("quantity_lowest", ...args);
-  const validateQuantityHighestField = (...args) => validateItemMasterdataField("quantity_highest", ...args);
-
   return (
     <>
       {/* THIS MAKES THE BACKGROUND NOT GRAY!! NEEDS TO FIX */}
@@ -179,41 +175,55 @@ const BottomContent = (props) => {
             </div>
           </div>
 
-          {/* Warehouse Tab  */}
+          {/* Equipment Tab  */}
           <div id="equipment_content" className="tabcontent">
             {/* === One Column   ==== */}
             <div className="grid_12 mt-2">
 
               {/* equipment_status_log -> price for frist order  */}
-              <Label>มูลค่านำเข้า</Label>
+              <div className="grid_2">
+                <p className="top-text">มูลค่านำเข้า</p>
+              </div>
               <div className="grid_2 alpha omega">
                 <TextInput name="equipment_status_log"
                   disabled={true} />
               </div>
               <Label>บาท</Label>
-              <div className="clear" />
 
-              {/* price currently  */}
-              <Label>มูลค่าปัจจุบัน</Label>
-              <div className="grid_2 alpha omega">
-                <TextInput name="price currently"
-                  disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+              <div className="grid_2 alpha omega float-right">
+                <TextInput name="equipment_status_log"
+                  disabled={true} />
               </div>
-              <Label>บาท</Label>
+              <div className="grid_2 float-right">
+                <p className="top-text">หน่วยงานที่รับผิดชอบ</p>
+              </div>
               <div className="clear" />
-
 
               {/* description_equipment`  */}
-              <Label>ค่าเสื่อมต่อปี</Label>
+              <div className="grid_2">
+                <p className="top-text">ค่าเสื่อมต่อปี</p>
+              </div>
               <div className="grid_2 alpha omega">
                 <TextInput name="description_equipment`"
                   disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
               </div>
               <Label>บาท</Label>
+
+              {/* price currently  */}
+              <div className="grid_2 alpha omega float-right">
+                <TextInput name="price currently"
+                  disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+              </div>
+              <div className="grid_2 float-right">
+                <p className="top-text">ผู้รับผิดชอบตามพื้นที่</p>
+              </div>
+
               <div className="clear" />
 
               {/* Straight Line method  */}
-              <Label>ประเภทค่าเสื่อม</Label>
+              <div className="grid_2">
+                <p className="top-text">ประเภทค่าเสื่อม</p>
+              </div>
               <div className="grid_3 alpha omega">
                 <TextInput name="method"
                   disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
@@ -222,7 +232,9 @@ const BottomContent = (props) => {
               <div className="clear" />
 
               {/* useful_life  */}
-              <Label>อายุการใช้งาน</Label>
+              <div className="grid_2">
+                <p className="top-text">อายุการใช้งาน</p>
+              </div>
               <div className="grid_2 alpha omega">
                 <TextInput name="useful_life"
                   disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
@@ -230,8 +242,26 @@ const BottomContent = (props) => {
               <Label>เดือน</Label>
               <div className="clear" />
 
+
+              <div className="grid_2">
+                <p className="top-text mt-1" style={{ fontWeight: "bold" }}>สถานที่</p>
+              </div>
+              <div className="clear" />
+
+
               {/* location  */}
-              <Label>สถานที่</Label>
+              <div className="grid_2">
+                <p className="top-text">สถานี</p>
+              </div>
+              <div className="grid_5 alpha omega">
+                <TextInput name="location"
+                  disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+              </div>
+              <div className="clear" />
+
+              <div className="grid_2">
+                <p className="top-text">รายละเอียดสถานี</p>
+              </div>
               <div className="grid_5 alpha omega">
                 <TextInput name="location"
                   disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
@@ -242,7 +272,7 @@ const BottomContent = (props) => {
             </div>
           </div>
 
-          {/* Warehouse Tab  */}
+          {/* Equipment Plane Tab  */}
           <div id="equipment_plane_content" className="tabcontent">
             {/* === One Column   ==== */}
             <div className="grid_12 mt-2">
@@ -297,11 +327,43 @@ const BottomContent = (props) => {
 
           {/* Attachment Tab */}
           <div id="attachment_content" className="tabcontent">
-            {/* <Files /> */}
+            <Files />
           </div>
+
+           {/* History Tab  */}
+           <div id="history_content" className="tabcontent">
+            {/* === One Column   ==== */}
+            <div className="grid_12 mt-2">
+              <table className="table-many-column mt-2">
+                <thead>
+                  <tr>
+                    <th className="font text-center" style={{ width: "30px" }}>#</th>
+                    <th className="font" style={{ width: "200px" }}>เวลา</th>
+                    <th className="font" style={{ width: "200px" }}>เลขที่เอกสาร</th>
+                    <th className="font" style={{ width: "200px" }}>ประเภทเอกสาร</th>
+                    <th className="font" style={{ width: "150px" }}>สถานะ</th>
+                    <th className="font" style={{ width: "150px" }}>มูลค่า</th>
+                    <th className="font" style={{ width: "150px" }}>หมายเหตุ</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="edit-padding"></td>
+                    <td className="edit-padding"></td>
+                    <td className="edit-padding"></td>
+                    <td className="edit-padding"></td>
+                    <td className="edit-padding"></td>
+                    <td className="edit-padding"></td>
+                    <td className="edit-padding"></td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+
         </div>
       </div>
-      {/* </div > */}
     </>
   )
 };

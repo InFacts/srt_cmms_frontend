@@ -79,11 +79,6 @@ const TopContent = (props) => {
           console.log(" NO I NOT ADMIN ")
           setFieldValue("modeEdit", false, false);
         }
-        fetchGoodsOnhandDataForItemmasterData(item.item_id)
-          .then((goods_onhand) => {
-            // console.log("good on hand", goods_onhand)
-            setFieldValue('goods_onhand', goods_onhand, false);
-          })
         return;
       } else {
         return 'Invalid Number ID';

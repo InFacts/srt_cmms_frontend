@@ -49,7 +49,7 @@ const BottomContent = (props) => {
             <div className="container_12 mt-2">
               <div className="grid_2"><p className="cancel-default">สถานะคลัง</p></div> {/* ปิด หรือ เปิด การใช้งาน เป็น boolean */}
               <div className="grid_4 pull_0">
-                <SelectNoChildrenInput name="active" validate={validateActionWarehouseIDField} cssStyle={{left: "-240px", top: "10px"}}
+                <SelectNoChildrenInput name="active" validate={values.modeEdit ? null : validateActionWarehouseIDField} cssStyle={{left: "-240px", top: "10px"}}
                   disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
                   {values.active === 1
                     ?
@@ -97,7 +97,7 @@ const BottomContent = (props) => {
               <div className="container_12">
                 <div className="grid_2"><p className="cancel-default">กลุ่มคลัง</p></div>
                 <div className="grid_4 pull_0">
-                  <SelectNoChildrenInput name="use_central"  validate={validateUseCentralWarehouseIDField} cssStyle={{left: "-240px", top: "10px"}}
+                  <SelectNoChildrenInput name="use_central"  validate={values.modeEdit ? null : validateUseCentralWarehouseIDField} cssStyle={{left: "-240px", top: "10px"}}
                     disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
                     {values.use_central === 1
                       ?

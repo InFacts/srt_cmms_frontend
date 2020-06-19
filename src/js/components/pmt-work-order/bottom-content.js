@@ -104,7 +104,7 @@ const BottomContent = (props) => {
                 <Label>รับข้อมูลผ่านช่องทาง</Label>
                 <div className="grid_4 alpha omega"> 
                     {/* Need to change to radio button later */}
-                    <SelectNoChildrenInput name="recv_accident_from_recv_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                    <SelectNoChildrenInput name="recv_accident_from_recv_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} cssStyle={{ left: "-240px", top: "14px" }}
                     validate={validateDocumentRecvAccidentFromRecvIDField}>
                         <option value='' selected></option>
                         <option value='1' >โทรศัพท์</option>

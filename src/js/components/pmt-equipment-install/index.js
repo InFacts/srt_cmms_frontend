@@ -89,7 +89,7 @@ const EnhancedEquipmentInstallationComponent = withFormik({
         // line_items: initialRows(),
         remark: '',                      // หมายเหตุ  NVARCHAR
 
-        file: [],
+        files: [],
     
         //Field ที่ไม่ได้กรอก
         document_status_id: '', // ?

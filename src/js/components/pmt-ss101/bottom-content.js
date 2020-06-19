@@ -112,7 +112,7 @@ const BottomContent = (props) => {
                         {/* Accident On  */}
                         <Label>วันเวลาที่เกิดเหตุ</Label>
                         <div className="grid_4 alpha omega">
-                            <DateTimeInput name="accident_on" validate={validateDocumentAccidentOnField}
+                            <DateTimeInput name="accident_on" validate={validateDocumentAccidentOnField} cssStyle={{ left: "-240px", top: "14px" }}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
@@ -121,7 +121,7 @@ const BottomContent = (props) => {
                         {/* request_on */}
                         <Label>วันเวลาที่รับแจ้ง</Label>
                         <div className="grid_4 alpha omega">
-                            <DateTimeInput name="request_on" validate={validateDocumentRequestOnField}
+                            <DateTimeInput name="request_on" validate={validateDocumentRequestOnField} cssStyle={{ left: "-240px", top: "14px" }}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
@@ -140,7 +140,7 @@ const BottomContent = (props) => {
                         <Label>รับข้อมูลผ่านช่องทาง</Label>
                         <div className="grid_4 alpha omega">
                             {/* Need to change to radio button later */}
-                            <SelectNoChildrenInput name="recv_accident_from_recv_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentRecvAccidentFromRecvIDField}>
+                            <SelectNoChildrenInput name="recv_accident_from_recv_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentRecvAccidentFromRecvIDField} cssStyle={{ left: "-240px", top: "14px" }}>
                                 <option value='' selected></option>
                                 {factRecvAccidentFrom.items.map((recv_accident_from) => {
                                     if (values.recv_accident_from_recv_id === recv_accident_from.recv_id) {
@@ -158,7 +158,7 @@ const BottomContent = (props) => {
                         {/* car_type_id  */}
                         <Label>เดินทางโดย</Label>
                         <div className="grid_4 alpha omega">
-                            <SelectNoChildrenInput name="car_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentCarTypeIDField}>
+                            <SelectNoChildrenInput name="car_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentCarTypeIDField} cssStyle={{ left: "-240px", top: "14px" }}>
                                 <option value=''></option>
                                 {factCarType.items.map((factCarType) => {
                                     if (values.car_type_id === factCarType.car_id) {
@@ -179,7 +179,7 @@ const BottomContent = (props) => {
                         {/* departed_on  */}
                         <Label>ออกเดินทาง</Label>
                         <div className="grid_4 alpha omega">
-                            <DateTimeInput name="departed_on" validate={validateDocumentDepartedOnField}
+                            <DateTimeInput name="departed_on" validate={validateDocumentDepartedOnField} cssStyle={{ left: "-240px", top: "14px" }}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
@@ -188,7 +188,7 @@ const BottomContent = (props) => {
                         {/* arrived_on  */}
                         <Label>เดินทางถึง</Label>
                         <div className="grid_4 alpha omega">
-                            <DateTimeInput name="arrived_on" validate={validateDocumentArrivedOnField}
+                            <DateTimeInput name="arrived_on" validate={validateDocumentArrivedOnField} cssStyle={{ left: "-240px", top: "14px" }}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
@@ -197,7 +197,7 @@ const BottomContent = (props) => {
                         {/* finished_on  */}
                         <Label>วันเวลาที่แล้วเสร็จ</Label>
                         <div className="grid_4 alpha omega">
-                            <DateTimeInput name="finished_on" validate={validateDocumentFinishedOnField}
+                            <DateTimeInput name="finished_on" validate={validateDocumentFinishedOnField} cssStyle={{ left: "-240px", top: "14px" }}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
@@ -206,7 +206,7 @@ const BottomContent = (props) => {
                         {/* system_type_group_id  */}
                         <Label>ระบบตรวจซ่อม</Label>
                         <div className="grid_4 alpha omega">
-                            <SelectNoChildrenInput name="system_type_group_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentSystemTypeGroupIDnField}>
+                            <SelectNoChildrenInput name="system_type_group_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentSystemTypeGroupIDnField} cssStyle={{ left: "-240px", top: "14px" }}>
                                 <option value='' selected></option>
                                 {factSystemTypeGroup.items.map((systemTypeGroup) => {
                                     if (systemTypeGroup.system_type_group_id === values.system_type_group_id) {
@@ -223,7 +223,7 @@ const BottomContent = (props) => {
                         {/* system_type_id  */}
                         <Label>ชนิดระบบตรวจซ่อม</Label>
                         <div className="grid_4 alpha omega">
-                            <SelectNoChildrenInput name="system_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentSystemTypeIDField}>
+                            <SelectNoChildrenInput name="system_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentSystemTypeIDField} cssStyle={{ left: "-240px", top: "14px" }}>
                                 <option value='' selected></option>
                                 {factSystemType.items.map((factSystemType) => {
                                     if (factSystemType.system_type_id === values.system_type_id) {
