@@ -775,3 +775,96 @@ label [type='checkbox'] {
   opacity: 1;
   position: static;
 }
+
+
+/*For Simple Card*/
+.gray-background {
+  background: #F2F2F3;
+}
+.white-background {
+  background: #FFF;
+}
+
+.simple-card {
+  width: auto;
+  height: 110px;
+  padding: 5px;
+}
+.simple-card-name {
+  /* padding-top: 5px; */
+  padding-top: 0px;
+  margin-bottom: 0px;
+  font-size: 18px;
+  text-align: center;
+  font-weight: bold;
+}
+.simple-card-inner {
+  height:75px;
+  padding-top:30px;
+
+  text-align: center;
+  font-size: 40px;
+  font-weight: bold;
+}
+
+
+.adjustment-bar {
+  width: auto;
+  /* width: 180px; */
+  /* height: 110px; */
+  padding: 5px;
+}
+
+.adjustment-bar-name {
+  /* padding-top: 5px; */
+  padding-top: 0px;
+  margin-bottom: 0px;
+  font-size: 18px;
+  text-align: left;
+  font-weight: bold;
+}
+
+.adjustment-bar-inner {
+  /* height:75px; */
+  /* padding-top:30px; */
+  padding: 6px;
+
+
+  /* text-align: center;
+  
+  font-weight: bold; */
+}
+
+.adjustment-bar-inner-text {
+  /* height:75px; */
+  /* padding-top:30px; */
+  /* margin-top:5px; */
+
+  font-size: 17px;
+
+  /* text-align: center;
+  
+  font-weight: bold; */
+}
+.space-5px {
+  width: auto;
+  height: 5px;
+}
+.space-10px {
+  width: auto;
+  height: 10px;
+}
+.space-50px {
+  width: auto;
+  height: 50px;
+}
+
+
+path.map-region:hover{
+  opacity:40%;
+  fill: #000;
+}
+
+.equipment-status-list {
+  padding: 8px;
+}
