@@ -4,14 +4,20 @@ import { Link, Redirect } from 'react-router-dom'
 import { API_PORT_DATABASE } from '../../config_port.js';
 import { API_URL_DATABASE } from '../../config_url.js';
 import { connect } from 'react-redux';
-import '../../../vender/fontawesome-free/css/all.css';
 import { useFormik, withFormik, useFormikContext } from 'formik';
 import { useSelector, shallowEqual } from 'react-redux';
 import TabBar from '../common/tab-bar';
 import SelectNoChildrenInput from '../common/formik-select-no-children';
 import TextInput from '../common/formik-text-input'
 
+import '../../../vender/fontawesome-free/css/all.css';
+
 const BottomContent = (props) => {
+    const factDistricts = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
+    const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
+    const factStations = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
+    const factDivisions = useSelector((state) => ({ ...state.api.fact.divisions }), shallowEqual);
+    const factPosition = useSelector((state) => ({ ...state.api.fact.position }), shallowEqual);
 
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
     const formatDate = (dateISOString) => {
@@ -21,12 +27,6 @@ const BottomContent = (props) => {
         // dt = date.getDate();
         return date.toLocaleDateString('en-GB') + " " + date.toLocaleTimeString();
     }
-
-    const factDistricts = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
-    const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
-    const factStations = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
-    const factDivisions = useSelector((state) => ({ ...state.api.fact.divisions }), shallowEqual);
-
 
     const [subTabNames, setSubtabNames] = useState([
         { id: "process", name: "กำลังดำเนินการ" },
@@ -51,10 +51,9 @@ const BottomContent = (props) => {
             if (content === "information") {
                 const information =
                 {
-                    "user_id": values.user_id,
                     "employee_id": values.employee_id,
-                    "firstname_th": values.firstname,
-                    "lastname_th": values.lastname,
+                    "firstname_th": values.firstname_th,
+                    "lastname_th": values.lastname_th,
                     "email": values.email
                 }
                 console.log("information", information)
@@ -65,21 +64,18 @@ const BottomContent = (props) => {
                         console.log("err", err)
                     })
             } else if (content === "password") {
-                if (values.password !== values.confirmpassword) {
-                    alert("Password did not match: Please try again...");
-                } else {
-                    const pass =
-                    {
-                        "password_old": values.password,
-                        "password_new": values.newpassword
-                    }
-                    console.log("inpasswordformation", pass)
-                    axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/profile/change-password`, pass)
-                        .then(res => {
-                            console.log(res);
-                        }).catch(function (err) {
-                        })
+                const pass =
+                {
+                    "password_old": values.password,
+                    "password_new": values.newpassword
                 }
+                console.log("inpasswordformation", pass)
+                axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/profile/change-password`, pass)
+                    .then(res => {
+                        console.log(res);
+                    }).catch(function (err) {
+                        console.log("err", err)
+                    })
             } else if (content === "position") {
 
 
@@ -90,7 +86,25 @@ const BottomContent = (props) => {
 
         }
 
+    }
 
+    const validateNewPasswordField = (newpassword) => {
+        if (newpassword.length >= 6) {
+            return;
+        } else {
+            return 'ความยาวตัวอักษร 6 ตัวขึ้นไป';
+        }
+    }
+
+    const validateConfirmpasswordField = (confirmpassword) => {
+        if (!values.confirmpassword) {
+            return 'Require';
+        }
+        if (confirmpassword === values.newpassword) {
+            return;
+        } else {
+            return 'รหัสไม่ถูกต้อง';
+        }
     }
 
     return (
@@ -107,17 +121,15 @@ const BottomContent = (props) => {
                         <table className="table-many-column" style={{ height: "350px" }}>
                             <thead>
                                 <tr>
-                                    <th className="font" style={{ minWidth: "150px" }}>เลขที่เอกสาร</th>
-                                    <th className="font" style={{ minWidth: "500px" }}>ประเภทเอกสาร</th>
+                                    <th className="font" style={{ minWidth: "200px" }}>เลขที่เอกสาร</th>
+                                    <th className="font" style={{ minWidth: "530px" }}>ประเภทเอกสาร</th>
                                     {/* <th className="font" style={{ minWidth: "300px" }}>รายละเอียด</th> */}
-                                    <th className="font" style={{ minWidth: "180px" }}>วันเวลาที่สร้าง</th>
+                                    <th className="font" style={{ minWidth: "200px" }}>วันเวลาที่สร้าง</th>
                                     {/* <th className="font" style={{ minWidth: "150px" }}>สถานะเอกสาร Actions</th> */}
                                 </tr>
                             </thead>
                             <tbody>
-
                                 {values.items.map(function (item, index) {
-                                    console.log("item", item)
                                     return (
                                         <tr key={index} id={index}>
                                             <td className="edit-padding" >{item.internal_document_id} </td>
@@ -151,25 +163,23 @@ const BottomContent = (props) => {
                     {/* </TabBar> */}
                 </div>
 
-
                 {/* === Tab related_parties_content  === */}
                 <div id="user_information_content" className="tabcontent">
 
                     <h3 className="head-title-bottom mt-2">ข้อมูลบัญชีผู้ใช้</h3>
-
-                    <div class="card-profile">
-                        <div class="card-profile-header">ข้อมูลส่วนตัว</div>
-                        <div class="card-profile-main">
+                    <div className="card-profile">
+                        <div className="card-profile-header">ข้อมูลส่วนตัว</div>
+                        <div className="card-profile-main">
 
                             <div className="grid_12">
                                 <div className="grid_2"><p className="cancel-default">ชื่อ</p></div>
                                 <div className="grid_3 pull_0">
-                                    <TextInput name='firstname'
+                                    <TextInput name='firstname_th'
                                         tabIndex="1" />
                                 </div>
                                 <div className="grid_2"><p className="cancel-default float-left">นามสกุล</p></div>
                                 <div className="grid_3 pull_0">
-                                    <TextInput name='lastname'
+                                    <TextInput name='lastname_th'
                                         tabIndex="1" />
                                 </div>
                             </div>
@@ -190,27 +200,25 @@ const BottomContent = (props) => {
                                 </div>
                             </div>
 
-
-
                         </div>
                     </div>
 
-                    <div class="card-profile">
-                        <div class="card-profile-header">แก้ไขรหัสผ่าน</div>
-                        <div class="card-profile-main">
+                    <div className="card-profile">
+                        <div className="card-profile-header">แก้ไขรหัสผ่าน</div>
+                        <div className="card-profile-main">
 
                             <div className="grid_12">
                                 <div className="grid_2"><p className="cancel-default">รหัสผ่านเก่า</p></div>
                                 <div className="grid_3 pull_0">
                                     <TextInput name='password' type="password"
                                         tabIndex="1" />
-
                                 </div>
                             </div>
                             <div className="grid_12">
                                 <div className="grid_2"><p className="cancel-default">รหัสผ่านใหม่</p></div>
                                 <div className="grid_3 pull_0">
-                                    <TextInput name='newpassword' type="password"
+                                    <TextInput name='newpassword' type="password" 
+                                    validate={validateNewPasswordField}
                                         tabIndex="1" />
                                 </div>
                             </div>
@@ -218,6 +226,7 @@ const BottomContent = (props) => {
                                 <div className="grid_2"><p className="cancel-default">ยืนยันรหัสผ่านใหม่</p></div>
                                 <div className="grid_3 pull_0">
                                     <TextInput name='confirmpassword' type="password"
+                                    validate={validateConfirmpasswordField}
                                         tabIndex="1" />
                                 </div>
                                 <div className="grid_2 pull_0 float-right ">
@@ -225,14 +234,13 @@ const BottomContent = (props) => {
                                 </div>
                             </div>
 
-
                         </div>
                     </div>
 
 
-                    <div class="card-profile">
-                        <div class="card-profile-header">ตำแหน่งงาน</div>
-                        <div class="card-profile-main">
+                    <div className="card-profile">
+                        <div className="card-profile-header">ตำแหน่งงาน</div>
+                        <div className="card-profile-main">
 
                             {/* <div className="grid_12">
                                 <div className="grid_2"><p className="cancel-default">ศูนย์</p></div>
@@ -259,14 +267,16 @@ const BottomContent = (props) => {
                             </div> */}
 
                             <div className="grid_12">
-                                <div className="grid_2"><p className="cancel-default">หน่วยงาน/แขวง</p></div>
+                                <div className="grid_2"><p className="cancel-default">หน่วยงาน</p></div>
                                 <div className="grid_3 pull_0">
-                                    <SelectNoChildrenInput name="district"
-                                        disabled={values.user_my === "user-profile"}
-                                    >
+                                    <SelectNoChildrenInput name="position_id" disabled={values.user_my === "user-profile"}>
                                         <option value=''></option>
-                                        {factDistricts.items.map(function ({ district_id, name }) {
-                                            return <option value={district_id} key={district_id}> {name} </option>
+                                        {factPosition.items.map(function ({ position_id, name }) {
+                                            if (position_id === values.position_id) {
+                                                return <option value={position_id} key={position_id} selected> {name} </option>
+                                            } else {
+                                                return <option value={position_id} key={position_id}> {name} </option>
+                                            }
                                         })}
                                     </SelectNoChildrenInput>
                                 </div>
@@ -288,16 +298,12 @@ const BottomContent = (props) => {
                                         <button className="button-blue edit  mr-5" disabled="disabled" type="button" onClick={(e) => { if (window.confirm('คุณต้องการแก้ไขตำแหน่งงานหรือไม่')) { onSave('position') } }} >บันทึก</button>
                                         :
                                         <button className="button-blue edit  mr-5" type="button" onClick={(e) => { if (window.confirm('คุณต้องการแก้ไขตำแหน่งงานหรือไม่')) { onSave('position') } }} >บันทึก</button>
-
                                     }
-
-
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
 
                 {/* === Tab related_parties_content  === */}
                 <div id="usage_history_content" className="tabcontent">
@@ -306,21 +312,18 @@ const BottomContent = (props) => {
                         <table className="table-many-column mt-3">
                             <thead>
                                 <tr>
-                                    <th className="font" style={{ minWidth: "150px" }}>วันเวลา</th>
-                                    <th className="font" style={{ minWidth: "380px" }}>ประเภทของเอกสาร</th>
-                                    {/* <th className="font" style={{ minWidth: "150px" }}>ประเภทของ Actions</th> */}
-                                    <th className="font" style={{ minWidth: "150px" }}>เลขที่เอกสาร</th>
-                                    <th className="font" style={{ minWidth: "150px" }}>Actions</th>
+                                    <th className="font" style={{ minWidth: "200px" }}>วันเวลา</th>
+                                    <th className="font" style={{ minWidth: "400px" }}>ประเภทของเอกสาร</th>
+                                    <th className="font" style={{ minWidth: "200px" }}>เลขที่เอกสาร</th>
+                                    <th className="font" style={{ minWidth: "130px" }}>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {values.items.map(function (item, index) {
-                                    console.log(item)
                                     return (
                                         <tr key={index} id={index}>
                                             <td className="edit-padding" >{formatDate(item.created_on)} </td>
                                             <td className="edit-padding" >{item.document_type_name} </td>
-                                            {/* <td className="edit-padding" >{formatDate(item.created_on)} </td> */}
                                             <td className="edit-padding" > {item.internal_document_id}</td>
                                             <td className="edit-padding text-center" >
                                                 <Link className="button-yellow" to={identifyEndpoins(item.document_type_id) + "?internal_document_id=" + item.internal_document_id + "&document_id=" + item.document_id}><button type="button" className="button-yellow">รายละเอียด</button></Link>

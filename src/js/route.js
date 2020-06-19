@@ -2,7 +2,6 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import Login from './components/signin';
-import Register from './components/register';
 import ForgotPassword from './components/forgot-password';
 import Main4Module from './components/main-module';
 import MainSpare from './components/main-spare';
@@ -42,6 +41,7 @@ import AlsEquipmentStatusComponent from './components/als-equipment-status';
 import PermistionAdmin from './components/admin-permisstion';
 import ActivityLog from './components/admin-activity-log'
 import UserManagement from './components/admin-user-management'
+import Register from './components/admin-register';
 
 // APPROVAL PAGE
 import ApprovalFlow from './components/approval-flow'
@@ -56,7 +56,6 @@ const FrontEnd = () => (
             <Route exact path="/" component={Login} />
             <Route exact path="/forgot-password" component={ForgotPassword} />
             <Route exact path="/main" component={Main4Module} />
-            <Route exact path="/register" component={Register} />
 
             {/* SPARE PAGE */}
             <Route exact path="/main-spare" component={MainSpare} />
@@ -92,6 +91,7 @@ const FrontEnd = () => (
             <Route exact path="/user-management" component={UserManagement} />
             <Route exact path="/activity-log" component={ActivityLog} />
             <Route exact path="/profile" component={Profile} />
+            <Route exact path="/register" component={Register} />
 
             {/* APPROVAL PAGE */}
             <Route exact path="/approval-flow" component={ApprovalFlow} />

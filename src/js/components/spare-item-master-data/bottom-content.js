@@ -64,7 +64,7 @@ const BottomContent = (props) => {
                 <p className="cancel-default">ชื่อย่อหน่วยนับ </p>
               </div>
               <div className="grid_3 pull_1">
-                <SelectNoChildrenInput name="uom_id" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomIDField} cssStyle={{ left: "-160px", top: "10px" }}>
+                <SelectNoChildrenInput name="uom_id" disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomIDField} cssStyle={{ left: "-160px", top: "10px" }}>
                   <option value=''></option>
                   {fact['unit-of-measures'].items.map((list_uoms) => (
                     list_uoms.uom_id === values.uom_id
@@ -83,7 +83,7 @@ const BottomContent = (props) => {
                 <div className="grid_2">
                   <NumberInput step={0.01} name="minimum_order_quantity" tabIndex="7" cssStyle={{ left: "60px", top: "-5px" }}
                     validate={validateMinimumOrderQuantityField}
-                    disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                    disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}
                   />
                 </div>
                 <div className="grid_1 ml-0 pull_0">
@@ -106,7 +106,7 @@ const BottomContent = (props) => {
                 </div>
                 <div className="grid_2">
                   <NumberInput step={1} name="lead_time" tabIndex="7" validate={validateLeadTimeField} cssStyle={{ left: "60px", top: "-5px" }}
-                    disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                    disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}
                   />
                 </div>
                 <div className="grid_1">
@@ -123,7 +123,7 @@ const BottomContent = (props) => {
                 <div className="grid_2">
                   <NumberInput step={1} name="tolerance_time" tabIndex="7"
                     validate={validateToleranceTimeField} cssStyle={{ left: "60px", top: "-5px" }}
-                    disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                    disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}
                   />
                 </div>
                 <div className="grid_1">
@@ -137,7 +137,7 @@ const BottomContent = (props) => {
                 <p className="cancel-default">สถานะอะไหล่ </p>
               </div>
               <div className="grid_3 pull_1">
-                <SelectNoChildrenInput name="active" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                <SelectNoChildrenInput name="active" disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}
                   validate={validateActiveField} cssStyle={{ left: "-160px", top: "10px" }}>
                   <option value=''></option>
                   {values.active === 0
@@ -160,7 +160,7 @@ const BottomContent = (props) => {
                 </div>
                 <div className="grid_2">
                   <TextInput name="accounting_type"
-                    disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="2" />
+                    disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="2" />
                 </div>
                 <div className="grid_1">
                   <p className="cancel-default"></p>
@@ -172,7 +172,7 @@ const BottomContent = (props) => {
               <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
               <div className="grid_11">
                 <TextareaInput name="remark" tabIndex="6"
-                  disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}
                 />
               </div>
             </div>
@@ -195,7 +195,7 @@ const BottomContent = (props) => {
               <div className="grid_2 pull_0">
                 <NumberInput step={0.01} name="quantity_required" tabIndex="7"
                   validate={validateQuantityRequiredField} cssStyle={{ left: "60px", top: "-5px" }}
-                  disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}
                 />
               </div>
               <div className="grid_1 ml-0 pull_0"></div>
@@ -208,7 +208,7 @@ const BottomContent = (props) => {
               <div className="grid_2 pull_0">
                 <NumberInput step={0.01} name="quantity_lowest" tabIndex="7"
                   validate={validateQuantityLowestField} cssStyle={{ left: "60px", top: "-5px" }}
-                  disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}
                 />
               </div>
               <div className="grid_1 ml-0 pull_0">
@@ -222,7 +222,7 @@ const BottomContent = (props) => {
               <div className="grid_2 pull_0">
                 <NumberInput step={0.01} name="quantity_highest" tabIndex="7"
                   validate={validateQuantityHighestField} cssStyle={{ left: "60px", top: "-5px" }}
-                  disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}
                 />
               </div>
               <div className="grid_3 float-right">

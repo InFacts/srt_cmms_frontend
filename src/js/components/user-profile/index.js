@@ -40,14 +40,15 @@ const Home = (props) => {
     // If Link to this url via Track Document
     useEffect(() => {
         let url = window.location.search;
-        console.log("URL IS", url)
+        // console.log("URL IS", url)
         const urlParams = new URLSearchParams(url);
         const user_id = urlParams.get('user_id');
         if (user_id !== null && user_id !== '') {
-            console.log(" IA M NOT SETTING ", user_id);
+            // console.log(" IA M NOT SETTING ", user_id);
             setFieldValue("user_id", user_id, true);
-            console.log(" THIS IS AFTER VALUES ", values);
+            // console.log(" THIS IS AFTER VALUES ", values);
             fetchUsers(user_id).then(function (data) {
+                console.log("data>>>", data)
                 setFieldValue("user_profile", data.results);
                 setFieldValue("username", data.results[0].username);
                 setFieldValue("firstname", data.results[0].firstname_th);
@@ -66,7 +67,7 @@ const Home = (props) => {
             })
             fetchDocumentUsers(user_id).then(function (data) {
                 setFieldValue("items", data.results);
-                console.log(data.results)
+                // console.log(data.results)
             })
             setFieldValue("user_my", "user-management");
         } else {
@@ -91,7 +92,7 @@ const Home = (props) => {
 
                 fetchDocumentUsers(data.user_id).then(function (data2) {
                     setFieldValue("items", data2.results);
-                    console.log(data2.results)
+                    // console.log(data2.results)
                 })
             })
             
@@ -140,6 +141,7 @@ const EnhancedUserProfileComponent = withFormik({
         newpassword: '',
         confirmpassword: '',
 
+        position_id: '',
         divisions: '',
         district: '',
         zone: '',

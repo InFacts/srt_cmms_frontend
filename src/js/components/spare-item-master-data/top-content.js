@@ -60,6 +60,9 @@ const TopContent = (props) => {
   }
 
   const validateInternalItemIDField = internal_item_id => {
+    if (internal_item_id === values.internal_item_id) {
+      return;
+    }
     if (!internal_item_id) {
       return 'Required';
     }

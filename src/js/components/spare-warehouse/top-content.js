@@ -23,7 +23,10 @@ const TopContent = (props) => {
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
   const validateWarehouseIDField = (fieldName, warehouse_id) => {
-    console.log("I am validating warehouse id ", warehouse_id)
+    if (warehouse_id === values.warehouse_id) {
+      return;
+    }
+
     const warehouseIDRegex = /^[0-9]{3}$/g;
     if (!warehouse_id) {
       return 'Required';
@@ -76,7 +79,7 @@ const TopContent = (props) => {
     if (!name) {
       return 'Required'
     }
-    return '';
+    return;
   };
   const validateNameWarehouseIDField = (...args) => validateWarehouseField("name", ...args);
   const validateAbbreviationWarehouseIDField = (...args) => validateWarehouseField("abbreviation", ...args);

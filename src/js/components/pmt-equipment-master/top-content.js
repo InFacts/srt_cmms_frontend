@@ -41,17 +41,14 @@ const TopContent = (props) => {
     return {
       internal_item_id: data.internal_item_id,
       description: data.description,
-      item_group_id: data.item_group_id,
-      item_type_id: data.item_type_id,
+      // item_group_id: data.item_group_id,
+      // item_type_id: data.item_type_id,
       uom_group_id: data.uom_group_id,                    //UOM
       uom_id: data.uom_id_inventory,
       uom_name: uom.name,
       minimum_order_quantity: !data.minimum_order_quantity ? 0 : data.minimum_order_quantity,  //ขั้นต่ำการสั่งซื้อ
       lead_time: !data.lead_time ? 0 : data.lead_time,
       tolerance_time: !data.tolerance_time ? 0 : data.tolerance_time,
-      quantity_required: !data.quantity_required ? 0 : data.quantity_required,  //จำนวนที่ต้องการ
-      quantity_lowest: !data.quantity_lowest ? 0 : data.quantity_lowest,    //ขั้นต่ำ
-      quantity_highest: !data.quantity_highest ? 0 : data.quantity_highest,   //ขั้นสูง
       remark: data.remark,
       active: data.active.data[0],
       accounting_type: data.accounting_type,
@@ -65,26 +62,28 @@ const TopContent = (props) => {
     }
     if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
       && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) {
-      let items = props.fact.items.items;
+
+      let items = props.fact.equipment.items;
       let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
       if (item) {
         setValues({ ...values, ...responseToFormState(item) }, false); //Setvalues and don't validate
         validateField("item_type_id");
 
+        // let items = props.fact.items.items;
+        // let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+        // if (item) {
+        //   setValues({ ...values, ...responseToFormState(item) }, false); //Setvalues and don't validate
+        //   validateField("item_type_id");
+
         // IF Check user If User is Admin -> return true Else -> return false
-        if (decoded_token.id === 4) { //{/* TODO USER_ID FOR ADMIN */}
-          console.log(" YES I AM ADMIN ")
-          setFieldValue("modeEdit", true, false);
-        } else {
-          console.log(" NO I NOT ADMIN ")
-          setFieldValue("modeEdit", false, false);
-        }
-        fetchGoodsOnhandDataForItemmasterData(item.item_id)
-          .then((goods_onhand) => {
-            // console.log("good on hand", goods_onhand)
-            setFieldValue('goods_onhand', goods_onhand, false);
-          })
-        return;
+        // if (decoded_token.id === 4) { //{/* TODO USER_ID FOR ADMIN */}
+        //   console.log(" YES I AM ADMIN ")
+        //   setFieldValue("modeEdit", true, false);
+        // } else {
+        //   console.log(" NO I NOT ADMIN ")
+        //   setFieldValue("modeEdit", false, false);
+        // }
+        // return;
       } else {
         return 'Invalid Number ID';
       }
@@ -105,7 +104,6 @@ const TopContent = (props) => {
     if (!name) {
       return 'Required'
     }
-    setFieldValue(fieldName, name, false);
   };
   const validateItemTypeIDField = (...args) => validateItemMasterdataField("item_type_id", ...args);
   const validateItemGroupIDField = (...args) => validateItemMasterdataField("item_group_id", ...args);
@@ -170,7 +168,7 @@ const TopContent = (props) => {
 
           <div className="container_12">
 
-          <FormLabel>สถานะการใช้งาน</FormLabel>
+            <FormLabel>สถานะการใช้งาน</FormLabel>
             <div className="grid_5 pull_0">
               <TextInput name='equipment_status_id' disabled={true} />
             </div>

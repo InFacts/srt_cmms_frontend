@@ -10,6 +10,8 @@ import Twoone from '../../../images/admin/two-one.svg'
 import Text4 from '../../../images/admin/text4.svg'
 import Threeone from '../../../images/admin/three-one.svg'
 import Text7 from '../../../images/admin/text7.svg'
+import Fourone from '../../../images/admin/four-one.svg'
+import Text9 from '../../../images/admin/text9.svg'
 
 import RedHouse from '../../../images/red-house.svg';
 
@@ -95,6 +97,8 @@ class Map extends React.Component {
                                 <img alt='some value' src={Text4} className="Atext4" />
                                 <Link to="/activity-log"><img alt='some value' src={Threeone} className="Athree-one" /></Link>
                                 <img alt='some value' src={Text7} className="Atext7" />
+                                <Link to="/register"><img alt='some value' src={Fourone} className="AFour-one" /></Link>
+                                <img alt='some value' src={Text9} className="Atext9" />
                             </div>
                         </section>
                     </div>
