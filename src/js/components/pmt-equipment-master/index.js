@@ -77,7 +77,7 @@ const EnhancedGoodsReceiptComponent = withFormik({
         //Field ที่ไม่ได้กรอก
         list_uoms: [],
         line_items: [],
-        file: [],
+        files: [],
         goods_onhand: [],       //อะไหล่ที่มีอยู่ในทุกคลัง
 
         // NOT USE FOR FOOTER

@@ -99,9 +99,9 @@ const Register = (props) => {
                         <h4 className="head-register">สร้างผู้ใช้งานภายในระบบ</h4>
 
                         <div className="grid_5">
-                            <div class="card-profile">
-                                <div class="card-profile-header">ข้อมูลส่วนตัว</div>
-                                <div class="card-profile-main">
+                            <div className="card-profile">
+                                <div className="card-profile-header">ข้อมูลส่วนตัว</div>
+                                <div className="card-profile-main" style={{ height: "400px"}}>
 
                                     <div className="container_12">
                                         <div className="container_12"><p className="cancel-default">รหัสพนักงาน</p></div>
@@ -146,9 +146,9 @@ const Register = (props) => {
                         </div>
 
                         <div className="grid_5 float-right">
-                            <div class="card-profile">
-                                <div class="card-profile-header">ตำแหน่งงาน</div>
-                                <div class="card-profile-main">
+                            <div className="card-profile">
+                                <div className="card-profile-header">ตำแหน่งงาน</div>
+                                <div className="card-profile-main" style={{ height: "400px"}}>
 
                                     <div className="container_12">
                                         <div className="container_12"><p className="cancel-default">ชื่อ</p></div>
@@ -180,7 +180,7 @@ const Register = (props) => {
                                     <div className="container_12">
                                         <div className="container_12"><p className="cancel-default">หน่วยงาน</p></div>
                                         <div className="grid_4 alpha omega ">
-                                            <SelectNoChildrenInput name="position_id" validate={validatePositionField}>
+                                            <SelectNoChildrenInput name="position_id" validate={validatePositionField} cssStyle={{ left: "-240px", top: "14px" }}>
                                                 <option value=''></option>
                                                 {factPosition.items.map(function ({ position_id, name }) {
                                                     return <option value={position_id} key={position_id}> {name} </option>
