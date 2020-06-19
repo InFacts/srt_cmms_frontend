@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import FormInput from '../common/form-input'
 import TextInput from '../common/formik-text-input'
 import SelectNoChildrenInput from '../common/formik-select-no-children';
-import PopupModalNoPartNoChildren from '../common/popup-modal-nopart-no-children'
+import PopupModalEquipmentNoChildren from '../common/popup-modal-equipment-no-children'
 
 import { useFormikContext, useField } from 'formik';
 
@@ -32,6 +32,7 @@ const TopContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm, resetForm } = useFormikContext();
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
+  const factEquipment = useSelector((state) => ({ ...state.api.fact.equipment }), shallowEqual);
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
@@ -41,8 +42,8 @@ const TopContent = (props) => {
     return {
       internal_item_id: data.internal_item_id,
       description: data.description,
-      // item_group_id: data.item_group_id,
-      // item_type_id: data.item_type_id,
+      item_group_id: data.item_group_id,
+      item_type_id: data.item_type_id,
       uom_group_id: data.uom_group_id,                    //UOM
       uom_id: data.uom_id_inventory,
       uom_name: uom.name,
@@ -62,28 +63,35 @@ const TopContent = (props) => {
     }
     if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
       && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) {
-
-      let items = props.fact.equipment.items;
+      let items = props.fact.items.items;
       let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
       if (item) {
         setValues({ ...values, ...responseToFormState(item) }, false); //Setvalues and don't validate
         validateField("item_type_id");
 
-        // let items = props.fact.items.items;
-        // let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
-        // if (item) {
-        //   setValues({ ...values, ...responseToFormState(item) }, false); //Setvalues and don't validate
-        //   validateField("item_type_id");
+        var item_match_equipments = factEquipment.items;
+        let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.item_id}` === `${item.item_id}`); // Returns undefined if not found
+        console.log("item_match_equipment", item_match_equipment)
+        if (item_match_equipment) {
+          setFieldValue("price_currently", item_match_equipment.price_currently, false);
+          setFieldValue("location_station_id", item_match_equipment.location_station_id, false);
+          setFieldValue("description_equipment", item_match_equipment.depreciation, false);
+          setFieldValue("useful_life", item_match_equipment.useful_life, false);
+          setFieldValue("equipment_status_id", item_match_equipment.equipment_status_id, false);
+          setFieldValue("responsible_by", item_match_equipment.responsible_by, false);
+          setFieldValue("station", item_match_equipment.station, false);
+          setFieldValue("equipment_group", item_match_equipment.equipment_group, false);
 
-        // IF Check user If User is Admin -> return true Else -> return false
-        // if (decoded_token.id === 4) { //{/* TODO USER_ID FOR ADMIN */}
-        //   console.log(" YES I AM ADMIN ")
-        //   setFieldValue("modeEdit", true, false);
-        // } else {
-        //   console.log(" NO I NOT ADMIN ")
-        //   setFieldValue("modeEdit", false, false);
-        // }
-        // return;
+          // IF Check user If User is Admin -> return true Else -> return false
+          if (decoded_token.id === 4) { //{/* TODO USER_ID FOR ADMIN */}
+            console.log(" YES I AM ADMIN ")
+            setFieldValue("modeEdit", true, false);
+          } else {
+            console.log(" NO I NOT ADMIN ")
+            setFieldValue("modeEdit", false, false);
+          }
+        }
+        return;
       } else {
         return 'Invalid Number ID';
       }
@@ -104,6 +112,7 @@ const TopContent = (props) => {
     if (!name) {
       return 'Required'
     }
+    setFieldValue(fieldName, name, false);
   };
   const validateItemTypeIDField = (...args) => validateItemMasterdataField("item_type_id", ...args);
   const validateItemGroupIDField = (...args) => validateItemMasterdataField("item_group_id", ...args);
@@ -116,7 +125,7 @@ const TopContent = (props) => {
         <section className="container_12 ">
           <FormTitle>ข้อมูลอุปกรณ์</FormTitle>
           <div className="container_12">
-            <FormLabel>เลขที่อุปกรณ์</FormLabel>
+            <FormLabel>เลขที่สินทรัพย์</FormLabel>
             <div className="grid_3 pull_1">
               <TextInput name='internal_item_id'
                 validate={validateInternalItemIDField}
@@ -194,7 +203,7 @@ const TopContent = (props) => {
         </section>
 
         {/* PopUp ค้นหาอะไหล่ */}
-        <PopupModalNoPartNoChildren />
+        <PopupModalEquipmentNoChildren />
       </div>
     </div>
   )
