@@ -23,6 +23,7 @@ const BottomContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
+  const factStation = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
 
   const validateUomItemmasterDataIDField = (fieldName, uom_id) => {
@@ -185,14 +186,14 @@ const BottomContent = (props) => {
                 <p className="top-text">มูลค่านำเข้า</p>
               </div>
               <div className="grid_2 alpha omega">
-                <TextInput name="equipment_status_log"
-                  disabled={true} />
+                <TextInput name="price_currently"
+                  disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} />
               </div>
               <Label>บาท</Label>
 
               <div className="grid_2 alpha omega float-right">
-                <TextInput name="equipment_status_log"
-                  disabled={true} />
+                <TextInput name="description_equipment`"
+                  disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} />
               </div>
               <div className="grid_2 float-right">
                 <p className="top-text">หน่วยงานที่รับผิดชอบ</p>
@@ -204,7 +205,7 @@ const BottomContent = (props) => {
                 <p className="top-text">ค่าเสื่อมต่อปี</p>
               </div>
               <div className="grid_2 alpha omega">
-                <TextInput name="description_equipment`"
+                <TextInput name="description_equipment"
                   disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
               </div>
               <Label>บาท</Label>
@@ -225,8 +226,9 @@ const BottomContent = (props) => {
                 <p className="top-text">ประเภทค่าเสื่อม</p>
               </div>
               <div className="grid_3 alpha omega">
-                <TextInput name="method"
-                  disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+              <SelectNoChildrenInput name='method' disabled={true}>
+                  {values.description && <option value=''>Straight Line method</option>}
+                </SelectNoChildrenInput>
               </div>
 
               <div className="clear" />
@@ -254,8 +256,17 @@ const BottomContent = (props) => {
                 <p className="top-text">สถานี</p>
               </div>
               <div className="grid_5 alpha omega">
-                <TextInput name="location"
-                  disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                <SelectNoChildrenInput name="location_station_id" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  cssStyle={{ left: "-160px", top: "10px" }}>
+                  <option value=''></option>
+                  {factStation.items.map((station) => {
+                    if (station.station_id === values.location_station_id) {
+                      return <option value={station.station_id} key={station.station_id} selected>{station.name}</option>
+                    } else {
+                      return <option value={station.station_id} key={station.station_id}>{station.name}</option>
+                    }
+                  })}
+                </SelectNoChildrenInput>
               </div>
               <div className="clear" />
 
@@ -296,6 +307,7 @@ const BottomContent = (props) => {
               <div className="grid_3 alpha omega">
                 <SelectNoChildrenInput name="checklist" disabled={props.toolbar.mode === TOOLBAR_MODE.SEARCH} cssStyle={{ left: "-160px", top: "10px" }}>
                   <option value=''></option>
+                  
                 </SelectNoChildrenInput>
               </div>
 
@@ -330,8 +342,8 @@ const BottomContent = (props) => {
             <Files />
           </div>
 
-           {/* History Tab  */}
-           <div id="history_content" className="tabcontent">
+          {/* History Tab  */}
+          <div id="history_content" className="tabcontent">
             {/* === One Column   ==== */}
             <div className="grid_12 mt-2">
               <table className="table-many-column mt-2">

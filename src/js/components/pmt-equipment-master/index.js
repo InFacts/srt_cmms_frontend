@@ -66,20 +66,26 @@ const EnhancedGoodsReceiptComponent = withFormik({
         default_warehouse_id: 100,
         minimum_order_quantity: '',  //ขั้นต่ำการสั่งซื้อ
         lead_time: '',
-        tolerance_time: '',
-        quantity_required: '',  //จำนวนที่ต้องการ
-        quantity_lowest: '',    //ขั้นต่ำ
-        quantity_highest: '',   //ขั้นสูง
         remark: '',
         active: '',            //สถานะอะไหล่ ปิด เปิด
         accounting_type: '',    // ประเภทเอกบัญชี
+
+        price_currently: '',
+        location_station_id: '',
+        description_equipment: '',
+        useful_life: '',
+        equipment_status_id: '',
+        responsible_by: '',
+        equipment_group: [],
+        station: [],
 
         //Field ที่ไม่ได้กรอก
         list_uoms: [],
         line_items: [],
         files: [],
         goods_onhand: [],       //อะไหล่ที่มีอยู่ในทุกคลัง
-
+        method: '',
+        
         // NOT USE FOR FOOTER
         step_approve: [],
         created_by_admin_employee_id: '',

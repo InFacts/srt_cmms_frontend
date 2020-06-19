@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import FormInput from '../common/form-input'
 import TextInput from '../common/formik-text-input'
 import SelectNoChildrenInput from '../common/formik-select-no-children';
-import PopupModalNoPartNoChildren from '../common/popup-modal-nopart-no-children'
+import PopupModalEquipmentNoChildren from '../common/popup-modal-equipment-no-children'
 
 import { useFormikContext, useField } from 'formik';
 
@@ -32,6 +32,7 @@ const TopContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm, resetForm } = useFormikContext();
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
+  const factEquipment = useSelector((state) => ({ ...state.api.fact.equipment }), shallowEqual);
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
@@ -49,9 +50,6 @@ const TopContent = (props) => {
       minimum_order_quantity: !data.minimum_order_quantity ? 0 : data.minimum_order_quantity,  //ขั้นต่ำการสั่งซื้อ
       lead_time: !data.lead_time ? 0 : data.lead_time,
       tolerance_time: !data.tolerance_time ? 0 : data.tolerance_time,
-      quantity_required: !data.quantity_required ? 0 : data.quantity_required,  //จำนวนที่ต้องการ
-      quantity_lowest: !data.quantity_lowest ? 0 : data.quantity_lowest,    //ขั้นต่ำ
-      quantity_highest: !data.quantity_highest ? 0 : data.quantity_highest,   //ขั้นสูง
       remark: data.remark,
       active: data.active.data[0],
       accounting_type: data.accounting_type,
@@ -71,13 +69,27 @@ const TopContent = (props) => {
         setValues({ ...values, ...responseToFormState(item) }, false); //Setvalues and don't validate
         validateField("item_type_id");
 
-        // IF Check user If User is Admin -> return true Else -> return false
-        if (decoded_token.id === 4) { //{/* TODO USER_ID FOR ADMIN */}
-          console.log(" YES I AM ADMIN ")
-          setFieldValue("modeEdit", true, false);
-        } else {
-          console.log(" NO I NOT ADMIN ")
-          setFieldValue("modeEdit", false, false);
+        var item_match_equipments = factEquipment.items;
+        let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.item_id}` === `${item.item_id}`); // Returns undefined if not found
+        console.log("item_match_equipment", item_match_equipment)
+        if (item_match_equipment) {
+          setFieldValue("price_currently", item_match_equipment.price_currently, false);
+          setFieldValue("location_station_id", item_match_equipment.location_station_id, false);
+          setFieldValue("description_equipment", item_match_equipment.depreciation, false);
+          setFieldValue("useful_life", item_match_equipment.useful_life, false);
+          setFieldValue("equipment_status_id", item_match_equipment.equipment_status_id, false);
+          setFieldValue("responsible_by", item_match_equipment.responsible_by, false);
+          setFieldValue("station", item_match_equipment.station, false);
+          setFieldValue("equipment_group", item_match_equipment.equipment_group, false);
+
+          // IF Check user If User is Admin -> return true Else -> return false
+          if (decoded_token.id === 4) { //{/* TODO USER_ID FOR ADMIN */}
+            console.log(" YES I AM ADMIN ")
+            setFieldValue("modeEdit", true, false);
+          } else {
+            console.log(" NO I NOT ADMIN ")
+            setFieldValue("modeEdit", false, false);
+          }
         }
         return;
       } else {
@@ -113,7 +125,7 @@ const TopContent = (props) => {
         <section className="container_12 ">
           <FormTitle>ข้อมูลอุปกรณ์</FormTitle>
           <div className="container_12">
-            <FormLabel>เลขที่อุปกรณ์</FormLabel>
+            <FormLabel>เลขที่สินทรัพย์</FormLabel>
             <div className="grid_3 pull_1">
               <TextInput name='internal_item_id'
                 validate={validateInternalItemIDField}
@@ -165,7 +177,7 @@ const TopContent = (props) => {
 
           <div className="container_12">
 
-          <FormLabel>สถานะการใช้งาน</FormLabel>
+            <FormLabel>สถานะการใช้งาน</FormLabel>
             <div className="grid_5 pull_0">
               <TextInput name='equipment_status_id' disabled={true} />
             </div>
@@ -191,7 +203,7 @@ const TopContent = (props) => {
         </section>
 
         {/* PopUp ค้นหาอะไหล่ */}
-        <PopupModalNoPartNoChildren />
+        <PopupModalEquipmentNoChildren />
       </div>
     </div>
   )
