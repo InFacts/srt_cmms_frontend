@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { scaleLinear ,scaleTime, scaleBand } from "d3-scale";
+import { scaleLinear ,scaleTime, scaleBand, scaleQuantize } from "d3-scale";
 import { extent, max, min, range } from "d3-array";
 import {line} from "d3-shape";
-import {schemeSet1} from "d3-scale-chromatic";
+import {schemeSet1, schemeReds} from "d3-scale-chromatic";
 
 import useChartDimensions from '../../hooks/chart-dimensions-hook'
 
 import ThailandTopo from './thailandWithName.json';
 import { geoPath, geoAlbers, geoMercator ,geoEqualEarth } from "d3-geo"
+import legend from './d3-color-legend';
 
 const chartSettings = { //Need to be at least one since 0 is a falsy value, will be replaced by defaults
     "marginLeft": 10,
@@ -30,6 +31,7 @@ function ThailandMapComponent({data}) {
     const [timeDomain, setTimeDomain] = useState([new Date(2000, 0, 1), new Date(2000, 0, 2)]);
     const [inventoryMonthDomain, setInventoryMonthDomain] = useState([0, 100]);
     const [inventoryMonthPath, setInventoryMonthPath] = useState("");
+    const [toolTipText, setToolTipText] = useState("Test Tooltip Text")
 
     const geographies = useMemo(() => (
         ThailandTopo.features
@@ -71,11 +73,15 @@ function ThailandMapComponent({data}) {
         console.log("AlsEquipmentStatusComponent:: geoPath ", geoPath(projection)(ThailandTopo))
     },[])
 
+    const color = scaleQuantize([1,10], schemeReds[9])
 
 
     return (
         <div className="Chart_wrapper" ref={ref}>
             <svg width={dms.width} height={dms.height} style={{ border: "1.5px solid gold" }} viewBox={`0 0 ${dms.width} ${dms.height}`}>
+                <g transform={`translate(${dms.width/2}, ${0})`}>
+                  {legend({color, title: "Test title", width: 260})}  
+                </g>
                 <g transform={`translate(${dms.marginLeft}, ${dms.marginTop})`}>
                     
                     {/* <rect
@@ -88,11 +94,16 @@ function ThailandMapComponent({data}) {
                         stroke="red"
                         fill="none"
                     /> */}
+
+                    {/* React onMouseEnter Events https://reactjs.org/docs/events.html#mouse-events */}
                     {geographies.map((region, i)=> (
                         <path 
+                            id={region.properties.name}
+                            key={region.properties.name}
                             d={geoPath(projection)(region)}
+                            onMouseEnter ={() => setToolTipText(region.properties.name)}
                             stroke="steelblue"
-                            fill="#FEF9E7"
+                            fill="#fff" 
                         >
                             <title>{region.properties.name}</title>
 
@@ -102,9 +113,11 @@ function ThailandMapComponent({data}) {
 
 
                 </g>
-                
+                <text class="label" id="country-name" x="10" y="390">{toolTipText}</text>
 
             </svg>
+
+          
         </div>
     );
 }
