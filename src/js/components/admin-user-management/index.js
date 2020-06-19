@@ -37,11 +37,10 @@ const EnhancedUserManagementComponent = withFormik({
         internal_document_id: '',
         created_by_user_employee_id: '',
         
-        user_id: '',
         name: '',
-        employee_id: '',
+        created_by_user_employee_id: '',
         item_list: [],
-        district: '',
+        position_id: '',
         zone: '',
     }),
 })(Home);

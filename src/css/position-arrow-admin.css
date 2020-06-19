@@ -63,3 +63,25 @@
 
     color: #000000;
 }
+
+.AFour-one{
+    position: absolute;
+    left: 550px;
+    top: 80px;
+}
+
+.Atext9{
+    /* นำเข้าอะไหล่โดยมีใบสั่งซื้อ */
+    position: absolute;
+    left: 520px;
+    top: 147px;
+    font-family: Kanit;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+    /* identical to box height */
+    text-align: center;
+
+    color: #000000;
+}

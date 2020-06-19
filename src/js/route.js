@@ -2,7 +2,6 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import Login from './components/signin';
-import Register from './components/register';
 import ForgotPassword from './components/forgot-password';
 import Main4Module from './components/main-module';
 import MainSpare from './components/main-spare';
@@ -35,10 +34,14 @@ import PmtMaintenantItem from './components/pmt-maintenant-item';
 import PmtEquipmentInstallation from './components/pmt-equipment-install';
 import PmtEquipmentMasterData from './components/pmt-equipment-master';
 
+// ALS Page
+import AlsSpareComponent from './components/als-spare';
+import AlsEquipmentStatusComponent from './components/als-equipment-status';
 // Admin
 import PermistionAdmin from './components/admin-permisstion';
 import ActivityLog from './components/admin-activity-log'
 import UserManagement from './components/admin-user-management'
+import Register from './components/admin-register';
 
 // APPROVAL PAGE
 import ApprovalFlow from './components/approval-flow'
@@ -48,13 +51,11 @@ import Profile from './components/user-profile'
 
 import Track from './components/track-document';
 const FrontEnd = () => (
-    <>
         <Switch>
             {/* Wrap the routes in a Switch which only renders the first matched component. Otherwise you would see multiple components rendered. */}
             <Route exact path="/" component={Login} />
             <Route exact path="/forgot-password" component={ForgotPassword} />
             <Route exact path="/main" component={Main4Module} />
-            <Route exact path="/register" component={Register} />
 
             {/* SPARE PAGE */}
             <Route exact path="/main-spare" component={MainSpare} />
@@ -90,15 +91,19 @@ const FrontEnd = () => (
             <Route exact path="/user-management" component={UserManagement} />
             <Route exact path="/activity-log" component={ActivityLog} />
             <Route exact path="/profile" component={Profile} />
+            <Route exact path="/register" component={Register} />
 
             {/* APPROVAL PAGE */}
             <Route exact path="/approval-flow" component={ApprovalFlow} />
             <Route exact path="/approval-flow-step" component={ApprovalFlowStep} />
 
-            {/* Handle routes that are not found */}
-            <Route component={NotFoundComponent} />
-        </Switch>
-    </>
+        {/* ALS Routes */}
+        <Route exact path="/als-spare" component={AlsSpareComponent} />
+        <Route exact path="/als-equipment-status" component={AlsEquipmentStatusComponent} />
+
+        {/* Handle routes that are not found */}
+        <Route component={NotFoundComponent} />
+    </Switch>
 );
 
 export default FrontEnd;

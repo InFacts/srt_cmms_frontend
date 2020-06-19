@@ -47,7 +47,8 @@ const GoodsReceiptNoPoComponent = (props) => {
     
     // If Link to this url via Track Document
     useEffect(() => {
-        getUrlParamsLink.then((internal_document_id) => {
+        getUrlParamsLink()
+            .then((internal_document_id) => {
             if (internal_document_id !== "") {
                 // action_approval
                 setFieldValue("status_name_th", "", true);
@@ -107,7 +108,7 @@ const EnhancedGoodsReceiptNoPoComponent = withFormik({
         remark: '',
         line_items: initialRows(),
 
-        file: [],
+        files: [],
     
         //Field ที่ไม่ได้กรอก
         
@@ -119,9 +120,7 @@ const EnhancedGoodsReceiptNoPoComponent = withFormik({
 
         //Field ที่ไม่ได้ display
         document_id: '', // changes when document is displayed (internal_document_id field validation)
-        // For Attactment
-        desrciption_files_length: '',
-        desrciption_files: [],
+
         // For Step Approval
         step_approve: [],
     }),

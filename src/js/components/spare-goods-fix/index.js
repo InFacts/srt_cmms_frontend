@@ -46,9 +46,8 @@ const GoodsReturnComponent = (props) => {
 
     // If Link to this url via Track Document
     useEffect(() => {
-        console.log("useEffect getUrlParamsLink")
-        getUrlParamsLink.then((internal_document_id) => {
-            console.log("internal_document_id --------", internal_document_id)
+        getUrlParamsLink()
+            .then((internal_document_id) => {
             if (internal_document_id !== "") {
                 // action_approval
                 setFieldValue("status_name_th", "", true);
