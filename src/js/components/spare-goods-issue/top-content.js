@@ -24,7 +24,7 @@ import {
   isValidInternalDocumentIDFormat, isValidInternalDocumentIDDraftFormat,
   fetchAttachmentDocumentData, validateEmployeeIDField, validateWarehouseIDField,
   validateInternalDocumentIDFieldHelper, DOCUMENT_STATUS, getUserIDFromEmployeeID,
-  validatedataDocumentField
+  validatedataDocumentField, checkBooleanForEditHelper
 } from '../../helper';
 
 import { FOOTER_MODE, FOOTER_ACTIONS } from '../../redux/modules/footer.js';
@@ -49,8 +49,7 @@ const TopContent = (props) => {
 
   const validateDocumentDateField = (...args) => validatedataDocumentField("document_date", setFieldValue, ...args)
 
-  const checkBooleanForEdit = (values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.FAST_TRACK )
-  && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
+  const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
   return (
     <div id="blackground-white">
       <div className="container_12 clearfix">

@@ -9,7 +9,9 @@ import DateInput from '../common/formik-date-input'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import { FACTS } from '../../redux/modules/api/fact';
 import Label from '../common/form-label'
-import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, DOCUMENT_STATUS, validateEmployeeIDField, validateWarehouseIDField, validateInternalDocumentIDFieldHelper, validatedataDocumentField, getUserIDFromEmployeeID } from '../../helper';
+import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, DOCUMENT_STATUS, validateEmployeeIDField, 
+    validateWarehouseIDField, validateInternalDocumentIDFieldHelper, validatedataDocumentField, getUserIDFromEmployeeID,checkBooleanForEditHelper 
+} from '../../helper';
 import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
 
 import { useFormikContext, useField } from 'formik';
@@ -33,7 +35,7 @@ const TopContent = (props) => {
 
     const validateDocumentDateField = (...args) => validatedataDocumentField("document_date", setFieldValue, ...args)
 
-    const checkBooleanForEdit = (values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.FAST_TRACK) && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
+    const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
 
     return (
         <div id="blackground-white">

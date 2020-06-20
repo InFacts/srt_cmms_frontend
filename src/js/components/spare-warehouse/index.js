@@ -18,7 +18,7 @@ import useFooterInitializer from '../../hooks/footer-initializer';
 
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
-const GoodsReceiptComponent = (props) => {
+const WarehouesMasterDataComponent = (props) => {
     
     const {resetForm, setFieldValue, setValues, values} = useFormikContext();
 
@@ -48,7 +48,7 @@ const GoodsReceiptComponent = (props) => {
     )
 }
 
-const EnhancedGoodsReceiptComponent = withFormik({
+const EnhancedWarehouseMasterDataComponent = withFormik({
     mapPropsToValues: (props) => ({ 
         // Field ที่ให้ User กรอก
         warehouse_id: '',
@@ -64,6 +64,6 @@ const EnhancedGoodsReceiptComponent = withFormik({
         // FOR CHECK USER_ID ADMIN FOR EDIT
         modeEdit: false,
     })
-})(GoodsReceiptComponent);
+})(WarehouesMasterDataComponent);
 
-export default EnhancedGoodsReceiptComponent;
+export default EnhancedWarehouseMasterDataComponent;

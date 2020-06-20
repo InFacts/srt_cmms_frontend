@@ -20,7 +20,7 @@ import PopupModalNoPart from '../common/popup-modal-nopart'
 import '../../../css/table.css';
 
 import { fetchGoodsOnhandData, getNumberFromEscapedString, getLotFromQty, weightedAverage, 
-  sumTotalLineItemHelper, sumTotalHelper,DOCUMENT_STATUS, getUserIDFromEmployeeID  } from '../../helper';
+  sumTotalLineItemHelper, sumTotalHelper,DOCUMENT_STATUS, getUserIDFromEmployeeID, checkBooleanForEditHelper  } from '../../helper';
 
 const BottomContent = (props) => {
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
@@ -125,9 +125,7 @@ const BottomContent = (props) => {
       })
   }
 
-  const checkBooleanForEdit = (values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.FAST_TRACK )
-  && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
-
+  const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
   return (
     <div id="blackground-gray">
       <div className="container_12 clearfix">

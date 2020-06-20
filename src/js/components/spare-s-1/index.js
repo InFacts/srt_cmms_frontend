@@ -20,7 +20,7 @@ import useExportPdfInitializer from '../../hooks/export-pdf-initializer';
 
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
-const GoodsReturnComponent = (props) => {
+const ReportS1Component = (props) => {
     
     const {resetForm, setFieldValue, setValues, values} = useFormikContext();
 
@@ -63,7 +63,7 @@ const initialLineYears = (n=10) => {
     return rows_year;
 }
 
-const EnhancedGoodsReturnComponent = withFormik({
+const EnhancedReportS1Component = withFormik({
     mapPropsToValues: (props) => ({ 
         // Field ที่ให้ User กรอก
         internal_document_id: '',
@@ -129,6 +129,6 @@ const EnhancedGoodsReturnComponent = withFormik({
         ],
 
     }),
-})(GoodsReturnComponent);
+})(ReportS1Component);
 
-export default EnhancedGoodsReturnComponent;
+export default EnhancedReportS1Component;

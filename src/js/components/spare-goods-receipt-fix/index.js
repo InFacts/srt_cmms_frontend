@@ -20,7 +20,7 @@ import useDocumentSubscription from '../../hooks/document-subscription';
 
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
-const GoodsReturnComponent = (props) => {
+const GoodsReceiptFixComponent = (props) => {
     
     const {resetForm, setFieldValue, setValues, values} = useFormikContext();
 
@@ -90,7 +90,7 @@ const initialRows = (n=10) => {
 }
 
 
-const EnhancedGoodsReturnComponent = withFormik({
+const EnhancedGoodsReceiptFixComponent = withFormik({
     mapPropsToValues: (props) => ({ 
         // Field ที่ให้ User กรอก
         internal_document_id: '',
@@ -125,7 +125,7 @@ const EnhancedGoodsReturnComponent = withFormik({
         }
         return errors;
     },
-})(GoodsReturnComponent);
+})(GoodsReceiptFixComponent);
 
 
-export default EnhancedGoodsReturnComponent;
+export default EnhancedGoodsReceiptFixComponent;

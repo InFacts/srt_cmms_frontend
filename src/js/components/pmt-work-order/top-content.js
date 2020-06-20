@@ -14,7 +14,7 @@ import PopupModalDocument from '../common/popup-modal-document'
 import PopupModalUsername from '../common/popup-modal-username'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, validateEmployeeIDField, 
-    validateWarehouseIDField, validateInternalDocumentIDFieldHelper, DOCUMENT_STATUS, validatedataDocumentField, getUserIDFromEmployeeID } from '../../helper';
+    validateWarehouseIDField, validateInternalDocumentIDFieldHelper, DOCUMENT_STATUS, validatedataDocumentField, getUserIDFromEmployeeID , checkBooleanForEditHelper} from '../../helper';
 import { FACTS } from '../../redux/modules/api/fact';
 import Label from '../common/form-label'
 import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
@@ -26,7 +26,6 @@ const TopContent = (props) => {
     const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
-
     // Fill Default Forms
     useFillDefaultsOnModeAdd();
 
@@ -37,7 +36,7 @@ const TopContent = (props) => {
 
     const validateDocumentDateField = (...args) => validatedataDocumentField("document_date", setFieldValue, ...args)
 
-    const checkBooleanForEdit = (values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.FAST_TRACK) && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
+    const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
     return (
         <div id="blackground-white">
             <div className="container_12 clearfix" style={{ marginTop: "55px" }}>
