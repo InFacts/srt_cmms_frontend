@@ -778,7 +778,7 @@ label [type='checkbox'] {
 }
 
 
-/*For Simple Card*/
+/* === For Simple Card ==== */
 .gray-background {
   background: #F2F2F3;
 }
@@ -814,6 +814,7 @@ label [type='checkbox'] {
   /* width: 180px; */
   /* height: 110px; */
   padding: 5px;
+  margin-top:20px;
 }
 
 .adjustment-bar-name {
@@ -847,6 +848,8 @@ label [type='checkbox'] {
   
   font-weight: bold; */
 }
+
+/* Spaces for empty divs */
 .space-5px {
   width: auto;
   height: 5px;
@@ -861,11 +864,18 @@ label [type='checkbox'] {
 }
 
 
+/* Map Hover Effect */
 path.map-region:hover{
-  opacity:40%;
-  fill: #000;
+  opacity:30%;
+  /* fill: #000; */
 }
 
+/* Equipment Status  */
 .equipment-status-list {
   padding: 8px;
+}
+
+.head-title.no-margin {
+  margin-top:0px;
+  margin-bottom:0px;
 }

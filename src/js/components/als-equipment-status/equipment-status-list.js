@@ -20,7 +20,10 @@ const EquipmentStatusListComponent = () => {
 
             <div className="adjustment-bar-inner-text">ประเภทอุปกรณ์</div  >
 
-
+            <div className="space-50px" />
+            <div className="space-50px" />
+            <div className="space-50px" />
+            <div className="space-50px" />
 
         </div>
     </div>);
