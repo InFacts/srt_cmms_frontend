@@ -71,18 +71,29 @@ function ThailandMapComponent({data}) {
     }, [data]);
 
     var [testMapData,setTestMapData] = useState([])
+
     useEffect(() => {
         console.log("AlsEquipmentStatusComponent:: JSON ", ThailandTopo)
         console.log("AlsEquipmentStatusComponent:: geoPath ", geoPath(projection)(ThailandTopo))
 
         let tempMapData = []
         for (let i =0; i<77; i++){
-            tempMapData.push((Math.random()+Math.random())/2*10);
+            tempMapData.push({
+                countryName: "something",
+                value: (Math.random()+Math.random())/2*10
+            });
         }
+
+        console.log("Map :: extent" , extent(tempMapData, d => d.value))
         setTestMapData(tempMapData)
     },[])
 
-    const color = scaleQuantize([1,10], schemeReds[9])
+
+    const color = useMemo(() => (
+        scaleQuantize()
+            .domain([0,max(testMapData, d => d.value)])
+            .range(schemeReds[9])
+    ), [testMapData]);
 
 
     return (
@@ -116,7 +127,7 @@ function ThailandMapComponent({data}) {
                             onMouseEnter ={() => setToolTipText(region.properties.name)}
                             stroke="black"
                             // fill="#f3f3f3" 
-                            fill={color(testMapData[i])}
+                            fill={testMapData[i] ? color(testMapData[i].value) : "#f3f3f3" }
                         >
                             <title>{region.properties.name}</title>
 
