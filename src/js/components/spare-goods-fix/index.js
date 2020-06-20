@@ -21,7 +21,7 @@ import useNavBottomStatusInitializer from '../../hooks/nav-bottom-status-initial
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 import { footerToModeSearch } from '../../redux/modules/footer.js';
 
-const GoodsReturnComponent = (props) => {
+const GoodsFixComponent = (props) => {
     const dispatch = useDispatch();
     const {resetForm, setFieldValue, setValues, values} = useFormikContext();
 
@@ -75,7 +75,7 @@ const initialLineItem = {
     uom_id: '',
     per_unit_price: '',
     // item_id: '',
-    item_status_id: 1,
+    item_status_id: 2,
     
     //Field ที่ไม่ได้กรอก
     description: '',
@@ -96,7 +96,7 @@ const initialRows = (n=10) => {
 }
 
 
-const EnhancedGoodsReturnComponent = withFormik({
+const EnhancedGoodsFixComponent = withFormik({
     mapPropsToValues: (props) => ({ 
         // Field ที่ให้ User กรอก
         internal_document_id: '',
@@ -122,7 +122,7 @@ const EnhancedGoodsReturnComponent = withFormik({
         // For Step Approval
         step_approve: [],
     })
-})(GoodsReturnComponent);
+})(GoodsFixComponent);
 
 
 
@@ -136,4 +136,4 @@ const mapDispatchToProps = {
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EnhancedGoodsReturnComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(EnhancedGoodsFixComponent);

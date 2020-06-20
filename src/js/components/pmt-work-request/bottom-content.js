@@ -12,7 +12,7 @@ import { FACTS } from '../../redux/modules/api/fact';
 
 import Label from '../common/form-label'
 
-import { validatedataDocumentField, DOCUMENT_STATUS, getUserIDFromEmployeeID } from '../../helper';
+import { validatedataDocumentField, DOCUMENT_STATUS, getUserIDFromEmployeeID, checkBooleanForEditHelper } from '../../helper';
 
 const BottomContent = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
@@ -28,7 +28,7 @@ const BottomContent = (props) => {
     const validateDocumentLocationNodeIDField = (...args) => validatedataDocumentField("location_node_id", setFieldValue, ...args)
     const validateDocumentLocationStationIDField = (...args) => validatedataDocumentField("location_station_id", setFieldValue, ...args)
 
-    const checkBooleanForEdit = (values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.FAST_TRACK) && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
+    const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
     return (
         <div id="blackground-gray">
             <div className="container_12 clearfix">

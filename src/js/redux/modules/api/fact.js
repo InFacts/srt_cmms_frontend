@@ -25,7 +25,8 @@ export const FACTS = {
     APPROVAL_PROCESS_LOOKUP: "approval-process-lookup",
     POSITION:"position",
     EQUIPMENT:"equipment",
-    
+    EQUIPMENT_GROUP: "equipment-group",
+
     // FOR SS101 LOOK UP
     SS101_RECV_ACCIDENT_FROM: "ss101/recv-accident-from",
     SS101_ACCIDENT_CAUSE: "ss101/accident-cause",

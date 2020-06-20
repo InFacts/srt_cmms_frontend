@@ -21,7 +21,7 @@ import '../../../css/table.css';
 
 import {
   fetchGoodsOnhandData, getNumberFromEscapedString, getLotFromQty, weightedAverage,
-  sumTotalLineItemHelper, sumTotalHelper, DOCUMENT_STATUS, getUserIDFromEmployeeID
+  sumTotalLineItemHelper, sumTotalHelper, DOCUMENT_STATUS, getUserIDFromEmployeeID, checkBooleanForEditHelper
 } from '../../helper';
 
 const BottomContent = (props) => {
@@ -61,7 +61,7 @@ const BottomContent = (props) => {
       setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
       // setFieldValue(fieldName + `.per_unit_price`, 0, false);
       setFieldValue(fieldName + `.line_number`, index + 1, false);
-      setFieldValue(fieldName + `.item_status_id`, 1, false);
+      setFieldValue(fieldName + `.item_status_id`, 2, false);
       setFieldValue(fieldName + `.item_id`, item.item_id, false);
       setFieldValue(fieldName + `.at_source`, [], false);
 
@@ -127,8 +127,7 @@ const BottomContent = (props) => {
       })
   }
 
-  const checkBooleanForEdit = (values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.FAST_TRACK )
-  && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
+  const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
 
   return (
     <div id="blackground-gray">

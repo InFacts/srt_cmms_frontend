@@ -20,7 +20,7 @@ import PopupModalNoPart from '../common/popup-modal-nopart'
 import '../../../css/table.css';
 
 import { fetchGoodsOnhandData, getNumberFromEscapedString, getLotFromQty, weightedAverage, 
-  sumTotalLineItemHelper, sumTotalHelper,DOCUMENT_STATUS, getUserIDFromEmployeeID  } from '../../helper';
+  sumTotalLineItemHelper, sumTotalHelper,DOCUMENT_STATUS, getUserIDFromEmployeeID, checkBooleanForEditHelper  } from '../../helper';
 
 const BottomContent = (props) => {
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
@@ -124,28 +124,7 @@ const BottomContent = (props) => {
         }
       })
   }
-  
-  // For Down File in Attactment by Nuk
-  const HandleDownload = () => {
-    axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/1/download/1`,
-      { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-      .then((response) => {
-        console.log("response", response)
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        console.log("url", url)
-        const link = document.createElement('a');
-        console.log("link", link)
-        link.href = url;
-        link.setAttribute('download', 'Screen Shot 2563-05-28 at 20.11.15.png');
-        document.body.appendChild(link);
-        link.click();
-      }).catch(function (err) {
-        console.log(err);
-      })
-  };
-
-  const checkBooleanForEdit = (values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.FAST_TRACK )
-  && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
+  const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
   return (
     <div id="blackground-gray">
       <div className="container_12 clearfix">

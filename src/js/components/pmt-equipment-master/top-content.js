@@ -1,11 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect, useSelector, shallowEqual } from 'react-redux';
 
-import axios from "axios";
-import { API_PORT_DATABASE } from '../../config_port.js';
-import { API_URL_DATABASE } from '../../config_url.js';
-import { v4 as uuidv4 } from 'uuid';
-
 import FormInput from '../common/form-input'
 import TextInput from '../common/formik-text-input'
 import SelectNoChildrenInput from '../common/formik-select-no-children';
@@ -13,7 +8,6 @@ import PopupModalEquipmentNoChildren from '../common/popup-modal-equipment-no-ch
 
 import { useFormikContext, useField } from 'formik';
 
-// import PopupModalDocument from '../common/popup-modal-document'  เปลี่ยนเป็น MOdal ของ part
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import { getNumberFromEscapedString, fetchGoodsOnhandDataForItemmasterData, DOCUMENT_TYPE_ID, getDocumentbyInternalDocumentID } from '../../helper';
 
@@ -37,13 +31,12 @@ const TopContent = (props) => {
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
   const responseToFormState = (data) => {
-    let uoms = props.fact['unit-of-measures'].items;
+    let uoms = fact['unit-of-measures'].items;
     let uom = uoms.find(uom => `${uom.uom_id}` === `${data.uom_id_inventory}`); // Returns undefined if not found
     return {
       internal_item_id: data.internal_item_id,
       description: data.description,
       item_group_id: data.item_group_id,
-      item_type_id: data.item_type_id,
       uom_group_id: data.uom_group_id,                    //UOM
       uom_id: data.uom_id_inventory,
       uom_name: uom.name,
@@ -63,7 +56,7 @@ const TopContent = (props) => {
     }
     if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
       && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) {
-      let items = props.fact.items.items;
+      let items = fact.items.items;
       let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
       if (item) {
         setValues({ ...values, ...responseToFormState(item) }, false); //Setvalues and don't validate
@@ -73,6 +66,8 @@ const TopContent = (props) => {
         let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.item_id}` === `${item.item_id}`); // Returns undefined if not found
         console.log("item_match_equipment", item_match_equipment)
         if (item_match_equipment) {
+          setFieldValue("price_import", item_match_equipment.price_import, false);
+          setFieldValue("districts_id", item_match_equipment.districts_id, false);
           setFieldValue("price_currently", item_match_equipment.price_currently, false);
           setFieldValue("location_station_id", item_match_equipment.location_station_id, false);
           setFieldValue("description_equipment", item_match_equipment.depreciation, false);
@@ -80,7 +75,8 @@ const TopContent = (props) => {
           setFieldValue("equipment_status_id", item_match_equipment.equipment_status_id, false);
           setFieldValue("responsible_by", item_match_equipment.responsible_by, false);
           setFieldValue("station", item_match_equipment.station, false);
-          setFieldValue("equipment_group", item_match_equipment.equipment_group, false);
+          setFieldValue("equipment_group_id", item_match_equipment.equipment_group.equipment_group_id, false);
+          setFieldValue("item_type_id", 1, false);
 
           // IF Check user If User is Admin -> return true Else -> return false
           if (decoded_token.id === 4) { //{/* TODO USER_ID FOR ADMIN */}
@@ -98,7 +94,7 @@ const TopContent = (props) => {
     } else {//If mode add, ok
       console.log("document ID doesn't exist but I am in mode add")
       if (internal_item_id) {
-        let items = props.fact.items.items;
+        let items = fact.items.items;
         let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
         // console.log("warehouse", item)
         if (!item) { // Check Dulplication
@@ -114,8 +110,6 @@ const TopContent = (props) => {
     }
     setFieldValue(fieldName, name, false);
   };
-  const validateItemTypeIDField = (...args) => validateItemMasterdataField("item_type_id", ...args);
-  const validateItemGroupIDField = (...args) => validateItemMasterdataField("item_group_id", ...args);
   const validateUomGroupIDField = (...args) => validateItemMasterdataField("uom_group_id", ...args);
   const validateItemDescriptionField = (...args) => validateItemMasterdataField("description", ...args);
 
@@ -125,24 +119,21 @@ const TopContent = (props) => {
         <section className="container_12 ">
           <FormTitle>ข้อมูลอุปกรณ์</FormTitle>
           <div className="container_12">
+
+            {/* === internal_item_id === */}
             <FormLabel>เลขที่สินทรัพย์</FormLabel>
             <div className="grid_3 pull_1">
               <TextInput name='internal_item_id'
                 validate={validateInternalItemIDField}
-                searchable={props.toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart" tabIndex="1" />
+                searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart" tabIndex="1" />
             </div>
+
+            {/* === item_type_id === */}
             <div className="float-right">
               <div className="grid_3 float-right">
-                <SelectNoChildrenInput name="item_type_id" validate={validateItemTypeIDField} cssStyle={{ left: "-160px", top: "10px" }}
-                  disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                <SelectNoChildrenInput name="item_type_id" disabled={true}>
                   <option value=''></option>
-                  {props.fact[FACTS.ITEM_TYPE].items.map((item_type) => (
-                    values.item_type_id === item_type.item_type_id
-                      ?
-                      <option value={item_type.item_type_id} key={item_type.item_type_id} selected> {item_type.name} </option>
-                      :
-                      <option value={item_type.item_type_id} key={item_type.item_type_id}> {item_type.name} </option>
-                  ))}
+                  {values.item_type_id === 1 && <option value='1' selected>asset</option>}
                 </SelectNoChildrenInput>
               </div>
               <div className="grid_2 float-right">
@@ -152,41 +143,19 @@ const TopContent = (props) => {
           </div>
 
           <div className="container_12">
+
+            {/* === description === */}
             <FormLabel>รายละเอียด</FormLabel>
             <div className="grid_3 pull_1">
-              <TextInput name="description" validate={validateItemDescriptionField} disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="2" />
+              <TextInput name="description" validate={validateItemDescriptionField} disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
             </div>
+
+            {/* === uom_group_id === */}
             <div className="float-right">
               <div className="grid_3 float-right">
-                <SelectNoChildrenInput name="item_group_id" disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateItemGroupIDField} cssStyle={{ left: "-160px", top: "10px" }}>
+                <SelectNoChildrenInput name="uom_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomGroupIDField} cssStyle={{ left: "-160px", top: "10px" }}>
                   <option value=''></option>
-                  {props.fact[FACTS.ITEM_GROUP].items.map((item_group) => (
-                    values.item_group_id === item_group.item_group_id
-                      ?
-                      <option value={item_group.item_group_id} key={item_group.item_group_id} selected> {item_group.abbreviation} </option>
-                      :
-                      <option value={item_group.item_group_id} key={item_group.item_group_id}> {item_group.abbreviation} </option>
-                  ))}
-                </SelectNoChildrenInput>
-              </div>
-              <div className="grid_2 float-right">
-                <p className="top-text float-right">กลุ่มอุปกรณ์</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="container_12">
-
-            <FormLabel>สถานะการใช้งาน</FormLabel>
-            <div className="grid_5 pull_0">
-              <TextInput name='equipment_status_id' disabled={true} />
-            </div>
-
-            <div className="float-right">
-              <div className="grid_3 float-right">
-                <SelectNoChildrenInput name="uom_group_id" disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomGroupIDField} cssStyle={{ left: "-160px", top: "10px" }}>
-                  <option value=''></option>
-                  {props.fact[FACTS.UNIT_OF_MEASURE_GROUPS].items.map((uom) => (
+                  {fact[FACTS.UNIT_OF_MEASURE_GROUPS].items.map((uom) => (
                     values.uom_group_id === uom.uom_group_id
                       ?
                       <option value={uom.uom_group_id} key={uom.uom_group_id} selected> {uom.name} </option>
@@ -200,6 +169,15 @@ const TopContent = (props) => {
               </div>
             </div>
           </div>
+
+          <div className="container_12">
+
+            {/* === equipment_status_id === */}
+            <FormLabel>สถานะการใช้งาน</FormLabel>
+            <div className="grid_5 pull_0">
+              <TextInput name='equipment_status_id' disabled={true} />
+            </div>
+          </div>
         </section>
 
         {/* PopUp ค้นหาอะไหล่ */}
@@ -209,14 +187,5 @@ const TopContent = (props) => {
   )
 
 }
-const mapStateToProps = (state) => ({
-  fact: state.api.fact,
-  toolbar: state.toolbar,
-  decoded_token: state.token.decoded_token,
-})
 
-const mapDispatchToProps = {
-
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(TopContent);
+export default TopContent;

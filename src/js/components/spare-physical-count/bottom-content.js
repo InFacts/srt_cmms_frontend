@@ -20,7 +20,7 @@ import {
   isValidInternalDocumentIDFormat, isValidInternalDocumentIDDraftFormat,
   fetchAttachmentDocumentData, validateEmployeeIDField, validateWarehouseIDField,
   validateInternalDocumentIDFieldHelper, DOCUMENT_STATUS, getUserIDFromEmployeeID,
-  validatedataDocumentField,sumTotalLineItemHelper, sumTotalHelper
+  validatedataDocumentField,sumTotalLineItemHelper, sumTotalHelper, checkBooleanForEditHelper
 } from '../../helper';
 
 import PopupModalNoPart from '../common/popup-modal-nopart'
@@ -106,8 +106,7 @@ const BottomContent = (props) => {
     }
   }
 
-  const checkBooleanForEdit = (values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.FAST_TRACK )
-  && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
+  const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
 
   return (
     <div id="blackground-gray">

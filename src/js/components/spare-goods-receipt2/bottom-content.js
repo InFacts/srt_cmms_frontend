@@ -20,7 +20,7 @@ import {
   isValidInternalDocumentIDFormat, isValidInternalDocumentIDDraftFormat,
   fetchAttachmentDocumentData, validateEmployeeIDField, validateWarehouseIDField,
   validateInternalDocumentIDFieldHelper, DOCUMENT_STATUS, getUserIDFromEmployeeID,
-  validatedataDocumentField,sumTotalLineItemHelper, sumTotalHelper
+  validatedataDocumentField,sumTotalLineItemHelper, sumTotalHelper, checkBooleanForEditHelper
 } from '../../helper';
 import '../../../css/table.css';
 
@@ -66,11 +66,6 @@ const BottomContent = (props) => {
     }
   }
   const validateLineNumberQuatityItemIDField = (fieldName, quantity, index) => {
-    // internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
-    //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
-    // if (values.line_items[index].quantity === quantity) {
-    //   return;
-    // }
     if (quantity === "") {
       return;
     }
@@ -83,11 +78,6 @@ const BottomContent = (props) => {
     }
   }
   const validateLineNumberPerUnitPriceItemIDField = (fieldName, per_unit_price, index) => {
-    // internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
-    //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
-    // if (values.line_items[index].per_unit_price === per_unit_price) {
-    //   return;
-    // }
     if (per_unit_price === "") {
       return;
     }
@@ -100,12 +90,7 @@ const BottomContent = (props) => {
     }
   }
 
-  const HandleDeleteFile = () => {
-    setFieldValue('file', [], false);
-  };
-
-  const checkBooleanForEdit = (values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.FAST_TRACK )
-  && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
+  const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
 
   return (
     <div id="blackground-gray">
