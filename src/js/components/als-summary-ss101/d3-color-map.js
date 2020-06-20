@@ -4,7 +4,7 @@ import { extent, max, histogram } from "d3-array";
 import {interpolatePuRd, interpolateOrRd, interpolateYlOrRd} from 'd3-scale-chromatic';
 import { line } from "d3-shape";
 import {select} from "d3-selection";
-import {axisBottom} from "d3-axis";
+import {axisBottom, axisLeft} from "d3-axis";
 
 import AxisBottom from '../common/d3-axis-bottom';
 import AxisLeft from '../common/d3-axis-left';
@@ -12,15 +12,15 @@ import useChartDimensions from '../../hooks/chart-dimensions-hook'
 import { createPortal } from 'react-dom';
 
 const defaultChartSettings = {
-    marginLeft: 95,
+    marginLeft: 80,
     marginBottom: 5,
     marginTop: 50,
-    marginRight: 95,
+    marginRight: 55,
 
     height: 450,
 }
 
-// References https://observablehq.com/@d3/grouped-bar-chart
+// References https://observablehq.com/@mbostock/the-impact-of-vaccines 
 const ColorMap = ({ data, chartSettings, title}) => {
     // useChartDimensions will have a ref to the Chart_wrapper and get its own Height and Width
     // See reference of Amelia Wattenberger https://wattenberger.com/blog/react-and-d3#sizing-responsivity
@@ -29,6 +29,7 @@ const ColorMap = ({ data, chartSettings, title}) => {
     // Using Shirley Wu's Hack on Axes Ref's: D3 and React, Together - Shirley Wu https://www.youtube.com/watch?v=zXBdNDnqV2Q 
     // In addition to how to useRef with `.current` from https://medium.com/@mautayro/d3-react-and-using-refs-e25b9a817a43
     const xAxis = useRef(null)
+    const yAxis = useRef(null)
 
     const [xDomain, setXDomain] = useState([0, 1000]);
     const [yDomain, setYDomain] = useState([0, 1000]);
@@ -60,6 +61,21 @@ const ColorMap = ({ data, chartSettings, title}) => {
         }
     }, [data]);
 
+    useEffect(() => {
+        select(xAxis.current)
+            .style("font-size", "14px")
+            .call(axisBottom(xScale).tickSize(0))
+            .call(g => g.select(".domain").remove());
+    }, [xAxis, xScale])
+
+
+    useEffect(() => {
+        select(yAxis.current)
+            .style("font-size", "15px")
+            .call(axisLeft(yScale).tickSize(0))
+            .call(g => g.select(".domain").remove());
+    }, [yAxis, yScale])
+
 
     return (
         <div className="Chart_wrapper" ref={ref}>
@@ -80,7 +96,7 @@ const ColorMap = ({ data, chartSettings, title}) => {
                     <text 
                         x={dms.boundedWidth/2}
                         text-anchor="middle"
-                        y={-30}
+                        y={-23}
                         font-weight="bold"
                         font-size="20px"
                     >{title}</text>
@@ -124,12 +140,14 @@ const ColorMap = ({ data, chartSettings, title}) => {
 
 
                     {/* === xAxis === */}
-                    <g transform={`translate(0, ${dms.boundedHeight})`}>
+                    <g 
+                    transform={`translate(0, ${-18})`}
+                    >
                         <g ref={xAxis} />
                     </g>
                     {/* === yAxis === */}
                     <g >
-                        <AxisLeft domain={yScale.domain()} range={yScale.range()} />
+                        <g ref={yAxis} />
                     </g>
 
                 </g>

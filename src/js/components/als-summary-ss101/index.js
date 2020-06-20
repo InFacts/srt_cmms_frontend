@@ -17,9 +17,10 @@ import LineGraph from '../als-spare/d3-line-graph';
 import BarDivergingGraph from '../als-spare/d3-bar-diverging';
 import GroupedBarGraph from './d3-grouped-bar-graph';
 import ColorMap from './d3-color-map';
+import PieChart from './d3-pie-chart';
 
 import AdjustmentBarComponent from './adjustment-bar';
-import {randomGroupedBarGraphData , randomColorMapData} from './mockup-data';
+import {randomGroupedBarGraphData , randomColorMapData,randomPieChartData} from './mockup-data';
 
 const AlsEquipmentStatusComponent = () => {
     const dispatch = useDispatch();
@@ -35,7 +36,7 @@ const AlsEquipmentStatusComponent = () => {
 
     return (
         <>
-            {!loggedIn ? <Redirect to="/" /> : null}
+            {/* {!loggedIn ? <Redirect to="/" /> : null} */}
 
             <div id="blackground-white" >
                 <div className="bootstrap-wrapper">
@@ -78,7 +79,12 @@ const AlsEquipmentStatusComponent = () => {
                                 <div className="row_bootstrap no-gutters">
                                     <div className="col-12"
                                         style={{ border: "1px purple solid" }}
-                                    >col6</div>
+                                    >
+                                        <PieChart 
+                                            title="สถิติการซ่อมบำรุงในแต่ละหมวด"
+                                            data={randomPieChartData()}
+                                        />
+                                    </div>
 
                                 </div>
                             </div>
