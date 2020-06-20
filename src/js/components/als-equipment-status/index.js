@@ -52,7 +52,7 @@ const AlsEquipmentStatusComponent = () => {
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
 
-            <div id="blackground-white" >
+            <div id="blackground-white" style={{ height: "100vh" }}>
                 <div className="bootstrap-wrapper">
                     <div className="container" style={{ marginTop: "70px" }}>
                         {/* Section Title */}

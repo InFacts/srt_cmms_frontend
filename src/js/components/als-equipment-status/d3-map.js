@@ -7,6 +7,7 @@ import {schemeSet1, schemeReds, schemeOranges} from "d3-scale-chromatic";
 import useChartDimensions from '../../hooks/chart-dimensions-hook'
 
 import ThailandTopo from './thailandWithName.json';
+import MockupEquipmentData from './mockupEquipmentData.json';
 import { geoPath, geoAlbers, geoMercator ,geoEqualEarth } from "d3-geo"
 import legend from './d3-color-legend';
 
@@ -74,11 +75,13 @@ function ThailandMapComponent({data}) {
     useEffect(() => {
         console.log("AlsEquipmentStatusComponent:: JSON ", ThailandTopo)
         console.log("AlsEquipmentStatusComponent:: geoPath ", geoPath(projection)(ThailandTopo))
-
+        
+        console.log("MockupEquipmentData", MockupEquipmentData.equipment_data)
         let tempMapData = []
         for (let i =0; i<77; i++){
             tempMapData.push((Math.random()+Math.random())/2*10);
         }
+        console.log("tempMapData", tempMapData)
         setTestMapData(tempMapData)
     },[])
 
