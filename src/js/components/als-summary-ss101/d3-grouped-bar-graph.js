@@ -172,7 +172,7 @@ function GroupedBarGraph({ data, chartSettings, title}) {
                     </g>
 
                     {/* === Color Legend === */}
-                    <g transform={`translate(${dms.boundedWidth},${-dms.marginTop})`}
+                    <g transform={`translate(${dms.boundedWidth},${-35})`}
                         textAnchor="end"
                         fontSize="14"
                     >
