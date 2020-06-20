@@ -84,6 +84,7 @@ const AlsEquipmentStatusComponent = () => {
                         {/* Columns have horizontal padding to create the gutters between individual columns, however, you can remove the margin from rows and padding from columns with .no-gutters on the .row. */}
                         <div className="row_bootstrap no-gutters">
 
+                            {/* First Half Column */}
                             <div className="col-6"
                                 style={{ border: "1px red solid" }}
                             >
@@ -119,9 +120,10 @@ const AlsEquipmentStatusComponent = () => {
                                 </div>
                             </div>
 
+                            {/* Second Half Column */}
                             <div className="col-6"
                                 style={{ border: "1px red solid" }}
-                            >col6
+                            >
                             <div className="row_bootstrap no-gutters">
                                     <div className="col-12"
                                         style={{ border: "1px purple solid" }}
@@ -131,7 +133,12 @@ const AlsEquipmentStatusComponent = () => {
                                 <div className="row_bootstrap no-gutters">
                                     <div className="col-12"
                                         style={{ border: "1px purple solid" }}
-                                    >col6</div>
+                                    >
+                                        <GroupedBarGraph 
+                                            title="ระยะเวลาเฉลี่ยก่อนการเสียหายแต่ละครั้ง - MTBF"
+                                            data={randomGroupedBarGraphData()}
+                                        />
+                                    </div>
 
                                 </div>
                             </div>

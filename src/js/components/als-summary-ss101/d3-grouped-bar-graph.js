@@ -61,7 +61,7 @@ function GroupedBarGraph({ data, chartSettings, title}) {
         // "#7b6888", 
         // "#6b486b", 
         "#a05d56", 
-        "#d0743c", 
+        // "#d0743c", 
         "#ff8c00"])
 
 
@@ -162,12 +162,36 @@ function GroupedBarGraph({ data, chartSettings, title}) {
 
 
 
-
+                    {/* === xAxis === */}
                     <g transform={`translate(0, ${dms.boundedHeight})`}>
                         <g ref={xAxis} />
                     </g>
+                    {/* === yAxis === */}
                     <g >
                         <AxisLeft domain={yScale.domain()} range={yScale.range()} />
+                    </g>
+
+                    {/* === Color Legend === */}
+                    <g transform={`translate(${dms.boundedWidth},${-dms.marginTop})`}
+                        textAnchor="end"
+                        fontSize="14"
+                    >
+                        {color.domain().slice().reverse().map((d,i)=> (
+                            <g  transform={`translate(0, ${i*17})`} >
+                                <rect 
+                                    x={-15}
+                                    width={15}
+                                    height={15}
+                                    fill={color(d)}
+                                />
+                                <text
+                                    x={-20}
+                                    y={6}
+                                    dy={"0.35em"}
+                                >{d}</text>
+                            </g>
+                        ))}
+
                     </g>
 
                 </g>
