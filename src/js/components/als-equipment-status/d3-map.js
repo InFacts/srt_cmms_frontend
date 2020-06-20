@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { scaleLinear ,scaleTime, scaleBand, scaleQuantize } from "d3-scale";
 import { extent, max, min, range } from "d3-array";
 import {line} from "d3-shape";
-import {schemeSet1, schemeReds} from "d3-scale-chromatic";
+import {schemeSet1, schemeReds, schemeOranges} from "d3-scale-chromatic";
 
 import useChartDimensions from '../../hooks/chart-dimensions-hook'
 
@@ -70,9 +70,16 @@ function ThailandMapComponent({data}) {
         }
     }, [data]);
 
+    var [testMapData,setTestMapData] = useState([])
     useEffect(() => {
         console.log("AlsEquipmentStatusComponent:: JSON ", ThailandTopo)
         console.log("AlsEquipmentStatusComponent:: geoPath ", geoPath(projection)(ThailandTopo))
+
+        let tempMapData = []
+        for (let i =0; i<77; i++){
+            tempMapData.push((Math.random()+Math.random())/2*10);
+        }
+        setTestMapData(tempMapData)
     },[])
 
     const color = scaleQuantize([1,10], schemeReds[9])
@@ -80,7 +87,9 @@ function ThailandMapComponent({data}) {
 
     return (
         <div className="Chart_wrapper" ref={ref}>
-            <svg width={dms.width} height={dms.height} style={{ border: "1.5px solid gold" }} viewBox={`0 0 ${dms.width} ${dms.height}`}>
+            <svg width={dms.width} height={dms.height} 
+                // style={{ border: "1.5px solid gold" }} 
+                viewBox={`0 0 ${dms.width} ${dms.height}`}>
                 <g transform={`translate(${dms.width/2+dms.width/8}, ${0})`}>
                   {legend({color, title: "Test title", width: 200})}  
                 </g>
@@ -105,8 +114,9 @@ function ThailandMapComponent({data}) {
                             class="map-region"
                             d={geoPath(projection)(region)}
                             onMouseEnter ={() => setToolTipText(region.properties.name)}
-                            stroke="steelblue"
-                            fill="#f3f3f3" 
+                            stroke="black"
+                            // fill="#f3f3f3" 
+                            fill={color(testMapData[i])}
                         >
                             <title>{region.properties.name}</title>
 
@@ -116,7 +126,7 @@ function ThailandMapComponent({data}) {
 
 
                 </g>
-                <text class="label" id="country-name" x="10" y="390">{toolTipText}</text>
+                <text class="label" id="country-name" x="20" y="50">{toolTipText}</text>
 
             </svg>
 

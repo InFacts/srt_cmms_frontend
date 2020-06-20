@@ -38,6 +38,9 @@ import PmtFixedAsset from './components/pmt-fixed-asset';
 // ALS Page
 import AlsSpareComponent from './components/als-spare';
 import AlsEquipmentStatusComponent from './components/als-equipment-status';
+import AlsSummarySS101Component from './components/als-summary-ss101';
+import AlsPreventiveMaintenanceComponent from './components/als-preventive-maintenance'
+import AlsPlanPreventiveMaintenanceComponent from './components/als-plan-preventive-maintenance'
 
 // Admin
 import PermistionAdmin from './components/admin-permisstion';
@@ -103,6 +106,9 @@ const FrontEnd = () => (
         {/* ALS Routes */}
         <Route exact path="/als-spare" component={AlsSpareComponent} />
         <Route exact path="/als-equipment-status" component={AlsEquipmentStatusComponent} />
+        <Route exact path="/als-summary-ss101" component={AlsSummarySS101Component} />
+        <Route exact path="/als-preventive-maintenance" component={AlsPreventiveMaintenanceComponent} />
+        <Route exact path="/als-plan-preventive-maintenance" component={AlsPlanPreventiveMaintenanceComponent} />
 
         {/* Handle routes that are not found */}
         <Route component={NotFoundComponent} />

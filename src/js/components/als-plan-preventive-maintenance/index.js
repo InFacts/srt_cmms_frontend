@@ -15,11 +15,11 @@ import useTokenInitializer from '../../hooks/token-initializer';
 import ScatterPlot from '../als-spare/d3-scatter-plot';
 import LineGraph from '../als-spare/d3-line-graph';
 import BarDivergingGraph from '../als-spare/d3-bar-diverging';
-import Histogram from './d3-histogram';
-import ThailandMapComponent from './d3-map';
-import SimpleGrayCardComponent from './simple-gray-card';
-import AdjustmentBarComponent from './adjustment-bar';
-import EquipmentStatusListComponent from './equipment-status-list';
+import Histogram from '../als-equipment-status/d3-histogram';
+import ThailandMapComponent from '../als-equipment-status/d3-map';
+import SimpleGrayCardComponent from '../als-equipment-status/simple-gray-card';
+import AdjustmentBarComponent from '../als-equipment-status/adjustment-bar';
+import EquipmentStatusListComponent from '../als-equipment-status/equipment-status-list';
 
 
 const randomHistogramData = () => {
