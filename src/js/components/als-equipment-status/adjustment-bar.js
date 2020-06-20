@@ -4,7 +4,7 @@ import SelectNoChildrenInput from '../common/formik-select-no-children';
 const AdjustmentBarComponent = ({name, value}) => {
 
     return (
-    <div className="gray-background adjustment-bar">
+    <div className="gray-background adjustment-bar mt-3">
         <h5 className="adjustment-bar-name">ปรับแต่งข้อมูลของภาพรวม</h5>
         <div className="white-background adjustment-bar-inner">
             <div className="adjustment-bar-inner-text">กลุ่มอุปกรณ์</div  >

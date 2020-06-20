@@ -30,11 +30,19 @@ const AxisBottom = ({xScale}) => {
     const ticks = useMemo(() => {
         const pixelsPerTick = 30;
         const numberOfTicksTarget = Math.max(1, Math.floor( width / pixelsPerTick));
-        return xScale.ticks(numberOfTicksTarget)
+        if (xScale.ticks) {
+            return xScale.ticks(numberOfTicksTarget)
             .map(value => ({
                 value,
                 xOffset: xScale(value)
             }))
+        } else { // This could be ordinal
+            return xScale.domain().map(value => ({
+                value,
+                xOffset: xScale(value)
+            }))
+        }
+        
     }, [ xScale.range().join("-"), xScale.domain().join("-")]);
 
     return (

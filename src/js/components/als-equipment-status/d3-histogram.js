@@ -3,8 +3,8 @@ import { scaleLinear, scaleTime } from "d3-scale";
 import { extent, max, histogram } from "d3-array";
 import { line } from "d3-shape";
 
-import AxisBottom from '../als-spare/d3-axis-bottom';
-import AxisLeft from '../als-spare/d3-axis-left';
+import AxisBottom from '../common/d3-axis-bottom';
+import AxisLeft from '../common/d3-axis-left';
 import useChartDimensions from '../../hooks/chart-dimensions-hook'
 
 const defaultChartSettings = {
