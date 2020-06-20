@@ -1,8 +1,8 @@
 {
     "data":[
-        {"equipment_group_id": "2", "equipment_group_name": "คานไม้กั้นถนน", "item_id": "102", "internal_item_id": "55120030", "description": "คานเครื่องกั้นถนน Fixed Asset", "equipment_status_id": "2", "location_amphure_id": "1",  "location_province_id": "1", "location_province_en": "Khet Phra Nakhon", "location_province_th": "เขตพระนคร"},
+        {"equipment_group_id": "2", "equipment_group_name": "คานไม้กั้นถนน", "item_id": "102", "internal_item_id": "55120030", "description": "คานเครื่องกั้นถนน Fixed Asset", "equipment_status_id": "3", "location_province_id": "1", "location_province_en": "Bangkok Metropolis", "location_province_th": "กรุงเทพมหานคร", "division_id":"", "division_name":"", "district_id":"3", "district_name":"แขวงบำรุงรักษาอาณัติสัญญาณภาคกลาง", "node_id":"29", "node_name":"ภาคกลาง(นตส.บซ.)", "station_id":"117", "station_name":"อุดรธานี"},
 
-        {"equipment_group_id": "2", "equipment_group_name": "คานไม้กั้นถนน", "item_id": "103", "internal_item_id": "55120031", "description": "คานเครื่องกั้นถนน Fixed Asset v2", "equipment_status_id": "2", "location_amphure_id": "1",  "location_province_id": "1", "location_province_en": "Khet Phra Nakhon", "location_province_th": "เขตพระนคร"}
+        {"equipment_group_id": "2", "equipment_group_name": "คานไม้กั้นถนน", "item_id": "103", "internal_item_id": "55120031", "description": "คานเครื่องกั้นถนน Fixed Asset v2", "equipment_status_id": "3", "location_province_en": "Bangkok Metropolis", "location_province_th": "กรุงเทพมหานคร", "division_id":"", "division_name":"", "district_id":"3", "district_name":"แขวงบำรุงรักษาอาณัติสัญญาณภาคกลาง", "node_id":"29", "node_name":"ภาคกลาง(นตส.บซ.)", "station_id":"117", "station_name":"อุดรธานี"}
     ]
 }
 
