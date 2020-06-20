@@ -35,7 +35,7 @@ const Register = (props) => {
                 }
             }
             console.log("Register", register)
-            axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/auth/create-account`, register)
+            axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/auth/create-account`, register, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
                 .then(res => {
                     console.log(res);
                     setRegister(true);

@@ -29,8 +29,8 @@ export const DOCUMENT_TYPE_ID = {
     WORK_ORDER: 202,
     WORK_ORDER_PM: 203,
     SS101: 204,
-
     EQUIPMENT_INSTALLATION: 206,
+    MAINTENANT_ITEM: 207,
 
     // These needs to change later!!! since Doc Type Group ID will need to be used in other API's
     WAREHOUSE_MASTER_DATA: 1,
@@ -43,7 +43,6 @@ export const DOCUMENT_TYPE_NOTGROUP_ID = {
     WORK_ORDER: 2021,
     WORK_ORDER_PM: 2031,
     SS101: 2041,
-    MAINTENANT_ITEM: 207,
 }
 
 export const ICD_DOCUMENT_TYPE_GROUP_IDS = [
@@ -244,7 +243,7 @@ export const getNumberFromEscapedString = (escapedString) => {
 }
 
 export const isValidInternalDocumentIDFormat = (internal_document_id) => {
-    const internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SD|WR|WO|WP|SS)-[A-Z]{3}-\d{4}\/\d{4}$/g;
+    const internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SD|WR|WO|WP|SS|MI)-[A-Z]{3}-\d{4}\/\d{4}$/g;
     return internalDocumentIDRegex.test(internal_document_id);
 }
 export const isValidInternalDocumentIDDraftFormat = (internal_document_id) => {
@@ -490,6 +489,33 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             document: document_part,
             specific: ss101_part,
         }
+    } else if (document_type_id === DOCUMENT_TYPE_ID.MAINTENANT_ITEM) {
+        document_part = {
+            ...document_part,
+            refer_to_document_id: values.refer_to_document_id,
+        };
+        var line_items_part = [];
+        values.line_items.map((line_item, index) => {
+            if (line_item.item_id) {
+                line_items_part.push({
+                    document_id: values.document_id,
+                    line_number: index+1,
+                    item_id: line_item.item_id,
+                    uom_id: line_item.uom_id,
+                    quantity_damaged: line_item.quantity_damaged,
+                    quantity_used: line_item.quantity_used,
+                    quantity_salvage: line_item.quantity_salvage
+                });
+            }
+        })
+        var icd_part = {
+            document_id: values.document_id,
+            line_items: line_items_part,
+        }
+        return {
+            document: document_part,
+            specific: icd_part,
+        }
     }
 }
 
@@ -616,6 +642,7 @@ export const editDocument = (document_id, document_type_group_id, data) => new P
             }
         })
         .catch((err) => {
+            console.log("err", err)
             reject(err)
         });
 });
@@ -679,13 +706,13 @@ export const saveDocument = (document_type_group_id, data, files) => new Promise
                     // console.log("[[[saveDocument.SEND", files, files.length)
                     if (files.length !== 0 && files !== undefined) {
                         uploadAttachmentDocumentData(document_id, files)
-                        .then(() => {
-                            return resolve(document_id, internal_document_id, status);
-                        })
-                        .catch((err) => {
-                            return reject(err);
-                        });
-                    } 
+                            .then(() => {
+                                return resolve(document_id, internal_document_id, status);
+                            })
+                            .catch((err) => {
+                                return reject(err);
+                            });
+                    }
                     else {
                         return resolve(document_id, internal_document_id, status);
                     }
@@ -952,6 +979,7 @@ export const checkDocumentStatus = (valuesContext) => new Promise((resolve, reje
 
 
 const responseToFormState = (fact, data, document_type_group_id) => {
+    console.log(">>>>>", document_type_group_id, "DOCUMENT_TYPE_ID.MAINTENANT_ITEM", DOCUMENT_TYPE_ID.MAINTENANT_ITEM)
     if (isICD(document_type_group_id)) {
         if (document_type_group_id !== DOCUMENT_TYPE_ID.PHYSICAL_COUNT && document_type_group_id !== DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT) {
             for (var i = data.line_items.length; i <= 9; i++) {
@@ -1153,6 +1181,34 @@ const responseToFormState = (fact, data, document_type_group_id) => {
         console.log("this is document_part 123  ", document_part)
         console.log("this is ss101_part ", ss101_part)
         return { ...transformDocumentResponseToFormState(document_part, fact), ...transformSS101ResponseToFormState(ss101_part) }
+    } else if (document_type_group_id === DOCUMENT_TYPE_ID.MAINTENANT_ITEM) {
+        for (var i = data.specific.line_items.length; i <= 9; i++) {
+            data.specific.line_items.push(
+                {
+                    item_id: "",
+                    internal_item_id: "",
+                    description: "",
+                    uom_group_id: "",
+                    unit: "",
+                    list_uoms: [],
+                }
+            );
+        }
+        var created_on = new Date(data.document.created_on);
+        created_on.setHours(created_on.getHours() + 7);
+        return {
+            document_id: data.document.document_id,
+            internal_document_id: data.document.internal_document_id,
+            created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_user_id) || '',
+            created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_admin_id) || '',
+            created_on: created_on.toISOString().split(".")[0],
+            line_items: data.specific.line_items,
+            src_warehouse_id: data.document.warehouse_id,
+            remark: data.document.remark,
+            refer_to_document_internal_id: data.document.refer_to_document_internal_id,
+            refer_to_document_id: data.document.refer_to_document_id,
+            document_date: data.document.document_date.slice(0, 10)
+        }
     }
 
 }
@@ -1233,15 +1289,15 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
         console.log("I dont have any internal doc id")
         return resolve('Required');
     } else if (!isValidInternalDocumentIDFormat(internal_document_id) && !isValidInternalDocumentIDDraftFormat(internal_document_id)) {
+        console.log(">>>>>")
         return resolve('Invalid Document ID Format Be sure to use the format ie. GR-PYO-2563/0001')
     }
-
+    console.log(">>>>>>>")
     // Checking from Database if Internal Document ID Exists
     let error;
     getDocumentbyInternalDocumentID(internal_document_id)
         .then((data) => {
             console.log(" i got data", data);
-
             if (isICD(document_type_group_id)) { // If document type group ID is ICD
                 if (document_type_group_id !== DOCUMENT_TYPE_ID.PHYSICAL_COUNT && document_type_group_id !== DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT) {
                     if (data.internal_document_id === internal_document_id) { // If input document ID exists
@@ -1307,7 +1363,7 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
                             // setFieldValue('document_id', '', false); 
                             // if (values.document_id || footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve
                             if (footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve 
-                            //TODO - need to check whether it needs to be approved - Donut
+                                //TODO - need to check whether it needs to be approved - Donut
                                 console.log("i am in mode add, saved and wanting to approve")
                                 error = '';
                             } else {
@@ -1425,31 +1481,27 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
 
 
             }
-            // else if (document_type_group_id === DOCUMENT_TYPE_ID.MAINTENANT_ITEM) {
-            //     console.log("i know i am in maintenant item!!")
-            //     if ((toolbar.mode === TOOLBAR_MODE.SEARCH ||
-            //         toolbar.mode === TOOLBAR_MODE.NONE ||
-            //         toolbar.mode === TOOLBAR_MODE.NONE_HOME)
-            //         && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
-            //         console.log("validateInternalDocumentIDField:: I got document ID ", data.document.document_id)
-            //         setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
-            //         validateField("created_by_user_employee_id");
-            //         validateField("created_by_admin_employee_id");
-            //         return resolve(null);
+            else if (document_type_group_id === DOCUMENT_TYPE_ID.MAINTENANT_ITEM) {
+                console.log("i know i am in maintenant item!!")
+                if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
+                    && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
+                    console.log("validateInternalDocumentIDField:: I got document ID ")
+                    setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
+                    validateField("created_by_user_employee_id");
+                    validateField("created_by_admin_employee_id");
+                    return resolve(null);
 
-            //     } else { //If Mode add, need to error duplicate Document ID
-            //         // setFieldValue('document_id', '', false); 
-            //         if (values.document_id || footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve
-            //             console.log("i am in mode add, saved and wanting to approve")
-            //             error = '';
-            //         } else {
-            //             console.log("I AM DUPLICATE")
-            //             error = 'Duplicate Document ID';
-            //         }
-            //     }
-
-
-            // }  
+                } else { //If Mode add, need to error duplicate Document ID
+                    // setFieldValue('document_id', '', false); 
+                    if (values.document_id || footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve
+                        console.log("i am in mode add, saved and wanting to approve")
+                        error = '';
+                    } else {
+                        console.log("I AM DUPLICATE")
+                        error = 'Duplicate Document ID';
+                    }
+                }
+            }
             else {
                 console.log("IDK WHERE I AM", document_type_group_id)
             }
@@ -1761,5 +1813,5 @@ export const identifyEndpoinsHelper = (document_type_id) => {
     else return "#";
 }
 
-export const checkBooleanForEditHelper = (values, decoded_token, fact) => (values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.FAST_TRACK || values.status_name_th === DOCUMENT_STATUS.DRAFT )
-  && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
+export const checkBooleanForEditHelper = (values, decoded_token, fact) => (values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.FAST_TRACK || values.status_name_th === DOCUMENT_STATUS.DRAFT)
+    && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
