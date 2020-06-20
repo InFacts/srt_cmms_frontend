@@ -49,8 +49,10 @@ function ThailandMapComponent({data}) {
         // .scale(200)
         // .translate([dms.width / 2, dms.height / 2])
         .rotate([-50,40,10])
+        .center([0, 0])
         // .parallels([-90, -120])
         .fitSize([dms.boundedWidth, dms.boundedHeight], ThailandTopo)
+        .center([-1.2, 0])
 
     // set Domain of x and y after new data
     useEffect(() => {
@@ -79,8 +81,8 @@ function ThailandMapComponent({data}) {
     return (
         <div className="Chart_wrapper" ref={ref}>
             <svg width={dms.width} height={dms.height} style={{ border: "1.5px solid gold" }} viewBox={`0 0 ${dms.width} ${dms.height}`}>
-                <g transform={`translate(${dms.width/2}, ${0})`}>
-                  {legend({color, title: "Test title", width: 260})}  
+                <g transform={`translate(${dms.width/2+dms.width/8}, ${0})`}>
+                  {legend({color, title: "Test title", width: 200})}  
                 </g>
                 <g transform={`translate(${dms.marginLeft}, ${dms.marginTop})`}>
                     
@@ -100,10 +102,11 @@ function ThailandMapComponent({data}) {
                         <path 
                             id={region.properties.name}
                             key={region.properties.name}
+                            class="map-region"
                             d={geoPath(projection)(region)}
                             onMouseEnter ={() => setToolTipText(region.properties.name)}
                             stroke="steelblue"
-                            fill="#fff" 
+                            fill="#f3f3f3" 
                         >
                             <title>{region.properties.name}</title>
 

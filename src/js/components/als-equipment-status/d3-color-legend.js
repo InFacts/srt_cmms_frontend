@@ -61,6 +61,11 @@ function ColorLegend({
                 fill={hexColor}
             />
         ))}
+        
+
+        <g>
+            
+        </g>
      </svg>
     </>
     );
