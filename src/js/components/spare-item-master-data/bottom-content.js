@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { connect, useSelector, shallowEqual } from 'react-redux';
-
-import axios from "axios";
-import { API_PORT_DATABASE } from '../../config_port.js';
-import { API_URL_DATABASE } from '../../config_url.js';
+import { useSelector, shallowEqual } from 'react-redux';
 
 import TextareaInput from '../common/formik-textarea-input';
 // import Table from '../common/table'; เปลัี่ยน Table ให้เป็นแบบสำหรับ form นี้
@@ -18,8 +14,8 @@ import { useFormikContext } from 'formik';
 
 import '../../../css/table.css';
 
-const BottomContent = (props) => {
-  const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
+const BottomContent = () => {
+  const { values, errors, touched, setFieldValue} = useFormikContext();
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
@@ -29,7 +25,7 @@ const BottomContent = (props) => {
       return 'Required'
     }
     setFieldValue(fieldName, uom_id, false);
-    let uoms = props.fact['unit-of-measures'].items;
+    let uoms = fact['unit-of-measures'].items;
     let uom = uoms.find(uom => `${uom.uom_id}` === `${uom_id}`); // Returns undefined if not found
     setFieldValue("uom_name", uom.name, false);
   };
@@ -64,7 +60,7 @@ const BottomContent = (props) => {
                 <p className="cancel-default">ชื่อย่อหน่วยนับ </p>
               </div>
               <div className="grid_3 pull_1">
-                <SelectNoChildrenInput name="uom_id" disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomIDField} cssStyle={{ left: "-160px", top: "10px" }}>
+                <SelectNoChildrenInput name="uom_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomIDField} cssStyle={{ left: "-160px", top: "10px" }}>
                   <option value=''></option>
                   {fact['unit-of-measures'].items.map((list_uoms) => (
                     list_uoms.uom_id === values.uom_id
@@ -83,7 +79,7 @@ const BottomContent = (props) => {
                 <div className="grid_2">
                   <NumberInput step={0.01} name="minimum_order_quantity" tabIndex="7" cssStyle={{ left: "60px", top: "-5px" }}
                     validate={validateMinimumOrderQuantityField}
-                    disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                   />
                 </div>
                 <div className="grid_1 ml-0 pull_0">
@@ -106,7 +102,7 @@ const BottomContent = (props) => {
                 </div>
                 <div className="grid_2">
                   <NumberInput step={1} name="lead_time" tabIndex="7" validate={validateLeadTimeField} cssStyle={{ left: "60px", top: "-5px" }}
-                    disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                   />
                 </div>
                 <div className="grid_1">
@@ -123,7 +119,7 @@ const BottomContent = (props) => {
                 <div className="grid_2">
                   <NumberInput step={1} name="tolerance_time" tabIndex="7"
                     validate={validateToleranceTimeField} cssStyle={{ left: "60px", top: "-5px" }}
-                    disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                   />
                 </div>
                 <div className="grid_1">
@@ -137,7 +133,7 @@ const BottomContent = (props) => {
                 <p className="cancel-default">สถานะอะไหล่ </p>
               </div>
               <div className="grid_3 pull_1">
-                <SelectNoChildrenInput name="active" disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                <SelectNoChildrenInput name="active" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                   validate={validateActiveField} cssStyle={{ left: "-160px", top: "10px" }}>
                   <option value=''></option>
                   {values.active === 0
@@ -160,7 +156,7 @@ const BottomContent = (props) => {
                 </div>
                 <div className="grid_2">
                   <TextInput name="accounting_type"
-                    disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="2" />
+                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="2" />
                 </div>
                 <div className="grid_1">
                   <p className="cancel-default"></p>
@@ -172,7 +168,7 @@ const BottomContent = (props) => {
               <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
               <div className="grid_11">
                 <TextareaInput name="remark" tabIndex="6"
-                  disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                 />
               </div>
             </div>
@@ -195,7 +191,7 @@ const BottomContent = (props) => {
               <div className="grid_2 pull_0">
                 <NumberInput step={0.01} name="quantity_required" tabIndex="7"
                   validate={validateQuantityRequiredField} cssStyle={{ left: "60px", top: "-5px" }}
-                  disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                 />
               </div>
               <div className="grid_1 ml-0 pull_0"></div>
@@ -208,7 +204,7 @@ const BottomContent = (props) => {
               <div className="grid_2 pull_0">
                 <NumberInput step={0.01} name="quantity_lowest" tabIndex="7"
                   validate={validateQuantityLowestField} cssStyle={{ left: "60px", top: "-5px" }}
-                  disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                 />
               </div>
               <div className="grid_1 ml-0 pull_0">
@@ -222,7 +218,7 @@ const BottomContent = (props) => {
               <div className="grid_2 pull_0">
                 <NumberInput step={0.01} name="quantity_highest" tabIndex="7"
                   validate={validateQuantityHighestField} cssStyle={{ left: "60px", top: "-5px" }}
-                  disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                 />
               </div>
               <div className="grid_3 float-right">
@@ -297,13 +293,4 @@ const BottomContent = (props) => {
   )
 };
 
-const mapStateToProps = (state) => ({
-  fact: state.api.fact,
-  toolbar: state.toolbar,
-  decoded_token: state.token.decoded_token,
-})
-
-const mapDispatchToProps = {
-
-}
-export default connect(mapStateToProps, mapDispatchToProps)(BottomContent);
+export default BottomContent;

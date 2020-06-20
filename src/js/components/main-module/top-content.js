@@ -17,22 +17,22 @@ const TopContent = (props) => {
 
   let module = [];
   useEffect(() => {
-    fetchPositionPermissionData(decoded_token.has_position && decoded_token.has_position[0].position_id)
-      .then((position_permission) => {
-        // console.log("position_permission", position_permission)
-        position_permission.map((list_module) => {
-          module.push({
-            position_id: list_module.position_id,
-            name: list_module.name,
-            abbreviation: list_module.abbreviation,
-            module_1: list_module.function.indexOf(1) !== -1,
-            module_2: list_module.function.indexOf(2) !== -1,
-            module_3: list_module.function.indexOf(3) !== -1,
-            module_4: list_module.function.indexOf(4) !== -1,
-          })
-        })
-        setFieldValue('line_position_permission', module, false);
-      })
+    // fetchPositionPermissionData(decoded_token.has_position && decoded_token.has_position[0].position_id)
+    //   .then((position_permission) => {
+    //     // console.log("position_permission", position_permission)
+    //     position_permission.map((list_module) => {
+    //       module.push({
+    //         position_id: list_module.position_id,
+    //         name: list_module.name,
+    //         abbreviation: list_module.abbreviation,
+    //         module_1: list_module.function.indexOf(1) !== -1,
+    //         module_2: list_module.function.indexOf(2) !== -1,
+    //         module_3: list_module.function.indexOf(3) !== -1,
+    //         module_4: list_module.function.indexOf(4) !== -1,
+    //       })
+    //     })
+    //     setFieldValue('line_position_permission', module, false);
+    //   })
   }, [decoded_token]);
 
   return (
@@ -43,7 +43,8 @@ const TopContent = (props) => {
             <h4 className="head-title" style={{ color: "black" }}>ระบบฐานข้อมูลระบบอาณัติสัญญาณเพื่อวิเคราะห์และวางแผนซ่อมบำรุง</h4>
 
             <div className="grid_4">
-              <Link to={values.line_position_permission.length !== 0 && values.line_position_permission[0].module_1 ? "/main-spare" : "#"}>
+              {/* <Link to={values.line_position_permission.length !== 0 && values.line_position_permission[0].module_1 ? "/main-spare" : "#"}> */}
+              <Link to="/main-spare">
                 <div className="card p-tooltip--btm-center" aria-describedby="btm-cntr">
                   <div className="image ">
                     <img src={Icon} alt="Generic placeholder thumbnail" />
@@ -58,7 +59,8 @@ const TopContent = (props) => {
             </div>
 
             <div className="grid_4">
-              <Link to={values.line_position_permission.length !== 0 && values.line_position_permission[0].module_2 ? "/main-pmt" : "#"}>
+              {/* <Link to={values.line_position_permission.length !== 0 && values.line_position_permission[0].module_2 ? "/main-pmt" : "#"}> */}
+              <Link to="/main-pmt">
                 <div className="card p-tooltip--btm-center" aria-describedby="btm-cntr" >
                   <div className="image ">
                     <img src={Icon} alt="Generic placeholder thumbnail" />
@@ -95,7 +97,8 @@ const TopContent = (props) => {
                   <img src={Icon} alt="Generic placeholder thumbnail" />
                 </div>
                 <div className="content ">
-                  <Link to={values.line_position_permission.length !== 0 && values.line_position_permission[0].module_4 ? "/track" : "#"}>
+                  <Link to="/track">
+                  {/* <Link to={values.line_position_permission.length !== 0 && values.line_position_permission[0].module_4 ? "/track" : "#"}> */}
                     <div className="card-body">สถานะรอการอนุมัติ</div>
                     <div className="card-footer ">
                       ระบบบริหารข้อมูลอะไหล่สำหรับซ่อมบำรุง

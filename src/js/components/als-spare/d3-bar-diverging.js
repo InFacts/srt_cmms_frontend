@@ -4,8 +4,8 @@ import { extent, max, min, range } from "d3-array";
 import {line} from "d3-shape";
 import {schemeSet1} from "d3-scale-chromatic";
 
-import AxisBottom from './d3-axis-bottom';
-import AxisLeft from './d3-axis-left';
+import AxisBottom from '../common/d3-axis-bottom';
+import AxisLeft from '../common/d3-axis-left';
 import useChartDimensions from '../../hooks/chart-dimensions-hook'
 
 const chartSettings = {

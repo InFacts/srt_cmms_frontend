@@ -26,17 +26,10 @@ const BottomContent = (props) => {
                         list.module_2 === true ? 2 : 0,
                         list.module_3 === true ? 3 : 0,
                         list.module_4 === true ? 4 : 0,
+                        list.module_5 === true ? 5 : 0,
                     ]
                 }
-                // console.log("data.function", data.function);
-                // data.function.map((list, index) => {
-                //     console.log("data.function.indexOf(0)", data.function.indexOf(0))
-                //     if (data.function.indexOf(0) !== -1) {
-                //         data.function.splice(data.function.indexOf(0), data.function.indexOf(0) + 1);
-                //         console.log("data.function>>>>", data.function);
-                //     }
-                // })
-                for (var i = 0; i < 4; i++) {
+                for (var i = 0; i < 5; i++) {
                     console.log("data.function.indexOf(0)", data.function.indexOf(0))
                     if (data.function.indexOf(0) !== -1) {
                         data.function.splice(data.function.indexOf(0), data.function.indexOf(0) + 1);
@@ -65,19 +58,20 @@ const BottomContent = (props) => {
                 <table className="table-many-column mt-2" style={{ height: "450px" }}>
                     <thead>
                         <tr>
-                            <th className="font" style={{ width: "200px" }}></th>
+                            <th className="font text-center" style={{ width: "200px" }}>#</th>
                             <th className="font" style={{ width: "200px" }}>ตำแหน่ง</th>
                             <th className="font">ระบบบริหารข้อมูลอะไหล่</th>
                             <th className="font">ระบบบริหารงานซ่อมบำรุง</th>
                             <th className="font">ระบบวิเคราะห์เเละวางแผนการซ่อมบำรุง</th>
                             <th className="font">สถานะรอการอนุมัติ</th>
+                            <th className="font">ระบบบริหารจัดการผู้ใช้งาน</th>
                         </tr>
                     </thead>
                     <tbody>
                         {values.line_position_permission.map((list, index) => {
                             return (
                                 <tr>
-                                    <td className="edit-padding">{index + 1}</td>
+                                    <td className="edit-padding text-center">{index + 1}</td>
                                     <td className="edit-padding">{list.abbreviation} - {list.name}</td>
                                     <td className="edit-padding" style={{ padding: "5px 60px" }}>
                                         <CheckboxInput name={`line_position_permission[${index}].module_1`}
@@ -94,6 +88,10 @@ const BottomContent = (props) => {
                                     <td className="edit-padding" style={{ padding: "5px 60px" }}>
                                         <CheckboxInput name={`line_position_permission[${index}].module_4`}
                                             checked={values.line_position_permission[index].module_4} value={true} />
+                                    </td>
+                                    <td className="edit-padding" style={{ padding: "5px 60px" }}>
+                                        <CheckboxInput name={`line_position_permission[${index}].module_5`}
+                                            checked={values.line_position_permission[index].module_5} value={true} />
                                     </td>
                                 </tr>
                             )

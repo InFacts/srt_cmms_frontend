@@ -25,8 +25,6 @@ const MaintenantItemComponent = () => {
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
         { id: "broken", name: "รายการอะไหล่" },
-        { id: "related_parties", name: "ระบุผู้ปฎิบัติงาน" },
-        // { id: "equipment", name: "อุปกรณ์ที่ต้องนำไปปฎิบัติงาน" },
         { id: "attachment", name: "แนบไฟล์" },
         { id: "table_status", name: "สถานะเอกสาร" },
     ]);
@@ -56,7 +54,8 @@ const initialLossLineItem = {
     description: '',   // รายการ
     no_item: '',     //เลขที่สินทรัพย์
     uom_id: '',
-    quantity_fix: '',
+    quantity_damaged: '',
+    quantity_used: '',
     quantity_salvage: '',
     remark:'',
 }
@@ -65,30 +64,6 @@ const initialRows = (n = 10) => {
     for (var i = 1; i <= n; i++) {
         rows.push({
             ...initialLossLineItem,
-            line_number: i
-        });
-    }
-    return rows;
-}
-
-// For อุปกรณ์ที่ต้องนำไปปฎิบัติงาน
-const initialEquipmentLineItem = {
-    document_id: '', // maybe not needed
-    line_number: '',
-    list_uoms: [],
-
-    // === Field ที่ให้ User กรอก ===
-    internal_item_id: '',
-    description: '',   // รายการ
-    quantity: '',
-    uom_id: '',
-    remark:'',
-}
-const intialEquipmentRow = (n = 10) => {
-    let rows = [];
-    for (var i = 1; i <= n; i++) {
-        rows.push({
-            ...initialEquipmentLineItem,
             line_number: i
         });
     }
@@ -106,28 +81,14 @@ const EnhancedMaintenantItemComponent = withFormik({
         status_name_th: '',              // TODO doesn't have (Field ที่ไม่ได้กรอก)
         created_on: '',                  // TODO doesn't have (Field ที่ไม่ได้กรอก)
         document_date: '',              // วันที่ออกเอกสาร (Default === NOW )
-        refer_to_document_internal_document_id: '',    // อ้างอิงเอกสาร
-
+        refer_to_document_internal_id: '',    // อ้างอิงเอกสาร
+        refer_to_document_id: '',
+        
         // Bottom Content
         line_items: initialRows(),          // รายการอะไหล่
         remark: '',                      // หมายเหตุ  NVARCHAR
 
-        // Bottom Content ผู้เกี่ยวข้อง
-        auditor_name: '',           //ผู้ควบคุมตรวจสอบชื่อ NVARCHAR
-        auditor_position_id: '', //ผู้ควบคุมตรวจสอบชื่อ ตำแหน่ง FK_ID
-        fixer_name: '',               //ดำเนินการแก้ไขชื่อ  NVARCHAR
-        fixer_position_id: '', //ดำเนินการแก้ไขชื่อ ตำแหน่ง FK_ID
-        member_1: '',               //รายชื่อเพื่อนร่วมงาน 1 NVARCHAR
-        member_1_position_id: '', //รายชื่อเพื่อนร่วมงาน 1 ตำแหน่ง FK_ID
-        member_2: '',              //รายชื่อเพื่อนร่วมงาน 2 NVARCHAR
-        member_2_position_id: '', //รายชื่อเพื่อนร่วมงาน 2 ตำแหน่ง FK_ID
-        member_3: '',             //รายชื่อเพื่อนร่วมงาน 3
-        member_3_position_id: '',  //รายชื่อเพื่อนร่วมงาน 3 ตำแหน่ง
-
-        // Bottom อุปกรณ์ที่ต้องนำไปปฎิบัติงาน
-        // line_equipments: intialEquipmentRow(),
-
-        file: [],
+        files: [],
 
         document_status_id: '', // ?
         step_approve: [],               // (Field ที่ไม่ได้กรอก)

@@ -262,11 +262,10 @@ const useFooterInitializer = (document_type_id) => {
         if (footer.requiresHandleClick[FOOTER_ACTIONS.SEND]) {
             // Move Dispatch to `finally` in the async functions
             // dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
+            console.log("NUKKKKK<<><<")
             validateForm()
                 .then((err) => {
-                    setTouched(setNestedObjectValues(values, true))
-                    dispatch(navBottomSending('[API]', 'Sending ... ธฎธฆธฆธ', ''));
-                    setErrors(err);
+                    console.log("NUKKK")
                     if (isEmpty(err)) {
                         if (values.document_id) { // If have document_id, no need to create new doc
                             let data = packDataFromValues(fact, values, document_type_id);

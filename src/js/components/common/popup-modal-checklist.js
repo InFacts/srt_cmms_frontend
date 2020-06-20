@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux'
 import { useFormikContext } from 'formik';
 
-const PopupModalCheckList = (props) => {
+const PopupModalNoPart = (props) => {
     //* PopUp เลขที่อะไหล่ */
     const [data, setData] = useState([]);
     const [currentQueryString, setCurrentQueryString] = useState("");
@@ -24,7 +24,7 @@ const PopupModalCheckList = (props) => {
     }, [currentQueryString, props.items]);
 
     return (
-        <div className="modal" id="modalCheckList" style={{ display: "none" }}>
+        <div className="modal" id={props.nameModal} style={{ display: "none" }}>
             <div className="gray-board">
                 <p className="head-title-modal edit">ค้นหาเลขที่อะไหล่</p>
                 <div className="container_12 edit-padding">
@@ -55,7 +55,7 @@ const PopupModalCheckList = (props) => {
                                             <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
                                                 <button type="button" className="button-blue" 
                                                 onClick={() => setFieldValue(`${props.keyname}[${props.lineNumber - 1}].internal_item_id`, no_part_show.internal_item_id, true)} 
-                                                aria-label="Close active modal" aria-controls="modalCheckList" id="closeModalNoPart" >เลือก</button>
+                                                aria-label="Close active modal" aria-controls={props.nameModal} id="closeModalNoPart" >เลือก</button>
                                             </td>
                                         </tr>
                                     )
@@ -64,7 +64,7 @@ const PopupModalCheckList = (props) => {
                         </table>
                     </div>
 
-                    <button className="button-blue float-right grid_1 mr-5 mt-3" type="button" aria-label="Close active modal" aria-controls="modalCheckList" id="closeModalNoPart">กลับ</button>
+                    <button className="button-blue float-right grid_1 mr-5 mt-3" type="button" aria-label="Close active modal" aria-controls={props.nameModal} id="closeModalNoPart">กลับ</button>
 
                 </div>
             </div>
@@ -80,4 +80,4 @@ const mapDispatchToProps = {
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PopupModalCheckList);
+export default connect(mapStateToProps, mapDispatchToProps)(PopupModalNoPart);

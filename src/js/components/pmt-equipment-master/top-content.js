@@ -72,7 +72,7 @@ const TopContent = (props) => {
           setFieldValue("location_station_id", item_match_equipment.location_station_id, false);
           setFieldValue("description_equipment", item_match_equipment.depreciation, false);
           setFieldValue("useful_life", item_match_equipment.useful_life, false);
-          setFieldValue("equipment_status_id", item_match_equipment.equipment_status_id, false);
+          setFieldValue("equipment_status_id_th", item_match_equipment.equipment_status.status_th, false);
           setFieldValue("responsible_by", item_match_equipment.responsible_by, false);
           setFieldValue("station", item_match_equipment.station, false);
           setFieldValue("equipment_group_id", item_match_equipment.equipment_group.equipment_group_id, false);
@@ -172,10 +172,10 @@ const TopContent = (props) => {
 
           <div className="container_12">
 
-            {/* === equipment_status_id === */}
+            {/* === equipment_status_id_th === */}
             <FormLabel>สถานะการใช้งาน</FormLabel>
             <div className="grid_5 pull_0">
-              <TextInput name='equipment_status_id' disabled={true} />
+              <TextInput name='equipment_status_id_th' disabled={true} />
             </div>
           </div>
         </section>
