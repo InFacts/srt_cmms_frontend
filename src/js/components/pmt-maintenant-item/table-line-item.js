@@ -9,14 +9,14 @@ import SelectInput from '../common/formik-select-input';
 
 const Table = (props) => {
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
+  const factItems = useSelector((state) => ({ ...state.api.fact.items }), shallowEqual);
   return (
     <table className="table-many-column mt-3">
       <thead>
         <tr>
           <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
-          <th className="font" style={{ minWidth: "130px" }}>เลขที่อะไหล่</th>
-          <th className="font" style={{ minWidth: "368px" }}>รายละเอียด</th>
-          <th className="font" style={{ minWidth: "130px" }}>เลขที่สินทรัพย์</th>
+          <th className="font" style={{ minWidth: "160px" }}>เลขที่อะไหล่</th>
+          <th className="font" style={{ minWidth: "340px" }}>รายละเอียด</th>
 
           <th className="font text-center" style={{ minWidth: "80px" }}>หน่วยนับ</th>
 
@@ -25,60 +25,52 @@ const Table = (props) => {
           <th className="font text-center" style={{ minWidth: "80px" }}>ของเก่าพร้อมใช้งาน</th>
 
           <th className="font text-center" style={{ minWidth: "80px" }}>จำนวนทั้งหมด</th>
-          <th className="font text-center" style={{ minWidth: "200px" }}>หมายเหตุ</th>
         </tr>
       </thead>
       <tbody>
         {props.line_items.map(function (list, index) {
           let line_number = index + 1;
-          return (
-            <tr key={index}>
-              <th className="edit-padding text-center">{line_number}</th>
-              <td className="edit-padding">
-                <TextInput name={`line_items[${index}].internal_item_id`}
-                  validate={internal_item_id => props.validateLineNumberInternalItemIDField(`line_items[${index}]`, internal_item_id, index)} 
-                  tabIndex="6"
-                  disabled
-                />
-              </td>
-              <td className="edit-padding">{list.description}</td>
-              <td className="edit-padding text-center"></td> {/* เลขที่สินทรัพย์ */}
+          let items = factItems.items;
+          let item = items.find(item => `${item.item_id}` === `${list.item_id}`)
+          if (item) {
+            return (
+              <tr key={index}>
+                <th className="edit-padding text-center">{line_number}</th>
+                <td className="edit-padding">{item.internal_item_id}</td>
+                <td className="edit-padding">{item.description}</td>
+                <td className="edit-padding text-center">{item.description && item.list_uoms[0].name}</td>
 
-              <td className="edit-padding text-center">
-                <SelectInput name={`line_items[${index}].uom_id`} listProps={list.list_uoms}
-                  tabIndex="8" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                  optionValue='uom_id' optionName='name'
-                  redBorderForError="error-in-table"
-                  disabled
-                />
-              </td>
+                <td className="edit-padding text-center">{item.description && list.quantity_damaged - list.quantity_used - list.quantity_salvage}</td>
+                <td className="edit-padding text-center">
+                  <NumberInput step={0.01} name={`line_items[${index}].quantity_used`}
+                    disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                    redBorderForError="error-in-table"
+                  />
+                </td>
+                <td className="edit-padding text-center">
+                  <NumberInput step={0.01} name={`line_items[${index}].quantity_salvage`}
+                    disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                    redBorderForError="error-in-table"
+                  />
+                </td>
 
-              <td className="edit-padding text-center">{list.quantity}</td>
-              <td className="edit-padding text-center">
-                <NumberInput step={0.01} name={`line_items[${index}].quantity_fix`}
-                  // validate={per_unit_price => props.validateLineNumberPerUnitPriceItemIDField(`line_items[${index}].per_unit_price`, per_unit_price, index)}
-                  disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                  redBorderForError="error-in-table"
-                />
-              </td>
-              <td className="edit-padding text-center">
-                <NumberInput step={0.01} name={`line_items[${index}].quantity_salvage`}
-                  // validate={per_unit_price => props.validateLineNumberPerUnitPriceItemIDField(`line_items[${index}].per_unit_price`, per_unit_price, index)}
-                  disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                  redBorderForError="error-in-table"
-                />
-              </td>
-
-              <td className="edit-padding text-center">{list.quantity}</td>
-
-              <td className="edit-padding text-center">
-                <TextInput name={`line_items[${index}].remark`}
-                  disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                  redBorderForError="error-in-table"
-                />
-              </td>
-            </tr>
-          )
+                <td className="edit-padding text-center">{list.quantity_damaged}</td>
+              </tr>
+            )
+          } else {
+            return (
+              <tr key={index}>
+                <th className="edit-padding text-center">{line_number}</th>
+                <td className="edit-padding"></td>
+                <td className="edit-padding"></td>
+                <td className="edit-padding text-center"></td>
+                <td className="edit-padding text-center"></td>
+                <td className="edit-padding text-center"></td>
+                <td className="edit-padding text-center"></td>
+                <td className="edit-padding text-center"></td>
+              </tr>
+            )
+          }
         })}
       </tbody>
     </table>

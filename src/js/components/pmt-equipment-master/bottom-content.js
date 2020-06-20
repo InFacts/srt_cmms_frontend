@@ -6,7 +6,6 @@ import { API_PORT_DATABASE } from '../../config_port.js';
 import { API_URL_DATABASE } from '../../config_url.js';
 
 import TextareaInput from '../common/formik-textarea-input';
-// import Table from '../common/table'; เปลัี่ยน Table ให้เป็นแบบสำหรับ form นี้
 import TextInput from '../common/formik-text-input'
 import NumberInput from '../common/formik-number-input'
 import SelectNoChildrenInput from '../common/formik-select-no-children';
@@ -29,6 +28,7 @@ const BottomContent = (props) => {
   const factStation = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
   const factEquipmentGroup = useSelector((state) => ({ ...state.api.fact[FACTS.EQUIPMENT_GROUP] }), shallowEqual);
+  const factChecklist = useSelector((state) => ({ ...state.api.fact.checklist }), shallowEqual);
 
   const validateUomItemmasterDataIDField = (fieldName, uom_id) => {
     if (!uom_id) {
@@ -406,7 +406,13 @@ const BottomContent = (props) => {
                   disabled={values.modeEdit ? false : values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                   cssStyle={{ left: "-160px", top: "10px" }}>
                   <option value=''></option>
-
+                    {factChecklist.items.map((factChecklist) => {
+                        if (factChecklist.checklist_id === values.checklist_id) {
+                          return <option value={factChecklist.checklist_id} key={factChecklist.checklist_id} selected>{factChecklist.checklist_name}</option>
+                        } else {
+                          return <option value={factChecklist.checklist_id} key={factChecklist.checklist_id}>{factChecklist.checklist_name}</option>
+                        }
+                    })}
                 </SelectNoChildrenInput>
               </div>
 

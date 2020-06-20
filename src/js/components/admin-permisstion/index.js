@@ -41,6 +41,7 @@ const PermisstionAdminComponent = (props) => {
                         module_2: list_module.function.indexOf(2) !== -1,
                         module_3: list_module.function.indexOf(3) !== -1,
                         module_4: list_module.function.indexOf(4) !== -1,
+                        module_5: list_module.function.indexOf(5) !== -1,
                     })
                 })
                 setFieldValue('line_position_permission', module, false);
