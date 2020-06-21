@@ -42,7 +42,8 @@ const useDocumentSubscription = () => {
     footer.requiresHandleClick[FOOTER_ACTIONS.CHECK_APPROVAL],
     footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK], 
     footer.requiresHandleClick[FOOTER_ACTIONS.GOT_IT],
-    footer.requiresHandleClick[FOOTER_ACTIONS.REJECT] ]);
+    footer.requiresHandleClick[FOOTER_ACTIONS.REJECT],
+    footer.requiresHandleClick[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS] ]);
 
     
     // Get  attachment when values.document_id changes

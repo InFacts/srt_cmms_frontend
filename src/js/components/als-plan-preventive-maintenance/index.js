@@ -37,7 +37,6 @@ const randomHistogramData = () => {
 const AlsEquipmentStatusComponent = () => {
     const dispatch = useDispatch();
     const loggedIn = useSelector(state => state.token.isLoggedIn);
-
     // Initializer: Change Toolbar to Mode None
     useToolbarChangeModeInitializer(TOOLBAR_MODE.NONE_HOME); // TODO: Needs to find where to go when we press "HOME"!!
     useTokenInitializer();
@@ -52,7 +51,7 @@ const AlsEquipmentStatusComponent = () => {
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
 
-            <div id="blackground-white" >
+            <div id="blackground-white" style={{ height: "100vh"}}>
                 <div className="bootstrap-wrapper">
                     <div className="container" style={{ marginTop: "70px" }}>
                         {/* Section Title */}

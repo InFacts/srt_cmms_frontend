@@ -628,14 +628,25 @@ export const getDocumentbyInternalDocumentID = (internal_document_id) => new Pro
 })
 
 // PUT /document/{document_id}/{document_type_group_id}
-export const editDocument = (document_id, document_type_group_id, data) => new Promise((resolve, reject) => {
+export const editDocument = (document_id, document_type_group_id, data, files) => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}/${document_type_group_id}`;
     axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             console.log(" I am successful in updating contents of document_id ", document_id)
             if (res.status === 200) {
                 console.log("wow i putted successfully status 200 ", res.data)
-                resolve(res.data);
+                if (files.length !== 0 && files !== undefined) {
+                    uploadAttachmentDocumentData(document_id, files)
+                        .then(() => {
+                            return resolve(res.data);
+                        })
+                        .catch((err) => {
+                            return reject(err);
+                        });
+                }
+                else {
+                    return resolve(res.data);
+                }
             } else {
                 console.log(" i think i have some problems putting ", res.data)
                 reject(res);
@@ -749,9 +760,11 @@ export const editMasterDataHelper = (document_type_group_id, data, image) => new
 // Start the Approval Flow of the Document
 // POST /approval/{document_id}/new
 export const startDocumentApprovalFlow = (document_id) => new Promise((resolve, reject) => {
+    console.log("startDocumentApprovalFlow");
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/new`;
     axios.post(url, null, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
+            console.log("startDocumentApprovalFlow res", res);
             if (res.status === 200 || res.status === 201) {
                 console.log(" I am successful in starting approval flow of document_id ", document_id)
                 resolve(res.data);
@@ -1598,6 +1611,19 @@ export const getLatestApprovalStep = (document_id, approval_step_action_id, user
         })
 });
 
+// Cancel Approval Process ID
+// POST /approval/{document_id}/{approval_process_id}/cancel
+export const cancelApproval = (document_id, approval_process_id) => new Promise((resolve, reject) => {
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/${approval_process_id}/cancel`;
+    axios.post(url, '', { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then(res => {
+            console.log(" I am successful in get latest approval_step ", res.data);
+            resolve(res);
+        }).catch(function (err) {
+            reject(err)
+        })
+});
+
 // Approve document in approval_step
 // POST /approval/{document_id}/approval_process_id/approve
 export const approveDocuement = (document_id, obj_body) => new Promise((resolve, reject) => {
@@ -1815,3 +1841,21 @@ export const identifyEndpoinsHelper = (document_type_id) => {
 
 export const checkBooleanForEditHelper = (values, decoded_token, fact) => (values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.FAST_TRACK || values.status_name_th === DOCUMENT_STATUS.DRAFT)
     && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
+
+
+export const filterAlsEquipment = (equipmentData, formData) => {
+    let tempEquipmentData = [];
+    equipmentData.map((mockup, i) => {
+        if (mockup.equipment_group_id === formData.equipment_group_id || formData.equipment_group_id === "") {
+            if (mockup.division_id === formData.division_id || formData.division_id === "") {
+                if (mockup.district_id === formData.district_id || formData.district_id === "") {
+                    if (mockup.node_id === formData.node_id || formData.node_id === "") {
+                        tempEquipmentData.push(mockup);
+                    }
+                }
+            }
+        }
+    })
+    return tempEquipmentData;
+
+}

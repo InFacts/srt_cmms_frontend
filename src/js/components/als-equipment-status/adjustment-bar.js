@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SelectNoChildrenInput from '../common/formik-select-no-children';
-
-const AdjustmentBarComponent = () => {
+import {LIST_EQUIPMENT_GROUP, LIST_DIVISION, LIST_DISTRICT, LIST_NODE} from './d3-map'
+const AdjustmentBarComponent = ({name, value}) => {
 
     return (
     <div className="gray-background adjustment-bar mt-3">
@@ -11,9 +11,9 @@ const AdjustmentBarComponent = () => {
             <SelectNoChildrenInput 
                 name="equipment_group_id" >
                     <option value='' selected>ทั้งหมด</option>
-                    <option value='1' >โทรศัพท์</option>
-                    <option value='2' >จดหมาย</option>
-                    <option value='3' >Work Request</option>
+                    {LIST_EQUIPMENT_GROUP.map((list, i) => (
+                        <option value={i+1} >{list}</option>
+                    ))}
             </SelectNoChildrenInput>
 
             <div className="space-10px" />
@@ -22,9 +22,9 @@ const AdjustmentBarComponent = () => {
             <SelectNoChildrenInput 
                 name="division_id" >
                     <option value='' selected>ทั้งหมด</option>
-                    <option value='1' >โทรศัพท์</option>
-                    <option value='2' >จดหมาย</option>
-                    <option value='3' >Work Request</option>
+                    {LIST_DIVISION.map((list, i) => (
+                        <option value={i+1} >{list}</option>
+                    ))}
             </SelectNoChildrenInput>
 
             <div className="space-10px" />
@@ -33,9 +33,9 @@ const AdjustmentBarComponent = () => {
             <SelectNoChildrenInput 
                 name="district_id" >
                     <option value='' selected>ทั้งหมด</option>
-                    <option value='1' >โทรศัพท์</option>
-                    <option value='2' >จดหมาย</option>
-                    <option value='3' >Work Request</option>
+                    {LIST_DISTRICT.map((list, i) => (
+                        <option value={i+1} >{list}</option>
+                    ))}
             </SelectNoChildrenInput>
 
             <div className="space-10px" />
@@ -44,9 +44,9 @@ const AdjustmentBarComponent = () => {
             <SelectNoChildrenInput 
                 name="node_id" >
                     <option value='' selected>ทั้งหมด</option>
-                    <option value='1' >โทรศัพท์</option>
-                    <option value='2' >จดหมาย</option>
-                    <option value='3' >Work Request</option>
+                    {LIST_NODE.map((list, i) => (
+                        <option value={i+1} >{list}</option>
+                    ))}
             </SelectNoChildrenInput>
         </div>
     </div>);

@@ -1,24 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { scaleLinear } from "d3-scale";
-import { extent } from "d3-array"
 import { useFormik, withFormik, useFormikContext } from 'formik';
-
-import { footerToModeInvisible } from '../../redux/modules/footer.js';
 import { useDispatch, useSelector } from 'react-redux'
 import { Redirect } from 'react-router-dom';
+
+import { footerToModeInvisible } from '../../redux/modules/footer.js';
 
 import { useToolbarChangeModeInitializer } from '../../hooks/toolbar-initializer';
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, MODE_TO_ACTION_CREATOR } from '../../redux/modules/toolbar.js';
 import useFactInitializer from '../../hooks/fact-initializer';
 import useTokenInitializer from '../../hooks/token-initializer';
-
-import ScatterPlot from '../als-spare/d3-scatter-plot';
-import LineGraph from '../als-spare/d3-line-graph';
-import BarDivergingGraph from '../als-spare/d3-bar-diverging';
-import Histogram from '../als-equipment-status/d3-histogram';
-import ThailandMapComponent from '../als-equipment-status/d3-map';
-import SimpleGrayCardComponent from '../als-equipment-status/simple-gray-card';
-import EquipmentStatusListComponent from '../als-equipment-status/equipment-status-list';
 
 import Top5Component from './d3-top5';
 
@@ -36,13 +26,11 @@ const AlsPreventiveMaintenanaceComponent = () => {
         dispatch(footerToModeInvisible());
     }, []);
 
-
-
     return (
         <>
-            {/* {!loggedIn ? <Redirect to="/" /> : null} */}
+            {!loggedIn ? <Redirect to="/" /> : null}
 
-            <div id="blackground-white" >
+            <div id="blackground-white" style={{ height: "100vh"}}>
                 <div className="bootstrap-wrapper">
                     <div className="container" style={{ marginTop: "70px" }}>
                         {/* Section Title */}
@@ -122,6 +110,7 @@ const EnhancedAlsPreventiveMaintenanaceComponent = withFormik({
         division_id: '',
         district_id: '',
         node_id: '',
+        temp_equipment_data: [],
     })
 })(AlsPreventiveMaintenanaceComponent);
 
