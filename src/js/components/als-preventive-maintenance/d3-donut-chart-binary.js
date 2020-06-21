@@ -12,7 +12,7 @@ import AxisLeft from '../common/d3-axis-left';
 import useChartDimensions from '../../hooks/chart-dimensions-hook'
 
 const defaultChartSettings = {
-    marginLeft: 20,
+    marginLeft: 50,
     marginBottom: 25,
     marginTop: 20,
     marginRight: 25,
@@ -20,42 +20,39 @@ const defaultChartSettings = {
     height: 250,
 }
 
-// References Maria Luísa - Simple Pie Chart  https://observablehq.com/@marialuisacp/pie-chart
-// Reference Mike Bostock - Pie Chart https://observablehq.com/@d3/pie-chart
-const PieChart = ({ data, chartSettings, title}) => {
+
+// Reference Mike Bostock - Donut Chart https://observablehq.com/@d3/donut-chart
+const DonutChartBinary = ({ data, chartSettings, title}) => {
     // useChartDimensions will have a ref to the Chart_wrapper and get its own Height and Width
     // See reference of Amelia Wattenberger https://wattenberger.com/blog/react-and-d3#sizing-responsivity
     const [ref, dms] = useChartDimensions({ ...defaultChartSettings, ...chartSettings });
     
     const [arcs, setArcs] = useState([]);
     
-    const arcGenerator = useMemo(() => (
-        arc()
-        .innerRadius(0)
-        .outerRadius(Math.min(dms.boundedWidth, dms.boundedHeight) / 2 - 1)
-    ), [dms.boundedWidth, dms.boundedHeight]);
+    const arcGenerator = useMemo(() => {
+        const radius = Math.min(dms.boundedWidth, dms.boundedHeight) / 2;
+        return arc()
+        .innerRadius(radius*0.58)
+        .outerRadius(radius - 1)
+    }, [dms.boundedWidth, dms.boundedHeight]);
 
     const pieGenerator = pie()
+        .padAngle(0.005)
         .sort(null)
         .value(d => d.value);
 
     const color = useMemo(() => (
         scaleOrdinal()
             .domain(data.map(d => d.key))
-            .range(quantize(t => interpolateSpectral(t * 0.8 + 0.1), data.length).reverse())
+            .range(["#4F4F4F", "#D0D0D0"])
     ), [data]);
-    
-    const arcLabel = useMemo(() => {
-        const radius = Math.min(dms.boundedWidth, dms.boundedHeight) / 2 * 0.7;
-        return arc().innerRadius(radius).outerRadius(radius);
-    })
 
     // set Domain of x and y after new data.
     useEffect(() => {
         if (!data) {
-            console.log("PieChart: There is no data! ");
+            console.log("DonutChart: There is no data! ");
         } else { // There is data
-            // console.log("PieChart:: data ", data)
+            console.log("DonutChart:: data ", data)
             // console.log("PieChart:: arcs ",pieGenerator(data))
             setArcs(pieGenerator(data))
         }
@@ -103,6 +100,61 @@ const PieChart = ({ data, chartSettings, title}) => {
                         font-size="16px"
                     >{data.yAxis}</text> */}
 
+                    <text
+                        x={dms.boundedWidth*(1/2-1/12)}
+                        y={dms.boundedHeight*(1/2+1/10)}
+                        font-weight={600} // 400 is the same as normal, and 700 is the same as bold
+                        font-size="18px"
+                    >{data.groupShow}</text>
+
+                    
+                    <text  
+                        x={dms.boundedWidth*(1/2-1/12)}
+                        y={dms.boundedHeight*(1/2+1/10)}
+                        dy={-20}
+                        font-weight={600} // 400 is the same as normal, and 700 is the same as bold
+                        font-size="18px"
+                    >{data[0].value}</text>
+
+                    <text
+                        x={dms.boundedWidth*(1/2-1/12)}
+                        y={dms.boundedHeight*(1/2+1/10)}
+                        dy={15}
+                        font-weight={500} // 400 is the same as normal, and 700 is the same as bold
+                        font-size="16px"
+                    >{data.unitOfMeasure}</text>
+
+                    {/* Total Value */}
+                    <text
+                        x={dms.boundedWidth*(1/4-1/6)}
+                        y={dms.boundedHeight*(1/2+1/10)}
+                        text-anchor="end"
+                        dy={-20}
+                        font-weight={500} // 400 is the same as normal, and 700 is the same as bold
+                        font-size="18px"
+                    >{data.reduce((prevValue, curValue) => (prevValue.value+curValue.value))}</text>
+
+                    {/* Total Value */}
+                    <text
+                        x={dms.boundedWidth*(1/4-1/6)}
+                        y={dms.boundedHeight*(1/2+1/10)}
+                        text-anchor="end"
+                        // dy={-20}
+                        font-weight={500} // 400 is the same as normal, and 700 is the same as bold
+                        font-size="16px"
+                    >{data.totalUnitOfMeasure}</text>
+
+                    {/* Percentage */}
+                    <text
+                        // x={dms.boundedWidth*(1/4-1/6)}
+                        // y={dms.boundedHeight*(1/2+1/10)}
+                        x={dms.boundedWidth*(1/4)}
+                        y={dms.boundedHeight/2+13+2}
+                        text-anchor="middle"
+                        // dy={-20}
+                        font-weight={600} // 400 is the same as normal, and 700 is the same as bold
+                        font-size={"25px"}
+                    >{`${Math.floor(data[0].value/data.reduce((prevValue, curValue) => (prevValue.value+curValue.value))*100)}%`}</text>
 
                     {/* For Each Pie Sector */}
                     <g transform={`translate(${dms.boundedWidth/4}, ${dms.boundedHeight/2+10})`}>
@@ -115,43 +167,17 @@ const PieChart = ({ data, chartSettings, title}) => {
                             >
                                 <title>{`${singleArc.data.key}: ${singleArc.data.value}`}</title>
                             </path>
-                            <text
+                            {/* <text
                                 transform={`translate(${arcLabel.centroid(singleArc)})`}
                             >
-                                {/* <tspan y="-0.4em" fontWeight="bold">{singleArc.data.key}</tspan> */}
-                                {/* Ignore any angle that is too small */}
-                                {/* {(singleArc.endAngle - singleArc.startAngle) > 0.25 && 
-                                <tspan x="0" y="0.7em" fillOpacity="0.7">{singleArc.data.value}</tspan>} */}
                                 {(singleArc.endAngle - singleArc.startAngle) > 0.25 && 
                                 <tspan fontWeight="bold">{singleArc.data.value}</tspan>}
-                            </text>
+                            </text> */}
                             </>
                         ))}
                     </g>
 
 
-                    {/* === Color Legend === */}
-                    <g transform={`translate(${dms.boundedWidth/2+20}, ${dms.boundedHeight/4   })`}
-                        // textAnchor="end"
-                        fontSize="14"
-                    >
-                        {color.domain().slice().reverse().map((d,i)=> (
-                            <g  transform={`translate(0, ${i*17})`} >
-                                <rect 
-                                    x={-15}
-                                    width={15}
-                                    height={15}
-                                    fill={color(d)}
-                                />
-                                <text
-                                    x={7}
-                                    y={6}
-                                    dy={"0.35em"}
-                                >{d}</text>
-                            </g>
-                        ))}
-
-                    </g>
 
                 </g>
 
@@ -160,5 +186,5 @@ const PieChart = ({ data, chartSettings, title}) => {
     );
 }
 
-export default PieChart;
+export default DonutChartBinary;
 

@@ -879,3 +879,11 @@ path.map-region:hover{
   margin-top:0px;
   margin-bottom:0px;
 }
+
+
+.top5-title{
+  padding-top: 0px;
+  margin-bottom: 0px;
+  width: auto;
+  /* width */
+}

@@ -36,7 +36,7 @@ const AlsEquipmentStatusComponent = () => {
 
     return (
         <>
-            {/* {!loggedIn ? <Redirect to="/" /> : null} */}
+            {!loggedIn ? <Redirect to="/" /> : null}
 
             <div id="blackground-white" >
                 <div className="bootstrap-wrapper">

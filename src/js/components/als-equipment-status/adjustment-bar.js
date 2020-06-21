@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SelectNoChildrenInput from '../common/formik-select-no-children';
 
-const AdjustmentBarComponent = ({name, value}) => {
+const AdjustmentBarComponent = () => {
 
     return (
     <div className="gray-background adjustment-bar mt-3">
