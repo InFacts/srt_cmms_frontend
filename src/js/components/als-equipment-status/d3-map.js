@@ -184,14 +184,18 @@ function ThailandMapComponent({data}) {
                 regionName: region.properties.name,
                 value: 0
             });
-            values.temp_equipment_data.map((mockup, j) => {
-                if (mockup.location_province_en === region.properties.name && mockup.equipment_status_id === EQUIPMENT_STATUS.DAMAGED) {
-                    tempMapData[i] = {
-                        regionName: region.properties.name,
-                        value: tempMapData[i].value + 1
-                    };
-                }
-            })
+            console.log("values.....", values)
+            if (values.temp_equipment_data !== undefined && values.temp_equipment_data !== []) {
+                values.temp_equipment_data.map((mockup, j) => {
+                    if (mockup.location_province_en === region.properties.name && mockup.equipment_status_id === EQUIPMENT_STATUS.DAMAGED) {
+                        tempMapData[i] = {
+                            regionName: region.properties.name,
+                            value: tempMapData[i].value + 1
+                        };
+                    }
+                })
+            }
+            
         });
         setTestMapData(tempMapData);
     },[values.temp_equipment_data])
