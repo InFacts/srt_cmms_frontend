@@ -46,3 +46,15 @@ export const randomColorMapData = () => {
 
     return {values, xLabels, yLabels};
 }
+
+// Data Format is referenced from https://observablehq.com/@marialuisacp/pie-chart
+export const randomPieChartData = () => {
+    let groups = ["จากอายุการใช้งาน", "จากอุบัติเหตุ", "จากภัยธรรมชาติ", "จากการบำรุงรักษาไม่ต่อเนี่อง", "จากอุปกรณ์ไม่ได้มาตรฐาน", "สาเหตุอื่นๆ"];
+    let results = [];
+    
+    for (let i = 0; i < groups.length; i++) {
+        results.push({key: groups[i], value: Math.floor(Math.random()*100)});
+    }
+
+    return results;
+}
