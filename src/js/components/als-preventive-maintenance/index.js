@@ -68,6 +68,7 @@ const AlsEquipmentStatusComponent = () => {
             MAINTENANCING: 0
         }
         let filterEquipment = filterAlsEquipment(MockupEquipmentData.data, values)
+        console.log("filterEquipment",filterEquipment)
         setFieldValue("temp_equipment_data", filterEquipment, false);
         filterEquipment.map((mockup, i) => {
             amountEquipmentStatus = countEquipmentStatus(mockup, amountEquipmentStatus);

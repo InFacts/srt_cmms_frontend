@@ -628,14 +628,25 @@ export const getDocumentbyInternalDocumentID = (internal_document_id) => new Pro
 })
 
 // PUT /document/{document_id}/{document_type_group_id}
-export const editDocument = (document_id, document_type_group_id, data) => new Promise((resolve, reject) => {
+export const editDocument = (document_id, document_type_group_id, data, files) => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}/${document_type_group_id}`;
     axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             console.log(" I am successful in updating contents of document_id ", document_id)
             if (res.status === 200) {
                 console.log("wow i putted successfully status 200 ", res.data)
-                resolve(res.data);
+                if (files.length !== 0 && files !== undefined) {
+                    uploadAttachmentDocumentData(document_id, files)
+                        .then(() => {
+                            return resolve(res.data);
+                        })
+                        .catch((err) => {
+                            return reject(err);
+                        });
+                }
+                else {
+                    return resolve(res.data);
+                }
             } else {
                 console.log(" i think i have some problems putting ", res.data)
                 reject(res);
@@ -749,9 +760,11 @@ export const editMasterDataHelper = (document_type_group_id, data, image) => new
 // Start the Approval Flow of the Document
 // POST /approval/{document_id}/new
 export const startDocumentApprovalFlow = (document_id) => new Promise((resolve, reject) => {
+    console.log("startDocumentApprovalFlow");
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/new`;
     axios.post(url, null, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
+            console.log("startDocumentApprovalFlow res", res);
             if (res.status === 200 || res.status === 201) {
                 console.log(" I am successful in starting approval flow of document_id ", document_id)
                 resolve(res.data);
@@ -1593,6 +1606,19 @@ export const getLatestApprovalStep = (document_id, approval_step_action_id, user
                 "remark": remark
             }
             resolve(obj_body);
+        }).catch(function (err) {
+            reject(err)
+        })
+});
+
+// Cancel Approval Process ID
+// POST /approval/{document_id}/{approval_process_id}/cancel
+export const cancelApproval = (document_id, approval_process_id) => new Promise((resolve, reject) => {
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/${approval_process_id}/cancel`;
+    axios.post(url, '', { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then(res => {
+            console.log(" I am successful in get latest approval_step ", res.data);
+            resolve(res);
         }).catch(function (err) {
             reject(err)
         })
