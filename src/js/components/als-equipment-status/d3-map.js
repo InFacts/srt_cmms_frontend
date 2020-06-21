@@ -5,7 +5,7 @@ import {line} from "d3-shape";
 import {schemeSet1, schemeReds, schemeOranges} from "d3-scale-chromatic";
 
 import useChartDimensions from '../../hooks/chart-dimensions-hook'
-
+import { useFormik, withFormik, useFormikContext } from 'formik';
 import ThailandTopo from './thailandWithName.json';
 import MockupEquipmentData from './mockupEquipmentData.json';
 import { geoPath, geoAlbers, geoMercator ,geoEqualEarth } from "d3-geo"
@@ -20,18 +20,18 @@ const chartSettings = { //Need to be at least one since 0 is a falsy value, will
     "height": 700,
 }
 
-const list_equipment_group = [
+export const LIST_EQUIPMENT_GROUP = [
     "CCTV",
     "PA"
 ]
 
-const list_division = [
+export const LIST_DIVISION = [
     "กองบริหารทั่วไป", "กองอาณัติสัญญาณ", "กองอาณัติสัญญาณทางไกล",
     "กองบำรักษาเขต 1", "กองบำรักษาเขต 2", "กองก่อสร้าง",
     "กองโครงการและแผนงาน", "กองโทรคมนาคม", "กองวิชาการและมาตรฐาน"
 ]
 
-const list_district = [
+export const LIST_DISTRICT = [
     "แขวงบำรุงรักษาอาณัติสัญญาณแขวงธนบุรี",
     "แขวงบำรุงรักษาอาณัติสัญญาณแขวงอยุธยา",
     "แขวงบำรุงรักษาอาณัติสัญญาณภาคกลาง",
@@ -63,7 +63,7 @@ const list_district = [
     "แผนกควบคุมพัสดุ",
 ]
 
-const list_node = [
+export const LIST_NODE = [
     "อยุธยา(นตส.ภช.)",
     "แก่งคอย(นตส.กค.)",
     "แก่งคอย(นตส.ปช.)",
@@ -116,11 +116,11 @@ const list_node = [
     "ลำปาง(นตส.ลป.)",
 ]
 
-const EQUIPMENT_STATUS = {
-    "READY": 1,
-    "WORKING": 2,
-    "DAMAGED": 3,
-    "MAINTENANCING": 4,
+export const EQUIPMENT_STATUS = {
+    "READY": "1",
+    "WORKING": "2",
+    "DAMAGED": "3",
+    "MAINTENANCING": "4",
 }
 
 // Reference:December 30, 2012Mike Bostock Let’s Make a Map https://bost.ocks.org/mike/map/
@@ -131,7 +131,7 @@ function ThailandMapComponent({data}) {
     // See reference of Amelia Wattenberger https://wattenberger.com/blog/react-and-d3#sizing-responsivity
     const [ref, dms] = useChartDimensions(chartSettings);
 
-
+    const { resetForm, setFieldValue, setValues, values } = useFormikContext();
     const [timeDomain, setTimeDomain] = useState([new Date(2000, 0, 1), new Date(2000, 0, 2)]);
     const [inventoryMonthDomain, setInventoryMonthDomain] = useState([0, 100]);
     const [inventoryMonthPath, setInventoryMonthPath] = useState("");
@@ -175,34 +175,33 @@ function ThailandMapComponent({data}) {
     }, [data]);
 
     var [testMapData,setTestMapData] = useState([])
-    useEffect(() => {
-        console.log("AlsEquipmentStatusComponent:: JSON ", ThailandTopo)
-        console.log("AlsEquipmentStatusComponent:: geoPath ", geoPath(projection)(ThailandTopo))
-        
-        console.log("MockupEquipmentData", MockupEquipmentData.data)
-        let tempMapData = []
-        // for (let i =0; i<77; i++){
-        //     tempMapData.push((Math.random()+Math.random())/2*10);
-        // }
 
-        let listUniqueEquipmentGroup = [];
-        let listAgeEquipment = [];
-        let list = [];
+    useEffect(() => {
+        let tempMapData = []
+        
         geographies.map((region, i) => {
-            console.log("region.properties.name", region.properties.name)
-            tempMapData.push(0);
-            MockupEquipmentData.data.map((mockup, j) => {
+            tempMapData.push({
+                regionName: region.properties.name,
+                value: 0
+            });
+            values.temp_equipment_data.map((mockup, j) => {
                 if (mockup.location_province_en === region.properties.name && mockup.equipment_status_id === EQUIPMENT_STATUS.DAMAGED) {
-                    tempMapData[i]++;
+                    tempMapData[i] = {
+                        regionName: region.properties.name,
+                        value: tempMapData[i].value + 1
+                    };
                 }
             })
         });
-        console.log("tempMapData", tempMapData)
-        setTestMapData(tempMapData)
-        
-    },[])
+        setTestMapData(tempMapData);
+    },[values.temp_equipment_data])
 
-    const color = scaleQuantize([1,10], schemeReds[9])
+
+    const color = useMemo(() => (
+        scaleQuantize()
+            .domain([0,max(testMapData, d => d.value) !== 0 ? max(testMapData, d => d.value) : 1])
+            .range(schemeReds[9])
+    ), [testMapData]);
 
 
     return (
@@ -236,15 +235,12 @@ function ThailandMapComponent({data}) {
                             onMouseEnter ={() => setToolTipText(region.properties.name)}
                             stroke="black"
                             // fill="#f3f3f3" 
-                            fill={color(testMapData[i])}
+                            fill={testMapData[i] ? color(testMapData[i].value) : "#f3f3f3" }
                         >
                             <title>{region.properties.name}</title>
 
                         </path>
                     ))}
-                    
-
-
                 </g>
                 <text class="label" id="country-name" x="20" y="50">{toolTipText}</text>
 

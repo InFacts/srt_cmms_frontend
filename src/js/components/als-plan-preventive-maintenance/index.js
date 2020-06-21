@@ -37,7 +37,6 @@ const randomHistogramData = () => {
 const AlsEquipmentStatusComponent = () => {
     const dispatch = useDispatch();
     const loggedIn = useSelector(state => state.token.isLoggedIn);
-
     // Initializer: Change Toolbar to Mode None
     useToolbarChangeModeInitializer(TOOLBAR_MODE.NONE_HOME); // TODO: Needs to find where to go when we press "HOME"!!
     useTokenInitializer();

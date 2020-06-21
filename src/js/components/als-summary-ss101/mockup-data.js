@@ -24,15 +24,22 @@ export const randomColorMapData = () => {
                     "ข1", "ข2", "ข3", "ข4", "ข5", "ข6", "ข7", "ข8", "ข9", "ข10", "ข11", "ข12",
                     "ค1", "ค2", "ค3", "ค4", "ค5", "ค6" ];
     let yLabels = []
-    for (let i=0; i<99; i++) {
-        yLabels.push(`ตอน ${i}`);
+    for (let i=0; i<29; i++) {
+        yLabels.push(`แขวง ${i}`);
     }
 
     let values = [];
     for (let i=0; i<yLabels.length; i++ ){
         let _tempRow = [];
+        let lax = (Math.random() > 0.4) ? true : false;
         for (let j=0; j<xLabels.length; j++){
-            _tempRow.push(Math.random()*10);
+            // if(Math.random() > 0.8){
+            // _tempRow.push(0);
+            // }else{
+            let value = Math.floor((Math.random()+Math.random()+Math.random())/3*10);
+            value = lax ? Math.max(0, value-2.5) : Math.min( 10, value+ 2.5)
+            _tempRow.push(value);
+            // }
         }
         values.push(_tempRow)
     }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { scaleLinear, scaleTime , scaleOrdinal, scaleBand} from "d3-scale";
+import { scaleLinear, scaleTime , scaleOrdinal, scaleBand, scaleSequential, scaleSequentialSqrt } from "d3-scale";
 import { extent, max, histogram } from "d3-array";
+import {interpolatePuRd, interpolateOrRd, interpolateYlOrRd} from 'd3-scale-chromatic';
 import { line } from "d3-shape";
 import {select} from "d3-selection";
 import {axisBottom} from "d3-axis";
@@ -11,12 +12,12 @@ import useChartDimensions from '../../hooks/chart-dimensions-hook'
 import { createPortal } from 'react-dom';
 
 const defaultChartSettings = {
-    marginLeft: 40,
-    marginBottom: 20,
-    marginTop: 40,
-    marginRight: 10,
+    marginLeft: 95,
+    marginBottom: 5,
+    marginTop: 50,
+    marginRight: 95,
 
-    height: 250,
+    height: 450,
 }
 
 // References https://observablehq.com/@d3/grouped-bar-chart
@@ -29,81 +30,41 @@ const ColorMap = ({ data, chartSettings, title}) => {
     // In addition to how to useRef with `.current` from https://medium.com/@mautayro/d3-react-and-using-refs-e25b9a817a43
     const xAxis = useRef(null)
 
-    const [x0Domain, setX0Domain] = useState([0, 1000]);
-    const [x1Domain, setX1Domain] = useState([0, 1000]);
+    const [xDomain, setXDomain] = useState([0, 1000]);
     const [yDomain, setYDomain] = useState([0, 1000]);
 
 
-    const x0Scale = useMemo(() => (
+    const xScale = useMemo(() => (
         scaleBand()
-            .domain(x0Domain)
-            .rangeRound([0, dms.boundedWidth])
-            .paddingInner(0.1)
-    ), [dms.boundedWidth, x0Domain.join("-")])
+            .domain(xDomain)
+            .range([0, dms.boundedWidth])
+    ), [dms.boundedWidth, xDomain.join("-")])
 
-    const x1Scale = useMemo(() => (
-        scaleBand()
-            .domain(x1Domain)
-            .rangeRound([0, x0Scale.bandwidth()])
-            .padding(0.05)
-    ), [dms.boundedWidth, x1Domain.join("-"), x0Scale.bandwidth()])
 
     const yScale = useMemo(() => (
-        scaleLinear()
-            .domain(yDomain).nice()
-            .range([dms.boundedHeight, 0])
+        scaleBand()
+            .domain(yDomain)
+            .range([0, dms.boundedHeight])
     ), [dms.boundedHeight, yDomain.join("-")])
 
-    const color = scaleOrdinal()
-    .range([
-        // "#98abc5", 
-        // "#8a89a6", 
-        // "#7b6888", 
-        // "#6b486b", 
-        "#a05d56", 
-        // "#d0743c", 
-        "#ff8c00"])
-
+    const color = scaleSequential([0, max(data.values, d => max(d))], interpolateYlOrRd);
 
 
     // set Domain of x and y after new data.
     useEffect(() => {
         if (!data) {
-            console.log("GroupedBarGraph: There is no data! ");
+            console.log("ColorMap: There is no data! ");
         } else { // There is data
-            // setX0Domain(data.map(d => d[data.xAxis]));
-            // setX1Domain(data.columns);
-            // setYDomain([0, max(data, d => max(data.columns, key => d[key]))]); 
+            setXDomain(data.xLabels);
+            setYDomain(data.yLabels); 
         }
     }, [data]);
-
-    useEffect(()=> {
-        console.log("ColorMap: data ",data)
-    }, [])
-
-    // useEffect(() => {
-    //     console.log("GroupedBarGraph: I can select ", select(xAxis.current))
-    //     select(xAxis.current)
-    //         .style("font-size", "15px")
-    //         .call(axisBottom(x0Scale).tickSizeOuter(0));
-    // }, [xAxis, x0Scale])
-    // Draw Line after data, xScale/yScale is updated
-    // useEffect(() => {
-    //     if (data) {
-    //         let _bins= histogram()
-    //                     .domain(xScale.domain())
-    //                     .thresholds(xScale.ticks(16))
-    //                     (data)
-    //         console.log("Histogram:: data bins", data,bins)
-    //         setBins(_bins);
-    //     }
-    // }, [data, xScale]);
 
 
     return (
         <div className="Chart_wrapper" ref={ref}>
             <svg width={dms.width} height={dms.height} 
-                // style={{ border: "1.5px solid gold" }} 
+                style={{ border: "1.5px solid gold" }} 
                 viewBox={`0 0 ${dms.width} ${dms.height}`}>
                 
                 {/* Graph Boundary */}
@@ -117,12 +78,11 @@ const ColorMap = ({ data, chartSettings, title}) => {
 
                     {/* Graph Title */}
                     <text 
-                        x="50%"
+                        x={dms.boundedWidth/2}
                         text-anchor="middle"
-                        y={-15}
+                        y={-30}
                         font-weight="bold"
                         font-size="20px"
-                        // transform={`translate(${dms.width/2}, ${dms.marginTop})`}
                     >{title}</text>
 
                     {/* xAxis Label */}
@@ -145,8 +105,21 @@ const ColorMap = ({ data, chartSettings, title}) => {
 
 
 
-                    {/* For Each Group of Rects */}
-
+                    {/* For Each Value */}
+                    {data.values.map((rowValues, rowIndex) => (
+                        <g transform={`translate(0, ${yScale(data.yLabels[rowIndex])})`}> 
+                            {rowValues.map((value, colIndex) => (
+                                <rect 
+                                    x={xScale(data.xLabels[colIndex])}
+                                    width={xScale.bandwidth()-1}
+                                    height={yScale.bandwidth()-1}
+                                    fill={isNaN(value) ? "#EEE":  color(value)}
+                                >    
+                                    <text>{`${value} in ${data.xLabels[rowIndex]}`}</text>
+                                </rect>
+                            ))}
+                        </g>
+                    ))}
 
 
 
@@ -157,29 +130,6 @@ const ColorMap = ({ data, chartSettings, title}) => {
                     {/* === yAxis === */}
                     <g >
                         <AxisLeft domain={yScale.domain()} range={yScale.range()} />
-                    </g>
-
-                    {/* === Color Legend === */}
-                    <g transform={`translate(${dms.boundedWidth},${-dms.marginTop})`}
-                        textAnchor="end"
-                        fontSize="14"
-                    >
-                        {color.domain().slice().reverse().map((d,i)=> (
-                            <g  transform={`translate(0, ${i*17})`} >
-                                <rect 
-                                    x={-15}
-                                    width={15}
-                                    height={15}
-                                    fill={color(d)}
-                                />
-                                <text
-                                    x={-20}
-                                    y={6}
-                                    dy={"0.35em"}
-                                >{d}</text>
-                            </g>
-                        ))}
-
                     </g>
 
                 </g>

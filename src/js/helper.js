@@ -1815,3 +1815,21 @@ export const identifyEndpoinsHelper = (document_type_id) => {
 
 export const checkBooleanForEditHelper = (values, decoded_token, fact) => (values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.FAST_TRACK || values.status_name_th === DOCUMENT_STATUS.DRAFT)
     && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
+
+
+export const filterAlsEquipment = (equipmentData, formData) => {
+    let tempEquipmentData = [];
+    equipmentData.map((mockup, i) => {
+        if (mockup.equipment_group_id === formData.equipment_group_id || formData.equipment_group_id === "") {
+            if (mockup.division_id === formData.division_id || formData.division_id === "") {
+                if (mockup.district_id === formData.district_id || formData.district_id === "") {
+                    if (mockup.node_id === formData.node_id || formData.node_id === "") {
+                        tempEquipmentData.push(mockup);
+                    }
+                }
+            }
+        }
+    })
+    return tempEquipmentData;
+
+}
