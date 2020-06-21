@@ -17,9 +17,10 @@ import LineGraph from '../als-spare/d3-line-graph';
 import BarDivergingGraph from '../als-spare/d3-bar-diverging';
 import Histogram from '../als-equipment-status/d3-histogram';
 import ThailandMapComponent from '../als-equipment-status/d3-map';
-import SimpleGrayCardComponent from '../als-equipment-status/simple-gray-card';
+
 import AdjustmentBarComponent from '../als-equipment-status/adjustment-bar';
 import EquipmentStatusListComponent from '../als-equipment-status/equipment-status-list';
+import SimpleGrayCardComponent from '../als-equipment-status/simple-gray-card';
 
 import {randomHistogramData, randomPieChartData,randomGroupedBarGraphData} from './mockup-data';
 import PieChart from '../common/d3-pie-chart';
@@ -79,7 +80,26 @@ const AlsPlanPreventiveMaintenanceComponent = () => {
                             </div>
                             {/* PM MTBF */}
                             <div className="col-8" >
-                                
+                                <div className="row_bootstrap" style={{padding:10}}>
+                                    <div className="col-4">
+                                        <SimpleGrayCardComponent
+                                            name="#PM << MTBF"
+                                            value={22}
+                                        />
+                                    </div>
+                                    <div className="col-4">
+                                        <SimpleGrayCardComponent
+                                            name="#PM = MTBF"
+                                            value={22}
+                                        />
+                                    </div>
+                                    <div className="col-4">
+                                        <SimpleGrayCardComponent
+                                            name="#PM > MTBF"
+                                            value={22}
+                                        />
+                                    </div>
+                                </div>
                             </div>
 
                         </div>
