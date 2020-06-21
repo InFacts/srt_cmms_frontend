@@ -7,8 +7,8 @@ import {select} from "d3-selection";
 import {quantize} from 'd3-interpolate';
 import {axisBottom, axisLeft} from "d3-axis";
 
-import AxisBottom from '../common/d3-axis-bottom';
-import AxisLeft from '../common/d3-axis-left';
+import AxisBottom from './d3-axis-bottom';
+import AxisLeft from './d3-axis-left';
 import useChartDimensions from '../../hooks/chart-dimensions-hook'
 
 const defaultChartSettings = {

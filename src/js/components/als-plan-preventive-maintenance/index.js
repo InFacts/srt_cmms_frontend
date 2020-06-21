@@ -21,20 +21,11 @@ import SimpleGrayCardComponent from '../als-equipment-status/simple-gray-card';
 import AdjustmentBarComponent from '../als-equipment-status/adjustment-bar';
 import EquipmentStatusListComponent from '../als-equipment-status/equipment-status-list';
 
+import {randomHistogramData, randomPieChartData,randomGroupedBarGraphData} from './mockup-data';
+import PieChart from '../common/d3-pie-chart';
+import GroupedBarGraph from '../common/d3-grouped-bar-graph';
 
-const randomHistogramData = () => {
-    let results = [];
-
-    results.push(0)
-    for (let i = 0; i < 1000; i++) {
-        let randomNumber = (Math.random() + Math.random() + Math.random() + Math.random()) / 4*100; 
-        results.push(randomNumber);
-    }
-
-    return results;
-}
-
-const AlsEquipmentStatusComponent = () => {
+const AlsPlanPreventiveMaintenanceComponent = () => {
     const dispatch = useDispatch();
     const loggedIn = useSelector(state => state.token.isLoggedIn);
     // Initializer: Change Toolbar to Mode None
@@ -55,98 +46,58 @@ const AlsEquipmentStatusComponent = () => {
                 <div className="bootstrap-wrapper">
                     <div className="container" style={{ marginTop: "70px" }}>
                         {/* Section Title */}
-                        <h4 className="head-title no-margin">แสดงผลสถานะของสินทรัพย์</h4>
-
+                        <h4 className="head-title no-margin">ระบบวิเคราะห์การวางแผนการซ่อมบำรุง</h4>
 
                         {/* Columns have horizontal padding to create the gutters between individual columns, however, you can remove the margin from rows and padding from columns with .no-gutters on the .row. */}
-                        <div className="row_bootstrap ">
-                            {/* === Annual Average Inventory Month Line Graph :1st Row, 1st Column === */}
-                            <div className="col-3" >
-                                <SimpleGrayCardComponent
-                                    name="จำนวนสินทรัพย์ทั้งหมด"
-                                    value={2000}
-                                />
-                            </div>
-
-
-                            {/* === Current Average Inventory Month Text :1st Row, 2nd Column === */}
-                            <div className="col-3">
-                                <SimpleGrayCardComponent
-                                    name="จำนวนสินทรัพย์ที่ใช้งาน"
-                                    value={1600}
-                                />
-
-                            </div>
-
-                            {/* === Current Inventory Month vs Planned Inventory Month Scatter Plot :1st Row, 2nd Column === */}
-                            <div className="col-3">
-                                <SimpleGrayCardComponent
-                                    name="จำนวนสินทรัพย์ชำรุด"
-                                    value={98}
-                                />
-
-                            </div>
-
-                            <div className="col-3" >
-                                <SimpleGrayCardComponent
-                                    name="จำนวนสินทรัพย์ดำเนินการซ่อม"
-                                    value={302}
-                                />
-
-                            </div>
-                        </div>
-                        {/*=== Second Row ===*/}
                         <div className="row_bootstrap no-gutters">
-                            <div className="col-2" >
-                                <AdjustmentBarComponent />
-                            </div>
-                            <div className="col-6"
-                                style={{
-                                    // border:"1px solid red", 
-                                    height: "450px"
-                                }}>
-
-                                <ThailandMapComponent />
-                            </div>
-                            <div className="col-4"
-                                style={{
-                                    // border:"1px solid red", 
-                                    height: "300px"
-                                }}>
+                            <div className="col-4" >
                                 <Histogram 
                                     chartSettings={{ marginLeft: 50, marginTop: 70, marginBottom: 40, height: 300 }} 
                                     data={randomHistogramData()}
-                                    title="กลุ่มอายุของสินทรัพย์"
+                                    title="ระยะเวลาระหว่างการชำรุดจากอายุการใช้งาน"
                                     xAxis="อายุการใช้งานของสินทรัพย์"
                                     yAxis="จำนวนของสินทรัพย์"
                                 />
-
-                                <div class="space-50px" />
-
-                                <EquipmentStatusListComponent />
                             </div>
+                            <div className="col-8" >
+                                <GroupedBarGraph 
+                                    chartSettings={{ marginLeft: 50, marginTop: 70, marginBottom: 40, height: 300 }} 
+                                    data={randomGroupedBarGraphData()}
+                                />
+                            </div>
+
                         </div>
 
-                        {/*=== Third Row ===*/}
                         <div className="row_bootstrap no-gutters">
-                            <div className="col-4" style={{ border: "1px solid red", height: "200px" }}>
-                                <ScatterPlot />
+                            <div className="col-4" >
+                                <PieChart 
+                                    chartSettings={{ marginLeft: 20, marginTop: 30, marginBottom: 40, 
+                                    marginRight:20, height: 200 }} 
+                                    data={randomPieChartData()}
+                                    title="ระยะเวลาระหว่างการชำรุดจากอายุการใช้งาน"
+                                />
                             </div>
+                            {/* PM MTBF */}
+                            <div className="col-8" >
+                                
+                            </div>
+
                         </div>
+
                     </div>
                 </div>
             </div>
         </>
     )
 }
-const EnhancedAlsEquipmentStatusComponent = withFormik({
+const EnhancedAlsPlanPreventiveMaintenanceComponent = withFormik({
     mapPropsToValues: () => ({
         equipment_group_id: '',
         division_id: '',
         district_id: '',
         node_id: '',
     })
-})(AlsEquipmentStatusComponent);
+})(AlsPlanPreventiveMaintenanceComponent);
 
 
-export default EnhancedAlsEquipmentStatusComponent;
+export default EnhancedAlsPlanPreventiveMaintenanceComponent;
