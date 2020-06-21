@@ -11,8 +11,11 @@ import useFactInitializer from '../../hooks/fact-initializer';
 import useTokenInitializer from '../../hooks/token-initializer';
 
 import Top5Component from './d3-top5';
+import ColorMapDateComponent from './d3-color-map-date';
 
 import AdjustmentBarComponent from './adjustment-bar';
+
+import {randomColorMapData} from './mockup-data';
 
 const AlsPreventiveMaintenanaceComponent = () => {
     const dispatch = useDispatch();
@@ -91,7 +94,17 @@ const AlsPreventiveMaintenanaceComponent = () => {
                             {/* Top5 */}
                             <div className="col-auto"
                                 style={{ border: "1px red solid" }}
-                            >Top5
+                            >
+                                <ColorMapDateComponent 
+                                    title="สถิติการทำวาระของแต่ละตอน"
+                                    data={randomColorMapData()}
+                                    chartSettings={{
+                                        height: 950,
+                                        marginBottom: 30,
+                                        marginLeft: 50,
+                                        marginRight: 20,
+                                    }}
+                                />
                             </div>
 
                         </div>

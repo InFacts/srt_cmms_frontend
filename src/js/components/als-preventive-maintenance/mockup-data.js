@@ -25,3 +25,30 @@ export const randomHorizontalBarGraphData = () => {
 
     return results;
 }
+
+// Data format is referenced from https://observablehq.com/@mbostock/the-impact-of-vaccines
+export const randomColorMapData = () => {
+    let xLabels = []
+    for (let d=new Date(2018, 0, 1); d<new Date(2020, 0, 1); d.setDate(d.getDate() + 7)) {
+        xLabels.push(new Date(d));
+    }
+    let yLabels = []
+    for (let i=0; i<99; i++) {
+        yLabels.push(`ตอน ${i}`);
+    }
+
+    let values = [];
+    for (let i=0; i<yLabels.length; i++ ){
+        let _tempRow = [];
+        let lax = (Math.random() > 0.4) ? true : false;
+        for (let j=0; j<xLabels.length; j++){
+
+            let value = Math.floor((Math.random()+Math.random()+Math.random())/3*10);
+            value = lax ? Math.max(0, value-2.5) : Math.min( 10, value+ 2.5)
+            _tempRow.push(value);
+        }
+        values.push(_tempRow)
+    }
+
+    return {values, xLabels, yLabels};
+}
