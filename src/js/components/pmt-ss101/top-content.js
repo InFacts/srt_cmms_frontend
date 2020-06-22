@@ -29,7 +29,7 @@ const TopContent = (props) => {
     const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
-    console.log(">>>>>>>>>>>", values)
+
     // Fill Default Forms
     useFillDefaultsOnModeAdd();
 
@@ -62,7 +62,7 @@ const TopContent = (props) => {
             .then((res) => {
                 console.log("res", res.data, refer_to_document_internal_id)
                 if (res.data.document.internal_document_id === refer_to_document_internal_id) { // If input document ID exists
-                    setFieldValue("refer_to_document_id", res.data.document_id, false)
+                    setFieldValue("refer_to_document_id", res.data.document.document_id, false)
                     return resolve(null);
                 } else { // If input Document ID doesn't exists
                     error = 'Invalid Document ID';
