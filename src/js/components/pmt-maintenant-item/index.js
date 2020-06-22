@@ -83,7 +83,6 @@ const EnhancedMaintenantItemComponent = withFormik({
         document_date: '',              // วันที่ออกเอกสาร (Default === NOW )
         refer_to_document_internal_id: '',    // อ้างอิงเอกสาร
         refer_to_document_id: '',
-        
         // Bottom Content
         line_items: initialRows(),          // รายการอะไหล่
         remark: '',                      // หมายเหตุ  NVARCHAR

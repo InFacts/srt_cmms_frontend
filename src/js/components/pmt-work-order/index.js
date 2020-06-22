@@ -35,6 +35,7 @@ const WorkOrderComponent = (props) => {
         {id:"attachment", name:"แนบไฟล์"},
         // {id:"fixed_asset", name:"สินทรัพย์ที่เกี่ยวข้อง"},
         {id:"table_status", name:"สถานะเอกสาร"},
+        { id: "assets_under_maintenance", name: "สินทรัพที่ดำเดินการซ่อมบำรุง" },
     ]);
 
     
@@ -52,7 +53,23 @@ const WorkOrderComponent = (props) => {
     )
 }
 
-
+const initialEquipmentLineItem = {
+    internal_item_id: '',
+    description:'',
+    work_order_document_id: '',
+    equipment_item_id: '',
+    equipment_status_id: '',
+    remark: '',
+}
+const initialRowsEquipment = (n = 10) => {
+    let rows = [];
+    for (var i = 1; i <= n; i++) {
+        rows.push({
+            ...initialEquipmentLineItem,
+        });
+    }
+    return rows;
+}
 
 const EnhancedWorkOrderComponent = withFormik({
     mapPropsToValues: (props) => ({ 
@@ -81,7 +98,7 @@ const EnhancedWorkOrderComponent = withFormik({
         location_node_id: '',            // สถานที่ ตอน   [ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม (สถานที่/ที่ตั้ง)] FK_ID
         location_station_id: '',         // สถานที่ สถานี  FK_ID
         location_detail: '',       //รายละเอียดสถานที่ [WR]  ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม (สถานที่/ที่ตั้ง) [WO] NVARCHAR
-
+        has_equipment_item: initialRowsEquipment(),
         
         // line_items: initialRows(),
         remark: '',                      // หมายเหตุ  NVARCHAR

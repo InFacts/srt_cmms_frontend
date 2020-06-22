@@ -33,35 +33,6 @@ const initialState = {
 export default function reducer(state = initialState, action) {
     switch (action.type) {
         // Mode Search
-        case "CLICK SEARCH TRACKDOCUMENT":
-            return {
-                ...state,
-                track_document_show: initialState.track_document.filter(item => {
-                    const query = state.no_track_document.toLowerCase();
-                    const query2 = state.date_start.toLowerCase();
-                    const query3 = state.date_end.toLowerCase();
-                    const query4 = state.zone.toLowerCase();
-                    const query5 = state.district.toLowerCase();
-
-                    const query6 = state.find_document.toLowerCase();
-                    const query7 = state.type_document.toLowerCase();
-                    const query8 = state.status_document.toLowerCase();
-                    const query9 = state.station.toLowerCase();
-                    return (
-                        (item.no_track_document.toLowerCase().indexOf(query) >= 0 || !query) &&
-                        (item.zone.toLowerCase().indexOf(query4) >= 0 || !query4) &&
-                        (item.district.toLowerCase().indexOf(query5) >= 0 || !query5) &&
-                        (item.date_end.toLowerCase().indexOf(query3) >= 0 || !query3) &&
-                        (item.date_start.toLowerCase().indexOf(query2) >= 0 || !query2) &&
-
-                        (item.find_document.toLowerCase().indexOf(query6) >= 0 || !query6) &&
-                        (item.type_document.toLowerCase().indexOf(query7) >= 0 || !query7) &&
-                        (item.status_document.toLowerCase().indexOf(query8) >= 0 || !query8) &&
-                        (item.station.toLowerCase().indexOf(query9) >= 0 || !query9)
-                    )
-                }),
-            }
-
         case "ON CHANGE NO TRACKDOCUMENT":
             return {
                 ...state,
@@ -143,11 +114,11 @@ function receiveDocuments(data) {
 function getQueryString(state) {
     let queryString = "?";
     let mapStateToQuery = {
-        no_track_document: "document_id",  // TODO NEED TO CHANGE TO INTERNAL LATER
+        no_track_document: "internal_document_id",
         // find_document: "", 
         type_document: "document_type_id",
-        // date_start: "", 
-        // date_end: "",
+        date_start: "before_create_on", 
+        date_end: "after_created_on",
         status_document: "document_status_id",
         // district: "", 
         // zone: "",
@@ -171,8 +142,9 @@ export function fetchDocuments() {
 
         // TODO: dispatch fetching
         let queryString = getQueryString(getState().track_doc);
-
-        return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search${queryString}`,
+        let url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search${queryString}`;
+        console.log("url", url)
+        return axios.get(url,
             { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
                 console.log(res)
                 if (res.status === 200) {
@@ -186,12 +158,6 @@ export function fetchDocuments() {
 
 
 
-
-export const onClickSearchTrackDocument = (e) => {
-    return {
-        type: "CLICK SEARCH TRACKDOCUMENT"
-    }
-}
 
 export const onChangeNoTrackDocument = (e) => {
     return {

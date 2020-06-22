@@ -9,8 +9,12 @@ import DateInput from '../common/formik-date-input'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import { FACTS } from '../../redux/modules/api/fact';
 import Label from '../common/form-label'
-import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, validateEmployeeIDField, validateWarehouseIDField, validateInternalDocumentIDFieldHelper } from '../../helper';
+import {
+    getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, validateEmployeeIDField,
+    validateWarehouseIDField, validateInternalDocumentIDFieldHelper, checkBooleanForEditHelper
+} from '../../helper';
 import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
+import PopupModalEquipmentNoChildren from '../common/popup-modal-equipment-no-children'
 
 import { useFormikContext, useField } from 'formik';
 
@@ -18,14 +22,65 @@ const TopContent = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
     const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
     const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
+    const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
+    const factEquipment = useSelector((state) => ({ ...state.api.fact.equipment }), shallowEqual);
 
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
     // Fill Default Forms
     useFillDefaultsOnModeAdd();
 
-    const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
+    const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.EQUIPMENT_INSTALLATION, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args)
 
+    const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
+    const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
+
+    // const validateInternalItemIDField = internal_item_id => {
+    //     if (!internal_item_id) {
+    //       return 'Required';
+    //     }
+    //     if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
+    //       && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) {
+    //       let items = fact.items.items;
+    //       let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+    //       if (item) {
+    //         setFieldValue("equipment_id", item.description, false);
+    //         var item_match_equipments = factEquipment.items;
+    //         let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.item_id}` === `${item.item_id}`); // Returns undefined if not found
+    //         console.log("item_match_equipment", item_match_equipment)
+    //         if (item_match_equipment) {
+    //             setFieldValue("equipment_id", item_match_equipment.equipment_id, false);
+    //           setFieldValue("equipment_status_id", item_match_equipment.equipment_status.equipment_status_id, false);
+    //           setFieldValue("equipment_status_id_th", item_match_equipment.equipment_status.status_th, false);
+    //           setFieldValue("responsible_by", item_match_equipment.responsible_by, false);
+    
+    //           // IF Check user If User is Admin -> return true Else -> return false
+    //           if (decoded_token.id === 4) { //{/* TODO USER_ID FOR ADMIN */}
+    //             console.log(" YES I AM ADMIN ")
+    //             setFieldValue("modeEdit", true, false);
+    //           } else {
+    //             console.log(" NO I NOT ADMIN ")
+    //             setFieldValue("modeEdit", false, false);
+    //           }
+    //         }
+    //         return;
+    //       } else {
+    //         return 'Invalid Number ID';
+    //       }
+    //     } else {//If mode add, ok
+    //       console.log("document ID doesn't exist but I am in mode add")
+    //       if (internal_item_id) {
+    //         let items = fact.items.items;
+    //         let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+    //         // console.log("warehouse", item)
+    //         if (!item) { // Check Dulplication
+    //           setFieldValue("internal_item_id", internal_item_id, false);
+    //         } else return 'Internal Item Id Duplication'
+    //       } else return 'Required';
+    //     }
+    //   };
+
+    const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
     return (
         <div id="blackground-white">
             <div className="container_12 clearfix">
@@ -35,24 +90,27 @@ const TopContent = (props) => {
                 {/* === Left Column === */}
                 <div className="grid_6" style={{ paddingLeft: "10px" }}>
 
+                    {/* Document ID */}
+                    <Label>เลขที่เอกสาร</Label>
+                    <div className="grid_3 alpha">
+                        <TextInput name="internal_document_id"
+                            validate={validateInternalDocumentIDField}
+                            searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalDocument"
+                            tabIndex="1" />
+                    </div>
+                    <div className="clear" />
+
                     {/* Equiment ID */}
                     <Label>เลขที่สินทรัพย์</Label>
                     <div className="grid_3 alpha">
-                        <TextInput name='equiment_item_id'
-                            searchable={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                        <TextInput name='internal_item_id'
+                            // validate={validateInternalItemIDField}
+                            searchable={toolbar.mode !== TOOLBAR_MODE.SEARCH}
+                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                            ariaControls="modalNoPart"
                             tabIndex="1" />
                     </div>
-                    <div class="clear" />
-
-                    {/* No Part */}
-                    <Label>เลขที่สิ่่งของ</Label>
-                    <div className="grid_3 alpha">
-                        <TextInput name="internal_item_id"
-                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                            searchable={toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"
-                            tabIndex="2" />
-                    </div>
-                    <div class="clear" />
+                    <div className="clear" />
 
                     {/* Description  */}
                     <Label>รายละเอียด</Label>
@@ -61,17 +119,16 @@ const TopContent = (props) => {
                             disabled
                             tabIndex="3" />
                     </div>
-                    <div class="clear" />
+                    <div className="clear" />
 
                     {/* UOM  */}
                     <Label>หน่วย</Label>
                     <div className="grid_3 alpha">
                         <TextInput name="uom_id"
-                            // validate={validateAdminEmployeeIDField} เลขที่ของ ผู้สร้างเอกสาร  รายละเอียด หน่วย need to add later
-                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                            disabled={true}
                             tabIndex="3" />
                     </div>
-                    <div class="clear" />
+                    <div className="clear" />
                 </div>
 
 
@@ -80,13 +137,22 @@ const TopContent = (props) => {
                 <div className="grid_6 prefix_2">
 
                     {/* Created On */}
+                    <Label>สถานะ</Label>
+                    <div className="grid_3 alpha">
+                        <TextInput name="status_name_th"
+                            disabled={true}
+                            tabIndex="3" />
+                    </div>
+                    <div className="clear" />
+
+                    {/* Created On */}
                     <Label>วันที่</Label>
                     <div className="grid_3 alpha">
                         <DateTimeInput name="created_on"
                             disabled
                             tabIndex="5" />
                     </div>
-                    <div class="clear" />
+                    <div className="clear" />
 
                     {/* Document date */}
                     <Label>วันที่เอกสาร</Label>
@@ -95,18 +161,28 @@ const TopContent = (props) => {
                             disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
                             tabIndex="6" />
                     </div>
-                    <div class="clear" />
+                    <div className="clear" />
 
                     {/* User Employee ID  */}
-                    <Label>ผู้สร้างเอกสาร</Label>
+                    <Label>ผู้นำเข้า</Label>
                     <div className="grid_3 alpha">
-                        <TextInput name="created_by_admin_employee_id"
+                        <TextInput name="created_by_user_employee_id"
                             validate={validateUserEmployeeIDField}
                             disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
                             searchable={toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"
                             tabIndex="2" />
                     </div>
-                    <div class="clear" />
+                    <div className="clear" />
+
+                    {/* Admin Employee ID  */}
+                    <Label>ผู้สร้างเอกสาร</Label>
+                    <div className="grid_3 alpha">
+                        <TextInput name="created_by_admin_employee_id"
+                            validate={validateAdminEmployeeIDField}
+                            disabled={true}
+                            tabIndex="2" />
+                    </div>
+                    <div className="clear" />
                 </div>
             </div>
 
@@ -119,6 +195,9 @@ const TopContent = (props) => {
 
             {/* PopUp ค้นหาชื่อพนักงาน MODE ADD */}
             <PopupModalUsername />
+
+            {/* PopUp ค้นหาสินทรัพย์ */}
+            <PopupModalEquipmentNoChildren />
         </div>
     );
 }

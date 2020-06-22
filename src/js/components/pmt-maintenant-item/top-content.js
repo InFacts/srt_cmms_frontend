@@ -40,6 +40,7 @@ const TopContent = (props) => {
 
     // For Search GOODs FIX
     const setLineItem = (data) => {
+        console.log("data", data)
         var line_items = []
         for (var i = 0; i < data.line_items.length; i++) {
             line_items.push(
@@ -52,6 +53,7 @@ const TopContent = (props) => {
                     quantity_salvage: 0,
                     uom_group_id: data.line_items[i].uom_group_id,
                     unit: data.line_items[i].unit,
+                    uom_id: data.line_items[i].uom_id,
                     list_uoms: data.line_items[i].list_uoms
                 }
             );
@@ -60,16 +62,12 @@ const TopContent = (props) => {
         for (var i = data.line_items.length; i <= 10 - data.line_items.length; i++) {
             line_items.push({
                 ...line_items,
-                line_number: i
             });
         }
         return line_items;
     }
 
     const validateInternalDocumentGoodFixID = refer_to_document_internal_id => new Promise(resolve => {
-        if (values.refer_to_document_internal_id === refer_to_document_internal_id) {
-            return;
-        }
         // Internal Document ID
         //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
         //  ie. GR-PYO-2563/0001
@@ -82,12 +80,16 @@ const TopContent = (props) => {
         } else if (!internalDocumentIDRegex.test(refer_to_document_internal_id) && !draftInternalDocumentIDRegex.test(refer_to_document_internal_id)) { //
             return resolve('Invalid Document ID Format\nBe sure to use the format ie. S1646-PYO-2563/0001')
         }
+        if (values.refer_to_document_internal_id === refer_to_document_internal_id) {
+            return resolve(null);
+        }
         let error;
         const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/internal_document_id/${encodeURIComponent(refer_to_document_internal_id)}`;
         axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
             .then((res) => {
                 console.log("res", res)
                 if (res.data.internal_document_id === refer_to_document_internal_id) { // If input document ID exists
+                    console.log("validateInternalDocumentGoodFixID")
                     setFieldValue("line_items", setLineItem(res.data), false)
                     setFieldValue("refer_to_document_id", res.data.document_id, false)
                     return resolve(null);
@@ -96,7 +98,7 @@ const TopContent = (props) => {
                 }
             })
             .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
-                if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
+                if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
                     error = 'Invalid Document ID';
                 }//If mode add, ok
             })
@@ -131,8 +133,8 @@ const TopContent = (props) => {
                     <div className="grid_3 alpha">
                         <TextInput name="created_by_user_employee_id"
                             validate={validateUserEmployeeIDField}
-                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                            searchable={toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"
+                            disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                            searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"
                             tabIndex="2" />
                     </div>
                     <div className="clear" />
@@ -152,7 +154,7 @@ const TopContent = (props) => {
                     <div className="grid_3 alpha">
                         <TextInput name='refer_to_document_internal_id'
                             validate={validateInternalDocumentGoodFixID}
-                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                            disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                             searchable={toolbar.mode === TOOLBAR_MODE.ADD}
                             ariaControls="modalDocument2"
                             tabIndex="1" />
@@ -187,7 +189,7 @@ const TopContent = (props) => {
                     <Label>วันที่เอกสาร</Label>
                     <div className="grid_3 alpha">
                         <DateInput name="document_date"
-                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                            disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                             tabIndex="7" />
                     </div>
                     <div className="clear" />
