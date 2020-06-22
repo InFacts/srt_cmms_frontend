@@ -777,7 +777,7 @@ const mutateDataFillDocumentID = (object, document_id) => {
 export const saveDocument = (document_type_group_id, data, files) => new Promise((resolve, reject) => {
     createDocumentEmptyRow()
         .then(({ document_id, internal_document_id, status }) => { // Get the Document_ID
-            editDocument(document_id, document_type_group_id, mutateDataFillDocumentID(data, document_id))
+            editDocument(document_id, document_type_group_id, mutateDataFillDocumentID(data, document_id), files)
                 .then(() => {
                     return resolve(document_id, internal_document_id, status);
                 })
