@@ -34,10 +34,10 @@ const useExportPdfInitializer = () => {
       exportPDF(routeLocation, values).then(function (htmlCode) {
         var w = window.open();
         w.document.write(htmlCode);
-        setTimeout(() => {
-          w.print();
-          w.close();
-        }, 500);
+        // setTimeout(() => {
+        //   w.print();
+        //   w.close();
+        // }, 500);
       })
       dispatch(handleClickExportPDF())
     }

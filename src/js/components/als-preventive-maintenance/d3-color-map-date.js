@@ -136,7 +136,8 @@ const ColorMap = ({ data, chartSettings, title}) => {
                                     x={xScale(data.xLabels[colIndex])}
                                     width={xScale(data.xLabels[colIndex].addDays(7))-xScale(data.xLabels[colIndex])-1} //-1 for space between it
                                     height={yScale.bandwidth()-1} //-1 for space between it
-                                    fill={isNaN(value) ? "#EEE":  color(value)}
+                                    // fill={isNaN(value) ? "#EEE":  color(value)}
+                                    fill={isNaN(value) ? "#EEE":  color(max(data.values, d => max(d))*Math.random())}
                                 >    
                                     <text>{`${value} in ${data.xLabels[rowIndex]}`}</text>
                                 </rect>
