@@ -77,18 +77,21 @@ const TopContent = (props) => {
             </div>
 
             <div className="grid_4">
-              <div className="card p-tooltip--btm-center" aria-describedby="btm-cntr">
-                <div className="image ">
-                  <img src={Icon} alt="Generic placeholder thumbnail" />
+              {/* <Link to={values.line_position_permission.length !== 0 && values.line_position_permission[0].module_2 ? "/main-pmt" : "#"}> */}
+              <Link to="/main-als">
+                <div className="card p-tooltip--btm-center" aria-describedby="btm-cntr" >
+                  <div className="image ">
+                    <img src={Icon} alt="Generic placeholder thumbnail" />
+                  </div>
+                  <div className="content ">
+                    <div className="card-body">ระบบวิเคราะห์และวางแผนทรัพยากรซ่อมบำรุง</div>
+                    <div className="card-footer ">
+                      ระบบบริหารข้อมูลอะไหล่สำหรับซ่อมบำรุง
+                    </div>
+                  </div>
+                  <span className="p-tooltip__message" role="tooltip" id="btm-cntr">ระบบบริหารงานซ่อมบำรุง</span>
                 </div>
-                <div className="content ">
-                  <div className="card-body">ระบบวิเคราะห์และวางแผนทรัพยากรซ่อมบำรุง</div>
-                  <div className="card-footer ">
-                    ระบบบริหารข้อมูลอะไหล่สำหรับซ่อมบำรุง
-                            </div>
-                </div>
-                <span className="p-tooltip__message" role="tooltip" id="btm-cntr">ระบบวิเคราะห์และวางแผนทรัพยากรซ่อมบำรุง</span>
-              </div>
+              </Link>
             </div>
 
             <div className="grid_4">

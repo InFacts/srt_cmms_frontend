@@ -6,6 +6,7 @@ import ForgotPassword from './components/forgot-password';
 import Main4Module from './components/main-module';
 import MainSpare from './components/main-spare';
 import MainPmt from './components/main-pmt';
+import MainAls from './components/main-als';
 import MainAdmin from './components/main-admin';
 import NotFoundComponent from './components/404-not-found';
 
@@ -104,6 +105,7 @@ const FrontEnd = () => (
         <Route exact path="/approval-flow-step" component={ApprovalFlowStep} />
 
         {/* ALS Routes */}
+        <Route exact path="/main-als" component={MainAls} />
         <Route exact path="/als-spare" component={AlsSpareComponent} />
         <Route exact path="/als-equipment-status" component={AlsEquipmentStatusComponent} />
         <Route exact path="/als-summary-ss101" component={AlsSummarySS101Component} />
