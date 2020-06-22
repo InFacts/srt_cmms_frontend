@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { scaleLinear } from "d3-scale";
 import { extent } from "d3-array"
+import { useFormik, withFormik, useFormikContext } from 'formik';
 
 import { footerToModeInvisible } from '../../redux/modules/footer.js';
 import { useDispatch, useSelector } from 'react-redux'
@@ -15,37 +16,9 @@ import ScatterPlot from './d3-scatter-plot';
 import LineGraph from './d3-line-graph';
 import BarDivergingGraph from './d3-bar-diverging';
 
-const getAnnualInventoryMonthData = () => {
-  let results= [];
-  let dataPoints=10;
-  let date = new Date("October 13, 2014");
-  for (let i = 0 ; i< dataPoints; i++){
-    results.push({
-      date: new Date(date),
-      inventory_month: Math.random()*10,
-    });
-    date.setMonth(date.getMonth() + 1);
-  }
-  return results;
-}
-
-const randomDivergingBarGraphData = () => {
-  let results = [];
-
-  //set the default value of i & j to print A to Z
-	var charCodeA = 65;
-  var charCodeZ = 91;
-  
-  for (let charCode = charCodeA; charCode<charCodeZ; charCode++){
-    results.push({
-      name: String.fromCharCode(charCode),
-      value_neg: -Math.random()*200,
-      value_pos: Math.random()*200,
-    });
-  }
-
-  return results;
-}
+import AdjustmentBarComponent from './adjustment-bar';
+import SimpleGrayCardComponent from '../als-equipment-status/simple-gray-card';
+import { getAnnualInventoryMonthData, randomDivergingBarGraphData, randomScatterPlotData } from './mockup-data';
 
 const AlsSpareComponent = () => {
   const dispatch = useDispatch();
@@ -61,14 +34,14 @@ const AlsSpareComponent = () => {
 
   const [IVMonthData, setIVMonthData] = useState([])
   const [BarDivergingGraphData, setBarDivergingGraphData] = useState([])
-  useEffect(()=> {
+  useEffect(() => {
     const interval = setTimeout(() => {
       var randomMonthData = getAnnualInventoryMonthData()
       setIVMonthData(randomMonthData);
-    }, 2000);
+    }, 1000);
     return () => clearInterval(interval);
   }, [])
-  useEffect(()=> {
+  useEffect(() => {
     const interval = setTimeout(() => {
       // var randomMonthData = randomDivergingBarGraphData()
       setBarDivergingGraphData(randomDivergingBarGraphData());
@@ -91,28 +64,93 @@ const AlsSpareComponent = () => {
             <div className="row_bootstrap no-gutters">
               {/* === Annual Average Inventory Month Line Graph :1st Row, 1st Column === */}
               <div class="col-4">
-                <LineGraph data={IVMonthData}/>
+                <LineGraph
+                  title="Average Inventory Month ของทุกๆปี"
+                  data={IVMonthData}
+                  chartSettings={{
+                    marginTop: 20,
+                    height: 230,
+                  }}
+                />
               </div>
 
 
               {/* === Current Average Inventory Month Text :1st Row, 2nd Column === */}
-              <div className="col-4">
-              Average Inventory Month ปัจจุบัน
-              {/* <LineGraph /> */}
+              <div className="col-4"
+                style={{ border: "1px red solid" }}
+              >
+                <div className="row_bootstrap">
+                  <div className="col-12">
+                    <SimpleGrayCardComponent
+                      name="Average Inventory Month ปัจจุบัน"
+                      value={`7.5 เดือน `}
+                    />
+                  </div>
+                </div>
+
+                <div className="row_bootstrap no-gutters">
+                  <div className="col-4">
+                    <SimpleGrayCardComponent
+                      name="อะไหล่ต่ำกว่าเกณฑ์"
+                      value={52}
+                    />
+                  </div>
+                  <div className="col-4">
+                    <SimpleGrayCardComponent
+                      name="อะไหล่ตามเกณฑ์"
+                      value={200}
+                    />
+                  </div>
+                  <div className="col-4">
+                    <SimpleGrayCardComponent
+                      name="อะไหล่สูงกว่าเกณฑ์"
+                      value={367}
+                    />
+                  </div>
+                </div>
+
+                {/* <LineGraph /> */}
               </div>
 
               {/* === Current Inventory Month vs Planned Inventory Month Scatter Plot :1st Row, 2nd Column === */}
               <div className="col-4">
-              <ScatterPlot />
+                <ScatterPlot 
+                  title="Inventory Month ปัจจุบัน vs. แผนของแต่ละอะไหล่"
+                  data ={randomScatterPlotData()}
+                  chartSettings={{
+                    marginTop: 20,
+                    marginBottom:30,
+                    marginLeft:30,
+                    height: 230,
+                  }}
+                />
               </div>
             </div>
             {/*=== Second Row ===*/}
-            <div className="row_bootstrap">
-              <div className="col-2">.col-md-2 ปรับแต่งข้อมูลของภาพรวม</div>
-              <div className="col-5">
-                <BarDivergingGraph data={BarDivergingGraphData}/>  
+            <div className="row_bootstrap no-gutters">
+              <div className="col-2">
+                <AdjustmentBarComponent />
               </div>
-              <div className="col-5">.col-md-5 <ScatterPlot /></div>
+              <div className="col-5">
+                <BarDivergingGraph 
+                  title="การนำออกและนำเข้าอะไหล่"
+                  data={BarDivergingGraphData} 
+                />
+              </div>
+              <div className="col-5">
+                <div className="row_bootstrap no-gutters">
+                  <div className="col-7">
+                  <ScatterPlot 
+                  data ={randomScatterPlotData()}
+                />
+                  </div>
+                  <div className="col-5">
+                  <ScatterPlot 
+                  data ={randomScatterPlotData()}
+                />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -121,4 +159,14 @@ const AlsSpareComponent = () => {
   )
 }
 
-export default AlsSpareComponent;
+const EnhancedAlsSpareComponent = withFormik({
+  mapPropsToValues: () => ({
+    year: 2563,
+    fix_type: '',
+    division_id: '',
+    district_id: '',
+    node_id: '',
+  })
+})(AlsSpareComponent);
+
+export default EnhancedAlsSpareComponent;

@@ -62,7 +62,7 @@ const AlsPlanPreventiveMaintenanceComponent = () => {
                             </div>
                             <div className="col-8" >
                                 <GroupedBarGraph 
-                                    chartSettings={{ marginLeft: 50, marginTop: 70, marginBottom: 40, height: 300 }} 
+                                    chartSettings={{ marginLeft: 50, marginTop: 60, marginBottom: 40, height: 300 }} 
                                     data={randomGroupedBarGraphData()}
                                 />
                             </div>
