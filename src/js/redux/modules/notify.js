@@ -36,7 +36,8 @@ export const loadNotify = (e) => {
     return (dispatch, getState) => {
         return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/notification/plus`,
             { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
-                console.log(res)
+                console.log("TEST")
+                console.log(res.headers)
                 dispatch(
                     {
                         type: "LOAD NOTIFY",

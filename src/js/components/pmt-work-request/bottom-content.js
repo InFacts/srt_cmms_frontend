@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { shallowEqual, useSelector } from 'react-redux'
 import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
 import Files from '../common/files2'
@@ -149,15 +149,11 @@ const BottomContent = (props) => {
 
                 </div>
 
-
-
-
                 <div id="attachment_content" className="tabcontent">
                     <div className="container_12 ">
                         <Files />
                     </div>
                 </div>
-
 
                 <div id="table_status_content" className="tabcontent">
                     <TableStatus bodyTableStatus={values.step_approve} />

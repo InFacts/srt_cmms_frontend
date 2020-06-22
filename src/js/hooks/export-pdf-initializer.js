@@ -16,9 +16,9 @@ const useExportPdfInitializer = () => {
     // let document_id = values.src_warehouse_id;
     let document_item = values.internal_document_id;
     let document_item_list = values.line_items;
-    console.log(values)
+    // console.log(values)
     let routeLocation = getRouteLocation();
-    console.log(routeLocation)
+    // console.log(routeLocation)
     if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF] && document_item) {
       exportPDF(routeLocation, values).then(function (htmlCode) {
         var w = window.open();
@@ -1526,7 +1526,7 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
     let mouth = newDate.getMonth() + 1;
     let year = newDate.getFullYear() + 543;
     if (mouth === Number(valuesContext.mouth_id) && year === Number(valuesContext.year_id)) {
-      console.log("ccccc")
+      // console.log("ccccc")
     } else {
       date = 30
     }
@@ -1609,7 +1609,7 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
     const row_groups = group.map(createCategory).join('');
 
     const head_doc = createPageS1Header(row_groups, data_json.CreateOn, data_json.SourceWarehouse, group.length, img);
-    console.log(head_doc)
+    // console.log(head_doc)
     pageAll = pageAll + head_doc
     var index = 1
     Object.keys(data_json.ItemInWarehouse).map((id) => {
@@ -1638,7 +1638,7 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
   }
   else if (routeLocation === '/inventory-transfer') {
 
-    console.log(valuesContext)
+    // console.log(valuesContext)
     let data = [];
     let p = 1
     let total = 0
@@ -1971,7 +1971,7 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
 
     for (let i = 0; i < pageSS101.length; i++) {
       const rows = pageSS101[i].map(createRowSS101).join('');
-      console.log(rows)
+      // console.log(rows)
       const table = createTableSS101(data_json.Headers, rows);
       const tablePage2 = createPageS101Page2(table, data_json.CreateOn, data_json.Content)
       pageAll = pageAll + tablePage2

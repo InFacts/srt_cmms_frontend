@@ -29,6 +29,7 @@ const Login = (props) => {
         localStorage.setItem('token_auth', res.data.token)
         setLogin(true);
       }).catch(function (err) {
+        console.log("err", err)
         setCheckIdPasswordLogin(false);
       })
   }

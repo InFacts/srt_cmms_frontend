@@ -72,7 +72,6 @@ const EnhancedWorkRequestComponent = withFormik({
         location_detail: '',       //รายละเอียดสถานที่
 
         remark: '',                      // หมายเหตุ  NVARCHAR
-        
 
         files: [],
 
