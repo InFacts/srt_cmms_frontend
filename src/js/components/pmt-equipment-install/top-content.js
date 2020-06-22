@@ -25,7 +25,7 @@ const TopContent = (props) => {
     const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
     const factEquipment = useSelector((state) => ({ ...state.api.fact.equipment }), shallowEqual);
 
-    const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
+    const { values, errors, touched, setFieldValue, setTouched, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
     // Fill Default Forms
     useFillDefaultsOnModeAdd();
@@ -35,50 +35,48 @@ const TopContent = (props) => {
     const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
     const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
 
-    // const validateInternalItemIDField = internal_item_id => {
-    //     if (!internal_item_id) {
-    //       return 'Required';
-    //     }
-    //     if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
-    //       && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) {
-    //       let items = fact.items.items;
-    //       let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
-    //       if (item) {
-    //         setFieldValue("equipment_id", item.description, false);
-    //         var item_match_equipments = factEquipment.items;
-    //         let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.item_id}` === `${item.item_id}`); // Returns undefined if not found
-    //         console.log("item_match_equipment", item_match_equipment)
-    //         if (item_match_equipment) {
-    //             setFieldValue("equipment_id", item_match_equipment.equipment_id, false);
-    //           setFieldValue("equipment_status_id", item_match_equipment.equipment_status.equipment_status_id, false);
-    //           setFieldValue("equipment_status_id_th", item_match_equipment.equipment_status.status_th, false);
-    //           setFieldValue("responsible_by", item_match_equipment.responsible_by, false);
-    
-    //           // IF Check user If User is Admin -> return true Else -> return false
-    //           if (decoded_token.id === 4) { //{/* TODO USER_ID FOR ADMIN */}
-    //             console.log(" YES I AM ADMIN ")
-    //             setFieldValue("modeEdit", true, false);
-    //           } else {
-    //             console.log(" NO I NOT ADMIN ")
-    //             setFieldValue("modeEdit", false, false);
-    //           }
-    //         }
-    //         return;
-    //       } else {
-    //         return 'Invalid Number ID';
-    //       }
-    //     } else {//If mode add, ok
-    //       console.log("document ID doesn't exist but I am in mode add")
-    //       if (internal_item_id) {
-    //         let items = fact.items.items;
-    //         let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
-    //         // console.log("warehouse", item)
-    //         if (!item) { // Check Dulplication
-    //           setFieldValue("internal_item_id", internal_item_id, false);
-    //         } else return 'Internal Item Id Duplication'
-    //       } else return 'Required';
-    //     }
-    //   };
+    const validateInternalItemIDField = internal_item_id => {
+        //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
+        if (values.internal_item_id === internal_item_id) {
+            return;
+        }
+        if (internal_item_id === "") {
+            setFieldValue("equipment_id", '', false);
+            setFieldValue("equipment_status_id", '', false);
+            setFieldValue("equipment_status_id_th", '', false);
+            setFieldValue("responsible_by", '', false);
+            return;
+        }
+        let items = fact.items.items;
+        let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+        console.log(item)
+        var item_match_equipments = factEquipment.items;
+        let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.item_id}` === `${item.item_id}`); // Returns undefined if not found
+        console.log("item_match_equipment", item_match_equipment)
+        if (item_match_equipment) {
+            // item
+            setFieldValue("description", item.description, false);
+            setFieldValue("unit", item.list_uoms[0].name, false);
+
+            // item_match_equipment
+            setFieldValue("equipment_id", item_match_equipment.equipment_id, false);
+            setFieldValue("equipment_status_id", item_match_equipment.equipment_status.equipment_status_id, false);
+            setFieldValue("equipment_status_id_th", item_match_equipment.equipment_status.status_th, false);
+            setFieldValue("responsible_by", item_match_equipment.responsible_by, false);
+            validateField("responsible_by");
+            // IF Check user If User is Admin -> return true Else -> return false
+            if (decoded_token.id === 4) { //{/* TODO USER_ID FOR ADMIN */}
+                console.log(" YES I AM ADMIN ")
+                setFieldValue("modeEdit", true, false);
+            } else {
+                console.log(" NO I NOT ADMIN ")
+                setFieldValue("modeEdit", false, false);
+            }
+        }
+        else {
+            return 'Invalid Number ID';
+        }
+    }
 
     const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
     return (
@@ -104,7 +102,7 @@ const TopContent = (props) => {
                     <Label>เลขที่สินทรัพย์</Label>
                     <div className="grid_3 alpha">
                         <TextInput name='internal_item_id'
-                            // validate={validateInternalItemIDField}
+                            validate={validateInternalItemIDField}
                             searchable={toolbar.mode !== TOOLBAR_MODE.SEARCH}
                             disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
                             ariaControls="modalNoPart"
@@ -124,14 +122,12 @@ const TopContent = (props) => {
                     {/* UOM  */}
                     <Label>หน่วย</Label>
                     <div className="grid_3 alpha">
-                        <TextInput name="uom_id"
+                        <TextInput name="unit"
                             disabled={true}
                             tabIndex="3" />
                     </div>
                     <div className="clear" />
                 </div>
-
-
 
                 {/* === Right Column === */}
                 <div className="grid_6 prefix_2">

@@ -12,8 +12,9 @@ import { useFormik, withFormik, useFormikContext } from 'formik';
 import Label from '../common/form-label'
 import {
     getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, validateEmployeeIDField,
-    validateWarehouseIDField, validateInternalDocumentIDFieldHelper, checkBooleanForEditHelper
+    validateWarehouseIDField, validateInternalDocumentIDFieldHelper, checkBooleanForEditHelper, validateUserIDField
 } from '../../helper';
+import { FACTS } from '../../redux/modules/api/fact';
 
 const BottomContent = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
@@ -23,9 +24,12 @@ const BottomContent = (props) => {
     const factDistricts = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
     const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
     const factStations = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
-    const { values } = useFormikContext();
+    const factEquipmentStatus = useSelector((state) => ({ ...state.api.fact[FACTS.EQUIPMENT_STATUS] }), shallowEqual);
+    const { values, setFieldValue } = useFormikContext();
 
     const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
+
+    const validateResponsibleByIDField = (...args) => validateUserIDField("responsible_by", fact, setFieldValue, ...args);
 
     return (
         <div id="blackground-gray">
@@ -60,6 +64,7 @@ const BottomContent = (props) => {
                         <Label>หน่วยงานผู้รับผิดชอบ</Label>
                         <div className="grid_3 alpha omega">
                             <TextInput name="responsible_by"
+                                validate={validateResponsibleByIDField}
                                 disabled
                                 tabIndex="6" />
                         </div>
@@ -90,9 +95,15 @@ const BottomContent = (props) => {
 
                         <Label>สถานะ</Label>
                         <div className="grid_3 alpha omega">
-                            <SelectNoChildrenInput name="equipment_status_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                cssStyle={{ left: "-160px", top: "10px" }}>
+                            <SelectNoChildrenInput name="equipment_status_id" disabled>
                                 <option value=''></option>
+                                {factEquipmentStatus.items.map((equipment_status) => {
+                                    if(values.equipment_status_id === equipment_status.equipment_status_id) {
+                                        return <option value={equipment_status.equipment_status_id} key={equipment_status.equipment_status_id} selected>{equipment_status.status_th}</option>
+                                    } else {
+                                        return <option value={equipment_status.equipment_status_id} key={equipment_status.equipment_status_id}>{equipment_status.status_th}</option>
+                                    }
+                                })} 
                             </SelectNoChildrenInput>
                         </div>
 

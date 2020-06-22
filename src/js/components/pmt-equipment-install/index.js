@@ -58,7 +58,7 @@ const EnhancedEquipmentInstallationComponent = withFormik({
         internal_document_id: '',       // เลขที่เอกสาร
         internal_item_id: '',  // เลขที่สินทรัพย์
         description: '',
-        uom_id: '',
+        unit: '',
         created_on: '',                  // TODO doesn't have (Field ที่ไม่ได้กรอก)
         document_date: '',              // วันที่ออกเอกสาร (Default === NOW )
         created_by_user_employee_id: '', // ผู้ดำเนินเรื่อง (Default === admin_employee_id)
@@ -66,7 +66,7 @@ const EnhancedEquipmentInstallationComponent = withFormik({
         status_name_th: '',              // TODO doesn't have (Field ที่ไม่ได้กรอก)
         equipment_id: '',
         equipment_status_id: '',
-        
+
         // Bottom Content
         // general_content
         responsible_zone_by: '',        // ผู้รับผิดชอบสถานที่ STRING

@@ -1661,6 +1661,8 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
                     setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
                     validateField("created_by_user_employee_id");
                     validateField("created_by_admin_employee_id");
+                    validateField("responsible_by");
+                    validateField("internal_item_id");
                     return resolve(null);
 
                 } else { //If Mode add, need to error duplicate Document ID
@@ -1703,6 +1705,18 @@ export const validateEmployeeIDField = (fieldName, fact, setFieldValue, employee
     let user = users.find(user => user.employee_id === employee_id); // Returns undefined if not found
     if (user) {
         setFieldValue(fieldName, `${employee_id}\\${user.firstname_th} ${user.lastname_th}`, false);
+        return;
+    } else {
+        return 'Invalid Employee ID';
+    }
+};
+
+export const validateUserIDField = (fieldName, fact, setFieldValue, user_id) => {
+    console.log("I am validating user id")
+    let users = fact[FACTS.USERS].items;
+    let user = users.find(user => user.user_id === user_id); // Returns undefined if not found
+    if (user) {
+        setFieldValue(fieldName, `${user.employee_id}\\${user.firstname_th} ${user.lastname_th}`, false);
         return;
     } else {
         return 'Invalid Employee ID';
