@@ -43,10 +43,10 @@ const TopContent = (props) => {
               </div>
 
               <div className="container_12 mt-2">
-                <div className="grid_2 cancel-default">
+                <div className="grid_1 cancel-default" style={{whiteSpace: "nowrap"}}>
                   <p className="cancel-default">ประเภทเอกสาร </p>
                 </div>
-                <div className="grid_2 pull_0">
+                <div className="grid_2" style={{ marginLeft: "20px"}}>
                   <FormDropdown factList={props.type_document_list} onChange={props.onChangeTypeTrackDocument} 
                     idName="document_type_group_id" descriptionName="name" gridClass="grid_2"/>
                 </div>
@@ -58,10 +58,10 @@ const TopContent = (props) => {
                 </div>
               </div>
               <div className="container_12">
-                <div className="grid_2 cancel-default">
-                  <p className="cancel-default">เลขที่เอกสาร </p>
+                <div className="grid_1 cancel-default" >
+                  <p className="cancel-default" style={{whiteSpace: "nowrap"}}>เลขที่เอกสาร </p>
                 </div>
-                <div className="grid_2 pull_0">
+                <div className="grid_2" style={{ marginLeft: "20px"}}>
                   <input type="text" className="cancel-default grid_2 " value={props.no_track_document} onChange={props.onChangeNoTrackDocument}></input>
                 </div>
                 <div className="grid_1  ">
@@ -77,31 +77,9 @@ const TopContent = (props) => {
                   <FormDropdown factList={props.status_document_list} onChange={props.onChangeStatusTrackDocument} 
                     idName="document_status_id" descriptionName="status" gridClass="grid_2"/>
                 </div>
+                <button className="button-blue edit grid_1 float-right" style={{margin:"0"}} type="button" onClick={props.fetchDocuments}>ค้นหา</button>
             </div>
-            <div className="container_12">
-              <div className="grid_2 cancel-default">
-                <p className="cancel-default">แขวง </p>
-              </div>
-              <div className="grid_2 pull_0">
-                <FormDropdown factList={props.district_list} onChange={props.onChangeDistrictTrackDocument} 
-                  idName="district_id" descriptionName="name" gridClass="grid_2"/>
-              </div>
-              <div className="grid_1  ">
-                <p className="cancel-default">ตอน </p>
-              </div>
-              <div className="grid_3">
-                <FormDropdown factList={props.node_list} onChange={props.onChangeZoneTrackDocument} 
-                    idName="node_id" descriptionName="name" gridClass="grid_3"/>
-              </div>
-              <div className="grid_1  ">
-                <p className="cancel-default">สถานี </p>
-              </div>
-              <div className="grid_2">
-                <FormDropdown factList={props.station_list} onChange={props.onChangeStationTrackDocument} 
-                  idName="station_id" descriptionName="name" gridClass="grid_2"/>
-              </div>
-              <button className="button-blue edit grid_1 float-right mr-5" type="button" onClick={props.fetchDocuments}>ค้นหา</button>
-            </div>
+
           </section>
         </div>
      </div> 
@@ -137,8 +115,7 @@ const mapStateToProps = (state) => {
 }
 
 
-const mapDispatchToProps = {
-  // onClickSearchTrackDocument, 
+const mapDispatchToProps = { 
   onChangeNoTrackDocument,
   onChangeFindTrackDocument,
   onChangeTypeTrackDocument,
