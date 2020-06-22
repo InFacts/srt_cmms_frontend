@@ -15,12 +15,13 @@ import {
     validateWarehouseIDField, validateInternalDocumentIDFieldHelper, checkBooleanForEditHelper, validateUserIDField
 } from '../../helper';
 import { FACTS } from '../../redux/modules/api/fact';
+import PopupModalReponseZoneBy from '../common/popup-modal-reponse-zone-by'
 
 const BottomContent = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
     const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
     const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
-    const decoded_token = useSelector((state) => ({...state.token.decoded_token}), shallowEqual);
+    const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
     const factDistricts = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
     const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
     const factStations = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
@@ -30,6 +31,7 @@ const BottomContent = (props) => {
     const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
 
     const validateResponsibleByIDField = (...args) => validateUserIDField("responsible_by", fact, setFieldValue, ...args);
+    const validateResponsibleZoneByField = (...args) => validateEmployeeIDField("responsible_zone_by", fact, setFieldValue, ...args);
 
     return (
         <div id="blackground-gray">
@@ -50,8 +52,10 @@ const BottomContent = (props) => {
                         <Label>ผู้รับผิดชอบ</Label>
                         <div className="grid_3 alpha omega">
                             <TextInput name="responsible_zone_by"
-                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                tabIndex="6" />
+                                validate={validateResponsibleZoneByField}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserNameResponesibleZoneBy"
+                                tabIndex="2" />
                         </div>
 
                         <div class="clear" />
@@ -79,7 +83,7 @@ const BottomContent = (props) => {
                         <Label>วันที่ติดตั้งเสร็จ</Label>
                         <div className="grid_3 alpha omega">
                             <DateInput name="installed_on"
-                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                                 tabIndex="6" />
                         </div>
                         <div class="clear" />
@@ -88,7 +92,7 @@ const BottomContent = (props) => {
                         <Label>วันที่ประกาศใช้</Label>
                         <div className="grid_3 alpha omega">
                             <DateInput name="announce_use_on"
-                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                                 tabIndex="6" />
                         </div>
                         <div class="clear" />
@@ -98,12 +102,12 @@ const BottomContent = (props) => {
                             <SelectNoChildrenInput name="equipment_status_id" disabled>
                                 <option value=''></option>
                                 {factEquipmentStatus.items.map((equipment_status) => {
-                                    if(values.equipment_status_id === equipment_status.equipment_status_id) {
+                                    if (values.equipment_status_id === equipment_status.equipment_status_id) {
                                         return <option value={equipment_status.equipment_status_id} key={equipment_status.equipment_status_id} selected>{equipment_status.status_th}</option>
                                     } else {
                                         return <option value={equipment_status.equipment_status_id} key={equipment_status.equipment_status_id}>{equipment_status.status_th}</option>
                                     }
-                                })} 
+                                })}
                             </SelectNoChildrenInput>
                         </div>
 
@@ -115,7 +119,7 @@ const BottomContent = (props) => {
                         <Label>หมายเหตุ</Label>
                         <div className="grid_11 alpha omega">
                             <TextareaInput name="remark"
-                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
                         <div class="clear" />
@@ -136,8 +140,8 @@ const BottomContent = (props) => {
                             {/* Responsible person District ID */}
                             <Label>แขวง</Label>
                             <div className="grid_7">
-                                <SelectNoChildrenInput name="location_district_id" 
-                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                                <SelectNoChildrenInput name="location_district_id"
+                                    disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                                     <option value=''></option>
                                     {factDistricts.items.map((districts) => {
                                         if (values.location_district_id === districts.district_id) {
@@ -152,8 +156,8 @@ const BottomContent = (props) => {
                             {/* Responsible person Node ID */}
                             <Label>ตอน</Label>
                             <div className="grid_7">
-                                <SelectNoChildrenInput name="location_node_id" 
-                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                                <SelectNoChildrenInput name="location_node_id"
+                                    disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                                     <option value=''></option>
                                     {factNodes.items.map((node) => {
                                         if (values.location_node_id === node.node_id) {
@@ -168,8 +172,8 @@ const BottomContent = (props) => {
                             {/* Responsible person Station ID */}
                             <Label>สถานี</Label>
                             <div className="grid_7">
-                                <SelectNoChildrenInput name="location_station_id" 
-                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                                <SelectNoChildrenInput name="location_station_id"
+                                    disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                                     <option value=''></option>
                                     {factStations.items.map((stations) => {
                                         if (values.location_station_id === stations.station_id) {
@@ -185,7 +189,7 @@ const BottomContent = (props) => {
                             <Label>รายละเอียดเพิ่มเติม</Label>
                             <div className="grid_7">
                                 <TextInput name="location_description"
-                                    disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                    disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                                     tabIndex="6" />
                             </div>
 
@@ -204,6 +208,7 @@ const BottomContent = (props) => {
                 </div>
 
             </div>
+            <PopupModalReponseZoneBy />
         </div>
     );
 };

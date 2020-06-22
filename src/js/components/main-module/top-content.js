@@ -95,21 +95,21 @@ const TopContent = (props) => {
             </div>
 
             <div className="grid_4">
+            <Link to="/track">
               <div className="card p-tooltip--btm-center" aria-describedby="btm-cntr">
                 <div className="image ">
                   <img src={Icon} alt="Generic placeholder thumbnail" />
                 </div>
                 <div className="content ">
-                  <Link to="/track">
                   {/* <Link to={values.line_position_permission.length !== 0 && values.line_position_permission[0].module_4 ? "/track" : "#"}> */}
                     <div className="card-body">สถานะรอการอนุมัติ</div>
                     <div className="card-footer ">
                       ระบบบริหารข้อมูลอะไหล่สำหรับซ่อมบำรุง
                       </div>
-                  </Link>
                 </div>
                 <span className="p-tooltip__message" role="tooltip" id="btm-cntr">สถานะรอการอนุมัติ</span>
               </div>
+              </Link>
             </div>
 
             <div className="grid_4">

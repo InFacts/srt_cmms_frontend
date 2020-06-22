@@ -92,7 +92,8 @@ export const DOCUMENT_SCHEMA_GET = {
     document_date: "",
     // document_status_id:	-1, // NOT USED, handled by Backend
     // document_action_type_id	string // NOT USED, handled by Backend
-    // refer_to_document_id	string // NOT USED, handled by Backend
+    refer_to_document_id: '',	 // string NOT USED, handled by Backend
+    refer_to_document_internal_id: '',
 }
 
 
@@ -575,6 +576,26 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             document: document_part,
             specific: icd_part,
         }
+    } else if (document_type_id === DOCUMENT_TYPE_ID.EQUIPMENT_INSTALLATION) {
+        var equipment_install = {
+            document_id: values.document_id,
+            equipment_id: values.equipment_id,
+            location_district_id: values.location_district_id,
+            location_node_id: values.location_node_id,
+            location_station_id: values.location_station_id,
+            location_description: values.location_description,
+            installed_on: values.installed_on,
+            announce_use_on: values.announce_use_on,
+            equipment_status_id: values.equipment_status_id,
+            responsible_zone_by: values.responsible_zone_by
+        }
+        console.log("document_part", document_part);
+        console.log("equipment_install", equipment_install)
+;
+        return {
+            document: document_part,
+            specific: equipment_install,
+        }
     }
 }
 
@@ -689,11 +710,12 @@ export const getDocumentbyInternalDocumentID = (internal_document_id) => new Pro
 
 // PUT /document/{document_id}/{document_type_group_id}
 export const editDocument = (document_id, document_type_group_id, data, files) => new Promise((resolve, reject) => {
+    console.log("files", files)
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}/${document_type_group_id}`;
     axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             console.log(" I am successful in updating contents of document_id ", document_id)
-            if (res.status === 200) {
+            if (res.status === 200) { 
                 console.log("wow i putted successfully status 200 ", res.data)
                 if (files.length !== 0 && files !== undefined) {
                     uploadAttachmentDocumentData(document_id, files)
@@ -1308,28 +1330,27 @@ const responseToFormState = (fact, data, document_type_group_id) => {
 function transformDocumentResponseToFormState(document_part, fact, document_type_group_id) {
     var created_on = new Date(document_part.created_on);
     created_on.setHours(created_on.getHours() + 7)
-    if (document_type_group_id === DOCUMENT_TYPE_ID.SS101) {
+    // if (document_type_group_id === DOCUMENT_TYPE_ID.SS101) {
         return {
             document_id: document_part.document_id,
         internal_document_id: document_part.internal_document_id,
         document_date: document_part.document_date.split("T")[0],
         created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_user_id) || '',
         created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_admin_id) || '',
-        // created_on: document_part.created_on.split(".")[0],
         created_on: created_on.toISOString().split(".")[0],
-        refer_to_document_id: document_part.refer_to_document_id
+        refer_to_document_id: document_part.refer_to_document_id,
+        refer_to_document_internal_id: document_part.refer_to_document_internal_id
         }
-    } else {
-    return {
-        document_id: document_part.document_id,
-        internal_document_id: document_part.internal_document_id,
-        document_date: document_part.document_date.split("T")[0],
-        created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_user_id) || '',
-        created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_admin_id) || '',
-        // created_on: document_part.created_on.split(".")[0],
-        created_on: created_on.toISOString().split(".")[0],
-    }
-}
+    // } else {
+    // return {
+    //     document_id: document_part.document_id,
+    //     internal_document_id: document_part.internal_document_id,
+    //     document_date: document_part.document_date.split("T")[0],
+    //     created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_user_id) || '',
+    //     created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_admin_id) || '',
+    //     created_on: created_on.toISOString().split(".")[0],
+    // }
+// }
 }
 
 function returnEmptyStringIfNull(string) {
@@ -1400,6 +1421,16 @@ function returnFullArrayHasEquipmentItemNull (has_equipment_item) {
         equipment_item_id: '',
         equipment_status_id: '',
         remark: '',
+    }
+    for (var i = 0; i < has_equipment_item.length; i++) {
+        has_equipment_item[i] = {
+            internal_item_id: has_equipment_item[i].equipment_item.equipment.equipment_item.item.internal_item_id,
+            description: has_equipment_item[i].equipment_item.equipment.equipment_item.item.description,
+            ss101_document_id: has_equipment_item[i].ss101_document_id,
+            equipment_item_id: has_equipment_item[i].equipment_item_id,
+            equipment_status_id: has_equipment_item[i].equipment_status_id,
+            remark: has_equipment_item[i].remark,
+        };
     }
     for (var i = has_equipment_item.length; i <= 9; i++) {
         has_equipment_item.push({

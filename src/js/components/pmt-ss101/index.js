@@ -119,7 +119,7 @@ const EnhancedPmtSS101Component = withFormik({
         internal_document_id: '',       // เลขที่เอกสาร
         created_by_user_employee_id: '', // ผู้ดำเนินเรื่อง (Default === admin_employee_id)
         created_by_admin_employee_id: '',  //ผู้สร้างเอกสาร (Field ที่ไม่ได้กรอก)
-        refer_to_internal_document_id: '',  // เลขที่เอกสารอ้างอิง (Must have)
+        refer_to_document_internal_id: '',  // เลขที่เอกสารอ้างอิง (Must have)
         refer_to_document_id: '',
 
         status_name_th: '',              // TODO doesn't have (Field ที่ไม่ได้กรอก)

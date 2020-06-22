@@ -103,8 +103,8 @@ const TopContent = (props) => {
                     <div className="grid_3 alpha">
                         <TextInput name='internal_item_id'
                             validate={validateInternalItemIDField}
-                            searchable={toolbar.mode !== TOOLBAR_MODE.SEARCH}
-                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                            searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH}
+                            disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                             ariaControls="modalNoPart"
                             tabIndex="1" />
                     </div>
@@ -154,7 +154,7 @@ const TopContent = (props) => {
                     <Label>วันที่เอกสาร</Label>
                     <div className="grid_3 alpha">
                         <DateInput name="document_date"
-                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                            disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                             tabIndex="6" />
                     </div>
                     <div className="clear" />
@@ -164,8 +164,8 @@ const TopContent = (props) => {
                     <div className="grid_3 alpha">
                         <TextInput name="created_by_user_employee_id"
                             validate={validateUserEmployeeIDField}
-                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                            searchable={toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"
+                            disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                            searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"
                             tabIndex="2" />
                     </div>
                     <div className="clear" />

@@ -429,13 +429,13 @@ const BottomContent = (props) => {
                         </div>
 
                         <Label>ตำแหน่ง</Label>
-                        <div className="grid_3 alpha omega">
+                        <div className="grid_4 alpha omega">
                             <SelectNoChildrenInput name="auditor_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
                                 <option value='' selected></option>
                                 {factPosition.items.map((position) => {
-                                    if (values.auditor_position_id === position.recv_id) {
-                                        return <option key={position.recv_id} value={position.recv_id} selected>{position.name}</option>
-                                    } else return <option key={position.recv_id} value={position.recv_id}>{position.name}</option>
+                                    if (values.auditor_position_id === position.position_id) {
+                                        return <option key={position.position_id} value={position.position_id} selected>{position.name}</option>
+                                    } else return <option key={position.position_id} value={position.position_id}>{position.name}</option>
                                 })}
                             </SelectNoChildrenInput>
                         </div>
@@ -448,13 +448,13 @@ const BottomContent = (props) => {
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
                         <Label>ตำแหน่ง</Label>
-                        <div className="grid_3 alpha omega">
+                        <div className="grid_4 alpha omega">
                             <SelectNoChildrenInput name="fixer_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
                                 <option value='' selected></option>
                                 {factPosition.items.map((position) => {
-                                    if (values.auditor_position_id === position.recv_id) {
-                                        return <option key={position.recv_id} value={position.recv_id} selected>{position.name}</option>
-                                    } else return <option key={position.recv_id} value={position.recv_id}>{position.name}</option>
+                                    if (values.fixer_position_id === position.position_id) {
+                                        return <option key={position.position_id} value={position.position_id} selected>{position.name}</option>
+                                    } else return <option key={position.position_id} value={position.position_id}>{position.name}</option>
                                 })}
                             </SelectNoChildrenInput>
                         </div>
@@ -468,13 +468,13 @@ const BottomContent = (props) => {
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
                         <Label>ตำแหน่ง</Label>
-                        <div className="grid_3 alpha omega">
+                        <div className="grid_4 alpha omega">
                             <SelectNoChildrenInput name="member_1_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
                                 <option value='' selected></option>
                                 {factPosition.items.map((position) => {
-                                    if (values.auditor_position_id === position.recv_id) {
-                                        return <option key={position.recv_id} value={position.recv_id} selected>{position.name}</option>
-                                    } else return <option key={position.recv_id} value={position.recv_id}>{position.name}</option>
+                                    if (values.member_1_position_id === position.position_id) {
+                                        return <option key={position.position_id} value={position.position_id} selected>{position.name}</option>
+                                    } else return <option key={position.position_id} value={position.position_id}>{position.name}</option>
                                 })}
                             </SelectNoChildrenInput>
                         </div>
@@ -487,13 +487,13 @@ const BottomContent = (props) => {
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
                         <Label>ตำแหน่ง</Label>
-                        <div className="grid_3 alpha omega">
+                        <div className="grid_4 alpha omega">
                             <SelectNoChildrenInput name="member_2_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
                                 <option value='' selected></option>
                                 {factPosition.items.map((position) => {
-                                    if (values.auditor_position_id === position.recv_id) {
-                                        return <option key={position.recv_id} value={position.recv_id} selected>{position.name}</option>
-                                    } else return <option key={position.recv_id} value={position.recv_id}>{position.name}</option>
+                                    if (values.member_2_position_id === position.position_id) {
+                                        return <option key={position.position_id} value={position.position_id} selected>{position.name}</option>
+                                    } else return <option key={position.position_id} value={position.position_id}>{position.name}</option>
                                 })}
                             </SelectNoChildrenInput>
                         </div>
@@ -506,13 +506,13 @@ const BottomContent = (props) => {
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
                         <Label>ตำแหน่ง</Label>
-                        <div className="grid_3 alpha omega">
+                        <div className="grid_4 alpha omega">
                             <SelectNoChildrenInput name="member_3_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
                                 <option value='' selected></option>
                                 {factPosition.items.map((position) => {
-                                    if (values.auditor_position_id === position.recv_id) {
-                                        return <option key={position.recv_id} value={position.recv_id} selected>{position.name}</option>
-                                    } else return <option key={position.recv_id} value={position.recv_id}>{position.name}</option>
+                                    if (values.member_3_position_id === position.position_id) {
+                                        return <option key={position.position_id} value={position.position_id} selected>{position.name}</option>
+                                    } else return <option key={position.position_id} value={position.position_id}>{position.name}</option>
                                 })}
                             </SelectNoChildrenInput>
                         </div>
