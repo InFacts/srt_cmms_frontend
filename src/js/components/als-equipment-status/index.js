@@ -131,7 +131,7 @@ const AlsEquipmentStatusComponent = () => {
                         {/*=== Third Row ===*/}
                         <div className="row_bootstrap no-gutters">
                             <div className="col-4" style={{ border: "1px solid red", height: "200px" }}>
-                                <ScatterPlot />
+                                {/* <ScatterPlot /> */}
                             </div>
                         </div>
                     </div>

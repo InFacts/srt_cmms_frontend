@@ -1997,6 +1997,7 @@ export const sumTotalHelper = (list_show) => {
 export const identifyEndpoinsHelper = (document_type_id) => {
     let doc_type = document_type_id.toString().substring(0, 3);
     // console.log("doc_type", doc_type)
+    // SPARE
     if (doc_type === "101") return "goods-receipt2";
     if (doc_type === "102") return "goods-return";
     if (doc_type === "103") return "goods-receipt-no-po";
@@ -2008,7 +2009,15 @@ export const identifyEndpoinsHelper = (document_type_id) => {
     if (doc_type === "141") return "physical-count";
     if (doc_type === "142") return "inventory-adjustment";
     if (doc_type === "151") return "salvage-return";
-    if (doc_type === "152") return "salvage-sold";
+    // PMT
+    if (doc_type === "201") return "pmt-work-request"; // แจ้งการเกิดอุบัติเหตุ/เสียหาย
+    if (doc_type === "202") return "pmt-work-order"; // สั่งซ่อม
+    // if (doc_type === "203") return "salvage-sold"; // สั่งซ่อม ตามวาระ TODO:
+    if (doc_type === "204") return "ss-101"; // สรุปการซ่อมบำรุง
+    if (doc_type === "205") return "PmtFixedAsset"; // สรุปการทำวาระ
+    if (doc_type === "206") return "pmt-equipment-installation"; // ติดตั้ง
+    if (doc_type === "207") return "maitenant-item"; // ดำเนินการซ่อมอะไหล่
+
     else return "#";
 }
 

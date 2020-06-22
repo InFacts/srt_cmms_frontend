@@ -101,7 +101,7 @@ function GroupedBarGraph({ data, chartSettings, title}) {
     return (
         <div className="Chart_wrapper" ref={ref}>
             <svg width={dms.width} height={dms.height} 
-                // style={{ border: "1.5px solid gold" }} 
+                style={{ border: "1.5px solid gold" }} 
                 viewBox={`0 0 ${dms.width} ${dms.height}`}>
                 
                 {/* Graph Boundary */}
@@ -174,7 +174,7 @@ function GroupedBarGraph({ data, chartSettings, title}) {
                     </g>
 
                     {/* === Color Legend === */}
-                    <g transform={`translate(${dms.boundedWidth},${-35})`}
+                    <g transform={`translate(${dms.boundedWidth},${-dms.marginTop*0.9})`}
                         textAnchor="end"
                         fontSize="14"
                     >
@@ -182,6 +182,7 @@ function GroupedBarGraph({ data, chartSettings, title}) {
                             <g  transform={`translate(0, ${i*17})`} >
                                 <rect 
                                     x={-15}
+                                    y={0}
                                     width={15}
                                     height={15}
                                     fill={color(d)}
