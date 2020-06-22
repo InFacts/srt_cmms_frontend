@@ -108,6 +108,49 @@ function ScatterPlot({ data, chartSettings, title }) {
                             stroke={"#000"}
                         />
                     ))}
+
+                    {/* Comparison Line */}
+                    {data.hasComparisonLine &&
+                    <>
+                        <line 
+                            x1={xScale(0)}
+                            // Invert to find x value of dms.boundedWidth (max X)
+                            x2={xScale(xScale.invert(dms.boundedWidth))}
+                            y1={yScale(0)}
+                            // Invert to find x value of dms.boundedWidth (max Y)
+                            y2={yScale(yScale.invert(0))}
+                            stroke-dasharray="3,3"
+                            stroke-opacity={0.5}
+                            stroke={"#000"}
+                        />
+                        <line 
+                            x1={xScale(0)}
+                            y1={yScale(0)}
+
+                            // Invert to find x value of dms.boundedWidth (max X)
+                            x2={xScale(xScale.invert(dms.boundedWidth))}
+                            // Invert to find x value of dms.boundedWidth (max Y)
+                            y2={yScale(yScale.invert(0)*1.05)}
+                            stroke-dasharray="3,3"
+                            stroke-opacity={0.5}
+                            stroke={"#000"}
+                        />
+                        <line 
+                            x1={xScale(0)}
+                            // Invert to find x value of dms.boundedWidth (max X)
+                            x2={xScale(xScale.invert(dms.boundedWidth))}
+                            y1={yScale(0)}
+                            // Invert to find x value of dms.boundedWidth (max Y)
+                            y2={yScale(yScale.invert(0)*0.95)}
+                            stroke-dasharray="3,3"
+                            stroke-opacity={0.5}
+                            stroke={"#000"}
+                        />
+                    </>
+                    }
+
+
+
                     {/* <rect
                         width={dms.boundedWidth}
                         height={dms.boundedHeight}
