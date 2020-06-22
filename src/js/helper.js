@@ -690,30 +690,33 @@ export const getDocumentbyInternalDocumentID = (internal_document_id) => new Pro
 // PUT /document/{document_id}/{document_type_group_id}
 export const editDocument = (document_id, document_type_group_id, data, files) => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}/${document_type_group_id}`;
+    console.log("files", files)
+    console.log("data>>", data)
     axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             console.log(" I am successful in updating contents of document_id ", document_id)
             if (res.status === 200) {
                 console.log("wow i putted successfully status 200 ", res.data)
-                if (files.length !== 0 && files !== undefined) {
-                    uploadAttachmentDocumentData(document_id, files)
-                        .then(() => {
-                            return resolve(res.data);
-                        })
-                        .catch((err) => {
-                            return reject(err);
-                        });
+                if (files !== undefined){
+                    if (files.length !== 0) {
+                        uploadAttachmentDocumentData(document_id, files)
+                            .then(() => {
+                                return resolve(res.data);
+                            })
+                            .catch((err) => {
+                                return reject(err);
+                            });
+                    }
+                    else {return resolve(res.data);}
                 }
-                else {
-                    return resolve(res.data);
-                }
+                else {return resolve(res.data); }
             } else {
                 console.log(" i think i have some problems putting ", res.data)
                 reject(res);
             }
         })
         .catch((err) => {
-            console.log("err", err.response)
+            console.log("err", err)
             reject(err)
         });
 });
@@ -774,21 +777,9 @@ const mutateDataFillDocumentID = (object, document_id) => {
 export const saveDocument = (document_type_group_id, data, files) => new Promise((resolve, reject) => {
     createDocumentEmptyRow()
         .then(({ document_id, internal_document_id, status }) => { // Get the Document_ID
-            editDocument(document_id, document_type_group_id, mutateDataFillDocumentID(data, document_id))
+            editDocument(document_id, document_type_group_id, mutateDataFillDocumentID(data, document_id), files)
                 .then(() => {
-                    // console.log("[[[saveDocument.SEND", files, files.length)
-                    if (files.length !== 0 && files !== undefined) {
-                        uploadAttachmentDocumentData(document_id, files)
-                            .then(() => {
-                                return resolve(document_id, internal_document_id, status);
-                            })
-                            .catch((err) => {
-                                return reject(err);
-                            });
-                    }
-                    else {
-                        return resolve(document_id, internal_document_id, status);
-                    }
+                    return resolve(document_id, internal_document_id, status);
                 })
                 .catch((err) => {
                     return reject(err);

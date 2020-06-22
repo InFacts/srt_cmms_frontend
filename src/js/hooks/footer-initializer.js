@@ -297,6 +297,7 @@ const useFooterInitializer = (document_type_id) => {
                                 });
                         } else { // If not have document_id
                             let data = packDataFromValues(fact, values, document_type_id);
+                            console.log("-------- values", values);
                             saveDocument(document_type_id, data, values.files)
                                 .then((document_id) => {
                                     setFieldValue('document_id', document_id, true);
