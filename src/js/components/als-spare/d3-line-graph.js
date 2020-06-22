@@ -7,7 +7,7 @@ import AxisBottom from '../common/d3-axis-bottom';
 import AxisLeft from '../common/d3-axis-left';
 import useChartDimensions from '../../hooks/chart-dimensions-hook'
 
-const chartSettings = {
+const defaultChartSettings = {
     "marginLeft": 20,
     "marginBottom": 20,
     "marginTop": 10,
@@ -16,79 +16,50 @@ const chartSettings = {
     "height": 200,
 }
 
-function LineGraph({data}) {
+function LineGraph({ data, chartSettings, title}) {
     // useChartDimensions will have a ref to the Chart_wrapper and get its own Height and Width
     // See reference of Amelia Wattenberger https://wattenberger.com/blog/react-and-d3#sizing-responsivity
-    const [ref, dms] = useChartDimensions(chartSettings);
+    const [ref, dms] = useChartDimensions({ ...defaultChartSettings, ...chartSettings });
 
-
-    const [timeDomain, setTimeDomain] = useState([new Date(2000, 0, 1), new Date(2000, 0, 2)]);
-    const [inventoryMonthDomain, setInventoryMonthDomain] = useState([0, 100]);
-    const [inventoryMonthPath, setInventoryMonthPath] = useState("");
-    // const xScale = useMemo(() => (
-    //     scaleLinear()
-    //         .domain([0, 100])
-    //         .range([0, dms.boundedWidth])
-    // ), [dms.boundedWidth])
-    const xScale = useMemo(() => {
-        console.log("LineGraph: i got new timeDomain ", timeDomain)
-        return scaleTime()
-            .domain(timeDomain)
-            .range([0, dms.boundedWidth]);
-    }, [dms.boundedWidth, timeDomain.join("-")])
-
-    const yScale = useMemo(() => (
-        scaleLinear()
-            .domain(inventoryMonthDomain)
-            .range([dms.boundedHeight, 0])
-    ), [dms.boundedHeight, inventoryMonthDomain.join("-")])
-    // console.log('this is yscale ', yScale.range())
-
+    // Note: useState will not update on props change, use the useEffect if needed props
+    // const [timeDomain, setTimeDomain] = useState([new Date(2000, 0, 1), new Date(2000, 0, 2)]);
+    // const [inventoryMonthDomain, setInventoryMonthDomain] = useState([0, 100]);
+    // const [inventoryMonthPath, setInventoryMonthPath] = useState("");
     
-    // set Domain of x and y after new data.
-    useEffect(() => {
-        if(!data) {
-            console.log("There is no data! Line Graph.");
-        }else { // There is data
-            console.log("LineGraph: i got data ", data)
-            // const timeDomain = extent(data, d => d.date);
-            // const inventoryMonthDomain = [0, max(data, d => d.inventory_month)];
-            // xScale.domain(timeDomain);
-            // yScale.domain(inventoryMonthDomain);
-            // console.log("LineGraph this is time extent ", extent(data, d => d.date).join("-"))
-            setTimeDomain(extent(data, d => d.date));
-            setInventoryMonthDomain([0, max(data, d => d.inventory_month)*1.1]); // Move up by 10% of the max
-        }
-    }, [data]);
+    const xScale = scaleTime()
+            .domain(extent(data, d => d.date))
+            .range([0, dms.boundedWidth]);
 
-    // Draw Line after data, xScale/yScale is updated
-    useEffect(()=> {
-        if(data){
-            const lineGenerator = line()
-                .x(d => xScale(d.date))
-                .y(d => yScale(d.inventory_month));
-            console.log("This is line generator date", extent(data, d => d.date))
-            console.log("This is line generator ",lineGenerator(data));
-            setInventoryMonthPath(lineGenerator(data)); 
-        }
-    }, [data, xScale, yScale]);
+    const yScale = scaleLinear()
+            .domain([0, max(data, d => d.inventory_month)*1.1]) // Move up by 10% of the max
+            .range([dms.boundedHeight, 0])
 
+    const lineGenerator = line()
+        .x(d => xScale(d.date))
+        .y(d => yScale(d.inventory_month))
 
     return (
         <div className="Chart_wrapper" ref={ref}>
             <svg width={dms.width} height={dms.height} style={{ border: "1.5px solid gold" }} >
                 <g transform={`translate(${dms.marginLeft}, ${dms.marginTop})`}>
                                         
-                    <rect
+                    {/* <rect
                         width={dms.boundedWidth}
                         height={dms.boundedHeight}
                         fill="#FEF9E7"
-                    />
+                    /> */}
                     {/* Line Path */}
-                    <path d={inventoryMonthPath} fill='none' stroke='steelblue'/>
+                    <path d={lineGenerator(data)} fill='none' stroke='steelblue'/>
 
 
-                    
+                    {/* Graph Title */}
+                    <text 
+                        x={dms.boundedWidth/2}
+                        text-anchor="middle"
+                        y={0}
+                        font-weight="bold"
+                        font-size="20px"
+                    >{title}</text>
 
                     <g transform={`translate(0, ${dms.boundedHeight})`}>
                         <AxisBottom xScale={xScale} />
