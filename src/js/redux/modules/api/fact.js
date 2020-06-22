@@ -28,6 +28,7 @@ export const FACTS = {
     EQUIPMENT_GROUP: "equipment-group",
     CHECKLIST_LINE_ITEM_USE_EQUIPMENT: "checklist-line-item-use-equipment",
     CHECKLIST: "checklist",
+    EQUIPMENT_STATUS: "equipment-status",
 
     // FOR SS101 LOOK UP
     SS101_RECV_ACCIDENT_FROM: "ss101/recv-accident-from",

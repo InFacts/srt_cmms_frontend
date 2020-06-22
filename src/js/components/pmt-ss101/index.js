@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useFormik, withFormik, useFormikContext } from 'formik';
 import { Redirect } from 'react-router-dom';
-import { useSelector  } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import TabBar from '../common/tab-bar';
 
@@ -9,7 +9,7 @@ import TopContent from './top-content';
 import BottomContent from './bottom-content';
 import Footer from '../common/footer.js';
 
-import {packDataFromValues, DOCUMENT_TYPE_ID, saveDocument} from '../../helper';
+import { packDataFromValues, DOCUMENT_TYPE_ID, saveDocument } from '../../helper';
 
 import useToolbarInitializer from '../../hooks/toolbar-initializer';
 import useFactInitializer from '../../hooks/fact-initializer';
@@ -17,7 +17,7 @@ import useTokenInitializer from '../../hooks/token-initializer';
 import useFooterInitializer from '../../hooks/footer-initializer';
 import useDocumentSubscription from '../../hooks/document-subscription';
 import useExportPdfInitializer from '../../hooks/export-pdf-initializer';
-import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
+import { TOOLBAR_MODE, TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
 
 const PmtSS101Componant = (props) => {
@@ -28,19 +28,19 @@ const PmtSS101Componant = (props) => {
     useFooterInitializer(DOCUMENT_TYPE_ID.SS101);
     useDocumentSubscription();
     useExportPdfInitializer();
-    const loggedIn = useSelector(state => state.token.isLoggedIn); 
+    const loggedIn = useSelector(state => state.token.isLoggedIn);
 
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
-        { id: "breakdown", name: "อาการเสีย"},
+        { id: "breakdown", name: "อาการเสีย" },
         { id: "related_parties", name: "ผู้ที่เกี่ยวข้อง" },
         { id: "compensation_list", name: "รายการค่าเสียหาย" },
-        { id: "attachment", name: "แนบไฟล์"},
-        { id: "table_status", name: "สถานะเอกสาร"},
-        // { id: "assets-under-maintenance", name: "สินทรัพที่ดำเดินการซ่อมบำรุง"},
+        { id: "attachment", name: "แนบไฟล์" },
+        { id: "table_status", name: "สถานะเอกสาร" },
+        { id: "assets_under_maintenance", name: "สินทรัพที่ดำเดินการซ่อมบำรุง" },
     ]);
 
-    const {resetForm, setFieldValue, setValues, values} = useFormikContext();
+    const { resetForm, setFieldValue, setValues, values } = useFormikContext();
 
 
     // If Link to this url via Track Document
@@ -59,14 +59,14 @@ const PmtSS101Componant = (props) => {
 
     return (
         <>
-        {!loggedIn ? <Redirect to="/" /> : null}
-        <form onSubmit={props.handleSubmit}>
-            <TopContent />
-            <TabBar tabNames={tabNames} initialTabID="breakdown">
-                <BottomContent />
-            </TabBar>
-            <Footer />
-        </form>
+            {!loggedIn ? <Redirect to="/" /> : null}
+            <form onSubmit={props.handleSubmit}>
+                <TopContent />
+                <TabBar tabNames={tabNames} initialTabID="breakdown">
+                    <BottomContent />
+                </TabBar>
+                <Footer />
+            </form>
         </>
     )
 }
@@ -77,14 +77,10 @@ const initialLossLineItem = {
 
     description: '',   // รายการ
     quantity: '',
-    uom_id: '',
-    per_unit_price: '',
-    internal_item_id: '',
+    uom_code: '',
+    price: '',
 
-    remark:'',
-    
-    // idk if needed
-    list_uoms: [],
+    remark: '',
 }
 const initialRows = (n = 10) => {
     let rows = [];
@@ -92,6 +88,24 @@ const initialRows = (n = 10) => {
         rows.push({
             ...initialLossLineItem,
             line_number: i
+        });
+    }
+    return rows;
+}
+
+const initialEquipmentLineItem = {
+    internal_item_id: '',
+    description:'',
+    ss101_document_id: '',
+    equipment_item_id: '',
+    equipment_status_id: '',
+    remark: '',
+}
+const initialRowsEquipment = (n = 10) => {
+    let rows = [];
+    for (var i = 1; i <= n; i++) {
+        rows.push({
+            ...initialEquipmentLineItem,
         });
     }
     return rows;
@@ -105,7 +119,8 @@ const EnhancedPmtSS101Component = withFormik({
         internal_document_id: '',       // เลขที่เอกสาร
         created_by_user_employee_id: '', // ผู้ดำเนินเรื่อง (Default === admin_employee_id)
         created_by_admin_employee_id: '',  //ผู้สร้างเอกสาร (Field ที่ไม่ได้กรอก)
-        wo_internal_document_id: '',  // เลขที่เอกสารอ้างอิง (Must have)
+        refer_to_internal_document_id: '',  // เลขที่เอกสารอ้างอิง (Must have)
+        refer_to_document_id: '',
 
         status_name_th: '',              // TODO doesn't have (Field ที่ไม่ได้กรอก)
         created_on: '',                  // TODO doesn't have (Field ที่ไม่ได้กรอก)
@@ -116,8 +131,8 @@ const EnhancedPmtSS101Component = withFormik({
         accident_on: '',                // วันเวลาเกิดเหตุ  DATETIME
         request_on: '',                 // วันเวลาที่รับแจ้ง DATETIME
         // root_cause: '',                 // อาการเสียโดยสรุป NVARCHAR [only WO]
-        request_by: '' ,                //  ผู้แจ้งเหตุ [WR] ,  ได้รับเหตุจาก[WO] NVARCHAR
-        recv_accident_from_recv_id: '' ,     // ได้รับข้อมูลผ่านช่องทาง: Phone, Letter, WR   FK_ID
+        request_by: '',                //  ผู้แจ้งเหตุ [WR] ,  ได้รับเหตุจาก[WO] NVARCHAR
+        recv_accident_from_recv_id: '',     // ได้รับข้อมูลผ่านช่องทาง: Phone, Letter, WR   FK_ID
 
         location_district_id: '',        // สถานที่ แขวง  [รายงานการตรวจซ่อมอุปกรณ์แขวง] FK_ID
         location_node_id: '',            // สถานที่ ตอน   [ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม (สถานที่/ที่ตั้ง)] FK_ID
@@ -131,7 +146,7 @@ const EnhancedPmtSS101Component = withFormik({
         arrived_on: '',           // เดินทางถึง  DATETIME
         finished_on: '',          // วันเวลาที่แล้วเสร็จ DATETIME
         system_type_group_id: '',   // ระบบตรวจซ่อม FK_ID
-        system_type_id: '',      //  ชนิดระบบตรวจซ่อม FK_ID
+        sub_maintenance_type_id: '',      //  ชนิดระบบตรวจซ่อม FK_ID
         hardware_type_id: '',   // ชื่ออุปกรณ์ที่บำรุงรักษา FK_ID
 
         summary_cause_condition: '', // สาเหตุและอาการเสียโดยสรุป link [root_cause] from WO NVARCHAR
@@ -139,7 +154,7 @@ const EnhancedPmtSS101Component = withFormik({
         total_fail_time: '', //เสียเวลาเพราะเหตุนี้ (นาที) DECIMAL(10,2)
         service_method_id: '', // ประเภทการซ่อม FK_ID
         service_method_desc: '', //สรุปการแก้ไขและการซ่อมแซม STRING
-        interrupt_id:'', //ยังไมไ่ด้จัดการแก้ไขเพราะเหตุนี้ FK_ID
+        interrupt_id: '', //ยังไมไ่ด้จัดการแก้ไขเพราะเหตุนี้ FK_ID
 
 
         // Bottom Content ผู้เกี่ยวข้อง
@@ -153,10 +168,11 @@ const EnhancedPmtSS101Component = withFormik({
         member_2_position_id: '', //รายชื่อเพื่อนร่วมงาน 2 ตำแหน่ง FK_ID
         member_3: '',             //รายชื่อเพื่อนร่วมงาน 3
         member_3_position_id: '',  //รายชื่อเพื่อนร่วมงาน 3 ตำแหน่ง
-        
+
 
         remark: '',
         loss_line_items: initialRows(),
+        has_equipment_item: initialRowsEquipment(),
 
         files: [],
 
@@ -175,7 +191,7 @@ const EnhancedPmtSS101Component = withFormik({
         return errors;
     },
     handleSubmit: (values, formikBag) => new Promise((resolve, reject) => { //handle Submit will just POST the Empty Document and PUT information inside
-        console.log( "I am submitting ". values)
+        console.log("I am submitting ".values)
         resolve("DONE!")
     }),
 })(PmtSS101Componant);

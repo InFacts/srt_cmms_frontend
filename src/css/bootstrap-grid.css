@@ -225,7 +225,9 @@
     -webkit-box-flex: 0;
     -webkit-flex: 0 0 auto;
         -ms-flex: 0 0 auto;
-            flex: 0 0 auto;
+            /* flex: 0 0 auto; */
+            /* Editted with reference to https://css-tricks.com/almanac/properties/f/flex/ , but not sure why the 0 0 auto value doesn't work */
+            flex: 1 1 auto;
     width: auto;
     max-width: 100%;
   }
@@ -254,6 +256,15 @@
     max-width: 25%;
   }
   
+  /* Custom Made 3.33 column */
+  /* .bootstrap-wrapper .col-3-33 {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 25%;
+        -ms-flex: 0 0 25%;
+            flex: 0 0 25%;
+    max-width: 25%;
+  } */
+
   .bootstrap-wrapper .col-4 {
     -webkit-box-flex: 0;
     -webkit-flex: 0 0 33.3333333333%;

@@ -6,6 +6,10 @@ import TextInput from '../common/formik-text-input'
 import DateTimeInput from '../common/formik-datetime-input'
 import DateInput from '../common/formik-date-input'
 
+import axios from "axios";
+import { API_PORT_DATABASE } from '../../config_port.js';
+import { API_URL_DATABASE } from '../../config_url.js';
+
 import { useFormikContext, useField } from 'formik';
 
 import PopupModalDocument from '../common/popup-modal-document'
@@ -36,12 +40,50 @@ const TopContent = (props) => {
 
     const validateDocumentDateField = (...args) => validatedataDocumentField("document_date", setFieldValue, ...args)
 
+    const validateRefDocumentId = refer_to_internal_document_id => new Promise(resolve => {
+        // Internal Document ID
+        //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
+        //  ie. GR-PYO-2563/0001
+        // console.log("I am validating document id")
+        let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS|WO)-[A-Z]{3}-\d{4}\/\d{4}$/g
+        let draftInternalDocumentIDRegex = /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
+        // let draftInternalDocumentIDRegex = /^heh/g
+        if (!refer_to_internal_document_id) {
+            return resolve('Required');
+        } else if (!internalDocumentIDRegex.test(refer_to_internal_document_id) && !draftInternalDocumentIDRegex.test(refer_to_internal_document_id)) { //
+            return resolve('Invalid Document ID Format\nBe sure to use the format ie. S1646-PYO-2563/0001')
+        }
+        if (values.refer_to_internal_document_id === refer_to_internal_document_id) {
+            return resolve(null);
+        }
+        let error;
+        const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/internal_document_id/${encodeURIComponent(refer_to_internal_document_id)}`;
+        axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+            .then((res) => {
+                console.log("res", res.data, refer_to_internal_document_id)
+                if (res.data.document.internal_document_id === refer_to_internal_document_id) { // If input document ID exists
+                    setFieldValue("refer_to_document_id", res.data.document_id, false)
+                    return resolve(null);
+                } else { // If input Document ID doesn't exists
+                    error = 'Invalid Document ID';
+                }
+            })
+            .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
+                if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
+                    error = 'Invalid Document ID';
+                }//If mode add, ok
+            })
+            .finally(() => {
+                return resolve(error)
+            });
+    });
+
     const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
     return (
     <div id="blackground-white">
     <div className="container_12 clearfix" style={{marginTop: "55px"}}>
         {/* Section Title */}
-        <h4 className="head-title">แจ้งเหตุขัดข้อง/ชำรุด</h4>
+        <h4 className="head-title">สรุปการซ่อมบำรุง - แบบ สส.101</h4>
 
         {/* === Left Column === */}
         <div className="grid_6" style={{paddingLeft: "10px"}}>
@@ -78,10 +120,11 @@ const TopContent = (props) => {
             </div>
             <div class="clear" />
 
-            {/* wo_internal_document_id  */}
+            {/* refer_to_internal_document_id  */}
             <Label>เลขที่เอกสารอ้างอิง</Label>
             <div className="grid_3 alpha">
-                <TextInput name="wo_internal_document_id" 
+                <TextInput name="refer_to_internal_document_id" 
+                    validate={validateRefDocumentId}
                     disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} 
                     searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} 
                     ariaControls="modalWODocument"
@@ -134,7 +177,7 @@ const TopContent = (props) => {
         <PopupModalDocument 
         documentTypeGroupID={DOCUMENT_TYPE_ID.WORK_ORDER} 
         id="modalWODocument" //For Open POPUP
-        name="wo_internal_document_id" //For setFieldValue 
+        name="refer_to_internal_document_id" //For setFieldValue 
         />
 
         {/* PopUp ค้นหาชื่อพนักงาน MODE ADD */}

@@ -13,7 +13,8 @@ import NumberInput from '../common/formik-number-input';
 import DateTimeInput from '../common/formik-datetime-input';
 import SelectNoChildrenInput from '../common/formik-select-no-children';
 import SelectInput from '../common/formik-select-input';
-import PopupModalNoPart from '../common/popup-modal-nopart';
+import PopupModalEquipment from '../common/popup-modal-equipment';
+import TableHasEquipment from '../common/table-has-equipment';
 
 import { useFormikContext } from 'formik';
 
@@ -37,40 +38,12 @@ const BottomContent = (props) => {
     const factCarType = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_CAR_TYPE] }), shallowEqual);
     const factCaseType = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_CASE_TYPE] }), shallowEqual);
     const factInterrupt = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_INTERRUPT] }), shallowEqual);
+    const factPosition = useSelector((state) => ({ ...state.api.fact[FACTS.POSITION] }), shallowEqual);
 
+    const factUnit = useSelector((state) => ({ ...state.api.fact[FACTS.UNIT_OF_MEASURE] }), shallowEqual);
     const { values, setFieldValue } = useFormikContext();
 
     const [lineNumber, setLineNumber] = useState('');
-
-    const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => {
-        //     By default Trigger every loss_line_item, so need to check if the internal_item_id changes ourselves
-        console.log(values.loss_line_items[index].internal_item_id, " === ", internal_item_id)
-        if (values.loss_line_items[index].internal_item_id === internal_item_id) {
-            return;
-        }
-        if (internal_item_id === "") {
-            setFieldValue(fieldName + `.description`, '', false);
-            setFieldValue(fieldName + `.quantity`, '', false);
-            setFieldValue(fieldName + `.list_uoms`, [], false);
-            setFieldValue(fieldName + `.uom_id`, '', false);
-            setFieldValue(fieldName + `.per_unit_price`, '', false);
-            return;
-        }
-        let items = props.fact.items.items;
-        console.log(items, "<<<<")
-        let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
-        console.log(item)
-        if (item) {
-            setFieldValue(fieldName + `.description`, `${item.description}`, false);
-            setFieldValue(fieldName + `.quantity`, 0, false);
-            setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
-            setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
-            setFieldValue(fieldName + `.per_unit_price`, 0, false);
-            return;
-        } else {
-            return 'Invalid Number ID';
-        }
-    }
 
     const validateDocumentAccidentNameField = (...args) => validatedataDocumentField("accident_name", setFieldValue, ...args)
     const validateDocumentAccidentOnField = (...args) => validatedataDocumentField("accident_on", setFieldValue, ...args)
@@ -87,6 +60,40 @@ const BottomContent = (props) => {
     const validateDocumentLocationDistrictIDField = (...args) => validatedataDocumentField("location_district_id", setFieldValue, ...args)
     const validateDocumentLocationNodeIDField = (...args) => validatedataDocumentField("location_node_id", setFieldValue, ...args)
     const validateDocumentLocationStationIDField = (...args) => validatedataDocumentField("location_station_id", setFieldValue, ...args)
+    const validateDocumentInterruptIDField = (...args) => validatedataDocumentField("interrupt_id", setFieldValue, ...args)
+    const validateDocumentTotalFailTimeField = (...args) => validatedataDocumentField("total_fail_time", setFieldValue, ...args)
+    const validateDocumentServiceMethodIDField = (...args) => validatedataDocumentField("service_method_id", setFieldValue, ...args)
+
+    const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => {
+        //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
+        if (values.has_equipment_item[index].internal_item_id === internal_item_id) {
+            return;
+        }
+        if (internal_item_id === "") {
+            setFieldValue(fieldName + `.description`, '', false);
+            setFieldValue(fieldName + `.quantity`, '', false);
+            setFieldValue(fieldName + `.list_uoms`, [], false);
+            setFieldValue(fieldName + `.uom_id`, '', false);
+            setFieldValue(fieldName + `.per_unit_price`, '', false);
+            return;
+        }
+        let items = props.fact.items.items;
+        let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+        console.log(item)
+        if (item) {
+            setFieldValue(fieldName + `.description`, `${item.description}`, false);
+            setFieldValue(fieldName + `.equipment_status_id`, 3, false);
+            var item_match_equipments = props.equipment;
+            let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.item_id}` === `${item.item_id}`);
+            console.log("item_match_equipment", item_match_equipment)
+            if (item_match_equipment) {
+                setFieldValue(fieldName + `.equipment_item_id`, parseInt(item_match_equipment.equipment_id), false);
+            }
+            return;
+        } else {
+            return 'Invalid Number ID';
+        }
+    }
 
     const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
     return (
@@ -147,9 +154,6 @@ const BottomContent = (props) => {
                                         return <option key={recv_accident_from.recv_id} value={recv_accident_from.recv_id} selected>{recv_accident_from.name}</option>
                                     } else return <option key={recv_accident_from.recv_id} value={recv_accident_from.recv_id}>{recv_accident_from.name}</option>
                                 })}
-                                {/* <option value='1' >โทรศัพท์</option>
-                                <option value='2' >จดหมาย</option>
-                                <option value='3' >Work Request</option> */}
                             </SelectNoChildrenInput>
                         </div>
 
@@ -162,15 +166,11 @@ const BottomContent = (props) => {
                                 <option value=''></option>
                                 {factCarType.items.map((factCarType) => {
                                     if (values.car_type_id === factCarType.car_id) {
-                                        return <option value={factCarType.car_type} key={factCarType.car_type} selected>{factCarType.car_type}</option>
+                                        return <option value={factCarType.car_id} key={factCarType.car_id} selected>{factCarType.car_type}</option>
                                     } else {
-                                        return <option value={factCarType.car_type} key={factCarType.car_type}>{factCarType.car_type}</option>
+                                        return <option value={factCarType.car_id} key={factCarType.car_id}>{factCarType.car_type}</option>
                                     }
                                 })}
-                                {/* <option value='' selected></option>
-                                <option value='1' >รถยนต์</option>
-                                <option value='2' >รถโดยสาร</option>
-                                <option value='3' >มอเตอร์ไซค์</option> */}
                             </SelectNoChildrenInput>
                         </div>
 
@@ -223,7 +223,7 @@ const BottomContent = (props) => {
                         {/* system_type_id  */}
                         <Label>ชนิดระบบตรวจซ่อม</Label>
                         <div className="grid_4 alpha omega">
-                            <SelectNoChildrenInput name="system_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentSystemTypeIDField} cssStyle={{ left: "-240px", top: "14px" }}>
+                            <SelectNoChildrenInput name="sub_maintenance_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentSystemTypeIDField} cssStyle={{ left: "-240px", top: "14px" }}>
                                 <option value='' selected></option>
                                 {factSystemType.items.map((factSystemType) => {
                                     if (factSystemType.system_type_id === values.system_type_id) {
@@ -346,7 +346,7 @@ const BottomContent = (props) => {
                         {/* total_fail_time  */}
                         <Label>เสียเวลาเพราะเหตุนี้</Label>
                         <div className="grid_3 alpha omega">
-                            <NumberInput name="total_fail_time" step={1}
+                            <NumberInput name="total_fail_time" step={1} validate={validateDocumentTotalFailTimeField}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
                         <div className="grid_1  omega">
@@ -360,7 +360,7 @@ const BottomContent = (props) => {
                         {/* service_method_id */}
                         <Label>ประเภทการซ่อม</Label>
                         <div className="grid_4 alpha omega">
-                            <SelectNoChildrenInput name="service_method_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                            <SelectNoChildrenInput name="service_method_id" validate={validateDocumentServiceMethodIDField} disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
                                 <option value='' selected></option>
                                 {factServiceMethod.items.map((factServiceMethod) => {
                                     if (factServiceMethod.sm_id === values.service_method_id) {
@@ -386,7 +386,7 @@ const BottomContent = (props) => {
                         {/* interrupt_id */}
                         <Label>ยังไมไ่ด้จัดการแก้ไขเพราะเหตุนี้</Label>
                         <div className="grid_4 alpha omega">
-                            <SelectNoChildrenInput name="interrupt_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                            <SelectNoChildrenInput name="interrupt_id" validate={validateDocumentInterruptIDField} disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
                                 <option value='' selected></option>
                                 {factInterrupt.items.map((factInterrupt) => {
                                     if (values.interrupt_id === factInterrupt.interrupt_id) {
@@ -428,6 +428,17 @@ const BottomContent = (props) => {
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
+                        <Label>ตำแหน่ง</Label>
+                        <div className="grid_3 alpha omega">
+                            <SelectNoChildrenInput name="auditor_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                                <option value='' selected></option>
+                                {factPosition.items.map((position) => {
+                                    if (values.auditor_position_id === position.recv_id) {
+                                        return <option key={position.recv_id} value={position.recv_id} selected>{position.name}</option>
+                                    } else return <option key={position.recv_id} value={position.recv_id}>{position.name}</option>
+                                })}
+                            </SelectNoChildrenInput>
+                        </div>
                         <div className="clear" />
 
                         {/* fixer_name  */}
@@ -436,7 +447,17 @@ const BottomContent = (props) => {
                             <TextInput name="fixer_name"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
-
+                        <Label>ตำแหน่ง</Label>
+                        <div className="grid_3 alpha omega">
+                            <SelectNoChildrenInput name="fixer_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                                <option value='' selected></option>
+                                {factPosition.items.map((position) => {
+                                    if (values.auditor_position_id === position.recv_id) {
+                                        return <option key={position.recv_id} value={position.recv_id} selected>{position.name}</option>
+                                    } else return <option key={position.recv_id} value={position.recv_id}>{position.name}</option>
+                                })}
+                            </SelectNoChildrenInput>
+                        </div>
                         <div className="clear" />
 
 
@@ -446,7 +467,17 @@ const BottomContent = (props) => {
                             <TextInput name="member_1"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
-
+                        <Label>ตำแหน่ง</Label>
+                        <div className="grid_3 alpha omega">
+                            <SelectNoChildrenInput name="member_1_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                                <option value='' selected></option>
+                                {factPosition.items.map((position) => {
+                                    if (values.auditor_position_id === position.recv_id) {
+                                        return <option key={position.recv_id} value={position.recv_id} selected>{position.name}</option>
+                                    } else return <option key={position.recv_id} value={position.recv_id}>{position.name}</option>
+                                })}
+                            </SelectNoChildrenInput>
+                        </div>
                         <div className="clear" />
 
                         {/* member_2  */}
@@ -455,7 +486,17 @@ const BottomContent = (props) => {
                             <TextInput name="member_2"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
-
+                        <Label>ตำแหน่ง</Label>
+                        <div className="grid_3 alpha omega">
+                            <SelectNoChildrenInput name="member_2_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                                <option value='' selected></option>
+                                {factPosition.items.map((position) => {
+                                    if (values.auditor_position_id === position.recv_id) {
+                                        return <option key={position.recv_id} value={position.recv_id} selected>{position.name}</option>
+                                    } else return <option key={position.recv_id} value={position.recv_id}>{position.name}</option>
+                                })}
+                            </SelectNoChildrenInput>
+                        </div>
                         <div className="clear" />
 
                         {/* member_3  */}
@@ -464,7 +505,17 @@ const BottomContent = (props) => {
                             <TextInput name="member_3"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
-
+                        <Label>ตำแหน่ง</Label>
+                        <div className="grid_3 alpha omega">
+                            <SelectNoChildrenInput name="member_3_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                                <option value='' selected></option>
+                                {factPosition.items.map((position) => {
+                                    if (values.auditor_position_id === position.recv_id) {
+                                        return <option key={position.recv_id} value={position.recv_id} selected>{position.name}</option>
+                                    } else return <option key={position.recv_id} value={position.recv_id}>{position.name}</option>
+                                })}
+                            </SelectNoChildrenInput>
+                        </div>
                         <div className="clear" />
                     </div>
 
@@ -476,76 +527,56 @@ const BottomContent = (props) => {
                     {/* Component Title */}
                     <h4 className="head-title-bottom mt-2">ข้อมูลรายการค่าเสียหาย</h4>
 
-
-
                     <table className="table-many-column">
                         <thead>
                             <tr>
                                 <th className="font text-center" style={{ minWidth: "50px" }}>#</th>
-                                <th className="font text-center" style={{ minWidth: "300px" }}>รายการ</th>
+                                <th className="font" style={{ minWidth: "400px" }}>รายการ</th>
                                 <th className="font text-center" style={{ minWidth: "100px" }}>จำนวน</th>
                                 <th className="font text-center" style={{ minWidth: "100px" }}>หน่วย</th>
                                 <th className="font text-center" style={{ minWidth: "100px" }}>จำนวนเงิน</th>
-                                <th className="font text-center" style={{ minWidth: "150px" }}>เลขที่อุปกรณ์</th>
-                                <th className="font text-center" style={{ minWidth: "300px" }}>หมายเหตุ</th>
+                                <th className="font" style={{ minWidth: "400px" }}>หมายเหตุ</th>
                             </tr>
                         </thead>
                         <tbody>
                             {values.loss_line_items.map((loss_line_item, index) => (
                                 <tr key={index}>
-                                    <td className="edit-padding text-center">{loss_line_item.line_number}</td>
-                                    <td className="edit-padding text-center">
+                                    <td className="edit-padding text-center">{index+1}</td>
+                                    <td className="edit-padding">
                                         <TextInput name={`loss_line_items[${index}].description`} tabIndex="6"
                                             disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-                                            redBorderForError="error-in-table"
                                         />
                                     </td>
                                     <td className="edit-padding text-center">
                                         <NumberInput step={0.01} name={`loss_line_items[${index}].quantity`} tabIndex="7"
                                             disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-                                            redBorderForError="error-in-table"
                                         />
                                     </td>
                                     <td className="edit-padding text-center">
-                                        {/* <SelectInput name={`loss_line_items[${index}].uom_id`} listProps={loss_line_item.list_uoms} tabIndex="8"
-                                    tabIndex="8" disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-                                    optionValue='uom_id' optionName='name'
-                                    redBorderForError="error-in-table"
-                                /> */}
+                                        <SelectNoChildrenInput name={`loss_line_items[${index}].uom_code`} disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                                            <option value='' selected></option>
+                                            {factUnit.items.map((factUnit) => {
+                                                if (values.loss_line_items[index].uom_code === factUnit.uom_id) {
+                                                    return <option key={factUnit.uom_id} value={parseInt(factUnit.uom_id)} selected>{factUnit.name}</option>
+                                                } else return <option key={factUnit.uom_id} value={parseInt(factUnit.uom_id)}>{factUnit.name}</option>
+                                            })}
+                                        </SelectNoChildrenInput>
                                     </td>
                                     <td className="edit-padding text-center">
-                                        <NumberInput step={1} name={`loss_line_items[${index}].per_unit_price`} tabIndex="9"
+                                        <NumberInput step={1} name={`loss_line_items[${index}].price`} tabIndex="9"
                                             disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-                                            redBorderForError="error-in-table"
                                         />
                                     </td>
-                                    <td className="edit-padding text-center">
-                                        <TextInput name={`loss_line_items[${index}].internal_item_id`}
-                                            validate={internal_item_id => validateLineNumberInternalItemIDField(`loss_line_items[${index}]`, internal_item_id, index)} tabIndex="6"
-                                            disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-                                            searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart"
-                                            handleModalClick={() => setLineNumber(loss_line_item.line_number)}
-                                            redBorderForError="error-in-table"
-                                        />
-                                    </td>
-                                    <td className="edit-padding text-center">
+                                    <td className="edit-padding">
                                         <TextInput name={`loss_line_items[${index}].remark`} tabIndex="11"
                                             disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
-                                            redBorderForError="error-in-table"
                                         />
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
-                    {/* PopUp ค้นหาอะไหล่ MODE ADD */}
-                    <PopupModalNoPart
-                        keyname='loss_line_items'
-                        lineNumber={lineNumber}
-                        nameModal="modalNoPart"
-                    />
                 </div>
-
 
                 <div id="attachment_content" className="tabcontent">
                     <Files />
@@ -555,6 +586,14 @@ const BottomContent = (props) => {
                     <TableStatus bodyTableStatus={values.step_approve} />
                 </div>
 
+                <div id="assets_under_maintenance_content" className="tabcontent">
+                    <TableHasEquipment line_items={values.has_equipment_item} values={values}
+                        setLineNumber={setLineNumber}
+                        validateLineNumberInternalItemIDField={validateLineNumberInternalItemIDField}
+                        checkBooleanForEdit={checkBooleanForEdit} />
+                </div>
+                {/* PopUp ค้นหาอะไหล่ MODE ADD */}
+                <PopupModalEquipment keyname='has_equipment_item' lineNumber={lineNumber} />
             </div>
         </div>
     )
@@ -563,6 +602,7 @@ const BottomContent = (props) => {
 const mapStateToProps = (state) => ({
     fact: state.api.fact,
     actionMode: state.toolbar.mode,
+    equipment: state.api.fact.equipment.items,
 
     list_show: state.list_show
 })
