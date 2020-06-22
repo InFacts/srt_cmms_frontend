@@ -53,7 +53,7 @@
   }
   
   .mb-0{
-    margin-bottom: 0rem;
+    margin-bottom: 0rem !important;
   }
   
   .mb-1{

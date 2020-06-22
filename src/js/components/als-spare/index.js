@@ -57,7 +57,7 @@ const AlsSpareComponent = () => {
         <div className="bootstrap-wrapper">
           <div class="container" style={{ marginTop: "80px" }}>
             {/* Section Title */}
-            <h4 className="head-title">ระบบวิเคราะห์การวางแผนสำรองอะไหล่</h4>
+            <h4 className="head-title mb-0">ระบบวิเคราะห์การวางแผนสำรองอะไหล่</h4>
 
 
             {/* Columns have horizontal padding to create the gutters between individual columns, however, you can remove the margin from rows and padding from columns with .no-gutters on the .row. */}
@@ -118,10 +118,10 @@ const AlsSpareComponent = () => {
                   title="Inventory Month ปัจจุบัน vs. แผนของแต่ละอะไหล่"
                   data ={randomScatterPlotData()}
                   chartSettings={{
-                    marginTop: 20,
+                    marginTop: 40,
                     marginBottom:30,
                     marginLeft:30,
-                    height: 230,
+                    height: 250,
                   }}
                 />
               </div>

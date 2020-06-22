@@ -32,7 +32,7 @@ export const randomDivergingBarGraphData = () => {
 
 // Data Format Referenced from https://observablehq.com/@d3/scatterplot
 export function randomScatterPlotData() {
-    const data = [...Array(100)].map((e, i) => ({
+    const data = [...Array(500)].map((e, i) => ({
         name: `Item ${i}`,
         x: Math.random() * 40,
         y: Math.random() * 40,
