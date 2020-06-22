@@ -239,7 +239,8 @@ function ThailandMapComponent({data}) {
                             onMouseEnter ={() => setToolTipText(region.properties.name)}
                             stroke="black"
                             // fill="#f3f3f3" 
-                            fill={testMapData[i] ? color(testMapData[i].value) : "#f3f3f3" }
+                            // fill={testMapData[i] ? color(testMapData[i].value) : "#f3f3f3" }
+                            fill={  color(Math.random())  }
                         >
                             <title>{region.properties.name}</title>
 
