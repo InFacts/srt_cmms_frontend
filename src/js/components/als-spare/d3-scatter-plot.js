@@ -54,14 +54,14 @@ function ScatterPlot({ data, chartSettings, title }) {
     return (
         <div className="Chart_wrapper" ref={ref}>
             <svg width={dms.width} height={dms.height} 
-                // style={{ border: "1.5px solid gold" }} 
+                style={{ border: "1.5px solid gold" }} 
                 >
                 <g transform={`translate(${dms.marginLeft}, ${dms.marginTop})`}>
 
                     {/* Graph Title */}
                     <text
                         x={dms.boundedWidth / 2}
-                        dy={0}
+                        dy={-20}
                         text-anchor="middle"
                         font-weight="bold"
                         font-size="20px"
@@ -81,7 +81,7 @@ function ScatterPlot({ data, chartSettings, title }) {
                         <g ref={yAxis} />
                         <text
                             x={-dms.marginLeft}
-                            y={-dms.marginTop+10}
+                            y={-8}
                             fontSize="13px"
                             textAnchor="start"
                         >{data.yAxisLabel}</text>
@@ -112,40 +112,95 @@ function ScatterPlot({ data, chartSettings, title }) {
                     {/* Comparison Line */}
                     {data.hasComparisonLine &&
                     <>
+                        {/* Line x=y */}
                         <line 
                             x1={xScale(0)}
+                            y1={yScale(0)}
                             // Invert to find x value of dms.boundedWidth (max X)
                             x2={xScale(xScale.invert(dms.boundedWidth))}
-                            y1={yScale(0)}
-                            // Invert to find x value of dms.boundedWidth (max Y)
-                            y2={yScale(yScale.invert(0))}
+                            // Invert to find y value (Y2=X2)
+                            y2={yScale(xScale.invert(dms.boundedWidth))}
                             stroke-dasharray="3,3"
-                            stroke-opacity={0.5}
+                            stroke-opacity={0.3}
                             stroke={"#000"}
                         />
+                        {/* Top Line x>0.95y  */}
+                        <line 
+                            x1={xScale(0)}
+                            y1={yScale(0)}
+
+                            // Invert to find max y value of 0 (max Y) 
+                            y2={yScale(yScale.invert(0))}
+                            // Invert to find x value (X2=0.95*Y2)
+                            x2={xScale(yScale.invert(0)*0.95)}
+
+                            stroke-dasharray="3,3"
+                            stroke-opacity={0.5}
+                            stroke="steelblue"
+                        />
+                        {/* Bottom Line x<1.05y */}
                         <line 
                             x1={xScale(0)}
                             y1={yScale(0)}
 
                             // Invert to find x value of dms.boundedWidth (max X)
                             x2={xScale(xScale.invert(dms.boundedWidth))}
-                            // Invert to find x value of dms.boundedWidth (max Y)
-                            y2={yScale(yScale.invert(0)*1.05)}
+                            // Invert to find y value (Y2=1/0.95*X2)
+                            y2={yScale(xScale.invert(dms.boundedWidth)*1/1.05)}
+                            
                             stroke-dasharray="3,3"
                             stroke-opacity={0.5}
-                            stroke={"#000"}
+                            stroke="steelblue"
                         />
-                        <line 
-                            x1={xScale(0)}
-                            // Invert to find x value of dms.boundedWidth (max X)
-                            x2={xScale(xScale.invert(dms.boundedWidth))}
-                            y1={yScale(0)}
-                            // Invert to find x value of dms.boundedWidth (max Y)
-                            y2={yScale(yScale.invert(0)*0.95)}
-                            stroke-dasharray="3,3"
-                            stroke-opacity={0.5}
-                            stroke={"#000"}
+                        {/* Path to fill the Comparison Line */}
+                        <path 
+                            d={["M", xScale(0), yScale(0), // Start with point 0,0
+                                "L", xScale(yScale.invert(0)*0.95), yScale(yScale.invert(0)), //Move to top line boundary
+                                "L", xScale(xScale.invert(dms.boundedWidth)), yScale(xScale.invert(dms.boundedWidth)),// Move to Center Line
+                                "L", xScale(xScale.invert(dms.boundedWidth)),yScale(xScale.invert(dms.boundedWidth)*1/1.05), // Move to Bottom Line
+                                "L", xScale(0), yScale(0), //Move back to Center 0,0
+                                ].join(" ")}
+                            // stroke={"#000"}
+                            opacity={0.2}
+                            fill={"mediumseagreen"}
                         />
+
+
+                        {/* Text Label */}
+                        <text
+                            x={-dms.marginLeft+dms.width/2}
+                            y={dms.boundedHeight/4}
+                            text-anchor="middle"
+                            vertical-align="middle"
+                            font-weight={600}
+                            font-size={18}
+                            fill={"red"}
+                            // paint-order="stroke"
+                            // stroke={"#000000"}
+                            // stroke-width="2px"
+                        >อะไหล่ต่ำกว่าเกณฑ์</text>
+
+                        <text
+                            x={-dms.marginLeft+dms.width/2}
+                            y={dms.boundedHeight/2}
+                            text-anchor="middle"
+                            vertical-align="middle"
+                            font-weight={600}
+                            font-size={18}
+                            fill={"green"}
+                        >อะไหล่ตามเกณฑ์</text>
+
+                        <text
+                            x={-dms.marginLeft+dms.width/2}
+                            y={dms.boundedHeight*3/4}
+                            text-anchor="middle"
+                            vertical-align="middle"
+                            font-weight={600}
+                            font-size={18}
+                            fill={"orange"}
+                        >อะไหล่สูงกว่าเกณฑ์</text>
+
+
                     </>
                     }
 
@@ -161,10 +216,15 @@ function ScatterPlot({ data, chartSettings, title }) {
                     {data.map((d, i) => (
                         <circle
                             key={i}
-                            r={2}
+                            r={1.3}
                             cx={xScale(d.x)}
                             cy={yScale(d.y)}
-                            fill="steelblue"
+                            fill={!data.hasComparisonLine ? 
+                                    "steelblue" : 
+                                    d.x > 1.05*d.y ? "orange" // Actual > Plan
+                                    : d.x < 0.95*d.y ?  "red" :  // Actual < Plan
+                                    "green" // 0.95y < x < 1.05y
+                                }
                         >
                             <title>{d.name}</title>
                         </circle>
