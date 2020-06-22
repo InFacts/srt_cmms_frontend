@@ -8,7 +8,7 @@ import { FOOTER_MODE, FOOTER_ACTIONS, handleClickBackToSpareMain, ACTION_TO_HAND
 import { useDispatch, useSelector } from 'react-redux';
 import useTokenInitializer from '../hooks/token-initializer';
 import { useFormikContext } from 'formik';
-import { startDocumentApprovalFlow, APPROVAL_STATUS, DOCUMENT_TYPE_ID, saveDocument, editDocument, packDataFromValues, fetchLatestStepApprovalDocumentData, getUserIDFromEmployeeID, DOCUMENT_STATUS, APPROVAL_STEP_ACTION, checkDocumentStatus, approveDocument, packDataFromValuesMasterdata, saveMasterData, editMasterDataHelper } from '../helper';
+import { cancelApproval, startDocumentApprovalFlow, APPROVAL_STATUS, DOCUMENT_TYPE_ID, saveDocument, editDocument, packDataFromValues, fetchLatestStepApprovalDocumentData, getUserIDFromEmployeeID, DOCUMENT_STATUS, APPROVAL_STEP_ACTION, checkDocumentStatus, approveDocument, packDataFromValuesMasterdata, saveMasterData, editMasterDataHelper } from '../helper';
 import { FACTS } from '../redux/modules/api/fact';
 import { navBottomError, navBottomSuccess, navBottomSending } from '../redux/modules/nav-bottom'
 import history from '../history';
@@ -195,7 +195,7 @@ const useFooterInitializer = (document_type_id) => {
                             let data = packDataFromValues(fact, values, document_type_id);
                             console.log("I AM SUBMITTING ", data);
                             if (document_type_id !== DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA && document_type_id !== DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
-                                editDocument(values.document_id, document_type_id, data)
+                                editDocument(values.document_id, document_type_id, data, values.files)
                                     .then((document_id) => {
                                         setFieldValue('document_id', values.document_id, true);
                                         dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
@@ -269,7 +269,7 @@ const useFooterInitializer = (document_type_id) => {
                         if (values.document_id) { // If have document_id, no need to create new doc
                             let data = packDataFromValues(fact, values, document_type_id);
                             console.log("I AM SUBMITTING ", data);
-                            editDocument(values.document_id, document_type_id, data)
+                            editDocument(values.document_id, document_type_id, data, values.files)
                                 .then((document_id) => {
                                     console.log("document_id", values.document_id)
                                     setFieldValue('document_id', values.document_id, true);
@@ -566,6 +566,45 @@ const useFooterInitializer = (document_type_id) => {
                 })
         }
     }, [footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]]);
+
+    // Handle Click CANCEL_APPROVAL_PROCESS
+    useEffect(() => {
+        console.log("CANCEL_APPROVAL_PROCESS");
+        if (footer.requiresHandleClick[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]) {
+            validateForm()
+                .then((err) => {
+                    dispatch(navBottomSending('[API]', 'Sending ...', ''));
+                    setErrors(err);
+                    if (isEmpty(err)) {
+                        if (values.document_id) { // If have document_id, no need to create new doc
+                            cancelApproval(values.document_id, values.step_approve[0].approval_process_id)
+                                .then(() => {
+                                    dispatch(navBottomSuccess('[PUT]', 'Submit Success', ''));
+                                })
+                                .catch((err) => {
+                                    console.warn("Canceled Approval Process Failed ", err.response);
+                                    dispatch(navBottomError('[PUT]', 'Approve Document Failed', err));
+                                })
+                                .finally(() => { // Set that I already handled the Click
+                                    console.log(" I submitted and i am now handling click")
+                                    dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.REJECT]());
+                                });
+                        }
+                        else { // If not have document_id
+                            console.log("If not have document_id");
+                        }
+                    }
+                    else {
+                        console.warn("isEmpty(err) ", err);
+                    }
+                })
+                .catch((err) => {
+                    console.warn("Submit Failed ", err.response);
+                })
+        }
+    }, [footer.requiresHandleClick[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]]);
+
+
 
     return;
 

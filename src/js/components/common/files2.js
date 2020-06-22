@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import { useFormikContext } from 'formik';
 
 import Document from '../../../images/document.svg';
-import {downloadAttachmentDocumentData, fetchAttachmentDocumentData} from '../../helper';
+import {downloadAttachmentDocumentData, fetchAttachmentDocumentData, checkBooleanForEditHelper} from '../../helper';
 import { TOOLBAR_MODE } from '../../redux/modules/toolbar'
 import { navBottomOnReady, navBottomWarning } from '../../redux/modules/nav-bottom'
 import { useDispatch, shallowEqual, useSelector } from 'react-redux'
@@ -11,9 +11,13 @@ const Files = () => {
     const dispatch = useDispatch();
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
     const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
+    const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
+    const decoded_token = useSelector((state) => ({...state.token.decoded_token}), shallowEqual);
+
     // const mimeTypeRegexp = /^(application|audio|example|image|message|model|multipart|text|video)\/[a-z0-9\.\+\*-]+$/;
     // const extRegexp = /\.[a-zA-Z0-9]*$/;
     const { values, setFieldValue } = useFormikContext();
+    const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
 
     const fileExtension = (file) => {
         let extensionSplit = file.name.split('.')
@@ -95,8 +99,8 @@ const Files = () => {
                 </div>
                 <div className="u-float-right">
                     <div className="upload-btn-wrapper">
-                        <button type="button" className="btn" disabled={toolbar.mode !== TOOLBAR_MODE.SEARCH ? false:true}>เพิ่มไฟล์</button>
-                        <input id="file" name="file" type="file" onChange={convertFormFileToAPI} multiple disabled={toolbar.mode !== TOOLBAR_MODE.SEARCH ? false:true}/>
+                        <button type="button" className="btn" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>เพิ่มไฟล์</button>
+                        <input id="file" name="file" type="file" onChange={convertFormFileToAPI} multiple disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}/>
                     </div>
                 </div>
             </div>

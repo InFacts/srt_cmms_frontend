@@ -5,8 +5,8 @@ import { line } from "d3-shape";
 import {select} from "d3-selection";
 import {axisBottom} from "d3-axis";
 
-import AxisBottom from '../common/d3-axis-bottom';
-import AxisLeft from '../common/d3-axis-left';
+import AxisBottom from './d3-axis-bottom';
+import AxisLeft from './d3-axis-left';
 import useChartDimensions from '../../hooks/chart-dimensions-hook'
 import { createPortal } from 'react-dom';
 
@@ -62,7 +62,9 @@ function GroupedBarGraph({ data, chartSettings, title}) {
         // "#6b486b", 
         "#a05d56", 
         // "#d0743c", 
-        "#ff8c00"])
+        "#ff8c00",
+        "#98abc5", 
+    ])
 
 
 

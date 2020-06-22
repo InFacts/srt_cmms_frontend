@@ -1,22 +1,28 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { scaleLinear, scaleTime , scaleOrdinal, scaleBand, scaleSequential, scaleSequentialSqrt } from "d3-scale";
-import { extent, max, histogram } from "d3-array";
+import { extent, max,min, histogram } from "d3-array";
 import {interpolatePuRd, interpolateOrRd, interpolateYlOrRd} from 'd3-scale-chromatic';
 import { line } from "d3-shape";
 import {select} from "d3-selection";
-import {axisBottom, axisLeft} from "d3-axis";
+import {axisBottom, axisLeft , axisTop} from "d3-axis";
 
 import AxisBottom from '../common/d3-axis-bottom';
 import AxisLeft from '../common/d3-axis-left';
 import useChartDimensions from '../../hooks/chart-dimensions-hook'
 
 const defaultChartSettings = {
-    marginLeft: 80,
+    marginLeft: 40,
     marginBottom: 5,
     marginTop: 50,
-    marginRight: 55,
+    marginRight: 40,
 
     height: 450,
+}
+
+Date.prototype.addDays = function(days) {
+    var date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
 }
 
 // References https://observablehq.com/@mbostock/the-impact-of-vaccines 
@@ -30,14 +36,15 @@ const ColorMap = ({ data, chartSettings, title}) => {
     const xAxis = useRef(null)
     const yAxis = useRef(null)
 
-    const [xDomain, setXDomain] = useState([0, 1000]);
+    const [xDomain, setXDomain] = useState([new Date("2019-01-02"), new Date("2020-01-02")]);
     const [yDomain, setYDomain] = useState([0, 1000]);
 
 
     const xScale = useMemo(() => (
-        scaleBand()
+        scaleTime()
             .domain(xDomain)
             .range([0, dms.boundedWidth])
+            
     ), [dms.boundedWidth, xDomain.join("-")])
 
 
@@ -47,7 +54,7 @@ const ColorMap = ({ data, chartSettings, title}) => {
             .range([0, dms.boundedHeight])
     ), [dms.boundedHeight, yDomain.join("-")])
 
-    const color = scaleSequential([0, max(data.values, d => max(d))], interpolateYlOrRd);
+    const color = scaleSequential([0, max(data.values, d => max(d))], interpolatePuRd);
 
 
     // set Domain of x and y after new data.
@@ -55,7 +62,7 @@ const ColorMap = ({ data, chartSettings, title}) => {
         if (!data) {
             console.log("ColorMap: There is no data! ");
         } else { // There is data
-            setXDomain(data.xLabels);
+            setXDomain([min(data.xLabels), max(data.xLabels).addDays(7)]);
             setYDomain(data.yLabels); 
         }
     }, [data]);
@@ -63,7 +70,7 @@ const ColorMap = ({ data, chartSettings, title}) => {
     useEffect(() => {
         select(xAxis.current)
             .style("font-size", "14px")
-            .call(axisBottom(xScale).tickSize(0))
+            .call(axisTop(xScale).ticks(20, "%Y-%m"))
             .call(g => g.select(".domain").remove());
     }, [xAxis, xScale])
 
@@ -125,9 +132,10 @@ const ColorMap = ({ data, chartSettings, title}) => {
                         <g transform={`translate(0, ${yScale(data.yLabels[rowIndex])})`}> 
                             {rowValues.map((value, colIndex) => (
                                 <rect 
+                                    key={`rect-date-${rowIndex}-${colIndex}`}
                                     x={xScale(data.xLabels[colIndex])}
-                                    width={xScale.bandwidth()-1}
-                                    height={yScale.bandwidth()-1}
+                                    width={xScale(data.xLabels[colIndex].addDays(7))-xScale(data.xLabels[colIndex])-1} //-1 for space between it
+                                    height={yScale.bandwidth()-1} //-1 for space between it
                                     fill={isNaN(value) ? "#EEE":  color(value)}
                                 >    
                                     <text>{`${value} in ${data.xLabels[rowIndex]}`}</text>
@@ -140,7 +148,6 @@ const ColorMap = ({ data, chartSettings, title}) => {
 
                     {/* === xAxis === */}
                     <g 
-                    transform={`translate(0, ${-18})`}
                     >
                         <g ref={xAxis} />
                     </g>

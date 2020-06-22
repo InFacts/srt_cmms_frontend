@@ -1,40 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { scaleLinear } from "d3-scale";
-import { extent } from "d3-array"
 import { useFormik, withFormik, useFormikContext } from 'formik';
-
-import { footerToModeInvisible } from '../../redux/modules/footer.js';
 import { useDispatch, useSelector } from 'react-redux'
 import { Redirect } from 'react-router-dom';
+
+import { footerToModeInvisible } from '../../redux/modules/footer.js';
 
 import { useToolbarChangeModeInitializer } from '../../hooks/toolbar-initializer';
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, MODE_TO_ACTION_CREATOR } from '../../redux/modules/toolbar.js';
 import useFactInitializer from '../../hooks/fact-initializer';
 import useTokenInitializer from '../../hooks/token-initializer';
 
-import ScatterPlot from '../als-spare/d3-scatter-plot';
-import LineGraph from '../als-spare/d3-line-graph';
-import BarDivergingGraph from '../als-spare/d3-bar-diverging';
-import Histogram from '../als-equipment-status/d3-histogram';
-import ThailandMapComponent from '../als-equipment-status/d3-map';
-import SimpleGrayCardComponent from '../als-equipment-status/simple-gray-card';
-import AdjustmentBarComponent from '../als-equipment-status/adjustment-bar';
-import EquipmentStatusListComponent from '../als-equipment-status/equipment-status-list';
+import Top5Component from './d3-top5';
+import ColorMapDateComponent from './d3-color-map-date';
 
+import AdjustmentBarComponent from './adjustment-bar';
 
-const randomHistogramData = () => {
-    let results = [];
+import {randomColorMapData} from './mockup-data';
 
-    results.push(0)
-    for (let i = 0; i < 1000; i++) {
-        let randomNumber = (Math.random() + Math.random() + Math.random() + Math.random()) / 4*100; 
-        results.push(randomNumber);
-    }
-
-    return results;
-}
-
-const AlsEquipmentStatusComponent = () => {
+const AlsPreventiveMaintenanaceComponent = () => {
     const dispatch = useDispatch();
     const loggedIn = useSelector(state => state.token.isLoggedIn);
 
@@ -46,108 +29,103 @@ const AlsEquipmentStatusComponent = () => {
         dispatch(footerToModeInvisible());
     }, []);
 
-
-
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
 
-            <div id="blackground-white" >
+            <div id="blackground-white" style={{ height: "100vh"}}>
                 <div className="bootstrap-wrapper">
                     <div className="container" style={{ marginTop: "70px" }}>
                         {/* Section Title */}
-                        <h4 className="head-title no-margin">แสดงผลสถานะของสินทรัพย์</h4>
-
+                        <h4 className="head-title no-margin">ภาพรวมการทำวาระ</h4>
 
                         {/* Columns have horizontal padding to create the gutters between individual columns, however, you can remove the margin from rows and padding from columns with .no-gutters on the .row. */}
-                        <div className="row_bootstrap ">
-                            {/* === Annual Average Inventory Month Line Graph :1st Row, 1st Column === */}
-                            <div className="col-3" >
-                                <SimpleGrayCardComponent
-                                    name="จำนวนสินทรัพย์ทั้งหมด"
-                                    value={2000}
-                                />
-                            </div>
-
-
-                            {/* === Current Average Inventory Month Text :1st Row, 2nd Column === */}
-                            <div className="col-3">
-                                <SimpleGrayCardComponent
-                                    name="จำนวนสินทรัพย์ที่ใช้งาน"
-                                    value={1600}
-                                />
-
-                            </div>
-
-                            {/* === Current Inventory Month vs Planned Inventory Month Scatter Plot :1st Row, 2nd Column === */}
-                            <div className="col-3">
-                                <SimpleGrayCardComponent
-                                    name="จำนวนสินทรัพย์ชำรุด"
-                                    value={98}
-                                />
-
-                            </div>
-
-                            <div className="col-3" >
-                                <SimpleGrayCardComponent
-                                    name="จำนวนสินทรัพย์ดำเนินการซ่อม"
-                                    value={302}
-                                />
-
-                            </div>
-                        </div>
-                        {/*=== Second Row ===*/}
                         <div className="row_bootstrap no-gutters">
-                            <div className="col-2" >
+
+                            {/* AdjustmentBar */}
+                            <div className="col-2"
+                                style={{ border: "1px red solid" }}
+                            >
                                 <AdjustmentBarComponent />
                             </div>
-                            <div className="col-6"
-                                style={{
-                                    // border:"1px solid red", 
-                                    height: "450px"
-                                }}>
 
-                                <ThailandMapComponent />
+
+                            {/* Make another col,row pair since 10 cant be divided by 3equally ; and col-auto/col with automatic width doesn't work!!*/}
+                            <div className="col-10">
+                                <div className="row_bootstrap no-gutters">
+
+                                    {/* Top5 */}
+                                    <div className="col-4"
+                                        style={{ border: "1px red solid" }}
+                                    >
+                                        <Top5Component
+                                            title="5 อันดับแรกที่ดำเนินตามวาระได้เสร็จสมบูรณ์"
+                                            // data={randomDonutChartBinaryData()}
+                                        />
+                                    </div>
+
+                                    {/* Top5 */}
+                                    <div className="col-4"
+                                        style={{ border: "1px red solid" }}
+                                    >
+                                        <Top5Component
+                                            title="5 อันดับแรกที่ทำตามวาระได้ดำเนินการไม่ตรงตามวาระ"
+                                            // data={randomDonutChartBinaryData()}
+                                        />
+                                    </div>
+
+                                    {/* Top5 */}
+                                    <div className="col-4"
+                                        style={{ border: "1px red solid" }}
+                                    >
+                                        <Top5Component
+                                            title="5 อันดับแรกที่ไม่ดำเนินการทำวาระ"
+                                            // data={randomDonutChartBinaryData()}
+                                        />
+                                    </div>
+                                </div>
                             </div>
-                            <div className="col-4"
-                                style={{
-                                    // border:"1px solid red", 
-                                    height: "300px"
-                                }}>
-                                <Histogram 
-                                    chartSettings={{ marginLeft: 50, marginTop: 70, marginBottom: 40, height: 300 }} 
-                                    data={randomHistogramData()}
-                                    title="กลุ่มอายุของสินทรัพย์"
-                                    xAxis="อายุการใช้งานของสินทรัพย์"
-                                    yAxis="จำนวนของสินทรัพย์"
-                                />
 
-                                <div class="space-50px" />
-
-                                <EquipmentStatusListComponent />
-                            </div>
                         </div>
 
-                        {/*=== Third Row ===*/}
+                        {/* PM ColorMap */}
                         <div className="row_bootstrap no-gutters">
-                            <div className="col-4" style={{ border: "1px solid red", height: "200px" }}>
-                                <ScatterPlot />
+
+                            {/* Top5 */}
+                            <div className="col-auto"
+                                style={{ border: "1px red solid" }}
+                            >
+                                <ColorMapDateComponent 
+                                    title="สถิติการทำวาระของแต่ละตอน"
+                                    data={randomColorMapData()}
+                                    chartSettings={{
+                                        height: 950,
+                                        marginBottom: 30,
+                                        marginLeft: 50,
+                                        marginRight: 20,
+                                    }}
+                                />
                             </div>
+
                         </div>
+
+
                     </div>
                 </div>
             </div>
         </>
     )
 }
-const EnhancedAlsEquipmentStatusComponent = withFormik({
+const EnhancedAlsPreventiveMaintenanaceComponent = withFormik({
     mapPropsToValues: () => ({
-        equipment_group_id: '',
+        year: 2563,
+        fix_type: '',
         division_id: '',
         district_id: '',
         node_id: '',
+        temp_equipment_data: [],
     })
-})(AlsEquipmentStatusComponent);
+})(AlsPreventiveMaintenanaceComponent);
 
 
-export default EnhancedAlsEquipmentStatusComponent;
+export default EnhancedAlsPreventiveMaintenanaceComponent;
