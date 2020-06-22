@@ -10,13 +10,23 @@ import DateTimeInput from '../common/formik-datetime-input';
 import SelectNoChildrenInput from '../common/formik-select-no-children';
 import { useFormik, withFormik, useFormikContext } from 'formik';
 import Label from '../common/form-label'
+import {
+    getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, validateEmployeeIDField,
+    validateWarehouseIDField, validateInternalDocumentIDFieldHelper, checkBooleanForEditHelper
+} from '../../helper';
 
 const BottomContent = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
+    const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
+    const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
+    const decoded_token = useSelector((state) => ({...state.token.decoded_token}), shallowEqual);
     const factDistricts = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
     const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
     const factStations = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
     const { values } = useFormikContext();
+
+    const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
+
     return (
         <div id="blackground-gray">
             <div className="container_12 clearfix">
@@ -35,8 +45,22 @@ const BottomContent = (props) => {
                         {/* Responsible person District ID */}
                         <Label>ผู้รับผิดชอบ</Label>
                         <div className="grid_3 alpha omega">
-                            <TextInput name="responsible_person_district"
+                            <TextInput name="responsible_zone_by"
                                 disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                tabIndex="6" />
+                        </div>
+
+                        <div class="clear" />
+
+                        <h3 className="head-title-bottom mt-2">หน่วยงานที่รับผิดชอบ</h3>
+
+                        <div class="clear" />
+
+                        {/* Responsible person District ID */}
+                        <Label>หน่วยงานผู้รับผิดชอบ</Label>
+                        <div className="grid_3 alpha omega">
+                            <TextInput name="responsible_by"
+                                disabled
                                 tabIndex="6" />
                         </div>
 
@@ -49,7 +73,7 @@ const BottomContent = (props) => {
                         {/* Installed date */}
                         <Label>วันที่ติดตั้งเสร็จ</Label>
                         <div className="grid_3 alpha omega">
-                            <DateInput name="install_date"
+                            <DateInput name="installed_on"
                                 disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
                                 tabIndex="6" />
                         </div>
@@ -58,7 +82,7 @@ const BottomContent = (props) => {
                         {/* Installed date */}
                         <Label>วันที่ประกาศใช้</Label>
                         <div className="grid_3 alpha omega">
-                            <DateInput name="announce_date"
+                            <DateInput name="announce_use_on"
                                 disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
                                 tabIndex="6" />
                         </div>
@@ -66,7 +90,7 @@ const BottomContent = (props) => {
 
                         <Label>สถานะ</Label>
                         <div className="grid_3 alpha omega">
-                            <SelectNoChildrenInput name="uom_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                            <SelectNoChildrenInput name="equipment_status_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
                                 cssStyle={{ left: "-160px", top: "10px" }}>
                                 <option value=''></option>
                             </SelectNoChildrenInput>
@@ -100,48 +124,56 @@ const BottomContent = (props) => {
 
                             {/* Responsible person District ID */}
                             <Label>แขวง</Label>
-                            <div className="grid_9">
-                                <TextInput name="install_address"
-                                    disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                    tabIndex="6" />
+                            <div className="grid_7">
+                                <SelectNoChildrenInput name="location_district_id" 
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                                    <option value=''></option>
+                                    {factDistricts.items.map((districts) => {
+                                        if (values.location_district_id === districts.district_id) {
+                                            return <option key={districts.district_id} value={districts.district_id} selected>{districts.name}</option>
+                                        } else return <option key={districts.district_id} value={districts.district_id}>{districts.name}</option>
+                                    })}
+                                </SelectNoChildrenInput>
                             </div>
 
                             <div class="clear" />
 
                             {/* Responsible person Node ID */}
                             <Label>ตอน</Label>
-                            <div className="grid_9">
-                                <TextInput name="install_district"
-                                    disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                    tabIndex="6" />
+                            <div className="grid_7">
+                                <SelectNoChildrenInput name="location_node_id" 
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                                    <option value=''></option>
+                                    {factNodes.items.map((node) => {
+                                        if (values.location_node_id === node.node_id) {
+                                            return <option key={node.node_id} value={node.node_id} selected>{node.name}</option>
+                                        } else return <option key={node.node_id} value={node.node_id}>{node.name}</option>
+                                    })}
+                                </SelectNoChildrenInput>
                             </div>
 
                             <div class="clear" />
 
                             {/* Responsible person Station ID */}
                             <Label>สถานี</Label>
-                            <div className="grid_9">
-                                <TextInput name="install_county"
-                                    disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                    tabIndex="6" />
-                            </div>
-
-                            <div class="clear" />
-
-                            {/* Responsible person Station ID */}
-                            <Label>ละติจูด, ลองติจูด</Label>
-                            <div className="grid_9">
-                                <TextInput name="install_postal_code"
-                                    disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                    tabIndex="6" />
+                            <div className="grid_7">
+                                <SelectNoChildrenInput name="location_station_id" 
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                                    <option value=''></option>
+                                    {factStations.items.map((stations) => {
+                                        if (values.location_station_id === stations.station_id) {
+                                            return <option key={stations.station_id} value={stations.station_id} selected>{stations.name}</option>
+                                        } else return <option key={stations.station_id} value={stations.station_id}>{stations.name}</option>
+                                    })}
+                                </SelectNoChildrenInput>
                             </div>
 
                             <div class="clear" />
 
                             {/* Responsible person Station ID */}
                             <Label>รายละเอียดเพิ่มเติม</Label>
-                            <div className="grid_9">
-                                <TextInput name="install_google_map"
+                            <div className="grid_7">
+                                <TextInput name="location_description"
                                     disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
                                     tabIndex="6" />
                             </div>

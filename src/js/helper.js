@@ -246,7 +246,7 @@ export const getNumberFromEscapedString = (escapedString) => {
 }
 
 export const isValidInternalDocumentIDFormat = (internal_document_id) => {
-    const internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SD|WR|WO|WP|SS|MI)-[A-Z]{3}-\d{4}\/\d{4}$/g;
+    const internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SD|WR|WO|WP|SS|MI|EI)-[A-Z]{3}-\d{4}\/\d{4}$/g;
     return internalDocumentIDRegex.test(internal_document_id);
 }
 export const isValidInternalDocumentIDDraftFormat = (internal_document_id) => {
@@ -1283,6 +1283,24 @@ const responseToFormState = (fact, data, document_type_group_id) => {
             refer_to_document_id: data.document.refer_to_document_id,
             document_date: data.document.document_date.slice(0, 10)
         }
+    } else if (document_type_group_id === DOCUMENT_TYPE_ID.EQUIPMENT_INSTALLATION) {
+        var created_on = new Date(data.document.created_on);
+        created_on.setHours(created_on.getHours() + 7);
+        return {
+            document_id: data.document.document_id,
+            internal_document_id: data.document.internal_document_id,
+            created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_user_id) || '',
+            created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_admin_id) || '',
+            created_on: created_on.toISOString().split(".")[0],
+            remark: data.document.remark,
+            document_date: data.document.document_date.slice(0, 10),
+            announce_use_on: data.specific.announce_use_on.slice(0, 10),
+            location_description: data.specific.location_description,
+            location_district_id: data.specific.location_district_id,
+            location_node_id: data.specific.location_node_id,
+            location_station_id: data.specific.location_station_id,
+            installed_on: data.specific.installed_on.slice(0, 10),
+        }
     }
 
 }
@@ -1615,9 +1633,28 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
                 }
 
 
-            }
-            else if (document_type_group_id === DOCUMENT_TYPE_ID.MAINTENANT_ITEM) {
+            } else if (document_type_group_id === DOCUMENT_TYPE_ID.MAINTENANT_ITEM) {
                 console.log("i know i am in maintenant item!!")
+                if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
+                    && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
+                    console.log("validateInternalDocumentIDField:: I got document ID ")
+                    setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
+                    validateField("created_by_user_employee_id");
+                    validateField("created_by_admin_employee_id");
+                    return resolve(null);
+
+                } else { //If Mode add, need to error duplicate Document ID
+                    // setFieldValue('document_id', '', false); 
+                    if (values.document_id || footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve
+                        console.log("i am in mode add, saved and wanting to approve")
+                        error = '';
+                    } else {
+                        console.log("I AM DUPLICATE")
+                        error = 'Duplicate Document ID';
+                    }
+                }
+            } else if (document_type_group_id === DOCUMENT_TYPE_ID.EQUIPMENT_INSTALLATION) {
+                console.log("i know i am in equipmrnt installation item!!")
                 if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
                     && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
                     console.log("validateInternalDocumentIDField:: I got document ID ")
