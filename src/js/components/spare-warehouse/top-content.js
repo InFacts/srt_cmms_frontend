@@ -15,6 +15,7 @@ import { getNumberFromEscapedString, fetchGoodsOnhandDataForItemmasterData, DOCU
 
 import { FACTS } from '../../redux/modules/api/fact.js';
 
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const TopContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
@@ -85,10 +86,12 @@ const TopContent = (props) => {
   const validateAbbreviationWarehouseIDField = (...args) => validateWarehouseField("abbreviation", ...args);
 
   return (
-    <div id="blackground-white">
+    <div id={changeTheam() === true ? "" : "blackground-white"}>
       <div className="container_12 clearfix">
         <section className="container_12 ">
           <h4 className="head-title">คลัง - Setup</h4>
+
+          <div id={changeTheam() === true ? "blackground-white" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "100px", paddingTop: "10px" } : {}} >
 
           <div className="container_12">
             <div className="grid_1"><p className="top-text">เลขที่คลัง</p></div>
@@ -115,6 +118,9 @@ const TopContent = (props) => {
             </div>
             <div className="grid_1 float-right"><p className="top-text float-right">ชื่อย่อคลัง</p></div>
           </div>
+
+          </div>
+
         </section>
 
         {/* PopUp ค้นหาเลขที่คลังต้นทาง MODE ADD */}

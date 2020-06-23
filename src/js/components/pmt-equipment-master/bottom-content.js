@@ -20,6 +20,8 @@ import { FACTS } from '../../redux/modules/api/fact.js';
 
 import '../../../css/table.css';
 
+import BgBlue from '../../../images/pmt/bg_blue.jpg';
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const BottomContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
@@ -60,9 +62,9 @@ const BottomContent = (props) => {
   return (
     <>
       {/* THIS MAKES THE BACKGROUND NOT GRAY!! NEEDS TO FIX */}
-      <div id="blackground-gray">
+      <div id={changeTheam() === true ? "" : "blackground-gray"}>
         {/* <div className="container_12 clearfix"> */}
-        <div className="container_12 ">
+        <div className="container_12 " id={changeTheam() === true ? "blackground-gray" : ""} style={ changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {} }>  
           {/* General Tab */}
           <div id="general_content" className="tabcontent">
             <div className="container_12 mt-3">

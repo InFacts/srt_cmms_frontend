@@ -9,7 +9,7 @@ const Top5Component = ({ data, chartSettings, title}) => {
 
     return (
         <>  
-        <div>
+        <div style={{ background: "white" }}>
             <h5 className="top5-title">{title}</h5>    
 
         

@@ -14,6 +14,8 @@ import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
 
 import { useFormikContext, useField } from 'formik';
 
+import BgBlue from '../../../images/pmt/bg_blue.jpg';
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const TopContent = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
     const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
@@ -27,131 +29,151 @@ const TopContent = (props) => {
     const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
 
     return (
-        <div id="blackground-white">
+        <div id={changeTheam() === true ? "" : "blackground-white"}>
             <div className="container_12 clearfix">
                 {/* Section Title */}
                 <h4 className="head-title" style={{ marginTop: "80px" }}>สรุปการทำวาระซ่อมบำรุง - สินทรัพย์</h4>
 
-                {/* === Left Column === */}
-                <div className="grid_12" style={{ paddingLeft: "10px" }}>
+                <div id={changeTheam() === true ? "blackground-white" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "270px", paddingTop: "10px" } : {}} >
 
-                    {/* Equiment ID */}
-                    <Label>เลขที่เอกสาร</Label>
-                    <div className="grid_3 alpha">
-                        <TextInput name='equiment_item_id'
-                            searchable={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                            tabIndex="1" />
-                    </div>
+                    {/* === Left Column === */}
+                    <div className="grid_12" style={{ paddingLeft: "10px" }}>
 
-                    {/* Created On */}
-                    <div className="float-right">
-                    <Label>วันที่</Label>
-                    <div className="grid_3 alpha">
-                        <DateTimeInput name="created_on"
-                            disabled
-                            tabIndex="5" />
-                    </div>
-                    </div>
-                    <div class="clear" />
+                        {/* Equiment ID */}
+                        <div className="grid_1 alpha white-space">
+                            <p className="top-text">เลขที่เอกสาร</p>
+                        </div>
+                        <div className="grid_3 alpha">
+                            <TextInput name='equiment_item_id'
+                                searchable={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                tabIndex="1" />
+                        </div>
 
-                    {/* No Part */}
-                    <Label>เลขที่เอกสารอ้างอิง</Label>
-                    <div className="grid_3 alpha">
-                        <TextInput name="internal_item_id"
-                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                            searchable={toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"
-                            tabIndex="2" />
-                    </div>
+                        {/* Created On */}
+                        <div className="float-right">
+                            <Label>วันที่</Label>
+                            <div className="grid_3 alpha">
+                                <DateTimeInput name="created_on"
+                                    disabled
+                                    tabIndex="5" />
+                            </div>
+                        </div>
+                        <div class="clear" />
 
-                    {/* Document date */}
-                    <div className="float-right">
-                    <Label>วันที่เอกสาร</Label>
-                    <div className="grid_3 alpha">
-                        <DateInput name="document_date"
-                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                            tabIndex="6" />
-                    </div>
-                    </div>
-                    <div class="clear" />
+                        {/* No Part */}
+                        <div className="grid_2 alpha white-space">
+                            <p className="top-text">เลขที่เอกสารอ้างอิง</p>
+                        </div>
+                        <div className="grid_3 pull_0">
+                            <TextInput name="internal_item_id"
+                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                searchable={toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"
+                                tabIndex="2" />
+                        </div>
 
-                    {/* Description  */}
-                    <Label>ชื่อแผนซ่อมบำรุง</Label>
-                    <div className="grid_3 alpha">
-                        <TextInput name="description"
-                            disabled
-                            tabIndex="3" />
-                    </div>
+                        {/* Document date */}
+                        <div className="float-right">
+                            <Label>วันที่เอกสาร</Label>
+                            <div className="grid_3 alpha">
+                                <DateInput name="document_date"
+                                    disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                    tabIndex="6" />
+                            </div>
+                        </div>
+                        <div class="clear" />
 
-                    {/* User Employee ID  */}
-                    <div className="float-right">
-                    <Label>ผู้สร้างเอกสาร</Label>
-                    <div className="grid_3 alpha">
-                        <TextInput name="created_by_admin_employee_id"
-                            validate={validateUserEmployeeIDField}
-                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                            searchable={toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"
-                            tabIndex="2" />
-                    </div>
-                    </div>
-                    <div class="clear" />
+                        {/* Description  */}
+                        <div className="grid_2 alpha white-space">
+                            <p className="top-text">ชื่อแผนซ่อมบำรุง</p>
+                        </div>
+                        <div className="grid_3 pull_0">
+                            <TextInput name="description"
+                                disabled
+                                tabIndex="3" />
+                        </div>
 
-                    {/* UOM  */}
-                    <Label>เลขที่สินทรัพย์</Label>
-                    <div className="grid_3 alpha">
-                        <TextInput name="uom_id"
-                            // validate={validateAdminEmployeeIDField} เลขที่ของ ผู้สร้างเอกสาร  รายละเอียด หน่วย need to add later
-                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                            tabIndex="3" />
-                    </div>
-                    {/* UOM  */}
-                    <Label>เลขที่สิ่งของ</Label>
-                    <div className="grid_3 alpha">
-                        <TextInput name="uom_id"
-                            // validate={validateAdminEmployeeIDField} เลขที่ของ ผู้สร้างเอกสาร  รายละเอียด หน่วย need to add later
-                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                            tabIndex="3" />
-                    </div>
-                    <div class="clear" />
+                        {/* User Employee ID  */}
+                        <div className="float-right">
+                            <Label>ผู้สร้างเอกสาร</Label>
+                            <div className="grid_3 alpha">
+                                <TextInput name="created_by_admin_employee_id"
+                                    validate={validateUserEmployeeIDField}
+                                    disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                    searchable={toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"
+                                    tabIndex="2" />
+                            </div>
+                        </div>
+                        <div class="clear" />
 
-                    {/* UOM  */}
-                    <Label>รายละเอียด</Label>
-                    <div className="grid_7 alpha">
-                        <TextInput name="uom_id"
-                            // validate={validateAdminEmployeeIDField} เลขที่ของ ผู้สร้างเอกสาร  รายละเอียด หน่วย need to add later
-                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                            tabIndex="3" />
-                    </div>
-                    <div class="clear" />
+                        <div className="grid_2 alpha white-space">
+                            <p className="top-text">เลขที่สินทรัพย์</p>
+                        </div>
+                        <div className="grid_3 pull_0">
+                            <TextInput name="uom_id"
+                                // validate={validateAdminEmployeeIDField} เลขที่ของ ผู้สร้างเอกสาร  รายละเอียด หน่วย need to add later
+                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                tabIndex="3" />
+                        </div>
+                        {/* UOM  */}
+                        <div className="grid_1 white-space pull_0">
+                            <p className="top-text">เลขที่สิ่งของ</p>
+                        </div>
+                        <div className="grid_3 pull_0">
+                            <TextInput name="uom_id"
+                                // validate={validateAdminEmployeeIDField} เลขที่ของ ผู้สร้างเอกสาร  รายละเอียด หน่วย need to add later
+                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                tabIndex="3" />
+                        </div>
+                        <div class="clear" />
 
-                    {/* UOM  */}
-                    <Label>แขวง</Label>
-                    <div className="grid_3 alpha">
-                        <TextInput name="uom_id"
-                            // validate={validateAdminEmployeeIDField} เลขที่ของ ผู้สร้างเอกสาร  รายละเอียด หน่วย need to add later
-                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                            tabIndex="3" />
-                    </div>
-                    <div class="clear" />
+                        {/* UOM  */}
+                        <div className="grid_1 alpha white-space">
+                            <p className="top-text">รายละเอียด</p>
+                        </div>
+                        <div className="grid_7 alpha">
+                            <TextInput name="uom_id"
+                                // validate={validateAdminEmployeeIDField} เลขที่ของ ผู้สร้างเอกสาร  รายละเอียด หน่วย need to add later
+                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                tabIndex="3" />
+                        </div>
+                        <div class="clear" />
 
-                    {/* UOM  */}
-                    <Label>ตอน</Label>
-                    <div className="grid_3 alpha">
-                        <TextInput name="uom_id"
-                            // validate={validateAdminEmployeeIDField} เลขที่ของ ผู้สร้างเอกสาร  รายละเอียด หน่วย need to add later
-                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                            tabIndex="3" />
-                    </div>
-                    <div class="clear" />
+                        {/* UOM  */}
+                        <div className="grid_1 alpha white-space">
+                            <p className="top-text">แขวง</p>
+                        </div>
+                        <div className="grid_3 alpha">
+                            <TextInput name="uom_id"
+                                // validate={validateAdminEmployeeIDField} เลขที่ของ ผู้สร้างเอกสาร  รายละเอียด หน่วย need to add later
+                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                tabIndex="3" />
+                        </div>
+                        <div class="clear" />
 
-                    {/* UOM  */}
-                    <Label>สถานี</Label>
-                    <div className="grid_3 alpha">
-                        <TextInput name="uom_id"
-                            // validate={validateAdminEmployeeIDField} เลขที่ของ ผู้สร้างเอกสาร  รายละเอียด หน่วย need to add later
-                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                            tabIndex="3" />
+                        {/* UOM  */}
+                        <div className="grid_1 alpha white-space">
+                            <p className="top-text">ตอน</p>
+                        </div>
+                        <div className="grid_3 alpha">
+                            <TextInput name="uom_id"
+                                // validate={validateAdminEmployeeIDField} เลขที่ของ ผู้สร้างเอกสาร  รายละเอียด หน่วย need to add later
+                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                tabIndex="3" />
+                        </div>
+                        <div class="clear" />
+
+                        {/* UOM  */}
+                        <div className="grid_1 alpha white-space">
+                            <p className="top-text">สถานี</p>
+                        </div>
+                        <div className="grid_3 alpha">
+                            <TextInput name="uom_id"
+                                // validate={validateAdminEmployeeIDField} เลขที่ของ ผู้สร้างเอกสาร  รายละเอียด หน่วย need to add later
+                                disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                tabIndex="3" />
+                        </div>
+                        <div class="clear" />
                     </div>
-                    <div class="clear" />
                 </div>
             </div>
 

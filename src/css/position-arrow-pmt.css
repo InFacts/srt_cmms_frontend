@@ -4,17 +4,45 @@
     top: 80px;
 }
 
+.Pone-one-new{
+    position: absolute;
+    left: 55px;
+    top: 90px;
+}
+
+
+
+
 .Pone-two{
     position: absolute;
     left: 70px;
     top: 200px;
 }
 
+.Pone-two-new{
+    position: absolute;
+    left: 75px;
+    top: 180px;
+}
+
+
+
+
+
 .Pone-three{
     position: absolute;
     left: 70px; 
     top: 310px;
 }
+
+.Pone-three-new{
+    position: absolute;
+    left: 77px; 
+    top: 310px;
+}
+
+
+
 
 .Parrow1{
     position: absolute;
@@ -71,23 +99,52 @@
     color: #000000;
 }
 
+
+
 .Ptwo-one{
     position: absolute;
     left: 260px;
     top: 80px;
 }
 
+.Ptwo-one-new{
+    position: absolute;
+    left: 260px;
+    top: 80px;
+}
+
+
+
+
+
 .Ptwo-two{
     position: absolute;
     left: 250px;
     top: 200px;
 }
+.Ptwo-two-new{
+    position: absolute;
+    left: 260px;
+    top: 180px;
+}
+
+
+
+
 
 .Ptwo-three{
     position: absolute;
     left: 260px;
     top: 320px;
 }
+.Ptwo-three-new{
+    position: absolute;
+    left: 265px;
+    top: 305px;
+}
+
+
+
 
 .Ptext4{
     position: absolute;
@@ -134,11 +191,21 @@
     color: #000000;
 }
 
+
+
 .Pthree-one{
     position: absolute;
     left: 460px;
     top: 75px;
 }
+.Pthree-one-new{
+    position: absolute;
+    left: 465px;
+    top: 75px;
+}
+
+
+
 
 .Parrow2{
     position: absolute;
@@ -162,17 +229,32 @@
     color: #000000;
 }
 
+
+
 .Pfour-one{
     position: absolute;
     left: 640px;
     top: 80px;
 }
+.Pfour-one-new{
+    position: absolute;
+    left: 633px;
+    top: 75px;
+}
+
+
 
 .Pfour-two{
     position: absolute;
     left: 645px;
     top: 210px;
 }
+.Pfour-two-new{
+    position: absolute;
+    left: 635px;
+    top: 190px;
+}
+
 
 .Ptext8{
     /* นำเข้าอะไหล่โดยมีใบสั่งซื้อ */
@@ -208,11 +290,22 @@
     color: #000000;
 }
 
+
+
+
 .Pfive-one{
     position: absolute;
     left: 800px;
     top: 85px;
 }
+.Pfive-one-new{
+    position: absolute;
+    left: 800px;
+    top: 70px;
+}
+
+
+
 
 .Ptext10{
     /* นำเข้าอะไหล่โดยมีใบสั่งซื้อ */

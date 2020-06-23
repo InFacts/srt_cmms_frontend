@@ -23,6 +23,8 @@ import useDocumentSubscription from '../../hooks/document-subscription';
 import useNavBottomStatusInitializer from '../../hooks/nav-bottom-status-initializer';
 import { footerToModeSearch } from '../../redux/modules/footer.js';
 
+import BgRed from '../../../images/spare/bg_red.jpg';
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const GoodsReturnComponent = (props) => {
     const dispatch = useDispatch();
     const {resetForm, setFieldValue, setValues, values, validateField,validateForm} = useFormikContext();
@@ -62,7 +64,7 @@ const GoodsReturnComponent = (props) => {
     return (
         <>
         {!loggedIn ? <Redirect to="/" /> : null}
-        <form >
+        <form style={changeTheam() === true ? { backgroundImage: `url(${BgRed})`, width: "100vw", height: "140vh" } : {}}>
             <TopContent />
             <TabBar tabNames={tabNames} initialTabID="listItem">
                 <BottomContent />

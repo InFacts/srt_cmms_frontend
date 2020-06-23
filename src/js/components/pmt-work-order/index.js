@@ -20,6 +20,8 @@ import useDocumentSubscription from '../../hooks/document-subscription';
 
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
+import BgBlue from '../../../images/pmt/bg_blue.jpg';
+import { changeTheam } from '../../helper.js'
 const WorkOrderComponent = (props) => {
 
     useToolbarInitializer(TOOLBAR_MODE.SEARCH, DOCUMENT_TYPE_ID.WORK_ORDER);
@@ -42,7 +44,7 @@ const WorkOrderComponent = (props) => {
     return (
         <>
         {!loggedIn ? <Redirect to="/" /> : null}
-        <form onSubmit={props.handleSubmit}>
+        <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "130vh" } : {}}>
             <TopContent />
             <TabBar tabNames={tabNames} initialTabID="broken">
                 <BottomContent />
@@ -120,10 +122,6 @@ const EnhancedWorkOrderComponent = withFormik({
         }
         return errors;
     },
-    handleSubmit: (values, formikBag) => new Promise ((resolve, reject) => { //handle Submit will just POST the Empty Document and PUT information inside
-        console.log( "I am submitting ". values)
-        resolve("DONE!")
-      }),    
 })(WorkOrderComponent);
 
 

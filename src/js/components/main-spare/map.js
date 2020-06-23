@@ -41,6 +41,9 @@ import Text13 from '../../../images/spare/text13.svg'
 
 import RedHouse from '../../../images/red-house.svg';
 
+import BgRed from '../../../images/spare/bg_red.jpg';
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
+
 // Start Function For Drop Dawn
 const toggleMenu = (element, show, top) => {
     var target = document.getElementById(element.getAttribute('aria-controls'));
@@ -105,16 +108,16 @@ class Map extends React.Component {
     componentDidMount() {
         // Setup DropDawn
         setupAllContextualMenus('.p-contextual-menu__toggle');
-      }
+    }
 
     render() {
         return (
-            <div>
+            <div style={ changeTheam() === true ? {backgroundImage: `url(${BgRed})`,  width: "100vw", height: "100vh"} : {} }>
                 <div>
                     <div className="container_12 clearfix">
                         <section className="grid_12 ">
-                        <h4 className="head-title" style={{ color: "black"}}>ระบบบริหารข้อมูลอะไหล่ - Spare</h4>
-                            <div id="blackground-white" style={{ height: "380px" }}>
+                            <h4 className="head-title" style={{ color: "black" }}>ระบบบริหารข้อมูลอะไหล่ - Spare</h4>
+                            <div id="blackground-white" style={ changeTheam() === true ? { borderRadius: "25px", border: "2px dashed gray", height: "380px"} : {height: "380px"} }>
                                 <Link to="/goods-receipt2"><img alt='some value' src={Oneone} className="one-one" /></Link>
                                 <img alt='some value' src={Onetwo} className="one-two" />
                                 <Link to="/goods-receipt-no-po"><img alt='some value' src={Onethree} className="one-three" /></Link>
@@ -138,18 +141,18 @@ class Map extends React.Component {
                                 <img alt='some value' src={Text5} className="text5" />
                                 <img alt='some value' src={Text6} className="text7" />
                                 <img alt='some value' src={Text7} className="text6" />
-                                
+
                                 <Link to="/inventory-transfer"><img alt='some value' src={Threeone} className="three-one" /></Link>
                                 <img alt='some value' src={Threetwo} className="three-two" />
                                 <img alt='some value' src={Threethree} className="three-three" />
-                                
+
                                 <img alt='some value' src={Text8} className="text8" />
                                 <img alt='some value' src={Text9} className="text9" />
                                 <img alt='some value' src={Text10} className="text10" />
 
                                 <Link to="/track"><img alt='some value' src={Fourone} className="four-one" /></Link>
                                 <Link to="/item-master-data"><img alt='some value' src={Fourtwo} className="four-two" /></Link>
-                                
+
                                 <img alt='some value' src={Fourthree} className="four-three" />
                                 <img alt='some value' src={Text11} className="text11" />
                                 <img alt='some value' src={Text12} className="text12" />
@@ -195,7 +198,7 @@ class Map extends React.Component {
                         </section>
                     </div>
                 </div>
-                <div id="red-house2">
+                {/* <div id="red-house2">
                     <div className="container_12 clearfix">
                         <div className="grid_12 from-red-house">
                             <img alt='red house' src={RedHouse} />
@@ -208,7 +211,7 @@ class Map extends React.Component {
                         <div className="grid_12">
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
         )
     };

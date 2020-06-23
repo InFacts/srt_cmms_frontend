@@ -18,6 +18,8 @@ import useFooterInitializer from '../../hooks/footer-initializer';
 
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
+import BgBlue from '../../../images/pmt/bg_blue.jpg';
+import { changeTheam } from '../../helper.js'
 const GoodsReceiptComponent = (props) => {
 
     const { resetForm, setFieldValue, setValues, values } = useFormikContext();
@@ -40,7 +42,7 @@ const GoodsReceiptComponent = (props) => {
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
-            <form>
+            <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "130vh" } : {}}>
                 <TopContent />
                 <TabBar tabNames={tabNames} initialTabID="general">
                     <BottomContent />

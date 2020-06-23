@@ -20,6 +20,8 @@ import AdjustmentBarComponent from './adjustment-bar';
 import SimpleGrayCardComponent from '../als-equipment-status/simple-gray-card';
 import { getAnnualInventoryMonthData, randomDivergingBarGraphData, randomScatterPlotData } from './mockup-data';
 
+import BgGreen from '../../../images/als/bg_als.jpg';
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const AlsSpareComponent = () => {
   const dispatch = useDispatch();
   const loggedIn = useSelector(state => state.token.isLoggedIn);
@@ -53,7 +55,7 @@ const AlsSpareComponent = () => {
     <>
       {!loggedIn ? <Redirect to="/" /> : null}
 
-      <div id="blackground-white" >
+      <div id={changeTheam() === true ? "" : "blackground-white"} style={changeTheam() === true ? { backgroundImage: `url(${BgGreen})`, width: "100vw", height: "100vh" } : {height: "100vh"}}>
         <div className="bootstrap-wrapper">
           <div class="container" style={{ marginTop: "80px" }}>
             {/* Section Title */}

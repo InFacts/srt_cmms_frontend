@@ -39,7 +39,7 @@ function LineGraph({ data, chartSettings, title}) {
         .y(d => yScale(d.inventory_month))
 
     return (
-        <div className="Chart_wrapper" ref={ref}>
+        <div className="Chart_wrapper" ref={ref} style={{ background: "white" }}>
             <svg width={dms.width} height={dms.height} style={{ border: "1.5px solid gold" }} >
                 <g transform={`translate(${dms.marginLeft}, ${dms.marginTop})`}>
                                         

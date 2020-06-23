@@ -1,14 +1,24 @@
 .ALSone-one{
     position: absolute;
     left: 105px;
-    top: 80px;
+    top: 100px;
 }
+
+.ALSone-one-new{
+    position: absolute;
+    left: 105px;
+    top: 100px;
+}
+
+
+
+
 
 .ALStext1{
     /* นำเข้าอะไหล่โดยมีใบสั่งซื้อ */
     position: absolute;
     left: 39px;
-    top: 145px;
+    top: 165px;
 
     font-family: Kanit;
     font-style: normal;
@@ -21,16 +31,29 @@
     color: #000000;
 }
 
+
+
+
+
 .ALStwo-one{
     position: absolute;
     left: 355px;
-    top: 80px;
+    top: 100px;
 }
+
+.ALStwo-one-new{
+    position: absolute;
+    left: 355px;
+    top: 90px;
+}
+
+
+
 
 .ALStext4{
     position: absolute;
     left: 310px;
-    top: 145px;
+    top: 165px;
 
     font-family: Kanit;
     font-style: normal;
@@ -42,17 +65,29 @@
     color: #000000;
 }
 
+
+
+
 .ALSthree-one{
     position: absolute;
     left: 585px;
-    top: 80px;
+    top: 100px;
 }
+
+.ALSthree-one-new{
+    position: absolute;
+    left: 595px;
+    top: 90px;
+}
+
+
+
 
 .ALStext7{
     /* นำเข้าอะไหล่โดยมีใบสั่งซื้อ */
     position: absolute;
     left: 500px;
-    top: 147px;
+    top: 167px;
     font-family: Kanit;
     font-style: normal;
     font-weight: 300;
@@ -67,14 +102,14 @@
 .ALSFour-one{
     position: absolute;
     left: 105px;
-    top: 200px;
+    top: 220px;
 }
 
 .ALStext9{
     /* นำเข้าอะไหล่โดยมีใบสั่งซื้อ */
     position: absolute;
     left: 82px;
-    top: 267px;
+    top: 287px;
     font-family: Kanit;
     font-style: normal;
     font-weight: 300;
@@ -86,17 +121,31 @@
     color: #000000;
 }
 
+
+
+
+
 .ALSFive-one{
     position: absolute;
     left: 355px;
-    top: 200px;
+    top: 220px;
 }
+
+.ALSFive-one-new{
+    position: absolute;
+    left: 360px;
+    top: 220px;
+}
+
+
+
+
 
 .ALStext11{
     /* นำเข้าอะไหล่โดยมีใบสั่งซื้อ */
     position: absolute;
     left: 285px;
-    top: 267px;
+    top: 287px;
     font-family: Kanit;
     font-style: normal;
     font-weight: 300;

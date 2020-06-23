@@ -17,6 +17,8 @@ import AdjustmentBarComponent from './adjustment-bar';
 
 import {randomColorMapData} from './mockup-data';
 
+import BgGreen from '../../../images/als/bg_als.jpg';
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const AlsPreventiveMaintenanaceComponent = () => {
     const dispatch = useDispatch();
     const loggedIn = useSelector(state => state.token.isLoggedIn);
@@ -33,7 +35,7 @@ const AlsPreventiveMaintenanaceComponent = () => {
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
 
-            <div id="blackground-white" style={{ height: "100vh"}}>
+            <div id={changeTheam() === true ? "" : "blackground-white"} style={changeTheam() === true ? { backgroundImage: `url(${BgGreen})`, width: "100vw", height: "160vh" } : {height: "160vh"}}>
                 <div className="bootstrap-wrapper">
                     <div className="container" style={{ marginTop: "70px" }}>
                         {/* Section Title */}

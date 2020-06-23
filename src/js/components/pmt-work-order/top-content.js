@@ -13,12 +13,16 @@ import { useFormikContext, useField } from 'formik';
 import PopupModalDocument from '../common/popup-modal-document'
 import PopupModalUsername from '../common/popup-modal-username'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
-import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, validateEmployeeIDField, 
-    validateWarehouseIDField, validateInternalDocumentIDFieldHelper, DOCUMENT_STATUS, validatedataDocumentField, getUserIDFromEmployeeID , checkBooleanForEditHelper} from '../../helper';
+import {
+    getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, validateEmployeeIDField,
+    validateWarehouseIDField, validateInternalDocumentIDFieldHelper, DOCUMENT_STATUS, validatedataDocumentField, getUserIDFromEmployeeID, checkBooleanForEditHelper
+} from '../../helper';
 import { FACTS } from '../../redux/modules/api/fact';
 import Label from '../common/form-label'
 import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
 
+import BgBlue from '../../../images/pmt/bg_blue.jpg';
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const TopContent = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
     const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
@@ -38,87 +42,96 @@ const TopContent = (props) => {
 
     const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
     return (
-        <div id="blackground-white">
+        <div id={changeTheam() === true ? "" : "blackground-white"}>
             <div className="container_12 clearfix" style={{ marginTop: "55px" }}>
                 {/* Section Title */}
                 <h4 className="head-title">ออกใบสั่งซ่อมบำรุง</h4>
 
-                {/* === Left Column === */}
-                <div className="grid_6" style={{ paddingLeft: "10px" }}>
-                    {/* Document ID */}
-                    <Label>เลขที่เอกสาร</Label>
-                    <div className="grid_3 alpha">
-                        <TextInput name='internal_document_id'
-                            validate={validateInternalDocumentIDField}
-                            searchable={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                            ariaControls="modalDocument"
-                            tabIndex="1" />
-                    </div>
-                    <div class="clear" />
+                <div id={changeTheam() === true ? "blackground-white" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "150px", paddingTop: "10px" } : {}} >
+                    {/* === Left Column === */}
+                    <div className={changeTheam() === true ? "grid_5" : "grid_6"} style={{ paddingLeft: "10px" }}>
+                        {/* Document ID */}
+                        <div className="grid_1 alpha white-space">
+                            <p className="top-text">เลขที่เอกสาร</p>
+                        </div>
+                        <div className="grid_3 alpha">
+                            <TextInput name='internal_document_id'
+                                validate={validateInternalDocumentIDField}
+                                searchable={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                ariaControls="modalDocument"
+                                tabIndex="1" />
+                        </div>
+                        <div class="clear" />
 
-                    {/* User Employee ID  */}
-                    <Label>ผู้ดำเนินเรื่อง</Label>
-                    <div className="grid_3 alpha">
-                        <TextInput name="created_by_user_employee_id"
-                            validate={validateUserEmployeeIDField}
-                            searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH}
-                            disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                            ariaControls="modalUserName"
-                            tabIndex="2" />
-                    </div>
-                    <div class="clear" />
+                        {/* User Employee ID  */}
+                        <div className="grid_1 alpha white-space">
+                            <p className="top-text">ผู้ดำเนินเรื่อง</p>
+                        </div>
+                        <div className="grid_3 alpha">
+                            <TextInput name="created_by_user_employee_id"
+                                validate={validateUserEmployeeIDField}
+                                searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                ariaControls="modalUserName"
+                                tabIndex="2" />
+                        </div>
+                        <div class="clear" />
 
 
-                    {/* Admin Employee ID  */}
-                    <Label>ผู้สร้างเอกสาร</Label>
-                    <div className="grid_3 alpha">
-                        <TextInput name="created_by_admin_employee_id"
-                            validate={validateAdminEmployeeIDField}
-                            disabled
-                            tabIndex="3" />
-                    </div>
-                    <div class="clear" />
+                        {/* Admin Employee ID  */}
+                        <div className="grid_1 alpha white-space">
+                            <p className="top-text">ผู้สร้างเอกสาร</p>
+                        </div>
+                        <div className="grid_3">
+                            <TextInput name="created_by_admin_employee_id"
+                                validate={validateAdminEmployeeIDField}
+                                disabled
+                                tabIndex="3" />
+                        </div>
+                        <div class="clear" />
 
-                    {/* wr_internal_document_id  */}
-                    <Label>เลขที่เอกสารแจ้งเหตุขัดข้อง</Label>
-                    <div className="grid_3 alpha">
-                        <TextInput name="wr_internal_document_id"
-                            disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                            tabIndex="4" />
+                        {/* wr_internal_document_id  */}
+                        <div className="grid_2 alpha omega white-space">
+                            <p className="top-text">เลขที่เอกสารแจ้งเหตุขัดข้อง</p>
+                        </div>
+                        <div className="grid_3 omega">
+                            <TextInput name="wr_internal_document_id"
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                tabIndex="4" />
+                        </div>
+                        <div class="clear" />
                     </div>
-                    <div class="clear" />
+
+                    {/* === Right Column === */}
+                    <div className="grid_6 prefix_2">
+                        {/* Document Status  */}
+                        <Label>สถานะ</Label>
+                        <div className="grid_3 alpha">
+                            <TextInput name="status_name_th"
+                                disabled
+                                tabIndex="5" />
+                        </div>
+                        <div class="clear" />
+
+                        {/* Created On */}
+                        <Label>วันที่</Label>
+                        <div className="grid_3 alpha">
+                            <DateTimeInput name="created_on"
+                                disabled
+                                tabIndex="6" />
+                        </div>
+                        <div class="clear" />
+
+                        {/* Document date */}
+                        <Label>วันที่เอกสาร</Label>
+                        <div className="grid_3 alpha">
+                            <DateInput name="document_date" validate={validateDocumentDateField}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                tabIndex="7" />
+                        </div>
+                        <div class="clear" />
+                    </div>
                 </div>
-
-                {/* === Right Column === */}
-                <div className="grid_6 prefix_2">
-                    {/* Document Status  */}
-                    <Label>สถานะ</Label>
-                    <div className="grid_3 alpha">
-                        <TextInput name="status_name_th"
-                            disabled
-                            tabIndex="5" />
-                    </div>
-                    <div class="clear" />
-
-                    {/* Created On */}
-                    <Label>วันที่</Label>
-                    <div className="grid_3 alpha">
-                        <DateTimeInput name="created_on"
-                            disabled
-                            tabIndex="6" />
-                    </div>
-                    <div class="clear" />
-
-                    {/* Document date */}
-                    <Label>วันที่เอกสาร</Label>
-                    <div className="grid_3 alpha">
-                        <DateInput name="document_date" validate={validateDocumentDateField}
-                            disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                            tabIndex="7" />
-                    </div>
-                    <div class="clear" />
-                </div>
-
             </div>
             <PopupModalDocument
                 documentTypeGroupID={DOCUMENT_TYPE_ID.WORK_ORDER}

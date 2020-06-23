@@ -9,7 +9,7 @@ import SelectInput from '../common/formik-select-input';
 const Table = (props) => {
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   return (
-    <table className="table-many-column">
+    <table className="table-many-column" style={{ padding: "10px"}}>
       <thead>
         <tr>
           <th className="font text-center" style={{ minWidth: "30px" }}>#</th>

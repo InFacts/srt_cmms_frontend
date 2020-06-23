@@ -12,6 +12,8 @@ import Label from '../common/form-label'
 import PopupModalNoPart from '../common/popup-modal-nopart'
 import TableLineItem from './table-line-item.js';
 
+import BgBlue from '../../../images/pmt/bg_blue.jpg';
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const BottomContent = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
     const factItems = useSelector((state) => ({ ...state.api.fact.items }), shallowEqual);
@@ -21,8 +23,8 @@ const BottomContent = (props) => {
     const [lineNumber, setLineNumber] = useState('');
 
     return (
-        <div id="blackground-gray">
-            <div className="container_12 clearfix">
+        <div id={changeTheam() === true ? "" : "blackground-gray"}>
+            <div className="container_12 clearfix" id={changeTheam() === true ? "blackground-gray" : ""} style={ changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {} }>
 
                 {/* === Tab broken_content  === */}
                 <div id="broken_content" className="tabcontent">

@@ -13,6 +13,8 @@ import { getNumberFromEscapedString, fetchGoodsOnhandDataForItemmasterData, DOCU
 
 import { FACTS } from '../../redux/modules/api/fact.js';
 
+import BgBlue from '../../../images/pmt/bg_blue.jpg';
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const FormLabel = ({ children }) => (
   <div className={`grid_2`}>
     <p className="top-text">{children}</p>
@@ -115,11 +117,13 @@ const TopContent = (props) => {
   const validateItemDescriptionField = (...args) => validateItemMasterdataField("description", ...args);
 
   return (
-    <div id="blackground-white">
+    <div id={changeTheam() === true ? "" : "blackground-white"}>
       <div className="container_12 clearfix">
         <section className="container_12 ">
           <FormTitle>ข้อมูลอุปกรณ์</FormTitle>
-          <div className="container_12">
+
+          <div id={changeTheam() === true ? "blackground-white" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "120px", paddingTop: "10px" } : {}}>
+          <div className="container_12" >
 
             {/* === internal_item_id === */}
             <FormLabel>เลขที่สินทรัพย์</FormLabel>
@@ -188,6 +192,9 @@ const TopContent = (props) => {
               </SelectNoChildrenInput>
             </div>
           </div>
+
+          </div>
+
         </section>
 
         {/* PopUp ค้นหาอะไหล่ */}

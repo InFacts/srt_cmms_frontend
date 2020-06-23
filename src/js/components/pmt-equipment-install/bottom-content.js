@@ -17,6 +17,8 @@ import {
 import { FACTS } from '../../redux/modules/api/fact';
 import PopupModalReponseZoneBy from '../common/popup-modal-reponse-zone-by'
 
+import BgBlue from '../../../images/pmt/bg_blue.jpg';
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const BottomContent = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
     const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
@@ -34,8 +36,8 @@ const BottomContent = (props) => {
     const validateResponsibleZoneByField = (...args) => validateUserIDField("responsible_zone_by", fact, setFieldValue, ...args);
 
     return (
-        <div id="blackground-gray">
-            <div className="container_12 clearfix">
+        <div id={changeTheam() === true ? "" : "blackground-gray"}>
+            <div className="container_12 clearfix" id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>
 
                 {/* === Tab broken_content  === */}
                 <div id="general_content" className="tabcontent">
@@ -49,7 +51,9 @@ const BottomContent = (props) => {
                         <div class="clear" />
 
                         {/* Responsible person District ID */}
-                        <Label>ผู้รับผิดชอบ</Label>
+                        <div className="grid_1 alpha white-space">
+                            <p className="top-text">ผู้รับผิดชอบ</p>
+                        </div>
                         <div className="grid_3 alpha omega">
                             <TextInput name="responsible_zone_by"
                                 validate={validateResponsibleZoneByField}
@@ -65,8 +69,10 @@ const BottomContent = (props) => {
                         <div class="clear" />
 
                         {/* Responsible person District ID */}
-                        <Label>หน่วยงานผู้รับผิดชอบ</Label>
-                        <div className="grid_3 alpha omega">
+                        <div className="grid_2 alpha white-space">
+                            <p className="top-text">หน่วยงานผู้รับผิดชอบ</p>
+                        </div>
+                        <div className="grid_3 pull_0">
                             <TextInput name="responsible_by"
                                 validate={validateResponsibleByIDField}
                                 disabled
@@ -80,8 +86,10 @@ const BottomContent = (props) => {
                         <div class="clear" />
 
                         {/* Installed date */}
-                        <Label>วันที่ติดตั้งเสร็จ</Label>
-                        <div className="grid_3 alpha omega">
+                        <div className="grid_1 alpha white-space">
+                            <p className="top-text">วันที่ติดตั้งเสร็จ</p>
+                        </div>
+                        <div className="grid_3 omega">
                             <DateInput name="installed_on"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                                 tabIndex="6" />
@@ -89,16 +97,20 @@ const BottomContent = (props) => {
                         <div class="clear" />
 
                         {/* Installed date */}
-                        <Label>วันที่ประกาศใช้</Label>
-                        <div className="grid_3 alpha omega">
+                        <div className="grid_1 alpha white-space">
+                            <p className="top-text">วันที่ประกาศใช้</p>
+                        </div>
+                        <div className="grid_3 omega">
                             <DateInput name="announce_use_on"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                                 tabIndex="6" />
                         </div>
                         <div class="clear" />
 
-                        <Label>สถานะ</Label>
-                        <div className="grid_3 alpha omega">
+                        <div className="grid_1 alpha white-space">
+                            <p className="top-text">สถานะ</p>
+                        </div>
+                        <div className="grid_3 omega">
                             <SelectNoChildrenInput name="equipment_status_id" disabled>
                                 <option value=''></option>
                                 {factEquipmentStatus.items.map((equipment_status) => {
@@ -114,9 +126,11 @@ const BottomContent = (props) => {
                         <div class="clear" />
                     </div>
 
-                    <div className="grid_12" style={{ marginTop: "20px" }}>
+                    <div className="grid_12">
                         {/* Remark */}
-                        <Label>หมายเหตุ</Label>
+                        <div className="grid_1 white-space">
+                            <p className="top-text">หมายเหตุ</p>
+                        </div>
                         <div className="grid_11 alpha omega">
                             <TextareaInput name="remark"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
@@ -138,25 +152,9 @@ const BottomContent = (props) => {
                             <div class="clear" />
 
                             {/* === จังหวัด === */}
-                            <Label>จังหวัด</Label>
-                            <div className="grid_7">
-                                {/* <SelectNoChildrenInput name="1" disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}> */}
-                                    <select>
-                                    <option value=''></option>
-                                    {/* {factStation.items.map((station) => {
-                                        if (station.station_id === values.location_station_id) {
-                                        return <option value={station.station_id} key={station.station_id} selected>{station.name}</option>
-                                        } else {
-                                        return <option value={station.station_id} key={station.station_id}>{station.name}</option>
-                                        }
-                                    })} */}
-                                    </select>
-                                {/* </SelectNoChildrenInput> */}
+                            <div className="grid_1 alpha white-space">
+                                <p className="top-text">จังหวัด</p>
                             </div>
-                            <div className="clear" />
-
-                            {/* === อำเภอ === */}
-                            <Label>อำเภอ</Label>
                             <div className="grid_7">
                                 {/* <SelectNoChildrenInput name="1" disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}> */}
                                 <select>
@@ -168,13 +166,35 @@ const BottomContent = (props) => {
                                         return <option value={station.station_id} key={station.station_id}>{station.name}</option>
                                         }
                                     })} */}
-                                    </select>
+                                </select>
+                                {/* </SelectNoChildrenInput> */}
+                            </div>
+                            <div className="clear" />
+
+                            {/* === อำเภอ === */}
+                            <div className="grid_1 alpha white-space">
+                                <p className="top-text">อำเภอ</p>
+                            </div>
+                            <div className="grid_7">
+                                {/* <SelectNoChildrenInput name="1" disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}> */}
+                                <select>
+                                    <option value=''></option>
+                                    {/* {factStation.items.map((station) => {
+                                        if (station.station_id === values.location_station_id) {
+                                        return <option value={station.station_id} key={station.station_id} selected>{station.name}</option>
+                                        } else {
+                                        return <option value={station.station_id} key={station.station_id}>{station.name}</option>
+                                        }
+                                    })} */}
+                                </select>
                                 {/* </SelectNoChildrenInput> */}
                             </div>
                             <div className="clear" />
 
                             {/* Responsible person District ID */}
-                            <Label>แขวง</Label>
+                            <div className="grid_1 alpha white-space">
+                                <p className="top-text">แขวง</p>
+                            </div>
                             <div className="grid_7">
                                 <SelectNoChildrenInput name="location_district_id"
                                     disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
@@ -188,7 +208,9 @@ const BottomContent = (props) => {
                             <div class="clear" />
 
                             {/* Responsible person Node ID */}
-                            <Label>ตอน</Label>
+                            <div className="grid_1 alpha white-space">
+                                <p className="top-text">ตอน</p>
+                            </div>
                             <div className="grid_7">
                                 <SelectNoChildrenInput name="location_node_id"
                                     disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
@@ -204,7 +226,9 @@ const BottomContent = (props) => {
                             <div class="clear" />
 
                             {/* Responsible person Station ID */}
-                            <Label>สถานี</Label>
+                            <div className="grid_1 alpha white-space">
+                                <p className="top-text">สถานี</p>
+                            </div>
                             <div className="grid_7">
                                 <SelectNoChildrenInput name="location_station_id"
                                     disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
@@ -220,8 +244,10 @@ const BottomContent = (props) => {
                             <div class="clear" />
 
                             {/* Responsible person Station ID */}
-                            <Label>รายละเอียดเพิ่มเติม</Label>
-                            <div className="grid_7">
+                            <div className="grid_2 alpha white-space">
+                                <p className="top-text">รายละเอียดเพิ่มเติม</p>
+                            </div>
+                            <div className="grid_7 pull_0">
                                 <TextInput name="location_description"
                                     disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                                     tabIndex="6" />

@@ -19,6 +19,8 @@ import useDocumentSubscription from '../../hooks/document-subscription';
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 import { DOCUMENT_TYPE_ID} from '../../helper';
 
+import BgBlue from '../../../images/pmt/bg_blue.jpg';
+import { changeTheam } from '../../helper.js'
 const WorkRequestComponent = () => {
 
     useToolbarInitializer(TOOLBAR_MODE.SEARCH, DOCUMENT_TYPE_ID.WORK_REQUEST);
@@ -38,7 +40,7 @@ const WorkRequestComponent = () => {
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
-          <form>
+          <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "130vh" } : {}}>
              <TopContent />
              <TabBar tabNames={tabNames} initialTabID="broken">
                 <BottomContent />

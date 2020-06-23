@@ -26,6 +26,8 @@ import {randomHistogramData, randomPieChartData,randomGroupedBarGraphData} from 
 import PieChart from '../common/d3-pie-chart';
 import GroupedBarGraph from '../common/d3-grouped-bar-graph';
 
+import BgGreen from '../../../images/als/bg_als.jpg';
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const AlsPlanPreventiveMaintenanceComponent = () => {
     const dispatch = useDispatch();
     const loggedIn = useSelector(state => state.token.isLoggedIn);
@@ -43,7 +45,7 @@ const AlsPlanPreventiveMaintenanceComponent = () => {
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
 
-            <div id="blackground-white" style={{ height: "100vh"}}>
+            <div id={changeTheam() === true ? "" : "blackground-white"} style={changeTheam() === true ? { backgroundImage: `url(${BgGreen})`, width: "100vw", height: "100vh" } : {height: "100vh"}}>
                 <div className="bootstrap-wrapper">
                     <div className="container" style={{ marginTop: "70px" }}>
                         {/* Section Title */}

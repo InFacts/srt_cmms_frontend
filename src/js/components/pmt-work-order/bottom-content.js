@@ -22,6 +22,8 @@ import TableHasEquipment from '../common/table-has-equipment';
 import { validatedataDocumentField, DOCUMENT_STATUS, getUserIDFromEmployeeID, checkBooleanForEditHelper } from '../../helper';
 import { FACTS } from '../../redux/modules/api/fact';
 
+import BgBlue from '../../../images/pmt/bg_blue.jpg';
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const BottomContent = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
     const factDistricts = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
@@ -76,8 +78,8 @@ const BottomContent = (props) => {
 
     const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
     return (
-        <div id="blackground-gray">
-            <div className="container_12 clearfix">
+        <div id={changeTheam() === true ? "" : "blackground-gray"}>
+            <div className="container_12 clearfix" id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>
 
                 {/* === Tab broken_content  === */}
                 <div id="broken_content" className="tabcontent">
@@ -85,12 +87,14 @@ const BottomContent = (props) => {
                     <h3 className="head-title-bottom mt-2">ข้อมูลเกี่ยวกับอาการขัดข้อง</h3>
 
                     {/* === Left Column   ==== */}
-                    <div className="grid_6" style={{ paddingLeft: "10px" }}>
+                    <div className={changeTheam() === true ? "grid_5" : "grid_6"} style={{ paddingLeft: "10px" }}>
 
 
                         {/* Accident Name  */}
-                        <Label>ชื่องาน</Label>
-                        <div className="grid_4 alpha omega">
+                        <div className="grid_2 alpha white-space">
+                            <p className="top-text">ชื่องาน</p>
+                        </div>
+                        <div className="grid_3 alpha omega pull_0">
                             <TextInput name="accident_name" validate={validateDocumentAccidentNameField}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
@@ -98,8 +102,10 @@ const BottomContent = (props) => {
                         <div class="clear" />
 
                         {/* Accident On  */}
-                        <Label>วันเวลาที่เกิดเหตุ</Label>
-                        <div className="grid_4 alpha omega">
+                        <div className="grid_2 alpha white-space">
+                            <p className="top-text">วันเวลาที่เกิดเหตุ</p>
+                        </div>
+                        <div className="grid_3 alpha omega pull_0">
                             <DateTimeInput name="accident_on" validate={validateDocumentAccidentOnField}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                                 cssStyle={{ left: "-240px", top: "14px" }} />
@@ -108,8 +114,10 @@ const BottomContent = (props) => {
                         <div class="clear" />
 
                         {/* request_on */}
-                        <Label>วันเวลาที่รับแจ้ง</Label>
-                        <div className="grid_4 alpha omega">
+                        <div className="grid_2 alpha white-space">
+                            <p className="top-text">วันเวลาที่รับแจ้ง</p>
+                        </div>
+                        <div className="grid_3 alpha omega pull_0">
                             <DateTimeInput name="request_on" validate={validateDocumentRequestOnField}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                                 cssStyle={{ left: "-240px", top: "14px" }} />
@@ -118,8 +126,10 @@ const BottomContent = (props) => {
                         <div class="clear" />
 
                         {/* root_cause */}
-                        <Label>อาการเสียโดยสรุป</Label>
-                        <div className="grid_4 alpha omega">
+                        <div className="grid_2 alpha white-space">
+                            <p className="top-text">อาการเสียโดยสรุป</p>
+                        </div>
+                        <div className="grid_3 alpha omega pull_0">
                             <TextareaInput name="root_cause"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
@@ -127,8 +137,10 @@ const BottomContent = (props) => {
                         <div class="clear" />
 
                         {/* request_by */}
-                        <Label>ได้รับเหตุจาก</Label>
-                        <div className="grid_4 alpha omega">
+                        <div className="grid_2 alpha white-space">
+                            <p className="top-text">ได้รับเหตุจาก</p>
+                        </div>
+                        <div className="grid_3 alpha omega pull_0">
                             <TextInput name="request_by" validate={validateDocumentRequestByField}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
@@ -136,8 +148,10 @@ const BottomContent = (props) => {
                         <div class="clear" />
 
                         {/* recv_accident_from_id */}
-                        <Label>รับข้อมูลผ่านช่องทาง</Label>
-                        <div className="grid_4 alpha omega">
+                        <div className="grid_2 alpha white-space">
+                            <p className="top-text">รับข้อมูลผ่านช่องทาง</p>
+                        </div>
+                        <div className="grid_3 alpha omega pull_0">
                             {/* Need to change to radio button later */}
                             <SelectNoChildrenInput name="recv_accident_from_recv_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} cssStyle={{ left: "-240px", top: "14px" }}
                                 validate={validateDocumentRecvAccidentFromRecvIDField}>

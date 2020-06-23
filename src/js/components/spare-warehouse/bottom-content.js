@@ -22,6 +22,7 @@ import { FACTS } from '../../redux/modules/api/fact.js';
 
 import '../../../css/table.css';
 
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const BottomContent = (props) => {
 
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm, resetForm } = useFormikContext();
@@ -40,8 +41,9 @@ const BottomContent = (props) => {
   return (
     <>
       {/* THIS MAKES THE BACKGROUND NOT GRAY!! NEEDS TO FIX */}
-      <div id="blackground-gray">
-        {/* <div className="container_12 clearfix"> */}
+      <div id={changeTheam() === true ? "" : "blackground-gray"}>
+      <div className="container_12 clearfix" id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>
+
         <div className="container_12 ">
           {/* General Tab */}
           <div id="general_content" className="tabcontent">
@@ -126,7 +128,7 @@ const BottomContent = (props) => {
           </div> */}
         </div>
       </div>
-      {/* </div > */}
+      </div >
     </>
   )
 };

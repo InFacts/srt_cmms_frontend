@@ -18,6 +18,8 @@ import useFooterInitializer from '../../hooks/footer-initializer';
 
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
+import BgRed from '../../../images/spare/bg_red.jpg';
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const WarehouesMasterDataComponent = (props) => {
     
     const {resetForm, setFieldValue, setValues, values} = useFormikContext();
@@ -37,7 +39,7 @@ const WarehouesMasterDataComponent = (props) => {
     return (
         <>
         {!loggedIn ? <Redirect to="/" /> : null}
-        <form>
+        <form style={changeTheam() === true ? { backgroundImage: `url(${BgRed})`, width: "100vw", height: "100vh" } : {}}>
             <TopContent />
             <TabBar tabNames={tabNames} initialTabID="general">
                 <BottomContent />

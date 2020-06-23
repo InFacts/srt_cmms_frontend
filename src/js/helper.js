@@ -2083,3 +2083,11 @@ export const filterAlsEquipment = (equipmentData, formData) => {
     return tempEquipmentData;
 
 }
+
+export const changeTheam = () => {
+    // Ture คือ version Theam แบบใหม่
+    return true;
+
+    // False คือ version Theam แบบเก่า
+    // return false;
+}

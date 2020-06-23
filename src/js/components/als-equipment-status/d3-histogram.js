@@ -65,7 +65,7 @@ function Histogram({ data, chartSettings, title, xAxis, yAxis}) {
 
 
     return (
-        <div className="Chart_wrapper" ref={ref}>
+        <div className="Chart_wrapper" style={{ background: "white" }} ref={ref}>
             <svg width={dms.width} height={dms.height} 
                 // style={{ border: "1.5px solid gold" }} 
                 viewBox={`0 0 ${dms.width} ${dms.height}`}>

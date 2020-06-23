@@ -19,6 +19,8 @@ import useDocumentSubscription from '../../hooks/document-subscription';
 
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
+import BgBlue from '../../../images/pmt/bg_blue.jpg';
+import { changeTheam } from '../../helper.js'
 const EquipmentInstallationComponent = (props) => {
 
     useToolbarInitializer(TOOLBAR_MODE.SEARCH);
@@ -39,7 +41,7 @@ const EquipmentInstallationComponent = (props) => {
     return (
         <>
         {!loggedIn ? <Redirect to="/" /> : null}
-        <form>
+        <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "130vh" } : {}}>
             <TopContent />
             <TabBar tabNames={tabNames} initialTabID="general">
                 <BottomContent />

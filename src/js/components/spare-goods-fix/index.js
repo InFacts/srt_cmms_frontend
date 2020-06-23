@@ -21,6 +21,8 @@ import useNavBottomStatusInitializer from '../../hooks/nav-bottom-status-initial
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 import { footerToModeSearch } from '../../redux/modules/footer.js';
 
+import BgRed from '../../../images/spare/bg_red.jpg';
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const GoodsFixComponent = (props) => {
     const dispatch = useDispatch();
     const {resetForm, setFieldValue, setValues, values} = useFormikContext();
@@ -59,7 +61,7 @@ const GoodsFixComponent = (props) => {
     return (
         <>
         {!loggedIn ? <Redirect to="/" /> : null}
-        <form>
+        <form style={changeTheam() === true ? { backgroundImage: `url(${BgRed})`, width: "100vw", height: "140vh" } : {}}>
             <TopContent />
             <TabBar tabNames={tabNames} initialTabID="listItem">
                 <BottomContent />

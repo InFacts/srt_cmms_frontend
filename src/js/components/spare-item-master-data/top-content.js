@@ -13,6 +13,7 @@ import { getNumberFromEscapedString, fetchGoodsOnhandDataForItemmasterData, DOCU
 
 import { FACTS } from '../../redux/modules/api/fact.js';
 
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const FormLabel = ({ children }) => (
   <div className={`grid_2`}>
     <p className="top-text">{children}</p>
@@ -110,77 +111,82 @@ const TopContent = (props) => {
   const validateItemDescriptionField = (...args) => validateItemMasterdataField("description", ...args);
 
   return (
-    <div id="blackground-white">
+    <div id={changeTheam() === true ? "" : "blackground-white"}>
       <div className="container_12 clearfix">
         <section className="container_12 ">
-          <FormTitle>ข้อมูลอุปกรณ์</FormTitle>
-          <div className="container_12">
-            <FormLabel>เลขที่อุปกรณ์</FormLabel>
-            <div className="grid_3 pull_1">
-              <TextInput name='internal_item_id'
-                validate={validateInternalItemIDField}
-                searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart" tabIndex="1" />
-            </div>
-            <div className="float-right">
-              <div className="grid_3 float-right">
-                <SelectNoChildrenInput name="item_type_id" validate={validateItemTypeIDField} cssStyle={{ left: "-160px", top: "10px" }}
-                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
-                  <option value=''></option>
-                  {fact[FACTS.ITEM_TYPE].items.map((item_type) => (
-                    values.item_type_id === item_type.item_type_id
-                      ?
-                      <option value={item_type.item_type_id} key={item_type.item_type_id} selected> {item_type.name} </option>
-                      :
-                      <option value={item_type.item_type_id} key={item_type.item_type_id}> {item_type.name} </option>
-                  ))}
-                </SelectNoChildrenInput>
-              </div>
-              <div className="grid_2 float-right">
-                <p className="top-text float-right">ชนิดอุปกรณ์</p>
-              </div>
-            </div>
-          </div>
 
-          <div className="container_12">
-            <FormLabel>รายละเอียด</FormLabel>
-            <div className="grid_3 pull_1">
-              <TextInput name="description" validate={validateItemDescriptionField} disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="2" />
-            </div>
-            <div className="float-right">
-              <div className="grid_3 float-right">
-                <SelectNoChildrenInput name="item_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateItemGroupIDField} cssStyle={{ left: "-160px", top: "10px" }}>
-                  <option value=''></option>
-                  {fact[FACTS.ITEM_GROUP].items.map((item_group) => (
-                    values.item_group_id === item_group.item_group_id
-                      ?
-                      <option value={item_group.item_group_id} key={item_group.item_group_id} selected> {item_group.abbreviation} </option>
-                      :
-                      <option value={item_group.item_group_id} key={item_group.item_group_id}> {item_group.abbreviation} </option>
-                  ))}
-                </SelectNoChildrenInput>
-              </div>
-              <div className="grid_2 float-right">
-                <p className="top-text float-right">กลุ่มอุปกรณ์</p>
-              </div>
-            </div>
-          </div>
+            <FormTitle>ข้อมูลอุปกรณ์</FormTitle>
 
-          <div className="container_12">
-            <div className="float-right">
-              <div className="grid_3 float-right">
-                <SelectNoChildrenInput name="uom_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomGroupIDField} cssStyle={{ left: "-160px", top: "10px" }}>
-                  <option value=''></option>
-                  {fact[FACTS.UNIT_OF_MEASURE_GROUPS].items.map((uom) => (
-                    values.uom_group_id === uom.uom_group_id
-                      ?
-                      <option value={uom.uom_group_id} key={uom.uom_group_id} selected> {uom.name} </option>
-                      :
-                      <option value={uom.uom_group_id} key={uom.uom_group_id}> {uom.name} </option>
-                  ))}
-                </SelectNoChildrenInput>
+            <div id={changeTheam() === true ? "blackground-white" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "120px", paddingTop: "10px" } : {}} >
+
+            <div className="container_12">
+              <FormLabel>เลขที่อุปกรณ์</FormLabel>
+              <div className="grid_3 pull_1">
+                <TextInput name='internal_item_id'
+                  validate={validateInternalItemIDField}
+                  searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart" tabIndex="1" />
               </div>
-              <div className="grid_2 float-right">
-                <p className="top-text float-right">กลุ่มหน่วยนับ</p>
+              <div className="float-right">
+                <div className="grid_3 float-right">
+                  <SelectNoChildrenInput name="item_type_id" validate={validateItemTypeIDField} cssStyle={{ left: "-160px", top: "10px" }}
+                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                    <option value=''></option>
+                    {fact[FACTS.ITEM_TYPE].items.map((item_type) => (
+                      values.item_type_id === item_type.item_type_id
+                        ?
+                        <option value={item_type.item_type_id} key={item_type.item_type_id} selected> {item_type.name} </option>
+                        :
+                        <option value={item_type.item_type_id} key={item_type.item_type_id}> {item_type.name} </option>
+                    ))}
+                  </SelectNoChildrenInput>
+                </div>
+                <div className="grid_2 float-right">
+                  <p className="top-text float-right">ชนิดอุปกรณ์</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="container_12">
+              <FormLabel>รายละเอียด</FormLabel>
+              <div className="grid_3 pull_1">
+                <TextInput name="description" validate={validateItemDescriptionField} disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="2" />
+              </div>
+              <div className="float-right">
+                <div className="grid_3 float-right">
+                  <SelectNoChildrenInput name="item_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateItemGroupIDField} cssStyle={{ left: "-160px", top: "10px" }}>
+                    <option value=''></option>
+                    {fact[FACTS.ITEM_GROUP].items.map((item_group) => (
+                      values.item_group_id === item_group.item_group_id
+                        ?
+                        <option value={item_group.item_group_id} key={item_group.item_group_id} selected> {item_group.abbreviation} </option>
+                        :
+                        <option value={item_group.item_group_id} key={item_group.item_group_id}> {item_group.abbreviation} </option>
+                    ))}
+                  </SelectNoChildrenInput>
+                </div>
+                <div className="grid_2 float-right">
+                  <p className="top-text float-right">กลุ่มอุปกรณ์</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="container_12">
+              <div className="float-right">
+                <div className="grid_3 float-right">
+                  <SelectNoChildrenInput name="uom_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomGroupIDField} cssStyle={{ left: "-160px", top: "10px" }}>
+                    <option value=''></option>
+                    {fact[FACTS.UNIT_OF_MEASURE_GROUPS].items.map((uom) => (
+                      values.uom_group_id === uom.uom_group_id
+                        ?
+                        <option value={uom.uom_group_id} key={uom.uom_group_id} selected> {uom.name} </option>
+                        :
+                        <option value={uom.uom_group_id} key={uom.uom_group_id}> {uom.name} </option>
+                    ))}
+                  </SelectNoChildrenInput>
+                </div>
+                <div className="grid_2 float-right">
+                  <p className="top-text float-right">กลุ่มหน่วยนับ</p>
+                </div>
               </div>
             </div>
           </div>
