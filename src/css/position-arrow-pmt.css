@@ -37,8 +37,8 @@
 
 .Pone-three-new{
     position: absolute;
-    left: 77px; 
-    top: 310px;
+    left: 74px; 
+    top: 305px;
 }
 
 
@@ -178,7 +178,7 @@
 
 .Ptext6{
     position: absolute;
-    left: 275px;
+    left: 230px;
     top: 390px;
 
     font-family: Kanit;
@@ -204,6 +204,17 @@
     top: 75px;
 }
 
+.Pthree-three{
+    position: absolute;
+    left: 450px;
+    top: 305px;
+}
+.Pthree-three-new{
+    position: absolute;
+    left: 450px;
+    top: 305px;
+}
+
 
 
 
@@ -218,6 +229,22 @@
     position: absolute;
     left: 440px;
     top: 150px;
+    font-family: Kanit;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+    /* identical to box height */
+    text-align: center;
+
+    color: #000000;
+}
+
+.Ptext11{
+    /* นำเข้าอะไหล่โดยมีใบสั่งซื้อ */
+    position: absolute;
+    left: 460px;
+    top: 390px;
     font-family: Kanit;
     font-style: normal;
     font-weight: 300;

@@ -35,6 +35,8 @@ import PmtMaintenantItem from './components/pmt-maintenant-item';
 import PmtEquipmentInstallation from './components/pmt-equipment-install';
 import PmtEquipmentMasterData from './components/pmt-equipment-master';
 import PmtFixedAsset from './components/pmt-fixed-asset';
+import PmtCreateChecklist from './components/pmt-create-checklist';
+import PmtScheduleCreateChecklist from './components/pmt-create-schedule-checklist';
 
 // ALS Page
 import AlsSpareComponent from './components/als-spare';
@@ -90,6 +92,8 @@ const FrontEnd = () => (
         <Route exact path="/pmt-equipment-master" component={PmtEquipmentMasterData} />
         <Route exact path="/pmt-equipment-installation" component={PmtEquipmentInstallation} />
         <Route exact path="/pmt-fixed-asset" component={PmtFixedAsset} />
+        <Route exact path="/pmt-create-checklist" component={PmtCreateChecklist} />
+        <Route exact path="/pmt-create-schedule-checklist" component={PmtScheduleCreateChecklist} />
         <Route exact path="/track" component={Track} />
 
         {/* Admin Page */}

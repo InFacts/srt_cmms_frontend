@@ -12,10 +12,8 @@ import PopupModalEquipmentNoChildren from '../common/popup-modal-equipment-no-ch
 import { useFormikContext, useField } from 'formik';
 
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
-import {
-  getNumberFromEscapedString, fetchGoodsOnhandDataForItemmasterData, DOCUMENT_TYPE_ID,
-  getDocumentbyInternalDocumentID, checkBooleanForEditHelper
-} from '../../helper';
+import { getNumberFromEscapedString, fetchGoodsOnhandDataForItemmasterData, DOCUMENT_TYPE_ID, 
+  getDocumentbyInternalDocumentID, checkBooleanForEditHelper } from '../../helper';
 
 import { FACTS } from '../../redux/modules/api/fact.js';
 
@@ -34,9 +32,6 @@ const TopContent = (props) => {
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
   const factEquipmentStatus = useSelector((state) => ({ ...state.api.fact[FACTS.EQUIPMENT_STATUS] }), shallowEqual);
-  const factDistict = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
-  const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
-  const factStations = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
 
   const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
 
@@ -44,10 +39,10 @@ const TopContent = (props) => {
     <div id={changeTheam() === true ? "" : "blackground-white"}>
       <div className="container_12 clearfix">
         <section className="container_12 ">
-          <FormTitle>ทำวาระ</FormTitle>
+          <FormTitle>กำหนดแผนการทำวาระ</FormTitle>
 
           <div id={changeTheam() === true ? "blackground-white" : ""}
-            style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "210px", paddingTop: "10px" } : {}}>
+            style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "120px", paddingTop: "10px" } : {}}>
 
             {/* === Left Column === */}
             <div className={changeTheam() === true ? "grid_5" : "grid_6"} style={{ paddingLeft: "10px" }}>
@@ -89,31 +84,6 @@ const TopContent = (props) => {
                   tabIndex="3" />
               </div>
               <div class="clear" />
-
-              {/* Admin Employee ID  */}
-              <div className="grid_1 alpha white-space">
-                <p className="top-text">งาน</p>
-              </div>
-              <div className="grid_3">
-                <TextInput name="created_by_admin_employee_id"
-                  // validate={validateAdminEmployeeIDField}
-                  disabled
-                  tabIndex="3" />
-              </div>
-              <div class="clear" />
-
-              {/* Admin Employee ID  */}
-              <div className="grid_1 alpha white-space">
-                <p className="top-text">แผน</p> {/* ก.ไฟฟ้า */}
-              </div>
-              <div className="grid_3">
-                <TextInput name="created_by_admin_employee_id"
-                  // validate={validateAdminEmployeeIDField}
-                  disabled
-                  tabIndex="3" />
-              </div>
-              <div class="clear" />
-
             </div>
 
 
@@ -142,52 +112,12 @@ const TopContent = (props) => {
               {/* Document date */}
               <Label>วันที่เอกสาร</Label>
               <div className="grid_3 alpha">
-                <DateInput name="document_date"
-                  // validate={validateDocumentDateField}
+                <DateInput name="document_date" 
+                // validate={validateDocumentDateField}
                   disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                   tabIndex="6" />
               </div>
               <div class="clear" />
-
-              {/* === Distict ID === */}
-              <Label>แขวง</Label>
-              <div className="grid_3 alpha">
-                <SelectNoChildrenInput name="location_district_id" disabled>
-                  <option value=''></option>
-                  {factDistict.items.map((factDistict) => {
-                    return <option value={factDistict.distict_id}>{factDistict.name}</option>
-                  })}
-                </SelectNoChildrenInput>
-              </div>
-              <div className="clear" />
-
-              <Label>ตอน</Label>
-              <div className="grid_3 alpha">
-                <SelectNoChildrenInput name="location_node_id" disabled>
-                  <option value=''></option>
-                  {factNodes.items.map((node) => {
-                    if (values.location_district_id == node.district_id) {
-                      return <option key={node.node_id} value={node.node_id} selected>{node.name}</option>
-                    }
-                  })}
-                </SelectNoChildrenInput>
-              </div>
-              <div className="clear" />
-
-              {/* === location === */}
-              <Label>สถานี</Label>
-              <div className="grid_3 alpha">
-                <SelectNoChildrenInput name="location_station_id" disabled>
-                  <option value=''></option>
-                  {factStations.items.map((stations) => {
-                    if (values.location_node_id == stations.node_id) {
-                      return <option key={stations.station_id} value={stations.station_id} selected>{stations.name}</option>
-                    }
-                  })}
-                </SelectNoChildrenInput>
-              </div>
-              <div className="clear" />
-
             </div>
 
           </div>

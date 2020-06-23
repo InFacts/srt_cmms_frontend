@@ -158,7 +158,6 @@ const BottomContent = (props) => {
                                 <option value='' selected></option>
                                 <option value='1' >โทรศัพท์</option>
                                 <option value='2' >จดหมาย</option>
-                                <option value='3' >Work Request</option>
                             </SelectNoChildrenInput>
                         </div>
 

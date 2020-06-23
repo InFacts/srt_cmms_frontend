@@ -289,42 +289,6 @@ const BottomContent = (props) => {
               </div>
               <div className="clear" />
 
-              {/* === จังหวัด === */}
-              <div className="grid_2">
-                <p className="top-text">จังหวัด</p>
-              </div>
-              <div className="grid_5 alpha omega">
-                <SelectNoChildrenInput name="1" disabled>
-                  <option value=''></option>
-                  {/* {factStation.items.map((station) => {
-                    if (station.station_id === values.location_station_id) {
-                      return <option value={station.station_id} key={station.station_id} selected>{station.name}</option>
-                    } else {
-                      return <option value={station.station_id} key={station.station_id}>{station.name}</option>
-                    }
-                  })} */}
-                </SelectNoChildrenInput>
-              </div>
-              <div className="clear" />
-
-              {/* === อำเภอ === */}
-              <div className="grid_2">
-                <p className="top-text">อำเภอ</p>
-              </div>
-              <div className="grid_5 alpha omega">
-                <SelectNoChildrenInput name="1" disabled>
-                  <option value=''></option>
-                  {/* {factStation.items.map((station) => {
-                    if (station.station_id === values.location_station_id) {
-                      return <option value={station.station_id} key={station.station_id} selected>{station.name}</option>
-                    } else {
-                      return <option value={station.station_id} key={station.station_id}>{station.name}</option>
-                    }
-                  })} */}
-                </SelectNoChildrenInput>
-              </div>
-              <div className="clear" />
-
               {/* === Distict ID === */}
               <div className="grid_2">
                 <p className="top-text">แขวง</p>

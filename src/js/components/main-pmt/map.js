@@ -36,8 +36,12 @@ import Text6 from '../../../images/pmt/text6.svg'
 import Threeone from '../../../images/pmt/three-one.svg'
 import ThreeoneNew from '../../../images/pmt/three-one-new.svg'
 
+import Threethree from '../../../images/pmt/three-three.svg'
+import ThreethreeNew from '../../../images/pmt/three-three-new.svg'
+
 import Arrow2 from '../../../images/pmt/arrow2.svg'
 import Text7 from '../../../images/pmt/text7.svg'
+import Text11 from '../../../images/pmt/text11.svg'
 
 import Fourone from '../../../images/pmt/four-one.svg'
 import FouroneNew from '../../../images/pmt/four-one-new.svg'
@@ -128,45 +132,59 @@ class Map extends React.Component {
 
         return (
             <div style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "100vh" } : {}}>
-                <div>
-                    <div className="container_12 clearfix">OneoneNew
+                    <div className="container_12 clearfix">
                         <section className="grid_12 ">
                             <h4 className="head-title" style={{ color: "black" }}>ระบบบริหารงานซ่อมบำรุง - PMT</h4>
                             <div style={{ height: "350px" }} id="blackground-white" style={ changeTheam() === true ? { borderRadius: "25px", border: "2px dashed gray", height: "380px" } : {height: "380px"} }>
                                 
-                                <Link to="/pmt-work-request"><img alt='some value' src={changeTheam() === true ? OneoneNew : Oneone} className={changeTheam() === true ? "Pone-one-new" : "Pone-one"} style={ changeTheam() === true ? { width: "80px" } : {} }/></Link>
+                                <Link to="/pmt-work-request"><img alt='some value' src={changeTheam() === true ? OneoneNew : Oneone} 
+                                className={changeTheam() === true ? "Pone-one-new" : "Pone-one"} style={ changeTheam() === true ? { width: "80px" } : {} }/></Link>
 
-                                <Link to="/pmt-equipment-master"><img alt='some value' src={changeTheam() === true ? OnetwoNew : Onetwo} className={changeTheam() === true ? "Pone-two-new" : "Pone-two"} style={ changeTheam() === true ? { width: "50px" } : {} } /></Link>
+                                <Link to="/pmt-equipment-master"><img alt='some value' src={changeTheam() === true ? OnetwoNew : Onetwo} 
+                                className={changeTheam() === true ? "Pone-two-new" : "Pone-two"} style={ changeTheam() === true ? { width: "50px" } : {} } /></Link>
 
-                                <Link to="#"><img alt='some value' src={changeTheam() === true ? OnethreeNew : Onethree} className={changeTheam() === true ? "Pone-three-new" : "Pone-three"} style={ changeTheam() === true ? { width: "50px" } : {} } /></Link>
+                                <Link to="/pmt-create-checklist"><img alt='some value' src={changeTheam() === true ? OnethreeNew : Onethree} 
+                                className={changeTheam() === true ? "Pone-three-new" : "Pone-three"} style={ changeTheam() === true ? { width: "55px" } : {} } /></Link>
 
                                 <img alt='some value' src={Arrow1} className="Parrow1" />
                                 <img alt='some value' src={Text1} className="Ptext1" />
                                 <img alt='some value' src={Text2} className="Ptext2" />
                                 <img alt='some value' src={Text3} className="Ptext3" />
                                 
-                                <Link to="/pmt-work-order"><img alt='some value' src={changeTheam() === true ? TwooneNew : Twoone} className={changeTheam() === true ? "Ptwo-one-new" : "Ptwo-one"} style={ changeTheam() === true ? { width: "55px" } : {} } /></Link>
+                                <Link to="/pmt-work-order"><img alt='some value' src={changeTheam() === true ? TwooneNew : Twoone} 
+                                className={changeTheam() === true ? "Ptwo-one-new" : "Ptwo-one"} style={ changeTheam() === true ? { width: "55px" } : {} } /></Link>
 
-                                <Link to="/pmt-equipment-installation"><img alt='some value' src={changeTheam() === true ? TwotwoNew : Twotwo} className={changeTheam() === true ? "Ptwo-two-new" : "Ptwo-two"} style={ changeTheam() === true ? { width: "70px" } : {} }/></Link>
-                                <Link to="/pmt-fixed-asset"><img alt='some value' src={changeTheam() === true ? TwothreeNew : Twothree} className={changeTheam() === true ? "Ptwo-three-new" : "Ptwo-three"} style={ changeTheam() === true ? { width: "55px" } : {} } /></Link>
+                                <Link to="/pmt-equipment-installation"><img alt='some value' src={changeTheam() === true ? TwotwoNew : Twotwo} 
+                                className={changeTheam() === true ? "Ptwo-two-new" : "Ptwo-two"} style={ changeTheam() === true ? { width: "70px" } : {} }/></Link>
+
+                                <Link to="/pmt-create-schedule-checklist"><img alt='some value' src={changeTheam() === true ? TwothreeNew : Twothree} 
+                                className={changeTheam() === true ? "Ptwo-three-new" : "Ptwo-three"} style={ changeTheam() === true ? { width: "55px" } : {} } /></Link>
 
                                 <img alt='some value' src={Text4} className="Ptext4" />
                                 <img alt='some value' src={Text5} className="Ptext5" />
                                 <img alt='some value' src={Text6} className="Ptext6" />
 
-                                <Link to="/ss-101"><img alt='some value' src={changeTheam() === true ? ThreeoneNew : Threeone} className={changeTheam() === true ? "Pthree-one-new" : "Pthree-one"} style={ changeTheam() === true ? { width: "50px" } : {} } /></Link>
+                                <Link to="/ss-101"><img alt='some value' src={changeTheam() === true ? ThreeoneNew : Threeone} 
+                                className={changeTheam() === true ? "Pthree-one-new" : "Pthree-one"} style={ changeTheam() === true ? { width: "50px" } : {} } /></Link>
+
+                                <Link to="/pmt-fixed-asset"><img alt='some value' src={changeTheam() === true ? ThreethreeNew : Threethree} 
+                                className={changeTheam() === true ? "Pthree-three-new" : "Pthree-three"} style={ changeTheam() === true ? { width: "55px" } : {} } /></Link>
 
                                 <img alt='some value' src={Arrow2} className="Parrow2" />
                                 <img alt='some value' src={Text7} className="Ptext7" />
+                                <img alt='some value' src={Text11} className="Ptext11" />
 
-                                <Link to="/track"><img alt='some value' src={changeTheam() === true ? FouroneNew : Fourone} className={changeTheam() === true ? "Pfour-one-new" : "Pfour-one"} style={ changeTheam() === true ? { width: "65px" } : {} } /></Link>
+                                <Link to="/track"><img alt='some value' src={changeTheam() === true ? FouroneNew : Fourone} 
+                                className={changeTheam() === true ? "Pfour-one-new" : "Pfour-one"} style={ changeTheam() === true ? { width: "65px" } : {} } /></Link>
 
-                                <Link to="/maitenant-item"><img alt='some value' src={changeTheam() === true ? FourtwoNew : Fourtwo} className={changeTheam() === true ? "Pfour-two-new" : "Pfour-two"} style={ changeTheam() === true ? { width: "80px" } : {} } /></Link>
+                                <Link to="/maitenant-item"><img alt='some value' src={changeTheam() === true ? FourtwoNew : Fourtwo} 
+                                className={changeTheam() === true ? "Pfour-two-new" : "Pfour-two"} style={ changeTheam() === true ? { width: "80px" } : {} } /></Link>
 
                                 <img alt='some value' src={Text8} className="Ptext8" />
                                 <img alt='some value' src={Text9} className="Ptext9" />
 
-                                <Link to="/report"><img alt='some value' src={changeTheam() === true ? FiveoneNew : Fiveone} className={changeTheam() === true ? "Pfive-one-new" : "Pfive-one"} style={ changeTheam() === true ? { width: "70px" } : {} } /></Link>
+                                <Link to="/report"><img alt='some value' src={changeTheam() === true ? FiveoneNew : Fiveone} 
+                                className={changeTheam() === true ? "Pfive-one-new" : "Pfive-one"} style={ changeTheam() === true ? { width: "70px" } : {} } /></Link>
 
                                 <img alt='some value' src={Text10} className="Ptext10" />
 
@@ -193,7 +211,6 @@ class Map extends React.Component {
                             </div>
                         </section>
                     </div>
-                </div>
                 {/* <div id="red-house2">
                     <div className="container_12 clearfix">
                         <div className="grid_12 from-red-house">

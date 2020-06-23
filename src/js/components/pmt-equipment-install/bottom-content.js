@@ -151,46 +151,6 @@ const BottomContent = (props) => {
 
                             <div class="clear" />
 
-                            {/* === จังหวัด === */}
-                            <div className="grid_1 alpha white-space">
-                                <p className="top-text">จังหวัด</p>
-                            </div>
-                            <div className="grid_7">
-                                {/* <SelectNoChildrenInput name="1" disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}> */}
-                                <select>
-                                    <option value=''></option>
-                                    {/* {factStation.items.map((station) => {
-                                        if (station.station_id === values.location_station_id) {
-                                        return <option value={station.station_id} key={station.station_id} selected>{station.name}</option>
-                                        } else {
-                                        return <option value={station.station_id} key={station.station_id}>{station.name}</option>
-                                        }
-                                    })} */}
-                                </select>
-                                {/* </SelectNoChildrenInput> */}
-                            </div>
-                            <div className="clear" />
-
-                            {/* === อำเภอ === */}
-                            <div className="grid_1 alpha white-space">
-                                <p className="top-text">อำเภอ</p>
-                            </div>
-                            <div className="grid_7">
-                                {/* <SelectNoChildrenInput name="1" disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}> */}
-                                <select>
-                                    <option value=''></option>
-                                    {/* {factStation.items.map((station) => {
-                                        if (station.station_id === values.location_station_id) {
-                                        return <option value={station.station_id} key={station.station_id} selected>{station.name}</option>
-                                        } else {
-                                        return <option value={station.station_id} key={station.station_id}>{station.name}</option>
-                                        }
-                                    })} */}
-                                </select>
-                                {/* </SelectNoChildrenInput> */}
-                            </div>
-                            <div className="clear" />
-
                             {/* Responsible person District ID */}
                             <div className="grid_1 alpha white-space">
                                 <p className="top-text">แขวง</p>

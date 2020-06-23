@@ -26,9 +26,8 @@ const GoodsReceiptComponent = (props) => {
 
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
-        { id: "general", name: "รายการบำรุงรักษา" },
-        { id: "attachment", name: "แนบไฟล์" },
-        { id: "table_status", name: "สถานะเอกสาร" }
+        { id: "general", name: "อุปกรณ์ที่ต้องนำไปปฎิบัติงาน" },
+        { id: "attachment", name: "แนบไฟล์" }
     ]);
 
     useToolbarInitializer(TOOLBAR_MODE.SEARCH);

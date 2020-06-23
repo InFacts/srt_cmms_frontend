@@ -6,9 +6,10 @@ import PopupModalUsername from '../common/popup-modal-username'
 import TextInput from '../common/formik-text-input'
 import DateTimeInput from '../common/formik-datetime-input'
 import DateInput from '../common/formik-date-input'
+import Label from '../common/form-label'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import { FACTS } from '../../redux/modules/api/fact';
-import Label from '../common/form-label'
+
 import {
     getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, DOCUMENT_STATUS, validateEmployeeIDField,
     validateWarehouseIDField, validateInternalDocumentIDFieldHelper, validatedataDocumentField, getUserIDFromEmployeeID, checkBooleanForEditHelper
