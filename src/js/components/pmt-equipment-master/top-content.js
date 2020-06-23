@@ -29,6 +29,7 @@ const TopContent = (props) => {
   const factEquipment = useSelector((state) => ({ ...state.api.fact.equipment }), shallowEqual);
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
+  const factEquipmentStatus = useSelector((state) => ({ ...state.api.fact[FACTS.EQUIPMENT_STATUS] }), shallowEqual);
 
   const responseToFormState = (data) => {
     let uoms = fact['unit-of-measures'].items;
@@ -131,9 +132,9 @@ const TopContent = (props) => {
             {/* === item_type_id === */}
             <div className="float-right">
               <div className="grid_3 float-right">
-                <SelectNoChildrenInput name="item_type_id" disabled={true}>
+                <SelectNoChildrenInput name="item_type_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
                   <option value=''></option>
-                  {values.item_type_id === 1 && <option value='1' selected>asset</option>}
+                  {values.item_type_id === 1 ? <option value='1' selected>asset</option> : <option value='1'>asset</option>}
                 </SelectNoChildrenInput>
               </div>
               <div className="grid_2 float-right">
@@ -174,8 +175,17 @@ const TopContent = (props) => {
 
             {/* === equipment_status_id_th === */}
             <FormLabel>สถานะการใช้งาน</FormLabel>
-            <div className="grid_5 pull_0">
-              <TextInput name='equipment_status_id_th' disabled={true} />
+            <div className="grid_3 pull_0">
+              <SelectNoChildrenInput name="equipment_status_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                <option value=''></option>
+                {factEquipmentStatus.items.map((equipment_status) => {
+                  if (values.equipment_status_id === equipment_status.equipment_status_id) {
+                    return <option value={equipment_status.equipment_status_id} key={equipment_status.equipment_status_id} selected>{equipment_status.status_th}</option>
+                  } else {
+                    return <option value={equipment_status.equipment_status_id} key={equipment_status.equipment_status_id}>{equipment_status.status_th}</option>
+                  }
+                })}
+              </SelectNoChildrenInput>
             </div>
           </div>
         </section>

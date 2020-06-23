@@ -6,6 +6,8 @@ import PopupModalUsername from '../common/popup-modal-username'
 import TextInput from '../common/formik-text-input'
 import DateTimeInput from '../common/formik-datetime-input'
 import DateInput from '../common/formik-date-input'
+import SelectNoChildrenInput from '../common/formik-select-no-children';
+
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import { FACTS } from '../../redux/modules/api/fact';
 import Label from '../common/form-label'
@@ -56,7 +58,7 @@ const TopContent = (props) => {
         if (item_match_equipment) {
             // item
             setFieldValue("description", item.description, false);
-            setFieldValue("unit", item.list_uoms[0].name, false);
+            setFieldValue("uom_group_id", item.uom_group_id, false);
 
             // item_match_equipment
             setFieldValue("equipment_id", item_match_equipment.equipment_id, false);
@@ -122,9 +124,16 @@ const TopContent = (props) => {
                     {/* UOM  */}
                     <Label>หน่วย</Label>
                     <div className="grid_3 alpha">
-                        <TextInput name="unit"
-                            disabled={true}
-                            tabIndex="3" />
+                        <SelectNoChildrenInput name="uom_group_id" disabled>
+                            <option value=''></option>
+                            {fact[FACTS.UNIT_OF_MEASURE_GROUPS].items.map((uom) => (
+                                values.uom_group_id === uom.uom_group_id
+                                    ?
+                                    <option value={uom.uom_group_id} key={uom.uom_group_id} selected> {uom.name} </option>
+                                    :
+                                    <option value={uom.uom_group_id} key={uom.uom_group_id}> {uom.name} </option>
+                            ))}
+                        </SelectNoChildrenInput>
                     </div>
                     <div className="clear" />
                 </div>

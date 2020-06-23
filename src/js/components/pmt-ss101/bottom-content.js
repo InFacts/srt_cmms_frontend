@@ -267,11 +267,7 @@ const BottomContent = (props) => {
                                 cssStyle={{ left: "-240px", top: "10px" }}>
                                 <option value=''></option>
                                 {factDistricts.items.map(function ({ district_id, name, division_id }) {
-                                    if (values.district_id === district_id) {
-                                        return <option value={district_id} key={district_id} selected> {name} </option>
-                                    } else {
-                                        return <option value={district_id} key={district_id}> {name} </option>
-                                    }
+                                    return <option value={district_id} key={district_id} selected> {name} </option>
                                 })}
                             </SelectNoChildrenInput>
                         </div>
@@ -288,8 +284,6 @@ const BottomContent = (props) => {
                                 {factNodes.items.map(function ({ node_id, name, district_id }) {
                                     if (values.location_district_id == district_id) { // Shallow equality, district ID may be string
                                         return <option value={node_id} key={node_id} selected>{name}</option>
-                                    } else {
-                                        return <option value={node_id} key={node_id}>{name}</option>
                                     }
                                 })}
                             </SelectNoChildrenInput>
@@ -307,8 +301,6 @@ const BottomContent = (props) => {
                                 {factStations.items.map(function ({ station_id, name, node_id }) {
                                     if (values.location_node_id == node_id) { // Shallow equality, node ID may be string
                                         return <option value={station_id} key={station_id} selected> {name} </option>
-                                    } else {
-                                        return <option value={station_id} key={station_id}> {name} </option>
                                     }
                                 })}
                             </SelectNoChildrenInput>

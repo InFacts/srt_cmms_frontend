@@ -31,7 +31,7 @@ const BottomContent = (props) => {
     const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
 
     const validateResponsibleByIDField = (...args) => validateUserIDField("responsible_by", fact, setFieldValue, ...args);
-    const validateResponsibleZoneByField = (...args) => validateEmployeeIDField("responsible_zone_by", fact, setFieldValue, ...args);
+    const validateResponsibleZoneByField = (...args) => validateUserIDField("responsible_zone_by", fact, setFieldValue, ...args);
 
     return (
         <div id="blackground-gray">
@@ -137,17 +137,51 @@ const BottomContent = (props) => {
 
                             <div class="clear" />
 
+                            {/* === จังหวัด === */}
+                            <Label>จังหวัด</Label>
+                            <div className="grid_7">
+                                {/* <SelectNoChildrenInput name="1" disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}> */}
+                                    <select>
+                                    <option value=''></option>
+                                    {/* {factStation.items.map((station) => {
+                                        if (station.station_id === values.location_station_id) {
+                                        return <option value={station.station_id} key={station.station_id} selected>{station.name}</option>
+                                        } else {
+                                        return <option value={station.station_id} key={station.station_id}>{station.name}</option>
+                                        }
+                                    })} */}
+                                    </select>
+                                {/* </SelectNoChildrenInput> */}
+                            </div>
+                            <div className="clear" />
+
+                            {/* === อำเภอ === */}
+                            <Label>อำเภอ</Label>
+                            <div className="grid_7">
+                                {/* <SelectNoChildrenInput name="1" disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}> */}
+                                <select>
+                                    <option value=''></option>
+                                    {/* {factStation.items.map((station) => {
+                                        if (station.station_id === values.location_station_id) {
+                                        return <option value={station.station_id} key={station.station_id} selected>{station.name}</option>
+                                        } else {
+                                        return <option value={station.station_id} key={station.station_id}>{station.name}</option>
+                                        }
+                                    })} */}
+                                    </select>
+                                {/* </SelectNoChildrenInput> */}
+                            </div>
+                            <div className="clear" />
+
                             {/* Responsible person District ID */}
                             <Label>แขวง</Label>
                             <div className="grid_7">
                                 <SelectNoChildrenInput name="location_district_id"
                                     disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                                     <option value=''></option>
-                                    {factDistricts.items.map((districts) => {
-                                        if (values.location_district_id === districts.district_id) {
-                                            return <option key={districts.district_id} value={districts.district_id} selected>{districts.name}</option>
-                                        } else return <option key={districts.district_id} value={districts.district_id}>{districts.name}</option>
-                                    })}
+                                    {factDistricts.items.map((districts) => (
+                                        <option key={districts.district_id} value={districts.district_id}>{districts.name}</option>
+                                    ))}
                                 </SelectNoChildrenInput>
                             </div>
 
@@ -160,9 +194,9 @@ const BottomContent = (props) => {
                                     disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                                     <option value=''></option>
                                     {factNodes.items.map((node) => {
-                                        if (values.location_node_id === node.node_id) {
+                                        if (values.location_district_id == node.district_id) {
                                             return <option key={node.node_id} value={node.node_id} selected>{node.name}</option>
-                                        } else return <option key={node.node_id} value={node.node_id}>{node.name}</option>
+                                        }
                                     })}
                                 </SelectNoChildrenInput>
                             </div>
@@ -176,9 +210,9 @@ const BottomContent = (props) => {
                                     disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                                     <option value=''></option>
                                     {factStations.items.map((stations) => {
-                                        if (values.location_station_id === stations.station_id) {
+                                        if (values.location_node_id == stations.node_id) {
                                             return <option key={stations.station_id} value={stations.station_id} selected>{stations.name}</option>
-                                        } else return <option key={stations.station_id} value={stations.station_id}>{stations.name}</option>
+                                        }
                                     })}
                                 </SelectNoChildrenInput>
                             </div>

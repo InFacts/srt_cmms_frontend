@@ -66,14 +66,14 @@ const BottomContent = (props) => {
             let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.item_id}` === `${item.item_id}`);
             console.log("item_match_equipment", item_match_equipment)
             if (item_match_equipment) {
-                setFieldValue(fieldName + `.equipment_item_id`, parseInt(item_match_equipment.equipment_id), false);
+                setFieldValue(fieldName + `.equipment_item_id`, parseInt(item.item_id), false);
             }
             return;
         } else {
             return 'Invalid Number ID';
         }
     }
-    console.log("values", values)
+
     const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
     return (
         <div id="blackground-gray">

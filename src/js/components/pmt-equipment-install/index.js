@@ -58,7 +58,7 @@ const EnhancedEquipmentInstallationComponent = withFormik({
         internal_document_id: '',       // เลขที่เอกสาร
         internal_item_id: '',  // เลขที่สินทรัพย์
         description: '',
-        unit: '',
+        uom_group_id: '',
         created_on: '',                  // TODO doesn't have (Field ที่ไม่ได้กรอก)
         document_date: '',              // วันที่ออกเอกสาร (Default === NOW )
         created_by_user_employee_id: '', // ผู้ดำเนินเรื่อง (Default === admin_employee_id)

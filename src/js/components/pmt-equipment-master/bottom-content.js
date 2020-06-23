@@ -24,8 +24,12 @@ const BottomContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
+  const factPosition = useSelector((state) => ({ ...state.api.fact.position }), shallowEqual);
+
   const factDistict = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
-  const factStation = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
+  const factStations = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
+  const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
+
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
   const factEquipmentGroup = useSelector((state) => ({ ...state.api.fact[FACTS.EQUIPMENT_GROUP] }), shallowEqual);
   const factChecklist = useSelector((state) => ({ ...state.api.fact.checklist }), shallowEqual);
@@ -205,14 +209,14 @@ const BottomContent = (props) => {
               <Label>บาท</Label>
 
               {/* === top_districts_id === */}
-              <div className="grid_2 alpha omega float-right">
+              <div className="grid_3 alpha omega float-right">
                 <SelectNoChildrenInput name="top_districts_id" disabled={values.modeEdit ? false : values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
                   <option value=''></option>
-                  {factDistict.items.map((factDistict) => {
-                    if (factDistict.distict_id === values.distict_id) {
-                      return <option value={factDistict.distict_id} selected>{factDistict.name}</option>
+                  {factPosition.items.map((factPosition) => {
+                    if (factPosition.distict_id === values.distict_id) {
+                      return <option value={factPosition.distict_id} selected>{factPosition.name}</option>
                     } else {
-                      return <option value={factDistict.distict_id}>{factDistict.name}</option>
+                      return <option value={factPosition.distict_id}>{factPosition.name}</option>
                     }
                   })}
                 </SelectNoChildrenInput>
@@ -227,14 +231,14 @@ const BottomContent = (props) => {
                 <p className="top-text">มูลค่าปัจจุบัน</p>
               </div>
               <div className="grid_2 alpha omega">
-                <TextInput name="price_currently" disabled={true} />
+                <TextInput name="price_currently" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
               </div>
               <Label>บาท</Label>
 
               {/* === ผู้รับผิดชอบตามพื้นที่ TODO ===  */}
-              <div className="grid_2 alpha omega float-right">
+              <div className="grid_3 alpha omega float-right">
                 <TextInput name="1"
-                  disabled={true} />
+                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
               </div>
               <div className="grid_2 float-right">
                 <p className="top-text">ผู้รับผิดชอบตามพื้นที่</p>
@@ -288,8 +292,7 @@ const BottomContent = (props) => {
                 <p className="top-text">จังหวัด</p>
               </div>
               <div className="grid_5 alpha omega">
-                <SelectNoChildrenInput name="1" disabled={values.modeEdit ? false : values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                  cssStyle={{ left: "-160px", top: "10px" }}>
+                <SelectNoChildrenInput name="1" disabled>
                   <option value=''></option>
                   {/* {factStation.items.map((station) => {
                     if (station.station_id === values.location_station_id) {
@@ -307,8 +310,7 @@ const BottomContent = (props) => {
                 <p className="top-text">อำเภอ</p>
               </div>
               <div className="grid_5 alpha omega">
-                <SelectNoChildrenInput name="1" disabled={values.modeEdit ? false : values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                  cssStyle={{ left: "-160px", top: "10px" }}>
+                <SelectNoChildrenInput name="1" disabled>
                   <option value=''></option>
                   {/* {factStation.items.map((station) => {
                     if (station.station_id === values.location_station_id) {
@@ -326,46 +328,52 @@ const BottomContent = (props) => {
                 <p className="top-text">แขวง</p>
               </div>
               <div className="grid_5 alpha omega">
-                <SelectNoChildrenInput name="districts_id" disabled={values.modeEdit ? false : values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                  cssStyle={{ left: "-160px", top: "10px" }}>
+                <SelectNoChildrenInput name="location_district_id" disabled>
                   <option value=''></option>
                   {factDistict.items.map((factDistict) => {
-                    if (factDistict.distict_id === values.distict_id) {
-                      return <option value={factDistict.distict_id} selected>{factDistict.name}</option>
-                    } else {
                       return <option value={factDistict.distict_id}>{factDistict.name}</option>
-                    }
                   })}
                 </SelectNoChildrenInput>
               </div>
               <div className="clear" />
 
+              <div className="grid_2">
+                <p className="top-text">ตอน</p>
+              </div>
+              <div className="grid_5 alpha omega">
+                <SelectNoChildrenInput name="location_node_id" disabled>
+                  <option value=''></option>
+                  {factNodes.items.map((node) => {
+                    if (values.location_district_id == node.district_id) {
+                      return <option key={node.node_id} value={node.node_id} selected>{node.name}</option>
+                    }
+                  })}
+                </SelectNoChildrenInput>
+              </div>
+              <div className="clear" />
+              
               {/* === location === */}
               <div className="grid_2">
                 <p className="top-text">สถานี</p>
               </div>
               <div className="grid_5 alpha omega">
-                <SelectNoChildrenInput name="location_station_id" disabled={values.modeEdit ? false : values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                  cssStyle={{ left: "-160px", top: "10px" }}>
+                <SelectNoChildrenInput name="location_station_id" disabled>
                   <option value=''></option>
-                  {factStation.items.map((station) => {
-                    if (station.station_id === values.location_station_id) {
-                      return <option value={station.station_id} key={station.station_id} selected>{station.name}</option>
-                    } else {
-                      return <option value={station.station_id} key={station.station_id}>{station.name}</option>
+                  {factStations.items.map((stations) => {
+                    if (values.location_node_id == stations.node_id) {
+                      return <option key={stations.station_id} value={stations.station_id} selected>{stations.name}</option>
                     }
                   })}
                 </SelectNoChildrenInput>
               </div>
               <div className="clear" />
-
 
               <div className="grid_2">
                 <p className="top-text">รายละเอียดสถานี</p>
               </div>
               <div className="grid_5 alpha omega">
                 <TextInput name="location"
-                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                  disabled />
               </div>
 
               <div className="clear" />
@@ -406,13 +414,13 @@ const BottomContent = (props) => {
                   disabled={values.modeEdit ? false : values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                   cssStyle={{ left: "-160px", top: "10px" }}>
                   <option value=''></option>
-                    {factChecklist.items.map((factChecklist) => {
-                        if (factChecklist.checklist_id === values.checklist_id) {
-                          return <option value={factChecklist.checklist_id} key={factChecklist.checklist_id} selected>{factChecklist.checklist_name}</option>
-                        } else {
-                          return <option value={factChecklist.checklist_id} key={factChecklist.checklist_id}>{factChecklist.checklist_name}</option>
-                        }
-                    })}
+                  {factChecklist.items.map((factChecklist) => {
+                    if (factChecklist.checklist_id === values.checklist_id) {
+                      return <option value={factChecklist.checklist_id} key={factChecklist.checklist_id} selected>{factChecklist.checklist_name}</option>
+                    } else {
+                      return <option value={factChecklist.checklist_id} key={factChecklist.checklist_id}>{factChecklist.checklist_name}</option>
+                    }
+                  })}
                 </SelectNoChildrenInput>
               </div>
 
