@@ -108,8 +108,8 @@ const Files = () => {
                 <div className="u-float-right">
                     <div className="upload-btn-wrapper">
                         {/* TODO: Add FILES */}
-                        <button type="button" className="btn" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH ? false : true}>เพิ่มไฟล์</button>
-                        <input id="file" name="file" type="file" onChange={convertFormFileToAPI} multiple disabled={toolbar.mode === TOOLBAR_MODE.SEARCH ? false : true}/>
+                        <button type="button" className="btn" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH ? true : false }>เพิ่มไฟล์</button>
+                        <input id="file" name="file" type="file" onChange={convertFormFileToAPI} multiple disabled={toolbar.mode === TOOLBAR_MODE.SEARCH ? true :false}/>
                         {/* <button type="button" className="btn" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>เพิ่มไฟล์</button> */}
                         {/* <input id="file" name="file" type="file" onChange={convertFormFileToAPI} multiple disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}/> */}
                     </div>

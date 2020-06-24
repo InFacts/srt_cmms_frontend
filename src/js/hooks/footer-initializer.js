@@ -15,7 +15,10 @@ import history from '../history';
 
 const spacialPage = {
     ITEM_MASTER_DATA: "/item-master-data",
-    WAREHOUSE: "/warehouse"
+    WAREHOUSE: "/warehouse",
+    PMT_EQUIPMENT_MASTER: "/pmt-equipment-master",
+    PMT_CREATE_CHECKOUT: "/pmt-create-checklist"
+
 }
 function isEmpty(obj) {
     for (var key in obj) {
@@ -55,7 +58,7 @@ const useFooterInitializer = (document_type_id) => {
             let created_by_admin_employee_id = getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id); // TEST: values.created_by_admin_employee_id;
 
             // Check That user who create document?
-            // console.log("userInfo.id", userInfo.id,"created_by_admin_employee_id", created_by_admin_employee_id)
+            // console.log("userInfo.id", userInfo.id,"created_by_admin_employee_id", created_by_admin_employee_id, "document_status", document_status)
             if (userInfo.id === created_by_admin_employee_id) {
                 if (document_status === DOCUMENT_STATUS.DRAFT) { dispatch(footerToModeAddDraft()); }
                 else if (document_status === DOCUMENT_STATUS.WAIT_APPROVE) { dispatch(footerToModeOwnDocument()); }
@@ -81,9 +84,9 @@ const useFooterInitializer = (document_type_id) => {
                 // Check Next Approver from postion_id
                 fetchLatestStepApprovalDocumentData(track_document_id).then((latestApprovalInfo) => {
                     if (latestApprovalInfo !== undefined || latestApprovalInfo.length !== 0) {
-                        // console.log("latestApprovalInfo------> ", latestApprovalInfo)
-                        // console.log("user------> ", latestApprovalInfo.position_id, userInfo.position_id)
-                        // console.log("approval_step_action_id------> ", latestApprovalInfo.approval_step_action_id, APPROVAL_STEP_ACTION.APPROVAL)
+                        console.log("latestApprovalInfo------> ", latestApprovalInfo)
+                        console.log("user------> ", latestApprovalInfo.position_id, userInfo.position_id)
+                        console.log("approval_step_action_id------> ", latestApprovalInfo.approval_step_action_id, APPROVAL_STEP_ACTION.APPROVAL)
                         if (latestApprovalInfo.position_id === userInfo.position_id) {
                             if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_APPROVAL) {
                                 dispatch(footerToModeApApproval());
@@ -122,7 +125,7 @@ const useFooterInitializer = (document_type_id) => {
     useEffect(() => {
         let document_id = values.document_id;
         let routeLocation = getRouteLocation();
-        if (routeLocation === spacialPage.ITEM_MASTER_DATA || routeLocation === spacialPage.WAREHOUSE) {
+        if (routeLocation === spacialPage.ITEM_MASTER_DATA || routeLocation === spacialPage.WAREHOUSE || routeLocation === spacialPage.PMT_EQUIPMENT_MASTER || routeLocation === spacialPage.PMT_CREATE_CHECKOUT) {
             if (toolbar.mode === TOOLBAR_MODE.SEARCH) {
                 // TODO: Check is_Admin
                 if (values.active !== undefined && values.active !== "") { dispatch(footerToModeSave()); }
