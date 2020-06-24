@@ -129,7 +129,7 @@ export const WORK_REQUEST_SCHEMA = {
     location_station_id: -1, // สถานที่ สถานี  [TODO DATABASE]
     location_detail: '', // location_detail รายละเอียดสถานที่
     // remark: '', we will remove this in db TODO** - > will use doc's remark instead
-    refer_to_document_id: ''
+    // refer_to_document_id: ''
 }
 
 export const WORK_ORDER_SCHEMA = {
@@ -321,24 +321,24 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         let equipment_part = {
             item_id: lastItemId,
             price_currently: values.price_currently,
-            depreciation: values.description_equipment,
+            // depreciation: values.description_equipment,
             useful_life: values.useful_life,
-            equipment_status_id: values.equipment_status_id,
-            responsible_by: values.responsible_by,
+            item_status_id: parseInt(values.equipment_status_id),
+            responsible_district_id: parseInt(values.responsible_by),
         }
 
         let equipment_item_part = {
             item_id: lastItemId,
-            equipment_group_id: values.equipment_group_id
+            equipment_group_id: parseInt(values.equipment_group_id)
         }
 
         let item_part = {
             item_id: lastItemId,
             internal_item_id: values.internal_item_id,
             description: values.description,
-            item_type_id: values.item_type_id,
-            item_group_id: values.item_group_id,
-            uom_group_id: values.uom_group_id,
+            item_type_id: parseInt(values.item_type_id),
+            item_group_id: parseInt(values.item_group_id),
+            uom_group_id: parseInt(values.uom_group_id),
             active: values.active === "1" ? true : false,
             remark: values.remark,
             default_warehouse_id: 100,
@@ -515,9 +515,24 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         })
         console.log("document_part", document_part)
         console.log("work_request_part", work_request_part)
+
+        document_part = {
+            ...document_part,
+            document_date: values.document_date + 'T00:00:00+00:00',
+            refer_to_document_id: 0,
+        };
+
+        work_request_part = {
+            ...work_request_part,
+            accident_on: values.accident_on + ':00'
+        }
+
+        let work_order_part = {
+            work_order: work_request_part
+        }
         return {
             document: document_part,
-            specific: work_request_part,
+            specific: work_order_part,
         }
     } else if (document_type_id === DOCUMENT_TYPE_ID.WORK_ORDER) {
         document_part["document_type_id"] = DOCUMENT_TYPE_NOTGROUP_ID.WORK_ORDER;
@@ -533,6 +548,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         })
         document_part = {
             ...document_part,
+            document_date: values.document_date + 'T00:00:00+00:00',
             refer_to_document_id: values.refer_to_document_id,
         };
 
@@ -549,10 +565,13 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             delete work_order_part.has_equipment_item[index].description
         })
 
+        let work_order_part_big = {
+            work_order: work_order_part
+        }
         console.log("document_part", document_part, "work_order_part", work_order_part)
         return {
             document: document_part,
-            specific: work_order_part,
+            specific: work_order_part_big,
         }
     } else if (document_type_id === DOCUMENT_TYPE_ID.SS101) {
         document_part["document_type_id"] = DOCUMENT_TYPE_NOTGROUP_ID.SS101;
@@ -640,7 +659,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             specific: icd_part,
         }
     } else if (document_type_id === DOCUMENT_TYPE_ID.EQUIPMENT_INSTALLATION) {
-        var equipment_install = {
+        var equipment_install_part = {
             document_id: values.document_id,
             equipment_id: values.equipment_id,
             location_district_id: values.location_district_id,
@@ -650,14 +669,26 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             installed_on: values.installed_on,
             announce_use_on: values.announce_use_on,
             equipment_status_id: values.equipment_status_id,
-            responsible_zone_by: getUserIDFromEmployeeID(fact[FACTS.USERS], values.responsible_zone_by) 
+            responsible_node_id: values.responsible_zone_by
+        }
+        var line_items_part = [
+            {
+                document_id: values.document_id ,
+                line_number: 1,
+                item_status_id: 5,
+                remark: "string"
+              }
+        ]
+
+        var equipment_installation = { 
+            equipment_install: equipment_install_part,
+            line_items: line_items_part
         }
         console.log("document_part", document_part);
-        console.log("equipment_install", equipment_install)
-            ;
+        console.log("equipment_install", equipment_installation);
         return {
             document: document_part,
-            specific: equipment_install,
+            specific: equipment_installation,
         }
     } 
 }
@@ -1371,8 +1402,6 @@ const responseToFormState = (fact, data, document_type_group_id) => {
             internal_item_id: data.specific.equipment.equipment_item.item.internal_item_id,
             description: data.specific.equipment.equipment_item.item.description,
             uom_group_id: data.specific.equipment.equipment_item.item.uom_group_id,
-            responsible_by: data.specific.equipment.responsible_by,
-            responsible_zone_by: data.specific.responsible_zone_by,
             equipment_status_id: data.specific.equipment.equipment_status_id,
 
             created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_user_id) || '',
@@ -1756,8 +1785,6 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
                     setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
                     validateField("created_by_user_employee_id");
                     validateField("created_by_admin_employee_id");
-                    validateField("responsible_by");
-                    validateField("responsible_zone_by");
                     validateField("internal_item_id");
                     return resolve(null);
 

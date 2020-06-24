@@ -56,11 +56,10 @@ const WorkOrderComponent = (props) => {
 }
 
 const initialEquipmentLineItem = {
+    document_id: '',
     internal_item_id: '',
     description:'',
-    work_order_document_id: '',
-    equipment_item_id: '',
-    equipment_status_id: '',
+    item_status_id: '',
     remark: '',
 }
 const initialRowsEquipment = (n = 10) => {
@@ -68,6 +67,7 @@ const initialRowsEquipment = (n = 10) => {
     for (var i = 1; i <= n; i++) {
         rows.push({
             ...initialEquipmentLineItem,
+            line_number: i
         });
     }
     return rows;
@@ -101,7 +101,7 @@ const EnhancedWorkOrderComponent = withFormik({
         location_node_id: '',            // สถานที่ ตอน   [ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม (สถานที่/ที่ตั้ง)] FK_ID
         location_station_id: '',         // สถานที่ สถานี  FK_ID
         location_detail: '',       //รายละเอียดสถานที่ [WR]  ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม (สถานที่/ที่ตั้ง) [WO] NVARCHAR
-        has_equipment_item: initialRowsEquipment(),
+        line_items: initialRowsEquipment(),
         
         // line_items: initialRows(),
         remark: '',                      // หมายเหตุ  NVARCHAR

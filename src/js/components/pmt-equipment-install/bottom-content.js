@@ -44,25 +44,6 @@ const BottomContent = (props) => {
                     {/* === Left Column === */}
                     <div className="grid_6" style={{ paddingLeft: "10px" }}>
 
-                        {/* Sub-Component Title */}
-                        {/* <h3 className="head-title-bottom mt-2">ผู้ที่รับผิดชอบตามพื้นที่</h3>
-
-                        <div class="clear" /> */}
-
-                        {/* Responsible person District ID */}
-                        {/* <div className="grid_1 alpha white-space">
-                            <p className="top-text">ผู้รับผิดชอบ</p>
-                        </div>
-                        <div className="grid_3 alpha omega">
-                            <TextInput name="responsible_zone_by"
-                                validate={validateResponsibleZoneByField}
-                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserNameResponesibleZoneBy"
-                                tabIndex="2" />
-                        </div>
-
-                        <div class="clear" /> */}
-
                         <h3 className="head-title-bottom mt-2">หน่วยงานที่รับผิดชอบ</h3>
 
                         <div class="clear" />
@@ -173,8 +154,14 @@ const BottomContent = (props) => {
                                 <SelectNoChildrenInput name="location_node_id"
                                     disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                                     <option value=''></option>
+                                    {/* {factNodes.items.map((node) => {
+                                        if (values.location_district_id === node.district_id) {
+                                            console.log("node.district_id", node.district_id, "values.location_district_id", values.location_district_id)
+                                            return <option key={node.node_id} value={node.node_id} selected>{node.name}</option>
+                                        }
+                                    })} */}
                                     {factNodes.items.map((node) => {
-                                        if (values.location_district_id == node.district_id) {
+                                        if (values.location_district_id === node.node_id) {
                                             return <option key={node.node_id} value={node.node_id} selected>{node.name}</option>
                                         }
                                     })}
@@ -192,7 +179,7 @@ const BottomContent = (props) => {
                                     disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                                     <option value=''></option>
                                     {factStations.items.map((stations) => {
-                                        if (values.location_node_id == stations.node_id) {
+                                        if (values.location_node_id === stations.node_id) {
                                             return <option key={stations.station_id} value={stations.station_id} selected>{stations.name}</option>
                                         }
                                     })}

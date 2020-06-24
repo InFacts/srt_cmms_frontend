@@ -206,7 +206,7 @@ const BottomContent = (props) => {
                 <p className="top-text">มูลค่านำเข้า</p>
               </div>
               <div className="grid_2 alpha omega">
-                <TextInput name="price_import" disabled={true} />
+                <NumberInput step={0.01} name="price_import" disabled/>
               </div>
               <Label>บาท</Label>
               
@@ -229,7 +229,9 @@ const BottomContent = (props) => {
                 <p className="top-text">มูลค่าปัจจุบัน</p>
               </div>
               <div className="grid_2 alpha omega">
-                <TextInput name="price_currently" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+              <NumberInput step={0.01} name="price_currently" tabIndex="7" 
+                    disabled={values.modeEdit ? false : values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  />
               </div>
               <Label>บาท</Label>
 
@@ -255,8 +257,9 @@ const BottomContent = (props) => {
                 <p className="top-text">ค่าเสื่อมต่อปี</p>
               </div>
               <div className="grid_2 alpha omega">
-                <TextInput name="description_equipment"
-                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+              <NumberInput step={0.01} name="description_equipment" tabIndex="7" 
+                    disabled={values.modeEdit ? false : values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  />
               </div>
               <Label>บาท</Label>
 
@@ -279,8 +282,9 @@ const BottomContent = (props) => {
                 <p className="top-text">อายุการใช้งาน</p>
               </div>
               <div className="grid_2 alpha omega">
-                <TextInput name="useful_life"
-                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+              <NumberInput step={1} name="useful_life" tabIndex="7" 
+                    disabled={values.modeEdit ? false : values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  />
               </div>
               <Label>เดือน</Label>
               <div className="clear" />
