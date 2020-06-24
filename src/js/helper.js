@@ -147,7 +147,7 @@ export const WORK_ORDER_SCHEMA = {
     location_station_id: -1, // สถานที่ สถานี  [TODO DATABASE]
     location_detail: '', // location_detail รายละเอียดสถานที่
     remark: '',
-    has_equipment_item: [],
+    line_items: [],
 }
 
 export const SS101_SCHEMA = {
@@ -195,7 +195,7 @@ export const SS101_SCHEMA = {
     member_3_position_id: -1,  //รายชื่อเพื่อนร่วมงาน 3 ตำแหน่ง
 
     loss_line_items: [],
-    has_equipment_item: [],
+    line_items: [],
 }
 
 // Helper Functions
@@ -527,12 +527,12 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             accident_on: values.accident_on + ':00'
         }
 
-        let work_order_part = {
-            work_order: work_request_part
+        let work_request_part_big = {
+            work_request: work_request_part
         }
         return {
             document: document_part,
-            specific: work_order_part,
+            specific: work_request_part_big,
         }
     } else if (document_type_id === DOCUMENT_TYPE_ID.WORK_ORDER) {
         document_part["document_type_id"] = DOCUMENT_TYPE_NOTGROUP_ID.WORK_ORDER;
@@ -551,23 +551,32 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             document_date: values.document_date + 'T00:00:00+00:00',
             refer_to_document_id: values.refer_to_document_id,
         };
-
-        work_order_part.accident_on = work_order_part.accident_on + ":00";
-
-        work_order_part.has_equipment_item = removeEmptyLineItems(work_order_part.has_equipment_item);
-
-        work_order_part.has_equipment_item.map((has_equipment_item, index) => {
-            work_order_part.has_equipment_item[index].equipment_item_id = has_equipment_item.equipment_item_id
-            work_order_part.has_equipment_item[index].equipment_status_id = has_equipment_item.equipment_status_id
-            work_order_part.has_equipment_item[index].remark = has_equipment_item.remark
-            work_order_part.has_equipment_item[index].work_order_document_id = has_equipment_item.work_order_document_id
-            delete work_order_part.has_equipment_item[index].internal_item_id
-            delete work_order_part.has_equipment_item[index].description
+        work_order_part.line_items = removeEmptyLineItems(work_order_part.line_items);
+        console.log("1111")
+        work_order_part.line_items.map((line_items, index) => {
+            work_order_part.line_items[index].item_id = line_items.item_id
+            work_order_part.line_items[index].item_status_id = parseInt(line_items.item_status_id)
+            work_order_part.line_items[index].remark = line_items.remark
+            work_order_part.line_items[index].document_id = line_items.document_id
+            delete work_order_part.line_items[index].internal_item_id
+            delete work_order_part.line_items[index].description
+            delete work_order_part.line_items[index].equipment_item_id
+            delete work_order_part.line_items[index].equipment_status_id
         })
-
+        console.log("22222222")
+        work_order_part = {
+            ...work_order_part,
+            accident_on: work_order_part.accident_on + ":00+00:00",
+            request_on: work_order_part.request_on + ":00+00:00"
+        };
+        console.log('333333333')
         let work_order_part_big = {
-            work_order: work_order_part
+            work_order: work_order_part,
+            line_items: work_order_part.line_items
         }
+        console.log("55555555")
+
+        delete work_order_part_big.work_order.line_items
         console.log("document_part", document_part, "work_order_part", work_order_part)
         return {
             document: document_part,
@@ -585,7 +594,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                 ss101_part[key] = values[key]
             }
         })
-
+        console.log("11111111111")
         ss101_part.loss_line_items = removeEmptyLineItems(ss101_part.loss_line_items);
 
         document_part = {
@@ -593,13 +602,13 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             refer_to_document_id: values.refer_to_document_id,
             document_date: values.document_date + 'T00:00:00+00:00'
         };
-
+        console.log("2222222")
         ss101_part = {
             ...ss101_part,
-            service_method_id: parseInt(values.service_method_id),
-            car_type_id: parseInt(values.car_type_id),
+            service_method_id: values.service_method_id ? parseInt(values.service_method_id) : null,
+            car_type_id: values.car_type_id ? parseInt(values.car_type_id) : null,
             cargo_id: values.cargo_id,
-            interrupt_id: parseInt(values.interrupt_id),
+            interrupt_id: values.interrupt_id ? parseInt(values.interrupt_id) : null,
             accident_on: values.accident_on + ':00+00:00',
             arrived_on: values.arrived_on + ':00+00:00',
             departed_on: values.departed_on + ':00+00:00',
@@ -610,26 +619,34 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             member_1_position_id: values.member_1_position_id ? parseInt(values.member_1_position_id) : null,
             member_2_position_id: values.member_2_position_id ? parseInt(values.member_2_position_id) : null,
             member_3_position_id: values.member_3_position_id ? parseInt(values.member_3_position_id) : null,
-            // has_equipment_item: values.has_equipment_item.map,
         };
-        ss101_part.has_equipment_item = removeEmptyLineItems(ss101_part.has_equipment_item);
-
-        ss101_part.has_equipment_item.map((has_equipment_item, index) => {
-            ss101_part.has_equipment_item[index].equipment_item_id = has_equipment_item.equipment_item_id
-            ss101_part.has_equipment_item[index].equipment_status_id = has_equipment_item.equipment_status_id
-            ss101_part.has_equipment_item[index].remark = has_equipment_item.remark
-            ss101_part.has_equipment_item[index].ss101_document_id = has_equipment_item.ss101_document_id
-            delete ss101_part.has_equipment_item[index].internal_item_id
-            delete ss101_part.has_equipment_item[index].description
+        console.log("333333")
+        ss101_part.line_items = removeEmptyLineItems(ss101_part.line_items);
+        console.log("4444444")
+        ss101_part.line_items.map((line_items, index) => {
+            console.log("line_items", line_items)
+            ss101_part.line_items[index].item_id = line_items.item_id
+            ss101_part.line_items[index].item_status_id = parseInt(line_items.item_status_id)
+            ss101_part.line_items[index].remark = line_items.remark
+            ss101_part.line_items[index].document_id = line_items.document_id
+            delete ss101_part.line_items[index].internal_item_id
+            delete ss101_part.line_items[index].description
+            delete ss101_part.line_items[index].equipment_item_id
+            delete ss101_part.line_items[index].equipment_status_id
         })
+        console.log("55555555")
+        let ss101_part_big = {
+            ss101: ss101_part,
+            line_items: ss101_part.line_items
+        }
+        console.log("document_part", document_part, "ss101_part", ss101_part_big)
 
-        ss101_part.loss_line_items.map((loss_line_items) => {
-            loss_line_items.uom_code = parseInt(loss_line_items.uom_code)
-        })
-        console.log("document_part", document_part, "ss101_part", ss101_part)
+        delete ss101_part_big.ss101.line_items
+        console.log("document_part", document_part, "ss101_part", ss101_part_big)
+
         return {
             document: document_part,
-            specific: ss101_part,
+            specific: ss101_part_big,
         }
     } else if (document_type_id === DOCUMENT_TYPE_ID.MAINTENANT_ITEM) {
         document_part = {
@@ -1417,7 +1434,6 @@ const responseToFormState = (fact, data, document_type_group_id) => {
             installed_on: data.specific.installed_on.slice(0, 10),
         }
     }
-
 }
 
 function transformDocumentResponseToFormState(document_part, fact, document_type_group_id) {
@@ -1471,8 +1487,7 @@ function transformWorkOrderResponseToFormState(work_order_part) {
         location_district_id: returnEmptyStringIfNull(work_order_part.location_district_id),
         location_node_id: returnEmptyStringIfNull(work_order_part.location_node_id),
         location_station_id: returnEmptyStringIfNull(work_order_part.location_station_id),
-
-        has_equipment_item: returnFullArrayHasEquipmentItemNull(work_order_part.has_equipment_item),
+        line_items: returnFullArrayHasEquipmentItemNull(work_order_part.line_items),
     }
 }
 function transformSS101ResponseToFormState(ss101_part, data) {

@@ -95,11 +95,10 @@ const initialRows = (n = 10) => {
 }
 
 const initialEquipmentLineItem = {
+    document_id: '',
     internal_item_id: '',
     description:'',
-    ss101_document_id: '',
-    equipment_item_id: '',
-    equipment_status_id: '',
+    item_status_id: '',
     remark: '',
 }
 const initialRowsEquipment = (n = 10) => {
@@ -107,6 +106,7 @@ const initialRowsEquipment = (n = 10) => {
     for (var i = 1; i <= n; i++) {
         rows.push({
             ...initialEquipmentLineItem,
+            line_number: i
         });
     }
     return rows;
@@ -173,7 +173,7 @@ const EnhancedPmtSS101Component = withFormik({
 
         remark: '',
         loss_line_items: initialRows(),
-        has_equipment_item: initialRowsEquipment(),
+        line_items: initialRowsEquipment(),
 
         files: [],
 

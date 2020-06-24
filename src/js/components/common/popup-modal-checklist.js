@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux'
 import { useFormikContext } from 'formik';
+import { FACTS } from '../../redux/modules/api/fact.js';
 
 const PopupModalNoPart = (props) => {
     //* PopUp เลขที่อะไหล่ */
@@ -15,7 +16,7 @@ const PopupModalNoPart = (props) => {
             setData(props.items.filter(function (items) {
                 var removeSpaces = currentQueryString.replace(/\s/g, '');
                 const regex = new RegExp(`${removeSpaces}`, 'i');
-                var isMatch = regex.test(items.internal_item_id) || regex.test(items.description);
+                var isMatch = regex.test(items.name);
                 return (isMatch);
             }));
             // setData corresponding to currentQueryString
@@ -24,7 +25,7 @@ const PopupModalNoPart = (props) => {
     }, [currentQueryString, props.items]);
 
     return (
-        <div className="modal" id={props.nameModal} style={{ display: "none" }}>
+        <div className="modal" id="modalChecklistLineItem" style={{ display: "none" }}>
             <div className="gray-board">
                 <p className="head-title-modal edit">ค้นหาเลขที่อะไหล่</p>
                 <div className="container_12 edit-padding">
@@ -41,21 +42,21 @@ const PopupModalNoPart = (props) => {
                         <table className="table-many-column mt-3" style={{height: "270px"}}>
                             <thead>
                                 <tr>
-                                    <th className="font" style={{ minWidth: "300px" }}>เลขที่อะไหล่</th>
-                                    <th className="font" style={{ minWidth: "450px" }}>รายละเอียด</th>
+                                    <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
+                                    <th className="font" style={{ minWidth: "730px" }}>ชื่องาน</th>
                                     <th className="font" style={{ minWidth: "150px" }}>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {data.map(function (no_part_show, index) {
+                                {data.map(function (checklist, index) {
                                     return (
                                         <tr key={index} id={index}>
-                                            <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show.internal_item_id} </td>
-                                            <td className="edit-padding" style={{ minWidth: "300px" }}> {no_part_show.description} </td>
-                                            <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
+                                            <td className="edit-padding text-center"> {index+1} </td>
+                                            <td className="edit-padding" style={{ minWidth: "300px" }}> {checklist.name} </td>
+                                            <td className="edit-padding text-center">
                                                 <button type="button" className="button-blue" 
-                                                onClick={() => setFieldValue(`${props.keyname}[${props.lineNumber - 1}].internal_item_id`, no_part_show.internal_item_id, true)} 
-                                                aria-label="Close active modal" aria-controls={props.nameModal} id="closeModalNoPart" >เลือก</button>
+                                                onClick={() => setFieldValue('checklist_line_item', checklist.checklist_line_item, true)} 
+                                                aria-label="Close active modal" aria-controls="modalChecklistLineItem" id="closeModalNoPart" >เลือก</button>
                                             </td>
                                         </tr>
                                     )
@@ -64,7 +65,7 @@ const PopupModalNoPart = (props) => {
                         </table>
                     </div>
 
-                    <button className="button-blue float-right grid_1 mr-5 mt-3" type="button" aria-label="Close active modal" aria-controls={props.nameModal} id="closeModalNoPart">กลับ</button>
+                    <button className="button-blue float-right grid_1 mr-5 mt-3" type="button" aria-label="Close active modal" aria-controls="modalChecklistLineItem" id="closeModalNoPart">กลับ</button>
 
                 </div>
             </div>
@@ -73,7 +74,7 @@ const PopupModalNoPart = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-    items: state.api.fact.items.items,
+    items: state.api.fact[FACTS.CHECKLIST_LINE_ITEM].items,
 })
 
 const mapDispatchToProps = {

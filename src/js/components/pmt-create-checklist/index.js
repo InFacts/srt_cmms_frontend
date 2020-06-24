@@ -51,7 +51,10 @@ const GoodsReceiptComponent = (props) => {
 }
 
 const initiaLineEquipmentPlan = {
-    description: ''
+    internal_item_id: '',
+    description: '',
+    quantity: '',
+    uom_id: ''
 }
 const initialRowsEquipmentPlan = (n = 10) => {
     let rows = [];
@@ -64,79 +67,25 @@ const initialRowsEquipmentPlan = (n = 10) => {
     return rows;
 }
 
-const initiaLineDocument = {
-    description: ''
-}
-const initialRowsDocument = (n = 10) => {
-    let rows = [];
-    for (var i = 1; i <= n; i++) {
-        rows.push({
-            ...initiaLineDocument,
-            line_number: i
-        });
-    }
-    return rows;
-}
-
-
-
 const EnhancedGoodsReceiptComponent = withFormik({
     mapPropsToValues: (props) => ({
         // Field ที่ให้ User กรอก
         // Top Content
-        internal_item_id: '',
-        item_type_id: '',
-        description: '',
-        equipment_status_id: '',
-        uom_group_id: '',
+        checklist_line_item: '', 
+        checklist_id: '',
+        name: '',  // ชื่อแผน
+        freq: '', //ความถี่
+        freq_unit_id: '',
+        active: '',
+        checklist_group_id: '',
 
         // Bottom Content
-        // General Content
-        uom_id: '',
-        minimum_order_quantity: '',
-        uom_name: '',
-        lead_time: '',
-        tolerance_time: '',
-        active: '',
-        accounting_type: '',
-        remark: '',
-        // Equipment Content
-        price_import: '',
-        price_currently: '',
-        description_equipment: '',
-        top_districts_id: '',
-        useful_life: '',
-        // จังหวัด
-        // อำเภอ
-        districts_id: '',
-        location_station_id: '',
-        location: '',
-        // Equipment Plane Content
-        equipment_group_id: '',
-        checklist_id: '',
-        checklist_line_item: initialRowsEquipmentPlan(),
-        // history_content
-        ref_document: initialRowsDocument(),
-
-        //Field ที่ไม่ได้กรอก
-        list_uoms: [],
-        line_items: [],
-        files: [],
-        goods_onhand: [],       //อะไหล่ที่มีอยู่ในทุกคลัง
-        method: '',
+        checklist_line_item_use_equipment: initialRowsEquipmentPlan(),
         
-        // NOT USE FOR FOOTER
-        step_approve: [],
-        created_by_admin_employee_id: '',
-
-        //Field ที่ไม่ได้ display
-        document_id: '', // changes when document is displayed (internal_document_id field validation)
-
+        files: [],
+        
         // FOR CHECK USER_ID ADMIN FOR EDIT
-        modeEdit: false,
-        // For Attactment
-        desrciption_files_length: '',
-        desrciption_files: [],
+        modeEdit: false
     })
 })(GoodsReceiptComponent);
 

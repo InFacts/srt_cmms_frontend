@@ -68,7 +68,7 @@ const BottomContent = (props) => {
 
     const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => {
         //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
-        if (values.has_equipment_item[index].internal_item_id === internal_item_id) {
+        if (values.line_items[index].internal_item_id === internal_item_id) {
             return;
         }
         if (internal_item_id === "") {
@@ -83,6 +83,7 @@ const BottomContent = (props) => {
         let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
         console.log(item)
         if (item) {
+            setFieldValue(fieldName + `.item_id`, item.item_id, false);
             setFieldValue(fieldName + `.description`, `${item.description}`, false);
             setFieldValue(fieldName + `.equipment_status_id`, 3, false);
             var item_match_equipments = props.equipment;
@@ -616,13 +617,13 @@ const BottomContent = (props) => {
                 </div>
 
                 <div id="assets_under_maintenance_content" className="tabcontent">
-                    <TableHasEquipment line_items={values.has_equipment_item} values={values}
+                    <TableHasEquipment line_items={values.line_items} values={values}
                         setLineNumber={setLineNumber}
                         validateLineNumberInternalItemIDField={validateLineNumberInternalItemIDField}
                         checkBooleanForEdit={checkBooleanForEdit} />
                 </div>
                 {/* PopUp ค้นหาอะไหล่ MODE ADD */}
-                <PopupModalEquipment keyname='has_equipment_item' lineNumber={lineNumber} />
+                <PopupModalEquipment keyname='line_items' lineNumber={lineNumber} />
             </div>
         </div>
     )
