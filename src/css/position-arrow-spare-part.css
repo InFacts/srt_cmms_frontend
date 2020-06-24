@@ -7,13 +7,13 @@
 
 .drop-dawn2{
     position: absolute;
-    left: 620px;
+    left: 640px;
     top: 130px;
 }
 
 .drop-dawn3{
     position: absolute;
-    left: 600px;
+    left: 610px;
     top: 236px;
 }
 .drop-dawn4{
@@ -22,23 +22,53 @@
     top: 236px;
 }
 
+
+
+
 .one-one{
     position: absolute;
     left: 100px;
     top: 90px;
 }
 
+.one-one-new{
+    position: absolute;
+    left: 90px;
+    top: 90px;
+}
+
+
+
+
 .one-two{
     position: absolute;
     left: 100px;
     top: 200px;
 }
+.one-two-new{
+    position: absolute;
+    left: 80px;
+    top: 210px;
+}
+
+
+
+
 
 .one-three{
     position: absolute;
     left: 100px;
     top: 310px;
 }
+.one-three-new{
+    position: absolute;
+    left: 80px;
+    top: 310px;
+}
+
+
+
+
 
 .arrow1{
     position: absolute;
@@ -111,11 +141,24 @@
     color: #000000;
 }
 
+
+
+
 .center{
     position: absolute;
     left: 280px;
     top: 220px;
 }
+
+.center-new{
+    position: absolute;
+    left: 273px;
+    top: 205px;
+}
+
+
+
+
 
 .text4{
     /* คงคลังอะไหล่ */
@@ -136,6 +179,9 @@
     color: #000000;
 }
 
+
+
+
 .two-one{
     position: absolute;
     width: 65px;
@@ -143,12 +189,30 @@
     left: 429px;
     top: 105px;
 }
+.two-one-new{
+    position: absolute;
+    width: 65px;
+    height: 65px;
+    left: 418px;
+    top: 94px;
+}
+
+
+
 
 .two-two{
     position: absolute;
     left: 429px;
     top: 210px;
 }
+.two-two-new{
+    position: absolute;
+    left: 420px;
+    top: 210px;
+}
+
+
+
 
 .two-three{
     position: absolute;
@@ -157,6 +221,16 @@ height: 55px;
 left: 429px;
 top: 310px;
 }
+.two-three-new{
+    position: absolute;
+width: 55px;
+left: 420px;
+top: 295px;
+}
+
+
+
+
 
 .arrow4{
 position: absolute;
@@ -235,23 +309,49 @@ color: #000000;
 
 }
 
+
+
+
 .three-one{
 position: absolute;
 left: 600px;
     top: 88px;
 }
+.three-one-new{
+    position: absolute;
+    left: 570px;
+        top: 92px;
+    }
+
+
 
 .three-two{
     position: absolute;
     left: 600px;
     top: 215px;
 }
+.three-two-new{
+    position: absolute;
+    left: 580px;
+    top: 205px;
+}
+
+
+
 
 .three-three{
 position: absolute;
 left: 600px;
 top: 310px;
 }
+.three-three-new{
+    position: absolute;
+    left: 580px;
+    top: 310px;
+    }
+
+
+
 
 .text8{
     /* ส่งซ่อมอะไหล่ */
@@ -307,23 +407,50 @@ text-align: center;
 color: #000000;
 }
 
+
+
+
 .four-one{
     position: absolute;
     left: 750px;
     top: 100px;
 }
+.four-one-new{
+    position: absolute;
+    left: 740px;
+    top: 90px;
+}
+
+
+
 
 .four-two{
     position: absolute;
     left: 750px;
     top: 220px;
 }
+.four-two-new{
+    position: absolute;
+    left: 750px;
+    top: 190px;
+}
+
+
+
 
 .four-three{
     position: absolute;
     left: 750px;
     top: 315px;
 }
+.four-three-new{
+    position: absolute;
+    left: 750px;
+    top: 295px;
+}
+
+
+
 
 .text11{
     position: absolute;
