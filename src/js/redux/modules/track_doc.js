@@ -117,9 +117,10 @@ function getQueryString(state) {
         no_track_document: "internal_document_id",
         // find_document: "", 
         type_document: "document_type_id",
-        date_start: "before_create_on", 
-        date_end: "after_created_on",
+        date_start: "after_created_on", 
+        date_end: "before_created_on",
         status_document: "document_status_id",
+        // after_created_on=2020-06-22&before_created_on=2020-06-22
         // district: "", 
         // zone: "",
         // station: ""

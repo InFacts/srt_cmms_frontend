@@ -859,15 +859,24 @@ export const fetchAttachmentDocumentData = (document_id) => new Promise((resolve
 // POST Attachment after SaveDocument (document_id changes)
 export const uploadAttachmentDocumentData = (document_id, files) => new Promise((resolve, reject) => {
     var formData = new FormData();
-    files.map((file) => { formData.append('file', file); })
-    let url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${document_id}`
-    axios.post(url, formData,
-        { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-        .then((res) => {
-            resolve(res);
-        }).catch(function (err) {
-            reject(err);
-        })
+    let tempFiles = [];
+    files.map((file) => {
+        if (file.isNew !== undefined) {
+            tempFiles.push(file)
+        }
+    })
+    if (tempFiles.length !== 0) {
+        tempFiles.map((file) => { formData.append('file', file); })
+        let url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${document_id}`
+        axios.post(url, formData,
+            { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+            .then((res) => {
+                resolve(res);
+            }).catch(function (err) {
+                reject(err);
+            })
+    }
+    resolve("Don't have new files");
 });
 
 // Download Attachment

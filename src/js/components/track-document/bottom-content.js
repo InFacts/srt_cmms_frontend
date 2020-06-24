@@ -9,7 +9,7 @@ const formatDate = (dateISOString) => {
   // year = date.getFullYear();
   // month = date.getMonth()+1;
   // dt = date.getDate();
-  return date.toLocaleDateString('en-GB') + " " + date.toLocaleTimeString();
+  return date.toLocaleDateString('th-TH');
 }
 
 const BottomContent = (props) => {
@@ -27,6 +27,7 @@ const BottomContent = (props) => {
               <table className="table-many-column mt-3" style={{ height: "380px" }}>
                 <thead>
                   <tr>
+                  {/* <th className="font" style={{ minWidth: "150px" }}>TEST</th> */}
                     <th className="font" style={{ minWidth: "150px" }}>วันเวลาสร้าง</th>
                     <th className="font" style={{ minWidth: "150px" }}>เลขที่เอกสาร</th>
                     <th className="font" style={{ minWidth: "500px" }}>ประเภทเอกสาร</th>
@@ -41,6 +42,7 @@ const BottomContent = (props) => {
                     if (Object.keys(listUsers).length !== 0 && listUsers !== undefined && Object.keys(listDocumentStatus).length !== 0 && listDocumentStatus !== undefined){
                       return (
                         <tr key={index} id={index}>
+                          {/* <td className="edit-padding" style={{ paddingLeft: "5px" }}>{track_document_show.document_id}</td> */}
                           <td className="edit-padding" style={{ paddingLeft: "5px" }}>{formatDate(track_document_show.created_on)}</td>
                           <td className="edit-padding" >
                             <Link to={identifyEndpoins(track_document_show.document_type_id) + "?internal_document_id=" + track_document_show.internal_document_id + "&document_id=" + track_document_show.document_id}>{track_document_show.internal_document_id}</Link>
