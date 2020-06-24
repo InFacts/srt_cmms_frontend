@@ -52,43 +52,43 @@ const TopContent = (props) => {
         let draftInternalDocumentIDRegex = /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
         // let draftInternalDocumentIDRegex = /^heh/g
         if (!refer_to_document_internal_id) {
-          return resolve('Required');
+            return resolve('Required');
         } else if (!internalDocumentIDRegex.test(refer_to_document_internal_id) && !draftInternalDocumentIDRegex.test(refer_to_document_internal_id)) { //
-          return resolve('Invalid Document ID Format\nBe sure to use the format ie. S1646-PYO-2563/0001')
+            return resolve('Invalid Document ID Format\nBe sure to use the format ie. S1646-PYO-2563/0001')
         }
-    
+
         // if (!refer_to_document_internal_id) {
         //   return resolve(); // Resolve doesn't return
         // }
         let error;
         const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/internal_document_id/${encodeURIComponent(refer_to_document_internal_id)}`;
         axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-          .then((res) => {
-            if (res.data.document.internal_document_id === refer_to_document_internal_id) { // If input document ID exists
-              // if (props.toolbar.mode === TOOLBAR_MODE.SEARCH && !props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
-              // console.log(" I AM STILL IN MODE ADD AND SET VALUE")
-              // setValues({ ...values, ...responseToFormState(res.data) }, false); //Setvalues and don't validate
-              setFieldValue("refer_to_document_id", res.data.document.document_id, false)
-              // setFieldValue("line_items", setLineItem(res.data), false)
-              return resolve(null);
-              // } else { //If Mode add, need to error duplicate Document ID
-              //   console.log("I AM DUPLICATE")
-              //   error = 'Duplicate Document ID';
-              // }
-            } else { // If input Document ID doesn't exists
-              // console.log("I KNOW IT'sINVALID")
-              error = 'Invalid Document ID';
-            }
-          })
-          .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
-            if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
-              error = 'Invalid Document ID';
-            }//If mode add, ok
-          })
-          .finally(() => {
-            return resolve(error)
-          });
-      });
+            .then((res) => {
+                if (res.data.document.internal_document_id === refer_to_document_internal_id) { // If input document ID exists
+                    // if (props.toolbar.mode === TOOLBAR_MODE.SEARCH && !props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
+                    // console.log(" I AM STILL IN MODE ADD AND SET VALUE")
+                    // setValues({ ...values, ...responseToFormState(res.data) }, false); //Setvalues and don't validate
+                    setFieldValue("refer_to_document_id", res.data.document.document_id, false)
+                    // setFieldValue("line_items", setLineItem(res.data), false)
+                    return resolve(null);
+                    // } else { //If Mode add, need to error duplicate Document ID
+                    //   console.log("I AM DUPLICATE")
+                    //   error = 'Duplicate Document ID';
+                    // }
+                } else { // If input Document ID doesn't exists
+                    // console.log("I KNOW IT'sINVALID")
+                    error = 'Invalid Document ID';
+                }
+            })
+            .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
+                if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
+                    error = 'Invalid Document ID';
+                }//If mode add, ok
+            })
+            .finally(() => {
+                return resolve(error)
+            });
+    });
 
     const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
     return (
