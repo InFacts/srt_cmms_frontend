@@ -20,11 +20,17 @@ const Files = () => {
     const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
 
     const fileExtension = (file) => {
-        let extensionSplit = file.name.split('.')
-        if (extensionSplit.length > 1) {
-            return extensionSplit[extensionSplit.length - 1]
-        } else {
-            return 'none'
+        console.log("file>>>>", file)
+        if (file.name !== undefined) {
+            let extensionSplit = file.name.split('.')
+            if (extensionSplit.length > 1) {
+                return extensionSplit[extensionSplit.length - 1]
+            } else {
+                return 'none'
+            }
+        }
+        else {
+
         }
     }
 
@@ -46,13 +52,14 @@ const Files = () => {
 
     const fileSizeAcceptable = (file) => {
         let maxFileSize = 10 ** 9; // 10^9 = 1GB
-        if (file.size > maxFileSize) {
-            dispatch(navBottomWarning('Attachment', file.name, 'ขนาดใหญ่เกิน 1GB'));
-            dispatch(navBottomWarning('Attachment', file.name, 'ขนาดใหญ่เกิน 1GB'));
-            setTimeout(function(){ dispatch(navBottomOnReady('', '', '')); }, 5000);
-            return false
-        } else {
-            return true
+        if (file.filename !== undefined) {
+            if (file.size > maxFileSize) {
+                dispatch(navBottomWarning('Attachment', file.name, 'ขนาดใหญ่เกิน 1GB'));
+                setTimeout(function(){ dispatch(navBottomOnReady('', '', '')); }, 5000);
+                return false
+            } else {
+                return true
+            }
         }
     }
 
@@ -63,11 +70,12 @@ const Files = () => {
             filesAdded.push(e.target.files[i]);
         }
         for (let i = 0; i < values.files.length; i++) {
+            console.log("values.files[i]", values.files[i])
             filesAdded.push(values.files[i]);
         }
         filesAdded.map((newFile, index) => {
             newFile.id = 'files-' + index;
-            newFile.filename = newFile.name;
+            if (newFile.name !== undefined) { newFile.filename = newFile.name; }
             newFile.extension = fileExtension(newFile);
             newFile.sizeReadable = fileSizeReadable(newFile.size);
             newFile.isNew = true;
@@ -99,8 +107,11 @@ const Files = () => {
                 </div>
                 <div className="u-float-right">
                     <div className="upload-btn-wrapper">
-                        <button type="button" className="btn" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>เพิ่มไฟล์</button>
-                        <input id="file" name="file" type="file" onChange={convertFormFileToAPI} multiple disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}/>
+                        {/* TODO: Add FILES */}
+                        <button type="button" className="btn" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH ? true : false }>เพิ่มไฟล์</button>
+                        <input id="file" name="file" type="file" onChange={convertFormFileToAPI} multiple disabled={toolbar.mode === TOOLBAR_MODE.SEARCH ? true :false}/>
+                        {/* <button type="button" className="btn" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>เพิ่มไฟล์</button> */}
+                        {/* <input id="file" name="file" type="file" onChange={convertFormFileToAPI} multiple disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}/> */}
                     </div>
                 </div>
             </div>

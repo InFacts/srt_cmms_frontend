@@ -53,6 +53,7 @@ const useDocumentSubscription = () => {
         fetchAttachmentDocumentData(values.document_id)
         .then((data_files) => {
             // Setup value From Attachment
+            console.log("data_files", data_files)
             setFieldValue("files", data_files.data.results, false);
         });
         }
