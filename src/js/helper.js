@@ -129,6 +129,7 @@ export const WORK_REQUEST_SCHEMA = {
     location_station_id: -1, // สถานที่ สถานี  [TODO DATABASE]
     location_detail: '', // location_detail รายละเอียดสถานที่
     // remark: '', we will remove this in db TODO** - > will use doc's remark instead
+    refer_to_document_id: ''
 }
 
 export const WORK_ORDER_SCHEMA = {
@@ -146,7 +147,6 @@ export const WORK_ORDER_SCHEMA = {
     location_station_id: -1, // สถานที่ สถานี  [TODO DATABASE]
     location_detail: '', // location_detail รายละเอียดสถานที่
     remark: '',
-
     has_equipment_item: [],
 }
 
@@ -170,7 +170,7 @@ export const SS101_SCHEMA = {
     departed_on: '',          // ออกเดินทาง DATETIME
     arrived_on: '',           // เดินทางถึง  DATETIME
     finished_on: '',          // วันเวลาที่แล้วเสร็จ DATETIME
-    system_type_group_id: -1,   // ระบบตรวจซ่อม FK_ID - this is automatically infered from sub_maintenance_type_id
+    // system_type_group_id: -1,   // ระบบตรวจซ่อม FK_ID - this is automatically infered from sub_maintenance_type_id
     sub_maintenance_type_id: -1,      //  ชนิดระบบตรวจซ่อม FK_ID
     hardware_type_id: -1,   // ชื่ออุปกรณ์ที่บำรุงรักษา FK_ID
 
@@ -297,6 +297,64 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             lead_time: values.lead_time,
             tolerance_time: values.tolerance_time,
             accounting_type: values.accounting_type
+        }
+    } else if (document_type_id === DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA) {
+        let lastItem = 0;
+        fact[FACTS.ITEM].items.map(item => {
+            if (item.item_id > lastItem) {
+                lastItem = item.item_id;
+            }
+        });
+        let lastEquipment = 0;
+        fact[FACTS.EQUIPMENT].items.map(item => {
+            if (item.item_id > lastEquipment) {
+                lastEquipment = item.item_id;
+            }
+        });
+        let lastItemId; 
+        if (lastEquipment >= lastItem) {
+            lastItemId = lastEquipment + 1;
+        } else {
+            lastItemId = lastItem + 1;
+        }
+
+        let equipment_part = {
+            item_id: lastItemId,
+            price_currently: values.price_currently,
+            depreciation: values.description_equipment,
+            useful_life: values.useful_life,
+            equipment_status_id: values.equipment_status_id,
+            responsible_by: values.responsible_by,
+        }
+
+        let equipment_item_part = {
+            item_id: lastItemId,
+            equipment_group_id: values.equipment_group_id
+        }
+
+        let item_part = {
+            item_id: lastItemId,
+            internal_item_id: values.internal_item_id,
+            description: values.description,
+            item_type_id: values.item_type_id,
+            item_group_id: values.item_group_id,
+            uom_group_id: values.uom_group_id,
+            active: values.active === "1" ? true : false,
+            remark: values.remark,
+            default_warehouse_id: 100,
+            quantity_lowest: 1,
+            quantity_highest: 1,
+            quantity_required: 1,
+            minimum_order_quantity: values.minimum_order_quantity,
+            lead_time: values.lead_time,
+            tolerance_time: values.tolerance_time,
+            accounting_type: values.accounting_type
+        }
+
+        return {
+            equipment: equipment_part,
+            equipment_item: equipment_item_part,
+            item: item_part,
         }
     }
     let document_part = {
@@ -473,6 +531,11 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                 work_order_part[key] = values[key]
             }
         })
+        document_part = {
+            ...document_part,
+            refer_to_document_id: values.refer_to_document_id,
+        };
+
         work_order_part.accident_on = work_order_part.accident_on + ":00";
 
         work_order_part.has_equipment_item = removeEmptyLineItems(work_order_part.has_equipment_item);
@@ -596,7 +659,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             document: document_part,
             specific: equipment_install,
         }
-    }
+    } 
 }
 
 
@@ -644,6 +707,9 @@ export const createMasterData = (data, document_type_group_id) => new Promise((r
     }
     if (document_type_group_id === DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
         var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items`;
+    }
+    if (document_type_group_id === DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA) {
+        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/equipment`;
     }
     console.log("data", data, "url", url)
     axios.post(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
@@ -1391,7 +1457,7 @@ function transformSS101ResponseToFormState(ss101_part, data) {
         arrived_on: ss101_part.arrived_on.split(".")[0],
         request_on: ss101_part.request_on.split(".")[0],
         finished_on: ss101_part.finished_on.split(".")[0],
-        system_type_group_id: returnEmptyStringIfNull(data.specific.system_type.system_type_group_id),
+        // system_type_group_id: returnEmptyStringIfNull(data.specific.system_type.system_type_group_id),
         sub_maintenance_type_id: returnEmptyStringIfNull(ss101_part.sub_maintenance_type_id),
         hardware_type_id: returnEmptyStringIfNull(ss101_part.hardware_type_id),
 

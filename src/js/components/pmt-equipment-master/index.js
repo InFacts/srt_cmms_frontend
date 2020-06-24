@@ -36,7 +36,7 @@ const GoodsReceiptComponent = (props) => {
     useToolbarInitializer(TOOLBAR_MODE.SEARCH);
     useTokenInitializer();
     useFactInitializer();
-    useFooterInitializer(DOCUMENT_TYPE_ID.ITEM_MASTER_DATA);
+    useFooterInitializer(DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA);
     const loggedIn = useSelector(state => state.token.isLoggedIn);
 
     return (
@@ -92,7 +92,8 @@ const EnhancedGoodsReceiptComponent = withFormik({
         description: '',
         equipment_status_id: '',
         uom_group_id: '',
-
+        active: '',
+        
         // Bottom Content
         // General Content
         uom_id: '',
@@ -102,12 +103,16 @@ const EnhancedGoodsReceiptComponent = withFormik({
         tolerance_time: '',
         active: '',
         accounting_type: '',
+        quantity_highest: '',
+        quantity_lowest: '',
+        quantity_required: '',
         remark: '',
         // Equipment Content
         price_import: '',
         price_currently: '',
         description_equipment: '',
-        top_districts_id: '',
+        location_amphure_id: '',
+        responsible_by: '',
         useful_life: '',
         // จังหวัด
         // อำเภอ

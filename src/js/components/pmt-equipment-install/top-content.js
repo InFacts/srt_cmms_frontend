@@ -48,7 +48,7 @@ const TopContent = (props) => {
             setFieldValue("equipment_id", '', false);
             setFieldValue("equipment_status_id", '', false);
             setFieldValue("equipment_status_id_th", '', false);
-            setFieldValue("responsible_by", '', false);
+            setFieldValue("responsible_node_id", '', false);
             return;
         }
         let items = fact.items.items;
@@ -66,8 +66,8 @@ const TopContent = (props) => {
             setFieldValue("equipment_id", item_match_equipment.equipment_id, false);
             setFieldValue("equipment_status_id", item_match_equipment.equipment_status.equipment_status_id, false);
             setFieldValue("equipment_status_id_th", item_match_equipment.equipment_status.status_th, false);
-            setFieldValue("responsible_by", item_match_equipment.responsible_by, false);
-            validateField("responsible_by");
+            setFieldValue("responsible_node_id", item_match_equipment.responsible_node_id, false);
+
             // IF Check user If User is Admin -> return true Else -> return false
             if (decoded_token.id === 4) { //{/* TODO USER_ID FOR ADMIN */}
                 console.log(" YES I AM ADMIN ")

@@ -12,16 +12,16 @@ const PopupModalNoPart = (props) => {
     useEffect(() => {
         const filterDataOnCurrentQueryString = () => {
             // currentQueryString
-            setData(props.items.filter(function (items) {
+            setData(props.equipment.filter(function (equipment) {
                 var removeSpaces = currentQueryString.replace(/\s/g, '');
                 const regex = new RegExp(`${removeSpaces}`, 'i');
-                var isMatch = regex.test(items.internal_item_id) || regex.test(items.description);
+                var isMatch = regex.test(equipment.equipment_group.item.internal_item_id) || regex.test(equipment.equipment_group.item.description);
                 return (isMatch);
             }));
             // setData corresponding to currentQueryString
         };
         filterDataOnCurrentQueryString();
-    }, [currentQueryString, props.items]);
+    }, [currentQueryString, props.equipment]);
 
     return (
         <div className="modal" id="modalNoPart" style={{ display: "none" }}>
@@ -38,7 +38,7 @@ const PopupModalNoPart = (props) => {
                     </div>
 
                     <div className="container_12">
-                        <table className="table-many-column mt-3" style={{height: "270px"}}>
+                        <table className="table-many-column mt-3" style={{ height: "270px" }}>
                             <thead>
                                 <tr>
                                     <th className="font" style={{ minWidth: "300px" }}>เลขที่อะไหล่</th>
@@ -48,23 +48,17 @@ const PopupModalNoPart = (props) => {
                             </thead>
                             <tbody>
                                 {data.map(function (no_part_show, index) {
-                                    var item_match_equipments = props.equipment;
-                                    let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.item_id}` === `${no_part_show.item_id}`); // Returns undefined if not found
-                                    if (item_match_equipment) {
-                                        return (
-                                            <tr key={index} id={index}>
-                                                <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show.internal_item_id} </td>
-                                                <td className="edit-padding" style={{ minWidth: "300px" }}> {no_part_show.description} </td>
-                                                <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
-                                                    <button type="button" className="button-blue"
-                                                        onClick={() => setFieldValue("internal_item_id", no_part_show.internal_item_id, true)}
-                                                        aria-label="Close active modal" aria-controls="modalNoPart" id="closeModalNoPart" >เลือก</button>
-                                                </td>
-                                            </tr>
-                                        )
-                                    } else {
-                                        return null;
-                                    }
+                                    return (
+                                        <tr key={index} id={index}>
+                                            <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show.equipment_group.item.internal_item_id} </td>
+                                            <td className="edit-padding" style={{ minWidth: "300px" }}> {no_part_show.equipment_group.item.description} </td>
+                                            <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
+                                                <button type="button" className="button-blue"
+                                                    onClick={() => setFieldValue("internal_item_id", no_part_show.equipment_group.item.internal_item_id, true)}
+                                                    aria-label="Close active modal" aria-controls="modalNoPart" id="closeModalNoPart" >เลือก</button>
+                                            </td>
+                                        </tr>
+                                    )
                                 })}
                             </tbody>
                         </table>
@@ -79,7 +73,6 @@ const PopupModalNoPart = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-    items: state.api.fact.items.items,
     equipment: state.api.fact.equipment.items
 })
 

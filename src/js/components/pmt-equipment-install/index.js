@@ -72,7 +72,7 @@ const EnhancedEquipmentInstallationComponent = withFormik({
         // Bottom Content
         // general_content
         responsible_zone_by: '',        // ผู้รับผิดชอบสถานที่ STRING
-        responsible_by: '',
+        responsible_node_id: '',
         installed_on: '',              // วันที่ติดตั้งเสร็จ (Default === NOW )
         announce_use_on: '',             // วันที่ประกาศใช้ (Default === NOW )
         equipment_status_id: '',        //สถานะ

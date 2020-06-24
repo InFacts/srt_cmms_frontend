@@ -64,7 +64,7 @@ const BottomContent = (props) => {
       {/* THIS MAKES THE BACKGROUND NOT GRAY!! NEEDS TO FIX */}
       <div id={changeTheam() === true ? "" : "blackground-gray"}>
         {/* <div className="container_12 clearfix"> */}
-        <div className="container_12 " id={changeTheam() === true ? "blackground-gray" : ""} style={ changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {} }>  
+        <div className="container_12 " id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>
           {/* General Tab */}
           <div id="general_content" className="tabcontent">
             <div className="container_12 mt-3">
@@ -209,17 +209,13 @@ const BottomContent = (props) => {
                 <TextInput name="price_import" disabled={true} />
               </div>
               <Label>บาท</Label>
-
-              {/* === top_districts_id === */}
+              
+              {/* === responsible_by === */}
               <div className="grid_3 alpha omega float-right">
-                <SelectNoChildrenInput name="top_districts_id" disabled={values.modeEdit ? false : values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                <SelectNoChildrenInput name="responsible_by" disabled={values.modeEdit ? false : values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
                   <option value=''></option>
-                  {factPosition.items.map((factPosition) => {
-                    if (factPosition.distict_id === values.distict_id) {
-                      return <option value={factPosition.distict_id} selected>{factPosition.name}</option>
-                    } else {
-                      return <option value={factPosition.distict_id}>{factPosition.name}</option>
-                    }
+                  {factDistict.items.map((factDistict) => {
+                    return <option value={factDistict.district_id}>{factDistict.name}</option>
                   })}
                 </SelectNoChildrenInput>
               </div>
@@ -239,8 +235,14 @@ const BottomContent = (props) => {
 
               {/* === ผู้รับผิดชอบตามพื้นที่ TODO ===  */}
               <div className="grid_3 alpha omega float-right">
-                <TextInput name="1"
-                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                <SelectNoChildrenInput name="responsible_node_by" disabled>
+                  <option value=''></option>
+                  {factNodes.items.map((node) => {
+                    if (values.location_district_id == node.district_id) {
+                      return <option key={node.node_id} value={node.node_id} selected>{node.name}</option>
+                    }
+                  })}
+                </SelectNoChildrenInput>
               </div>
               <div className="grid_2 float-right">
                 <p className="top-text">ผู้รับผิดชอบตามพื้นที่</p>
@@ -297,7 +299,7 @@ const BottomContent = (props) => {
                 <SelectNoChildrenInput name="location_district_id" disabled>
                   <option value=''></option>
                   {factDistict.items.map((factDistict) => {
-                      return <option value={factDistict.distict_id}>{factDistict.name}</option>
+                    return <option value={factDistict.distict_id}>{factDistict.name}</option>
                   })}
                 </SelectNoChildrenInput>
               </div>
@@ -317,7 +319,7 @@ const BottomContent = (props) => {
                 </SelectNoChildrenInput>
               </div>
               <div className="clear" />
-              
+
               {/* === location === */}
               <div className="grid_2">
                 <p className="top-text">สถานี</p>
@@ -407,11 +409,7 @@ const BottomContent = (props) => {
                     return (
                       <tr>
                         <td className="edit-padding text-center">{checklist_line_item.line_number}</td>
-                        <td className="edit-padding">
-                          <TextInput name='1'
-                            disabled={values.modeEdit ? false : values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                            searchable={toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalCheckList" tabIndex="1" />
-                        </td>
+                        <td className="edit-padding"></td>
                         <td className="edit-padding"></td>
                         <td className="edit-padding"></td>
                       </tr>

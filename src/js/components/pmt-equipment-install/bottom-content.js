@@ -32,7 +32,6 @@ const BottomContent = (props) => {
 
     const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
 
-    const validateResponsibleByIDField = (...args) => validateUserIDField("responsible_by", fact, setFieldValue, ...args);
     const validateResponsibleZoneByField = (...args) => validateUserIDField("responsible_zone_by", fact, setFieldValue, ...args);
 
     return (
@@ -46,12 +45,12 @@ const BottomContent = (props) => {
                     <div className="grid_6" style={{ paddingLeft: "10px" }}>
 
                         {/* Sub-Component Title */}
-                        <h3 className="head-title-bottom mt-2">ผู้ที่รับผิดชอบตามพื้นที่</h3>
+                        {/* <h3 className="head-title-bottom mt-2">ผู้ที่รับผิดชอบตามพื้นที่</h3>
 
-                        <div class="clear" />
+                        <div class="clear" /> */}
 
                         {/* Responsible person District ID */}
-                        <div className="grid_1 alpha white-space">
+                        {/* <div className="grid_1 alpha white-space">
                             <p className="top-text">ผู้รับผิดชอบ</p>
                         </div>
                         <div className="grid_3 alpha omega">
@@ -62,7 +61,7 @@ const BottomContent = (props) => {
                                 tabIndex="2" />
                         </div>
 
-                        <div class="clear" />
+                        <div class="clear" /> */}
 
                         <h3 className="head-title-bottom mt-2">หน่วยงานที่รับผิดชอบ</h3>
 
@@ -73,8 +72,7 @@ const BottomContent = (props) => {
                             <p className="top-text">หน่วยงานผู้รับผิดชอบ</p>
                         </div>
                         <div className="grid_3 pull_0">
-                            <TextInput name="responsible_by"
-                                validate={validateResponsibleByIDField}
+                            <TextInput name="responsible_node_id"
                                 disabled
                                 tabIndex="6" />
                         </div>
@@ -147,7 +145,7 @@ const BottomContent = (props) => {
                         <div className="grid_12">
 
                             {/* Sub-Component Title */}
-                            <h3 className="head-title-bottom mt-2">สถานที่</h3>
+                            <h3 className="head-title-bottom mt-2">สถานที่ (ผู้ที่รับผิดชอบตามพื้นที่)</h3>
 
                             <div class="clear" />
 
@@ -185,7 +183,7 @@ const BottomContent = (props) => {
 
                             <div class="clear" />
 
-                            {/* Responsible person Station ID */}
+                            {/* Responsible person Station ID ใช้สำหรับส่งให้ พี่ลีเพื่อบอกว่า สถานีไหนรับผิดชอบ */}
                             <div className="grid_1 alpha white-space">
                                 <p className="top-text">สถานี</p>
                             </div>

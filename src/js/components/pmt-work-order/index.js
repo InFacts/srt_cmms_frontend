@@ -80,7 +80,8 @@ const EnhancedWorkOrderComponent = withFormik({
         internal_document_id: '',       // เลขที่เอกสาร
         created_by_user_employee_id: '', // ผู้ดำเนินเรื่อง (Default === admin_employee_id)
         created_by_admin_employee_id: '',  //ผู้สร้างเอกสาร (Field ที่ไม่ได้กรอก)
-        wr_internal_document_id: '',  // เลขที่เอกสารแจ้งเหตุขัดข้อง (ถ้ามี)
+        refer_to_document_internal_id: '',  // เลขที่เอกสารแจ้งเหตุขัดข้อง (ถ้ามี)
+        refer_to_document_id: '',
 
         status_name_th: '',              // TODO doesn't have (Field ที่ไม่ได้กรอก)
         created_on: '',                  // TODO doesn't have (Field ที่ไม่ได้กรอก)

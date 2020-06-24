@@ -194,7 +194,8 @@ const useFooterInitializer = (document_type_id) => {
                         if (values.document_id) { // If have document_id, no need to create new doc
                             let data = packDataFromValues(fact, values, document_type_id);
                             console.log("I AM SUBMITTING ", data);
-                            if (document_type_id !== DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA && document_type_id !== DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
+                            if (document_type_id !== DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA && document_type_id !== DOCUMENT_TYPE_ID.ITEM_MASTER_DATA 
+                                && document_type_id !== DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA) {
                                 editDocument(values.document_id, document_type_id, data, values.files)
                                     .then((document_id) => {
                                         setFieldValue('document_id', values.document_id, true);
@@ -224,7 +225,8 @@ const useFooterInitializer = (document_type_id) => {
                         } else { // If not have document_id
                             let data = packDataFromValues(fact, values, document_type_id);
                             console.log("I AM SUBMITTING ", data);
-                            if (document_type_id !== DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA && document_type_id !== DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
+                            if (document_type_id !== DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA && document_type_id !== DOCUMENT_TYPE_ID.ITEM_MASTER_DATA
+                                && document_type_id !== DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA) {
                                 saveDocument(document_type_id, data, values.files)
                                     .then((document_id) => {
                                         setFieldValue('document_id', document_id, true);
