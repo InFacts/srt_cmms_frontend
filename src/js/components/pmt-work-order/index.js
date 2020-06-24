@@ -20,6 +20,8 @@ import useDocumentSubscription from '../../hooks/document-subscription';
 
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
+import BgBlue from '../../../images/pmt/bg_blue.jpg';
+import { changeTheam } from '../../helper.js'
 const WorkOrderComponent = (props) => {
 
     useToolbarInitializer(TOOLBAR_MODE.SEARCH, DOCUMENT_TYPE_ID.WORK_ORDER);
@@ -42,7 +44,7 @@ const WorkOrderComponent = (props) => {
     return (
         <>
         {!loggedIn ? <Redirect to="/" /> : null}
-        <form onSubmit={props.handleSubmit}>
+        <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "130vh" } : {}}>
             <TopContent />
             <TabBar tabNames={tabNames} initialTabID="broken">
                 <BottomContent />
@@ -54,11 +56,10 @@ const WorkOrderComponent = (props) => {
 }
 
 const initialEquipmentLineItem = {
+    document_id: '',
     internal_item_id: '',
     description:'',
-    work_order_document_id: '',
-    equipment_item_id: '',
-    equipment_status_id: '',
+    item_status_id: '',
     remark: '',
 }
 const initialRowsEquipment = (n = 10) => {
@@ -66,6 +67,7 @@ const initialRowsEquipment = (n = 10) => {
     for (var i = 1; i <= n; i++) {
         rows.push({
             ...initialEquipmentLineItem,
+            line_number: i
         });
     }
     return rows;
@@ -78,7 +80,8 @@ const EnhancedWorkOrderComponent = withFormik({
         internal_document_id: '',       // เลขที่เอกสาร
         created_by_user_employee_id: '', // ผู้ดำเนินเรื่อง (Default === admin_employee_id)
         created_by_admin_employee_id: '',  //ผู้สร้างเอกสาร (Field ที่ไม่ได้กรอก)
-        wr_internal_document_id: '',  // เลขที่เอกสารแจ้งเหตุขัดข้อง (ถ้ามี)
+        refer_to_document_internal_id: '',  // เลขที่เอกสารแจ้งเหตุขัดข้อง (ถ้ามี)
+        refer_to_document_id: '',
 
         status_name_th: '',              // TODO doesn't have (Field ที่ไม่ได้กรอก)
         created_on: '',                  // TODO doesn't have (Field ที่ไม่ได้กรอก)
@@ -98,7 +101,7 @@ const EnhancedWorkOrderComponent = withFormik({
         location_node_id: '',            // สถานที่ ตอน   [ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม (สถานที่/ที่ตั้ง)] FK_ID
         location_station_id: '',         // สถานที่ สถานี  FK_ID
         location_detail: '',       //รายละเอียดสถานที่ [WR]  ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม (สถานที่/ที่ตั้ง) [WO] NVARCHAR
-        has_equipment_item: initialRowsEquipment(),
+        line_items: initialRowsEquipment(),
         
         // line_items: initialRows(),
         remark: '',                      // หมายเหตุ  NVARCHAR
@@ -120,10 +123,6 @@ const EnhancedWorkOrderComponent = withFormik({
         }
         return errors;
     },
-    handleSubmit: (values, formikBag) => new Promise ((resolve, reject) => { //handle Submit will just POST the Empty Document and PUT information inside
-        console.log( "I am submitting ". values)
-        resolve("DONE!")
-      }),    
 })(WorkOrderComponent);
 
 

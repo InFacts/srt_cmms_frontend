@@ -92,7 +92,8 @@ export const DOCUMENT_SCHEMA_GET = {
     document_date: "",
     // document_status_id:	-1, // NOT USED, handled by Backend
     // document_action_type_id	string // NOT USED, handled by Backend
-    // refer_to_document_id	string // NOT USED, handled by Backend
+    refer_to_document_id: '',	 // string NOT USED, handled by Backend
+    refer_to_document_internal_id: '',
 }
 
 
@@ -128,6 +129,7 @@ export const WORK_REQUEST_SCHEMA = {
     location_station_id: -1, // สถานที่ สถานี  [TODO DATABASE]
     location_detail: '', // location_detail รายละเอียดสถานที่
     // remark: '', we will remove this in db TODO** - > will use doc's remark instead
+    // refer_to_document_id: ''
 }
 
 export const WORK_ORDER_SCHEMA = {
@@ -145,7 +147,6 @@ export const WORK_ORDER_SCHEMA = {
     location_station_id: -1, // สถานที่ สถานี  [TODO DATABASE]
     location_detail: '', // location_detail รายละเอียดสถานที่
     remark: '',
-
     has_equipment_item: [],
 }
 
@@ -296,6 +297,64 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             lead_time: values.lead_time,
             tolerance_time: values.tolerance_time,
             accounting_type: values.accounting_type
+        }
+    } else if (document_type_id === DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA) {
+        let lastItem = 0;
+        fact[FACTS.ITEM].items.map(item => {
+            if (item.item_id > lastItem) {
+                lastItem = item.item_id;
+            }
+        });
+        let lastEquipment = 0;
+        fact[FACTS.EQUIPMENT].items.map(item => {
+            if (item.item_id > lastEquipment) {
+                lastEquipment = item.item_id;
+            }
+        });
+        let lastItemId; 
+        if (lastEquipment >= lastItem) {
+            lastItemId = lastEquipment + 1;
+        } else {
+            lastItemId = lastItem + 1;
+        }
+
+        let equipment_part = {
+            item_id: lastItemId,
+            price_currently: values.price_currently,
+            // depreciation: values.description_equipment,
+            useful_life: values.useful_life,
+            item_status_id: parseInt(values.equipment_status_id),
+            responsible_district_id: parseInt(values.responsible_by),
+        }
+
+        let equipment_item_part = {
+            item_id: lastItemId,
+            equipment_group_id: parseInt(values.equipment_group_id)
+        }
+
+        let item_part = {
+            item_id: lastItemId,
+            internal_item_id: values.internal_item_id,
+            description: values.description,
+            item_type_id: parseInt(values.item_type_id),
+            item_group_id: parseInt(values.item_group_id),
+            uom_group_id: parseInt(values.uom_group_id),
+            active: values.active === "1" ? true : false,
+            remark: values.remark,
+            default_warehouse_id: 100,
+            quantity_lowest: 1,
+            quantity_highest: 1,
+            quantity_required: 1,
+            minimum_order_quantity: values.minimum_order_quantity,
+            lead_time: values.lead_time,
+            tolerance_time: values.tolerance_time,
+            accounting_type: values.accounting_type
+        }
+
+        return {
+            equipment: equipment_part,
+            equipment_item: equipment_item_part,
+            item: item_part,
         }
     }
     let document_part = {
@@ -456,9 +515,24 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         })
         console.log("document_part", document_part)
         console.log("work_request_part", work_request_part)
+
+        document_part = {
+            ...document_part,
+            document_date: values.document_date + 'T00:00:00+00:00',
+            refer_to_document_id: 0,
+        };
+
+        work_request_part = {
+            ...work_request_part,
+            accident_on: values.accident_on + ':00'
+        }
+
+        let work_order_part = {
+            work_order: work_request_part
+        }
         return {
             document: document_part,
-            specific: work_request_part,
+            specific: work_order_part,
         }
     } else if (document_type_id === DOCUMENT_TYPE_ID.WORK_ORDER) {
         document_part["document_type_id"] = DOCUMENT_TYPE_NOTGROUP_ID.WORK_ORDER;
@@ -472,6 +546,12 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                 work_order_part[key] = values[key]
             }
         })
+        document_part = {
+            ...document_part,
+            document_date: values.document_date + 'T00:00:00+00:00',
+            refer_to_document_id: values.refer_to_document_id,
+        };
+
         work_order_part.accident_on = work_order_part.accident_on + ":00";
 
         work_order_part.has_equipment_item = removeEmptyLineItems(work_order_part.has_equipment_item);
@@ -485,10 +565,13 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             delete work_order_part.has_equipment_item[index].description
         })
 
-        console.log("document_part", document_part,"work_order_part", work_order_part)
+        let work_order_part_big = {
+            work_order: work_order_part
+        }
+        console.log("document_part", document_part, "work_order_part", work_order_part)
         return {
             document: document_part,
-            specific: work_order_part,
+            specific: work_order_part_big,
         }
     } else if (document_type_id === DOCUMENT_TYPE_ID.SS101) {
         document_part["document_type_id"] = DOCUMENT_TYPE_NOTGROUP_ID.SS101;
@@ -514,7 +597,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         ss101_part = {
             ...ss101_part,
             service_method_id: parseInt(values.service_method_id),
-            car_type_id: parseInt(values.car_type_id) ,
+            car_type_id: parseInt(values.car_type_id),
             cargo_id: values.cargo_id,
             interrupt_id: parseInt(values.interrupt_id),
             accident_on: values.accident_on + ':00+00:00',
@@ -522,7 +605,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             departed_on: values.departed_on + ':00+00:00',
             finished_on: values.finished_on + ':00+00:00',
             request_on: values.request_on + ':00+00:00',
-            auditor_position_id : values.auditor_position_id ? parseInt(values.auditor_position_id) : null,
+            auditor_position_id: values.auditor_position_id ? parseInt(values.auditor_position_id) : null,
             fixer_position_id: values.fixer_position_id ? parseInt(values.fixer_position_id) : null,
             member_1_position_id: values.member_1_position_id ? parseInt(values.member_1_position_id) : null,
             member_2_position_id: values.member_2_position_id ? parseInt(values.member_2_position_id) : null,
@@ -543,7 +626,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         ss101_part.loss_line_items.map((loss_line_items) => {
             loss_line_items.uom_code = parseInt(loss_line_items.uom_code)
         })
-        console.log("document_part", document_part,"ss101_part", ss101_part)
+        console.log("document_part", document_part, "ss101_part", ss101_part)
         return {
             document: document_part,
             specific: ss101_part,
@@ -559,7 +642,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                 line_items_part.push({
                     document_id: values.document_id,
                     item_id: line_item.item_id,
-                    line_number: index+1,
+                    line_number: index + 1,
                     uom_id: line_item.uom_id,
                     quantity_damaged: line_item.quantity_damaged,
                     quantity_used: line_item.quantity_used,
@@ -575,7 +658,39 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             document: document_part,
             specific: icd_part,
         }
-    }
+    } else if (document_type_id === DOCUMENT_TYPE_ID.EQUIPMENT_INSTALLATION) {
+        var equipment_install_part = {
+            document_id: values.document_id,
+            equipment_id: values.equipment_id,
+            location_district_id: values.location_district_id,
+            location_node_id: values.location_node_id,
+            location_station_id: values.location_station_id,
+            location_description: values.location_description,
+            installed_on: values.installed_on,
+            announce_use_on: values.announce_use_on,
+            equipment_status_id: values.equipment_status_id,
+            responsible_node_id: values.responsible_zone_by
+        }
+        var line_items_part = [
+            {
+                document_id: values.document_id ,
+                line_number: 1,
+                item_status_id: 5,
+                remark: "string"
+              }
+        ]
+
+        var equipment_installation = { 
+            equipment_install: equipment_install_part,
+            line_items: line_items_part
+        }
+        console.log("document_part", document_part);
+        console.log("equipment_install", equipment_installation);
+        return {
+            document: document_part,
+            specific: equipment_installation,
+        }
+    } 
 }
 
 
@@ -623,6 +738,9 @@ export const createMasterData = (data, document_type_group_id) => new Promise((r
     }
     if (document_type_group_id === DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
         var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items`;
+    }
+    if (document_type_group_id === DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA) {
+        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/equipment`;
     }
     console.log("data", data, "url", url)
     axios.post(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
@@ -689,6 +807,7 @@ export const getDocumentbyInternalDocumentID = (internal_document_id) => new Pro
 
 // PUT /document/{document_id}/{document_type_group_id}
 export const editDocument = (document_id, document_type_group_id, data, files) => new Promise((resolve, reject) => {
+    console.log("files", files)
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}/${document_type_group_id}`;
     console.log("files", files)
     console.log("data>>", data)
@@ -697,7 +816,7 @@ export const editDocument = (document_id, document_type_group_id, data, files) =
             console.log(" I am successful in updating contents of document_id ", document_id)
             if (res.status === 200) {
                 console.log("wow i putted successfully status 200 ", res.data)
-                if (files !== undefined){
+                if (files !== undefined) {
                     if (files.length !== 0) {
                         uploadAttachmentDocumentData(document_id, files)
                             .then(() => {
@@ -707,16 +826,16 @@ export const editDocument = (document_id, document_type_group_id, data, files) =
                                 return reject(err);
                             });
                     }
-                    else {return resolve(res.data);}
+                    else { return resolve(res.data); }
                 }
-                else {return resolve(res.data); }
+                else { return resolve(res.data); }
             } else {
                 console.log(" i think i have some problems putting ", res.data)
                 reject(res);
             }
         })
         .catch((err) => {
-            console.log("err", err)
+            console.log("err", err.response)
             reject(err)
         });
 });
@@ -766,8 +885,8 @@ const fillObjectOfName = (object, fieldName, value) => {
 const mutateDataFillDocumentID = (object, document_id) => {
     let mutated_object = { ...object };
     fillObjectOfName(mutated_object, 'document_id', document_id);
-    fillObjectOfName(mutated_object, 'ss101_document_id', document_id); 
-    fillObjectOfName(mutated_object, 'work_order_document_id', document_id); 
+    fillObjectOfName(mutated_object, 'ss101_document_id', document_id);
+    fillObjectOfName(mutated_object, 'work_order_document_id', document_id);
     return mutated_object
 }
 
@@ -1254,7 +1373,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
         )
         console.log("this is document_part 123  ", document_part)
         console.log("this is ss101_part ", ss101_part)
-        return { ...transformDocumentResponseToFormState(document_part, fact, document_type_group_id), ...transformSS101ResponseToFormState(ss101_part) }
+        return { ...transformDocumentResponseToFormState(document_part, fact, document_type_group_id), ...transformSS101ResponseToFormState(ss101_part, data) }
     } else if (document_type_group_id === DOCUMENT_TYPE_ID.MAINTENANT_ITEM) {
         for (var i = data.specific.line_items.length; i <= 9; i++) {
             data.specific.line_items.push(
@@ -1289,6 +1408,11 @@ const responseToFormState = (fact, data, document_type_group_id) => {
         return {
             document_id: data.document.document_id,
             internal_document_id: data.document.internal_document_id,
+            internal_item_id: data.specific.equipment.equipment_item.item.internal_item_id,
+            description: data.specific.equipment.equipment_item.item.description,
+            uom_group_id: data.specific.equipment.equipment_item.item.uom_group_id,
+            equipment_status_id: data.specific.equipment.equipment_status_id,
+
             created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_user_id) || '',
             created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_admin_id) || '',
             created_on: created_on.toISOString().split(".")[0],
@@ -1308,28 +1432,27 @@ const responseToFormState = (fact, data, document_type_group_id) => {
 function transformDocumentResponseToFormState(document_part, fact, document_type_group_id) {
     var created_on = new Date(document_part.created_on);
     created_on.setHours(created_on.getHours() + 7)
-    if (document_type_group_id === DOCUMENT_TYPE_ID.SS101) {
-        return {
-            document_id: document_part.document_id,
-        internal_document_id: document_part.internal_document_id,
-        document_date: document_part.document_date.split("T")[0],
-        created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_user_id) || '',
-        created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_admin_id) || '',
-        // created_on: document_part.created_on.split(".")[0],
-        created_on: created_on.toISOString().split(".")[0],
-        refer_to_document_id: document_part.refer_to_document_id
-        }
-    } else {
+    // if (document_type_group_id === DOCUMENT_TYPE_ID.SS101) {
     return {
         document_id: document_part.document_id,
         internal_document_id: document_part.internal_document_id,
         document_date: document_part.document_date.split("T")[0],
         created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_user_id) || '',
         created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_admin_id) || '',
-        // created_on: document_part.created_on.split(".")[0],
         created_on: created_on.toISOString().split(".")[0],
+        refer_to_document_id: document_part.refer_to_document_id,
+        refer_to_document_internal_id: document_part.refer_to_document_internal_id
     }
-}
+    // } else {
+    // return {
+    //     document_id: document_part.document_id,
+    //     internal_document_id: document_part.internal_document_id,
+    //     document_date: document_part.document_date.split("T")[0],
+    //     created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_user_id) || '',
+    //     created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_admin_id) || '',
+    //     created_on: created_on.toISOString().split(".")[0],
+    // }
+    // }
 }
 
 function returnEmptyStringIfNull(string) {
@@ -1358,10 +1481,10 @@ function transformWorkOrderResponseToFormState(work_order_part) {
         location_node_id: returnEmptyStringIfNull(work_order_part.location_node_id),
         location_station_id: returnEmptyStringIfNull(work_order_part.location_station_id),
 
-         has_equipment_item: returnFullArrayHasEquipmentItemNull(work_order_part.has_equipment_item),
+        has_equipment_item: returnFullArrayHasEquipmentItemNull(work_order_part.has_equipment_item),
     }
 }
-function transformSS101ResponseToFormState(ss101_part) {
+function transformSS101ResponseToFormState(ss101_part, data) {
     return {
         ...ss101_part,
         ...transformWorkRequestResponseToFormState(ss101_part),
@@ -1372,7 +1495,7 @@ function transformSS101ResponseToFormState(ss101_part) {
         arrived_on: ss101_part.arrived_on.split(".")[0],
         request_on: ss101_part.request_on.split(".")[0],
         finished_on: ss101_part.finished_on.split(".")[0],
-        system_type_group_id: returnEmptyStringIfNull(ss101_part.system_type_group_id),
+        // system_type_group_id: returnEmptyStringIfNull(data.specific.system_type.system_type_group_id),
         sub_maintenance_type_id: returnEmptyStringIfNull(ss101_part.sub_maintenance_type_id),
         hardware_type_id: returnEmptyStringIfNull(ss101_part.hardware_type_id),
 
@@ -1392,14 +1515,24 @@ function transformSS101ResponseToFormState(ss101_part) {
     }
 }
 
-function returnFullArrayHasEquipmentItemNull (has_equipment_item) {
+function returnFullArrayHasEquipmentItemNull(has_equipment_item) {
     let initialEquipmentLineItem = {
         internal_item_id: '',
-        description:'',
+        description: '',
         ss101_document_id: '',
         equipment_item_id: '',
         equipment_status_id: '',
         remark: '',
+    }
+    for (var i = 0; i < has_equipment_item.length; i++) {
+        has_equipment_item[i] = {
+            internal_item_id: has_equipment_item[i].equipment_item.equipment.equipment_item.item.internal_item_id,
+            description: has_equipment_item[i].equipment_item.equipment.equipment_item.item.description,
+            ss101_document_id: has_equipment_item[i].ss101_document_id,
+            equipment_item_id: has_equipment_item[i].equipment_item_id,
+            equipment_status_id: has_equipment_item[i].equipment_status_id,
+            remark: has_equipment_item[i].remark,
+        };
     }
     for (var i = has_equipment_item.length; i <= 9; i++) {
         has_equipment_item.push({
@@ -1409,7 +1542,7 @@ function returnFullArrayHasEquipmentItemNull (has_equipment_item) {
     return has_equipment_item;
 }
 
-function  returnFullArrayLossLineItemNull (loss_line_items) {
+function returnFullArrayLossLineItemNull(loss_line_items) {
     let initialLossLineItem = {
         document_id: '', // maybe not needed
         line_number: '',
@@ -1420,13 +1553,13 @@ function  returnFullArrayLossLineItemNull (loss_line_items) {
         remark: '',
     }
 
-        for (var i = loss_line_items.length; i <= 9; i++) {
-            loss_line_items.push({
-                initialLossLineItem,
-                line_number: i
-            });
-        }
-        return loss_line_items;
+    for (var i = loss_line_items.length; i <= 9; i++) {
+        loss_line_items.push({
+            initialLossLineItem,
+            line_number: i
+        });
+    }
+    return loss_line_items;
 }
 
 // Validation 
@@ -1661,7 +1794,6 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
                     setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
                     validateField("created_by_user_employee_id");
                     validateField("created_by_admin_employee_id");
-                    validateField("responsible_by");
                     validateField("internal_item_id");
                     return resolve(null);
 
@@ -1712,20 +1844,32 @@ export const validateEmployeeIDField = (fieldName, fact, setFieldValue, employee
 };
 
 export const validateUserIDField = (fieldName, fact, setFieldValue, user_id) => {
-    console.log("I am validating user id")
-    let users = fact[FACTS.USERS].items;
-    let user = users.find(user => user.user_id === user_id); // Returns undefined if not found
-    if (user) {
-        setFieldValue(fieldName, `${user.employee_id}\\${user.firstname_th} ${user.lastname_th}`, false);
+    if (!user_id) {
         return;
+    }
+    if (Number.isInteger(user_id)) {
+        let users = fact[FACTS.USERS].items;
+        let user = users.find(user => user.user_id === user_id); // Returns undefined if not found
+        if (user) {
+            setFieldValue(fieldName, `${user.employee_id}\\${user.firstname_th} ${user.lastname_th}`, false);
+            return;
+        } else {
+            return 'Invalid Employee ID';
+        }
     } else {
-        return 'Invalid Employee ID';
+        let users = fact[FACTS.USERS].items;
+        let user = users.find(user => user.user_id === getUserIDFromEmployeeID(fact[FACTS.USERS], user_id)); // Returns undefined if not found
+        if (user) {
+            setFieldValue(fieldName, `${user.employee_id}\\${user.firstname_th} ${user.lastname_th}`, false);
+            return;
+        } else {
+            return 'Invalid Employee ID';
+        }
     }
 };
 
 
 export const validateWarehouseIDField = (fieldName, fact, setFieldValue, warehouse_id) => {
-    console.log("I am validating warehouse id")
     warehouse_id = `${warehouse_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
     let warehouses = fact[FACTS.WAREHOUSES].items;
     let warehouse = warehouses.find(warehouse => `${warehouse.warehouse_id}` === `${warehouse_id}`); // Returns undefined if not found
@@ -2040,4 +2184,12 @@ export const filterAlsEquipment = (equipmentData, formData) => {
     })
     return tempEquipmentData;
 
+}
+
+export const changeTheam = () => {
+    // Ture คือ version Theam แบบใหม่
+    return true;
+
+    // False คือ version Theam แบบเก่า
+    // return false;
 }

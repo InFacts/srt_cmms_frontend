@@ -14,6 +14,8 @@ import Label from '../common/form-label'
 
 import { validatedataDocumentField, DOCUMENT_STATUS, getUserIDFromEmployeeID, checkBooleanForEditHelper } from '../../helper';
 
+import BgBlue from '../../../images/pmt/bg_blue.jpg';
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const BottomContent = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
     const factDistricts = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
@@ -30,8 +32,8 @@ const BottomContent = (props) => {
 
     const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
     return (
-        <div id="blackground-gray">
-            <div className="container_12 clearfix">
+        <div id={changeTheam() === true ? "" : "blackground-gray"}>
+            <div className="container_12 clearfix" id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>
 
                 {/* === Tab broken_content  === */}
                 <div id="broken_content" className="tabcontent">
@@ -39,7 +41,7 @@ const BottomContent = (props) => {
                     <h3 className="head-title-bottom mt-2">ข้อมูลเหตุขัดข้อง/ชำรุด</h3>
 
                     {/* === Left Column === */}
-                    <div className="grid_6" style={{ paddingLeft: "10px" }}>
+                    <div className={changeTheam() === true ? "grid_5" : "grid_6"} style={{ paddingLeft: "10px" }}>
 
                         {/* Accident On */}
                         <Label>วันเวลาเกิดเหตุ</Label>

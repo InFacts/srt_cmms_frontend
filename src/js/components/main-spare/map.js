@@ -7,39 +7,71 @@ import '../../../css/position-arrow-spare-part.css';
 import Dropdown from '../../../images/spare/drop-dawn.svg'
 
 import Oneone from '../../../images/spare/one-one.svg'
+import OneoneNew from '../../../images/spare/one-one-new.svg'
+
 import Onetwo from '../../../images/spare/one-two.svg'
+import OnetwoNew from '../../../images/spare/one-two-new.svg'
+
 import Onethree from '../../../images/spare/one-three.svg'
+import OnethreeNew from '../../../images/spare/one-three-new.svg'
+
 import Arrow1 from '../../../images/spare/arrow1.svg'
 import Arrow2 from '../../../images/spare/arrow2.svg'
 import Arrow3 from '../../../images/spare/arrow3.svg'
 import Text1 from '../../../images/spare/text1.svg'
 import Text2 from '../../../images/spare/text2.svg'
 import Text3 from '../../../images/spare/text3.svg'
+
 import Center from '../../../images/spare/center.svg'
+import CenterNew from '../../../images/spare/center-new.svg'
+
 import Text4 from '../../../images/spare/text4.svg'
+
 import Twoone from '../../../images/spare/two-one.svg'
+import TwooneNew from '../../../images/spare/two-one-new.svg'
+
 import Twotwo from '../../../images/spare/two-two.svg'
+import TwotwoNew from '../../../images/spare/two-two-new.svg'
+
 import Twothree from '../../../images/spare/two-three.svg'
+import TwothreeNew from '../../../images/spare/two-three-new.svg'
+
 import Arrow4 from '../../../images/spare/arrow4.svg'
 import Arrow5 from '../../../images/spare/arrow5.svg'
 import Arrow6 from '../../../images/spare/arrow6.svg'
 import Text5 from '../../../images/spare/text5.svg'
 import Text6 from '../../../images/spare/text6.svg'
 import Text7 from '../../../images/spare/text7.svg'
+
 import Threeone from '../../../images/spare/three-one.svg'
+import ThreeoneNew from '../../../images/spare/three-one-new.svg'
+
 import Threetwo from '../../../images/spare/three-two.svg'
+
 import Threethree from '../../../images/spare/three-three.svg'
+import ThreethreeNew from '../../../images/spare/three-three-new.svg'
+
 import Text8 from '../../../images/spare/text8.svg'
 import Text9 from '../../../images/spare/text9.svg'
 import Text10 from '../../../images/spare/text10.svg'
+
 import Fourone from '../../../images/spare/four-one.svg'
+import FouroneNew from '../../../images/spare/four-one-new.svg'
+
 import Fourtwo from '../../../images/spare/four-two.svg'
+import FourtwoNew from '../../../images/spare/four-two-new.svg'
+
 import Fourthree from '../../../images/spare/four-three.svg'
+import FourthreeNew from '../../../images/spare/four-three-new.svg'
+
 import Text11 from '../../../images/spare/text11.svg'
 import Text12 from '../../../images/spare/text12.svg'
 import Text13 from '../../../images/spare/text13.svg'
 
 import RedHouse from '../../../images/red-house.svg';
+
+import BgRed from '../../../images/spare/bg_red.jpg';
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 
 // Start Function For Drop Dawn
 const toggleMenu = (element, show, top) => {
@@ -105,19 +137,25 @@ class Map extends React.Component {
     componentDidMount() {
         // Setup DropDawn
         setupAllContextualMenus('.p-contextual-menu__toggle');
-      }
+    }
 
     render() {
         return (
-            <div>
+            <div style={ changeTheam() === true ? {backgroundImage: `url(${BgRed})`,  width: "100vw", height: "100vh"} : {} }>
                 <div>
                     <div className="container_12 clearfix">
                         <section className="grid_12 ">
-                        <h4 className="head-title" style={{ color: "black"}}>ระบบบริหารข้อมูลอะไหล่ - Spare</h4>
-                            <div id="blackground-white" style={{ height: "380px" }}>
-                                <Link to="/goods-receipt2"><img alt='some value' src={Oneone} className="one-one" /></Link>
-                                <img alt='some value' src={Onetwo} className="one-two" />
-                                <Link to="/goods-receipt-no-po"><img alt='some value' src={Onethree} className="one-three" /></Link>
+                            <h4 className="head-title" style={{ color: "black" }}>ระบบบริหารข้อมูลอะไหล่ - Spare</h4>
+                            <div id="blackground-white" style={ changeTheam() === true ? { borderRadius: "25px", border: "2px dashed gray", height: "380px"} : {height: "380px"} }>
+
+                                <Link to="/goods-receipt2"><img alt='some value' src={changeTheam() === true ? OneoneNew : Oneone} 
+                                className={changeTheam() === true ? "one-one-new" : "one-one"} style={ changeTheam() === true ? { width: "60px" } : {} }/></Link>
+
+                                <img alt='some value' src={changeTheam() === true ? OnetwoNew : Onetwo} 
+                                className={changeTheam() === true ? "one-two-new" : "one-two"} style={ changeTheam() === true ? { width: "85px" } : {} } />
+
+                                <Link to="/goods-receipt-no-po"><img alt='some value' src={changeTheam() === true ? OnethreeNew : Onethree} 
+                                className={changeTheam() === true ? "one-three-new" : "one-three"} style={ changeTheam() === true ? { width: "85px" } : {} } /></Link>
 
                                 <img alt='some value' src={Arrow1} className="arrow1" />
                                 <img alt='some value' src={Arrow2} className="arrow2" />
@@ -126,11 +164,18 @@ class Map extends React.Component {
                                 <img alt='some value' src={Text2} className="text2" />
                                 <img alt='some value' src={Text3} className="text3" />
 
-                                <Link to="/warehouse"><img alt='some value' src={Center} className="center" /></Link>
+                                <Link to="/warehouse"><img alt='some value' src={changeTheam() === true ? CenterNew : Center} 
+                                className={changeTheam() === true ? "center-new" : "center"} style={ changeTheam() === true ? { width: "75px" } : {} } /></Link>
+
                                 <img alt='some value' src={Text4} className="text4" />
-                                <Link to="/goods-usage"><img alt='some value' src={Twoone} className="two-one" /></Link>
-                                <Link to="/goods-fix"><img alt='some value' src={Twothree} className="two-two" /></Link>
-                                <Link to="/goods-issue"><img alt='some value' src={Twotwo} className="two-three" /></Link>
+                                <Link to="/goods-usage"><img alt='some value' src={changeTheam() === true ? TwooneNew : Twoone} 
+                                className={changeTheam() === true ? "two-one-new" : "two-one"} style={ changeTheam() === true ? { width: "75px" } : {} }  /></Link>
+
+                                <Link to="/goods-fix"><img alt='some value' src={changeTheam() === true ? TwotwoNew : Twotwo} 
+                                className={changeTheam() === true ? "two-two-new" : "two-two"} style={ changeTheam() === true ? { width: "70px" } : {} }  /></Link>
+
+                                <Link to="/goods-issue"><img alt='some value' src={changeTheam() === true ? TwothreeNew : Twothree} 
+                                className={changeTheam() === true ? "two-three-new" : "two-three"} style={ changeTheam() === true ? { width: "80px" } : {} }  /></Link>
 
                                 <img alt='some value' src={Arrow4} className="arrow4" />
                                 <img alt='some value' src={Arrow5} className="arrow5" />
@@ -138,19 +183,29 @@ class Map extends React.Component {
                                 <img alt='some value' src={Text5} className="text5" />
                                 <img alt='some value' src={Text6} className="text7" />
                                 <img alt='some value' src={Text7} className="text6" />
-                                
-                                <Link to="/inventory-transfer"><img alt='some value' src={Threeone} className="three-one" /></Link>
-                                <img alt='some value' src={Threetwo} className="three-two" />
-                                <img alt='some value' src={Threethree} className="three-three" />
-                                
+
+                                <Link to="/inventory-transfer"><img alt='some value' src={changeTheam() === true ? ThreeoneNew : Threeone} 
+                                className={changeTheam() === true ? "three-one-new" : "three-one"} style={ changeTheam() === true ? { width: "85px" } : {} }/></Link>
+
+                                <img alt='some value' src={changeTheam() === true ? ThreethreeNew : Threetwo} 
+                                className={changeTheam() === true ? "three-two-new" : "three-two"} style={ changeTheam() === true ? { width: "80px" } : {} }/>
+
+                                <img alt='some value' src={changeTheam() === true ? ThreethreeNew : Threethree} 
+                                className={changeTheam() === true ? "three-three-new" : "three-three"} style={ changeTheam() === true ? { width: "75px" } : {} } />
+
                                 <img alt='some value' src={Text8} className="text8" />
                                 <img alt='some value' src={Text9} className="text9" />
                                 <img alt='some value' src={Text10} className="text10" />
 
-                                <Link to="/track"><img alt='some value' src={Fourone} className="four-one" /></Link>
-                                <Link to="/item-master-data"><img alt='some value' src={Fourtwo} className="four-two" /></Link>
-                                
-                                <img alt='some value' src={Fourthree} className="four-three" />
+                                <Link to="/track"><img alt='some value' src={changeTheam() === true ? FouroneNew : Fourone} 
+                                className={changeTheam() === true ? "four-one-new" : "four-one"} style={ changeTheam() === true ? { width: "70px" } : {} } /></Link>
+
+                                <Link to="/item-master-data"><img alt='some value' src={changeTheam() === true ? FourtwoNew : Fourtwo} 
+                                className={changeTheam() === true ? "four-two-new" : "four-two"} style={ changeTheam() === true ? { width: "60px" } : {} } /></Link>
+
+                                <img alt='some value' src={changeTheam() === true ? FourthreeNew : Fourthree} 
+                                className={changeTheam() === true ? "four-three-new" : "four-three"} style={ changeTheam() === true ? { width: "70px" } : {} }/>
+
                                 <img alt='some value' src={Text11} className="text11" />
                                 <img alt='some value' src={Text12} className="text12" />
                                 <img alt='some value' src={Text13} className="text13" />
@@ -195,7 +250,7 @@ class Map extends React.Component {
                         </section>
                     </div>
                 </div>
-                <div id="red-house2">
+                {/* <div id="red-house2">
                     <div className="container_12 clearfix">
                         <div className="grid_12 from-red-house">
                             <img alt='red house' src={RedHouse} />
@@ -208,7 +263,7 @@ class Map extends React.Component {
                         <div className="grid_12">
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
         )
     };

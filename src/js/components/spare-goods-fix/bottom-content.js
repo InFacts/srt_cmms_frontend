@@ -24,6 +24,7 @@ import {
   sumTotalLineItemHelper, sumTotalHelper, DOCUMENT_STATUS, getUserIDFromEmployeeID, checkBooleanForEditHelper
 } from '../../helper';
 
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const BottomContent = (props) => {
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
@@ -130,52 +131,55 @@ const BottomContent = (props) => {
   const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
 
   return (
-    <div id="blackground-gray">
-      <div className="container_12 clearfix">
-        <div className="container_12 ">
+    <div id={changeTheam() === true ? "" : "blackground-gray"}>
+      <div className="container_12 clearfix" id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>
 
-          <div id="listItem_content" className="tabcontent">
-            <div className="container_12 mt-1" style={{ paddingRight: "10px" }}>
-              <TableHaveStock line_items={values.line_items}
-                sumTotalLineItem={sumTotalLineItem}
-                validateLineNumberInternalItemIDField={validateLineNumberInternalItemIDField}
-                validateLineNumberQuatityItemIDField={validateLineNumberQuatityItemIDField}
-                validateLineNumberItemStatusIDField={validateLineNumberItemStatusIDField}
-                setLineNumber={setLineNumber}
-                checkBooleanForEdit={checkBooleanForEdit}
-              />
-            </div>
+        <div className="container_12 clearfix">
+          <div className="container_12 ">
 
-            <div className="container_12 mt-3">
-              <div className="grid_1 float-right"><p className="cancel-default float-right">บาท.</p></div>
-              <div className="grid_3 float-right push_0">
-                <input type="text" className="cancel-default" value={sumTotal(values.line_items)} disabled="disabled"></input>
-              </div>
-              <div className="grid_2 float-right push_0"><p className="cancel-default float-right">รวมเป็นเงิน</p></div>
-            </div>
-            <div className="container_12">
-              <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
-              <div className="grid_11">
-                <TextareaInput name="remark" tabIndex="6"
-                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+            <div id="listItem_content" className="tabcontent">
+              <div className="container_12 mt-1" style={{ paddingRight: "10px" }}>
+                <TableHaveStock line_items={values.line_items}
+                  sumTotalLineItem={sumTotalLineItem}
+                  validateLineNumberInternalItemIDField={validateLineNumberInternalItemIDField}
+                  validateLineNumberQuatityItemIDField={validateLineNumberQuatityItemIDField}
+                  validateLineNumberItemStatusIDField={validateLineNumberItemStatusIDField}
+                  setLineNumber={setLineNumber}
+                  checkBooleanForEdit={checkBooleanForEdit}
                 />
               </div>
+
+              <div className="container_12 mt-3">
+                <div className="grid_1 float-right"><p className="cancel-default float-right">บาท.</p></div>
+                <div className="grid_3 float-right push_0">
+                  <input type="text" className="cancel-default" value={sumTotal(values.line_items)} disabled="disabled"></input>
+                </div>
+                <div className="grid_2 float-right push_0"><p className="cancel-default float-right">รวมเป็นเงิน</p></div>
+              </div>
+              <div className="container_12">
+                <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
+                <div className="grid_11">
+                  <TextareaInput name="remark" tabIndex="6"
+                    disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  />
+                </div>
+              </div>
             </div>
+
+            <div id="attachment_content" className="tabcontent">
+              <Files />
+            </div>
+
+            <div id="table_status_content" className="tabcontent">
+              <TableStatus bodyTableStatus={values.step_approve} />
+            </div>
+
+            {/* PopUp ค้นหาอะไหล่ MODE ADD */}
+            <PopupModalNoPart keyname='line_items' lineNumber={lineNumber} nameModal="modalNoPart" />
+
           </div>
-
-          <div id="attachment_content" className="tabcontent">
-            <Files/>
-          </div>
-
-          <div id="table_status_content" className="tabcontent">
-            <TableStatus bodyTableStatus={values.step_approve} />
-          </div>
-
-          {/* PopUp ค้นหาอะไหล่ MODE ADD */}
-          <PopupModalNoPart keyname='line_items' lineNumber={lineNumber} nameModal="modalNoPart" />
-
         </div>
-      </div>
+      </div >
     </div >
   )
 };

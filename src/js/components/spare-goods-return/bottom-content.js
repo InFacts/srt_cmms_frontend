@@ -27,6 +27,7 @@ import PopupModalNoPart from '../common/popup-modal-nopart'
 
 import '../../../css/table.css';
 
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const BottomContent = (props) => {
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
@@ -109,8 +110,9 @@ const BottomContent = (props) => {
   const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
 
   return (
-    <div id="blackground-gray">
-      <div className="container_12 clearfix">
+    <div id={changeTheam() === true ? "" : "blackground-gray"}>
+      <div className="container_12 clearfix" id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>
+
         <div className="container_12 ">
 
           <div id="listItem_content" className="tabcontent">

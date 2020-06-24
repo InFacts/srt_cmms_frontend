@@ -8,7 +8,7 @@ import '../../../vender/fontawesome-free/css/all.css';
 import '../../../css/style-signin.css';
 
 import RedHouse from '../../../images/red-house.svg';
-import logo from '../../../images/logo.png';
+import logo from '../../../images/logo2.png';
 
 const Login = (props) => {
   const [login, setLogin] = useState(false)
@@ -41,7 +41,7 @@ const Login = (props) => {
     <div>
       <div className="container_12 clearfix">
         <div className="grid_12 from-sigin">
-          <img alt='some value' src={logo} width="400px" />
+          <img alt='some value' src={logo} width="200px" />
           <p className="text-signin">ระบบฐานข้อมูลระบบอาณัติสัญญาณเพื่อวิเคราะห์และวางแผนซ่อมบำรุง</p>
           <p className="text-signin">ฝ่ายการอาณัติสัญญาณและโทรคมนาคม</p>
           <h4 className="head-signin">เข้าสู่ระบบ</h4>
@@ -58,7 +58,7 @@ const Login = (props) => {
         </div>
       </div>
 
-      <div id="red-house2">
+      {/* <div id="red-house2">
         <div className="container_12 clearfix">
           <div className="grid_12 from-red-house">
             <img alt='red house' src={RedHouse} />
@@ -71,7 +71,7 @@ const Login = (props) => {
           <div className="grid_12">
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 };

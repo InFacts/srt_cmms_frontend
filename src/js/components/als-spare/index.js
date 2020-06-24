@@ -20,6 +20,8 @@ import AdjustmentBarComponent from './adjustment-bar';
 import SimpleGrayCardComponent from '../als-equipment-status/simple-gray-card';
 import { getAnnualInventoryMonthData, randomDivergingBarGraphData, randomScatterPlotData } from './mockup-data';
 
+import BgGreen from '../../../images/als/bg_als.jpg';
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const AlsSpareComponent = () => {
   const dispatch = useDispatch();
   const loggedIn = useSelector(state => state.token.isLoggedIn);
@@ -53,11 +55,11 @@ const AlsSpareComponent = () => {
     <>
       {!loggedIn ? <Redirect to="/" /> : null}
 
-      <div id="blackground-white" >
+      <div id={changeTheam() === true ? "" : "blackground-white"} style={changeTheam() === true ? { backgroundImage: `url(${BgGreen})`, width: "100vw", height: "100vh" } : {height: "100vh"}}>
         <div className="bootstrap-wrapper">
           <div class="container" style={{ marginTop: "80px" }}>
             {/* Section Title */}
-            <h4 className="head-title">ระบบวิเคราะห์การวางแผนสำรองอะไหล่</h4>
+            <h4 className="head-title mb-0">ระบบวิเคราะห์การวางแผนสำรองอะไหล่</h4>
 
 
             {/* Columns have horizontal padding to create the gutters between individual columns, however, you can remove the margin from rows and padding from columns with .no-gutters on the .row. */}
@@ -118,10 +120,10 @@ const AlsSpareComponent = () => {
                   title="Inventory Month ปัจจุบัน vs. แผนของแต่ละอะไหล่"
                   data ={randomScatterPlotData()}
                   chartSettings={{
-                    marginTop: 20,
+                    marginTop: 40,
                     marginBottom:30,
                     marginLeft:30,
-                    height: 230,
+                    height: 250,
                   }}
                 />
               </div>

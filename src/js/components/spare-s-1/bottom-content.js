@@ -15,13 +15,16 @@ import { useFormikContext } from 'formik';
 import '../../../css/table.css';
 
 import { fetchGoodsOnhandData, getNumberFromEscapedString } from '../../helper';
+
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const BottomContent = (props) => {
 
   const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
   return (
-    <div id="blackground-gray">
-      <div className="container_12 clearfix">
+    <div id={changeTheam() === true ? "" : "blackground-gray"}>
+      <div className="container_12 clearfix" id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>
+
         <div className="container_12 ">
           <div id="listItem_content" className="tabcontent">
             <table className="table-many-column mt-2">

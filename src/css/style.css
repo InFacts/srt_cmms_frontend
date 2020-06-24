@@ -53,7 +53,7 @@
   }
   
   .mb-0{
-    margin-bottom: 0rem;
+    margin-bottom: 0rem !important;
   }
   
   .mb-1{
@@ -520,7 +520,7 @@
 }
 
 .card-body{
-    color: #545454;
+    color: black;
     font-family: Anakotmai-Light;
     font-style: normal;
     font-weight: bold;
@@ -533,7 +533,7 @@
 }
 
 .card-footer{
-    color: #999999;
+    color: black;
     font-family: Anakotmai-Light;
     font-style: normal;
     font-size: 12px;

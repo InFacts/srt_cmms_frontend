@@ -87,10 +87,10 @@ const MainModule = (props) => {
                                 </Link>
                                 <ul className="p-subnav__items--right" id="account-menu" aria-hidden="true">
                                     <li>
-                                        <Link to="/profile" className="p-subnav__item sub">โปรไฟล์</Link>
+                                        <Link to="/profile" className="p-subnav__item sub" style={{ color: "#111"}}>โปรไฟล์</Link>
                                     </li>
                                     <li>
-                                        <Link to="/" className="p-subnav__item sub" onClick={(e) => {if (window.confirm('คุณต้องการออกจากระบบใช่หรือไม่')) {return localStorage.removeItem('token_auth') } else { e.preventDefault(); }}} >ออกจากระบบ</Link>
+                                        <Link to="/" className="p-subnav__item sub" style={{ color: "#111"}} onClick={(e) => {if (window.confirm('คุณต้องการออกจากระบบใช่หรือไม่')) {return localStorage.removeItem('token_auth') } else { e.preventDefault(); }}} >ออกจากระบบ</Link>
                                     </li>
                                 </ul>
                             </li>

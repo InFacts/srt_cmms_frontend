@@ -21,13 +21,14 @@ import SimpleGrayCardComponent from './simple-gray-card';
 import AdjustmentBarComponent from './adjustment-bar';
 import EquipmentStatusListComponent from './equipment-status-list';
 
-
+import BgGreen from '../../../images/als/bg_als.jpg';
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const randomHistogramData = () => {
     let results = [];
 
     results.push(0)
     for (let i = 0; i < 1000; i++) {
-        let randomNumber = (Math.random() + Math.random() + Math.random() + Math.random()) / 4*100; 
+        let randomNumber = (Math.random() + Math.random() + Math.random() + Math.random()) / 4 * 100;
         results.push(randomNumber);
     }
 
@@ -51,8 +52,7 @@ const AlsEquipmentStatusComponent = () => {
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
-
-            <div id="blackground-white" style={{ height: "100vh" }}>
+            <div id={changeTheam() === true ? "" : "blackground-white"} style={changeTheam() === true ? { backgroundImage: `url(${BgGreen})`, width: "100vw", height: "120vh" } : {height: "120vh"}}>
                 <div className="bootstrap-wrapper">
                     <div className="container" style={{ marginTop: "70px" }}>
                         {/* Section Title */}
@@ -114,8 +114,8 @@ const AlsEquipmentStatusComponent = () => {
                                     // border:"1px solid red", 
                                     height: "300px"
                                 }}>
-                                <Histogram 
-                                    chartSettings={{ marginLeft: 50, marginTop: 70, marginBottom: 40, height: 300 }} 
+                                <Histogram
+                                    chartSettings={{ marginLeft: 50, marginTop: 70, marginBottom: 40, height: 300 }}
                                     data={randomHistogramData()}
                                     title="กลุ่มอายุของสินทรัพย์"
                                     xAxis="อายุการใช้งานของสินทรัพย์"

@@ -30,6 +30,7 @@ import {
 import { FOOTER_MODE, FOOTER_ACTIONS } from '../../redux/modules/footer.js';
 import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
 
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const responseToFormState = (userFact, data) => {
   for (var i = data.line_items.length; i <= 9; i++) {
     data.line_items.push(
@@ -64,7 +65,7 @@ const TopContent = (props) => {
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
-  const decoded_token = useSelector((state) => ({...state.token.decoded_token}), shallowEqual);
+  const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
   // Fill Default Forms
   useFillDefaultsOnModeAdd();
@@ -80,88 +81,93 @@ const TopContent = (props) => {
 
   const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
   return (
-    <div id="blackground-white">
+    <div id={changeTheam() === true ? "" : "blackground-white"}>
+
       <div className="container_12 clearfix">
         <section className="container_12 ">
           <h4 className="head-title">ปรับปรุงจำนวนอะไหล่</h4>
-          <div className="container_12">
 
-            {/* Document ID */}
-            <div className="grid_2">
-              <p className="top-text">เลขที่เอกสาร</p>
-            </div>
-            <div className="grid_3 pull_1">
-              <TextInput name='internal_document_id' validate={validateInternalDocumentIDField}
-                searchable={props.toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalDocument" tabIndex="1" />
-            </div>
+          <div id={changeTheam() === true ? "blackground-white" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "150px", paddingTop: "10px" } : {}} >
 
-            {/* Document Status  */}
-            <div className="grid_3 float-right">
-              <TextInput name="status_name_th" disabled />
-            </div>
-            <div className="grid_2 float-right">
-              <p className="top-text float-right">สถานะ</p>
-            </div>
-          </div>
+            <div className="container_12">
 
-          <div className="container_12">
-            {/* Created by User */}
-            <div className="grid_2">
-              <p className="top-text">ผู้นำเข้า</p>
-            </div>
-            <div className="grid_3 pull_1">
-              {/* Q: If this is user name in thai, how do we get ID? */}
-              <TextInput name="created_by_user_employee_id" validate={validateUserEmployeeIDField}
-                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName" tabIndex="2" />
+              {/* Document ID */}
+              <div className="grid_2">
+                <p className="top-text">เลขที่เอกสาร</p>
+              </div>
+              <div className="grid_3 pull_1">
+                <TextInput name='internal_document_id' validate={validateInternalDocumentIDField}
+                  searchable={props.toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalDocument" tabIndex="1" />
+              </div>
+
+              {/* Document Status  */}
+              <div className="grid_3 float-right">
+                <TextInput name="status_name_th" disabled />
+              </div>
+              <div className="grid_2 float-right">
+                <p className="top-text float-right">สถานะ</p>
+              </div>
             </div>
 
-            {/* Created On */}
-            <div className="grid_3 float-right">
-              <DateTimeInput name="created_on" /*validate={validateCreateOnField */
-                disabled />
-            </div>
-            <div className="grid_2 float-right">
-              <p className="top-text float-right">วันที่</p>
-            </div>
-          </div>
+            <div className="container_12">
+              {/* Created by User */}
+              <div className="grid_2">
+                <p className="top-text">ผู้นำเข้า</p>
+              </div>
+              <div className="grid_3 pull_1">
+                {/* Q: If this is user name in thai, how do we get ID? */}
+                <TextInput name="created_by_user_employee_id" validate={validateUserEmployeeIDField}
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName" tabIndex="2" />
+              </div>
 
-          <div className="container_12">
-            {/* Admin Name */}
-            <div className="grid_2">
-              <p className="top-text">ผู้สร้างเอกสาร</p>
-            </div>
-            <div className="grid_3 pull_1">
-              <TextInput name="created_by_admin_employee_id" validate={validateAdminEmployeeIDField} disabled />
-            </div>
-
-            {/* Document date */}
-            <div className="grid_3 float-right">
-              <DateInput name="document_date"
-                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="3" />
-            </div>
-            <div className="grid_2 float-right">
-              <p className="top-text float-right">วันที่เอกสาร</p>
+              {/* Created On */}
+              <div className="grid_3 float-right">
+                <DateTimeInput name="created_on" /*validate={validateCreateOnField */
+                  disabled />
+              </div>
+              <div className="grid_2 float-right">
+                <p className="top-text float-right">วันที่</p>
+              </div>
             </div>
 
-          </div>
+            <div className="container_12">
+              {/* Admin Name */}
+              <div className="grid_2">
+                <p className="top-text">ผู้สร้างเอกสาร</p>
+              </div>
+              <div className="grid_3 pull_1">
+                <TextInput name="created_by_admin_employee_id" validate={validateAdminEmployeeIDField} disabled />
+              </div>
 
-          <div className="container_12">
-            {/* <div className="grid_2">
+              {/* Document date */}
+              <div className="grid_3 float-right">
+                <DateInput name="document_date"
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="3" />
+              </div>
+              <div className="grid_2 float-right">
+                <p className="top-text float-right">วันที่เอกสาร</p>
+              </div>
+
+            </div>
+
+            <div className="container_12">
+              {/* <div className="grid_2">
               <p className="top-text">เลขที่เอกสารอ้างอิง</p>
             </div>
             <div className="grid_3 pull_0">
               <TextInput name="refer_to_document_name" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="4" />
             </div> */}
 
-            {/* SRC Warehouse ID */}
-            <div className="grid_3 float-right">
-              <TextInput name="src_warehouse_id" validate={validateSrcWarehouseIDField}
-                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalInventory" tabIndex="5" />
-            </div>
-            <div className="grid_2 float-right">
-              <p className="top-text float-right">เลขที่คลัง</p>
+              {/* SRC Warehouse ID */}
+              <div className="grid_3 float-right">
+                <TextInput name="src_warehouse_id" validate={validateSrcWarehouseIDField}
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalInventory" tabIndex="5" />
+              </div>
+              <div className="grid_2 float-right">
+                <p className="top-text float-right">เลขที่คลัง</p>
+              </div>
             </div>
           </div>
         </section>

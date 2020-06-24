@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const TabBar = (props) => {
 
   // Run only once with checking nothing []
@@ -21,8 +21,8 @@ const TabBar = (props) => {
   }
   return ( 
     <>
-      <div id="blackground-white">
-        <div className="container_12">
+      <div id={changeTheam() === true ? "" : "blackground-white"}>
+        <div className="container_12" id={changeTheam() === true ? "blackground-white" : ""} style={ changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {} }>
           <div className="tab grid_12">
             {props.tabNames.map((tabName, index) => 
                 <button type="button" className="tablinks" id={tabName.id} onClick={actionTabDocument}>{tabName.name}</button>

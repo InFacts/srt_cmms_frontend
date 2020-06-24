@@ -30,6 +30,7 @@ import {
 import { FOOTER_MODE, FOOTER_ACTIONS } from '../../redux/modules/footer.js';
 import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add';
 
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const TopContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
@@ -51,10 +52,13 @@ const TopContent = (props) => {
 
   const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
   return (
-    <div id="blackground-white">
+    <div id={changeTheam() === true ? "" : "blackground-white"}>
       <div className="container_12 clearfix">
         <section className="container_12 ">
           <h4 className="head-title">ตรวจนับสินค้า</h4>
+
+          <div id={changeTheam() === true ? "blackground-white" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "150px", paddingTop: "10px" } : {}} >
+
           <div className="container_12">
 
             {/* Document ID */}
@@ -134,6 +138,7 @@ const TopContent = (props) => {
             <div className="grid_2 float-right">
               <p className="top-text float-right">เลขที่คลัง</p>
             </div>
+          </div>
           </div>
         </section>
       </div>

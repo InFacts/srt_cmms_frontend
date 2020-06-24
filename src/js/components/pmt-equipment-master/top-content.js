@@ -13,6 +13,9 @@ import { getNumberFromEscapedString, fetchGoodsOnhandDataForItemmasterData, DOCU
 
 import { FACTS } from '../../redux/modules/api/fact.js';
 
+import BgBlue from '../../../images/pmt/bg_blue.jpg';
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
+
 const FormLabel = ({ children }) => (
   <div className={`grid_2`}>
     <p className="top-text">{children}</p>
@@ -29,68 +32,59 @@ const TopContent = (props) => {
   const factEquipment = useSelector((state) => ({ ...state.api.fact.equipment }), shallowEqual);
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
+  const factEquipmentStatus = useSelector((state) => ({ ...state.api.fact[FACTS.EQUIPMENT_STATUS] }), shallowEqual);
 
   const responseToFormState = (data) => {
-    let uoms = fact['unit-of-measures'].items;
-    let uom = uoms.find(uom => `${uom.uom_id}` === `${data.uom_id_inventory}`); // Returns undefined if not found
+    console.log("data", data)
     return {
-      internal_item_id: data.internal_item_id,
-      description: data.description,
-      item_group_id: data.item_group_id,
-      uom_group_id: data.uom_group_id,                    //UOM
-      uom_id: data.uom_id_inventory,
-      uom_name: uom.name,
-      minimum_order_quantity: !data.minimum_order_quantity ? 0 : data.minimum_order_quantity,  //ขั้นต่ำการสั่งซื้อ
-      lead_time: !data.lead_time ? 0 : data.lead_time,
-      tolerance_time: !data.tolerance_time ? 0 : data.tolerance_time,
-      remark: data.remark,
-      active: data.active.data[0],
-      accounting_type: data.accounting_type,
-      list_uoms: data.list_uoms
+      internal_item_id: data.equipment_group.item.internal_item_id,
+      description: data.equipment_group.item.description,
+      active: data.equipment_group.item.active.data[0],
+      item_type_id: data.equipment_group.item.item_type_id,
+      uom_group_id: data.equipment_group.item.uom_group_id,                    //UOM
+      uom_id: data.equipment_group.item.uom_group.uom[0].uom_id,
+      uom_name: data.equipment_group.item.uom_group.uom[0].name,
+      remark: data.equipment_group.item.remark,
+      minimum_order_quantity: data.equipment_group.item.minimum_order_quantity,
+      tolerance_time: data.equipment_group.item.tolerance_time,
+      lead_time: data.equipment_group.item.lead_time,
+      accounting_type: data.equipment_group.item.accounting_type,
+      equipment_status_id: data.item_status_id,
+      price_import: data.price_import,
+      price_currently: data.price_currently,
+      description_equipment: data.depreciation,
+      useful_life: data.useful_life,
+      responsible_by: data.responsible_district_id,
+      responsible_node_by: data.responsible_node_by
     }
   }
 
   const validateInternalItemIDField = internal_item_id => {
+    console.log("internal_item_id", internal_item_id)
+
     if (!internal_item_id) {
+      console.log("I dont have any internal item id")
       return 'Required';
     }
+
     if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
       && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) {
-      let items = fact.items.items;
-      let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
-      if (item) {
-        setValues({ ...values, ...responseToFormState(item) }, false); //Setvalues and don't validate
-        validateField("item_type_id");
-
-        var item_match_equipments = factEquipment.items;
-        let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.item_id}` === `${item.item_id}`); // Returns undefined if not found
-        console.log("item_match_equipment", item_match_equipment)
-        if (item_match_equipment) {
-          setFieldValue("price_import", item_match_equipment.price_import, false);
-          setFieldValue("districts_id", item_match_equipment.districts_id, false);
-          setFieldValue("price_currently", item_match_equipment.price_currently, false);
-          setFieldValue("location_station_id", item_match_equipment.location_station_id, false);
-          setFieldValue("description_equipment", item_match_equipment.depreciation, false);
-          setFieldValue("useful_life", item_match_equipment.useful_life, false);
-          setFieldValue("equipment_status_id_th", item_match_equipment.equipment_status.status_th, false);
-          setFieldValue("responsible_by", item_match_equipment.responsible_by, false);
-          setFieldValue("station", item_match_equipment.station, false);
-          setFieldValue("equipment_group_id", item_match_equipment.equipment_group.equipment_group_id, false);
-          setFieldValue("item_type_id", 1, false);
-
-          // IF Check user If User is Admin -> return true Else -> return false
-          if (decoded_token.id === 4) { //{/* TODO USER_ID FOR ADMIN */}
-            console.log(" YES I AM ADMIN ")
-            setFieldValue("modeEdit", true, false);
-          } else {
-            console.log(" NO I NOT ADMIN ")
-            setFieldValue("modeEdit", false, false);
-          }
+      var item_match_equipments = factEquipment.items;
+      let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.equipment_group.item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+      // console.log("item_match_equipment", item_match_equipment)
+      if (item_match_equipment) {
+        setValues({ ...values, ...responseToFormState(item_match_equipment) }, false); //Setvalues and don't validate
+        // validateField("item_type_id");
+        // IF Check user If User is Admin -> return true Else -> return false
+        if (decoded_token.id === 4) { //{/* TODO USER_ID FOR ADMIN */}
+          console.log(" YES I AM ADMIN ")
+          setFieldValue("modeEdit", true, false);
+        } else {
+          console.log(" NO I NOT ADMIN ")
+          setFieldValue("modeEdit", false, false);
         }
-        return;
-      } else {
-        return 'Invalid Number ID';
       }
+      return;
     } else {//If mode add, ok
       console.log("document ID doesn't exist but I am in mode add")
       if (internal_item_id) {
@@ -114,70 +108,84 @@ const TopContent = (props) => {
   const validateItemDescriptionField = (...args) => validateItemMasterdataField("description", ...args);
 
   return (
-    <div id="blackground-white">
+    <div id={changeTheam() === true ? "" : "blackground-white"}>
       <div className="container_12 clearfix">
         <section className="container_12 ">
           <FormTitle>ข้อมูลอุปกรณ์</FormTitle>
-          <div className="container_12">
 
-            {/* === internal_item_id === */}
-            <FormLabel>เลขที่สินทรัพย์</FormLabel>
-            <div className="grid_3 pull_1">
-              <TextInput name='internal_item_id'
-                validate={validateInternalItemIDField}
-                searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart" tabIndex="1" />
+          <div id={changeTheam() === true ? "blackground-white" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "120px", paddingTop: "10px" } : {}}>
+            <div className="container_12" >
+
+              {/* === internal_item_id === */}
+              <FormLabel>เลขที่สินทรัพย์</FormLabel>
+              <div className="grid_3 pull_1">
+                <TextInput name='internal_item_id'
+                  validate={validateInternalItemIDField}
+                  searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart" tabIndex="1" />
+              </div>
+
+              {/* === item_type_id === */}
+              <div className="float-right">
+                <div className="grid_3 float-right">
+                  <SelectNoChildrenInput name="item_type_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                    <option value=''></option>
+                    {values.item_type_id === 1 ? <option value='1' selected>asset</option> : <option value='1'>asset</option>}
+                  </SelectNoChildrenInput>
+                </div>
+                <div className="grid_2 float-right">
+                  <p className="top-text float-right">ชนิดอุปกรณ์</p>
+                </div>
+              </div>
             </div>
 
-            {/* === item_type_id === */}
-            <div className="float-right">
-              <div className="grid_3 float-right">
-                <SelectNoChildrenInput name="item_type_id" disabled={true}>
+            <div className="container_12">
+
+              {/* === description === */}
+              <FormLabel>รายละเอียด</FormLabel>
+              <div className="grid_3 pull_1">
+                <TextInput name="description" validate={validateItemDescriptionField} disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+              </div>
+
+              {/* === uom_group_id === */}
+              <div className="float-right">
+                <div className="grid_3 float-right">
+                  <SelectNoChildrenInput name="uom_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomGroupIDField} cssStyle={{ left: "-160px", top: "10px" }}>
+                    <option value=''></option>
+                    {fact[FACTS.UNIT_OF_MEASURE_GROUPS].items.map((uom) => (
+                      values.uom_group_id === uom.uom_group_id
+                        ?
+                        <option value={uom.uom_group_id} key={uom.uom_group_id} selected> {uom.name} </option>
+                        :
+                        <option value={uom.uom_group_id} key={uom.uom_group_id}> {uom.name} </option>
+                    ))}
+                  </SelectNoChildrenInput>
+                </div>
+                <div className="grid_2 float-right">
+                  <p className="top-text float-right">กลุ่มหน่วยนับ</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="container_12">
+
+              {/* === equipment_status_id_th === */}
+              <FormLabel>สถานะการใช้งาน</FormLabel>
+              <div className="grid_3 pull_0">
+                <SelectNoChildrenInput name="equipment_status_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                   <option value=''></option>
-                  {values.item_type_id === 1 && <option value='1' selected>asset</option>}
+                  {factEquipmentStatus.items.map((equipment_status) => {
+                    if (values.equipment_status_id === equipment_status.equipment_status_id) {
+                      return <option value={equipment_status.equipment_status_id} key={equipment_status.equipment_status_id} selected>{equipment_status.status_th}</option>
+                    } else {
+                      return <option value={equipment_status.equipment_status_id} key={equipment_status.equipment_status_id}>{equipment_status.status_th}</option>
+                    }
+                  })}
                 </SelectNoChildrenInput>
               </div>
-              <div className="grid_2 float-right">
-                <p className="top-text float-right">ชนิดอุปกรณ์</p>
-              </div>
             </div>
+
           </div>
 
-          <div className="container_12">
-
-            {/* === description === */}
-            <FormLabel>รายละเอียด</FormLabel>
-            <div className="grid_3 pull_1">
-              <TextInput name="description" validate={validateItemDescriptionField} disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
-            </div>
-
-            {/* === uom_group_id === */}
-            <div className="float-right">
-              <div className="grid_3 float-right">
-                <SelectNoChildrenInput name="uom_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomGroupIDField} cssStyle={{ left: "-160px", top: "10px" }}>
-                  <option value=''></option>
-                  {fact[FACTS.UNIT_OF_MEASURE_GROUPS].items.map((uom) => (
-                    values.uom_group_id === uom.uom_group_id
-                      ?
-                      <option value={uom.uom_group_id} key={uom.uom_group_id} selected> {uom.name} </option>
-                      :
-                      <option value={uom.uom_group_id} key={uom.uom_group_id}> {uom.name} </option>
-                  ))}
-                </SelectNoChildrenInput>
-              </div>
-              <div className="grid_2 float-right">
-                <p className="top-text float-right">กลุ่มหน่วยนับ</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="container_12">
-
-            {/* === equipment_status_id_th === */}
-            <FormLabel>สถานะการใช้งาน</FormLabel>
-            <div className="grid_5 pull_0">
-              <TextInput name='equipment_status_id_th' disabled={true} />
-            </div>
-          </div>
         </section>
 
         {/* PopUp ค้นหาอะไหล่ */}

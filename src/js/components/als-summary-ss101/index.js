@@ -22,6 +22,8 @@ import PieChart from '../common/d3-pie-chart';
 import AdjustmentBarComponent from './adjustment-bar';
 import {randomGroupedBarGraphData , randomColorMapData,randomPieChartData} from './mockup-data';
 
+import BgGreen from '../../../images/als/bg_als.jpg';
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const AlsEquipmentStatusComponent = () => {
     const dispatch = useDispatch();
     const loggedIn = useSelector(state => state.token.isLoggedIn);
@@ -38,7 +40,7 @@ const AlsEquipmentStatusComponent = () => {
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
 
-            <div id="blackground-white" >
+            <div id={changeTheam() === true ? "" : "blackground-white"} style={changeTheam() === true ? { backgroundImage: `url(${BgGreen})`, width: "100vw", height: "120vh" } : {height: "120vh"}}>
                 <div className="bootstrap-wrapper">
                     <div className="container" style={{ marginTop: "70px" }}>
                         {/* Section Title */}

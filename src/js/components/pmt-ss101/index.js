@@ -19,7 +19,8 @@ import useDocumentSubscription from '../../hooks/document-subscription';
 import useExportPdfInitializer from '../../hooks/export-pdf-initializer';
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
-
+import BgBlue from '../../../images/pmt/bg_blue.jpg';
+import { changeTheam } from '../../helper.js'
 const PmtSS101Componant = (props) => {
 
     useToolbarInitializer(TOOLBAR_MODE.SEARCH, DOCUMENT_TYPE_ID.SS101);
@@ -60,7 +61,7 @@ const PmtSS101Componant = (props) => {
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
-            <form onSubmit={props.handleSubmit}>
+            <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "150vh" } : {}}>
                 <TopContent />
                 <TabBar tabNames={tabNames} initialTabID="breakdown">
                     <BottomContent />
@@ -119,7 +120,7 @@ const EnhancedPmtSS101Component = withFormik({
         internal_document_id: '',       // เลขที่เอกสาร
         created_by_user_employee_id: '', // ผู้ดำเนินเรื่อง (Default === admin_employee_id)
         created_by_admin_employee_id: '',  //ผู้สร้างเอกสาร (Field ที่ไม่ได้กรอก)
-        refer_to_internal_document_id: '',  // เลขที่เอกสารอ้างอิง (Must have)
+        refer_to_document_internal_id: '',  // เลขที่เอกสารอ้างอิง (Must have)
         refer_to_document_id: '',
 
         status_name_th: '',              // TODO doesn't have (Field ที่ไม่ได้กรอก)
@@ -190,10 +191,6 @@ const EnhancedPmtSS101Component = withFormik({
         }
         return errors;
     },
-    handleSubmit: (values, formikBag) => new Promise((resolve, reject) => { //handle Submit will just POST the Empty Document and PUT information inside
-        console.log("I am submitting ".values)
-        resolve("DONE!")
-    }),
 })(PmtSS101Componant);
 
 

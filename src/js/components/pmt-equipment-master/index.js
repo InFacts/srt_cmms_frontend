@@ -18,6 +18,8 @@ import useFooterInitializer from '../../hooks/footer-initializer';
 
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
+import BgBlue from '../../../images/pmt/bg_blue.jpg';
+import { changeTheam } from '../../helper.js'
 const GoodsReceiptComponent = (props) => {
 
     const { resetForm, setFieldValue, setValues, values } = useFormikContext();
@@ -34,13 +36,13 @@ const GoodsReceiptComponent = (props) => {
     useToolbarInitializer(TOOLBAR_MODE.SEARCH);
     useTokenInitializer();
     useFactInitializer();
-    useFooterInitializer(DOCUMENT_TYPE_ID.ITEM_MASTER_DATA);
+    useFooterInitializer(DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA);
     const loggedIn = useSelector(state => state.token.isLoggedIn);
 
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
-            <form>
+            <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "130vh" } : {}}>
                 <TopContent />
                 <TabBar tabNames={tabNames} initialTabID="general">
                     <BottomContent />
@@ -90,7 +92,8 @@ const EnhancedGoodsReceiptComponent = withFormik({
         description: '',
         equipment_status_id: '',
         uom_group_id: '',
-
+        active: '',
+        
         // Bottom Content
         // General Content
         uom_id: '',
@@ -100,12 +103,16 @@ const EnhancedGoodsReceiptComponent = withFormik({
         tolerance_time: '',
         active: '',
         accounting_type: '',
+        quantity_highest: '',
+        quantity_lowest: '',
+        quantity_required: '',
         remark: '',
         // Equipment Content
         price_import: '',
         price_currently: '',
         description_equipment: '',
-        top_districts_id: '',
+        location_amphure_id: '',
+        responsible_by: '',
         useful_life: '',
         // จังหวัด
         // อำเภอ

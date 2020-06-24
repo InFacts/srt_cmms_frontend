@@ -20,17 +20,18 @@ import {
   isValidInternalDocumentIDFormat, isValidInternalDocumentIDDraftFormat,
   fetchAttachmentDocumentData, validateEmployeeIDField, validateWarehouseIDField,
   validateInternalDocumentIDFieldHelper, DOCUMENT_STATUS, getUserIDFromEmployeeID,
-  validatedataDocumentField,sumTotalLineItemHelper, sumTotalHelper, checkBooleanForEditHelper
+  validatedataDocumentField, sumTotalLineItemHelper, sumTotalHelper, checkBooleanForEditHelper
 } from '../../helper';
 import PopupModalNoPart from '../common/popup-modal-nopart'
 
 import '../../../css/table.css';
 
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const BottomContent = (props) => {
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
-  const decoded_token = useSelector((state) => ({...state.token.decoded_token}), shallowEqual);
+  const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
   const [lineNumber, setLineNumber] = useState('');
 
   const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
@@ -60,7 +61,7 @@ const BottomContent = (props) => {
       setFieldValue(fieldName + `.quantity`, 0, false);
       setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
       setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
-      setFieldValue(fieldName + `.line_number`, index+1, false);
+      setFieldValue(fieldName + `.line_number`, index + 1, false);
       setFieldValue(fieldName + `.item_status_id`, 3, false);
       setFieldValue(fieldName + `.per_unit_price`, 0, false);
       return;
@@ -108,8 +109,9 @@ const BottomContent = (props) => {
   const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
 
   return (
-    <div id="blackground-gray">
-      <div className="container_12 clearfix">
+    <div id={changeTheam() === true ? "" : "blackground-gray"}>
+      <div className="container_12 clearfix" id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>
+
         <div className="container_12 ">
 
           <div id="listItem_content" className="tabcontent">
@@ -147,7 +149,7 @@ const BottomContent = (props) => {
 
           <div id="table_status_content" className="tabcontent">
             {/* {console.log("values.step_approve", values.step_approve)} */}
-            <TableStatus bodyTableStatus = {values.step_approve} />
+            <TableStatus bodyTableStatus={values.step_approve} />
           </div>
 
           {/* PopUp ค้นหาอะไหล่ MODE ADD */}

@@ -80,6 +80,21 @@ body {
   float: right;
 }
 
+.grid_1.white-space,
+.grid_2.white-space,
+.grid_3.white-space,
+.grid_4.white-space,
+.grid_5.white-space,
+.grid_6.white-space,
+.grid_7.white-space,
+.grid_8.white-space,
+.grid_9.white-space,
+.grid_10.white-space,
+.grid_11.white-space,
+.grid_12.white-space {
+  white-space: nowrap;
+}
+
 /* `Grid >> Children (Alpha ~ First, Omega ~ Last)
 ----------------------------------------------------------------------------------------------------*/
 

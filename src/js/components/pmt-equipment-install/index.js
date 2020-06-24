@@ -19,6 +19,8 @@ import useDocumentSubscription from '../../hooks/document-subscription';
 
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
+import BgBlue from '../../../images/pmt/bg_blue.jpg';
+import { changeTheam } from '../../helper.js'
 const EquipmentInstallationComponent = (props) => {
 
     useToolbarInitializer(TOOLBAR_MODE.SEARCH, DOCUMENT_TYPE_ID.EQUIPMENT_INSTALLATION);
@@ -39,7 +41,7 @@ const EquipmentInstallationComponent = (props) => {
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
-            <form>
+            <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "130vh" } : {}}>
                 <TopContent />
                 <TabBar tabNames={tabNames} initialTabID="general">
                     <BottomContent />
@@ -58,7 +60,7 @@ const EnhancedEquipmentInstallationComponent = withFormik({
         internal_document_id: '',       // เลขที่เอกสาร
         internal_item_id: '',  // เลขที่สินทรัพย์
         description: '',
-        unit: '',
+        uom_group_id: '',
         created_on: '',                  // TODO doesn't have (Field ที่ไม่ได้กรอก)
         document_date: '',              // วันที่ออกเอกสาร (Default === NOW )
         created_by_user_employee_id: '', // ผู้ดำเนินเรื่อง (Default === admin_employee_id)
@@ -69,8 +71,8 @@ const EnhancedEquipmentInstallationComponent = withFormik({
 
         // Bottom Content
         // general_content
-        responsible_zone_by: '',        // ผู้รับผิดชอบสถานที่ STRING
-        responsible_by: '',
+        responsible_district_id: '',        // ผู้รับผิดชอบสถานที่ STRING
+        responsible_node_id: '',            // ส่งlocation_node_id ไป
         installed_on: '',              // วันที่ติดตั้งเสร็จ (Default === NOW )
         announce_use_on: '',             // วันที่ประกาศใช้ (Default === NOW )
         equipment_status_id: '',        //สถานะ

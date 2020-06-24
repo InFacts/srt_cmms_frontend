@@ -98,7 +98,7 @@ const Files = () => {
     }
 
     return (
-        <div>
+        <div style={{ padding: "10px"}}>
             <h4 className="head-title-bottom mt-2">ข้อมูลแนบไฟล์</h4>
             <div className="u-clearfix">
                 <div className="u-float-left">

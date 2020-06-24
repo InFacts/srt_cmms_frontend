@@ -11,7 +11,8 @@ const Table = (props) => {
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const factItems = useSelector((state) => ({ ...state.api.fact.items }), shallowEqual);
   return (
-    <table className="table-many-column mt-3">
+    <div style={{ padding: "10px"}}>
+    <table className="table-many-column mt-3" >
       <thead>
         <tr>
           <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
@@ -74,6 +75,7 @@ const Table = (props) => {
         })}
       </tbody>
     </table>
+    </div>
   )
 }
 

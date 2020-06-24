@@ -19,6 +19,8 @@ import useDocumentSubscription from '../../hooks/document-subscription';
 
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
+import BgRed from '../../../images/spare/bg_red.jpg';
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const SalvageSoldComponent = (props) => {
     
     const {resetForm, setFieldValue, setValues, values} = useFormikContext();
@@ -50,7 +52,7 @@ const SalvageSoldComponent = (props) => {
     return (
         <>
         {!loggedIn ? <Redirect to="/" /> : null}
-        <form>
+        <form style={changeTheam() === true ? { backgroundImage: `url(${BgRed})`, width: "100vw", height: "140vh" } : {}}>
             <TopContent />
             <TabBar tabNames={tabNames} initialTabID="listItem">
                 <BottomContent />

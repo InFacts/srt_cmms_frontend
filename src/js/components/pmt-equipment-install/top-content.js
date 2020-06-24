@@ -6,6 +6,8 @@ import PopupModalUsername from '../common/popup-modal-username'
 import TextInput from '../common/formik-text-input'
 import DateTimeInput from '../common/formik-datetime-input'
 import DateInput from '../common/formik-date-input'
+import SelectNoChildrenInput from '../common/formik-select-no-children';
+
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import { FACTS } from '../../redux/modules/api/fact';
 import Label from '../common/form-label'
@@ -18,6 +20,8 @@ import PopupModalEquipmentNoChildren from '../common/popup-modal-equipment-no-ch
 
 import { useFormikContext, useField } from 'formik';
 
+import BgBlue from '../../../images/pmt/bg_blue.jpg';
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const TopContent = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
     const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
@@ -44,7 +48,7 @@ const TopContent = (props) => {
             setFieldValue("equipment_id", '', false);
             setFieldValue("equipment_status_id", '', false);
             setFieldValue("equipment_status_id_th", '', false);
-            setFieldValue("responsible_by", '', false);
+            setFieldValue("responsible_node_id", '', false);
             return;
         }
         let items = fact.items.items;
@@ -56,14 +60,14 @@ const TopContent = (props) => {
         if (item_match_equipment) {
             // item
             setFieldValue("description", item.description, false);
-            setFieldValue("unit", item.list_uoms[0].name, false);
+            setFieldValue("uom_group_id", item.uom_group_id, false);
 
             // item_match_equipment
             setFieldValue("equipment_id", item_match_equipment.equipment_id, false);
             setFieldValue("equipment_status_id", item_match_equipment.equipment_status.equipment_status_id, false);
             setFieldValue("equipment_status_id_th", item_match_equipment.equipment_status.status_th, false);
-            setFieldValue("responsible_by", item_match_equipment.responsible_by, false);
-            validateField("responsible_by");
+            setFieldValue("responsible_node_id", item_match_equipment.responsible_node_id, false);
+
             // IF Check user If User is Admin -> return true Else -> return false
             if (decoded_token.id === 4) { //{/* TODO USER_ID FOR ADMIN */}
                 console.log(" YES I AM ADMIN ")
@@ -80,105 +84,122 @@ const TopContent = (props) => {
 
     const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
     return (
-        <div id="blackground-white">
+        <div id={changeTheam() === true ? "" : "blackground-white"}>
             <div className="container_12 clearfix">
                 {/* Section Title */}
                 <h4 className="head-title" style={{ marginTop: "80px" }}>ติดตั้งสินทรัพย์</h4>
 
-                {/* === Left Column === */}
-                <div className="grid_6" style={{ paddingLeft: "10px" }}>
+                <div id={changeTheam() === true ? "blackground-white" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "200px", paddingTop: "10px" } : {}} >
+                    {/* === Left Column === */}
+                    <div className={changeTheam() === true ? "grid_5" : "grid_6"} style={{ paddingLeft: "10px" }}>
 
-                    {/* Document ID */}
-                    <Label>เลขที่เอกสาร</Label>
-                    <div className="grid_3 alpha">
-                        <TextInput name="internal_document_id"
-                            validate={validateInternalDocumentIDField}
-                            searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalDocument"
-                            tabIndex="1" />
+                        {/* Document ID */}
+                        <div className="grid_1 alpha white-space">
+                            <p className="top-text">เลขที่เอกสาร</p>
+                        </div>
+                        <div className="grid_3">
+                            <TextInput name="internal_document_id"
+                                validate={validateInternalDocumentIDField}
+                                searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalDocument"
+                                tabIndex="1" />
+                        </div>
+                        <div className="clear" />
+
+                        {/* Equiment ID */}
+                        <div className="grid_1 alpha white-space">
+                            <p className="top-text">เลขที่สินทรัพย์</p>
+                        </div>
+                        <div className="grid_3">
+                            <TextInput name='internal_item_id'
+                                validate={validateInternalItemIDField}
+                                searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                ariaControls="modalNoPart"
+                                tabIndex="1" />
+                        </div>
+                        <div className="clear" />
+
+                        {/* Description  */}
+                        <div className="grid_1 alpha white-space">
+                            <p className="top-text">รายละเอียด</p>
+                        </div>
+                        <div className="grid_3">
+                            <TextInput name="description"
+                                disabled
+                                tabIndex="3" />
+                        </div>
+                        <div className="clear" />
+
+                        {/* UOM  */}
+                        <div className="grid_1 alpha white-space">
+                            <p className="top-text">หน่วย</p>
+                        </div>
+                        <div className="grid_3">
+                            <SelectNoChildrenInput name="uom_group_id" disabled>
+                                <option value=''></option>
+                                {fact[FACTS.UNIT_OF_MEASURE_GROUPS].items.map((uom) => (
+                                    values.uom_group_id === uom.uom_group_id
+                                        ?
+                                        <option value={uom.uom_group_id} key={uom.uom_group_id} selected> {uom.name} </option>
+                                        :
+                                        <option value={uom.uom_group_id} key={uom.uom_group_id}> {uom.name} </option>
+                                ))}
+                            </SelectNoChildrenInput>
+                        </div>
+                        <div className="clear" />
                     </div>
-                    <div className="clear" />
 
-                    {/* Equiment ID */}
-                    <Label>เลขที่สินทรัพย์</Label>
-                    <div className="grid_3 alpha">
-                        <TextInput name='internal_item_id'
-                            validate={validateInternalItemIDField}
-                            searchable={toolbar.mode !== TOOLBAR_MODE.SEARCH}
-                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                            ariaControls="modalNoPart"
-                            tabIndex="1" />
+                    {/* === Right Column === */}
+                    <div className="grid_6 prefix_2">
+
+                        {/* Created On */}
+                        <Label>สถานะ</Label>
+                        <div className="grid_3 alpha">
+                            <TextInput name="status_name_th"
+                                disabled={true}
+                                tabIndex="3" />
+                        </div>
+                        <div className="clear" />
+
+                        {/* Created On */}
+                        <Label>วันที่</Label>
+                        <div className="grid_3 alpha">
+                            <DateTimeInput name="created_on"
+                                disabled
+                                tabIndex="5" />
+                        </div>
+                        <div className="clear" />
+
+                        {/* Document date */}
+                        <Label>วันที่เอกสาร</Label>
+                        <div className="grid_3 alpha">
+                            <DateInput name="document_date"
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                tabIndex="6" />
+                        </div>
+                        <div className="clear" />
+
+                        {/* User Employee ID  */}
+                        <Label>ผู้นำเข้า</Label>
+                        <div className="grid_3 alpha">
+                            <TextInput name="created_by_user_employee_id"
+                                validate={validateUserEmployeeIDField}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"
+                                tabIndex="2" />
+                        </div>
+                        <div className="clear" />
+
+                        {/* Admin Employee ID  */}
+                        <Label>ผู้สร้างเอกสาร</Label>
+                        <div className="grid_3 alpha">
+                            <TextInput name="created_by_admin_employee_id"
+                                validate={validateAdminEmployeeIDField}
+                                disabled={true}
+                                tabIndex="2" />
+                        </div>
+                        <div className="clear" />
                     </div>
-                    <div className="clear" />
-
-                    {/* Description  */}
-                    <Label>รายละเอียด</Label>
-                    <div className="grid_3 alpha">
-                        <TextInput name="description"
-                            disabled
-                            tabIndex="3" />
-                    </div>
-                    <div className="clear" />
-
-                    {/* UOM  */}
-                    <Label>หน่วย</Label>
-                    <div className="grid_3 alpha">
-                        <TextInput name="unit"
-                            disabled={true}
-                            tabIndex="3" />
-                    </div>
-                    <div className="clear" />
-                </div>
-
-                {/* === Right Column === */}
-                <div className="grid_6 prefix_2">
-
-                    {/* Created On */}
-                    <Label>สถานะ</Label>
-                    <div className="grid_3 alpha">
-                        <TextInput name="status_name_th"
-                            disabled={true}
-                            tabIndex="3" />
-                    </div>
-                    <div className="clear" />
-
-                    {/* Created On */}
-                    <Label>วันที่</Label>
-                    <div className="grid_3 alpha">
-                        <DateTimeInput name="created_on"
-                            disabled
-                            tabIndex="5" />
-                    </div>
-                    <div className="clear" />
-
-                    {/* Document date */}
-                    <Label>วันที่เอกสาร</Label>
-                    <div className="grid_3 alpha">
-                        <DateInput name="document_date"
-                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                            tabIndex="6" />
-                    </div>
-                    <div className="clear" />
-
-                    {/* User Employee ID  */}
-                    <Label>ผู้นำเข้า</Label>
-                    <div className="grid_3 alpha">
-                        <TextInput name="created_by_user_employee_id"
-                            validate={validateUserEmployeeIDField}
-                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                            searchable={toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"
-                            tabIndex="2" />
-                    </div>
-                    <div className="clear" />
-
-                    {/* Admin Employee ID  */}
-                    <Label>ผู้สร้างเอกสาร</Label>
-                    <div className="grid_3 alpha">
-                        <TextInput name="created_by_admin_employee_id"
-                            validate={validateAdminEmployeeIDField}
-                            disabled={true}
-                            tabIndex="2" />
-                    </div>
-                    <div className="clear" />
                 </div>
             </div>
 
