@@ -90,6 +90,7 @@ function HorizontalBarGraph({ data, chartSettings, title}) {
                     {/* For Each Rects */}
                     {data.map((d, index)=>(
                         <rect 
+                            key={`horizontal-bar-rect-${index}`}
                             x={xScale(0)}
                             y={yScale(d.key)}
                             width={xScale(d.value)-xScale(0)}

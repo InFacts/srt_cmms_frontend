@@ -20,7 +20,7 @@ import ColorMap from './d3-color-map';
 import PieChart from '../common/d3-pie-chart';
 
 import AdjustmentBarComponent from './adjustment-bar';
-import {randomGroupedBarGraphData , randomColorMapData,randomPieChartData} from './mockup-data';
+import {randomGroupedBarGraphData , randomGroupedBarGraphDataMTBF, randomColorMapData,randomPieChartData, randomPieChartDataSystemType} from './mockup-data';
 
 import BgGreen from '../../../images/als/bg_als.jpg';
 import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
@@ -38,7 +38,7 @@ const AlsEquipmentStatusComponent = () => {
 
     return (
         <>
-            {!loggedIn ? <Redirect to="/" /> : null}
+            {/* {!loggedIn ? <Redirect to="/" /> : null} */}
 
             <div id={changeTheam() === true ? "" : "blackground-white"} style={changeTheam() === true ? { backgroundImage: `url(${BgGreen})`, width: "100vw", height: "120vh" } : {height: "120vh"}}>
                 <div className="bootstrap-wrapper">
@@ -52,23 +52,33 @@ const AlsEquipmentStatusComponent = () => {
 
                             {/* First Half Column */}
                             <div className="col-6"
-                                style={{ border: "1px red solid" }}
+                                // style={{ border: "1px red solid" }}
                             >
                                 <div className="row_bootstrap no-gutters">
                                     <div className="col-4"
-                                        style={{ border: "1px purple solid" }}
+                                        // style={{ border: "1px purple solid" }}
                                     >
                                         <AdjustmentBarComponent />
                                     </div>
                                     <div className="col-8"
-                                        style={{ border: "1px purple solid" }}
-                                    >col4</div>
+                                        // style={{ border: "1px purple solid" }}
+                                    >
+                                    <PieChart 
+                                        title="สถิติจำนวนครั้งการขัดข้องของระบบที่ตรวจซ่อม"
+                                        chartSettings={{
+                                            marginTop:50,
+                                            marginBottom:80,
+                                            height:280,
+                                        }}
+                                        data={randomPieChartDataSystemType()}
+                                    />
+                                </div>
 
                                 </div>
 
                                 <div className="row_bootstrap no-gutters">
                                     <div className="col-12"
-                                        style={{ border: "1px purple solid" }}
+                                        // style={{ border: "1px purple solid" }}
                                     >
                                         <GroupedBarGraph
                                             title="สถิติค่าใช้จ่ายในการซ่อมบำรุงแต่ละประเภท"
@@ -80,7 +90,7 @@ const AlsEquipmentStatusComponent = () => {
 
                                 <div className="row_bootstrap no-gutters">
                                     <div className="col-12"
-                                        style={{ border: "1px purple solid" }}
+                                        // style={{ border: "1px purple solid" }}
                                     >
                                         <PieChart 
                                             title="สถิติการซ่อมบำรุงในแต่ละหมวด"
@@ -93,11 +103,11 @@ const AlsEquipmentStatusComponent = () => {
 
                             {/* Second Half Column */}
                             <div className="col-6"
-                                style={{ border: "1px red solid" }}
+                                // style={{ border: "1px red solid" }}
                             >
                                 <div className="row_bootstrap no-gutters">
                                     <div className="col-12"
-                                        style={{ border: "1px purple solid" }}
+                                        // style={{ border: "1px purple solid" }}
                                     >
                                         <ColorMap 
                                             title="สถิติจำนวนครั้งการขัดข้องของระบบที่ตรวจซ่อมเทียบกับแขวง"
@@ -110,11 +120,11 @@ const AlsEquipmentStatusComponent = () => {
                                 {/* ระยะเวลาเฉลี่ยก่อนการเสียหายแต่ละครั้ง - MTBF */}
                                 <div className="row_bootstrap no-gutters">
                                     <div className="col-12"
-                                        style={{ border: "1px purple solid" }}
+                                        // style={{ border: "1px purple solid" }}
                                     >
                                         <GroupedBarGraph
                                             title="ระยะเวลาเฉลี่ยก่อนการเสียหายแต่ละครั้ง - MTBF"
-                                            data={randomGroupedBarGraphData()}
+                                            data={randomGroupedBarGraphDataMTBF()}
                                         />
                                     </div>
 

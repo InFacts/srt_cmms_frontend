@@ -101,7 +101,7 @@ function GroupedBarGraph({ data, chartSettings, title}) {
     return (
         <div className="Chart_wrapper" ref={ref} style={{ background: "white" }}>
             <svg width={dms.width} height={dms.height} 
-                style={{ border: "1.5px solid gold" }} 
+                // style={{ border: "1.5px solid gold" }} 
                 viewBox={`0 0 ${dms.width} ${dms.height}`}>
                 
                 {/* Graph Boundary */}
@@ -115,7 +115,7 @@ function GroupedBarGraph({ data, chartSettings, title}) {
 
                     {/* Graph Title */}
                     <text 
-                        x="50%"
+                        x={-dms.marginLeft+dms.width/2}
                         text-anchor="middle"
                         y={-15}
                         font-weight="bold"

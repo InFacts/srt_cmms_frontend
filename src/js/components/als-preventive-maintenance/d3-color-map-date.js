@@ -36,36 +36,41 @@ const ColorMap = ({ data, chartSettings, title}) => {
     const xAxis = useRef(null)
     const yAxis = useRef(null)
 
-    const [xDomain, setXDomain] = useState([new Date("2019-01-02"), new Date("2020-01-02")]);
-    const [yDomain, setYDomain] = useState([0, 1000]);
+    // const [xDomain, setXDomain] = useState([new Date("2019-01-02"), new Date("2020-01-02")]);
+    // const [yDomain, setYDomain] = useState([0, 1000]);
 
 
-    const xScale = useMemo(() => (
-        scaleTime()
-            .domain(xDomain)
-            .range([0, dms.boundedWidth])
+    // const xScale = useMemo(() => (
+    //     scaleTime()
+    //         .domain(xDomain)
+    //         .range([0, dms.boundedWidth])
             
-    ), [dms.boundedWidth, xDomain.join("-")])
+    // ), [dms.boundedWidth, xDomain.join("-")])
+    const xScale = scaleTime()
+            .domain([min(data.xLabels), max(data.xLabels).addDays(7)])
+            .range([0, dms.boundedWidth])
 
-
-    const yScale = useMemo(() => (
-        scaleBand()
-            .domain(yDomain)
+    // const yScale = useMemo(() => (
+    //     scaleBand()
+    //         .domain(yDomain)
+    //         .range([0, dms.boundedHeight])
+    // ), [dms.boundedHeight, yDomain.join("-")])
+    const yScale = scaleBand()
+            .domain(data.yLabels)
             .range([0, dms.boundedHeight])
-    ), [dms.boundedHeight, yDomain.join("-")])
 
     const color = scaleSequential([0, max(data.values, d => max(d))], interpolatePuRd);
 
 
     // set Domain of x and y after new data.
-    useEffect(() => {
-        if (!data) {
-            console.log("ColorMap: There is no data! ");
-        } else { // There is data
-            setXDomain([min(data.xLabels), max(data.xLabels).addDays(7)]);
-            setYDomain(data.yLabels); 
-        }
-    }, [data]);
+    // useEffect(() => {
+    //     if (!data) {
+    //         console.log("ColorMap: There is no data! ");
+    //     } else { // There is data
+    //         setXDomain([min(data.xLabels), max(data.xLabels).addDays(7)]);
+    //         setYDomain(data.yLabels); 
+    //     }
+    // }, [data]);
 
     useEffect(() => {
         select(xAxis.current)
@@ -86,7 +91,7 @@ const ColorMap = ({ data, chartSettings, title}) => {
     return (
         <div className="Chart_wrapper" ref={ref} style={{ background: "white" }}>
             <svg width={dms.width} height={dms.height} 
-                style={{ border: "1.5px solid gold" }} 
+                // style={{ border: "1.5px solid gold" }} 
                 viewBox={`0 0 ${dms.width} ${dms.height}`}>
                 
                 {/* Graph Boundary */}
@@ -101,10 +106,10 @@ const ColorMap = ({ data, chartSettings, title}) => {
                     {/* Graph Title */}
                     <text 
                         x={dms.boundedWidth/2}
-                        text-anchor="middle"
+                        textAnchor="middle"
                         y={-23}
-                        font-weight="bold"
-                        font-size="20px"
+                        fontWeight="bold"
+                        fontSize="20px"
                     >{title}</text>
 
                     {/* xAxis Label */}
@@ -128,22 +133,34 @@ const ColorMap = ({ data, chartSettings, title}) => {
 
 
                     {/* For Each Value */}
-                    {data.values.map((rowValues, rowIndex) => (
-                        <g transform={`translate(0, ${yScale(data.yLabels[rowIndex])})`}> 
-                            {rowValues.map((value, colIndex) => (
+                    {
+                    // (Array.isArray(data.values) && data.values.length) && // This doesn't help in making fixedWidth > 1
+                    data.values.map((rowValues, rowIndex) => {
+                        const fixedWidth = xScale(data.xLabels[0].addDays(7))-xScale(data.xLabels[0])-1;
+                        if (fixedWidth >1) // SOMEHOW THIS CAN BECOME -1 !!!?!?!?!?!? 
+                        return(
+                        <g key={`g-${rowIndex}`} transform={`translate(0, ${yScale(data.yLabels[rowIndex])})`}> 
+                            {rowValues.map((value, colIndex) => {
+                                // console.log("This is my colindex data", data.xLabels[colIndex])
+                                // console.log("This is my width ", xScale(data.xLabels[colIndex].addDays(7))-xScale(data.xLabels[colIndex])-1)
+                                // if (data.xLabels[colIndex])
+                                return(
                                 <rect 
                                     key={`rect-date-${rowIndex}-${colIndex}`}
                                     x={xScale(data.xLabels[colIndex])}
-                                    width={xScale(data.xLabels[colIndex].addDays(7))-xScale(data.xLabels[colIndex])-1} //-1 for space between it
+                                    // width={xScale(data.xLabels[colIndex].addDays(7))-xScale(data.xLabels[colIndex])-1} //-1 for space between it
+                                    width={fixedWidth}
                                     height={yScale.bandwidth()-1} //-1 for space between it
-                                    // fill={isNaN(value) ? "#EEE":  color(value)}
-                                    fill={isNaN(value) ? "#EEE":  color(max(data.values, d => max(d))*Math.random())}
+                                    fill={isNaN(value) ? "#EEE":  color(value)}
+                                    // fill={isNaN(value) ? "#EEE":  color(max(data.values, d => max(d))*Math.random())}
                                 >    
                                     <text>{`${value} in ${data.xLabels[rowIndex]}`}</text>
                                 </rect>
-                            ))}
+                            )}
+                            )}
                         </g>
-                    ))}
+                    )}
+                    )}
 
 
 

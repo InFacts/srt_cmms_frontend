@@ -12,17 +12,18 @@ import { TOOLBAR_MODE, TOOLBAR_ACTIONS, MODE_TO_ACTION_CREATOR } from '../../red
 import useFactInitializer from '../../hooks/fact-initializer';
 import useTokenInitializer from '../../hooks/token-initializer';
 
-import ScatterPlot from '../als-spare/d3-scatter-plot';
-import LineGraph from '../als-spare/d3-line-graph';
-import BarDivergingGraph from '../als-spare/d3-bar-diverging';
+import GroupedBarGraph from '../common/d3-grouped-bar-graph';
 import Histogram from './d3-histogram';
 import ThailandMapComponent from './d3-map';
 import SimpleGrayCardComponent from './simple-gray-card';
 import AdjustmentBarComponent from './adjustment-bar';
 import EquipmentStatusListComponent from './equipment-status-list';
+import {randomGroupedBarGraphData} from './mockup-data'
 
 import BgGreen from '../../../images/als/bg_als.jpg';
 import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
+import mockupEquipmentData from './mockupEquipmentData.json';
+
 const randomHistogramData = () => {
     let results = [];
 
@@ -38,6 +39,7 @@ const randomHistogramData = () => {
 const AlsEquipmentStatusComponent = () => {
     const dispatch = useDispatch();
     const loggedIn = useSelector(state => state.token.isLoggedIn);
+    const {setFieldValue} = useFormikContext();
 
     // Initializer: Change Toolbar to Mode None
     useToolbarChangeModeInitializer(TOOLBAR_MODE.NONE_HOME); // TODO: Needs to find where to go when we press "HOME"!!
@@ -47,11 +49,14 @@ const AlsEquipmentStatusComponent = () => {
         dispatch(footerToModeInvisible());
     }, []);
 
+    useEffect(() => {
+        setFieldValue('temp_equipment_data', mockupEquipmentData.data)
+    }, [])
 
 
     return (
         <>
-            {!loggedIn ? <Redirect to="/" /> : null}
+            {/* {!loggedIn ? <Redirect to="/" /> : null} */}
             <div id={changeTheam() === true ? "" : "blackground-white"} style={changeTheam() === true ? { backgroundImage: `url(${BgGreen})`, width: "100vw", height: "120vh" } : {height: "120vh"}}>
                 <div className="bootstrap-wrapper">
                     <div className="container" style={{ marginTop: "70px" }}>
@@ -112,10 +117,11 @@ const AlsEquipmentStatusComponent = () => {
                             <div className="col-4"
                                 style={{
                                     // border:"1px solid red", 
+                                    marginTop: 30, 
                                     height: "300px"
                                 }}>
                                 <Histogram
-                                    chartSettings={{ marginLeft: 50, marginTop: 70, marginBottom: 40, height: 300 }}
+                                    chartSettings={{ marginLeft: 50, marginTop: 40, marginBottom: 40, height: 300 }}
                                     data={randomHistogramData()}
                                     title="กลุ่มอายุของสินทรัพย์"
                                     xAxis="อายุการใช้งานของสินทรัพย์"
@@ -130,8 +136,14 @@ const AlsEquipmentStatusComponent = () => {
 
                         {/*=== Third Row ===*/}
                         <div className="row_bootstrap no-gutters">
-                            <div className="col-4" style={{ border: "1px solid red", height: "200px" }}>
-                                {/* <ScatterPlot /> */}
+                            <div className="col-4" 
+                                // style={{ border: "1px solid red", height: "200px" }}
+                            >
+
+                                <GroupedBarGraph
+                                    title="ระยะเวลาเฉลี่ยก่อนการเสียหายแต่ละครั้ง"
+                                    data={randomGroupedBarGraphData()}
+                                />
                             </div>
                         </div>
                     </div>
