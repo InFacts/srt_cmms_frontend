@@ -115,10 +115,10 @@ const BottomContent = (props) => {
                   <tr>
                     <th className="edit-padding text-center"></th>
                     <td className="edit-padding">
-                      <SelectNoChildrenInput name="equipment_status_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                      <SelectNoChildrenInput name="1" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                         <option value=''></option>
-                        <option value=''>ก. ไฟฟ้า</option>
-                        <option value=''>ข. ไฟฟ้า</option>
+                        <option value='ก. ไฟฟ้า'>ก. ไฟฟ้า</option>
+                        <option value='ข. ไฟฟ้า'>ข. ไฟฟ้า</option>
                       </SelectNoChildrenInput>
                     </td>
                     <td className="edit-padding">
