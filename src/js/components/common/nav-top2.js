@@ -82,7 +82,7 @@ const MainModule = (props) => {
                                 </ul>
                             </li>
                             <li className="p-navigation__item p-subnav a nav-li" style={{ marginRight: "0"}} role="menuitem" id="link-1">
-                                <Link to="#" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu" style={{ paddingRight: "10px" }}>
+                                <Link to="#" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu" style={{ paddingRight: "10px" }} onClick={() => setCheckNav(1)}>
                                     <i className="fas fa-user-circle" style={{ fontSize: "22px", color: "white" }}></i>
                                 </Link>
                                 <ul className="p-subnav__items--right" id="account-menu" aria-hidden="true">

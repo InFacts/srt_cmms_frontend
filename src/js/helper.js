@@ -711,6 +711,19 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             specific: icd_part,
         }
     } else if (document_type_id === DOCUMENT_TYPE_ID.EQUIPMENT_INSTALLATION) {
+
+        let document_part_equipment_install = {
+        ...DOCUMENT_SCHEMA,
+        document_status_id: 1,
+        document_action_type_id: 1,
+        document_id: values.document_id,
+        internal_document_id: values.internal_document_id,
+        remark: values.remark,
+        created_by_admin_id: getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id),
+        created_by_user_id: getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_user_employee_id),
+        document_date: values.document_date + 'T00:00:00+00:00',
+    }
+
         var equipment_install_part = {
             document_id: values.document_id,
             equipment_id: values.equipment_id,
@@ -739,7 +752,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         console.log("document_part", document_part);
         console.log("equipment_install", equipment_installation);
         return {
-            document: document_part,
+            document: document_part_equipment_install,
             specific: equipment_installation,
         }
     }
