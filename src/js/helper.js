@@ -1421,6 +1421,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
         return { ...transformDocumentResponseToFormState(document_part, fact), ...transformWorkOrderResponseToFormState(work_order_part) }
     } else if (document_type_group_id === DOCUMENT_TYPE_ID.SS101) {
         // Get Subset of Data from both DOCUMENT_SCHEMA_GET and SS101_SCHEMA_GET 
+        console.log(">>> responseToFormState", data.document)
         let document_part = Object.fromEntries(
             Object.entries(data.document)
                 .filter(([key]) => Object.keys(DOCUMENT_SCHEMA_GET).includes(key))

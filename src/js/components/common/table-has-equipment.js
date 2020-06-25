@@ -35,7 +35,7 @@ const Table = (props) => {
                     tabIndex="6"
                     disabled={props.disabledBothMode !== true ? props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true}
                     searchable={props.checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalEquipment"
-                    handleModalClick={() => props.setLineNumber(line_number)}
+                    // handleModalClick={() => props.setLineNumber(line_number)}
                     redBorderForError="error-in-table"
                   />
                 </td>
