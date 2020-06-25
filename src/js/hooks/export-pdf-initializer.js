@@ -303,7 +303,7 @@ const useExportPdfInitializer = () => {
           setTimeout(() => {
             w.print();
             // w.close();
-          }, 500);
+          }, 1500);
         })
         dispatch(handleClickExportPDF())
       } else {
@@ -1241,7 +1241,7 @@ const createPageS101Page1 = (date, content) =>
           <td style=" text-align:center ; vertical-align: middle;">${content.AccidentOnDay}</td>
       </tr>
       <tr class="item">
-          <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">(3) งาน</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label></label></div></div></td>
+          <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">(3) งาน</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>${content.AccidentName}</label></div></div></td>
           <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">ออกเดินทาง</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.DepartedOnTimeParts}</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.DepartedOnYear}</td>
