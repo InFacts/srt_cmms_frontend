@@ -16,7 +16,7 @@ const defaultChartSettings = {
     "height": 200,
 }
 
-function LineGraph({ data, chartSettings, title}) {
+function MultiLineGraph({ data, chartSettings, title}) {
     // useChartDimensions will have a ref to the Chart_wrapper and get its own Height and Width
     // See reference of Amelia Wattenberger https://wattenberger.com/blog/react-and-d3#sizing-responsivity
     const [ref, dms] = useChartDimensions({ ...defaultChartSettings, ...chartSettings });
@@ -56,11 +56,13 @@ function LineGraph({ data, chartSettings, title}) {
 
                     {/* Graph Title */}
                     <text 
-                        x={dms.boundedWidth/2}
-                        text-anchor="middle"
+                        // x={dms.boundedWidth/2}
+
+                        // text-anchor="middle"
                         y={0}
-                        font-weight="bold"
-                        font-size="20px"
+                        dy={-5}
+                        // font-weight="bold"
+                        font-size="17px"
                     >{title}</text>
 
                     <g transform={`translate(0, ${dms.boundedHeight})`}>
@@ -77,20 +79,4 @@ function LineGraph({ data, chartSettings, title}) {
     );
 }
 
-export default LineGraph;
-
-
-const data = [{
-    "reporting_period_id": 1,
-    "item_id": 1,
-    "warehouse_id": 323,
-    "item_status_id": 1,
-    "begin_unit_count": 0,
-    "receive_unit_count": 0,
-    "issue_unit_count": 0,
-    "state_in_unit_count": 0,
-    "state_out_unit_count": 0,
-    "adjustment_unit_count": 0,
-    "ending_unit_count": 127,
-    "ending_committed_unit_count": 0
-}]
+export default MultiLineGraph;
