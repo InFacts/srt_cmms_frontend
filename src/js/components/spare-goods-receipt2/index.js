@@ -37,9 +37,9 @@ const GoodsReceiptComponent = (props) => {
     useToolbarInitializer(TOOLBAR_MODE.SEARCH);
     useTokenInitializer();
     useFactInitializer();
-    useFooterInitializer(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO);
-    useNavBottomStatusInitializer();
     useDocumentSubscription();
+    useNavBottomStatusInitializer();
+    useFooterInitializer(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO);
     const loggedIn = useSelector(state => state.token.isLoggedIn);
 
     useEffect(() => {

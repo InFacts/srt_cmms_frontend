@@ -22,7 +22,7 @@ import AdjustmentBarComponent from '../als-equipment-status/adjustment-bar';
 import EquipmentStatusListComponent from '../als-equipment-status/equipment-status-list';
 import SimpleGrayCardComponent from '../als-equipment-status/simple-gray-card';
 
-import {randomHistogramData, randomPieChartData,randomGroupedBarGraphData} from './mockup-data';
+import { randomHistogramData, randomPieChartData, randomGroupedBarGraphData } from './mockup-data';
 import PieChart from '../common/d3-pie-chart';
 import GroupedBarGraph from '../common/d3-grouped-bar-graph';
 
@@ -43,9 +43,9 @@ const AlsPlanPreventiveMaintenanceComponent = () => {
 
     return (
         <>
-            {!loggedIn ? <Redirect to="/" /> : null}
+            {/* {!loggedIn ? <Redirect to="/" /> : null} */}
 
-            <div id={changeTheam() === true ? "" : "blackground-white"} style={changeTheam() === true ? { backgroundImage: `url(${BgGreen})`, width: "100vw", height: "100vh" } : {height: "100vh"}}>
+            <div id={changeTheam() === true ? "" : "blackground-white"} style={changeTheam() === true ? { backgroundImage: `url(${BgGreen})`, width: "100vw", height: "100vh" } : { height: "100vh" }}>
                 <div className="bootstrap-wrapper">
                     <div className="container" style={{ marginTop: "70px" }}>
                         {/* Section Title */}
@@ -54,8 +54,8 @@ const AlsPlanPreventiveMaintenanceComponent = () => {
                         {/* Columns have horizontal padding to create the gutters between individual columns, however, you can remove the margin from rows and padding from columns with .no-gutters on the .row. */}
                         <div className="row_bootstrap no-gutters">
                             <div className="col-4" >
-                                <Histogram 
-                                    chartSettings={{ marginLeft: 50, marginTop: 70, marginBottom: 40, height: 300 }} 
+                                <Histogram
+                                    chartSettings={{ marginLeft: 50, marginTop: 70, marginBottom: 40, height: 300 }}
                                     data={randomHistogramData()}
                                     title="ระยะเวลาระหว่างการชำรุดจากอายุการใช้งาน"
                                     xAxis="อายุการใช้งานของสินทรัพย์"
@@ -63,8 +63,8 @@ const AlsPlanPreventiveMaintenanceComponent = () => {
                                 />
                             </div>
                             <div className="col-8" >
-                                <GroupedBarGraph 
-                                    chartSettings={{ marginLeft: 50, marginTop: 60, marginBottom: 40, height: 300 }} 
+                                <GroupedBarGraph
+                                    chartSettings={{ marginLeft: 50, marginTop: 60, marginBottom: 40, height: 300 }}
                                     data={randomGroupedBarGraphData()}
                                 />
                             </div>
@@ -73,31 +73,40 @@ const AlsPlanPreventiveMaintenanceComponent = () => {
 
                         <div className="row_bootstrap no-gutters">
                             <div className="col-4" >
-                                <PieChart 
-                                    chartSettings={{ marginLeft: 20, marginTop: 30, marginBottom: 40, 
-                                    marginRight:20, height: 200 }} 
+                                <PieChart
+                                    chartSettings={{
+                                        marginLeft: 20, marginTop: 30, marginBottom: 40,
+                                        marginRight: 20, height: 200
+                                    }}
                                     data={randomPieChartData()}
                                     title="ระยะเวลาระหว่างการชำรุดจากอายุการใช้งาน"
                                 />
                             </div>
                             {/* PM MTBF */}
                             <div className="col-8" >
-                                <div className="row_bootstrap" style={{padding:10}}>
+                                <div className="row_bootstrap" style={{ padding: 10 }}>
+                                    <div className="col-12">
+                                        <div className="gray-background">
+                                            <h5 className="simple-card-name">จำนวนของสินทรัพย์ในแต่ละเกณฑ์</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="row_bootstrap" style={{ padding: 10 }}>
                                     <div className="col-4">
                                         <SimpleGrayCardComponent
-                                            name="#PM << MTBF"
+                                            name="PM Interval << MTBF"
                                             value={22}
                                         />
                                     </div>
                                     <div className="col-4">
                                         <SimpleGrayCardComponent
-                                            name="#PM = MTBF"
+                                            name="PM Interval = MTBF"
                                             value={22}
                                         />
                                     </div>
                                     <div className="col-4">
                                         <SimpleGrayCardComponent
-                                            name="#PM > MTBF"
+                                            name="PM Interval > MTBF"
                                             value={22}
                                         />
                                     </div>

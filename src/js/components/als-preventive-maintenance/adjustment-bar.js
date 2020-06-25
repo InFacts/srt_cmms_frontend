@@ -23,8 +23,10 @@ const AdjustmentBarComponent = () => {
 
                 <div className="adjustment-bar-inner-text">ประเภทการตรวจซ่อม</div  >
                 <SelectNoChildrenInput
-                    name="fix_type" >
-                    <option value='' selected>ทั้งหมด</option>
+                    name="fix_type" 
+                    // defaultValue=''
+                >
+                    <option value=''>ทั้งหมด</option>
                     <option value='1' >โทรศัพท์</option>
                     <option value='2' >จดหมาย</option>
                     <option value='3' >Work Request</option>
@@ -34,8 +36,10 @@ const AdjustmentBarComponent = () => {
 
                 <div className="adjustment-bar-inner-text">กอง</div>
                 <SelectNoChildrenInput
-                    name="division_id" >
-                    <option value='' selected>ทั้งหมด</option>
+                    name="division_id" 
+                    // defaultValue=''
+                >
+                    <option value=''>ทั้งหมด</option>
                     <option value='1' >โทรศัพท์</option>
                     <option value='2' >จดหมาย</option>
                     <option value='3' >Work Request</option>
@@ -45,8 +49,10 @@ const AdjustmentBarComponent = () => {
 
                 <div className="adjustment-bar-inner-text">หน่วยงาน/แขวง</div>
                 <SelectNoChildrenInput
-                    name="district_id" >
-                    <option value='' selected>ทั้งหมด</option>
+                    name="district_id" 
+                    // defaultValue=''
+                >
+                    <option value=''>ทั้งหมด</option>
                     <option value='1' >โทรศัพท์</option>
                     <option value='2' >จดหมาย</option>
                     <option value='3' >Work Request</option>
@@ -56,8 +62,10 @@ const AdjustmentBarComponent = () => {
 
                 <div className="adjustment-bar-inner-text">ตอน</div>
                 <SelectNoChildrenInput
-                    name="node_id" >
-                    <option value='' selected>ทั้งหมด</option>
+                    name="node_id" 
+                    // defaultValue=''
+                >
+                    <option value=''>ทั้งหมด</option>
                     <option value='1' >โทรศัพท์</option>
                     <option value='2' >จดหมาย</option>
                     <option value='3' >Work Request</option>

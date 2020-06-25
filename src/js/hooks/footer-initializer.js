@@ -45,7 +45,9 @@ const useFooterInitializer = (document_type_id) => {
     
     //Handle Document Status TODO: move it out of footer!!
     const hadleDocumentStatusWithFooter = (document_id) => {
+        console.log("hadleDocumentStatusWithFooter")
         checkDocumentStatus(values).then(function (docuementStatus) {
+            console.log("checkDocumentStatus", docuementStatus)
             setFieldValue("status_name_th", docuementStatus, false);
             let userInfo = {
                 id: user_id.id, // TEST: User ID

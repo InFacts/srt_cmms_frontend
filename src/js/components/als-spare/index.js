@@ -53,7 +53,7 @@ const AlsSpareComponent = () => {
 
   return (
     <>
-      {!loggedIn ? <Redirect to="/" /> : null}
+      {/* {!loggedIn ? <Redirect to="/" /> : null} */}
 
       <div id={changeTheam() === true ? "" : "blackground-white"} style={changeTheam() === true ? { backgroundImage: `url(${BgGreen})`, width: "100vw", height: "100vh" } : {height: "100vh"}}>
         <div className="bootstrap-wrapper">

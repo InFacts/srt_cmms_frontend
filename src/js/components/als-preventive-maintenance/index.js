@@ -33,7 +33,7 @@ const AlsPreventiveMaintenanaceComponent = () => {
 
     return (
         <>
-            {!loggedIn ? <Redirect to="/" /> : null}
+            {/* {!loggedIn ? <Redirect to="/" /> : null} */}
 
             <div id={changeTheam() === true ? "" : "blackground-white"} style={changeTheam() === true ? { backgroundImage: `url(${BgGreen})`, width: "100vw", height: "160vh" } : {height: "160vh"}}>
                 <div className="bootstrap-wrapper">
@@ -46,7 +46,7 @@ const AlsPreventiveMaintenanaceComponent = () => {
 
                             {/* AdjustmentBar */}
                             <div className="col-2"
-                                style={{ border: "1px red solid" }}
+                                // style={{ border: "1px red solid" }}
                             >
                                 <AdjustmentBarComponent />
                             </div>
@@ -58,7 +58,7 @@ const AlsPreventiveMaintenanaceComponent = () => {
 
                                     {/* Top5 */}
                                     <div className="col-4"
-                                        style={{ border: "1px red solid" }}
+                                        // style={{ border: "1px red solid" }}
                                     >
                                         <Top5Component
                                             title="5 อันดับแรกที่ดำเนินตามวาระได้เสร็จสมบูรณ์"
@@ -68,7 +68,7 @@ const AlsPreventiveMaintenanaceComponent = () => {
 
                                     {/* Top5 */}
                                     <div className="col-4"
-                                        style={{ border: "1px red solid" }}
+                                        // style={{ border: "1px red solid" }}
                                     >
                                         <Top5Component
                                             title="5 อันดับแรกที่ทำตามวาระได้ดำเนินการไม่ตรงตามวาระ"
@@ -78,7 +78,7 @@ const AlsPreventiveMaintenanaceComponent = () => {
 
                                     {/* Top5 */}
                                     <div className="col-4"
-                                        style={{ border: "1px red solid" }}
+                                        // style={{ border: "1px red solid" }}
                                     >
                                         <Top5Component
                                             title="5 อันดับแรกที่ไม่ดำเนินการทำวาระ"
@@ -95,7 +95,7 @@ const AlsPreventiveMaintenanaceComponent = () => {
 
                             {/* Top5 */}
                             <div className="col-auto"
-                                style={{ border: "1px red solid" }}
+                                // style={{ border: "1px red solid" }}
                             >
                                 <ColorMapDateComponent 
                                     title="สถิติการทำวาระของแต่ละตอน"

@@ -28,8 +28,10 @@ const useDocumentSubscription = () => {
         // If not an empty string AND isn't handlingSEND process
         // console.log("fetchStepApprovalDocumentData: SEND/Doc ID Changed")
         // Start Axios Get step_approve and attachment By nuk
+        // console.log("BEFORE fetchStepApprovalDocumentData")
         fetchStepApprovalDocumentData(values.document_id)
         .then((result) => {
+            // console.log("AFTER fetchStepApprovalDocumentData", result)
             setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
             if(result.is_canceled){
                 setFieldValue("document_is_canceled", result.is_canceled.data, false);
@@ -42,8 +44,7 @@ const useDocumentSubscription = () => {
     footer.requiresHandleClick[FOOTER_ACTIONS.CHECK_APPROVAL],
     footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK], 
     footer.requiresHandleClick[FOOTER_ACTIONS.GOT_IT],
-    footer.requiresHandleClick[FOOTER_ACTIONS.REJECT],
-    footer.requiresHandleClick[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS] ]);
+    footer.requiresHandleClick[FOOTER_ACTIONS.REJECT] ]);
 
     
     // Get  attachment when values.document_id changes
