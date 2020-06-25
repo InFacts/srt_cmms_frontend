@@ -155,7 +155,6 @@ const BottomContent = (props) => {
                                     disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                                     <option value=''></option>
                                     {factNodes.items.map((node) => {
-                                        console.log("node.district_id", node.district_id, "values.location_district_id", values.location_district_id)
                                         if (values.location_district_id == node.district_id) {
                                             return <option key={node.node_id} value={node.node_id} selected>{node.name}</option>
                                         }

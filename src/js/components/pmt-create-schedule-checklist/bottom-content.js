@@ -32,9 +32,9 @@ const BottomContent = (props) => {
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
   const factEquipmentGroup = useSelector((state) => ({ ...state.api.fact[FACTS.EQUIPMENT_GROUP] }), shallowEqual);
   const factChecklist = useSelector((state) => ({ ...state.api.fact.checklist }), shallowEqual);
-  const factDistict = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
-  const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
-  const factStations = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
+    const factDistricts = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
+    const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
+    const factStations = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
   const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
@@ -55,11 +55,11 @@ const BottomContent = (props) => {
                 <p className="top-text">แขวง</p>
               </div>
               <div className="grid_5 alpha omega">
-                <SelectNoChildrenInput name="location_district_id" disabled>
+                <SelectNoChildrenInput name="location_district_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
                   <option value=''></option>
-                  {factDistict.items.map((factDistict) => {
-                    return <option value={factDistict.distict_id}>{factDistict.name}</option>
-                  })}
+                  {factDistricts.items.map((districts) => (
+                      <option key={districts.district_id} value={districts.district_id}>{districts.name}</option>
+                  ))}
                 </SelectNoChildrenInput>
               </div>
               <div className="clear" />
@@ -68,13 +68,13 @@ const BottomContent = (props) => {
                 <p className="top-text">ตอน</p>
               </div>
               <div className="grid_5 alpha omega">
-                <SelectNoChildrenInput name="location_node_id" disabled>
+                <SelectNoChildrenInput name="location_node_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
                   <option value=''></option>
                   {factNodes.items.map((node) => {
-                    if (values.location_district_id == node.district_id) {
-                      return <option key={node.node_id} value={node.node_id} selected>{node.name}</option>
-                    }
-                  })}
+                        if (values.location_district_id == node.district_id) {
+                            return <option key={node.node_id} value={node.node_id} selected>{node.name}</option>
+                        }
+                    })}
                 </SelectNoChildrenInput>
               </div>
               <div className="clear" />
@@ -84,13 +84,13 @@ const BottomContent = (props) => {
                 <p className="top-text">สถานี</p>
               </div>
               <div className="grid_5 alpha omega">
-                <SelectNoChildrenInput name="location_station_id" disabled>
+                <SelectNoChildrenInput name="location_station_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
                   <option value=''></option>
                   {factStations.items.map((stations) => {
-                    if (values.location_node_id == stations.node_id) {
-                      return <option key={stations.station_id} value={stations.station_id} selected>{stations.name}</option>
-                    }
-                  })}
+                        if (values.location_node_id == stations.node_id) {
+                            return <option key={stations.station_id} value={stations.station_id} selected>{stations.name}</option>
+                        }
+                    })}
                 </SelectNoChildrenInput>
               </div>
               <div className="clear" />
@@ -108,7 +108,7 @@ const BottomContent = (props) => {
                     <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
                     <th className="font" style={{ minWidth: "220px" }}>กลุ่มการทำวาระ</th>
                     <th className="font" style={{ minWidth: "220px" }}>ชนิดการทำวาระ</th>
-                    <th className="font" style={{ minWidth: "130px" }}>รายการ</th>
+                    <th className="font" style={{ minWidth: "130px" }}>เลขที่สินทรัพย์</th>
                     <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
                   </tr>
                 </thead>
@@ -119,7 +119,7 @@ const BottomContent = (props) => {
                     <tr>
                     <th className="edit-padding text-center"></th>
                     <td className="edit-padding">
-                      <SelectNoChildrenInput name={`21111${i}`} disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                      <SelectNoChildrenInput name={`21111${i}`} disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} >
                         <option value=''></option>
                         <option value='กล้อง CCTV'>กล้อง CCTV</option>
                         <option value='คานกั้นถนน'>คานกั้นถนน</option>
@@ -127,7 +127,7 @@ const BottomContent = (props) => {
                       </SelectNoChildrenInput>
                     </td>
                     <td className="edit-padding">
-                      <SelectNoChildrenInput name={`1aefsedf${i}`} disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                      <SelectNoChildrenInput name={`1aefsedf${i}`} disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} >
                         <option value=''></option>
                         <option value='ก.0 ชนิดคานทำงานด้วยไฟฟ้า ตรวจสอบด้วยกล้อง'>ก.0 ชนิดคานทำงานด้วยไฟฟ้า ตรวจสอบด้วยกล้อง</option>
                         <option value='ก.1 ชนิดคานทำงานด้วยไฟฟ้า มีพนักงานควบคุม'>ก.1 ชนิดคานทำงานด้วยไฟฟ้า มีพนักงานควบคุม</option>
@@ -139,9 +139,9 @@ const BottomContent = (props) => {
                       </SelectNoChildrenInput>
                     </td>
                     <td className="edit-padding">
-                      <TextInput name="created_by_user_employee_id"
+                      <TextInput name={`1aefsedfd${i}`}
                         // validate={validateUserEmployeeIDField}
-                        disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
                         searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"
                         tabIndex="2" />
                     </td>
