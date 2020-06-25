@@ -139,7 +139,42 @@ const useExportPdfInitializer = () => {
 
         let data = [];
         let p = 1
+        let dateTimeParts = values.accident_on.split('T')
+        let timeParts = dateTimeParts[1]
+        let dateParts = dateTimeParts[0].split('-')
+        let day = Number(dateParts[0])+543
+        let mount = dateParts[1]
+        let year = dateParts[2]
 
+        let dateTimeParts2 = values.request_on.split('T')
+        let timeParts2 = dateTimeParts2[1]
+        let dateParts2 = dateTimeParts2[0].split('-')
+        let day2 = Number(dateParts2[0])+543
+        let mount2 = dateParts2[1]
+        let year2 = dateParts2[2]
+
+
+        let dateTimeParts3 = values.departed_on.split('T')
+        let timeParts3 = dateTimeParts3[1]
+        let dateParts3 = dateTimeParts3[0].split('-')
+        let day3 = Number(dateParts3[0])+543
+        let mount3 = dateParts3[1]
+        let year3 = dateParts3[2]
+
+        let dateTimeParts4 = values.arrived_on.split('T')
+        let timeParts4 = dateTimeParts4[1]
+        let dateParts4 = dateTimeParts4[0].split('-')
+        let day4 = Number(dateParts4[0])+543
+        let mount4 = dateParts4[1]
+        let year4 = dateParts4[2]
+        
+
+        let dateTimeParts5 = values.finished_on.split('T')
+        let timeParts5 = dateTimeParts5[1]
+        let dateParts5 = dateTimeParts5[0].split('-')
+        let day5 = Number(dateParts5[0])+543
+        let mount5 = dateParts5[1]
+        let year5 = dateParts5[2]
 
         values.loss_line_items.map(lineItem => {
           data.push({
@@ -164,11 +199,42 @@ const useExportPdfInitializer = () => {
             "District": District,
             "AccidentName": values.accident_name,
             "AccidentOn": values.accident_on,
-            "ArrivedOn": values.arrived_on,
-            "RequestBy": values.request_by,
-            "CarType": car_type_id,
+            "AccidentOnTimeParts": timeParts,
+            "AccidentOnDay": day,
+            "AccidentOnMount": mount,
+            "AccidentOnYear": year,
+
+
+
+
+            "RequesstOn": values.request_on,
+            "RequesstOnTimeParts": timeParts2,
+            "RequesstOnDay": day2,
+            "RequesstOnMount": mount2,
+            "RequesstOnYear": year2,
+
+
+
             "DepartedOn": values.departed_on,
+            "DepartedOnTimeParts": timeParts3,
+            "DepartedOnDay": day3,
+            "DepartedOnMount": mount3,
+            "DepartedOnYear": year3,
+
+
+            "ArrivedOn": values.arrived_on,
+            "ArrivedOnTimeParts": timeParts4,
+            "ArrivedOnDay": day4,
+            "ArrivedOnMount": mount4,
+            "ArrivedOnYear": year4,
+
+
+
             "FinishedOn": values.finished_on,
+            "FinishedOnTimeParts": timeParts5,
+            "FinishedOnDay": day5,
+            "FinishedOnMount": mount5,
+            "FinishedOnYear": year5,
 
             "A": "",
             "B": "",
@@ -1159,45 +1225,45 @@ const createPageS101Page1 = (date, content) =>
               <td style="width: 6%; text-align:center; vertical-align: middle;" >พ.ศ.</td>  
           </tr>
           <tr class="item">
-              <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">(2) ได้รับแจ้งเหตุจาก</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>${content.RequestBy}</label></div></div></td>
-              <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">วันเวลาที่รับแจ้ง</td>
-              <td style=" text-align:center ; vertical-align: middle;" >-</td>
-              <td style=" text-align:center ; vertical-align: middle;" >-</td>
-              <td style=" text-align:center ; vertical-align: middle;">-</td>
-              <td style=" text-align:center ; vertical-align: middle;">-</td>
-          </tr>
-          <tr class="item">
-              <td style="padding-left: 15px; text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">โดยจดหมายหรือโทรเลขที่</div><div contenteditable="true"><div class="dotted" style="width: 435px;"><label></label></div></div></td>
-              <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">วันเวลาที่เกิดเหตุ</td>
-              <td style=" text-align:center ; vertical-align: middle;" >-</td>
-              <td style=" text-align:center ; vertical-align: middle;" >-</td>
-              <td style=" text-align:center ; vertical-align: middle;">-</td>
-              <td style=" text-align:center ; vertical-align: middle;">-</td>
-          </tr>
-          <tr class="item">
-              <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">(3) งาน</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label></label></div></div></td>
-              <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">ออกเดินทาง</td>
-              <td style=" text-align:center ; vertical-align: middle;" >-</td>
-              <td style=" text-align:center ; vertical-align: middle;" >-</td>
-              <td style=" text-align:center ; vertical-align: middle;">-</td>
-              <td style=" text-align:center ; vertical-align: middle;">-</td>
-          </tr>
-          <tr class="item">
-              <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">(4) เดินทางโดย</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>${content.CarType}</label></div></div></td>
-              <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">เดินทางถึง</td>
-              <td style=" text-align:center ; vertical-align: middle;" >-</td>
-              <td style=" text-align:center ; vertical-align: middle;" >-</td>
-              <td style=" text-align:center ; vertical-align: middle;">-</td>
-              <td style=" text-align:center ; vertical-align: middle;">-</td>
-          </tr>
-          <tr class="item">
-              <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">(5) ระบบที่ตรวจซ่อม</div></td>
-              <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">วันเวลาแล้วเสร็จ</td>
-              <td style=" text-align:center ; vertical-align: middle;" >-</td>
-              <td style=" text-align:center ; vertical-align: middle;" >-</td>
-              <td style=" text-align:center ; vertical-align: middle;">-</td>
-              <td style=" text-align:center ; vertical-align: middle;">-</td>
-          </tr>
+          <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">(2) ได้รับแจ้งเหตุจาก</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>${content.RequestBy}</label></div></div></td>
+          <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">วันเวลาที่รับแจ้ง</td>
+          <td style=" text-align:center ; vertical-align: middle;" >${content.RequesstOnTimeParts}</td>
+          <td style=" text-align:center ; vertical-align: middle;" >${content.RequesstOnYear}</td>
+          <td style=" text-align:center ; vertical-align: middle;">${content.RequesstOnMount}</td>
+          <td style=" text-align:center ; vertical-align: middle;">${content.RequesstOnDay}</td>
+      </tr>
+      <tr class="item">
+          <td style="padding-left: 15px; text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">โดยจดหมายหรือโทรเลขที่</div><div contenteditable="true"><div class="dotted" style="width: 435px;"><label></label></div></div></td>
+          <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">วันเวลาที่เกิดเหตุ</td>
+          <td style=" text-align:center ; vertical-align: middle;" >${content.AccidentOnTimeParts}</td>
+          <td style=" text-align:center ; vertical-align: middle;" >${content.AccidentOnYear}</td>
+          <td style=" text-align:center ; vertical-align: middle;">${content.AccidentOnMount}</td>
+          <td style=" text-align:center ; vertical-align: middle;">${content.AccidentOnDay}</td>
+      </tr>
+      <tr class="item">
+          <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">(3) งาน</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label></label></div></div></td>
+          <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">ออกเดินทาง</td>
+          <td style=" text-align:center ; vertical-align: middle;" >${content.DepartedOnTimeParts}</td>
+          <td style=" text-align:center ; vertical-align: middle;" >${content.DepartedOnYear}</td>
+          <td style=" text-align:center ; vertical-align: middle;">${content.DepartedOnMount}</td>
+          <td style=" text-align:center ; vertical-align: middle;">${content.DepartedOnDay}</td>
+      </tr>
+      <tr class="item">
+          <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">(4) เดินทางโดย</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>${content.CarType}</label></div></div></td>
+          <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">เดินทางถึง</td>
+          <td style=" text-align:center ; vertical-align: middle;" >${content.ArrivedOnTimeParts}</td>
+          <td style=" text-align:center ; vertical-align: middle;" >${content.ArrivedOnYear}</td>
+          <td style=" text-align:center ; vertical-align: middle;">${content.ArrivedOnMount}</td>
+          <td style=" text-align:center ; vertical-align: middle;">${content.ArrivedOnDay}</td>
+      </tr>
+      <tr class="item">
+          <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">(5) ระบบที่ตรวจซ่อม</div></td>
+          <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">วันเวลาแล้วเสร็จ</td>
+          <td style=" text-align:center ; vertical-align: middle;" >${content.FinishedOnTimeParts}</td>
+          <td style=" text-align:center ; vertical-align: middle;" >${content.FinishedOnYear}</td>
+          <td style=" text-align:center ; vertical-align: middle;">${content.FinishedOnMount}</td>
+          <td style=" text-align:center ; vertical-align: middle;">${content.FinishedOnDay}</td>
+      </tr>
     </table>
 
     
@@ -1338,10 +1404,10 @@ const createPageS101Page1 = (date, content) =>
             <div class="left">(12) ผู้ควบคุมทดสอบ ชื่อ</div><div contenteditable="true"><div class="dotted" style="width: 200px;"><label>${content.auditor_name}</label></div></div>
         </td>
         <td style="width: 33%; text-align:left ; vertical-align: middle;">
-            <div class="left">ตำแหน่ง</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.auditor_position_id}</label></div></div>
+            <div class="left">ตำแหน่ง</div><div contenteditable="true"><div class="dotted" style="width: 400px;"><label>${content.auditor_position_id}</label></div></div>
         </td> 
         <td style="width: 33%; text-align:left ; vertical-align: middle;">
-            <div class="left">ลงนาม</div><div contenteditable="true"><div class="dotted" style="width: 180px;"><label></label></div></div>
+            <div class="left">ลงนาม</div><div contenteditable="true"><div class="dotted" style="width: 130px;"><label></label></div></div>
         </td> 
       </tr>
     </table>
@@ -1352,10 +1418,10 @@ const createPageS101Page1 = (date, content) =>
             <div class="left">(13) ผู้ควบคุมแก้ไข ชื่อ</div><div contenteditable="true"><div class="dotted" style="width: 200px;"><label>${content.fixer_name}</label></div></div>
         </td>
         <td style="width: 33%; text-align:left ; vertical-align: middle;">
-            <div class="left">ตำแหน่ง</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.fixer_position_id}</label></div></div>
+            <div class="left">ตำแหน่ง</div><div contenteditable="true"><div class="dotted" style="width: 400px;"><label>${content.fixer_position_id}</label></div></div>
         </td> 
         <td style="width: 33%; text-align:left ; vertical-align: middle;">
-            <div class="left">ลงนาม</div><div contenteditable="true"><div class="dotted" style="width: 180px;"><label></label></div></div>
+            <div class="left">ลงนาม</div><div contenteditable="true"><div class="dotted" style="width: 130px;"><label></label></div></div>
         </td> 
       </tr>
     </table>
