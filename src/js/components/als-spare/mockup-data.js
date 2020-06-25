@@ -46,3 +46,18 @@ export function randomScatterPlotData() {
 
     return data;
   }
+
+// Data Format Referenced from https://observablehq.com/@d3/multi-line-chart
+export const getMultiLineGraphData = () => {
+    let results = [];
+    let dataPoints = 10;
+    let date = new Date("October 13, 2014");
+    for (let i = 0; i < dataPoints; i++) {
+        results.push({
+            date: new Date(date),
+            inventory_month: Math.random() * 10,
+        });
+        date.setMonth(date.getMonth() + 1);
+    }
+    return results;
+}

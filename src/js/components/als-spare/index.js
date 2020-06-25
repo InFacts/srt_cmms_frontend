@@ -14,10 +14,12 @@ import useTokenInitializer from '../../hooks/token-initializer';
 
 import ScatterPlot from './d3-scatter-plot';
 import LineGraph from './d3-line-graph';
+import MultiLineGraph from './d3-multi-line-graph';
 import BarDivergingGraph from './d3-bar-diverging';
 
 import AdjustmentBarComponent from './adjustment-bar';
 import SimpleGrayCardComponent from '../als-equipment-status/simple-gray-card';
+import SimpleCard2ValuesComponent from './simple-card-2values';
 import { getAnnualInventoryMonthData, randomDivergingBarGraphData, randomScatterPlotData } from './mockup-data';
 
 import BgGreen from '../../../images/als/bg_als.jpg';
@@ -55,7 +57,7 @@ const AlsSpareComponent = () => {
     <>
       {/* {!loggedIn ? <Redirect to="/" /> : null} */}
 
-      <div id={changeTheam() === true ? "" : "blackground-white"} style={changeTheam() === true ? { backgroundImage: `url(${BgGreen})`, width: "100vw", height: "100vh" } : {height: "100vh"}}>
+      <div id={changeTheam() === true ? "" : "blackground-white"} style={changeTheam() === true ? { backgroundImage: `url(${BgGreen})`, width: "100vw", height: "100vh" } : { height: "100vh" }}>
         <div className="bootstrap-wrapper">
           <div class="container" style={{ marginTop: "80px" }}>
             {/* Section Title */}
@@ -79,9 +81,12 @@ const AlsSpareComponent = () => {
 
               {/* === Current Average Inventory Month Text :1st Row, 2nd Column === */}
               <div className="col-4"
-                style={{ border: "1px red solid" }}
+                style={{ padding: 5 }}
+              // style={{ border: "1px red solid" }}
               >
-                <div className="row_bootstrap">
+                <div className="row_bootstrap"
+                  style={{ marginBottom: 5 }}
+                >
                   <div className="col-12">
                     <SimpleGrayCardComponent
                       name="Average Inventory Month ปัจจุบัน"
@@ -116,13 +121,13 @@ const AlsSpareComponent = () => {
 
               {/* === Current Inventory Month vs Planned Inventory Month Scatter Plot :1st Row, 2nd Column === */}
               <div className="col-4">
-                <ScatterPlot 
+                <ScatterPlot
                   title="Inventory Month ปัจจุบัน vs. แผนของแต่ละอะไหล่"
-                  data ={randomScatterPlotData()}
+                  data={randomScatterPlotData()}
                   chartSettings={{
                     marginTop: 40,
-                    marginBottom:30,
-                    marginLeft:30,
+                    marginBottom: 30,
+                    marginLeft: 30,
                     height: 250,
                   }}
                 />
@@ -134,22 +139,95 @@ const AlsSpareComponent = () => {
                 <AdjustmentBarComponent />
               </div>
               <div className="col-5">
-                <BarDivergingGraph 
+                <BarDivergingGraph
                   title="การนำออกและนำเข้าอะไหล่"
-                  data={BarDivergingGraphData} 
+                  data={BarDivergingGraphData}
                 />
               </div>
               <div className="col-5">
                 <div className="row_bootstrap no-gutters">
+                  <div className="col-12">
+                    <h5 style={{marginBottom:0 , 
+                      backgroundColor: "white",
+                      fontSize: 20,
+                      fontWeight:600}}>{"อะไหล่ Relay 5V SPDF 240"}</h5>
+                  </div>
                   <div className="col-7">
-                  <ScatterPlot 
-                  data ={randomScatterPlotData()}
-                />
+                    <div className="row_bootstrap no-gutters">
+                      <div className="col-12">
+                        <MultiLineGraph
+                          title="การใช้งานและการนำเข้า"
+                          data={IVMonthData}
+                          chartSettings={{
+                            marginTop: 20,
+                            height: 150,
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div className="row_bootstrap no-gutters">
+                      <div className="col-12">
+                        <MultiLineGraph
+                          title="คงคลัง/Inventory Month"
+                          data={IVMonthData}
+                          chartSettings={{
+                            marginTop: 20,
+                            height: 150,
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div className="row_bootstrap no-gutters">
+                      <div className="col-12">
+                        <MultiLineGraph
+                          title="Inventory Turnover Rate"
+                          data={IVMonthData}
+                          chartSettings={{
+                            marginTop: 20,
+                            height: 150,
+                          }}
+                        />
+                      </div>
+                    </div>
                   </div>
                   <div className="col-5">
-                  <ScatterPlot 
-                  data ={randomScatterPlotData()}
-                />
+                    <div className="row_bootstrap no-gutters">
+                      <div className="col-12">
+                        <SimpleCard2ValuesComponent
+                          name1="อัตราการนำออก"
+                          value1="200/ปี"
+                          name2="อัตราการนำเข้า"
+                          value2="200/ปี"
+                        />
+                      </div>
+                    </div>
+                    <div className="row_bootstrap no-gutters">
+                      <div className="col-12">
+                        <SimpleCard2ValuesComponent
+                          name1="คงคลัง ปัจจุบัน"
+                          value1={125}
+                          name2="คงคลังเป้าหมาย"
+                          value2={110}
+
+                        />
+                        <SimpleCard2ValuesComponent
+                          name1="Iv. Month ปัจจุบัน"
+                          value1={6.5}
+                          name2="Iv. Month เป้าหมาย"
+                          value2={6}
+                        />
+                      </div>
+                    </div>
+                    <div className="row_bootstrap no-gutters">
+                      <div className="col-12">
+                        <SimpleCard2ValuesComponent
+                          name1="Turnover Rate ปัจจุบัน"
+                          value1={22}
+                          name2="Turnover Rate เป้าหมาย"
+                          value2={2}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
