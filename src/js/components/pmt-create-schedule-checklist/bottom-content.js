@@ -109,7 +109,7 @@ const BottomContent = (props) => {
                     <th className="font" style={{ minWidth: "220px" }}>กลุ่มการทำวาระ</th>
                     <th className="font" style={{ minWidth: "220px" }}>ชนิดการทำวาระ</th>
                     <th className="font" style={{ minWidth: "130px" }}>เลขที่สินทรัพย์</th>
-                    <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
+                    <th className="font text-center" style={{ minWidth: "80px" }}>จำนวนสถานที่ซ่อมบำรุง</th>
                   </tr>
                 </thead>
                 <tbody>
