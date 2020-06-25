@@ -108,8 +108,8 @@ const BottomContent = (props) => {
                     <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
                     <th className="font" style={{ minWidth: "220px" }}>กลุ่มการทำวาระ</th>
                     <th className="font" style={{ minWidth: "220px" }}>ชนิดการทำวาระ</th>
-                    <th className="font" style={{ minWidth: "130px" }}>รายการ</th>
-                    <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
+                    <th className="font" style={{ minWidth: "130px" }}>เลขที่สินทรัพย์</th>
+                    <th className="font text-center" style={{ minWidth: "80px" }}>จำนวนสถานที่ซ่อมบำรุง</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -139,7 +139,7 @@ const BottomContent = (props) => {
                       </SelectNoChildrenInput>
                     </td>
                     <td className="edit-padding">
-                      <TextInput name="created_by_user_employee_id"
+                      <TextInput name="created_by_user_employee_id" //created_by_user_employee_id
                         // validate={validateUserEmployeeIDField}
                         disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                         searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"
