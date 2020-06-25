@@ -33,7 +33,7 @@ const GoodsReceiptComponent = (props) => {
     useToolbarInitializer(TOOLBAR_MODE.SEARCH);
     useTokenInitializer();
     useFactInitializer();
-    useFooterInitializer(DOCUMENT_TYPE_ID.ITEM_MASTER_DATA);
+    useFooterInitializer(DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM);
     const loggedIn = useSelector(state => state.token.isLoggedIn);
 
     return (

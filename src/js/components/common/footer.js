@@ -66,7 +66,14 @@ const FooterComponent = (props) => {
           <div className="container_12 clearfix">
             <div className="grid_12 nav-footer">
               { Object.keys(FOOTER_ACTIONS).map((key, index) => (
-                  <FooterItemComponent keyFooter={key} buttonName={FOOTER_ACTIONS_TEXT[key]} buttonType={props[key].styleButton} isVisible={props[key].isVisible} handleClick={props.handleClick}/>
+                  <FooterItemComponent 
+                    key={`footer-item-${index}`}
+                    keyFooter={key} 
+                    buttonName={FOOTER_ACTIONS_TEXT[key]} 
+                    buttonType={props[key].styleButton} 
+                    isVisible={props[key].isVisible} 
+                    handleClick={props.handleClick}
+                  />
                 ))}
             </div>
           </div>

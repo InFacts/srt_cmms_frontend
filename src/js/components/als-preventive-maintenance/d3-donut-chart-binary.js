@@ -61,7 +61,7 @@ const DonutChartBinary = ({ data, chartSettings, title}) => {
     return (
         <div className="Chart_wrapper" ref={ref}>
             <svg width={dms.width} height={dms.height} 
-                style={{ border: "1.5px solid gold" }} 
+                // style={{ border: "1.5px solid gold" }} 
                 viewBox={`0 0 ${dms.width} ${dms.height}`}>
                 
                 {/* Graph Boundary */}
@@ -76,10 +76,10 @@ const DonutChartBinary = ({ data, chartSettings, title}) => {
                     {/* Graph Title */}
                     <text 
                         x={dms.boundedWidth/2}
-                        text-anchor="middle"
+                        textAnchor="middle"
                         y={0}
-                        font-weight="bold"
-                        font-size="20px"
+                        fontWeight="bold"
+                        fontSize="20px"
                     >{title}</text>
 
                     {/* xAxis Label */}
@@ -103,8 +103,8 @@ const DonutChartBinary = ({ data, chartSettings, title}) => {
                     <text
                         x={dms.boundedWidth*(1/2-1/12)}
                         y={dms.boundedHeight*(1/2+1/10)}
-                        font-weight={600} // 400 is the same as normal, and 700 is the same as bold
-                        font-size="18px"
+                        fontWeight={600} // 400 is the same as normal, and 700 is the same as bold
+                        fontSize="18px"
                     >{data.groupShow}</text>
 
                     
@@ -112,36 +112,36 @@ const DonutChartBinary = ({ data, chartSettings, title}) => {
                         x={dms.boundedWidth*(1/2-1/12)}
                         y={dms.boundedHeight*(1/2+1/10)}
                         dy={-20}
-                        font-weight={600} // 400 is the same as normal, and 700 is the same as bold
-                        font-size="18px"
+                        fontWeight={600} // 400 is the same as normal, and 700 is the same as bold
+                        fontSize="18px"
                     >{data[0].value}</text>
 
                     <text
                         x={dms.boundedWidth*(1/2-1/12)}
                         y={dms.boundedHeight*(1/2+1/10)}
                         dy={15}
-                        font-weight={500} // 400 is the same as normal, and 700 is the same as bold
-                        font-size="16px"
+                        fontWeight={500} // 400 is the same as normal, and 700 is the same as bold
+                        fontSize="16px"
                     >{data.unitOfMeasure}</text>
 
                     {/* Total Value */}
                     <text
                         x={dms.boundedWidth*(1/4-1/6)}
                         y={dms.boundedHeight*(1/2+1/10)}
-                        text-anchor="end"
+                        textAnchor="end"
                         dy={-20}
-                        font-weight={500} // 400 is the same as normal, and 700 is the same as bold
-                        font-size="18px"
+                        fontWeight={500} // 400 is the same as normal, and 700 is the same as bold
+                        fontSize="18px"
                     >{data.reduce((prevValue, curValue) => (prevValue.value+curValue.value))}</text>
 
                     {/* Total Value */}
                     <text
                         x={dms.boundedWidth*(1/4-1/6)}
                         y={dms.boundedHeight*(1/2+1/10)}
-                        text-anchor="end"
+                        textAnchor="end"
                         // dy={-20}
-                        font-weight={500} // 400 is the same as normal, and 700 is the same as bold
-                        font-size="16px"
+                        fontWeight={500} // 400 is the same as normal, and 700 is the same as bold
+                        fontSize="16px"
                     >{data.totalUnitOfMeasure}</text>
 
                     {/* Percentage */}
@@ -150,30 +150,32 @@ const DonutChartBinary = ({ data, chartSettings, title}) => {
                         // y={dms.boundedHeight*(1/2+1/10)}
                         x={dms.boundedWidth*(1/4)}
                         y={dms.boundedHeight/2+13+2}
-                        text-anchor="middle"
+                        textAnchor="middle"
                         // dy={-20}
-                        font-weight={600} // 400 is the same as normal, and 700 is the same as bold
-                        font-size={"25px"}
+                        fontWeight={600} // 400 is the same as normal, and 700 is the same as bold
+                        fontSize={"25px"}
                     >{`${Math.floor(data[0].value/data.reduce((prevValue, curValue) => (prevValue.value+curValue.value))*100)}%`}</text>
 
                     {/* For Each Pie Sector */}
                     <g transform={`translate(${dms.boundedWidth/4}, ${dms.boundedHeight/2+10})`}>
                 
-                        {arcs.map((singleArc) => (
-                            <>
+                        {arcs.map((singleArc, singleArcIndex) => (
+                            // <>
                             <path 
+                                key={`arc-${singleArcIndex}`}
                                 fill={color(singleArc.data.key)}
                                 d={arcGenerator(singleArc)}
                             >
-                                <title>{`${singleArc.data.key}: ${singleArc.data.value}`}</title>
-                            </path>
+                                {/* <title>{`${singleArc.data.key}: ${singleArc.data.value}`}</title> */}
+                            
                             {/* <text
                                 transform={`translate(${arcLabel.centroid(singleArc)})`}
                             >
                                 {(singleArc.endAngle - singleArc.startAngle) > 0.25 && 
                                 <tspan fontWeight="bold">{singleArc.data.value}</tspan>}
                             </text> */}
-                            </>
+                            {/* </> */}
+                            </path>
                         ))}
                     </g>
 

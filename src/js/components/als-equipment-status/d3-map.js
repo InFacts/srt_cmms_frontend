@@ -7,9 +7,10 @@ import {schemeSet1, schemeReds, schemeOranges} from "d3-scale-chromatic";
 import useChartDimensions from '../../hooks/chart-dimensions-hook'
 import { useFormik, withFormik, useFormikContext } from 'formik';
 import ThailandTopo from './thailandWithName.json';
-import MockupEquipmentData from './mockupEquipmentData.json';
+// import MockupEquipmentData from './mockupEquipmentData.json';
 import { geoPath, geoAlbers, geoMercator ,geoEqualEarth } from "d3-geo"
 import legend from './d3-color-legend';
+// import mockupEquipmentData from './mockupEquipmentData.json';
 
 const chartSettings = { //Need to be at least one since 0 is a falsy value, will be replaced by defaults
     "marginLeft": 10,
@@ -199,6 +200,7 @@ function ThailandMapComponent({data}) {
         });
         setTestMapData(tempMapData);
     },[values.temp_equipment_data])
+    
 
 
     const color = useMemo(() => (
@@ -239,8 +241,8 @@ function ThailandMapComponent({data}) {
                             onMouseEnter ={() => setToolTipText(region.properties.name)}
                             stroke="black"
                             // fill="#f3f3f3" 
-                            // fill={testMapData[i] ? color(testMapData[i].value) : "#f3f3f3" }
-                            fill={  color(Math.random())  }
+                            fill={testMapData[i] ? color(testMapData[i].value) : "#f3f3f3" }
+                            // fill={  color(Math.random())  }
                         >
                             <title>{region.properties.name}</title>
 

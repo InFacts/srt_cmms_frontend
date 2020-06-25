@@ -74,9 +74,14 @@ const ToolbarComponent = (props) => {
         <div id="toolbar">
             <div className="container_12 clearfix" style={{ marginTop: "3px" }}>
                 <ul className="grid_12 nav-ul ">
-                    {TOOLBAR_ORDER.map( toolbar_action => (
-                        <ToolbarItemComponent toolbarAction={toolbar_action} isDisabled={props[toolbar_action].isDisabled} 
-                        isSelecting={props[toolbar_action].isSelecting} handleClick={props.handleClick} />
+                    {TOOLBAR_ORDER.map( (toolbar_action, toolbar_action_index) => (
+                        <ToolbarItemComponent 
+                            key={`toolbar-item-${toolbar_action_index}`}
+                            toolbarAction={toolbar_action} 
+                            isDisabled={props[toolbar_action].isDisabled} 
+                            isSelecting={props[toolbar_action].isSelecting} 
+                            handleClick={props.handleClick} 
+                        />
                     ))}
                 </ul>
             </div>

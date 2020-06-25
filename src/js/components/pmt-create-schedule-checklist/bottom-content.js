@@ -113,27 +113,29 @@ const BottomContent = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {[0,1,1,1,1,1,1,1,1].map((x, i) => (
+                  {[0,1,1,1,1,1,1,1,1].map((x, i) => {
+                    console.log("i",i)
+                    return (
                     <tr>
                     <th className="edit-padding text-center"></th>
                     <td className="edit-padding">
-                      <SelectNoChildrenInput name="equipment_status_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                      <SelectNoChildrenInput name={`21111${i}`} disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                         <option value=''></option>
-                        <option value=''>กล้อง CCTV</option>
-                        <option value=''>คานกั้นถนน</option>
-                        <option value=''>งานบำรุงรักษาตามวาระที่สถานี</option>
+                        <option value='กล้อง CCTV'>กล้อง CCTV</option>
+                        <option value='คานกั้นถนน'>คานกั้นถนน</option>
+                        <option value='งานบำรุงรักษาตามวาระที่สถานี'>งานบำรุงรักษาตามวาระที่สถานี</option>
                       </SelectNoChildrenInput>
                     </td>
                     <td className="edit-padding">
-                      <SelectNoChildrenInput name="equipment_status_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                      <SelectNoChildrenInput name={`1aefsedf${i}`} disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                         <option value=''></option>
-                        <option value=''>ก.0 ชนิดคานทำงานด้วยไฟฟ้า ตรวจสอบด้วยกล้อง</option>
-                        <option value=''>ก.1 ชนิดคานทำงานด้วยไฟฟ้า มีพนักงานควบคุม</option>
-                        <option value=''>ก.2 ชนิดม่านยกตรง ทำงานด้วยมือหมุน</option>
-                        <option value=''>ก.3 ชนิดเข็นแผง</option>
-                        <option value=''>ห้องรีเลย์ไฟสี ARI/ไฟสีสายลวด</option>
-                        <option value=''>ห้องรีเลย์ CTC Service (CTS/PABX/SDH/PDH)</option>
-                        <option value=''>แผงบรรยายทาง (CBI/IPU/CCTV FOR Level Crossing)</option>
+                        <option value='ก.0 ชนิดคานทำงานด้วยไฟฟ้า ตรวจสอบด้วยกล้อง'>ก.0 ชนิดคานทำงานด้วยไฟฟ้า ตรวจสอบด้วยกล้อง</option>
+                        <option value='ก.1 ชนิดคานทำงานด้วยไฟฟ้า มีพนักงานควบคุม'>ก.1 ชนิดคานทำงานด้วยไฟฟ้า มีพนักงานควบคุม</option>
+                        <option value='ก.2 ชนิดม่านยกตรง ทำงานด้วยมือหมุน'>ก.2 ชนิดม่านยกตรง ทำงานด้วยมือหมุน</option>
+                        <option value='ก.3 ชนิดเข็นแผง'>ก.3 ชนิดเข็นแผง</option>
+                        <option value='ห้องรีเลย์ไฟสี ARI/ไฟสีสายลวด'>ห้องรีเลย์ไฟสี ARI/ไฟสีสายลวด</option>
+                        <option value='ห้องรีเลย์ CTC Service (CTS/PABX/SDH/PDH)'>ห้องรีเลย์ CTC Service (CTS/PABX/SDH/PDH)</option>
+                        <option value='แผงบรรยายทาง (CBI/IPU/CCTV FOR Level Crossing)'>แผงบรรยายทาง (CBI/IPU/CCTV FOR Level Crossing)</option>
                       </SelectNoChildrenInput>
                     </td>
                     <td className="edit-padding">
@@ -149,7 +151,8 @@ const BottomContent = (props) => {
                       />
                     </td>
                   </tr>
-                  ))}
+                    )
+})}
                   
                 </tbody>
               </table>

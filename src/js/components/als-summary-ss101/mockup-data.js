@@ -17,6 +17,23 @@ export const randomGroupedBarGraphData = () => {
 
     return results;
 }
+export const randomGroupedBarGraphDataMTBF = () => {
+    let results = [];
+    results.columns = ["2018", "2019"];
+    results.yAxis = "ระยะเวลาเฉลี่ยก่อนการเสียหาย"
+    results.xAxis = "ประเภท"
+    let xGroups = ["ก0", "ก1", "ก2", "ก3", "ก4", "ก5", "ข1", "ข2", "ข3", "ข4", "ข5", "ข6", "ข7", "ข8", "ข9", "ข10", "ข11", "ข12"]
+
+    for (let i = 0; i < xGroups.length; i++) {
+        results.push({
+            [results.xAxis]: xGroups[i],
+            [results.columns[0]]: Math.random() * 10000,
+            [results.columns[1]]: Math.random() * 8000,
+        });
+    }
+
+    return results;
+}
 
 // Data format is referenced from https://observablehq.com/@mbostock/the-impact-of-vaccines
 export const randomColorMapData = () => {
@@ -50,6 +67,19 @@ export const randomColorMapData = () => {
 // Data Format is referenced from https://observablehq.com/@marialuisacp/pie-chart
 export const randomPieChartData = () => {
     let groups = ["จากอายุการใช้งาน", "จากอุบัติเหตุ", "จากภัยธรรมชาติ", "จากการบำรุงรักษาไม่ต่อเนี่อง", "จากอุปกรณ์ไม่ได้มาตรฐาน", "สาเหตุอื่นๆ"];
+    let results = [];
+    
+    for (let i = 0; i < groups.length; i++) {
+        results.push({key: groups[i], value: Math.floor(Math.random()*100)});
+    }
+
+    return results;
+}
+
+// Data Format is referenced from https://observablehq.com/@marialuisacp/pie-chart
+export const randomPieChartDataSystemType = () => {
+    let groups = ["ระบบอาณัติสัญญาณ", "ระบบสายส่ง", "ระบบทางผ่านเครื่องกั้นถนน", "ระบบเครื่องทางสะดวก", "ระบบโทรศัพท์", "ระบบไฟฟ้า", "ระบบโทรพิมพ์", "ระบบวิทยุ", "ระบบอิเล็กทรอนิกส์"]; 
+
     let results = [];
     
     for (let i = 0; i < groups.length; i++) {

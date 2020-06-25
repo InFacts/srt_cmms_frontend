@@ -65,6 +65,7 @@ const TopContent = (props) => {
               res.data.checklist_line_item.checklist_line_item_use_equipment[i].description = res.data.checklist_line_item.checklist_line_item_use_equipment[i].item.description
               res.data.checklist_line_item.checklist_line_item_use_equipment[i].quantity = res.data.checklist_line_item.checklist_line_item_use_equipment[i].quantity
               res.data.checklist_line_item.checklist_line_item_use_equipment[i].uom_id = res.data.checklist_line_item.checklist_line_item_use_equipment[i].item.uom_group.uom[0].uom_id
+              res.data.checklist_line_item.checklist_line_item_use_equipment[i].uom_group_id = res.data.checklist_line_item.checklist_line_item_use_equipment[i].item.uom_group.uom[0].uom_group_id
               delete res.data.checklist_line_item.checklist_line_item_use_equipment[i].item
             }
             for (var i = res.data.checklist_line_item.checklist_line_item_use_equipment.length; i <= 9; i++) {
@@ -72,7 +73,8 @@ const TopContent = (props) => {
                 internal_item_id: '',
                 description: '',
                 quantity: '',
-                uom_id: ''
+                uom_id: '',
+                uom_group_id: ''
               });
             }
 
