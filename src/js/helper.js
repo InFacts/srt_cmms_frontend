@@ -36,6 +36,7 @@ export const DOCUMENT_TYPE_ID = {
     WAREHOUSE_MASTER_DATA: 1,
     ITEM_MASTER_DATA: 2,
     EQUIPMENT_MASTER_DATA: 3,
+    CREATE_CHECKLIST_LINE_ITEM: 4
 
 }
 export const DOCUMENT_TYPE_NOTGROUP_ID = {
@@ -356,6 +357,40 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             equipment_item: equipment_item_part,
             item: item_part,
         }
+    } else if (document_type_id === DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM) {
+        console.log("values", values)
+        let last_checklist_line_item = 0;
+        fact[FACTS.CHECKLIST_LINE_ITEM].items.map(item => {
+            if (item.checklist_line_item > last_checklist_line_item) {
+                last_checklist_line_item = item.checklist_line_item_id;
+            }
+        });
+
+        var line_items_part = [];
+        values.checklist_line_item_use_equipment.map((line_item, index) => {
+            if (line_item.item_id) {
+                line_items_part.push({
+                    checklist_line_item_id: parseInt(last_checklist_line_item) + 1,
+                    item_id: line_item.item_id,
+                    quantity: line_item.quantity,
+                    uom_id: line_item.uom_id
+                });
+            }
+        })
+
+        let create_checklist_part = {
+            checklist_line_item: parseInt(last_checklist_line_item) + 1,
+            checklist_id: values.checklist_id,
+            name: values.name,
+            freq: values.freq,
+            freq_unit_id: values.freq_unit_id,
+            active: values.active === "1" ? true : false,
+            remark: values.remark,
+            line_items: line_items_part
+          }
+          console.log("create_checklist_part", create_checklist_part)
+        return create_checklist_part;
+        
     }
     let document_part = {
         ...DOCUMENT_SCHEMA,
@@ -628,7 +663,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             ss101_part.line_items[index].item_id = line_items.item_id
             ss101_part.line_items[index].item_status_id = parseInt(line_items.item_status_id)
             ss101_part.line_items[index].remark = line_items.remark
-            ss101_part.line_items[index].document_id = line_items.document_id
+            ss101_part.line_items[index].document_id = values.document_id
             delete ss101_part.line_items[index].internal_item_id
             delete ss101_part.line_items[index].description
             delete ss101_part.line_items[index].equipment_item_id
@@ -707,7 +742,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             document: document_part,
             specific: equipment_installation,
         }
-    } 
+    }
 }
 
 
@@ -715,6 +750,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
 function removeEmptyLineItems(line_items) {
     return line_items.filter(line_item => line_item.description != '');
 }
+
 
 
 
@@ -758,6 +794,9 @@ export const createMasterData = (data, document_type_group_id) => new Promise((r
     }
     if (document_type_group_id === DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA) {
         var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/equipment`;
+    }
+    if (document_type_group_id === DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM) {
+        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/checklist-line-item`;
     }
     console.log("data", data, "url", url)
     axios.post(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
@@ -904,6 +943,8 @@ const mutateDataFillDocumentID = (object, document_id) => {
     fillObjectOfName(mutated_object, 'document_id', document_id);
     fillObjectOfName(mutated_object, 'ss101_document_id', document_id);
     fillObjectOfName(mutated_object, 'work_order_document_id', document_id);
+    // fillObjectOfName(mutated_object, 'line_items_document_id', document_id);
+    // console.log("object", mutated_object)
     return mutated_object
 }
 
@@ -1380,6 +1421,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
         return { ...transformDocumentResponseToFormState(document_part, fact), ...transformWorkOrderResponseToFormState(work_order_part) }
     } else if (document_type_group_id === DOCUMENT_TYPE_ID.SS101) {
         // Get Subset of Data from both DOCUMENT_SCHEMA_GET and SS101_SCHEMA_GET 
+        console.log(">>> responseToFormState", data.document)
         let document_part = Object.fromEntries(
             Object.entries(data.document)
                 .filter(([key]) => Object.keys(DOCUMENT_SCHEMA_GET).includes(key))
@@ -1490,13 +1532,16 @@ function transformWorkRequestResponseToFormState(work_request_part) {
     }
 }
 function transformWorkOrderResponseToFormState(work_order_part) {
+    console.log(">>>>>")
     return {
         ...work_order_part,
         accident_on: work_order_part.accident_on.slice(0, 16),
+        request_on: work_order_part.request_on.slice(0, 16),
         location_district_id: returnEmptyStringIfNull(work_order_part.location_district_id),
         location_node_id: returnEmptyStringIfNull(work_order_part.location_node_id),
         location_station_id: returnEmptyStringIfNull(work_order_part.location_station_id),
-        line_items: returnFullArrayHasEquipmentItemNull(work_order_part.line_items),
+        line_items: [work_order_part.line_items],
+        // line_items: returnFullArrayHasEquipmentItemNull(work_order_part.line_items),
     }
 }
 function transformSS101ResponseToFormState(ss101_part, data) {
@@ -1525,7 +1570,9 @@ function transformSS101ResponseToFormState(ss101_part, data) {
         member_2_position_id: returnEmptyStringIfNull(ss101_part.member_2_position_id),
         member_3_position_id: returnEmptyStringIfNull(ss101_part.member_3_position_id),
 
-        has_equipment_item: returnFullArrayHasEquipmentItemNull(ss101_part.has_equipment_item),
+        line_items: [ss101_part.line_items],
+        // line_items: returnFullArrayHasEquipmentItemNull(ss101_part.line_items),
+
         loss_line_items: returnFullArrayLossLineItemNull(ss101_part.loss_line_items)
     }
 }
@@ -1731,6 +1778,7 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
                         console.log("validateInternalDocumentIDField:: I got document ID ", data.document.document_id)
                         setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
                         // validateField("dest_warehouse_id");
+                        console.log("!!!!!!!")
                         validateField("created_by_user_employee_id");
                         validateField("created_by_admin_employee_id");
                         return resolve(null);

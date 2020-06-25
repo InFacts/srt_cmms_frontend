@@ -154,14 +154,8 @@ const BottomContent = (props) => {
                                 <SelectNoChildrenInput name="location_node_id"
                                     disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                                     <option value=''></option>
-                                    {/* {factNodes.items.map((node) => {
-                                        if (values.location_district_id === node.district_id) {
-                                            console.log("node.district_id", node.district_id, "values.location_district_id", values.location_district_id)
-                                            return <option key={node.node_id} value={node.node_id} selected>{node.name}</option>
-                                        }
-                                    })} */}
                                     {factNodes.items.map((node) => {
-                                        if (values.location_district_id === node.node_id) {
+                                        if (values.location_district_id == node.district_id) {
                                             return <option key={node.node_id} value={node.node_id} selected>{node.name}</option>
                                         }
                                     })}
@@ -179,7 +173,7 @@ const BottomContent = (props) => {
                                     disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                                     <option value=''></option>
                                     {factStations.items.map((stations) => {
-                                        if (values.location_node_id === stations.node_id) {
+                                        if (values.location_node_id == stations.node_id) {
                                             return <option key={stations.station_id} value={stations.station_id} selected>{stations.name}</option>
                                         }
                                     })}

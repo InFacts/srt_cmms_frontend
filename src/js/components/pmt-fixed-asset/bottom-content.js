@@ -49,7 +49,7 @@ const BottomContent = (props) => {
           {/* General Tab */}
           <div id="general_content" className="tabcontent">
 
-            <TableHasEquipment line_items={[]} values={values}
+            <TableHasEquipment line_items={['','','','','','','','','']} values={values}
               // setLineNumber={setLineNumber}
               // validateLineNumberInternalItemIDField={validateLineNumberInternalItemIDField}
               checkBooleanForEdit={checkBooleanForEdit} />

@@ -35,19 +35,21 @@ const Table = (props) => {
                     tabIndex="6"
                     disabled={props.disabledBothMode !== true ? props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true}
                     searchable={props.checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalEquipment"
-                    handleModalClick={() => props.setLineNumber(line_number)}
+                    // handleModalClick={() => props.setLineNumber(line_number)}
                     redBorderForError="error-in-table"
                   />
                 </td>
-                <td className="edit-padding">{list.description}</td>
+                <td className="edit-padding">{list && list.description}</td>
 
                 <td className="edit-padding text-center">
                   <SelectNoChildrenInput name={`line_items[${index}].item_status_id`} disabled={props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                     <option value='' selected></option>
                     {factItemStatus.items.map((factItemStatus) => {
+                      if (list) {
                       if (props.values.line_items[index].item_status_id === factItemStatus.item_status_id) {
                         return <option key={factItemStatus.item_status_id} value={factItemStatus.item_status_id} selected>{factItemStatus.description_th}</option>
                       } else return <option key={factItemStatus.item_status_id} value={factItemStatus.item_status_id}>{factItemStatus.description_th}</option>
+                    }
                     })}
                   </SelectNoChildrenInput>
                 </td>
