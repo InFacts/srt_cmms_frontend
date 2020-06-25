@@ -370,7 +370,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         values.checklist_line_item_use_equipment.map((line_item, index) => {
             if (line_item.item_id) {
                 line_items_part.push({
-                    checklist_line_item_id: last_checklist_line_item + 1,
+                    checklist_line_item_id: parseInt(last_checklist_line_item) + 1,
                     item_id: line_item.item_id,
                     quantity: line_item.quantity,
                     uom_id: line_item.uom_id
@@ -379,7 +379,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         })
 
         let create_checklist_part = {
-            checklist_line_item: last_checklist_line_item + 1,
+            checklist_line_item: parseInt(last_checklist_line_item) + 1,
             checklist_id: values.checklist_id,
             name: values.name,
             freq: values.freq,
@@ -663,7 +663,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             ss101_part.line_items[index].item_id = line_items.item_id
             ss101_part.line_items[index].item_status_id = parseInt(line_items.item_status_id)
             ss101_part.line_items[index].remark = line_items.remark
-            ss101_part.line_items[index].document_id = line_items.document_id
+            ss101_part.line_items[index].document_id = values.document_id
             delete ss101_part.line_items[index].internal_item_id
             delete ss101_part.line_items[index].description
             delete ss101_part.line_items[index].equipment_item_id
@@ -794,6 +794,9 @@ export const createMasterData = (data, document_type_group_id) => new Promise((r
     }
     if (document_type_group_id === DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA) {
         var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/equipment`;
+    }
+    if (document_type_group_id === DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM) {
+        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/checklist-line-item`;
     }
     console.log("data", data, "url", url)
     axios.post(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
@@ -940,6 +943,8 @@ const mutateDataFillDocumentID = (object, document_id) => {
     fillObjectOfName(mutated_object, 'document_id', document_id);
     fillObjectOfName(mutated_object, 'ss101_document_id', document_id);
     fillObjectOfName(mutated_object, 'work_order_document_id', document_id);
+    // fillObjectOfName(mutated_object, 'line_items_document_id', document_id);
+    // console.log("object", mutated_object)
     return mutated_object
 }
 

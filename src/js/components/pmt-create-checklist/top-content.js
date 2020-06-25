@@ -145,7 +145,7 @@ const TopContent = (props) => {
                 <SelectNoChildrenInput name="checklist_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                   <option value=''></option>
                   {factChecklistEquipmentGroup.items.map((factChecklistEquipmentGroup) => {
-                    return (<option value={factChecklistEquipmentGroup.checklist_group_id}>{factChecklistEquipmentGroup.checklist_group_id}</option>)
+                    return (<option value={factChecklistEquipmentGroup.checklist_group_id}>{factChecklistEquipmentGroup.name}</option>)
                   })}
                   {factChecklistCustomGroup.items.map((factChecklistCustomGroup) => {
                     return (<option value={factChecklistCustomGroup.checklist_group_id}>{factChecklistCustomGroup.checklist_group_name}</option>)
