@@ -15,6 +15,8 @@ import useToolbarInitializer from '../../hooks/toolbar-initializer';
 import useFactInitializer from '../../hooks/fact-initializer';
 import useTokenInitializer from '../../hooks/token-initializer';
 import useFooterInitializer from '../../hooks/footer-initializer';
+import useDocumentSubscription from '../../hooks/document-subscription';
+import useNavBottomStatusInitializer from '../../hooks/nav-bottom-status-initializer';
 
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
@@ -27,7 +29,8 @@ const GoodsReceiptComponent = (props) => {
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
         { id: "general", name: "สถานที่" },
-        { id: "list_plan", name: "รายการบำรุงรักษา" },
+        { id: "list_plan_custom", name: "รายการบำรุงรักษาสถานี" },
+        { id: "list_plan_equipment", name: "รายการบำรุงรักษาสินทรัพย์" },
         { id: "attachment", name: "แนบไฟล์" },
         { id: "table_status", name: "สถานะเอกสาร" }
     ]);
@@ -35,7 +38,10 @@ const GoodsReceiptComponent = (props) => {
     useToolbarInitializer(TOOLBAR_MODE.SEARCH);
     useTokenInitializer();
     useFactInitializer();
-    useFooterInitializer(DOCUMENT_TYPE_ID.ITEM_MASTER_DATA);
+    useFooterInitializer(DOCUMENT_TYPE_ID.SELECTOR);
+    useDocumentSubscription();
+    useNavBottomStatusInitializer();
+    useFooterInitializer(DOCUMENT_TYPE_ID.SELECTOR);
     const loggedIn = useSelector(state => state.token.isLoggedIn);
 
     return (
@@ -52,80 +58,61 @@ const GoodsReceiptComponent = (props) => {
     )
 }
 
-const initiaLineEquipmentPlan = {
-    description: ''
+const initiaLineCustom = {
+    checklist_group_name: '',
+    checklist_id: '',
+    quantity_location: '',
+    unit_maintenance_location_id: ''
 }
-const initialRowsEquipmentPlan = (n = 10) => {
+const initialRowsCustom = (n = 10) => {
     let rows = [];
     for (var i = 1; i <= n; i++) {
         rows.push({
-            ...initiaLineEquipmentPlan,
-            line_number: i
+            ...initiaLineCustom,
         });
     }
     return rows;
 }
 
-const initiaLineDocument = {
-    description: ''
+const initiaLineEquipment = {
+    checklist_id: '',
+    item_id: '',
+    internal_item_id: '',
+    quantity_location: '',
+    unit_maintenance_location_id: ''
 }
-const initialRowsDocument = (n = 10) => {
+const initialRowsEquipment = (n = 10) => {
     let rows = [];
     for (var i = 1; i <= n; i++) {
         rows.push({
-            ...initiaLineDocument,
-            line_number: i
+            ...initiaLineEquipment,
         });
     }
     return rows;
 }
-
-
 
 const EnhancedGoodsReceiptComponent = withFormik({
     mapPropsToValues: (props) => ({
         // Field ที่ให้ User กรอก
         // Top Content
-        internal_item_id: '',
-        item_type_id: '',
-        description: '',
-        equipment_status_id: '',
-        uom_group_id: '',
+        internal_document_id: '',       // เลขที่เอกสาร
+        created_by_user_employee_id: '', // ผู้ดำเนินเรื่อง (Default === admin_employee_id)
+        created_by_admin_employee_id: '',  //ผู้สร้างเอกสาร (Field ที่ไม่ได้กรอก)
+        name: '',                   // ชื่อแผนการทำวาระ
+        status_name_th: '',              // TODO doesn't have (Field ที่ไม่ได้กรอก)
+        created_on: '',                  // TODO doesn't have (Field ที่ไม่ได้กรอก)
+        document_date: '',              // วันที่ออกเอกสาร (Default === NOW )
+        start_on: '',
 
-        // Bottom Content
-        // General Content
-        uom_id: '',
-        minimum_order_quantity: '',
-        uom_name: '',
-        lead_time: '',
-        tolerance_time: '',
-        active: '',
-        accounting_type: '',
-        remark: '',
-        // Equipment Content
-        price_import: '',
-        price_currently: '',
-        description_equipment: '',
-        top_districts_id: '',
-        useful_life: '',
-        // จังหวัด
-        // อำเภอ
-        districts_id: '',
-        location_station_id: '',
-        location: '',
-        // Equipment Plane Content
-        equipment_group_id: '',
-        checklist_id: '',
-        checklist_line_item: initialRowsEquipmentPlan(),
-        // history_content
-        ref_document: initialRowsDocument(),
+        // Bottom
+        district_id: '',
+        node_id: '',
+        station_id: '',
+        line_custom: initialRowsCustom(),
+        line_equipment: initialRowsEquipment(),
 
         //Field ที่ไม่ได้กรอก
-        list_uoms: [],
-        line_items: [],
         files: [],
-        goods_onhand: [],       //อะไหล่ที่มีอยู่ในทุกคลัง
-        method: '',
         
         // NOT USE FOR FOOTER
         step_approve: [],

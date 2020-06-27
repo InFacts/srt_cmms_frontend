@@ -63,7 +63,7 @@ const BottomContent = (props) => {
       setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
       setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
       setFieldValue(fieldName + `.line_number`, index+1, false);
-      setFieldValue(fieldName + `.item_status_id`, 1, false);
+      setFieldValue(fieldName + `.item_status_id`, 2, false);
       setFieldValue(fieldName + `.per_unit_price`, 0, false);
       return;
     } else {

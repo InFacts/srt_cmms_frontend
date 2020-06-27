@@ -27,6 +27,7 @@ const GoodsReceiptComponent = (props) => {
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
         { id: "general", name: "รายการบำรุงรักษา" },
+        { id: "item", name: "อุปกรณ์ที่ต้องนำไปปฎิบัติงาน" },
         { id: "attachment", name: "แนบไฟล์" },
         { id: "table_status", name: "สถานะเอกสาร" }
     ]);
@@ -34,7 +35,7 @@ const GoodsReceiptComponent = (props) => {
     useToolbarInitializer(TOOLBAR_MODE.SEARCH);
     useTokenInitializer();
     useFactInitializer();
-    useFooterInitializer(DOCUMENT_TYPE_ID.ITEM_MASTER_DATA);
+    useFooterInitializer(DOCUMENT_TYPE_ID.WORK_ORDER_PM);
     const loggedIn = useSelector(state => state.token.isLoggedIn);
 
     return (
@@ -52,7 +53,10 @@ const GoodsReceiptComponent = (props) => {
 }
 
 const initiaLineEquipmentPlan = {
-    description: ''
+    internal_item_id: '',
+    description: '',
+    quantity: '',
+    uom_id: ''
 }
 const initialRowsEquipmentPlan = (n = 10) => {
     let rows = [];
@@ -66,7 +70,10 @@ const initialRowsEquipmentPlan = (n = 10) => {
 }
 
 const initiaLineDocument = {
-    description: ''
+    internal_item_id: '',
+    description: '',
+    item_status_id: '',
+    remark: ''
 }
 const initialRowsDocument = (n = 10) => {
     let rows = [];
@@ -86,45 +93,26 @@ const EnhancedGoodsReceiptComponent = withFormik({
         // Field ที่ให้ User กรอก
         // Top Content
         internal_item_id: '',
-        item_type_id: '',
-        description: '',
-        equipment_status_id: '',
-        uom_group_id: '',
-
-        // Bottom Content
-        // General Content
-        uom_id: '',
-        minimum_order_quantity: '',
-        uom_name: '',
-        lead_time: '',
-        tolerance_time: '',
-        active: '',
-        accounting_type: '',
-        remark: '',
-        // Equipment Content
-        price_import: '',
-        price_currently: '',
-        description_equipment: '',
-        top_districts_id: '',
-        useful_life: '',
-        // จังหวัด
-        // อำเภอ
-        districts_id: '',
-        location_station_id: '',
-        location: '',
-        // Equipment Plane Content
-        equipment_group_id: '',
+        created_by_user_employee_id: '',
+        created_by_admin_employee_id: '',
         checklist_id: '',
-        checklist_line_item: initialRowsEquipmentPlan(),
-        // history_content
-        ref_document: initialRowsDocument(),
+        name: '',
+        freq: '',
+        freq_unit_id: '',
+        status_name_th: '',
+        created_on: '',
+        document_date: '',
+        location_district_id: '',
+        location_node_id: '',
+        location_station_id: '',
+        
+        // Bottom
+        line_items: initialRowsDocument(),
+        remark: '',
+        checklist_line_item_use_equipment: initialRowsEquipmentPlan(),
 
         //Field ที่ไม่ได้กรอก
-        list_uoms: [],
-        line_items: [],
         files: [],
-        goods_onhand: [],       //อะไหล่ที่มีอยู่ในทุกคลัง
-        method: '',
         
         // NOT USE FOR FOOTER
         step_approve: [],

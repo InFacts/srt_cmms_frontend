@@ -7,15 +7,21 @@ import DateTimeInput from '../common/formik-datetime-input'
 import DateInput from '../common/formik-date-input'
 import Label from '../common/form-label'
 import SelectNoChildrenInput from '../common/formik-select-no-children';
-import PopupModalEquipmentNoChildren from '../common/popup-modal-equipment-no-children'
+
+import PopupModalDocument from '../common/popup-modal-document';
+import PopupModalUsername from '../common/popup-modal-username';
 
 import { useFormikContext, useField } from 'formik';
 
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
-import { getNumberFromEscapedString, fetchGoodsOnhandDataForItemmasterData, DOCUMENT_TYPE_ID, 
-  getDocumentbyInternalDocumentID, checkBooleanForEditHelper } from '../../helper';
+import {
+  getNumberFromEscapedString, fetchGoodsOnhandDataForItemmasterData, DOCUMENT_TYPE_ID,
+  getDocumentbyInternalDocumentID, checkBooleanForEditHelper, validateEmployeeIDField,
+  validateInternalDocumentIDFieldHelper
+} from '../../helper';
 
 import { FACTS } from '../../redux/modules/api/fact.js';
+import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
 
 import BgBlue from '../../../images/pmt/bg_blue.jpg';
 import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
@@ -33,6 +39,13 @@ const TopContent = (props) => {
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
   const factEquipmentStatus = useSelector((state) => ({ ...state.api.fact[FACTS.EQUIPMENT_STATUS] }), shallowEqual);
 
+  // Fill Default Forms
+  useFillDefaultsOnModeAdd();
+  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.SELECTOR, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
+
+  const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
+  const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
+
   const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
 
   return (
@@ -42,7 +55,7 @@ const TopContent = (props) => {
           <FormTitle>กำหนดแผนการทำวาระ</FormTitle>
 
           <div id={changeTheam() === true ? "blackground-white" : ""}
-            style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "120px", paddingTop: "10px" } : {}}>
+            style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "150px", paddingTop: "10px" } : {}}>
 
             {/* === Left Column === */}
             <div className={changeTheam() === true ? "grid_5" : "grid_6"} style={{ paddingLeft: "10px" }}>
@@ -53,10 +66,21 @@ const TopContent = (props) => {
               </div>
               <div className="grid_3">
                 <TextInput name='internal_document_id'
-                  // validate={validateInternalDocumentIDField}
+                  validate={validateInternalDocumentIDField}
                   searchable={toolbar.mode === TOOLBAR_MODE.SEARCH}
                   ariaControls="modalDocument"
                   tabIndex="1" />
+              </div>
+              <div class="clear" />
+
+              {/* name แผนการทำวาระ */}
+              <div className="grid_1 alpha white-space">
+                <p className="top-text">ชื่อแผนวาระ</p>
+              </div>
+              <div className="grid_3">
+                <TextInput name="name"
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  tabIndex="3" />
               </div>
               <div class="clear" />
 
@@ -66,7 +90,7 @@ const TopContent = (props) => {
               </div>
               <div className="grid_3">
                 <TextInput name="created_by_user_employee_id"
-                  // validate={validateUserEmployeeIDField}
+                  validate={validateUserEmployeeIDField}
                   disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                   searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"
                   tabIndex="2" />
@@ -79,7 +103,7 @@ const TopContent = (props) => {
               </div>
               <div className="grid_3">
                 <TextInput name="created_by_admin_employee_id"
-                  // validate={validateAdminEmployeeIDField}
+                  validate={validateAdminEmployeeIDField}
                   disabled
                   tabIndex="3" />
               </div>
@@ -112,20 +136,37 @@ const TopContent = (props) => {
               {/* Document date */}
               <Label>วันที่เอกสาร</Label>
               <div className="grid_3 alpha">
-                <DateInput name="document_date" 
-                // validate={validateDocumentDateField}
+                <DateInput name="document_date"
+                  // validate={validateDocumentDateField}
                   disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                   tabIndex="6" />
               </div>
               <div class="clear" />
+
+              {/* Document date */}
+              <Label>วันเวลาที่เริ่มทำวาระ</Label>
+              <div className="grid_3 alpha">
+                <DateInput name="start_on"
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  tabIndex="6" />
+              </div>
+              <div class="clear" />
+
             </div>
 
           </div>
 
         </section>
 
-        {/* PopUp ค้นหาอะไหล่ */}
-        <PopupModalEquipmentNoChildren />
+        {/* PopUp ค้นหาเลขที่เอกสาร */}
+        <PopupModalDocument
+          documentTypeGroupID={DOCUMENT_TYPE_ID.SELECTOR}
+          id="modalDocument" //For Open POPUP
+          name="internal_document_id" //For setFieldValue 
+        />
+
+        {/* PopUp ค้นหาชื่อพนักงาน MODE ADD */}
+        <PopupModalUsername />
       </div>
     </div>
   )

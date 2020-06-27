@@ -52,7 +52,7 @@ const BottomContent = (props) => {
               <div className="grid_2"><p className="cancel-default">สถานะคลัง</p></div> {/* ปิด หรือ เปิด การใช้งาน เป็น boolean */}
               <div className="grid_4 pull_0">
                 <SelectNoChildrenInput name="active" validate={values.modeEdit ? null : validateActionWarehouseIDField} cssStyle={{left: "-240px", top: "10px"}}
-                  disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                  disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}  tabIndex="4">
                   {values.active === 1
                     ?
                     <>
@@ -75,7 +75,7 @@ const BottomContent = (props) => {
               <div className="container_12">
                 <div className="grid_2"><p className="cancel-default">ที่อยู่</p></div>
                 <div className="grid_4 pull_0">
-                  <TextInput name="location" validate={validateLocationWarehouseIDField} disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="4" />
+                  <TextInput name="location" validate={validateLocationWarehouseIDField} disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="5" />
                 </div>
               </div>
 
@@ -83,7 +83,7 @@ const BottomContent = (props) => {
                 <div className="grid_2"><p className="cancel-default">ประเภทคลัง</p></div>
                 <div className="grid_4 pull_0">
                   <SelectNoChildrenInput name="warehouse_type_id" validate={validateWarehouseTypeIDField} cssStyle={{left: "-240px", top: "10px"}}
-                    disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                    disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}  tabIndex="6">
                     <option value=''></option>
                     {props.fact[FACTS.WAREHOUSES_TYPE].items.map((warehouse_type) => (
                       values.warehouse_type_id === warehouse_type.warehouse_type_id
@@ -100,7 +100,7 @@ const BottomContent = (props) => {
                 <div className="grid_2"><p className="cancel-default">กลุ่มคลัง</p></div>
                 <div className="grid_4 pull_0">
                   <SelectNoChildrenInput name="use_central"  validate={values.modeEdit ? null : validateUseCentralWarehouseIDField} cssStyle={{left: "-240px", top: "10px"}}
-                    disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                    disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH}  tabIndex="7">
                     {values.use_central === 1
                       ?
                       <>

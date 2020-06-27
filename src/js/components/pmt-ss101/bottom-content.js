@@ -68,9 +68,11 @@ const BottomContent = (props) => {
 
     const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => {
         //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
+        console.log("11111")
         if (values.line_items[index].internal_item_id === internal_item_id) {
             return;
         }
+        console.log("2222")
         if (internal_item_id === "") {
             setFieldValue(fieldName + `.description`, '', false);
             setFieldValue(fieldName + `.quantity`, '', false);
@@ -79,6 +81,7 @@ const BottomContent = (props) => {
             setFieldValue(fieldName + `.per_unit_price`, '', false);
             return;
         }
+        console.log("333333")
         let items = props.fact.items.items;
         let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
         console.log(item)
@@ -115,7 +118,7 @@ const BottomContent = (props) => {
                             <p className="top-text">ชื่องาน</p>
                         </div>
                         <div className="grid_3 alpha omega">
-                            <TextInput name="accident_name" validate={validateDocumentAccidentNameField}
+                            <TextInput name="accident_name" validate={validateDocumentAccidentNameField} tabIndex="8"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
@@ -126,8 +129,8 @@ const BottomContent = (props) => {
                             <p className="top-text">วันเวลาที่เกิดเหตุ</p>
                         </div>
                         <div className="grid_3 alpha omega">
-                            <DateTimeInput name="accident_on" validate={validateDocumentAccidentOnField} cssStyle={{ left: "-240px", top: "14px" }}
-                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                            <DateTimeInput name="accident_on" validate={validateDocumentAccidentOnField} cssStyle={{ left: "-160px", top: "14px" }}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="9"/>
                         </div>
 
                         <div className="clear" />
@@ -137,8 +140,8 @@ const BottomContent = (props) => {
                             <p className="top-text">วันเวลาที่รับแจ้ง</p>
                         </div>
                         <div className="grid_3 alpha omega">
-                            <DateTimeInput name="request_on" validate={validateDocumentRequestOnField} cssStyle={{ left: "-240px", top: "14px" }}
-                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                            <DateTimeInput name="request_on" validate={validateDocumentRequestOnField} cssStyle={{ left: "-160px", top: "14px" }}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="10"/>
                         </div>
 
                         <div className="clear" />
@@ -148,7 +151,7 @@ const BottomContent = (props) => {
                             <p className="top-text">ได้รับเหตุจาก</p>
                         </div>
                         <div className="grid_3 alpha omega">
-                            <TextInput name="request_by" validate={validateDocumentRequestByField}
+                            <TextInput name="request_by" validate={validateDocumentRequestByField} tabIndex="11"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
@@ -160,7 +163,7 @@ const BottomContent = (props) => {
                         </div>
                         <div className="grid_3 alpha omega">
                             {/* Need to change to radio button later */}
-                            <SelectNoChildrenInput name="recv_accident_from_recv_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentRecvAccidentFromRecvIDField} cssStyle={{ left: "-240px", top: "14px" }}>
+                            <SelectNoChildrenInput name="recv_accident_from_recv_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentRecvAccidentFromRecvIDField} cssStyle={{ left: "-160px", top: "14px" }} tabIndex="12">
                                 <option value='' selected></option>
                                 {factRecvAccidentFrom.items.map((recv_accident_from) => {
                                     if (values.recv_accident_from_recv_id === recv_accident_from.recv_id) {
@@ -177,7 +180,7 @@ const BottomContent = (props) => {
                             <p className="top-text">เดินทางโดย</p>
                         </div>
                         <div className="grid_3 alpha omega">
-                            <SelectNoChildrenInput name="car_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentCarTypeIDField} cssStyle={{ left: "-240px", top: "14px" }}>
+                            <SelectNoChildrenInput name="car_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentCarTypeIDField} cssStyle={{ left: "-160px", top: "14px" }} tabIndex="13">
                                 <option value=''></option>
                                 {factCarType.items.map((factCarType) => {
                                     if (values.car_type_id === factCarType.car_id) {
@@ -196,8 +199,8 @@ const BottomContent = (props) => {
                             <p className="top-text">ออกเดินทาง</p>
                         </div>
                         <div className="grid_3 alpha omega">
-                            <DateTimeInput name="departed_on" validate={validateDocumentDepartedOnField} cssStyle={{ left: "-240px", top: "14px" }}
-                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                            <DateTimeInput name="departed_on" validate={validateDocumentDepartedOnField} cssStyle={{ left: "-160px", top: "14px" }}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="14"/>
                         </div>
 
                         <div className="clear" />
@@ -207,8 +210,8 @@ const BottomContent = (props) => {
                             <p className="top-text">เดินทางถึง</p>
                         </div>
                         <div className="grid_3 alpha omega">
-                            <DateTimeInput name="arrived_on" validate={validateDocumentArrivedOnField} cssStyle={{ left: "-240px", top: "14px" }}
-                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                            <DateTimeInput name="arrived_on" validate={validateDocumentArrivedOnField} cssStyle={{ left: "-160px", top: "14px" }}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="15"/>
                         </div>
 
                         <div className="clear" />
@@ -218,8 +221,8 @@ const BottomContent = (props) => {
                             <p className="top-text">วันเวลาที่แล้วเสร็จ</p>
                         </div>
                         <div className="grid_3 alpha omega">
-                            <DateTimeInput name="finished_on" validate={validateDocumentFinishedOnField} cssStyle={{ left: "-240px", top: "14px" }}
-                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                            <DateTimeInput name="finished_on" validate={validateDocumentFinishedOnField} cssStyle={{ left: "-160px", top: "14px" }}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="16" />
                         </div>
 
                         <div className="clear" />
@@ -229,7 +232,7 @@ const BottomContent = (props) => {
                             <p className="top-text">ระบบตรวจซ่อม</p>
                         </div>
                         <div className="grid_3 alpha omega">
-                            <SelectNoChildrenInput name="system_type_group_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentSystemTypeGroupIDnField} cssStyle={{ left: "-240px", top: "14px" }}>
+                            <SelectNoChildrenInput name="system_type_group_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentSystemTypeGroupIDnField} cssStyle={{ left: "-160px", top: "14px" }} tabIndex="17">
                                 <option value='' selected></option>
                                 {factSystemTypeGroup.items.map((systemTypeGroup) => {
                                     if (systemTypeGroup.system_type_group_id === values.system_type_group_id) {
@@ -248,7 +251,7 @@ const BottomContent = (props) => {
                             <p className="top-text">ชนิดระบบตรวจซ่อม</p>
                         </div>
                         <div className="grid_3 alpha omega">
-                            <SelectNoChildrenInput name="sub_maintenance_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentSystemTypeIDField} cssStyle={{ left: "-240px", top: "14px" }}>
+                            <SelectNoChildrenInput name="sub_maintenance_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentSystemTypeIDField} cssStyle={{ left: "-160px", top: "14px" }} tabIndex="18">
                                 <option value='' selected></option>
                                 {factSystemType.items.map((factSystemType) => {
                                     if (factSystemType.system_type_id === values.system_type_id) {
@@ -267,7 +270,7 @@ const BottomContent = (props) => {
                             <p className="top-text">ชื่ออุปกรณ์ที่บำรุงรักษา</p>
                         </div>
                         <div className="grid_3 alpha omega pull">
-                            <SelectNoChildrenInput name="hardware_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                            <SelectNoChildrenInput name="hardware_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="19">
                                 <option value=''></option>
                                 {factHardwareType.items.map((factHardwareType) => {
                                     if (factHardwareType.hardware_type_id === values.hardware_type_id) {
@@ -290,7 +293,7 @@ const BottomContent = (props) => {
                         <div className="grid_4 alpha omega">
                             <SelectNoChildrenInput name="location_district_id" validate={validateDocumentLocationDistrictIDField}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                cssStyle={{ left: "-240px", top: "10px" }}>
+                                cssStyle={{ left: "-240px", top: "10px" }} tabIndex="20">
                                 <option value=''></option>
                                 {factDistricts.items.map(function ({ district_id, name, division_id }) {
                                     return <option value={district_id} key={district_id} selected> {name} </option>
@@ -305,7 +308,7 @@ const BottomContent = (props) => {
                         <div className="grid_4 alpha omega">
                             <SelectNoChildrenInput name="location_node_id" validate={validateDocumentLocationNodeIDField}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                cssStyle={{ left: "-240px", top: "10px" }}>
+                                cssStyle={{ left: "-240px", top: "10px" }} tabIndex="21">
                                 <option value=''></option>
                                 {factNodes.items.map(function ({ node_id, name, district_id }) {
                                     if (values.location_district_id == district_id) { // Shallow equality, district ID may be string
@@ -322,7 +325,7 @@ const BottomContent = (props) => {
                         <div className="grid_4 alpha omega">
                             <SelectNoChildrenInput name="location_station_id" validate={validateDocumentLocationStationIDField}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                cssStyle={{ left: "-240px", top: "10px" }}>
+                                cssStyle={{ left: "-240px", top: "10px" }} tabIndex="22">
                                 <option value=''></option>
                                 {factStations.items.map(function ({ station_id, name, node_id }) {
                                     if (values.location_node_id == node_id) { // Shallow equality, node ID may be string
@@ -337,7 +340,7 @@ const BottomContent = (props) => {
                         {/* Station ID */}
                         <Label>รายละเอียดสถานที่</Label>
                         <div className="grid_4 alpha omega">
-                            <TextareaInput name="location_detail"
+                            <TextareaInput name="location_detail" tabIndex="23"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
@@ -346,7 +349,7 @@ const BottomContent = (props) => {
                         {/* summary_cause_condition link [root_cause] from WO */}
                         <Label>สาเหตุและอาการเสียโดยสรุป</Label>
                         <div className="grid_4 alpha omega">
-                            <TextareaInput name="summary_cause_condition"
+                            <TextareaInput name="summary_cause_condition" tabIndex="24"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
@@ -355,7 +358,7 @@ const BottomContent = (props) => {
                         {/* cargo_id  */}
                         <Label>ขบวนรถที่</Label>
                         <div className="grid_4 alpha omega">
-                            <TextInput name="cargo_id"
+                            <TextInput name="cargo_id" tabIndex="25"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
@@ -364,8 +367,8 @@ const BottomContent = (props) => {
                         {/* total_fail_time  */}
                         <Label>เสียเวลาเพราะเหตุนี้</Label>
                         <div className="grid_3 alpha omega">
-                            <NumberInput name="total_fail_time" step={1} validate={validateDocumentTotalFailTimeField}
-                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                            <NumberInput name="total_fail_time" step={1} validate={validateDocumentTotalFailTimeField} tabIndex="26"
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} cssStyle={{ left: "60px", top: "-5px" }} />
                         </div>
                         <div className="grid_1  omega">
                             <p className="top-text">
@@ -378,7 +381,7 @@ const BottomContent = (props) => {
                         {/* service_method_id */}
                         <Label>ประเภทการซ่อม</Label>
                         <div className="grid_4 alpha omega">
-                            <SelectNoChildrenInput name="service_method_id" validate={validateDocumentServiceMethodIDField} disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                            <SelectNoChildrenInput name="service_method_id" validate={validateDocumentServiceMethodIDField} disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="27" cssStyle={{ left: "-240px", top: "10px" }}>
                                 <option value='' selected></option>
                                 {factServiceMethod.items.map((factServiceMethod) => {
                                     if (factServiceMethod.sm_id === values.service_method_id) {
@@ -395,7 +398,7 @@ const BottomContent = (props) => {
                         {/* service_method_desc */}
                         <Label>สรุปการแก้ไขและการซ่อมแซม</Label>
                         <div className="grid_4 alpha omega">
-                            <TextareaInput name="service_method_desc"
+                            <TextareaInput name="service_method_desc" tabIndex="28"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
@@ -404,7 +407,7 @@ const BottomContent = (props) => {
                         {/* interrupt_id */}
                         <Label>ยังไมไ่ด้จัดการแก้ไขเพราะเหตุนี้</Label>
                         <div className="grid_4 alpha omega">
-                            <SelectNoChildrenInput name="interrupt_id" validate={validateDocumentInterruptIDField} disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                            <SelectNoChildrenInput name="interrupt_id" validate={validateDocumentInterruptIDField} disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="29" cssStyle={{ left: "-240px", top: "10px" }}>
                                 <option value='' selected></option>
                                 {factInterrupt.items.map((factInterrupt) => {
                                     if (values.interrupt_id === factInterrupt.interrupt_id) {
@@ -423,7 +426,7 @@ const BottomContent = (props) => {
                         {/* Remark */}
                         <Label>หมายเหตุ</Label>
                         <div className="grid_11 alpha omega">
-                            <TextareaInput name="remark"
+                            <TextareaInput name="remark" tabIndex="30"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
@@ -444,13 +447,13 @@ const BottomContent = (props) => {
                             <p className="top-text">ผู้ควบคุมตรวจสอบชื่อ</p>
                         </div>
                         <div className="grid_4 alpha omega">
-                            <TextInput name="auditor_name"
+                            <TextInput name="auditor_name" tabIndex="31"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
                         <Label>ตำแหน่ง</Label>
                         <div className="grid_4 alpha omega">
-                            <SelectNoChildrenInput name="auditor_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                            <SelectNoChildrenInput name="auditor_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="32">
                                 <option value='' selected></option>
                                 {factPosition.items.map((position) => {
                                     if (values.auditor_position_id === position.position_id) {
@@ -466,12 +469,12 @@ const BottomContent = (props) => {
                             <p className="top-text">ดำเนินการแก้ไขชื่อ</p>
                         </div>
                         <div className="grid_4 alpha omega">
-                            <TextInput name="fixer_name"
+                            <TextInput name="fixer_name" tabIndex="33"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
                         <Label>ตำแหน่ง</Label>
                         <div className="grid_4 alpha omega">
-                            <SelectNoChildrenInput name="fixer_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                            <SelectNoChildrenInput name="fixer_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="34">
                                 <option value='' selected></option>
                                 {factPosition.items.map((position) => {
                                     if (values.fixer_position_id === position.position_id) {
@@ -488,12 +491,12 @@ const BottomContent = (props) => {
                             <p className="top-text">รายชื่อเพื่อนร่วมงาน</p>
                         </div>
                         <div className="grid_4 alpha omega">
-                            <TextInput name="member_1"
+                            <TextInput name="member_1" tabIndex="35"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
                         <Label>ตำแหน่ง</Label>
                         <div className="grid_4 alpha omega">
-                            <SelectNoChildrenInput name="member_1_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                            <SelectNoChildrenInput name="member_1_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="36">
                                 <option value='' selected></option>
                                 {factPosition.items.map((position) => {
                                     if (values.member_1_position_id === position.position_id) {
@@ -510,11 +513,11 @@ const BottomContent = (props) => {
                         </div>
                         <div className="grid_4 alpha omega">
                             <TextInput name="member_2"
-                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="37"/>
                         </div>
                         <Label>ตำแหน่ง</Label>
                         <div className="grid_4 alpha omega">
-                            <SelectNoChildrenInput name="member_2_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                            <SelectNoChildrenInput name="member_2_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="38">
                                 <option value='' selected></option>
                                 {factPosition.items.map((position) => {
                                     if (values.member_2_position_id === position.position_id) {
@@ -530,12 +533,12 @@ const BottomContent = (props) => {
                             <p className="top-text">รายชื่อเพื่อนร่วมงาน</p>
                         </div>
                         <div className="grid_4 alpha omega">
-                            <TextInput name="member_3"
+                            <TextInput name="member_3" tabIndex="39"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
                         <Label>ตำแหน่ง</Label>
                         <div className="grid_4 alpha omega">
-                            <SelectNoChildrenInput name="member_3_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                            <SelectNoChildrenInput name="member_3_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="40">
                                 <option value='' selected></option>
                                 {factPosition.items.map((position) => {
                                     if (values.member_3_position_id === position.position_id) {

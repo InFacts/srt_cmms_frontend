@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { useFormik , withFormik ,useFormikContext} from 'formik';
 import { Redirect } from 'react-router-dom';
-import { useSelector  } from 'react-redux';
+import { useSelector, useDispatch  } from 'react-redux';
 
 import TabBar from '../common/tab-bar';
 
@@ -16,7 +16,7 @@ import useFactInitializer from '../../hooks/fact-initializer';
 import useTokenInitializer from '../../hooks/token-initializer';
 import useFooterInitializer from '../../hooks/footer-initializer';
 import useDocumentSubscription from '../../hooks/document-subscription';
-
+import { footerToModeSearch } from '../../redux/modules/footer.js';
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
 import BgRed from '../../../images/spare/bg_red.jpg';
@@ -24,7 +24,7 @@ import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const SalvageSoldComponent = (props) => {
     
     const {resetForm, setFieldValue, setValues, values} = useFormikContext();
-
+    const dispatch = useDispatch();
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
         {id:"listItem", name:"รายการ"},
@@ -38,6 +38,11 @@ const SalvageSoldComponent = (props) => {
     useFooterInitializer(DOCUMENT_TYPE_ID.SALVAGE_SOLD);
     useDocumentSubscription();
     const loggedIn = useSelector(state => state.token.isLoggedIn); 
+
+    useEffect(() => {
+        dispatch(footerToModeSearch());
+    }, []);
+
     // If Link to this url via Track Document
     useEffect(() => {
         getUrlParamsLink()

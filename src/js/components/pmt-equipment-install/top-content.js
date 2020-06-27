@@ -45,28 +45,26 @@ const TopContent = (props) => {
             return;
         }
         if (internal_item_id === "") {
+            setFieldValue("item_id", '', false);
+            setFieldValue("description", '', false);
+            setFieldValue("uom_group_id", '', false);
             setFieldValue("equipment_id", '', false);
             setFieldValue("equipment_status_id", '', false);
-            setFieldValue("equipment_status_id_th", '', false);
             setFieldValue("responsible_node_id", '', false);
             return;
         }
-        let items = fact.items.items;
-        let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
-        console.log(item)
+
         var item_match_equipments = factEquipment.items;
-        let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.item_id}` === `${item.item_id}`); // Returns undefined if not found
+        let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.equipment_group.item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
         console.log("item_match_equipment", item_match_equipment)
         if (item_match_equipment) {
-            // item
-            setFieldValue("description", item.description, false);
-            setFieldValue("uom_group_id", item.uom_group_id, false);
-
             // item_match_equipment
+            setFieldValue("item_id", item_match_equipment.equipment_group.item_id, false);
+            setFieldValue("description", item_match_equipment.equipment_group.item.description, false);
+            setFieldValue("uom_group_id", item_match_equipment.equipment_group.item.uom_group_id, false);
             setFieldValue("equipment_id", item_match_equipment.equipment_id, false);
-            setFieldValue("equipment_status_id", item_match_equipment.equipment_status.equipment_status_id, false);
-            setFieldValue("equipment_status_id_th", item_match_equipment.equipment_status.status_th, false);
-            setFieldValue("responsible_node_id", item_match_equipment.responsible_node_id, false);
+            setFieldValue("equipment_status_id", item_match_equipment.item_status_id, false);
+            setFieldValue("responsible_district_id", item_match_equipment.responsible_district_id, false);
 
             // IF Check user If User is Admin -> return true Else -> return false
             if (decoded_token.id === 4) { //{/* TODO USER_ID FOR ADMIN */}
@@ -115,7 +113,7 @@ const TopContent = (props) => {
                                 searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                                 ariaControls="modalNoPart"
-                                tabIndex="1" />
+                                tabIndex="2" />
                         </div>
                         <div className="clear" />
 
@@ -157,7 +155,7 @@ const TopContent = (props) => {
                         <div className="grid_3 alpha">
                             <TextInput name="status_name_th"
                                 disabled={true}
-                                tabIndex="3" />
+                                tabIndex="4" />
                         </div>
                         <div className="clear" />
 
@@ -186,7 +184,7 @@ const TopContent = (props) => {
                                 validate={validateUserEmployeeIDField}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                                 searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"
-                                tabIndex="2" />
+                                tabIndex="7" />
                         </div>
                         <div className="clear" />
 
@@ -195,8 +193,7 @@ const TopContent = (props) => {
                         <div className="grid_3 alpha">
                             <TextInput name="created_by_admin_employee_id"
                                 validate={validateAdminEmployeeIDField}
-                                disabled={true}
-                                tabIndex="2" />
+                                disabled={true} />
                         </div>
                         <div className="clear" />
                     </div>

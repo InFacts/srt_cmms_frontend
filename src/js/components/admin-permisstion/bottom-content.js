@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { shallowEqual, useSelector } from 'react-redux'
 import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
 import { useFormik, withFormik, useFormikContext } from 'formik';
@@ -13,9 +13,10 @@ import Label from '../common/form-label'
 const BottomContent = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
     const { values } = useFormikContext();
+    const [alertMessage, setAlertMessage] = useState('1');
 
     const postPermission = () => new Promise(resolve => {
-        // console.log("values", values)
+        console.log("values", values)
         {
             values.line_position_permission.map((list, index) => {
                 var data = {
@@ -29,41 +30,47 @@ const BottomContent = (props) => {
                         list.module_5 === true ? 5 : 0,
                     ]
                 }
-                for (var i = 0; i < 5; i++) {
-                    console.log("data.function.indexOf(0)", data.function.indexOf(0))
-                    if (data.function.indexOf(0) !== -1) {
-                        data.function.splice(data.function.indexOf(0), data.function.indexOf(0) + 1);
-                        console.log("data.function>>>>", data.function);
-                    }
-                }
-                console.log("data", data)
                 // console.log("data", data)
+                let data_function_for_post = [];
+                data.function.map((module, index) => {
+                    if (module !== 0) {
+                        data_function_for_post.push(module);
+                    }
+                })
+                // console.log("data_for_post", data_function_for_post)
+                var data_for_post = {
+                    "enable_permission": true,
+                    "position_id": list.position_id,
+                    "function": data_function_for_post
+                }
                 const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/admin/position-permission`;
-                axios.post(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+                axios.post(url, data_for_post, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
                     .then((res) => {
                         // console.log("res AFTER POST POSITION PERMISSION", res)
+                        setAlertMessage(true)
                         resolve(res.data);
                     })
                     .catch((err) => {
+                        setAlertMessage(false)
                         resolve(err)
                     });
 
             })
         };
     });
-
+    // console.log("alertMessage", alertMessage)
     return (
         <div id="blackground-gray">
             <div className="container_12 clearfix">
                 <table className="table-many-column mt-2" style={{ height: "450px" }}>
                     <thead>
                         <tr>
-                            <th className="font text-center" style={{ width: "200px" }}>#</th>
-                            <th className="font" style={{ width: "200px" }}>ตำแหน่ง</th>
+                            <th className="font text-center">#</th>
+                            <th className="font">ตำแหน่ง</th>
                             <th className="font">ระบบบริหารข้อมูลอะไหล่</th>
                             <th className="font">ระบบบริหารงานซ่อมบำรุง</th>
                             <th className="font">ระบบวิเคราะห์เเละวางแผนการซ่อมบำรุง</th>
-                            <th className="font">สถานะรอการอนุมัติ</th>
+                            <th className="font text-center">สถานะรอการอนุมัติ</th>
                             <th className="font">ระบบบริหารจัดการผู้ใช้งาน</th>
                         </tr>
                     </thead>
@@ -99,7 +106,17 @@ const BottomContent = (props) => {
                     </tbody>
                 </table>
 
-                <button type="button" className="button-blue float-right mt-3" onClick={postPermission}>บันทึก</button>
+                {
+                    alertMessage === true || alertMessage === false
+                        ?
+                        <div className={`alert ${alertMessage === false ? `red` : ''} mt-1`}>
+                            <span className="closebtn" onClick={() => setAlertMessage("1")}>&times;</span>
+                            Success! Indicates a successful or positive action.</div>
+                        :
+                        null
+                }
+
+                <button type="button" className="button-blue float-right mt-1 mb-1" onClick={postPermission}>บันทึก</button>
             </div>
         </div>
     );

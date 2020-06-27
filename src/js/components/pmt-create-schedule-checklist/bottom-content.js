@@ -10,7 +10,6 @@ import TextInput from '../common/formik-text-input'
 import NumberInput from '../common/formik-number-input'
 import SelectNoChildrenInput from '../common/formik-select-no-children';
 import Label from '../common/form-label'
-import PopupModalCheckListLineItem from '../common/popup-modal-checklist'
 import TableStatus from '../common/table-status';
 
 import Files from '../common/files2'
@@ -28,13 +27,13 @@ const BottomContent = (props) => {
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
   const factPosition = useSelector((state) => ({ ...state.api.fact.position }), shallowEqual);
-
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
-  const factEquipmentGroup = useSelector((state) => ({ ...state.api.fact[FACTS.EQUIPMENT_GROUP] }), shallowEqual);
   const factChecklist = useSelector((state) => ({ ...state.api.fact.checklist }), shallowEqual);
-    const factDistricts = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
-    const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
-    const factStations = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
+  const factChecklistCustom = useSelector((state) => ({ ...state.api.fact[FACTS.CHECKLIST_CUSTOM_GROUP] }), shallowEqual);
+  const factDistricts = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
+  const factUnitMaintenanceLocation = useSelector((state) => ({ ...state.api.fact[FACTS.UNIT_MAINTENANCE_LOCATION] }), shallowEqual);
+  const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
+  const factStations = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
   const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
@@ -50,55 +49,63 @@ const BottomContent = (props) => {
 
             <div className="grid_12 mt-3" style={{ paddingLeft: "10px" }}>
 
-              {/* === Distict ID === */}
-              <div className="grid_1">
+              {/* district_id */}
+              <div className="grid_1 alpha white-space">
                 <p className="top-text">แขวง</p>
               </div>
-              <div className="grid_5 alpha omega">
-                <SelectNoChildrenInput name="location_district_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+              <div className="grid_7">
+                <SelectNoChildrenInput name="district_id"
+                  disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                   <option value=''></option>
                   {factDistricts.items.map((districts) => (
-                      <option key={districts.district_id} value={districts.district_id}>{districts.name}</option>
+                    <option key={districts.district_id} value={districts.district_id}>{districts.name}</option>
                   ))}
                 </SelectNoChildrenInput>
               </div>
-              <div className="clear" />
 
-              <div className="grid_1">
+              <div class="clear" />
+
+              {/* Node ID */}
+              <div className="grid_1 alpha white-space">
                 <p className="top-text">ตอน</p>
               </div>
-              <div className="grid_5 alpha omega">
-                <SelectNoChildrenInput name="location_node_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+              <div className="grid_7">
+                <SelectNoChildrenInput name="node_id"
+                  disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                   <option value=''></option>
                   {factNodes.items.map((node) => {
-                        if (values.location_district_id == node.district_id) {
-                            return <option key={node.node_id} value={node.node_id} selected>{node.name}</option>
-                        }
-                    })}
+                    if (values.district_id == node.district_id) {
+                      return <option key={node.node_id} value={node.node_id} selected>{node.name}</option>
+                    }
+                  })}
                 </SelectNoChildrenInput>
               </div>
-              <div className="clear" />
 
-              {/* === location === */}
-              <div className="grid_1">
+              <div class="clear" />
+
+              {/* Station ID */}
+              <div className="grid_1 alpha white-space">
                 <p className="top-text">สถานี</p>
               </div>
-              <div className="grid_5 alpha omega">
-                <SelectNoChildrenInput name="location_station_id" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+              <div className="grid_7">
+                <SelectNoChildrenInput name="station_id"
+                  disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                   <option value=''></option>
                   {factStations.items.map((stations) => {
-                        if (values.location_node_id == stations.node_id) {
-                            return <option key={stations.station_id} value={stations.station_id} selected>{stations.name}</option>
-                        }
-                    })}
+                    if (values.node_id == stations.node_id) {
+                      return <option key={stations.station_id} value={stations.station_id} selected>{stations.name}</option>
+                    }
+                  })}
                 </SelectNoChildrenInput>
               </div>
-              <div className="clear" />
+
+              <div class="clear" />
+
             </div>
           </div>
 
-          {/* list_plan Tab */}
-          <div id="list_plan_content" className="tabcontent">
+          {/* list_plan_custom_content Tab */}
+          <div id="list_plan_custom_content" className="tabcontent">
 
             <div className="container_12 mt-3">
 
@@ -106,57 +113,110 @@ const BottomContent = (props) => {
                 <thead>
                   <tr>
                     <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
-                    <th className="font" style={{ minWidth: "220px" }}>กลุ่มการทำวาระ</th>
-                    <th className="font" style={{ minWidth: "220px" }}>ชนิดการทำวาระ</th>
-                    <th className="font" style={{ minWidth: "130px" }}>เลขที่สินทรัพย์</th>
-                    <th className="font text-center" style={{ minWidth: "80px" }}>จำนวนสถานที่ซ่อมบำรุง</th>
+                    <th className="font" style={{ minWidth: "250px" }}>กลุ่ม</th>
+                    <th className="font" style={{ minWidth: "350px" }}>แผน</th>
+                    <th className="font text-center" style={{ minWidth: "100px" }}>จำนวนสถานที่ซ่อมบำรุง</th>
+                    <th className="font text-center" style={{ minWidth: "150px" }}>หน่วย</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {[0,1,1,1,1,1,1,1,1].map((x, i) => {
-                    console.log("i",i)
+                  {values.line_custom.map((line_item, index) => {
+                    let line_number = index + 1;
                     return (
-                    <tr>
-                    <th className="edit-padding text-center"></th>
-                    <td className="edit-padding">
-                      <SelectNoChildrenInput name={`21111${i}`} disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} >
-                        <option value=''></option>
-                        <option value='กล้อง CCTV'>กล้อง CCTV</option>
-                        <option value='คานกั้นถนน'>คานกั้นถนน</option>
-                        <option value='งานบำรุงรักษาตามวาระที่สถานี'>งานบำรุงรักษาตามวาระที่สถานี</option>
-                      </SelectNoChildrenInput>
-                    </td>
-                    <td className="edit-padding">
-                      <SelectNoChildrenInput name={`1aefsedf${i}`} disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} >
-                        <option value=''></option>
-                        <option value='ก.0 ชนิดคานทำงานด้วยไฟฟ้า ตรวจสอบด้วยกล้อง'>ก.0 ชนิดคานทำงานด้วยไฟฟ้า ตรวจสอบด้วยกล้อง</option>
-                        <option value='ก.1 ชนิดคานทำงานด้วยไฟฟ้า มีพนักงานควบคุม'>ก.1 ชนิดคานทำงานด้วยไฟฟ้า มีพนักงานควบคุม</option>
-                        <option value='ก.2 ชนิดม่านยกตรง ทำงานด้วยมือหมุน'>ก.2 ชนิดม่านยกตรง ทำงานด้วยมือหมุน</option>
-                        <option value='ก.3 ชนิดเข็นแผง'>ก.3 ชนิดเข็นแผง</option>
-                        <option value='ห้องรีเลย์ไฟสี ARI/ไฟสีสายลวด'>ห้องรีเลย์ไฟสี ARI/ไฟสีสายลวด</option>
-                        <option value='ห้องรีเลย์ CTC Service (CTS/PABX/SDH/PDH)'>ห้องรีเลย์ CTC Service (CTS/PABX/SDH/PDH)</option>
-                        <option value='แผงบรรยายทาง (CBI/IPU/CCTV FOR Level Crossing)'>แผงบรรยายทาง (CBI/IPU/CCTV FOR Level Crossing)</option>
-                      </SelectNoChildrenInput>
-                    </td>
-                    <td className="edit-padding">
-                      <TextInput name={`1aefsedfd${i}`}
-                        // validate={validateUserEmployeeIDField}
-                        disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                        searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"
-                        tabIndex="2" />
-                    </td>
-                    <td className="edit-padding text-center">
-                      <NumberInput step={0.01} name="minimum_order_quantity" tabIndex="7" cssStyle={{ left: "60px", top: "-5px" }}
-                        disabled={values.modeEdit ? false : values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                      />
-                    </td>
-                  </tr>
+                      <tr>
+                        <th className="edit-padding text-center">{line_number}</th>
+                        <td className="edit-padding">
+                          <SelectNoChildrenInput name={`line_custom[${index}].checklist_group_name`} disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                            <option value=''></option>
+                            {factChecklistCustom.items.map((custom_group) => (
+                              <option value={custom_group.checklist_group_name} key={custom_group.checklist_group_name}> {custom_group.checklist_group_name} </option>
+                            ))}
+                          </SelectNoChildrenInput>
+                        </td>
+                        <td className="edit-padding">
+                          <SelectNoChildrenInput name={`line_custom[${index}].checklist_id`} disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                            <option value=''></option>
+                            {console.log("factChecklist.items", factChecklist.items)}
+                            {factChecklist.items.map((custom_group) => {
+                              if (values.line_custom[index].checklist_group_id == custom_group.checklist_group_id) {
+                              return <option value={custom_group.checklist_id} key={custom_group.checklist_id}> {custom_group.checklist_name} </option>
+                              }
+                          })}
+                          </SelectNoChildrenInput>
+                        </td>
+                        <td className="edit-padding text-center">
+                          <NumberInput step={0.01} name={`line_custom[${index}].quantity_location`} tabIndex="7" cssStyle={{ left: "60px", top: "-5px" }}
+                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                          />
+                        </td>
+                        <td className="edit-padding">
+                          <SelectNoChildrenInput name={`line_custom[${index}].unit_maintenance_location_id`} disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                            <option value=''></option>
+                            {factUnitMaintenanceLocation.items.map((unit) => (
+                              <option value={unit.unit_maintenance_location_id} key={unit.unit_maintenance_location_id}> {unit.unit_type} </option>
+                            ))}
+                          </SelectNoChildrenInput>
+                        </td>
+                      </tr>
                     )
-})}
-                  
+                  })}
+
                 </tbody>
               </table>
 
+            </div>
+
+          </div>
+
+          {/* list_plan_equipment_content Tab */}
+          <div id="list_plan_equipment_content" className="tabcontent">
+
+            <div className="container_12 mt-3">
+
+              <table className="table-many-column" style={{ padding: "10px" }}>
+                <thead>
+                  <tr>
+                    <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
+                    <th className="font" style={{ minWidth: "200px" }}>เลขที่สินทรัพย์</th>
+                    <th className="font" style={{ minWidth: "400px" }}>แผน</th>
+                    <th className="font text-center" style={{ minWidth: "100px" }}>จำนวน</th>
+                    <th className="font text-center" style={{ minWidth: "150px" }}>หน่วย</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {values.line_equipment.map((line_item, index) => {
+                    let line_number = index + 1;
+                    return (
+                      <tr>
+                        <th className="edit-padding text-center">{line_number}</th>
+                        <td className="edit-padding">
+                          <TextInput name={`line_equipment[${index}].internal_item_id`} disabled />
+                        </td>
+                        <td className="edit-padding">
+                          <SelectNoChildrenInput name={`line_equipment[${index}].checklist_id`} disabled >
+                            <option value=''></option>
+                            {factChecklist.items.map((custom_group) => (
+                              <option value={custom_group.checklist_group_id} key={custom_group.checklist_group_id}> {custom_group.checklist_name} </option>
+                            ))}
+                          </SelectNoChildrenInput>
+                        </td>
+                        <td className="edit-padding text-center">
+                          <NumberInput step={0.01} name={`line_equipment[${index}].quantity_location`} disabled />
+                        </td>
+                        <td className="edit-padding">
+                          <SelectNoChildrenInput name={`line_equipment[${index}].unit_maintenance_location_id`} disabled >
+                            <option value=''></option>
+                            {factUnitMaintenanceLocation.items.map((unit) => (
+                              <option value={unit.unit_maintenance_location_id} key={unit.unit_maintenance_location_id}> {unit.unit_type} </option>
+                            ))}
+                          </SelectNoChildrenInput>
+                        </td>
+                      </tr>
+                    )
+                  })}
+
+                </tbody>
+              </table>
 
             </div>
 
@@ -172,9 +232,6 @@ const BottomContent = (props) => {
           </div>
 
         </div>
-
-        {/* PopUp ค้นหาอะไหล่ */}
-        <PopupModalCheckListLineItem />
 
       </div>
     </>

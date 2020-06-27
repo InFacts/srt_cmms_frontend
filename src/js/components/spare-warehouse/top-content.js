@@ -104,7 +104,7 @@ const TopContent = (props) => {
             <div className="grid_4 float-right">
               <TextInput name="name"
                 validate={validateNameWarehouseIDField}
-                disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="1" />
+                disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="2" />
             </div>
             <div className="grid_1 float-right"><p className="top-text float-right">ชื่อคลัง</p></div>
           </div>
@@ -114,7 +114,7 @@ const TopContent = (props) => {
             <div className="grid_4 float-right">
               <TextInput name="abbreviation"
                 validate={validateAbbreviationWarehouseIDField}
-                disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="1" />
+                disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="3" />
             </div>
             <div className="grid_1 float-right"><p className="top-text float-right">ชื่อย่อคลัง</p></div>
           </div>

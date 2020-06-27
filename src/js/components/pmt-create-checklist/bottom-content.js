@@ -38,7 +38,6 @@ const BottomContent = (props) => {
   const [lineNumber, setLineNumber] = useState('');
 
   const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => {
-    console.log("0000", internal_item_id, "values.checklist_line_item_use_equipment[index].internal_item_id", values.checklist_line_item_use_equipment[index].internal_item_id)
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
     if (values.checklist_line_item_use_equipment[index].internal_item_id === internal_item_id) {
       return;
@@ -56,6 +55,7 @@ const BottomContent = (props) => {
     let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
     console.log(item)
     if (item) {
+      setFieldValue(fieldName + `.item_id`, item.item_id, false);
       setFieldValue(fieldName + `.description`, item.description, false);
       setFieldValue(fieldName + `.quantity`, 0, false);
       setFieldValue(fieldName + `.uom_id`, 0, false);

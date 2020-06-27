@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react';
 import { connect, useSelector, shallowEqual } from 'react-redux';
 
+import axios from "axios";
+import { API_PORT_DATABASE } from '../../config_port.js';
+import { API_URL_DATABASE } from '../../config_url.js';
+
 import FormInput from '../common/form-input'
 import TextInput from '../common/formik-text-input'
 import SelectNoChildrenInput from '../common/formik-select-no-children';
@@ -32,7 +36,7 @@ const TopContent = (props) => {
   const factEquipment = useSelector((state) => ({ ...state.api.fact.equipment }), shallowEqual);
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
-  const factEquipmentStatus = useSelector((state) => ({ ...state.api.fact[FACTS.EQUIPMENT_STATUS] }), shallowEqual);
+  const factItemStatus = useSelector((state) => ({ ...state.api.fact[FACTS.ITEM_STATUS] }), shallowEqual);
 
   const responseToFormState = (data) => {
     console.log("data", data)
@@ -49,31 +53,30 @@ const TopContent = (props) => {
       tolerance_time: data.equipment_group.item.tolerance_time,
       lead_time: data.equipment_group.item.lead_time,
       accounting_type: data.equipment_group.item.accounting_type,
-      equipment_status_id: data.item_status_id,
+      item_status_id: data.item_status_id,
       price_import: data.price_import,
       price_currently: data.price_currently,
-      description_equipment: data.depreciation,
+      depreciation: data.depreciation,
       useful_life: data.useful_life,
-      responsible_by: data.responsible_district_id,
-      responsible_node_by: data.responsible_node_by
+      responsible_district_id: data.responsible_district_id,
+      responsible_node_id: data.responsible_node_id
     }
   }
 
-  const validateInternalItemIDField = internal_item_id => {
-    console.log("internal_item_id", internal_item_id)
-
+  const validateInternalItemIDField = internal_item_id => new Promise((resolve, reject) =>{
     if (!internal_item_id) {
       console.log("I dont have any internal item id")
-      return 'Required';
+      return resolve('Required');
     }
 
     if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
       && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) {
       var item_match_equipments = factEquipment.items;
       let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.equipment_group.item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
-      // console.log("item_match_equipment", item_match_equipment)
+      console.log("item_match_equipment", item_match_equipment)
       if (item_match_equipment) {
         setValues({ ...values, ...responseToFormState(item_match_equipment) }, false); //Setvalues and don't validate
+        
         // validateField("item_type_id");
         // IF Check user If User is Admin -> return true Else -> return false
         if (decoded_token.id === 4) { //{/* TODO USER_ID FOR ADMIN */}
@@ -83,8 +86,17 @@ const TopContent = (props) => {
           console.log(" NO I NOT ADMIN ")
           setFieldValue("modeEdit", false, false);
         }
+
+        const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/equipment/${item_match_equipment.equipment_id}/history`;
+        axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+          .then((res) => {
+            console.log(res.data);
+            setFieldValue("ref_document", res.data.results, false);
+          });
+
+      } else {
+        return 'Invalid Equipment ID';
       }
-      return;
     } else {//If mode add, ok
       console.log("document ID doesn't exist but I am in mode add")
       if (internal_item_id) {
@@ -96,16 +108,17 @@ const TopContent = (props) => {
         } else return 'Internal Item Id Duplication'
       } else return 'Required';
     }
-  };
+  });
 
   const validateItemMasterdataField = (fieldName, name) => {
     if (!name) {
       return 'Required'
     }
-    setFieldValue(fieldName, name, false);
   };
   const validateUomGroupIDField = (...args) => validateItemMasterdataField("uom_group_id", ...args);
   const validateItemDescriptionField = (...args) => validateItemMasterdataField("description", ...args);
+  const validateItemTypeIDField = (...args) => validateItemMasterdataField("item_type_id", ...args);
+  const validateItemStatusIDField = (...args) => validateItemMasterdataField("item_status_id", ...args);
 
   return (
     <div id={changeTheam() === true ? "" : "blackground-white"}>
@@ -127,7 +140,8 @@ const TopContent = (props) => {
               {/* === item_type_id === */}
               <div className="float-right">
                 <div className="grid_3 float-right">
-                  <SelectNoChildrenInput name="item_type_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                  <SelectNoChildrenInput name="item_type_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="2" 
+                  validate={validateItemTypeIDField} cssStyle={{ left: "-160px", top: "10px" }}>
                     <option value=''></option>
                     {values.item_type_id === 1 ? <option value='1' selected>asset</option> : <option value='1'>asset</option>}
                   </SelectNoChildrenInput>
@@ -143,13 +157,13 @@ const TopContent = (props) => {
               {/* === description === */}
               <FormLabel>รายละเอียด</FormLabel>
               <div className="grid_3 pull_1">
-                <TextInput name="description" validate={validateItemDescriptionField} disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                <TextInput name="description" validate={validateItemDescriptionField} disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="3" />
               </div>
 
               {/* === uom_group_id === */}
               <div className="float-right">
                 <div className="grid_3 float-right">
-                  <SelectNoChildrenInput name="uom_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomGroupIDField} cssStyle={{ left: "-160px", top: "10px" }}>
+                  <SelectNoChildrenInput name="uom_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="4">
                     <option value=''></option>
                     {fact[FACTS.UNIT_OF_MEASURE_GROUPS].items.map((uom) => (
                       values.uom_group_id === uom.uom_group_id
@@ -171,13 +185,14 @@ const TopContent = (props) => {
               {/* === equipment_status_id_th === */}
               <FormLabel>สถานะการใช้งาน</FormLabel>
               <div className="grid_3 pull_0">
-                <SelectNoChildrenInput name="equipment_status_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                <SelectNoChildrenInput name="item_status_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="5" 
+                validate={validateItemStatusIDField} cssStyle={{ left: "-160px", top: "10px" }}>
                   <option value=''></option>
-                  {factEquipmentStatus.items.map((equipment_status) => {
-                    if (values.equipment_status_id === equipment_status.equipment_status_id) {
-                      return <option value={equipment_status.equipment_status_id} key={equipment_status.equipment_status_id} selected>{equipment_status.status_th}</option>
+                  {factItemStatus.items.map((item_status) => {
+                    if (values.item_status_id === item_status.item_status_id) {
+                      return <option value={item_status.item_status_id} key={item_status.item_status_id} selected>{item_status.description_th}</option>
                     } else {
-                      return <option value={equipment_status.equipment_status_id} key={equipment_status.equipment_status_id}>{equipment_status.status_th}</option>
+                      return <option value={item_status.item_status_id} key={item_status.item_status_id}>{item_status.description_th}</option>
                     }
                   })}
                 </SelectNoChildrenInput>

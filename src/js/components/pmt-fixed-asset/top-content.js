@@ -4,17 +4,20 @@ import { connect, useSelector, shallowEqual } from 'react-redux';
 import FormInput from '../common/form-input'
 import TextInput from '../common/formik-text-input'
 import DateTimeInput from '../common/formik-datetime-input'
+import NumberInput from '../common/formik-number-input';
 import DateInput from '../common/formik-date-input'
 import Label from '../common/form-label'
 import SelectNoChildrenInput from '../common/formik-select-no-children';
 import PopupModalEquipmentNoChildren from '../common/popup-modal-equipment-no-children'
+import PopupModalDocument from '../common/popup-modal-document';
 
 import { useFormikContext, useField } from 'formik';
 
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import {
   getNumberFromEscapedString, fetchGoodsOnhandDataForItemmasterData, DOCUMENT_TYPE_ID,
-  getDocumentbyInternalDocumentID, checkBooleanForEditHelper
+  getDocumentbyInternalDocumentID, checkBooleanForEditHelper, validateEmployeeIDField,
+  validateInternalDocumentIDFieldHelper
 } from '../../helper';
 
 import { FACTS } from '../../redux/modules/api/fact.js';
@@ -37,8 +40,15 @@ const TopContent = (props) => {
   const factDistict = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
   const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
   const factStations = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
+  const factChecklist = useSelector((state) => ({ ...state.api.fact.checklist }), shallowEqual);
 
   const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
+
+  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.WORK_ORDER_PM, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
+
+  const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
+  const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
+
 
   return (
     <div id={changeTheam() === true ? "" : "blackground-white"}>
@@ -58,7 +68,7 @@ const TopContent = (props) => {
               </div>
               <div className="grid_3">
                 <TextInput name='internal_document_id'
-                  // validate={validateInternalDocumentIDField}
+                  validate={validateInternalDocumentIDField}
                   searchable={toolbar.mode === TOOLBAR_MODE.SEARCH}
                   ariaControls="modalDocument"
                   tabIndex="1" />
@@ -71,7 +81,7 @@ const TopContent = (props) => {
               </div>
               <div className="grid_3">
                 <TextInput name="created_by_user_employee_id"
-                  // validate={validateUserEmployeeIDField}
+                  validate={validateUserEmployeeIDField}
                   disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                   searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"
                   tabIndex="2" />
@@ -84,19 +94,7 @@ const TopContent = (props) => {
               </div>
               <div className="grid_3">
                 <TextInput name="created_by_admin_employee_id"
-                  // validate={validateAdminEmployeeIDField}
-                  disabled
-                  tabIndex="3" />
-              </div>
-              <div class="clear" />
-
-              {/* Admin Employee ID  */}
-              <div className="grid_1 alpha white-space">
-                <p className="top-text">งาน</p>
-              </div>
-              <div className="grid_3">
-                <TextInput name="created_by_admin_employee_id"
-                  // validate={validateAdminEmployeeIDField}
+                  validate={validateAdminEmployeeIDField}
                   disabled
                   tabIndex="3" />
               </div>
@@ -107,12 +105,50 @@ const TopContent = (props) => {
                 <p className="top-text">แผน</p> {/* ก.ไฟฟ้า */}
               </div>
               <div className="grid_3">
-                <TextInput name="created_by_admin_employee_id"
+                <SelectNoChildrenInput name="checklist_id"
+                  disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                  <option value=''></option>
+                  {factChecklist.items.map((factChecklist) => {
+                    return <option value={factChecklist.checklist_id} key={factChecklist.checklist_id}>{factChecklist.checklist_name}</option>
+                  })}
+                </SelectNoChildrenInput>
+              </div>
+              <div class="clear" />
+
+              {/* Admin Employee ID  */}
+              <div className="grid_1 alpha white-space">
+                <p className="top-text">งาน</p>
+              </div>
+              <div className="grid_3">
+                <TextInput name="name"
                   // validate={validateAdminEmployeeIDField}
                   disabled
                   tabIndex="3" />
               </div>
               <div class="clear" />
+
+              <div className="container_12">
+
+                <div className="grid_2 alpha white-space">
+                  <p className="top-text">ความถี่การซ่อมบำรุง</p>
+                </div>
+                <div className="grid_3 alpha omega pull_0">
+                  <NumberInput name="freq" step={1}
+                    disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                </div>
+                <div className="grid_1 omega pull_0">
+                  <p className="top-text">ครั้งต่อ</p>
+                </div>
+                <div className="grid_2 alpha omega pull_0">
+                  <SelectNoChildrenInput name="freq_unit_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                    <option value=''></option>
+                    <option value='1'>วัน</option>
+                    <option value='2'>เดือน</option>
+                    <option value='3'>ปี</option>
+                  </SelectNoChildrenInput>
+                </div>
+
+              </div>
 
             </div>
 
@@ -193,6 +229,13 @@ const TopContent = (props) => {
           </div>
 
         </section>
+
+        {/* PopUp ค้นหาเลขที่เอกสาร */}
+        <PopupModalDocument
+          documentTypeGroupID={DOCUMENT_TYPE_ID.WORK_ORDER_PM}
+          id="modalDocument" //For Open POPUP
+          name="internal_document_id" //For setFieldValue 
+        />
 
         {/* PopUp ค้นหาอะไหล่ */}
         <PopupModalEquipmentNoChildren />

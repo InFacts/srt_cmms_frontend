@@ -128,7 +128,7 @@ const TopContent = (props) => {
               <div className="grid_3 float-right">
                 <TextInput name="dest_warehouse_id" validate={validateDestWarehouseIDField}
                   disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                  searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalInventory" tabIndex="5" />
+                  searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalInventory" tabIndex="4" />
               </div>
               <div className="grid_2 float-right">
                 <p className="top-text float-right">เลขที่คลัง</p>

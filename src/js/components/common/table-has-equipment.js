@@ -13,7 +13,7 @@ const Table = (props) => {
 
   return (
     <div style={{ padding: "10px" }}>
-      <table className="table-many-column mt-3">
+      <table className="table-many-column">
         <thead>
           <tr>
             <th className="font text-center" style={{ width: "50px" }}>#</th>
@@ -35,7 +35,7 @@ const Table = (props) => {
                     tabIndex="6"
                     disabled={props.disabledBothMode !== true ? props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true}
                     searchable={props.checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalEquipment"
-                    // handleModalClick={() => props.setLineNumber(line_number)}
+                    handleModalClick={() => props.setLineNumber(line_number)}
                     redBorderForError="error-in-table"
                   />
                 </td>

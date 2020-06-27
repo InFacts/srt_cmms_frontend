@@ -96,7 +96,7 @@ const BottomContent = (props) => {
                             <p className="top-text">ชื่องาน</p>
                         </div>
                         <div className="grid_3 alpha omega pull_0">
-                            <TextInput name="accident_name" validate={validateDocumentAccidentNameField}
+                            <TextInput name="accident_name" validate={validateDocumentAccidentNameField} tabIndex="8"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
@@ -107,9 +107,9 @@ const BottomContent = (props) => {
                             <p className="top-text">วันเวลาที่เกิดเหตุ</p>
                         </div>
                         <div className="grid_3 alpha omega pull_0">
-                            <DateTimeInput name="accident_on" validate={validateDocumentAccidentOnField}
+                            <DateTimeInput name="accident_on" validate={validateDocumentAccidentOnField} tabIndex="9"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                cssStyle={{ left: "-240px", top: "14px" }} />
+                                cssStyle={{ left: "-160px", top: "14px" }} />
                         </div>
 
                         <div class="clear" />
@@ -119,9 +119,9 @@ const BottomContent = (props) => {
                             <p className="top-text">วันเวลาที่รับแจ้ง</p>
                         </div>
                         <div className="grid_3 alpha omega pull_0">
-                            <DateTimeInput name="request_on" validate={validateDocumentRequestOnField}
+                            <DateTimeInput name="request_on" validate={validateDocumentRequestOnField} tabIndex="10"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                cssStyle={{ left: "-240px", top: "14px" }} />
+                                cssStyle={{ left: "-160px", top: "14px" }} />
                         </div>
 
                         <div class="clear" />
@@ -131,7 +131,7 @@ const BottomContent = (props) => {
                             <p className="top-text">อาการเสียโดยสรุป</p>
                         </div>
                         <div className="grid_3 alpha omega pull_0">
-                            <TextareaInput name="root_cause"
+                            <TextareaInput name="root_cause" tabIndex="11"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
@@ -142,7 +142,7 @@ const BottomContent = (props) => {
                             <p className="top-text">ได้รับเหตุจาก</p>
                         </div>
                         <div className="grid_3 alpha omega pull_0">
-                            <TextInput name="request_by" validate={validateDocumentRequestByField}
+                            <TextInput name="request_by" validate={validateDocumentRequestByField} tabIndex="12"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
@@ -154,8 +154,9 @@ const BottomContent = (props) => {
                         </div>
                         <div className="grid_3 alpha omega pull_0">
                             {/* Need to change to radio button later */}
-                            <SelectNoChildrenInput name="recv_accident_from_recv_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} cssStyle={{ left: "-240px", top: "14px" }}
-                                validate={validateDocumentRecvAccidentFromRecvIDField}>
+                            <SelectNoChildrenInput name="recv_accident_from_recv_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                             cssStyle={{ left: "-160px", top: "14px" }}
+                                validate={validateDocumentRecvAccidentFromRecvIDField} tabIndex="13">
                                 <option value='' selected></option>
                                 <option value='1' >โทรศัพท์</option>
                                 <option value='2' >จดหมาย</option>
@@ -174,7 +175,7 @@ const BottomContent = (props) => {
                         <Label>สถานที่ แขวง</Label>
                         <div className="grid_4 alpha omega">
                             <SelectNoChildrenInput name="location_district_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                validate={validateDocumentLocationDistrictIDField} cssStyle={{ left: "-240px", top: "10px" }}>
+                                validate={validateDocumentLocationDistrictIDField} cssStyle={{ left: "-240px", top: "10px" }} tabIndex="14">
                                 <option value=''></option>
                                 {factDistricts.items.map(function ({ district_id, name, division_id }) {
                                     return <option value={district_id} key={district_id}> {name} </option>
@@ -188,7 +189,7 @@ const BottomContent = (props) => {
                         <Label>สถานที่ ตอน</Label>
                         <div className="grid_4 alpha omega">
                             <SelectNoChildrenInput name="location_node_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                validate={validateDocumentLocationNodeIDField} cssStyle={{ left: "-240px", top: "10px" }}>
+                                validate={validateDocumentLocationNodeIDField} cssStyle={{ left: "-240px", top: "10px" }} tabIndex="15">
                                 <option value=''></option>
                                 {factNodes.items.map(function ({ node_id, name, district_id }) {
                                     if (values.location_district_id == district_id) { // Shallow equality, district ID may be string
@@ -203,7 +204,7 @@ const BottomContent = (props) => {
                         {/* Station ID */}
                         <Label>สถานที่ สถานี</Label>
                         <div className="grid_4 alpha omega">
-                            <SelectNoChildrenInput name="location_station_id" cssStyle={{ left: "-240px", top: "10px" }}
+                            <SelectNoChildrenInput name="location_station_id" cssStyle={{ left: "-240px", top: "10px" }} tabIndex="16"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentLocationStationIDField}>
                                 <option value=''></option>
                                 {factStations.items.map(function ({ station_id, name, node_id }) {
@@ -219,7 +220,7 @@ const BottomContent = (props) => {
                         {/* Station ID */}
                         <Label>รายละเอียดสถานที่</Label>
                         <div className="grid_4 alpha omega">
-                            <TextareaInput name="location_detail"
+                            <TextareaInput name="location_detail" tabIndex="17"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
@@ -231,7 +232,7 @@ const BottomContent = (props) => {
                         {/* Remark */}
                         <Label>หมายเหตุ</Label>
                         <div className="grid_11 alpha omega">
-                            <TextareaInput name="remark"
+                            <TextareaInput name="remark" tabIndex="18"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 

@@ -21,14 +21,21 @@ import { FACTS } from '../../redux/modules/api/fact.js';
 import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const TopContent = (props) => {
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
-
+  const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm, setTouched, setErrors } = useFormikContext();
 
+  useEffect(() => {
+    validateField("src_warehouse_id")
+    searchGoodsOnHand();
+  }, [decoded_token.has_position, fact.warehouses.items])
+
   const validateWarehouseIDField = (fieldName, warehouse_id) => {
-    // console.log("I am validating warehouse id")
+    console.log("I am validating warehouse id",fieldName, warehouse_id)
     warehouse_id = `${warehouse_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
-    let warehouses = props.fact.warehouses.items;
+    let warehouses = fact.warehouses.items;
+    console.log("warehouses", warehouses)
     let warehouse = warehouses.find(warehouse => `${warehouse.warehouse_id}` === `${warehouse_id}`); // Returns undefined if not found
+    console.log("warehouse1", warehouse)
     if (warehouse) {
       setFieldValue(fieldName, `${warehouse_id}\\[${warehouse.abbreviation}] ${warehouse.name}`, false);
       return;

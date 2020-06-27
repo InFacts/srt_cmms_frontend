@@ -31,6 +31,7 @@ export const DOCUMENT_TYPE_ID = {
     SS101: 204,
     EQUIPMENT_INSTALLATION: 206,
     MAINTENANT_ITEM: 207,
+    SELECTOR: 208,
 
     // These needs to change later!!! since Doc Type Group ID will need to be used in other API's
     WAREHOUSE_MASTER_DATA: 1,
@@ -200,6 +201,21 @@ export const SS101_SCHEMA = {
 }
 
 // Helper Functions
+export function getWarehouseIDFromUserID(warehouseFact, warehouseID) {
+    let warehouses = warehouseFact.items;
+    if (warehouses && warehouses.length > 0) {
+        let warehouse = warehouses.find(warehouse => `${warehouse.warehouse_id}` === `${warehouseID}`)
+        if (warehouseID === 0) { // needs to be handled later
+            return "Server"
+        }
+        if (warehouse) {
+            return warehouse.warehouse_id;
+        }
+        return null;
+    }
+    return null;
+}
+
 export function getEmployeeIDFromUserID(userFact, userID) {
     let users = userFact.items;
     if (users && users.length > 0) {
@@ -312,7 +328,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                 lastEquipment = item.item_id;
             }
         });
-        let lastItemId; 
+        let lastItemId;
         if (lastEquipment >= lastItem) {
             lastItemId = lastEquipment + 1;
         } else {
@@ -322,10 +338,10 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         let equipment_part = {
             item_id: lastItemId,
             price_currently: values.price_currently,
-            // depreciation: values.description_equipment,
+            depreciation: parseInt(values.depreciation),
             useful_life: values.useful_life,
-            item_status_id: parseInt(values.equipment_status_id),
-            responsible_district_id: parseInt(values.responsible_by),
+            item_status_id: parseInt(values.item_status_id),
+            responsible_district_id: parseInt(values.responsible_district_id),
         }
 
         let equipment_item_part = {
@@ -358,39 +374,47 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             item: item_part,
         }
     } else if (document_type_id === DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM) {
-        console.log("values", values)
         let last_checklist_line_item = 0;
         fact[FACTS.CHECKLIST_LINE_ITEM].items.map(item => {
+            console.log("item", item)
             if (item.checklist_line_item > last_checklist_line_item) {
-                last_checklist_line_item = item.checklist_line_item_id;
+                last_checklist_line_item = item.checklist_line_item;
+            }
+        });
+        console.log("values", values)
+        let last_checklist_line_item_use_equipment_id = 0;
+        fact[FACTS.CHECKLIST_LINE_ITEM_USE_EQUIPMENT].items.map(item => {
+            if (item.checklist_line_item_use_equipment_id > last_checklist_line_item_use_equipment_id) {
+                last_checklist_line_item_use_equipment_id = item.checklist_line_item_use_equipment_id;
             }
         });
 
         var line_items_part = [];
         values.checklist_line_item_use_equipment.map((line_item, index) => {
             if (line_item.item_id) {
-                line_items_part.push({
-                    checklist_line_item_id: parseInt(last_checklist_line_item) + 1,
-                    item_id: line_item.item_id,
-                    quantity: line_item.quantity,
-                    uom_id: line_item.uom_id
-                });
-            }
+            line_items_part.push({
+                checklist_line_item_use_equipment_id: parseInt(last_checklist_line_item_use_equipment_id) + 1, // ต้อง Get อัน่าสุดออกมาก่อน
+                checklist_line_item_id: parseInt(last_checklist_line_item) + 1,
+                item_id: line_item.item_id,
+                quantity: line_item.quantity,
+                uom_id: parseInt(line_item.uom_id)
+            });
+        }
         })
 
         let create_checklist_part = {
             checklist_line_item: parseInt(last_checklist_line_item) + 1,
-            checklist_id: values.checklist_id,
+            checklist_id: parseInt(values.checklist_id),
             name: values.name,
             freq: values.freq,
-            freq_unit_id: values.freq_unit_id,
+            freq_unit_id: parseInt(values.freq_unit_id),
             active: values.active === "1" ? true : false,
             remark: values.remark,
-            line_items: line_items_part
-          }
-          console.log("create_checklist_part", create_checklist_part)
+            line_item: line_items_part
+        }
+        console.log("create_checklist_part", create_checklist_part)
         return create_checklist_part;
-        
+
     }
     let document_part = {
         ...DOCUMENT_SCHEMA,
@@ -618,71 +642,75 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             specific: work_order_part_big,
         }
     } else if (document_type_id === DOCUMENT_TYPE_ID.SS101) {
-        document_part["document_type_id"] = DOCUMENT_TYPE_NOTGROUP_ID.SS101;
-        let ss101_part = {}
-        Object.keys(SS101_SCHEMA).map((key) => {
-            if (Number.isInteger(SS101_SCHEMA[key]) && key !== "document_id") { // Check if the number in the schema is a number
-                // Hack 'document_id' to not be null, so it would work in mutateData
-                // TODO needs to change ordering of the packDataFromValues!! to not use the mutate function
-                ss101_part[key] = getNumberFromEscapedString(values[key]);
-            } else {
-                ss101_part[key] = values[key]
-            }
-        })
-        console.log("11111111111")
-        ss101_part.loss_line_items = removeEmptyLineItems(ss101_part.loss_line_items);
-
         document_part = {
             ...document_part,
             refer_to_document_id: values.refer_to_document_id,
             document_date: values.document_date + 'T00:00:00+00:00'
         };
-        console.log("2222222")
-        ss101_part = {
-            ...ss101_part,
-            service_method_id: values.service_method_id ? parseInt(values.service_method_id) : null,
-            car_type_id: values.car_type_id ? parseInt(values.car_type_id) : null,
-            cargo_id: values.cargo_id,
-            interrupt_id: values.interrupt_id ? parseInt(values.interrupt_id) : null,
+        console.log("document_part", document_part)
+        let ss101_part = {
+            document_id: values.document_id,
+            accident_name: values.accident_name,
             accident_on: values.accident_on + ':00+00:00',
             arrived_on: values.arrived_on + ':00+00:00',
-            departed_on: values.departed_on + ':00+00:00',
             finished_on: values.finished_on + ':00+00:00',
+            total_fail_time: values.total_fail_time,
+            recv_accident_from_recv_id: values.recv_accident_from_recv_id ? parseInt(values.recv_accident_from_recv_id) : null,
+            recv_accident_from_desc: values.recv_accident_from_desc,
+            summary_cause_condition: values.summary_cause_condition,
+            loss: values.loss,
+            car_type_id: values.car_type_id ? parseInt(values.car_type_id) : null,
+            interrupt_id: values.interrupt_id ? parseInt(values.interrupt_id) : null,
+            service_method_id: values.service_method_id ? parseInt(values.service_method_id) : null,
+            service_method_desc: values.service_method_desc,
+            location_node_id: values.location_node_id ? parseInt(values.location_node_id) : null,
+            location_station_id: values.location_station_id ? parseInt(values.location_station_id) : null,
+            location_detail: values.location_detail,
+            hardware_type_id: values.hardware_type_id ? parseInt(values.hardware_type_id) : null,
+            member_1: values.member_1,
+            member_2: values.member_2,
+            member_3: values.member_3,
+            remark: values.remark,
+            sub_maintenance_type_id: values.sub_maintenance_type_id ? parseInt(values.sub_maintenance_type_id) : null,
             request_on: values.request_on + ':00+00:00',
+            request_by: values.request_by,
+            location_district_id: values.location_district_id ? parseInt(values.location_district_id) : null,
+            departed_on: values.departed_on + ':00+00:00',
+            cargo_id: values.cargo_id ? parseInt(values.cargo_id) : null,
+            auditor_name: values.auditor_name,
             auditor_position_id: values.auditor_position_id ? parseInt(values.auditor_position_id) : null,
+            fixer_name: values.fixer_name,
             fixer_position_id: values.fixer_position_id ? parseInt(values.fixer_position_id) : null,
             member_1_position_id: values.member_1_position_id ? parseInt(values.member_1_position_id) : null,
             member_2_position_id: values.member_2_position_id ? parseInt(values.member_2_position_id) : null,
-            member_3_position_id: values.member_3_position_id ? parseInt(values.member_3_position_id) : null,
-        };
-        console.log("333333")
-        ss101_part.line_items = removeEmptyLineItems(ss101_part.line_items);
-        console.log("4444444")
-        ss101_part.line_items.map((line_items, index) => {
-            console.log("line_items", line_items)
-            ss101_part.line_items[index].item_id = line_items.item_id
-            ss101_part.line_items[index].item_status_id = parseInt(line_items.item_status_id)
-            ss101_part.line_items[index].remark = line_items.remark
-            ss101_part.line_items[index].document_id = values.document_id
-            delete ss101_part.line_items[index].internal_item_id
-            delete ss101_part.line_items[index].description
-            delete ss101_part.line_items[index].equipment_item_id
-            delete ss101_part.line_items[index].equipment_status_id
+            member_3_position_id: values.member_3_position_id ? parseInt(values.member_3_position_id) : null
+        }
+        values.loss_line_items = removeEmptyLineItems(values.loss_line_items);
+        values.line_items = removeEmptyLineItems(values.line_items);
+
+        let loss_line_item_part = values.loss_line_items;
+        let ss101_line_item_part = values.line_items
+        ss101_line_item_part.map((line_items, index) => {
+            ss101_line_item_part[index].item_id = line_items.item_id
+            ss101_line_item_part[index].item_status_id = parseInt(line_items.item_status_id)
+            ss101_line_item_part[index].remark = line_items.remark
+            ss101_line_item_part[index].document_id = values.document_id
+            delete ss101_line_item_part[index].internal_item_id
+            delete ss101_line_item_part[index].description
+            delete ss101_line_item_part[index].equipment_item_id
+            delete ss101_line_item_part[index].equipment_status_id
         })
-        console.log("55555555")
+
         let ss101_part_big = {
             ss101: ss101_part,
-            line_items: ss101_part.line_items
+            loss_line_item: loss_line_item_part,
+            ss101_line_item: ss101_line_item_part
         }
-        console.log("document_part", document_part, "ss101_part", ss101_part_big)
-
-        delete ss101_part_big.ss101.line_items
-        console.log("document_part", document_part, "ss101_part", ss101_part_big)
-
         return {
             document: document_part,
             specific: ss101_part_big,
         }
+
     } else if (document_type_id === DOCUMENT_TYPE_ID.MAINTENANT_ITEM) {
         document_part = {
             ...document_part,
@@ -713,47 +741,83 @@ export const packDataFromValues = (fact, values, document_type_id) => {
     } else if (document_type_id === DOCUMENT_TYPE_ID.EQUIPMENT_INSTALLATION) {
 
         let document_part_equipment_install = {
-        ...DOCUMENT_SCHEMA,
-        document_status_id: 1,
-        document_action_type_id: 1,
-        document_id: values.document_id,
-        internal_document_id: values.internal_document_id,
-        remark: values.remark,
-        created_by_admin_id: getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id),
-        created_by_user_id: getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_user_employee_id),
-        document_date: values.document_date + 'T00:00:00+00:00',
-    }
+            ...DOCUMENT_SCHEMA,
+            document_status_id: 1,
+            document_action_type_id: 1,
+            document_id: values.document_id,
+            internal_document_id: values.internal_document_id,
+            remark: values.remark,
+            created_by_admin_id: getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id),
+            created_by_user_id: getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_user_employee_id),
+            document_date: values.document_date + 'T00:00:00+00:00',
+        }
 
         var equipment_install_part = {
             document_id: values.document_id,
-            equipment_id: values.equipment_id,
-            location_district_id: values.location_district_id,
-            location_node_id: values.location_node_id,
-            location_station_id: values.location_station_id,
-            location_description: values.location_description,
-            installed_on: values.installed_on,
-            announce_use_on: values.announce_use_on,
-            equipment_status_id: values.equipment_status_id,
-            responsible_node_id: values.responsible_zone_by
+            equipment_id: values.equipment_id ? parseInt(values.equipment_id) : null,
+            location_district_id: values.location_district_id ? parseInt(values.location_district_id) : null,
+            location_node_id: values.location_node_id ? parseInt(values.location_node_id) : null,
+            location_station_id: values.location_station_id ? parseInt(values.location_station_id) : null,
+            // location_description: values.location_description ,
+            location_description: 1 ,
+            installed_on: values.installed_on + 'T00:00:00+00:00',
+            announce_use_on: values.announce_use_on + 'T00:00:00+00:00',
+            // equipment_status_id: values.equipment_status_id,
+            responsible_node_id: values.location_node_id ? parseInt(values.location_node_id) : null
         }
         var line_items_part = [
             {
-                document_id: values.document_id ,
+                document_id: values.document_id,
+                item_id: values.item_id,
                 line_number: 1,
                 item_status_id: 5,
                 remark: "string"
-              }
+            }
         ]
 
-        var equipment_installation = { 
-            equipment_install: equipment_install_part,
+        var equipment_installation_part = {
+            equipment_installation: equipment_install_part,
             line_items: line_items_part
         }
+        console.log("values", values)
         console.log("document_part", document_part);
-        console.log("equipment_install", equipment_installation);
+        console.log("equipment_install", equipment_installation_part);
         return {
             document: document_part_equipment_install,
-            specific: equipment_installation,
+            specific: equipment_installation_part,
+        }
+    } else if (document_type_id === DOCUMENT_TYPE_ID.SELECTOR) {
+        let document_part_selector = {
+            ...DOCUMENT_SCHEMA,
+            document_status_id: 1,
+            document_action_type_id: 1,
+            document_id: values.document_id,
+            internal_document_id: values.internal_document_id,
+            remark: values.remark,
+            created_by_admin_id: getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id),
+            created_by_user_id: getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_user_employee_id),
+            document_date: values.document_date + 'T00:00:00+00:00',
+        }
+
+        let selector_checklist_group_part = {
+            document_id: values.document_id,
+            // name_group: values.line_custom[index].checklist_group_name,
+            unit_maintenance_location_id: 0,
+            // selector_checklist: selector_checklist_part
+        }
+
+        let specific_selector = {
+            document_id: values.document_id,
+            name: values.name,
+            active: values.active === "1" ? true : false,
+            node_id: values.node_id,
+            station_id: values.station_id,
+            selector_checklist_group: selector_checklist_group_part
+        }
+
+        return {
+            document: document_part_selector,
+            specific: specific_selector,
         }
     }
 }
@@ -918,10 +982,21 @@ const fillObjectOfName = (object, fieldName, value) => {
                     for (let key3 in object[key1][key2]) {
                         if (typeof object[key1][key2][key3] === "object" && object[key1] !== null) {
                             // recursive line items
-                            let line_item = object[key1][key2][key3];
-                            if (typeof line_item === "object" && object[key1] !== null) {
-                                if (line_item.hasOwnProperty(fieldName)) {
-                                    object[key1][key2][key3][fieldName] = value;
+                            for (let key4 in object[key1][key2][key3]) {
+                                if (typeof object[key1][key2][key3][key4] === "object" && object[key1] !== null) {
+                                    let line_item = object[key1][key2][key3];
+                                    console.log("line_item", line_item)
+                                    if (typeof line_item === "object" && object[key1] !== null) {
+                                        if (line_item.hasOwnProperty(fieldName)) {
+                                            object[key1][key2][key3][fieldName] = value;
+
+                                        }
+                                    }
+                                } else {
+                                    // base case, stop recurring
+                                    if (key4 === fieldName) {
+                                        object[key1][key2][key3][key4] = value;
+                                    }
                                 }
                             }
                         } else {
@@ -954,9 +1029,6 @@ const fillObjectOfName = (object, fieldName, value) => {
 const mutateDataFillDocumentID = (object, document_id) => {
     let mutated_object = { ...object };
     fillObjectOfName(mutated_object, 'document_id', document_id);
-    fillObjectOfName(mutated_object, 'ss101_document_id', document_id);
-    fillObjectOfName(mutated_object, 'work_order_document_id', document_id);
-    // fillObjectOfName(mutated_object, 'line_items_document_id', document_id);
     // console.log("object", mutated_object)
     return mutated_object
 }
@@ -1429,6 +1501,10 @@ const responseToFormState = (fact, data, document_type_group_id) => {
             Object.entries(data.specific)
                 .filter(([key]) => Object.keys(WORK_ORDER_SCHEMA).includes(key))
         )
+        work_order_part = {
+            ...work_order_part,
+            line_items: data.specific.line_item
+        }
         console.log("this is document_part 123  ", document_part)
         console.log("this is work_order_part ", work_order_part)
         return { ...transformDocumentResponseToFormState(document_part, fact), ...transformWorkOrderResponseToFormState(work_order_part) }
@@ -1483,8 +1559,8 @@ const responseToFormState = (fact, data, document_type_group_id) => {
             internal_item_id: data.specific.equipment.equipment_item.item.internal_item_id,
             description: data.specific.equipment.equipment_item.item.description,
             uom_group_id: data.specific.equipment.equipment_item.item.uom_group_id,
-            equipment_status_id: data.specific.equipment.equipment_status_id,
-
+            equipment_status_id: data.specific.equipment.item_status_id,
+            responsible_district_id: data.specific.equipment.responsible_district_id,
             created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_user_id) || '',
             created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_admin_id) || '',
             created_on: created_on.toISOString().split(".")[0],
@@ -1514,16 +1590,6 @@ function transformDocumentResponseToFormState(document_part, fact, document_type
         refer_to_document_id: document_part.refer_to_document_id,
         refer_to_document_internal_id: document_part.refer_to_document_internal_id
     }
-    // } else {
-    // return {
-    //     document_id: document_part.document_id,
-    //     internal_document_id: document_part.internal_document_id,
-    //     document_date: document_part.document_date.split("T")[0],
-    //     created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_user_id) || '',
-    //     created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_admin_id) || '',
-    //     created_on: created_on.toISOString().split(".")[0],
-    // }
-    // }
 }
 
 function returnEmptyStringIfNull(string) {
@@ -1553,8 +1619,7 @@ function transformWorkOrderResponseToFormState(work_order_part) {
         location_district_id: returnEmptyStringIfNull(work_order_part.location_district_id),
         location_node_id: returnEmptyStringIfNull(work_order_part.location_node_id),
         location_station_id: returnEmptyStringIfNull(work_order_part.location_station_id),
-        line_items: [work_order_part.line_items],
-        // line_items: returnFullArrayHasEquipmentItemNull(work_order_part.line_items),
+        line_items: returnFullArrayHasEquipmentItemNull(work_order_part.line_items),
     }
 }
 function transformSS101ResponseToFormState(ss101_part, data) {
@@ -1605,7 +1670,7 @@ function returnFullArrayHasEquipmentItemNull(has_equipment_item) {
             description: has_equipment_item[i].equipment_item.equipment.equipment_item.item.description,
             ss101_document_id: has_equipment_item[i].ss101_document_id,
             equipment_item_id: has_equipment_item[i].equipment_item_id,
-            equipment_status_id: has_equipment_item[i].equipment_status_id,
+            item_status_id: has_equipment_item[i].item_status_id,
             remark: has_equipment_item[i].remark,
         };
     }
@@ -2229,10 +2294,10 @@ export const identifyEndpoinsHelper = (document_type_id) => {
     if (doc_type === "141") return "physical-count";
     if (doc_type === "142") return "inventory-adjustment";
     if (doc_type === "151") return "salvage-return";
+    if (doc_type === "152") return "salvage-sold"; // สั่งซ่อม ตามวาระ TODO:
     // PMT
     if (doc_type === "201") return "pmt-work-request"; // แจ้งการเกิดอุบัติเหตุ/เสียหาย
     if (doc_type === "202") return "pmt-work-order"; // สั่งซ่อม
-    // if (doc_type === "203") return "salvage-sold"; // สั่งซ่อม ตามวาระ TODO:
     if (doc_type === "204") return "ss-101"; // สรุปการซ่อมบำรุง
     if (doc_type === "205") return "PmtFixedAsset"; // สรุปการทำวาระ
     if (doc_type === "206") return "pmt-equipment-installation"; // ติดตั้ง

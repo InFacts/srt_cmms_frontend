@@ -129,7 +129,7 @@ const TopContent = (props) => {
               <div className="float-right">
                 <div className="grid_3 float-right">
                   <SelectNoChildrenInput name="item_type_id" validate={validateItemTypeIDField} cssStyle={{ left: "-160px", top: "10px" }}
-                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="2">
                     <option value=''></option>
                     {fact[FACTS.ITEM_TYPE].items.map((item_type) => (
                       values.item_type_id === item_type.item_type_id
@@ -149,11 +149,11 @@ const TopContent = (props) => {
             <div className="container_12">
               <FormLabel>รายละเอียด</FormLabel>
               <div className="grid_3 pull_1">
-                <TextInput name="description" validate={validateItemDescriptionField} disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="2" />
+                <TextInput name="description" validate={validateItemDescriptionField} disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="3" />
               </div>
               <div className="float-right">
                 <div className="grid_3 float-right">
-                  <SelectNoChildrenInput name="item_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateItemGroupIDField} cssStyle={{ left: "-160px", top: "10px" }}>
+                  <SelectNoChildrenInput name="item_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateItemGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="4">
                     <option value=''></option>
                     {fact[FACTS.ITEM_GROUP].items.map((item_group) => (
                       values.item_group_id === item_group.item_group_id
@@ -173,7 +173,7 @@ const TopContent = (props) => {
             <div className="container_12">
               <div className="float-right">
                 <div className="grid_3 float-right">
-                  <SelectNoChildrenInput name="uom_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomGroupIDField} cssStyle={{ left: "-160px", top: "10px" }}>
+                  <SelectNoChildrenInput name="uom_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="5">
                     <option value=''></option>
                     {fact[FACTS.UNIT_OF_MEASURE_GROUPS].items.map((uom) => (
                       values.uom_group_id === uom.uom_group_id

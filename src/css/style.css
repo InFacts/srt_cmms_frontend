@@ -887,3 +887,35 @@ path.map-region:hover{
   width: auto;
   /* width */
 }
+
+/* The alert message box */
+.alert {
+  padding: 5px;
+  background-color: #00cc00; /* Red */
+  color: white;
+  font-weight: bold;
+}
+
+.alert.red {
+  padding: 5px;
+  background-color: #ff0000; /* Red */
+  color: white;
+  font-weight: bold;
+}
+
+/* The close button */
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* When moving the mouse over the close button */
+.closebtn:hover {
+  color: black;
+}

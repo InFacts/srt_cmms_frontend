@@ -67,7 +67,7 @@ const BottomContent = (props) => {
       fetchGoodsOnhandData(getNumberFromEscapedString(values.src_warehouse_id), item.item_id)
        .then((at_source) => {
           var at_sources = at_source;
-          var at_source = at_sources.find(at_source => `${at_source.item_status_id}` === `1`); // Returns undefined if not found
+          var at_source = at_sources.find(at_source => `${at_source.item_status_id}` === `5`); // Returns undefined if not found
           console.log("at_source", at_source)
           if (at_source) {
             setFieldValue(`line_items[${index}].at_source`, [at_source], false);

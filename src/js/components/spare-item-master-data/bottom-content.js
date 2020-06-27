@@ -62,7 +62,7 @@ const BottomContent = () => {
                 <p className="cancel-default">ชื่อย่อหน่วยนับ </p>
               </div>
               <div className="grid_3 pull_1">
-                <SelectNoChildrenInput name="uom_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomIDField} cssStyle={{ left: "-160px", top: "10px" }}>
+                <SelectNoChildrenInput name="uom_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomIDField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="6">
                   <option value=''></option>
                   {fact['unit-of-measures'].items.map((list_uoms) => (
                     list_uoms.uom_id === values.uom_id
@@ -95,7 +95,7 @@ const BottomContent = () => {
                 <p className="cancel-default">ชื่อหน่วยนับ  </p>
               </div>
               <div className="grid_3 pull_1">
-                <TextInput name='uom_name' disabled tabIndex="1" />
+                <TextInput name='uom_name' disabled />
               </div>
 
               <div className="float-right">
@@ -103,7 +103,7 @@ const BottomContent = () => {
                   <p className="cancel-default float-right">Lead Time</p>
                 </div>
                 <div className="grid_2">
-                  <NumberInput step={1} name="lead_time" tabIndex="7" validate={validateLeadTimeField} cssStyle={{ left: "60px", top: "-5px" }}
+                  <NumberInput step={1} name="lead_time" tabIndex="8" validate={validateLeadTimeField} cssStyle={{ left: "60px", top: "-5px" }}
                     disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                   />
                 </div>
@@ -119,7 +119,7 @@ const BottomContent = () => {
                   <p className="cancel-default float-right">Tolerance Days</p>
                 </div>
                 <div className="grid_2">
-                  <NumberInput step={1} name="tolerance_time" tabIndex="7"
+                  <NumberInput step={1} name="tolerance_time" tabIndex="9"
                     validate={validateToleranceTimeField} cssStyle={{ left: "60px", top: "-5px" }}
                     disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                   />
@@ -136,7 +136,7 @@ const BottomContent = () => {
               </div>
               <div className="grid_3 pull_1">
                 <SelectNoChildrenInput name="active" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                  validate={validateActiveField} cssStyle={{ left: "-160px", top: "10px" }}>
+                  validate={validateActiveField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="10">
                   <option value=''></option>
                   {values.active === 0
                     ?
@@ -158,7 +158,7 @@ const BottomContent = () => {
                 </div>
                 <div className="grid_2">
                   <TextInput name="accounting_type"
-                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="2" />
+                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="11" />
                 </div>
                 <div className="grid_1">
                   <p className="cancel-default"></p>
@@ -169,7 +169,7 @@ const BottomContent = () => {
             <div className="container_12 mt-3">
               <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
               <div className="grid_11">
-                <TextareaInput name="remark" tabIndex="6"
+                <TextareaInput name="remark" tabIndex="12"
                   disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                 />
               </div>
@@ -191,7 +191,7 @@ const BottomContent = () => {
                 <p className="cancel-default">จำนวนที่ต้องการ</p>
               </div>
               <div className="grid_2 pull_0">
-                <NumberInput step={0.01} name="quantity_required" tabIndex="7"
+                <NumberInput step={0.01} name="quantity_required" tabIndex="13"
                   validate={validateQuantityRequiredField} cssStyle={{ left: "60px", top: "-5px" }}
                   disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                 />
@@ -204,7 +204,7 @@ const BottomContent = () => {
                 <p className="cancel-default">จำนวนต่ำสุด</p>
               </div>
               <div className="grid_2 pull_0">
-                <NumberInput step={0.01} name="quantity_lowest" tabIndex="7"
+                <NumberInput step={0.01} name="quantity_lowest" tabIndex="14"
                   validate={validateQuantityLowestField} cssStyle={{ left: "60px", top: "-5px" }}
                   disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                 />
@@ -218,7 +218,7 @@ const BottomContent = () => {
                 <p className="cancel-default">จำนวนสูงสุด</p>
               </div>
               <div className="grid_2 pull_0">
-                <NumberInput step={0.01} name="quantity_highest" tabIndex="7"
+                <NumberInput step={0.01} name="quantity_highest" tabIndex="15"
                   validate={validateQuantityHighestField} cssStyle={{ left: "60px", top: "-5px" }}
                   disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                 />
@@ -278,9 +278,9 @@ const BottomContent = () => {
               </table>
             </div>
 
-            <div className="container_12 mt-2" style={{ paddingRight: "px" }}>
+            {/* <div className="container_12 mt-2" style={{ paddingRight: "px" }}>
               <button type="button" className="button-gray float-right" disabled="disabled">ตั้งเป็นคลังตั้งต้น</button>
-            </div>
+            </div> */}
 
           </div>
 

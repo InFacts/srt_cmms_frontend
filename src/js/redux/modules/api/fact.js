@@ -32,6 +32,7 @@ export const FACTS = {
     CHECKLIST_LINE_ITEM: "checklist-line-item",
     CHECKLIST_CUSTOM_GROUP:"checklist-custom-group",
     CHECKLIST_EQUIPMENT_GROUP:"checklist-equipment-group",
+    UNIT_MAINTENANCE_LOCATION: "unit-maintenance-location",
 
     // FOR SS101 LOOK UP
     SS101_RECV_ACCIDENT_FROM: "ss101/recv-accident-from",

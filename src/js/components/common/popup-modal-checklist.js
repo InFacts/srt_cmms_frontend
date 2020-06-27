@@ -55,7 +55,7 @@ const PopupModalNoPart = (props) => {
                                             <td className="edit-padding" style={{ minWidth: "300px" }}> {checklist.name} </td>
                                             <td className="edit-padding text-center">
                                                 <button type="button" className="button-blue" 
-                                                onClick={() => setFieldValue('checklist_line_item', checklist.checklist_line_item, true)} 
+                                                onClick={() => setFieldValue('name', checklist.name, true)} 
                                                 aria-label="Close active modal" aria-controls="modalChecklistLineItem" id="closeModalNoPart" >เลือก</button>
                                             </td>
                                         </tr>

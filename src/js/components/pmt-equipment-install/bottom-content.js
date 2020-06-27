@@ -12,7 +12,7 @@ import { useFormik, withFormik, useFormikContext } from 'formik';
 import Label from '../common/form-label'
 import {
     getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, validateEmployeeIDField,
-    validateWarehouseIDField, validateInternalDocumentIDFieldHelper, checkBooleanForEditHelper, validateUserIDField
+    validateWarehouseIDField, validateInternalDocumentIDFieldHelper, checkBooleanForEditHelper, validateUserIDField, validatedataDocumentField
 } from '../../helper';
 import { FACTS } from '../../redux/modules/api/fact';
 import PopupModalReponseZoneBy from '../common/popup-modal-reponse-zone-by'
@@ -27,12 +27,16 @@ const BottomContent = (props) => {
     const factDistricts = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
     const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
     const factStations = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
-    const factEquipmentStatus = useSelector((state) => ({ ...state.api.fact[FACTS.EQUIPMENT_STATUS] }), shallowEqual);
+    const factItemStatus = useSelector((state) => ({ ...state.api.fact[FACTS.ITEM_STATUS] }), shallowEqual);
     const { values, setFieldValue } = useFormikContext();
 
     const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
 
-    const validateResponsibleZoneByField = (...args) => validateUserIDField("responsible_zone_by", fact, setFieldValue, ...args);
+    const validateInstalledOnField = (...args) => validatedataDocumentField("installed_on", setFieldValue, ...args)
+    const validateAnnounceUseOnField = (...args) => validatedataDocumentField("announce_use_on", setFieldValue, ...args)
+    const validateLocationDistrictIDField = (...args) => validatedataDocumentField("location_district_id", setFieldValue, ...args)
+    const validateLocationNodeIDField = (...args) => validatedataDocumentField("location_node_id", setFieldValue, ...args)
+    const validateLocationStationIDField = (...args) => validatedataDocumentField("location_station_id", setFieldValue, ...args)
 
     return (
         <div id={changeTheam() === true ? "" : "blackground-gray"}>
@@ -53,9 +57,12 @@ const BottomContent = (props) => {
                             <p className="top-text">หน่วยงานผู้รับผิดชอบ</p>
                         </div>
                         <div className="grid_3 pull_0">
-                            <TextInput name="responsible_node_id"
-                                disabled
-                                tabIndex="6" />
+                            <SelectNoChildrenInput name="responsible_district_id" disabled>
+                                <option value=''></option>
+                                {factDistricts.items.map((districts) => (
+                                    <option key={districts.district_id} value={districts.district_id}>{districts.name}</option>
+                                ))}
+                            </SelectNoChildrenInput>
                         </div>
 
                         <div class="clear" />
@@ -69,9 +76,9 @@ const BottomContent = (props) => {
                             <p className="top-text">วันที่ติดตั้งเสร็จ</p>
                         </div>
                         <div className="grid_3 omega">
-                            <DateInput name="installed_on"
+                            <DateInput name="installed_on" validate={validateInstalledOnField}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                tabIndex="6" />
+                                tabIndex="8" />
                         </div>
                         <div class="clear" />
 
@@ -80,9 +87,9 @@ const BottomContent = (props) => {
                             <p className="top-text">วันที่ประกาศใช้</p>
                         </div>
                         <div className="grid_3 omega">
-                            <DateInput name="announce_use_on"
+                            <DateInput name="announce_use_on" validate={validateAnnounceUseOnField}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                tabIndex="6" />
+                                tabIndex="9" />
                         </div>
                         <div class="clear" />
 
@@ -92,12 +99,8 @@ const BottomContent = (props) => {
                         <div className="grid_3 omega">
                             <SelectNoChildrenInput name="equipment_status_id" disabled>
                                 <option value=''></option>
-                                {factEquipmentStatus.items.map((equipment_status) => {
-                                    if (values.equipment_status_id === equipment_status.equipment_status_id) {
-                                        return <option value={equipment_status.equipment_status_id} key={equipment_status.equipment_status_id} selected>{equipment_status.status_th}</option>
-                                    } else {
-                                        return <option value={equipment_status.equipment_status_id} key={equipment_status.equipment_status_id}>{equipment_status.status_th}</option>
-                                    }
+                                {factItemStatus.items.map((equipment_status) => {
+                                    return <option value={equipment_status.item_status_id} key={equipment_status.item_status_id}>{equipment_status.description_th}</option>
                                 })}
                             </SelectNoChildrenInput>
                         </div>
@@ -111,7 +114,7 @@ const BottomContent = (props) => {
                             <p className="top-text">หมายเหตุ</p>
                         </div>
                         <div className="grid_11 alpha omega">
-                            <TextareaInput name="remark"
+                            <TextareaInput name="remark" tabIndex="10"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
@@ -135,7 +138,7 @@ const BottomContent = (props) => {
                                 <p className="top-text">แขวง</p>
                             </div>
                             <div className="grid_7">
-                                <SelectNoChildrenInput name="location_district_id"
+                                <SelectNoChildrenInput name="location_district_id" tabIndex="11" validate={validateLocationDistrictIDField} cssStyle={{ left: "-480px", top: "10px" }}
                                     disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                                     <option value=''></option>
                                     {factDistricts.items.map((districts) => (
@@ -151,7 +154,7 @@ const BottomContent = (props) => {
                                 <p className="top-text">ตอน</p>
                             </div>
                             <div className="grid_7">
-                                <SelectNoChildrenInput name="location_node_id"
+                                <SelectNoChildrenInput name="location_node_id" tabIndex="12" validate={validateLocationNodeIDField} cssStyle={{ left: "-480px", top: "10px" }}
                                     disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                                     <option value=''></option>
                                     {factNodes.items.map((node) => {
@@ -169,7 +172,7 @@ const BottomContent = (props) => {
                                 <p className="top-text">สถานี</p>
                             </div>
                             <div className="grid_7">
-                                <SelectNoChildrenInput name="location_station_id"
+                                <SelectNoChildrenInput name="location_station_id" tabIndex="13" validate={validateLocationStationIDField} cssStyle={{ left: "-480px", top: "10px" }}
                                     disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                                     <option value=''></option>
                                     {factStations.items.map((stations) => {
@@ -187,9 +190,9 @@ const BottomContent = (props) => {
                                 <p className="top-text">รายละเอียดเพิ่มเติม</p>
                             </div>
                             <div className="grid_7 pull_0">
-                                <TextInput name="location_description"
+                                <TextInput name="location_description" 
                                     disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                    tabIndex="6" />
+                                    tabIndex="14" />
                             </div>
 
                             <div class="clear" />

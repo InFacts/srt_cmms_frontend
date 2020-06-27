@@ -16,7 +16,7 @@ import { useFormikContext, useField } from 'formik';
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import {
   getNumberFromEscapedString, fetchGoodsOnhandDataForItemmasterData, DOCUMENT_TYPE_ID,
-  getDocumentbyInternalDocumentID
+  getDocumentbyInternalDocumentID, validatedataDocumentField
 } from '../../helper';
 
 import { FACTS } from '../../redux/modules/api/fact.js';
@@ -44,18 +44,19 @@ const TopContent = (props) => {
   const factChecklistEquipmentGroup = useSelector((state) => ({ ...state.api.fact[FACTS.CHECKLIST_EQUIPMENT_GROUP] }), shallowEqual);
   const factChecklist = useSelector((state) => ({ ...state.api.fact.checklist }), shallowEqual);
 
-  const validateNameChecklist = checklist_line_item => new Promise(resolve => {
-    if (!checklist_line_item) {
+  const validateNameChecklist = name => new Promise(resolve => {
+    if (!name) {
       return resolve('Required');
     }
 
     let error;
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/checklist-line-item/${checklist_line_item}`;
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/checklist-line-item/name/${name}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
       .then((res) => {
-        if (res.data.checklist_line_item.checklist_line_item === checklist_line_item) { // If input document ID exists
+        console.log("I Got data", res.data.checklist_line_item)
+        if (res.data.checklist_line_item.name === name) { // If input document ID exists
           if (toolbar.mode === TOOLBAR_MODE.SEARCH && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
-            setFieldValue("checklist_line_item", `${res.data.checklist_line_item.checklist_line_item}\\${res.data.checklist_line_item.name}`, false)
+            setFieldValue("checklist_line_item", res.data.checklist_line_item.checklist_line_item, false)
             setFieldValue("checklist_id", res.data.checklist_line_item.checklist_id, false)
             setFieldValue("freq", res.data.checklist_line_item.freq, false)
             setFieldValue("freq_unit_id", res.data.checklist_line_item.freq_unit_id, false)
@@ -99,6 +100,12 @@ const TopContent = (props) => {
       });
   });
 
+  const validateActiveField = (...args) => validatedataDocumentField("active", setFieldValue, ...args)
+  const validateChecklistGroupIDField = (...args) => validatedataDocumentField("checklist_group_id", setFieldValue, ...args)
+  const validateChecklistIDField = (...args) => validatedataDocumentField("checklist_id", setFieldValue, ...args)
+  const validateFrepField = (...args) => validatedataDocumentField("frep", setFieldValue, ...args)
+  const validateFrepUnitIDField = (...args) => validatedataDocumentField("frep_unit_id", setFieldValue, ...args)
+
   return (
     <div id={changeTheam() === true ? "" : "blackground-white"}>
       <div className="container_12 clearfix">
@@ -113,7 +120,7 @@ const TopContent = (props) => {
                 <p className="top-text">แผนซ่อมบำรุง</p>
               </div>
               <div className="grid_3 alpha omega pull_0">
-                <TextInput name='checklist_line_item' validate={validateNameChecklist}
+                <TextInput name='name' validate={validateNameChecklist}
                   searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalChecklistLineItem" tabIndex="1" />
               </div>
 
@@ -126,7 +133,8 @@ const TopContent = (props) => {
                 <p className="top-text">สถานะการใช้งาน</p>
               </div>
               <div className="grid_3 alpha omega pull_0">
-                <SelectNoChildrenInput name="active" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                <SelectNoChildrenInput name="active" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="2"
+                validate={validateActiveField} cssStyle={{ left: "-160px", top: "10px" }}>
                   <option value=''></option>
                   <option value='1'>เปิดการใช้งาน</option>
                   <option value='0'>ปิดการใช้งาน</option>
@@ -142,7 +150,8 @@ const TopContent = (props) => {
                 <p className="top-text">กลุ่มการทำวาระ</p>
               </div>
               <div className="grid_3 alpha omega pull_0">
-                <SelectNoChildrenInput name="checklist_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                <SelectNoChildrenInput name="checklist_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="3" 
+                validate={validateChecklistGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} >
                   <option value=''></option>
                   {factChecklistEquipmentGroup.items.map((factChecklistEquipmentGroup) => {
                     return (<option value={factChecklistEquipmentGroup.checklist_group_id}>{factChecklistEquipmentGroup.name}</option>)
@@ -162,7 +171,8 @@ const TopContent = (props) => {
                 <p className="top-text">ชนิดการทำวาระ</p>
               </div>
               <div className="grid_3 alpha omega pull_0">
-                <SelectNoChildrenInput name="checklist_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                <SelectNoChildrenInput name="checklist_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="4" 
+                validate={validateChecklistIDField} cssStyle={{ left: "-160px", top: "10px" }}>
                   <option value=''></option>
                   {factChecklist.items.map((factChecklist) => {
                     if (values.checklist_group_id == factChecklist.checklist_group_id) {
@@ -180,14 +190,15 @@ const TopContent = (props) => {
                 <p className="top-text">ความถี่การซ่อมบำรุง</p>
               </div>
               <div className="grid_3 alpha omega pull_0">
-                <NumberInput name="freq" step={1}
-                  disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                <NumberInput name="freq" step={1} tabIndex="5" validate={validateFrepField}
+                  disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} cssStyle={{ left: "60px", top: "-5px" }}/>
               </div>
               <div className="grid_1 omega pull_0">
                 <p className="top-text">ครั้งต่อ</p>
               </div>
               <div className="grid_2 alpha omega pull_0">
-                <SelectNoChildrenInput name="freq_unit_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                <SelectNoChildrenInput name="freq_unit_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="6"
+                validate={validateFrepUnitIDField} cssStyle={{ left: "-80px", top: "10px" }}>
                   <option value=''></option>
                   <option value='1'>วัน</option>
                   <option value='2'>เดือน</option>
