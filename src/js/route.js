@@ -69,35 +69,36 @@ const FrontEnd = () => (
 
         {/* SPARE PAGE */}
         <Route exact path="/main-spare" component={MainSpare} />
-        <Route exact path="/item-master-data" component={ItemMasterData} />
-        <Route exact path="/goods-receipt2" component={SpareGoodsReceipt2} />
-        <Route exact path="/goods-receipt-no-po" component={SpareGoodsReceiptNoPo} />
-        <Route exact path="/goods-return" component={SpareGoodsReturn} />
-        <Route exact path="/goods-fix" component={SpareGoodsFix} />
-        <Route exact path="/goods-usage" component={SpareGoodsUsage} />
-        <Route exact path="/goods-receipt-fix" component={SpareGoodsReceiptFix} />
-        <Route exact path="/goods-issue" component={SpareGoodsIssue} />
-        <Route exact path="/inventory-transfer" component={SpareInventoryTransfer} />
-        <Route exact path="/salvage-return" component={SpareSalvageReturn} />
-        <Route exact path="/salvage-sold" component={SpareSalvageSold} />
-        <Route exact path="/physical-count" component={SparePhysicalCount} />
-        <Route exact path="/inventory-adjustment" component={SpareInventoryAdjustment} />
-        <Route exact path="/report-s-1" component={SpareS1} />
-        <Route exact path="/warehouse" component={SpareWarehouse} />
-        <Route exact path="/report-b22" component={SpareB22} />
+        <Route exact path="/spare-item-master-data" component={ItemMasterData} />
+        <Route exact path="/spare-goods-receipt2" component={SpareGoodsReceipt2} />
+        <Route exact path="/spare-goods-receipt-no-po" component={SpareGoodsReceiptNoPo} />
+        <Route exact path="/spare-goods-return" component={SpareGoodsReturn} />
+        <Route exact path="/spare-goods-fix" component={SpareGoodsFix} />
+        <Route exact path="/spare-goods-usage" component={SpareGoodsUsage} />
+        <Route exact path="/spare-goods-receipt-fix" component={SpareGoodsReceiptFix} />
+        <Route exact path="/spare-goods-issue" component={SpareGoodsIssue} />
+        <Route exact path="/spare-inventory-transfer" component={SpareInventoryTransfer} />
+        <Route exact path="/spare-salvage-return" component={SpareSalvageReturn} />
+        <Route exact path="/spare-salvage-sold" component={SpareSalvageSold} />
+        <Route exact path="/spare-physical-count" component={SparePhysicalCount} />
+        <Route exact path="/spare-inventory-adjustment" component={SpareInventoryAdjustment} />
+        <Route exact path="/spare-report-s-1" component={SpareS1} />
+        <Route exact path="/spare-warehouse" component={SpareWarehouse} />
+        <Route exact path="/spare-report-b22" component={SpareB22} />
 
         {/* PMT Routes */}
         <Route exact path="/main-pmt" component={MainPmt} />
         <Route exact path="/pmt-work-request" component={WorkRequestComponent} />
         <Route exact path="/pmt-work-order" component={PmtWorkOrder} />
-        <Route exact path="/ss-101" component={PmtSS101} />
-        <Route exact path="/maitenant-item" component={PmtMaintenantItem} />
+        <Route exact path="/pmt-ss-101" component={PmtSS101} />
+        <Route exact path="/pmt-maitenant-item" component={PmtMaintenantItem} />
         <Route exact path="/pmt-equipment-master" component={PmtEquipmentMasterData} />
         <Route exact path="/pmt-equipment-installation" component={PmtEquipmentInstallation} />
         <Route exact path="/pmt-fixed-asset" component={PmtFixedAsset} />
         <Route exact path="/pmt-create-checklist" component={PmtCreateChecklist} />
         <Route exact path="/pmt-all-checklist" component={PmtAllChecklist} />
         <Route exact path="/pmt-create-schedule-checklist" component={PmtScheduleCreateChecklist} />
+        
         <Route exact path="/track" component={Track} />
 
         {/* Admin Page */}

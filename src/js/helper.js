@@ -2283,25 +2283,25 @@ export const identifyEndpoinsHelper = (document_type_id) => {
     let doc_type = document_type_id.toString().substring(0, 3);
     // console.log("doc_type", doc_type)
     // SPARE
-    if (doc_type === "101") return "goods-receipt2";
-    if (doc_type === "102") return "goods-return";
-    if (doc_type === "103") return "goods-receipt-no-po";
-    if (doc_type === "111") return "goods-usage";
-    if (doc_type === "112") return "goods-issue";
-    if (doc_type === "121") return "inventory-transfer";
-    if (doc_type === "131") return "goods-receipt-fix";
-    if (doc_type === "132") return "goods-fix";
-    if (doc_type === "141") return "physical-count";
-    if (doc_type === "142") return "inventory-adjustment";
-    if (doc_type === "151") return "salvage-return";
-    if (doc_type === "152") return "salvage-sold"; // สั่งซ่อม ตามวาระ TODO:
+    if (doc_type === "101") return "spare-goods-receipt2";
+    if (doc_type === "102") return "spare-goods-return";
+    if (doc_type === "103") return "spare-goods-receipt-no-po";
+    if (doc_type === "111") return "spare-goods-usage";
+    if (doc_type === "112") return "spare-goods-issue";
+    if (doc_type === "121") return "spare-inventory-transfer";
+    if (doc_type === "131") return "spare-goods-receipt-fix";
+    if (doc_type === "132") return "spare-goods-fix";
+    if (doc_type === "141") return "spare-physical-count";
+    if (doc_type === "142") return "spare-inventory-adjustment";
+    if (doc_type === "151") return "spare-salvage-return";
+    if (doc_type === "152") return "spare-salvage-sold"; // สั่งซ่อม ตามวาระ TODO:
     // PMT
     if (doc_type === "201") return "pmt-work-request"; // แจ้งการเกิดอุบัติเหตุ/เสียหาย
     if (doc_type === "202") return "pmt-work-order"; // สั่งซ่อม
-    if (doc_type === "204") return "ss-101"; // สรุปการซ่อมบำรุง
-    if (doc_type === "205") return "PmtFixedAsset"; // สรุปการทำวาระ
+    if (doc_type === "204") return "pmt-ss-101"; // สรุปการซ่อมบำรุง
+    if (doc_type === "205") return "pmt-fixed-asset"; // สรุปการทำวาระ
     if (doc_type === "206") return "pmt-equipment-installation"; // ติดตั้ง
-    if (doc_type === "207") return "maitenant-item"; // ดำเนินการซ่อมอะไหล่
+    if (doc_type === "207") return "pmt-maitenant-item"; // ดำเนินการซ่อมอะไหล่
 
     else return "#";
 }

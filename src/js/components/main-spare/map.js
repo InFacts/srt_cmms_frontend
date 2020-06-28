@@ -148,13 +148,13 @@ class Map extends React.Component {
                             <h4 className="head-title" style={{ color: "black" }}>ระบบบริหารข้อมูลอะไหล่ - Spare</h4>
                             <div id="blackground-white" style={ changeTheam() === true ? { borderRadius: "25px", border: "2px dashed gray", height: "380px"} : {height: "380px"} }>
 
-                                <Link to="/goods-receipt2"><img alt='some value' src={changeTheam() === true ? OneoneNew : Oneone} 
+                                <Link to="/spare-goods-receipt2"><img alt='some value' src={changeTheam() === true ? OneoneNew : Oneone} 
                                 className={changeTheam() === true ? "one-one-new" : "one-one"} style={ changeTheam() === true ? { width: "60px" } : {} }/></Link>
 
                                 <img alt='some value' src={changeTheam() === true ? OnetwoNew : Onetwo} 
                                 className={changeTheam() === true ? "one-two-new" : "one-two"} style={ changeTheam() === true ? { width: "85px" } : {} } />
 
-                                <Link to="/goods-receipt-no-po"><img alt='some value' src={changeTheam() === true ? OnethreeNew : Onethree} 
+                                <Link to="/spare-goods-receipt-no-po"><img alt='some value' src={changeTheam() === true ? OnethreeNew : Onethree} 
                                 className={changeTheam() === true ? "one-three-new" : "one-three"} style={ changeTheam() === true ? { width: "85px" } : {} } /></Link>
 
                                 <img alt='some value' src={Arrow1} className="arrow1" />
@@ -164,17 +164,17 @@ class Map extends React.Component {
                                 <img alt='some value' src={Text2} className="text2" />
                                 <img alt='some value' src={Text3} className="text3" />
 
-                                <Link to="/warehouse"><img alt='some value' src={changeTheam() === true ? CenterNew : Center} 
+                                <Link to="/spare-warehouse"><img alt='some value' src={changeTheam() === true ? CenterNew : Center} 
                                 className={changeTheam() === true ? "center-new" : "center"} style={ changeTheam() === true ? { width: "75px" } : {} } /></Link>
 
                                 <img alt='some value' src={Text4} className="text4" />
-                                <Link to="/goods-usage"><img alt='some value' src={changeTheam() === true ? TwooneNew : Twoone} 
+                                <Link to="/spare-goods-usage"><img alt='some value' src={changeTheam() === true ? TwooneNew : Twoone} 
                                 className={changeTheam() === true ? "two-one-new" : "two-one"} style={ changeTheam() === true ? { width: "75px" } : {} }  /></Link>
 
-                                <Link to="/goods-fix"><img alt='some value' src={changeTheam() === true ? TwotwoNew : Twotwo} 
+                                <Link to="/spare-goods-fix"><img alt='some value' src={changeTheam() === true ? TwotwoNew : Twotwo} 
                                 className={changeTheam() === true ? "two-two-new" : "two-two"} style={ changeTheam() === true ? { width: "70px" } : {} }  /></Link>
 
-                                <Link to="/goods-issue"><img alt='some value' src={changeTheam() === true ? TwothreeNew : Twothree} 
+                                <Link to="/spare-goods-issue"><img alt='some value' src={changeTheam() === true ? TwothreeNew : Twothree} 
                                 className={changeTheam() === true ? "two-three-new" : "two-three"} style={ changeTheam() === true ? { width: "80px" } : {} }  /></Link>
 
                                 <img alt='some value' src={Arrow4} className="arrow4" />
@@ -184,7 +184,7 @@ class Map extends React.Component {
                                 <img alt='some value' src={Text6} className="text7" />
                                 <img alt='some value' src={Text7} className="text6" />
 
-                                <Link to="/inventory-transfer"><img alt='some value' src={changeTheam() === true ? ThreeoneNew : Threeone} 
+                                <Link to="/spare-inventory-transfer"><img alt='some value' src={changeTheam() === true ? ThreeoneNew : Threeone} 
                                 className={changeTheam() === true ? "three-one-new" : "three-one"} style={ changeTheam() === true ? { width: "85px" } : {} }/></Link>
 
                                 <img alt='some value' src={changeTheam() === true ? ThreethreeNew : Threetwo} 
@@ -200,7 +200,7 @@ class Map extends React.Component {
                                 <Link to="/track"><img alt='some value' src={changeTheam() === true ? FouroneNew : Fourone} 
                                 className={changeTheam() === true ? "four-one-new" : "four-one"} style={ changeTheam() === true ? { width: "70px" } : {} } /></Link>
 
-                                <Link to="/item-master-data"><img alt='some value' src={changeTheam() === true ? FourtwoNew : Fourtwo} 
+                                <Link to="/spare-item-master-data"><img alt='some value' src={changeTheam() === true ? FourtwoNew : Fourtwo} 
                                 className={changeTheam() === true ? "four-two-new" : "four-two"} style={ changeTheam() === true ? { width: "60px" } : {} } /></Link>
 
                                 <img alt='some value' src={changeTheam() === true ? FourthreeNew : Fourthree} 
@@ -214,8 +214,8 @@ class Map extends React.Component {
                                     <button className="p-contextual-menu__toggle" style={{ border: "none", padding: "0" }} aria-controls="menu-1" aria-expanded="false" aria-haspopup="true"><img alt='some value' src={Dropdown} /></button>
                                     <span className="p-contextual-menu__dropdown" id="menu-1" aria-hidden="true" aria-label="submenu">
                                         <span className="p-contextual-menu__group">
-                                            <Link to="/goods-return" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>คืนอะไหล่</Link>
-                                            <Link to="/goods-receipt-fix" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รับคืนอะไหล่ส่งซ่อม</Link>
+                                            <Link to="/spare-goods-return" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>คืนอะไหล่</Link>
+                                            <Link to="/spare-goods-receipt-fix" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รับคืนอะไหล่ส่งซ่อม</Link>
                                         </span>
                                     </span>
                                 </span>
@@ -223,8 +223,8 @@ class Map extends React.Component {
                                     <button className="p-contextual-menu__toggle" style={{ border: "none", padding: "0" }} aria-controls="menu-2" aria-expanded="false" aria-haspopup="true"><img alt='some value' src={Dropdown} /></button>
                                     <span className="p-contextual-menu__dropdown" id="menu-2" aria-hidden="true" aria-label="submenu">
                                         <span className="p-contextual-menu__group">
-                                            <Link to="/physical-count" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>ตรวจนับสินค้า</Link>
-                                            <Link to="/inventory-adjustment" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>ปรับปรุงจำนวนอะไหล่</Link>
+                                            <Link to="/spare-physical-count" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>ตรวจนับสินค้า</Link>
+                                            <Link to="/spare-inventory-adjustment" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>ปรับปรุงจำนวนอะไหล่</Link>
                                         </span>
                                     </span>
                                 </span>
@@ -232,8 +232,8 @@ class Map extends React.Component {
                                     <button className="p-contextual-menu__toggle" style={{ border: "none", padding: "0" }} aria-controls="menu-3" aria-expanded="false" aria-haspopup="true"><img alt='some value' src={Dropdown} /></button>
                                     <span className="p-contextual-menu__dropdown" id="menu-3" aria-hidden="true" aria-label="submenu">
                                         <span className="p-contextual-menu__group">
-                                            <Link to="/salvage-return" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>คืนซากอะไหล่</Link>
-                                            <Link to="/salvage-sold" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>จำหหน่ายซากอะไหล่</Link>
+                                            <Link to="/spare-salvage-return" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>คืนซากอะไหล่</Link>
+                                            <Link to="/spare-salvage-sold" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>จำหหน่ายซากอะไหล่</Link>
                                         </span>
                                     </span>
                                 </span>
@@ -241,8 +241,8 @@ class Map extends React.Component {
                                     <button className="p-contextual-menu__toggle" style={{ border: "none", padding: "0" }} aria-controls="menu-4" aria-expanded="false" aria-haspopup="true"><img alt='some value' src={Dropdown} /></button>
                                     <span className="p-contextual-menu__dropdown" id="menu-4" aria-hidden="true" aria-label="submenu">
                                         <span className="p-contextual-menu__group">
-                                            <Link to="/report-b22" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รายงาน บ.22 (Spare6)</Link>
-                                            <Link to="/report-s-1" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รายงาน ส.1 (Spare7)</Link>
+                                            <Link to="/spare-report-b22" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รายงาน บ.22 (Spare6)</Link>
+                                            <Link to="/spare-report-s-1" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รายงาน ส.1 (Spare7)</Link>
                                         </span>
                                     </span>
                                 </span>

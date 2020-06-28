@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { loadNotify, readNotify } from '../../redux/modules/notify.js';
 
 import { Link } from 'react-router-dom';
-import logo from '../../../images/logo.png';
+import logo from '../../../images/home.svg';
 import { useDispatch, useSelector , shallowEqual} from 'react-redux'
 
 import { setupAllSubNav } from '../../helper';
@@ -38,8 +38,14 @@ const MainModule = (props) => {
         if (url === "/main") {
             return "#FFFFFF";
         }
+        if (url === "/main-spare") {
+            return "#F6A79B";
+        }
         if (url === "/main-pmt" || url === "/pmt") {
             return "#9ADFF9";
+        }
+        if (url === "/main-als" || url === "/als") {
+            return "#CCE7B2";
         }
     }
 
@@ -58,7 +64,8 @@ const MainModule = (props) => {
                         <ul className="p-navigation__items" role="menu" style={{ height: "49px" }}>
                             <li className="nav-li">
                                 <Link to="/main">
-                                    <img src={logo} alt="logo" width="160px" />
+                                    <img src={logo} alt="logo" width="200px" />
+                                    
                                 </Link>
                             </li>
 

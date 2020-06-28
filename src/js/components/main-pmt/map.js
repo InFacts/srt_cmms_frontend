@@ -164,7 +164,7 @@ class Map extends React.Component {
                                 <img alt='some value' src={Text5} className="Ptext5" />
                                 <img alt='some value' src={Text6} className="Ptext6" />
 
-                                <Link to="/ss-101"><img alt='some value' src={changeTheam() === true ? ThreeoneNew : Threeone} 
+                                <Link to="/pmt-ss-101"><img alt='some value' src={changeTheam() === true ? ThreeoneNew : Threeone} 
                                 className={changeTheam() === true ? "Pthree-one-new" : "Pthree-one"} style={ changeTheam() === true ? { width: "50px" } : {} } /></Link>
 
                                 <Link to="/pmt-fixed-asset"><img alt='some value' src={changeTheam() === true ? ThreethreeNew : Threethree} 
@@ -177,7 +177,7 @@ class Map extends React.Component {
                                 <Link to="/track"><img alt='some value' src={changeTheam() === true ? FouroneNew : Fourone} 
                                 className={changeTheam() === true ? "Pfour-one-new" : "Pfour-one"} style={ changeTheam() === true ? { width: "65px" } : {} } /></Link>
 
-                                <Link to="/maitenant-item"><img alt='some value' src={changeTheam() === true ? FourtwoNew : Fourtwo} 
+                                <Link to="/pmt-maitenant-item"><img alt='some value' src={changeTheam() === true ? FourtwoNew : Fourtwo} 
                                 className={changeTheam() === true ? "Pfour-two-new" : "Pfour-two"} style={ changeTheam() === true ? { width: "80px" } : {} } /></Link>
 
                                 <img alt='some value' src={Text8} className="Ptext8" />
