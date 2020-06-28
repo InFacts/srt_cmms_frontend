@@ -71,7 +71,7 @@ const TopContent = (props) => {
                     <div className="card-body">ระบบบริหารข้อมูลอะไหล่</div>
                     <div className="card-footer">ระบบบริหารข้อมูลอะไหล่สำหรับซ่อมบำรุง</div>
                   </div>
-                  <span className="p-tooltip__message" role="tooltip" id="btm-cntr">ระบบบริหารข้อมูลอะไหล่</span>
+                  <span className="p-tooltip__message edit_p_tooltip__message" role="tooltip" id="btm-cntr">ระบบบริหารข้อมูลอะไหล่</span>
                 </div>
               </Link>
             </div>
@@ -97,7 +97,7 @@ const TopContent = (props) => {
                       ระบบบริหารข้อมูลอะไหล่สำหรับซ่อมบำรุง
                             </div>
                   </div>
-                  <span className="p-tooltip__message" role="tooltip" id="btm-cntr">ระบบบริหารงานซ่อมบำรุง</span>
+                  <span className="p-tooltip__message edit_p_tooltip__message" role="tooltip" id="btm-cntr">ระบบบริหารงานซ่อมบำรุง</span>
                 </div>
               </Link>
             </div>
@@ -123,7 +123,7 @@ const TopContent = (props) => {
                       ระบบบริหารข้อมูลอะไหล่สำหรับซ่อมบำรุง
                     </div>
                   </div>
-                  <span className="p-tooltip__message" role="tooltip" id="btm-cntr">ระบบบริหารงานซ่อมบำรุง</span>
+                  <span className="p-tooltip__message edit_p_tooltip__message" role="tooltip" id="btm-cntr">ระบบบริหารงานซ่อมบำรุง</span>
                 </div>
               </Link>
             </div>
@@ -149,7 +149,7 @@ const TopContent = (props) => {
                       ระบบบริหารข้อมูลอะไหล่สำหรับซ่อมบำรุง
                       </div>
                   </div>
-                  <span className="p-tooltip__message" role="tooltip" id="btm-cntr">สถานะรอการอนุมัติ</span>
+                  <span className="p-tooltip__message edit_p_tooltip__message" role="tooltip" id="btm-cntr">สถานะรอการอนุมัติ</span>
                 </div>
               </Link>
             </div>
@@ -159,13 +159,13 @@ const TopContent = (props) => {
                 <div className="card p-tooltip--btm-center" aria-describedby="btm-cntr"
                   style={values.line_position_permission.length !== 0 && values.line_position_permission[0].module_5 ? {} : { background: "gray" }}>
                   <div className="image">
-                    <img src={Icon} alt="Generic placeholder thumbnail" />
+                    <img src={Spare} alt="Generic placeholder thumbnail" />
                   </div>
                   <div className="content ">
                     <div className="card-body">บริหารจัดการผู้ใช้งาน</div>
                     <div className="card-footer ">ระบบบริหารข้อมูลอะไหล่สำหรับซ่อมบำรุง</div>
                   </div>
-                  <span className="p-tooltip__message" role="tooltip" id="btm-cntr">สถานะรอการอนุมัติ</span>
+                  <span className="p-tooltip__message edit_p_tooltip__message" role="tooltip" id="btm-cntr">สถานะรอการอนุมัติ</span>
                 </div>
               </Link>
             </div>
@@ -174,13 +174,13 @@ const TopContent = (props) => {
               <Link to="/approval-flow">
                 <div className="card p-tooltip--btm-center" aria-describedby="btm-cntr">
                   <div className="image ">
-                    <img src={Icon} alt="Generic placeholder thumbnail" />
+                    <img src={Spare} alt="Generic placeholder thumbnail" />
                   </div>
                   <div className="content ">
                     <div className="card-body">บริหารจัดการเส้นทางเอกสาร</div>
                     <div className="card-footer ">ระบบบริหารข้อมูลอะไหล่สำหรับซ่อมบำรุง</div>
                   </div>
-                  <span className="p-tooltip__message" role="tooltip" id="btm-cntr">สถานะรอการอนุมัติ</span>
+                  <span className="p-tooltip__message edit_p_tooltip__message" role="tooltip" id="btm-cntr">สถานะรอการอนุมัติ</span>
                 </div>
               </Link>
             </div>

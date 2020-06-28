@@ -264,7 +264,7 @@ export const getNumberFromEscapedString = (escapedString) => {
 }
 
 export const isValidInternalDocumentIDFormat = (internal_document_id) => {
-    const internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SD|WR|WO|WP|SS|MI|EI)-[A-Z]{3}-\d{4}\/\d{4}$/g;
+    const internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SD|WR|WO|WP|SS|MI|EI|CS)-[A-Z]{3}-\d{4}\/\d{4}$/g;
     return internalDocumentIDRegex.test(internal_document_id);
 }
 export const isValidInternalDocumentIDDraftFormat = (internal_document_id) => {
@@ -676,7 +676,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             request_by: values.request_by,
             location_district_id: values.location_district_id ? parseInt(values.location_district_id) : null,
             departed_on: values.departed_on + ':00+00:00',
-            cargo_id: values.cargo_id ? parseInt(values.cargo_id) : null,
+            // cargo_id: values.cargo_id ? parseInt(values.cargo_id) : null,
             auditor_name: values.auditor_name,
             auditor_position_id: values.auditor_position_id ? parseInt(values.auditor_position_id) : null,
             fixer_name: values.fixer_name,
@@ -688,17 +688,29 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         values.loss_line_items = removeEmptyLineItems(values.loss_line_items);
         values.line_items = removeEmptyLineItems(values.line_items);
 
-        let loss_line_item_part = values.loss_line_items;
+        let loss_line_item_part = values.loss_line_items
+        loss_line_item_part.map((line_items, index) => {
+            loss_line_item_part[index].description = line_items.description
+            loss_line_item_part[index].document_id = values.document_id
+            loss_line_item_part[index].line_number = index+1
+            loss_line_item_part[index].price = parseInt(line_items.price)
+            loss_line_item_part[index].quantity = parseInt(line_items.quantity)
+            loss_line_item_part[index].remark = line_items.remark
+            loss_line_item_part[index].uom_code = parseInt(line_items.uom_code)
+        })
+
         let ss101_line_item_part = values.line_items
         ss101_line_item_part.map((line_items, index) => {
             ss101_line_item_part[index].item_id = line_items.item_id
-            ss101_line_item_part[index].item_status_id = parseInt(line_items.item_status_id)
+            ss101_line_item_part[index].item_status_item_status_id = parseInt(line_items.item_status_id)
             ss101_line_item_part[index].remark = line_items.remark
             ss101_line_item_part[index].document_id = values.document_id
+            ss101_line_item_part[index].line_number = index+1
             delete ss101_line_item_part[index].internal_item_id
             delete ss101_line_item_part[index].description
             delete ss101_line_item_part[index].equipment_item_id
             delete ss101_line_item_part[index].equipment_status_id
+            delete ss101_line_item_part[index].item_status_id
         })
 
         let ss101_part_big = {
@@ -787,7 +799,10 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             specific: equipment_installation_part,
         }
     } else if (document_type_id === DOCUMENT_TYPE_ID.SELECTOR) {
-        let document_part_selector = {
+
+        console.log("data values", values)
+
+        let selector_pm_plan = {
             ...DOCUMENT_SCHEMA,
             document_status_id: 1,
             document_action_type_id: 1,
@@ -799,26 +814,36 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             document_date: values.document_date + 'T00:00:00+00:00',
         }
 
+        // ต้องเป็น Array
         let selector_checklist_group_part = {
-            document_id: values.document_id,
-            // name_group: values.line_custom[index].checklist_group_name,
-            unit_maintenance_location_id: 0,
-            // selector_checklist: selector_checklist_part
+
         }
 
-        let specific_selector = {
-            document_id: values.document_id,
-            name: values.name,
-            active: values.active === "1" ? true : false,
-            node_id: values.node_id,
-            station_id: values.station_id,
-            selector_checklist_group: selector_checklist_group_part
+        // ต้องเป็น Array
+        let selector_checklist_part = {
+
         }
 
-        return {
-            document: document_part_selector,
-            specific: specific_selector,
+        // ต้องเป็น Array
+        let selector_checklist_line_item_part = {
+
         }
+
+        // ต้องเป็น Array
+        let selector_checklist_line_item_use_equipment_part = {
+
+        }
+
+        console.log("selector_pm_plan", selector_pm_plan)
+        console.log("selector_checklist_group", selector_checklist_group_part)
+        console.log("selector_checklist", selector_checklist_part)
+        console.log("selector_checklist_line_item", selector_checklist_line_item_part)
+        console.log("selector_checklist_line_item_use_equipment", selector_checklist_line_item_use_equipment_part)
+
+        // return {
+        //     document: document_part_selector,
+        //     specific: specific_selector,
+        // }
     }
 }
 
@@ -1224,6 +1249,20 @@ export const fetchPositionPermissionData = (position_id) => new Promise((resolve
             reject(err)
         });
 });
+
+// Get Position Permission For Admin
+export const fetchPositionPermissionDataSearchPositionName = (position_name) => new Promise((resolve, reject) => {
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/admin/position-permission?position_name=${position_name}`;
+    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((res) => {
+            // console.log("res", res)
+            resolve(res.data.results);
+        })
+        .catch((err) => {
+            reject(err)
+        });
+});
+
 
 // Check Document Status from 
 export const DOCUMENT_STATUS = {
@@ -1936,6 +1975,26 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
                     validateField("created_by_user_employee_id");
                     validateField("created_by_admin_employee_id");
                     validateField("internal_item_id");
+                    return resolve(null);
+
+                } else { //If Mode add, need to error duplicate Document ID
+                    // setFieldValue('document_id', '', false); 
+                    if (values.document_id || footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve
+                        console.log("i am in mode add, saved and wanting to approve")
+                        error = '';
+                    } else {
+                        console.log("I AM DUPLICATE")
+                        error = 'Duplicate Document ID';
+                    }
+                }
+            } else if (document_type_group_id === DOCUMENT_TYPE_ID.SELECTOR) {
+                console.log("i know i am in SELECTOR!!")
+                if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
+                    && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
+                    console.log("validateInternalDocumentIDField:: I got document ID ")
+                    // setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
+                    validateField("created_by_user_employee_id");
+                    validateField("created_by_admin_employee_id");
                     return resolve(null);
 
                 } else { //If Mode add, need to error duplicate Document ID

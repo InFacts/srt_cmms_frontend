@@ -130,7 +130,7 @@ const BottomContent = (props) => {
                         </div>
                         <div className="grid_3 alpha omega">
                             <DateTimeInput name="accident_on" validate={validateDocumentAccidentOnField} cssStyle={{ left: "-160px", top: "14px" }}
-                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="9"/>
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="9" />
                         </div>
 
                         <div className="clear" />
@@ -141,7 +141,7 @@ const BottomContent = (props) => {
                         </div>
                         <div className="grid_3 alpha omega">
                             <DateTimeInput name="request_on" validate={validateDocumentRequestOnField} cssStyle={{ left: "-160px", top: "14px" }}
-                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="10"/>
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="10" />
                         </div>
 
                         <div className="clear" />
@@ -200,7 +200,7 @@ const BottomContent = (props) => {
                         </div>
                         <div className="grid_3 alpha omega">
                             <DateTimeInput name="departed_on" validate={validateDocumentDepartedOnField} cssStyle={{ left: "-160px", top: "14px" }}
-                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="14"/>
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="14" />
                         </div>
 
                         <div className="clear" />
@@ -211,7 +211,7 @@ const BottomContent = (props) => {
                         </div>
                         <div className="grid_3 alpha omega">
                             <DateTimeInput name="arrived_on" validate={validateDocumentArrivedOnField} cssStyle={{ left: "-160px", top: "14px" }}
-                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="15"/>
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="15" />
                         </div>
 
                         <div className="clear" />
@@ -235,11 +235,7 @@ const BottomContent = (props) => {
                             <SelectNoChildrenInput name="system_type_group_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentSystemTypeGroupIDnField} cssStyle={{ left: "-160px", top: "14px" }} tabIndex="17">
                                 <option value='' selected></option>
                                 {factSystemTypeGroup.items.map((systemTypeGroup) => {
-                                    if (systemTypeGroup.system_type_group_id === values.system_type_group_id) {
-                                        return <option key={systemTypeGroup.system_type_group_id} value={systemTypeGroup.system_type_group_id} selected>{systemTypeGroup.system_type_group}</option>
-                                    } else {
-                                        return <option key={systemTypeGroup.system_type_group_id} value={systemTypeGroup.system_type_group_id}>{systemTypeGroup.system_type_group}</option>
-                                    }
+                                    return <option key={systemTypeGroup.system_type_group_id} value={systemTypeGroup.system_type_group_id}>{systemTypeGroup.system_type_group}</option>
                                 })}
                             </SelectNoChildrenInput>
                         </div>
@@ -254,11 +250,8 @@ const BottomContent = (props) => {
                             <SelectNoChildrenInput name="sub_maintenance_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentSystemTypeIDField} cssStyle={{ left: "-160px", top: "14px" }} tabIndex="18">
                                 <option value='' selected></option>
                                 {factSystemType.items.map((factSystemType) => {
-                                    if (factSystemType.system_type_id === values.system_type_id) {
-                                        return <option key={factSystemType.system_type_id} value={factSystemType.system_type_id} selected>{factSystemType.abbreviation} - {factSystemType.system_type}</option>
-                                    } else {
-                                        return <option key={factSystemType.system_type_id} value={factSystemType.system_type_id}>{factSystemType.abbreviation} - {factSystemType.system_type}</option>
-                                    }
+                                    if (values.system_type_group_id == factSystemType.system_type_group_id)
+                                    return <option key={factSystemType.system_type_id} value={factSystemType.system_type_id}>{factSystemType.abbreviation}</option>
                                 })}
                             </SelectNoChildrenInput>
                         </div>
@@ -273,11 +266,7 @@ const BottomContent = (props) => {
                             <SelectNoChildrenInput name="hardware_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="19">
                                 <option value=''></option>
                                 {factHardwareType.items.map((factHardwareType) => {
-                                    if (factHardwareType.hardware_type_id === values.hardware_type_id) {
-                                        return <option key={factHardwareType.hardware_type_id} value={factHardwareType.hardware_type_id} selected>{factHardwareType.abbreviation} - {factHardwareType.system_type}</option>
-                                    } else {
-                                        return <option key={factHardwareType.hardware_type_id} value={factHardwareType.hardware_type_id}>{factHardwareType.abbreviation} - {factHardwareType.system_type}</option>
-                                    }
+                                    return <option key={factHardwareType.hardware_type_id} value={factHardwareType.hardware_type_id}>{factHardwareType.abbreviation} - {factHardwareType.system_type}</option>
                                 })}
                             </SelectNoChildrenInput>
                         </div>
@@ -513,7 +502,7 @@ const BottomContent = (props) => {
                         </div>
                         <div className="grid_4 alpha omega">
                             <TextInput name="member_2"
-                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="37"/>
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="37" />
                         </div>
                         <Label>ตำแหน่ง</Label>
                         <div className="grid_4 alpha omega">

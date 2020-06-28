@@ -919,3 +919,10 @@ path.map-region:hover{
 .closebtn:hover {
   color: black;
 }
+
+.p-tooltip__message.edit_p_tooltip__message {
+  background-color: gray;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+}

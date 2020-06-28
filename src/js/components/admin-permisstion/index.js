@@ -65,7 +65,7 @@ const EnhancedPermisstionAdminDataComponent = withFormik({
     mapPropsToValues: (props) => ({
         // Field ที่ให้ User กรอก
         // Top Content
-        position_id: '',
+        position_name: '',
 
         // Bottom Content
         line_position_permission: [],

@@ -5,10 +5,10 @@ import { loadNotify, readNotify } from '../../redux/modules/notify.js';
 
 import { Link } from 'react-router-dom';
 import logo from '../../../images/home.svg';
-import { useDispatch, useSelector , shallowEqual} from 'react-redux'
+import { useDispatch, useSelector, shallowEqual } from 'react-redux'
 
 import { setupAllSubNav } from '../../helper';
-import {identifyEndpoinsHelper} from '../../helper';
+import { identifyEndpoinsHelper } from '../../helper';
 
 const MainModule = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }));
@@ -38,13 +38,28 @@ const MainModule = (props) => {
         if (url === "/main") {
             return "#FFFFFF";
         }
-        if (url === "/main-spare") {
+        if (url === "/main-spare" || url === "/spare-item-master-data"
+            || url === "/spare-goods-receipt2" || url === "/spare-goods-receipt-no-po"
+            || url === "/spare-goods-return" || url === "/spare-goods-fix"
+            || url === "/spare-goods-receipt-fix" || url === "/spare-goods-usage"
+            || url === "/spare-goods-issue" || url === "/spare-inventory-transfer"
+            || url === "/spare-salvage-return" || url === "/spare-salvage-sold"
+            || url === "/spare-physical-count" || url === "/spare-inventory-adjustment"
+            || url === "/spare-report-s-1" || url === "/spare-warehouse"
+            || url === "/spare-report-b22") {
             return "#F6A79B";
         }
-        if (url === "/main-pmt" || url === "/pmt") {
+        if (url === "/main-pmt" || url === "/pmt-work-request"
+            || url === "/pmt-work-order" || url === "/pmt-maitenant-item"
+            || url === "/pmt-ss-101" || url === "/pmt-equipment-master"
+            || url === "/pmt-equipment-installation" || url === "/pmt-fixed-asset"
+            || url === "/pmt-create-checklist" || url === "/pmt-all-checklist"
+            || url === "/pmt-create-schedule-checklist") {
             return "#9ADFF9";
         }
-        if (url === "/main-als" || url === "/als") {
+        if (url === "/main-als" || url === "/als-spare"
+            || url === "/als-equipment-status" || url === "/als-summary-ss101"
+            || url === "/als-preventive-maintenance" || url === "/als-plan-preventive-maintenance") {
             return "#CCE7B2";
         }
     }
@@ -54,23 +69,45 @@ const MainModule = (props) => {
         return null
     }
     else {
-        // setCheckNav(1);
-        // console.log("checkNav", checkNav)
         return (
             <div>
-                <div id="header" style={{ backgroundColor: `${colorTopBar()}`}}>
+                <div id="header" style={{ backgroundColor: `${colorTopBar()}` }}>
                     <div className="container_12 clearfix">
 
                         <ul className="p-navigation__items" role="menu" style={{ height: "49px" }}>
                             <li className="nav-li">
                                 <Link to="/main">
                                     <img src={logo} alt="logo" width="200px" />
-                                    
+
                                 </Link>
                             </li>
 
-                            <li className="p-navigation__item p-subnav a nav-li" style={{ marginRight: "10px", marginLeft: "auto" }} role="menuitem" id="link-1">
-                                <Link to="#" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu" style={{ paddingRight: "10px" }} onClick={() => setCheckNav(1)}>
+                            {
+                                url !== "/main"
+                                    ?
+                                    <>
+                                        <li className="nav-li box-red-top-bar">
+                                            <Link to="/main-spare">ระบบบริหารข้อมูลอะไหล่</Link>
+                                        </li>
+                                        <li className="nav-li box-blue-top-bar">
+                                            <Link to="/main-pmt">ระบบบริหารงานซ่อมบำรุง</Link>
+                                        </li>
+
+                                        <li className="nav-li box-green-top-bar">
+                                            <Link to="/main-als">ระบบวิเคราห์ะวางแผนทรัพยากรซ่อมบำรุง</Link>
+                                        </li>
+
+                                        <li className="nav-li box-yellow-top-bar">
+                                            <Link to="/track">สถานรออนุมัติ</Link>
+                                        </li>
+                                    </>
+                                    :
+                                    null
+                            }
+
+                            <li className="p-navigation__item p-subnav a nav-li" style={{ marginRight: "0", marginLeft: "auto" }} role="menuitem" id="link-1">
+                                <Link to="#" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu" style={{ padding: "10px 0 0 0" }}
+                                    onClick={() => setCheckNav(1)}>
                                     <i className="fas fa-bell" style={{ fontSize: "24px", color: "#823D35" }}></i>
                                     {props.notify.not_read_count !== 0
                                         ?
@@ -92,10 +129,10 @@ const MainModule = (props) => {
                                                     <Link to={identifyEndpoins(notify.document_type_id) + "?internal_document_id=" + notify.internal_document_id + "&document_id=" + notify.document_id} className="p-subnav__item sub_notify" onClick={(e) => props.readNotify(e)} style={notify.is_read.data[0] === 1 ? {} : { backgroundColor: "#edf2fa" }} >
                                                         <div>
                                                             <i className="fas fa-file-alt float-left" style={{ fontSize: "30px", "marginTop": "16px", "marginLeft": "10px", "color": "#111" }}></i>
-                                                            <p className="cancel-default_notify" style={{"color": "#111"}}>{notify.created_on.replace("T", " เวลา ").slice(0, 21) + " น."}</p>
-                                                            <p className="cancel-default_notify" style={{"color": "#111"}}>ประเภท: {notify.document_type_name}</p>
-                                                            <p className="cancel-default_notify" style={{"color": "#111"}}>เลขที่: {notify.internal_document_id}</p>
-                                                            <p className="cancel-default_notify" style={{"color": "#111"}}>{notify.action_document}</p>
+                                                            <p className="cancel-default_notify" style={{ "color": "#111" }}>{notify.created_on.replace("T", " เวลา ").slice(0, 21) + " น."}</p>
+                                                            <p className="cancel-default_notify" style={{ "color": "#111" }}>ประเภท: {notify.document_type_name}</p>
+                                                            <p className="cancel-default_notify" style={{ "color": "#111" }}>เลขที่: {notify.internal_document_id}</p>
+                                                            <p className="cancel-default_notify" style={{ "color": "#111" }}>{notify.action_document}</p>
                                                         </div>
                                                     </Link>
                                                 </li>
@@ -104,16 +141,18 @@ const MainModule = (props) => {
                                     }
                                 </ul>
                             </li>
-                            <li className="p-navigation__item p-subnav a nav-li" style={{ marginRight: "0"}} role="menuitem" id="link-1">
-                                <Link to="#" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu" style={{ paddingRight: "10px" }} onClick={() => setCheckNav(1)}>
+
+                            <li className="p-navigation__item p-subnav a nav-li" style={{ marginLeft: "15px" }} role="menuitem" id="link-1">
+                                <Link to="#" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu" style={{ padding: "10px 0 0 0" }}
+                                    onClick={() => setCheckNav(1)}>
                                     <i className="fas fa-user-circle" style={{ fontSize: "24px", color: "#823D35" }}></i>
                                 </Link>
                                 <ul className="p-subnav__items--right" id="account-menu" aria-hidden="true">
                                     <li>
-                                        <Link to="/profile" className="p-subnav__item sub" style={{ color: "#111"}}>โปรไฟล์</Link>
+                                        <Link to="/profile" className="p-subnav__item sub" style={{ color: "#111" }}>โปรไฟล์</Link>
                                     </li>
                                     <li>
-                                        <Link to="/" className="p-subnav__item sub" style={{ color: "#111"}} onClick={(e) => {if (window.confirm('คุณต้องการออกจากระบบใช่หรือไม่')) {return localStorage.removeItem('token_auth') } else { e.preventDefault(); }}} >ออกจากระบบ</Link>
+                                        <Link to="/" className="p-subnav__item sub" style={{ color: "#111" }} onClick={(e) => { if (window.confirm('คุณต้องการออกจากระบบใช่หรือไม่')) { return localStorage.removeItem('token_auth') } else { e.preventDefault(); } }} >ออกจากระบบ</Link>
                                     </li>
                                 </ul>
                             </li>

@@ -7,7 +7,7 @@ import SelectNoChildrenInput from '../common/formik-select-no-children';
 
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import { FACTS } from '../../redux/modules/api/fact';
-import { fetchPositionPermissionData } from '../../helper';
+import { fetchPositionPermissionDataSearchPositionName } from '../../helper';
 import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
 
 import { useFormikContext, useField } from 'formik';
@@ -21,7 +21,7 @@ const TopContent = (props) => {
 
     let module = [];
     const searchPermisstion = () => new Promise(resolve => {
-        fetchPositionPermissionData(values.position_id)
+        fetchPositionPermissionDataSearchPositionName(values.position_name)
             .then((position_permission) => {
                 console.log("position_permission", position_permission)
                 position_permission.map((list_module) => {
@@ -56,7 +56,7 @@ const TopContent = (props) => {
                                 <option value={list_position.position_id} key={list_position.position_id}>{list_position.name}</option>
                             ))}
                         </SelectNoChildrenInput> */}
-                        <TextInput name='position_id'
+                        <TextInput name='position_name'
                             // validate={validateInternalDocumentIDField}
                         />
                     </div>

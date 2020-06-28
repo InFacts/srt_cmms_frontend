@@ -126,17 +126,16 @@ const BottomContent = (props) => {
                       <tr>
                         <th className="edit-padding text-center">{line_number}</th>
                         <td className="edit-padding">
-                          <SelectNoChildrenInput name={`line_custom[${index}].checklist_group_name`} disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                          <SelectNoChildrenInput name={`line_custom[${index}].checklist_group_id`} disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} >
                             <option value=''></option>
                             {factChecklistCustom.items.map((custom_group) => (
-                              <option value={custom_group.checklist_group_name} key={custom_group.checklist_group_name}> {custom_group.checklist_group_name} </option>
+                              <option value={custom_group.checklist_group_id} key={custom_group.checklist_group_id}> {custom_group.checklist_group_name} </option>
                             ))}
                           </SelectNoChildrenInput>
                         </td>
                         <td className="edit-padding">
                           <SelectNoChildrenInput name={`line_custom[${index}].checklist_id`} disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} >
                             <option value=''></option>
-                            {console.log("factChecklist.items", factChecklist.items)}
                             {factChecklist.items.map((custom_group) => {
                               if (values.line_custom[index].checklist_group_id == custom_group.checklist_group_id) {
                               return <option value={custom_group.checklist_id} key={custom_group.checklist_id}> {custom_group.checklist_name} </option>
