@@ -56,11 +56,15 @@ const TopContent = (props) => {
         console.log("I Got data", res.data.checklist_line_item)
         if (res.data.checklist_line_item.name === name) { // If input document ID exists
           if (toolbar.mode === TOOLBAR_MODE.SEARCH && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
+            
             setFieldValue("checklist_line_item", res.data.checklist_line_item.checklist_line_item, false)
             setFieldValue("checklist_id", res.data.checklist_line_item.checklist_id, false)
             setFieldValue("freq", res.data.checklist_line_item.freq, false)
             setFieldValue("freq_unit_id", res.data.checklist_line_item.freq_unit_id, false)
             setFieldValue("active", res.data.checklist_line_item.active.data[0], false)
+            setFieldValue("checklist_group_id", res.data.checklist_line_item.checklist.checklist_group_id, false)
+            setFieldValue("checklist_id", res.data.checklist_line_item.checklist.checklist_id, false)
+
             for (var i = 0; i < res.data.checklist_line_item.checklist_line_item_use_equipment.length; i++) {
               res.data.checklist_line_item.checklist_line_item_use_equipment[i].internal_item_id = res.data.checklist_line_item.checklist_line_item_use_equipment[i].item.internal_item_id
               res.data.checklist_line_item.checklist_line_item_use_equipment[i].description = res.data.checklist_line_item.checklist_line_item_use_equipment[i].item.description

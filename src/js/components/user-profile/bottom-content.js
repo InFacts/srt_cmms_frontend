@@ -19,6 +19,9 @@ const BottomContent = (props) => {
     const factDivisions = useSelector((state) => ({ ...state.api.fact.divisions }), shallowEqual);
     const factPosition = useSelector((state) => ({ ...state.api.fact.position }), shallowEqual);
 
+    const [alertMessageProfile, setAlertMessageProfile] = useState('1');
+    const [alertMessage, setAlertMessage] = useState('1');
+
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
     const formatDate = (dateISOString) => {
         let date = new Date(dateISOString);
@@ -57,10 +60,12 @@ const BottomContent = (props) => {
                     "email": values.email
                 }
                 console.log("information", information)
-                axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/profile`, information)
+                axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/profile`, information, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
                     .then(res => {
+                        setAlertMessageProfile(true)
                         console.log(res);
                     }).catch(function (err) {
+                        setAlertMessageProfile(false)
                         console.log("err", err)
                     })
             } else if (content === "password") {
@@ -70,10 +75,12 @@ const BottomContent = (props) => {
                     "password_new": values.newpassword
                 }
                 console.log("inpasswordformation", pass)
-                axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/profile/change-password`, pass)
+                axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/profile/change-password`, pass, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
                     .then(res => {
+                        setAlertMessage(true)
                         console.log(res);
                     }).catch(function (err) {
+                        setAlertMessage(false)
                         console.log("err", err)
                     })
             } else if (content === "position") {
@@ -199,7 +206,15 @@ const BottomContent = (props) => {
 
                                 </div>
                             </div>
-
+                            {
+                                alertMessageProfile === true || alertMessageProfile === false
+                                    ?
+                                    <div className={`alert ${alertMessageProfile === false ? `red` : ''} mt-1`}>
+                                        <span className="closebtn" onClick={() => setAlertMessageProfile("1")}>&times;</span>
+                                        Success! Indicates a successful or positive action.</div>
+                                    :
+                                    null
+                            }
                         </div>
                     </div>
 
@@ -217,8 +232,8 @@ const BottomContent = (props) => {
                             <div className="grid_12">
                                 <div className="grid_2"><p className="cancel-default">รหัสผ่านใหม่</p></div>
                                 <div className="grid_3 pull_0">
-                                    <TextInput name='newpassword' type="password" 
-                                    validate={validateNewPasswordField}
+                                    <TextInput name='newpassword' type="password"
+                                        validate={validateNewPasswordField}
                                         tabIndex="1" />
                                 </div>
                             </div>
@@ -226,14 +241,22 @@ const BottomContent = (props) => {
                                 <div className="grid_2"><p className="cancel-default">ยืนยันรหัสผ่านใหม่</p></div>
                                 <div className="grid_3 pull_0">
                                     <TextInput name='confirmpassword' type="password"
-                                    validate={validateConfirmpasswordField}
+                                        validate={validateConfirmpasswordField}
                                         tabIndex="1" />
                                 </div>
                                 <div className="grid_2 pull_0 float-right ">
                                     <button className="button-blue edit  mr-5" type="button" onClick={(e) => { if (window.confirm('คุณต้องการแก้ไขรหัสผ่านหรือไม่')) { onSave('password') } }} >บันทึก</button>
                                 </div>
                             </div>
-
+                            {
+                                alertMessage === true || alertMessage === false
+                                    ?
+                                    <div className={`alert ${alertMessage === false ? `red` : ''} mt-1`}>
+                                        <span className="closebtn" onClick={() => setAlertMessage("1")}>&times;</span>
+                                        Success! Indicates a successful or positive action.</div>
+                                    :
+                                    null
+                            }
                         </div>
                     </div>
 

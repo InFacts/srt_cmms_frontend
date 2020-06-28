@@ -13,37 +13,40 @@ import TextInput from '../common/formik-text-input'
 import '../../../vender/fontawesome-free/css/all.css';
 import '../../../css/style-register.css';
 const Register = (props) => {
-    const [register, setRegister] = useState(false)
+    // const [register, setRegister] = useState(false)
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
     const factPosition = useSelector((state) => ({ ...state.api.fact.position }), shallowEqual);
     const factUser = useSelector((state) => ({ ...state.api.fact.users }), shallowEqual);
+    const [alertMessage, setAlertMessage] = useState('1');
 
     const handleSubmit = event => {
         event.preventDefault();
-        if (values.password !== values.confirmpassword) {
-            alert("Password did not match: Please try again...");
-        } else {
-            const register =
-            {
-                "create_account": true,
-                "data": {
-                    "employee_id": values.employee_id,
-                    "username": values.username,
-                    "email": values.email,
-                    "firstname_th": values.firstname,
-                    "lastname_th": values.lastname,
-                }
+        let last_user_id;
+        factUser.items.map((user) => {
+            last_user_id = user.user_id;
+        })
+        const register =
+        {
+            "create_account": true,
+            "data": {
+                "user_id": parseInt(last_user_id + 1), 
+                "employee_id": values.employee_id,
+                "username": values.username,
+                "email": values.email,
+                "firstname_th": values.firstname,
+                "lastname_th": values.lastname,
+                "password": values.password,
+                "position_id": values.position_id
             }
-            console.log("Register", register)
-            axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/auth/create-account`, register, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-                .then(res => {
-                    console.log(res);
-                    setRegister(true);
-                }).catch(function (err) {
-                    setRegister(false);
-                })
         }
-
+        console.log("Register", register)
+        axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/auth/create-account`, register, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+            .then(res => {
+                console.log(res);
+                setAlertMessage(true)
+            }).catch(function (err) {
+                setAlertMessage(false)
+            })
     }
 
     const validateFirstnameField = (...args) => validatedataDocumentField("firstname", setFieldValue, ...args)
@@ -58,7 +61,7 @@ const Register = (props) => {
         }
         let items = factUser.items;
         let item = items.find(item => `${item.employee_id}` === `${employee_id}`); // Returns undefined if not found
-        console.log(item)
+        // console.log(item)
         if (item) {
             return 'Duplicate Employee ID';
         } else {
@@ -72,7 +75,7 @@ const Register = (props) => {
         }
         let items = factUser.items;
         let item = items.find(item => `${item.username}` === `${username}`); // Returns undefined if not found
-        console.log(item)
+        // console.log(item)
         if (item) {
             return 'Duplicate Username';
         } else {
@@ -101,7 +104,7 @@ const Register = (props) => {
                         <div className="grid_5">
                             <div className="card-profile">
                                 <div className="card-profile-header">ข้อมูลส่วนตัว</div>
-                                <div className="card-profile-main" style={{ height: "400px"}}>
+                                <div className="card-profile-main" style={{ height: "400px" }}>
 
                                     <div className="container_12">
                                         <div className="container_12"><p className="cancel-default">รหัสพนักงาน</p></div>
@@ -148,7 +151,7 @@ const Register = (props) => {
                         <div className="grid_5 float-right">
                             <div className="card-profile">
                                 <div className="card-profile-header">ตำแหน่งงาน</div>
-                                <div className="card-profile-main" style={{ height: "400px"}}>
+                                <div className="card-profile-main" style={{ height: "400px" }}>
 
                                     <div className="container_12">
                                         <div className="container_12"><p className="cancel-default">ชื่อ</p></div>
@@ -194,6 +197,15 @@ const Register = (props) => {
                         </div>
 
                     </div>
+                    {
+                        alertMessage === true || alertMessage === false
+                            ?
+                            <div className={`alert ${alertMessage === false ? `red` : ''} mt-1`}>
+                                <span className="closebtn" onClick={() => setAlertMessage("1")}>&times;</span>
+                            Success! Indicates a successful or positive action.</div>
+                            :
+                            null
+                    }
                     <div className="container_12 " style={{ "text-align": "center" }}>
                         <button className="button-red from-register-button" style={{ "width": "300px" }} type="submit">สร้างผู้ใช้งาน</button>
                     </div>

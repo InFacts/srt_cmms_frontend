@@ -188,16 +188,18 @@ class Map extends React.Component {
 
                                 <img alt='some value' src={Text10} className="Ptext10" />
 
-                                {/* <span className="p-contextual-menu--left Pdrop-dawn1">
+                                <span className="p-contextual-menu--left Pdrop-dawn1">
                                     <button className="p-contextual-menu__toggle" style={{ border: "none", padding: "0" }} aria-controls="menu-1" aria-expanded="false" aria-haspopup="true"><img alt='some value' src={Dropdown} /></button>
                                     <span className="p-contextual-menu__dropdown" id="menu-1" aria-hidden="true" aria-label="submenu">
                                         <span className="p-contextual-menu__group">
-                                            <Link to="/wo" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>ออกใบสั่งซ่อมบำรุง</Link>
+                                            <Link to="/pmt-create-checklist" className="p-contextual-menu__link" style={{ fontSize: "20px" }}
+                                            >สร้างวาระ</Link>
+                                            <Link to="/pmt-all-checklist" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>แผนการทำวาระ</Link>
                                         </span>
                                     </span>
                                 </span>
 
-                                <span className="p-contextual-menu--left Pdrop-dawn2">
+                                {/* <span className="p-contextual-menu--left Pdrop-dawn2">
                                     <button className="p-contextual-menu__toggle" style={{ border: "none", padding: "0" }} aria-controls="menu-2" aria-expanded="false" aria-haspopup="true"><img alt='some value' src={Dropdown} /></button>
                                     <span className="p-contextual-menu__dropdown" id="menu-2" aria-hidden="true" aria-label="submenu">
                                         <span className="p-contextual-menu__group">

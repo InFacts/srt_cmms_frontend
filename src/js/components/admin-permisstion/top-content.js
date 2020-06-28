@@ -7,7 +7,7 @@ import SelectNoChildrenInput from '../common/formik-select-no-children';
 
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import { FACTS } from '../../redux/modules/api/fact';
-import {fetchPositionPermissionData } from '../../helper';
+import { fetchPositionPermissionData } from '../../helper';
 import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
 
 import { useFormikContext, useField } from 'formik';
@@ -23,7 +23,7 @@ const TopContent = (props) => {
     const searchPermisstion = () => new Promise(resolve => {
         fetchPositionPermissionData(values.position_id)
             .then((position_permission) => {
-                // console.log("position_permission", position_permission)
+                console.log("position_permission", position_permission)
                 position_permission.map((list_module) => {
                     module.push({
                         position_id: list_module.position_id,
@@ -50,12 +50,15 @@ const TopContent = (props) => {
                 <div className="grid_11`" style={{ paddingLeft: "10px" }}>
                     <Label>ตำแหน่ง</Label>
                     <div className="grid_4 alpha">
-                        <SelectNoChildrenInput name="position_id">
+                        {/* <SelectNoChildrenInput name="position_id">
                             <option value=''></option>
                             {values.line_position_permission.map((list_position) => (
                                 <option value={list_position.position_id} key={list_position.position_id}>{list_position.name}</option>
                             ))}
-                        </SelectNoChildrenInput>
+                        </SelectNoChildrenInput> */}
+                        <TextInput name='position_id'
+                            // validate={validateInternalDocumentIDField}
+                        />
                     </div>
                     <div className="grid_1">
                         <button type="button" className="button-blue" onClick={searchPermisstion}>ค้นหา</button>

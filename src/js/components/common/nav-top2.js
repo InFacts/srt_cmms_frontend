@@ -27,6 +27,22 @@ const MainModule = (props) => {
 
     const identifyEndpoins = (document_type_id) => identifyEndpoinsHelper(document_type_id)
 
+    let url = window.location.pathname;
+
+    useEffect(() => {
+        // Setup SubNav
+        colorTopBar();
+    }, [url]);
+
+    const colorTopBar = () => {
+        if (url === "/main") {
+            return "#FFFFFF";
+        }
+        if (url === "/main-pmt" || url === "/pmt") {
+            return "#9ADFF9";
+        }
+    }
+
     // console.log("nav.mode", toolbar.mode, footer.mode)
     if (toolbar.mode === "INVISIBLE" && footer.mode === "INVISIBLE") {
         return null
@@ -36,7 +52,7 @@ const MainModule = (props) => {
         // console.log("checkNav", checkNav)
         return (
             <div>
-                <div id="header">
+                <div id="header" style={{ backgroundColor: `${colorTopBar()}`}}>
                     <div className="container_12 clearfix">
 
                         <ul className="p-navigation__items" role="menu" style={{ height: "49px" }}>
@@ -48,7 +64,7 @@ const MainModule = (props) => {
 
                             <li className="p-navigation__item p-subnav a nav-li" style={{ marginRight: "10px", marginLeft: "auto" }} role="menuitem" id="link-1">
                                 <Link to="#" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu" style={{ paddingRight: "10px" }} onClick={() => setCheckNav(1)}>
-                                    <i className="fas fa-bell" style={{ fontSize: "22px", color: "white" }}></i>
+                                    <i className="fas fa-bell" style={{ fontSize: "24px", color: "#823D35" }}></i>
                                     {props.notify.not_read_count !== 0
                                         ?
                                         <span className="badge badge-danger badge-counter">{props.notify.not_read_count}</span>
@@ -83,7 +99,7 @@ const MainModule = (props) => {
                             </li>
                             <li className="p-navigation__item p-subnav a nav-li" style={{ marginRight: "0"}} role="menuitem" id="link-1">
                                 <Link to="#" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu" style={{ paddingRight: "10px" }} onClick={() => setCheckNav(1)}>
-                                    <i className="fas fa-user-circle" style={{ fontSize: "22px", color: "white" }}></i>
+                                    <i className="fas fa-user-circle" style={{ fontSize: "24px", color: "#823D35" }}></i>
                                 </Link>
                                 <ul className="p-subnav__items--right" id="account-menu" aria-hidden="true">
                                     <li>

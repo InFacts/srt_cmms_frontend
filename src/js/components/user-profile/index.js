@@ -73,7 +73,7 @@ const Home = (props) => {
         } else {
 
             fetchMyUsers().then(function (data) {
-                console.log(data.user_id)
+                console.log("data>>>>>>", data)
                 setFieldValue("user_id", data.user_id);
                 setFieldValue("username", data.username);
                 setFieldValue("firstname", data.firstname_th);
@@ -89,6 +89,7 @@ const Home = (props) => {
                 setFieldValue("phone", data.phone);
                 setFieldValue("created_at", data.created_at);
                 setFieldValue("updated_at", data.updated_at);
+                setFieldValue("position_name", data.has_positions[0].name);
 
                 fetchDocumentUsers(data.user_id).then(function (data2) {
                     setFieldValue("items", data2.results);
