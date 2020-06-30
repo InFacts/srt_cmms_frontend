@@ -12,7 +12,7 @@ const useFetchPernissionUser = (document_type_group_id) => {
     const fact = useSelector((state) => ({...state.api.fact}), shallowEqual);
     const toolbar = useSelector((state) => ({...state.toolbar}), shallowEqual);
     const decoded_token = useSelector((state) => ({...state.token.decoded_token}), shallowEqual);
-    const { values, touched, setFieldValue, validateField} = useFormikContext();
+    const { setFieldValue } = useFormikContext();
 
     let module = [];
     useEffect(() => {

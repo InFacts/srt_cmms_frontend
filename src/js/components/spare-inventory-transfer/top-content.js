@@ -51,7 +51,12 @@ const TopContent = (props) => {
 
   const validateDocumentDateField = (...args) => validatedataDocumentField("document_date", setFieldValue, ...args)
 
-  const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
+  let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
+  useEffect(() => {
+    checkBooleanForEdit = false
+    validateField("internal_document_id")
+  }, [values.internal_document_id])
+  
   return (
     <div id={changeTheam() === true ? "" : "blackground-white"}>
 

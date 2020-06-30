@@ -10,6 +10,7 @@ import TabBar from '../common/tab-bar';
 import SelectNoChildrenInput from '../common/formik-select-no-children';
 import TextInput from '../common/formik-text-input'
 
+import {identifyEndpoinsHelper} from '../../helper';
 import '../../../vender/fontawesome-free/css/all.css';
 
 const BottomContent = (props) => {
@@ -36,18 +37,7 @@ const BottomContent = (props) => {
         { id: "complete", name: "เสร็จสิน" },
     ]);
 
-    const identifyEndpoins = (document_type_id) => {
-        let doc_type = document_type_id.toString().substring(0, 3);
-        // console.log("doc_type", doc_type)
-        if (doc_type === "101") return "goods-receipt2";
-        if (doc_type === "103") return "goods-receipt-no-po";
-        if (doc_type === "111") return "goods-usage";
-        if (doc_type === "112") return "goods-issue";
-        if (doc_type === "121") return "inventory-transfer";
-        if (doc_type === "132") return "goods-fix";
-        if (doc_type === "102") return "goods-return";
-        else return "#";
-    }
+    const identifyEndpoins = (document_type_id) => identifyEndpoinsHelper(document_type_id)
 
     const onSave = (content) => {
         if (values.user_my === "user-profile") {

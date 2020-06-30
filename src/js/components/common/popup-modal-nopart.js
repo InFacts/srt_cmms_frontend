@@ -15,7 +15,6 @@ const PopupModalNoPart = (props) => {
             setData(props.items.filter(function (items) {
                 // var removeSpaces = currentQueryString.replace(/\s/g, '');
                 const regex = new RegExp(`${currentQueryString}`, 'i');
-                console.log("regex", regex)
                 var isMatch = regex.test(items.internal_item_id) || regex.test(items.description);
                 return (isMatch);
             }));

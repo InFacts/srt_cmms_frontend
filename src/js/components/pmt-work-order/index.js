@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { useFormik , withFormik ,useFormikContext} from 'formik';
 import { Redirect } from 'react-router-dom';
-import { useSelector  } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 import TabBar from '../common/tab-bar';
 
@@ -10,25 +10,31 @@ import TopContent from './top-content';
 import BottomContent from './bottom-content';
 import Footer from '../common/footer.js';
 
-import {packDataFromValues, DOCUMENT_TYPE_ID, saveDocument} from '../../helper';
+import {packDataFromValues, DOCUMENT_TYPE_ID, getUrlParamsLink} from '../../helper';
 
 import useToolbarInitializer from '../../hooks/toolbar-initializer';
 import useFactInitializer from '../../hooks/fact-initializer';
 import useTokenInitializer from '../../hooks/token-initializer';
 import useFooterInitializer from '../../hooks/footer-initializer';
 import useDocumentSubscription from '../../hooks/document-subscription';
+import useNavBottomStatusInitializer from '../../hooks/nav-bottom-status-initializer';
 
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
+
+import { footerToModeSearch } from '../../redux/modules/footer.js';
 
 import BgBlue from '../../../images/pmt/bg_blue.jpg';
 import { changeTheam } from '../../helper.js'
 const WorkOrderComponent = (props) => {
+    const { resetForm, setFieldValue, setValues, values } = useFormikContext();
+    const dispatch = useDispatch();
 
     useToolbarInitializer(TOOLBAR_MODE.SEARCH, DOCUMENT_TYPE_ID.WORK_ORDER);
     useTokenInitializer();
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.WORK_ORDER);
     useDocumentSubscription();
+    useNavBottomStatusInitializer();
     const loggedIn = useSelector(state => state.token.isLoggedIn); 
 
     // Initial tabbar & set default active
@@ -39,6 +45,22 @@ const WorkOrderComponent = (props) => {
         {id:"table_status", name:"สถานะเอกสาร"},
         { id: "assets_under_maintenance", name: "สินทรัพที่ดำเดินการซ่อมบำรุง" },
     ]);
+
+    useEffect(() => {
+        dispatch(footerToModeSearch());
+    }, []);
+
+        // If Link to this url via Track Document
+        useEffect(() => {
+            getUrlParamsLink()
+                .then((internal_document_id) => {
+                if (internal_document_id !== "") {
+                    // action_approval
+                    setFieldValue("status_name_th", "", true);
+                    setFieldValue("internal_document_id", internal_document_id, true);
+                }
+            })
+        }, [])
 
     
     return (

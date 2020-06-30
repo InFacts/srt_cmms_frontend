@@ -121,7 +121,8 @@ const EnhancedGoodsReceiptComponent = withFormik({
 
         //Field ที่ไม่ได้ display
         document_id: '', // changes when document is displayed (internal_document_id field validation)
-
+        checkBooleanForEdit: '',
+        
         // For Step Approval
         step_approve: [],
     })

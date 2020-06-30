@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Redirect } from 'react-router-dom';
-import { useSelector  } from 'react-redux'
+import { useDispatch, useSelector  } from 'react-redux'
 
 import { useFormik , withFormik ,useFormikContext} from 'formik';
 
@@ -15,19 +15,25 @@ import useFactInitializer from '../../hooks/fact-initializer';
 import useTokenInitializer from '../../hooks/token-initializer';
 import useFooterInitializer from '../../hooks/footer-initializer';
 import useDocumentSubscription from '../../hooks/document-subscription';
+import useNavBottomStatusInitializer from '../../hooks/nav-bottom-status-initializer';
 
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
-import { DOCUMENT_TYPE_ID} from '../../helper';
+import { DOCUMENT_TYPE_ID, getUrlParamsLink} from '../../helper';
+
+import { footerToModeSearch } from '../../redux/modules/footer.js';
 
 import BgBlue from '../../../images/pmt/bg_blue.jpg';
 import { changeTheam } from '../../helper.js'
 const WorkRequestComponent = () => {
+    const { resetForm, setFieldValue, setValues, values } = useFormikContext();
+    const dispatch = useDispatch();
 
     useToolbarInitializer(TOOLBAR_MODE.SEARCH, DOCUMENT_TYPE_ID.WORK_REQUEST);
     useTokenInitializer();
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.WORK_REQUEST);
     useDocumentSubscription();
+    useNavBottomStatusInitializer();
     const loggedIn = useSelector(state => state.token.isLoggedIn); 
 
     // Initial tabbar & set default active
@@ -36,6 +42,22 @@ const WorkRequestComponent = () => {
         {id:"attachment", name:"แนบไฟล์"},
         {id:"table_status", name:"สถานะเอกสาร"},
     ]);
+
+    useEffect(() => {
+        dispatch(footerToModeSearch());
+    }, []);
+
+        // If Link to this url via Track Document
+        useEffect(() => {
+            getUrlParamsLink()
+                .then((internal_document_id) => {
+                if (internal_document_id !== "") {
+                    // action_approval
+                    setFieldValue("status_name_th", "", true);
+                    setFieldValue("internal_document_id", internal_document_id, true);
+                }
+            })
+        }, [])
 
     return (
         <>

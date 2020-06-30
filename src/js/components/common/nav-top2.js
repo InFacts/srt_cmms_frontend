@@ -7,13 +7,38 @@ import { Link } from 'react-router-dom';
 import logo from '../../../images/home.svg';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux'
 
-import { setupAllSubNav } from '../../helper';
+import { setupAllSubNav, fetchPositionPermissionData } from '../../helper';
 import { identifyEndpoinsHelper } from '../../helper';
-
 const MainModule = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }));
     const footer = useSelector((state) => ({ ...state.footer }));
     const [checkNav, setCheckNav] = useState(0);
+    const [checkPermission, setCheckPermission] = useState([]);
+    const fact = useSelector((state) => ({...state.api.fact}), shallowEqual);
+    const decoded_token = useSelector((state) => ({...state.token.decoded_token}), shallowEqual);
+
+    let module = [];
+    useEffect(() => {
+      if (decoded_token.has_position) {
+        fetchPositionPermissionData(decoded_token.has_position[0].position_id)
+          .then((position_permission) => {
+            // console.log("position_permission", position_permission)
+            position_permission.map((list_module) => {
+              module.push({
+                position_id: list_module.position_id,
+                name: list_module.name,
+                abbreviation: list_module.abbreviation,
+                module_spare: list_module.function.indexOf(1) !== -1,
+                module_pmt: list_module.function.indexOf(2) !== -1,
+                module_als: list_module.function.indexOf(3) !== -1,
+                module_track_document: list_module.function.indexOf(4) !== -1,
+                module_admin: list_module.function.indexOf(5) !== -1,
+              })
+            })
+            setCheckPermission(module);
+          })
+      }
+    }, [decoded_token.has_position]);
 
     useEffect(() => {
         // Load Notify
@@ -69,6 +94,7 @@ const MainModule = (props) => {
         return null
     }
     else {
+        console.log("checkPermission",checkPermission)
         return (
             <div>
                 <div id="header" style={{ backgroundColor: `${colorTopBar()}` }}>
@@ -87,18 +113,18 @@ const MainModule = (props) => {
                                     ?
                                     <>
                                         <li className="nav-li box-red-top-bar">
-                                            <Link to="/main-spare">ระบบบริหารข้อมูลอะไหล่</Link>
+                                            <Link to={checkPermission.length !== 0 && checkPermission[0].module_spare ? "/main-spare" : "#"}>ระบบบริหารข้อมูลอะไหล่</Link>
                                         </li>
                                         <li className="nav-li box-blue-top-bar">
-                                            <Link to="/main-pmt">ระบบบริหารงานซ่อมบำรุง</Link>
+                                            <Link to={checkPermission.length !== 0 && checkPermission[0].module_pmt ? "/main-pmt" : "#"}>ระบบบริหารงานซ่อมบำรุง</Link>
                                         </li>
 
                                         <li className="nav-li box-green-top-bar">
-                                            <Link to="/main-als">ระบบวิเคราห์ะวางแผนทรัพยากรซ่อมบำรุง</Link>
+                                            <Link to={checkPermission.length !== 0 && checkPermission[0].module_als ? "/main-als" : "#"}>ระบบวิเคราห์ะวางแผนทรัพยากรซ่อมบำรุง</Link>
                                         </li>
 
                                         <li className="nav-li box-yellow-top-bar">
-                                            <Link to="/track">สถานรออนุมัติ</Link>
+                                            <Link to={checkPermission.length !== 0 && checkPermission[0].module_track_document ? "/track" : "#"}>สถานรออนุมัติ</Link>
                                         </li>
                                     </>
                                     :
@@ -106,7 +132,7 @@ const MainModule = (props) => {
                             }
 
                             <li className="p-navigation__item p-subnav a nav-li" style={{ marginRight: "0", marginLeft: "auto" }} role="menuitem" id="link-1">
-                                <Link to="#" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu" style={{ padding: "10px 0 0 0" }}
+                                <Link to="#" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu" style={{ padding: "10px 12px 0 0" }}
                                     onClick={() => setCheckNav(1)}>
                                     <i className="fas fa-bell" style={{ fontSize: "24px", color: "#823D35" }}></i>
                                     {props.notify.not_read_count !== 0

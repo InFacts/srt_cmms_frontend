@@ -1880,9 +1880,9 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
     // Internal Document ID
     //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
     //  ie. GR-PYO-2563/0001
-    // if (checkBooleanForEdit === true) {
-    //     return resolve();
-    // }
+    if (checkBooleanForEdit === true && (toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)) {
+        return resolve();
+    }
     console.log("I am validating internal document id ", internal_document_id)
     if (!internal_document_id) {
         console.log("I dont have any internal doc id")
@@ -2491,17 +2491,18 @@ export const identifyEndpoinsHelper = (document_type_id) => {
     // PMT
     if (doc_type === "201") return "pmt-work-request"; // แจ้งการเกิดอุบัติเหตุ/เสียหาย
     if (doc_type === "202") return "pmt-work-order"; // สั่งซ่อม
+    if (doc_type === "203") return "pmt-fixed-asset"; // สรุปการทำวาระ  WORK_ORDER_PM
     if (doc_type === "204") return "pmt-ss-101"; // สรุปการซ่อมบำรุง
-    if (doc_type === "205") return "pmt-fixed-asset"; // สรุปการทำวาระ
     if (doc_type === "206") return "pmt-equipment-installation"; // ติดตั้ง
     if (doc_type === "207") return "pmt-maitenant-item"; // ดำเนินการซ่อมอะไหล่
+    if (doc_type === "208") return "pmt-create-schedule-checklist"; // SELECTOR
 
     else return "#";
 }
 
-export const checkBooleanForEditHelper = (values, decoded_token, fact) => (values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.DRAFT)
+export const checkBooleanForEditHelper = (values, decoded_token, fact) => (
+    values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.DRAFT) 
     && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
-
 
 export const filterAlsEquipment = (equipmentData, formData) => {
     let tempEquipmentData = [];

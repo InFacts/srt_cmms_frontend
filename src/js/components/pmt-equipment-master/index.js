@@ -33,7 +33,7 @@ const GoodsReceiptComponent = (props) => {
         { id: "history", name: "ประวัติการใช้" }
     ]);
 
-    useToolbarInitializer(TOOLBAR_MODE.SEARCH);
+    useToolbarInitializer(TOOLBAR_MODE.SEARCH, DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA);
     useTokenInitializer();
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA);

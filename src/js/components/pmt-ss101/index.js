@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useFormik, withFormik, useFormikContext } from 'formik';
 import { Redirect } from 'react-router-dom';
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 import TabBar from '../common/tab-bar';
 
@@ -17,11 +17,17 @@ import useTokenInitializer from '../../hooks/token-initializer';
 import useFooterInitializer from '../../hooks/footer-initializer';
 import useDocumentSubscription from '../../hooks/document-subscription';
 import useExportPdfInitializer from '../../hooks/export-pdf-initializer';
+import useNavBottomStatusInitializer from '../../hooks/nav-bottom-status-initializer';
+
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
+import { footerToModeSearch } from '../../redux/modules/footer.js';
+
 import BgBlue from '../../../images/pmt/bg_blue.jpg';
-import { changeTheam } from '../../helper.js'
+import { changeTheam, getUrlParamsLink } from '../../helper.js'
 const PmtSS101Componant = (props) => {
+    const { resetForm, setFieldValue, setValues, values } = useFormikContext();
+    const dispatch = useDispatch();
 
     useToolbarInitializer(TOOLBAR_MODE.SEARCH, DOCUMENT_TYPE_ID.SS101);
     useTokenInitializer();
@@ -29,6 +35,7 @@ const PmtSS101Componant = (props) => {
     useFooterInitializer(DOCUMENT_TYPE_ID.SS101);
     useDocumentSubscription();
     useExportPdfInitializer();
+    useNavBottomStatusInitializer();
     const loggedIn = useSelector(state => state.token.isLoggedIn);
 
     // Initial tabbar & set default active
@@ -41,22 +48,21 @@ const PmtSS101Componant = (props) => {
         { id: "assets_under_maintenance", name: "สินทรัพที่ดำเดินการซ่อมบำรุง" },
     ]);
 
-    const { resetForm, setFieldValue, setValues, values } = useFormikContext();
-
-
-    // If Link to this url via Track Document
     useEffect(() => {
-        let url = window.location.search;
-        console.log("URL IS", url)
-        const urlParams = new URLSearchParams(url);
-        const internal_document_id = urlParams.get('internal_document_id');
-        if (internal_document_id !== "") {
-            // action_approval
-            console.log(" IA M NOT SETTING ", internal_document_id);
-            setFieldValue("internal_document_id", internal_document_id, true);
-            console.log(" THIS IS AFTER VALUES ", values);
-        }
+        dispatch(footerToModeSearch());
     }, []);
+
+        // If Link to this url via Track Document
+        useEffect(() => {
+            getUrlParamsLink()
+                .then((internal_document_id) => {
+                if (internal_document_id !== "") {
+                    // action_approval
+                    setFieldValue("status_name_th", "", true);
+                    setFieldValue("internal_document_id", internal_document_id, true);
+                }
+            })
+        }, [])
 
     return (
         <>

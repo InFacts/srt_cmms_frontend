@@ -30,7 +30,7 @@ const GoodsReceiptComponent = (props) => {
         { id: "attachment", name: "แนบไฟล์" }
     ]);
 
-    useToolbarInitializer(TOOLBAR_MODE.SEARCH);
+    useToolbarInitializer(TOOLBAR_MODE.SEARCH, DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM);
     useTokenInitializer();
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM);

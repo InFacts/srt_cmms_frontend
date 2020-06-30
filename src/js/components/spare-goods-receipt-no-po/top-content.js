@@ -1,4 +1,4 @@
-import React, { useEffectm, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect, useSelector, shallowEqual } from 'react-redux'
 
 import axios from "axios";
@@ -25,7 +25,7 @@ import {
   isValidInternalDocumentIDFormat, isValidInternalDocumentIDDraftFormat,
   fetchAttachmentDocumentData, validateEmployeeIDField, validateWarehouseIDField,
   validateInternalDocumentIDFieldHelper, DOCUMENT_STATUS, getUserIDFromEmployeeID,
-  validatedataDocumentField
+  validatedataDocumentField, checkBooleanForEditHelper
 } from '../../helper';
 import { FACTS } from '../../redux/modules/api/fact.js';
 
@@ -61,7 +61,7 @@ const TopContent = (props) => {
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
   // Fill Default Forms
-  useFillDefaultsOnModeAdd();
+  useFillDefaultsOnModeAdd(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO);
 
   const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args)
 
@@ -118,8 +118,11 @@ const TopContent = (props) => {
       });
   });
 
-  const checkBooleanForEdit = (values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.FAST_TRACK)
-    && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
+  let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
+  useEffect(() => {
+    checkBooleanForEdit = false
+    validateField("internal_document_id")
+  }, [values.internal_document_id])
 
   return (
     <div id={changeTheam() === true ? "" : "blackground-white"}>

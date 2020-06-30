@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useFormik, withFormik, useFormikContext } from 'formik';
 import { Redirect } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import TabBar from '../common/tab-bar';
 
@@ -20,11 +20,13 @@ import useNavBottomStatusInitializer from '../../hooks/nav-bottom-status-initial
 
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
-import BgBlue from '../../../images/pmt/bg_blue.jpg';
-import { changeTheam } from '../../helper.js'
-const GoodsReceiptComponent = (props) => {
+import { footerToModeSearch } from '../../redux/modules/footer.js';
 
+import BgBlue from '../../../images/pmt/bg_blue.jpg';
+import { changeTheam, getUrlParamsLink } from '../../helper.js'
+const GoodsReceiptComponent = (props) => {
     const { resetForm, setFieldValue, setValues, values } = useFormikContext();
+    const dispatch = useDispatch();
 
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
@@ -35,7 +37,7 @@ const GoodsReceiptComponent = (props) => {
         { id: "table_status", name: "สถานะเอกสาร" }
     ]);
 
-    useToolbarInitializer(TOOLBAR_MODE.SEARCH);
+    useToolbarInitializer(TOOLBAR_MODE.SEARCH, DOCUMENT_TYPE_ID.SELECTOR);
     useTokenInitializer();
     useFactInitializer();
     useDocumentSubscription();
@@ -44,9 +46,25 @@ const GoodsReceiptComponent = (props) => {
 
     const loggedIn = useSelector(state => state.token.isLoggedIn);
 
+    useEffect(() => {
+        dispatch(footerToModeSearch());
+    }, []);
+
+        // If Link to this url via Track Document
+        useEffect(() => {
+            getUrlParamsLink()
+                .then((internal_document_id) => {
+                if (internal_document_id !== "") {
+                    // action_approval
+                    setFieldValue("status_name_th", "", true);
+                    setFieldValue("internal_document_id", internal_document_id, true);
+                }
+            })
+        }, [])
+        
     return (
         <>
-            {/* {!loggedIn ? <Redirect to="/" /> : null} */}
+            {!loggedIn ? <Redirect to="/" /> : null}
             <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "130vh" } : {}}>
                 <TopContent />
                 <TabBar tabNames={tabNames} initialTabID="general">
