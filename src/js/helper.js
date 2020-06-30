@@ -1325,30 +1325,33 @@ export const checkDocumentStatus = (valuesContext) => new Promise((resolve, reje
             return resolve(DOCUMENT_STATUS.REOPEN);
         }
         else {
-            if (approval_step.length !== 0) {
-                // TODO: Check Latest ApprovalProcessID
-                let checkWaitApproval = false;
-                approval_step.map(apStep => {
-                    if (apStep.approval_by.length === 0) {
-                        // console.log("------> WAIT_APPROVE", apStep)
-                        checkWaitApproval = true;
-                        return resolve(DOCUMENT_STATUS.WAIT_APPROVE);
-                    }
-                    else {
-                        if (apStep.approval_by[0].approval_status_id === APPROVAL_STATUS.REJECTED) {
-                            return resolve(DOCUMENT_STATUS.REOPEN);
+            if (approval_step != undefined) {
+                if (approval_step.length !== 0) {
+                    // TODO: Check Latest ApprovalProcessID
+                    let checkWaitApproval = false;
+                    approval_step.map(apStep => {
+                        if (apStep.approval_by.length === 0) {
+                            // console.log("------> WAIT_APPROVE", apStep)
+                            checkWaitApproval = true;
+                            return resolve(DOCUMENT_STATUS.WAIT_APPROVE);
                         }
+                        else {
+                            if (apStep.approval_by[0].approval_status_id === APPROVAL_STATUS.REJECTED) {
+                                return resolve(DOCUMENT_STATUS.REOPEN);
+                            }
+                        }
+                    })
+                    if (!checkWaitApproval) {
+                        // console.log("------> APPROVE_DONE")
+                        return resolve(DOCUMENT_STATUS.APPROVE_DONE);
                     }
-                })
-                if (!checkWaitApproval) {
-                    // console.log("------> APPROVE_DONE")
-                    return resolve(DOCUMENT_STATUS.APPROVE_DONE);
+                }
+                else {
+                    // console.log("------> DRAFT")
+                    return resolve(DOCUMENT_STATUS.DRAFT);
                 }
             }
-            else {
-                // console.log("------> DRAFT")
-                return resolve(DOCUMENT_STATUS.DRAFT);
-            }
+
         }
     }
 })

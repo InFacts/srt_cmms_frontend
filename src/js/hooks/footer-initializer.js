@@ -14,8 +14,8 @@ import { navBottomError, navBottomSuccess, navBottomSending } from '../redux/mod
 import history from '../history';
 
 const spacialPage = {
-    ITEM_MASTER_DATA: "/item-master-data",
-    WAREHOUSE: "/warehouse",
+    ITEM_MASTER_DATA: "/spare-item-master-data",
+    WAREHOUSE: "/spare-warehouse",
     PMT_EQUIPMENT_MASTER: "/pmt-equipment-master",
     PMT_CREATE_CHECKOUT: "/pmt-create-checklist"
 
