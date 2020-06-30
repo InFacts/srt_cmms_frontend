@@ -503,3 +503,23 @@ text-align: center;
 
 color: #000000;
 }
+
+.p-tooltip__message.edit_p_tooltip__message.tooltip1 {
+    top: 160px;
+    left: 120px;
+}
+
+.p-tooltip__message.edit_p_tooltip__message.tooltip3 {
+    top: 160px;
+    left: 460px;
+}
+
+.p-tooltip__message.edit_p_tooltip__message.tooltip4 {
+    top: 160px;
+    left: 620px;
+}
+
+.p-tooltip__message.edit_p_tooltip__message.tooltip5 {
+    top: 280px;
+    left: 460px;
+}

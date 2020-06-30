@@ -14,6 +14,9 @@ import { getNumberFromEscapedString, fetchGoodsOnhandDataForItemmasterData, DOCU
 import { FACTS } from '../../redux/modules/api/fact.js';
 
 import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
+
+import useFetchPernissionUser from '../../hooks/fetch-permission-user';
+
 const FormLabel = ({ children }) => (
   <div className={`grid_2`}>
     <p className="top-text">{children}</p>
@@ -54,6 +57,9 @@ const TopContent = (props) => {
     }
   }
 
+  // Fetch permissiton
+  useFetchPernissionUser();
+
   const validateInternalItemIDField = internal_item_id => {
     if (internal_item_id === values.internal_item_id) {
       return;
@@ -70,7 +76,7 @@ const TopContent = (props) => {
         validateField("item_type_id");
 
         // IF Check user If User is Admin -> return true Else -> return false
-        if (decoded_token.id === 4) { //{/* TODO USER_ID FOR ADMIN */}
+        if (values.line_position_permission[0].module_5 === true) { //{/* TODO USER_ID FOR ADMIN */}
           console.log(" YES I AM ADMIN ")
           setFieldValue("modeEdit", true, false);
         } else {
@@ -103,7 +109,7 @@ const TopContent = (props) => {
     if (!name) {
       return 'Required'
     }
-    return '';
+    return;
   };
   const validateItemTypeIDField = (...args) => validateItemMasterdataField("item_type_id", ...args);
   const validateItemGroupIDField = (...args) => validateItemMasterdataField("item_group_id", ...args);
@@ -131,13 +137,7 @@ const TopContent = (props) => {
                   <SelectNoChildrenInput name="item_type_id" validate={validateItemTypeIDField} cssStyle={{ left: "-160px", top: "10px" }}
                     disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="2">
                     <option value=''></option>
-                    {fact[FACTS.ITEM_TYPE].items.map((item_type) => (
-                      values.item_type_id === item_type.item_type_id
-                        ?
-                        <option value={item_type.item_type_id} key={item_type.item_type_id} selected> {item_type.name} </option>
-                        :
-                        <option value={item_type.item_type_id} key={item_type.item_type_id}> {item_type.name} </option>
-                    ))}
+                    <option value='1'>item</option>
                   </SelectNoChildrenInput>
                 </div>
                 <div className="grid_2 float-right">

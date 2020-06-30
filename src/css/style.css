@@ -926,3 +926,7 @@ path.map-region:hover{
   font-weight: bold;
   font-size: 18px;
 }
+
+.p-tooltip--btm-center.edit {
+  position: unset;
+}

@@ -32,7 +32,7 @@ const Table = (props) => {
                 <td className="edit-padding">
                   <TextInput name={`line_items[${index}].internal_item_id`}
                     validate={internal_item_id => props.validateLineNumberInternalItemIDField(`line_items[${index}]`, internal_item_id, index)}
-                    tabIndex="6"
+                    tabIndex={props.tabIndex + line_number}
                     disabled={props.disabledBothMode !== true ? props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true}
                     searchable={props.checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalEquipment"
                     handleModalClick={() => props.setLineNumber(line_number)}
@@ -42,7 +42,8 @@ const Table = (props) => {
                 <td className="edit-padding">{list && list.description}</td>
 
                 <td className="edit-padding text-center">
-                  <SelectNoChildrenInput name={`line_items[${index}].item_status_id`} disabled={props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                  <SelectNoChildrenInput name={`line_items[${index}].item_status_id`} tabIndex={props.tabIndex + line_number}
+                  disabled={props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                     <option value='' selected></option>
                     {factItemStatus.items.map((factItemStatus) => {
                       if (list) {
@@ -55,7 +56,7 @@ const Table = (props) => {
                 </td>
 
                 <td className="edit-padding text-center">
-                  <TextInput name={`line_items[${index}].remark`} tabIndex="6"
+                  <TextInput name={`line_items[${index}].remark`} tabIndex={props.tabIndex + line_number}
                     disabled={props.disabledBothMode !== true ? props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true}
                   />
                 </td>

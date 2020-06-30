@@ -37,7 +37,6 @@ const BottomContent = () => {
     if (!name) {
       return 'Required'
     }
-    setFieldValue(fieldName, name, false);
   };
   const validateMinimumOrderQuantityField = (...args) => validateItemMasterdataField("minimum_order_quantity", ...args);
   const validateLeadTimeField = (...args) => validateItemMasterdataField("lead_time", ...args);

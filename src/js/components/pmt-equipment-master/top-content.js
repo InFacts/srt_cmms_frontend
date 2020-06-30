@@ -143,7 +143,7 @@ const TopContent = (props) => {
                   <SelectNoChildrenInput name="item_type_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="2" 
                   validate={validateItemTypeIDField} cssStyle={{ left: "-160px", top: "10px" }}>
                     <option value=''></option>
-                    {values.item_type_id === 1 ? <option value='1' selected>asset</option> : <option value='1'>asset</option>}
+                    {values.item_type_id === 1 ? <option value='2' selected>asset</option> : <option value='2'>asset</option>}
                   </SelectNoChildrenInput>
                 </div>
                 <div className="grid_2 float-right">

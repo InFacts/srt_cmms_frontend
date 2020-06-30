@@ -11,8 +11,8 @@ import Pmt from '../../../images/main/pmt.svg';
 import Als from '../../../images/main/als.svg';
 import Approval from '../../../images/main/approval.svg';
 import BgWhite from '../../../images/main/bg_white.jpg';
-
-import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
+import useFetchPernissionUser from '../../hooks/fetch-permission-user';
+import { changeTheam } from '../../helper.js'
 
 const TopContent = (props) => {
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
@@ -20,30 +20,7 @@ const TopContent = (props) => {
 
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
-  let module = [];
-  useEffect(() => {
-    if (decoded_token.has_position) {
-      fetchPositionPermissionData(decoded_token.has_position[0].position_id)
-        .then((position_permission) => {
-          // console.log("position_permission", position_permission)
-          position_permission.map((list_module) => {
-            module.push({
-              position_id: list_module.position_id,
-              name: list_module.name,
-              abbreviation: list_module.abbreviation,
-              module_1: list_module.function.indexOf(1) !== -1,
-              module_2: list_module.function.indexOf(2) !== -1,
-              module_3: list_module.function.indexOf(3) !== -1,
-              module_4: list_module.function.indexOf(4) !== -1,
-              module_5: list_module.function.indexOf(5) !== -1,
-            })
-          })
-          setFieldValue('line_position_permission', module, false);
-        })
-    }
-  }, [decoded_token.has_position]);
-  // console.log("decoded_token", decoded_token)
-  // console.log("line_position_permission", values.line_position_permission)
+  useFetchPernissionUser();
 
   return (
     <div style={changeTheam() === true ? { backgroundImage: `url(${BgWhite})`, width: "100vw", height: "100vh" } : {}}>

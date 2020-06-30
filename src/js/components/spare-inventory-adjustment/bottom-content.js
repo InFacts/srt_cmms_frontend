@@ -123,6 +123,7 @@ const BottomContent = (props) => {
                 validateLineNumberPerUnitPriceItemIDField={validateLineNumberPerUnitPriceItemIDField}
                 setLineNumber={setLineNumber}
                 checkBooleanForEdit={checkBooleanForEdit}
+                tabIndex={6}
               />
             </div>
 
@@ -136,7 +137,7 @@ const BottomContent = (props) => {
             <div className="container_12">
               <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
               <div className="grid_11">
-                <TextareaInput name="remark" tabIndex="6"
+                <TextareaInput name="remark" tabIndex="100"
                   disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                 />
               </div>

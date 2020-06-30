@@ -30,13 +30,14 @@ const BottomContent = (props) => {
                 <div id="broken_content" className="tabcontent">
                     <TableLineItem line_items={values.line_items}
                         setLineNumber={setLineNumber}
+                        tabIndex={8}
                     />
 
                     <div className="grid_12" style={{ marginTop: "10px" }}>
                         {/* Remark */}
                         <Label>หมายเหตุ</Label>
                         <div className="grid_11 alpha omega">
-                            <TextareaInput name="remark"
+                            <TextareaInput name="remark" tabIndex="100"
                                 disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 

@@ -167,7 +167,7 @@ const TopContent = (props) => {
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                                 searchable={toolbar.mode === TOOLBAR_MODE.ADD}
                                 ariaControls="modalDocument2"
-                                tabIndex="1" />
+                                tabIndex="4" />
                         </div>
                         <div className="clear" />
                     </div>

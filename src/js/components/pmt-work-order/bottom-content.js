@@ -254,7 +254,8 @@ const BottomContent = (props) => {
                     <TableHasEquipment line_items={values.line_items} values={values}
                         setLineNumber={setLineNumber}
                         validateLineNumberInternalItemIDField={validateLineNumberInternalItemIDField}
-                        checkBooleanForEdit={checkBooleanForEdit} />
+                        checkBooleanForEdit={checkBooleanForEdit}
+                        tabIndex={19} />
                 </div>
 
                 {/* PopUp ค้นหาอะไหล่ MODE ADD */}

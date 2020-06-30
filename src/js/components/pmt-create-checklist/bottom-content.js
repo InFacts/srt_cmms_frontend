@@ -77,6 +77,7 @@ const BottomContent = (props) => {
             <TableCreatePlan checklist_line_item_use_equipment={values.checklist_line_item_use_equipment}
               validateLineNumberInternalItemIDField={validateLineNumberInternalItemIDField}
               setLineNumber={setLineNumber}
+              tabIndex={7}
             // checkBooleanForEdit={checkBooleanForEdit}
             />
           </div>

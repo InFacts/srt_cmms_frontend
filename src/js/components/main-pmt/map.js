@@ -137,8 +137,13 @@ class Map extends React.Component {
                             <h4 className="head-title" style={{ color: "black" }}>ระบบบริหารงานซ่อมบำรุง - PMT</h4>
                             <div style={{ height: "350px" }} id="blackground-white" style={ changeTheam() === true ? { borderRadius: "25px", border: "2px dashed gray", height: "380px" } : {height: "380px"} }>
                                 
-                                <Link to="/pmt-work-request"><img alt='some value' src={changeTheam() === true ? OneoneNew : Oneone} 
-                                className={changeTheam() === true ? "Pone-one-new" : "Pone-one"} style={ changeTheam() === true ? { width: "80px" } : {} }/></Link>
+                                <Link to="/pmt-work-request">
+                                <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
+                                <img alt='some value' src={changeTheam() === true ? OneoneNew : Oneone} 
+                                className={changeTheam() === true ? "Pone-one-new" : "Pone-one"} style={ changeTheam() === true ? { width: "80px" } : {} }/>
+                                <span className="p-tooltip__message edit_p_tooltip__message Ptooltip3" role="tooltip" id="btm-cntr">PMT 1</span>
+                                    </div>
+                                    </Link>
 
                                 <Link to="/pmt-equipment-master"><img alt='some value' src={changeTheam() === true ? OnetwoNew : Onetwo} 
                                 className={changeTheam() === true ? "Pone-two-new" : "Pone-two"} style={ changeTheam() === true ? { width: "50px" } : {} } /></Link>
@@ -164,11 +169,20 @@ class Map extends React.Component {
                                 <img alt='some value' src={Text5} className="Ptext5" />
                                 <img alt='some value' src={Text6} className="Ptext6" />
 
-                                <Link to="/pmt-ss-101"><img alt='some value' src={changeTheam() === true ? ThreeoneNew : Threeone} 
-                                className={changeTheam() === true ? "Pthree-one-new" : "Pthree-one"} style={ changeTheam() === true ? { width: "50px" } : {} } /></Link>
+                                <Link to="/pmt-ss-101">
+                                 <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
+                                <img alt='some value' src={changeTheam() === true ? ThreeoneNew : Threeone} 
+                                className={changeTheam() === true ? "Pthree-one-new" : "Pthree-one"} style={ changeTheam() === true ? { width: "50px" } : {} } />
+                                <span className="p-tooltip__message edit_p_tooltip__message Ptooltip1" role="tooltip" id="btm-cntr">PMT 4</span>
+                                    </div>
+                                </Link>
 
-                                <Link to="/pmt-fixed-asset"><img alt='some value' src={changeTheam() === true ? ThreethreeNew : Threethree} 
-                                className={changeTheam() === true ? "Pthree-three-new" : "Pthree-three"} style={ changeTheam() === true ? { width: "55px" } : {} } /></Link>
+                                <Link to="/pmt-fixed-asset">
+                                <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
+                                <img alt='some value' src={changeTheam() === true ? ThreethreeNew : Threethree} 
+                                className={changeTheam() === true ? "Pthree-three-new" : "Pthree-three"} style={ changeTheam() === true ? { width: "55px" } : {} } />
+                                <span className="p-tooltip__message edit_p_tooltip__message Ptooltip2" role="tooltip" id="btm-cntr">PMT 2</span>
+                                    </div></Link>
 
                                 <img alt='some value' src={Arrow2} className="Parrow2" />
                                 <img alt='some value' src={Text7} className="Ptext7" />

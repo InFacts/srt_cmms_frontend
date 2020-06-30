@@ -33,7 +33,7 @@ const TopContent = (props) => {
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
   // Fill Default Forms
-  useFillDefaultsOnModeAdd();
+  useFillDefaultsOnModeAdd(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO);
 
   const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args)
 
@@ -44,7 +44,7 @@ const TopContent = (props) => {
 
   const validateDocumentDateField = (...args) => validatedataDocumentField("document_date", setFieldValue, ...args)
 
-  const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
+  const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
 
   return (
     <div id={changeTheam() === true ? "" : "blackground-white"}>

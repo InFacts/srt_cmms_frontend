@@ -39,7 +39,7 @@ const TopContent = (props) => {
   const decoded_token = useSelector((state) => ({...state.token.decoded_token}), shallowEqual);
 
   // Fill Default Forms
-  useFillDefaultsOnModeAdd();
+  useFillDefaultsOnModeAdd(DOCUMENT_TYPE_ID.SALVAGE_RETURN);
 
   const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.SALVAGE_RETURN, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args)
 

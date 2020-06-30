@@ -702,7 +702,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         let ss101_line_item_part = values.line_items
         ss101_line_item_part.map((line_items, index) => {
             ss101_line_item_part[index].item_id = line_items.item_id
-            ss101_line_item_part[index].item_status_item_status_id = parseInt(line_items.item_status_id)
+            ss101_line_item_part[index].item_status_id = parseInt(line_items.item_status_id)
             ss101_line_item_part[index].remark = line_items.remark
             ss101_line_item_part[index].document_id = values.document_id
             ss101_line_item_part[index].line_number = index+1
@@ -710,7 +710,6 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             delete ss101_line_item_part[index].description
             delete ss101_line_item_part[index].equipment_item_id
             delete ss101_line_item_part[index].equipment_status_id
-            delete ss101_line_item_part[index].item_status_id
         })
 
         let ss101_part_big = {
@@ -802,7 +801,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
 
         console.log("data values", values)
 
-        let selector_pm_plan = {
+        let document_part_selector = {
             ...DOCUMENT_SCHEMA,
             document_status_id: 1,
             document_action_type_id: 1,
@@ -814,36 +813,167 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             document_date: values.document_date + 'T00:00:00+00:00',
         }
 
-        // ต้องเป็น Array
-        let selector_checklist_group_part = {
+        let selector_pm_plan_part = {
+            document_id: values.document_id,
+            name: values.name,
+            active: values.active === "1" ? true : false,
+            node_id: parseInt(values.node_id),
+            station_id: parseInt(values.station_id)
+        }
+        
+        // ต้องเป็น Array selector_checklist_group_part
+        let selector_checklist_group_part = []
+        // ของ Custom line item
+        values.line_custom.map((line_custom) => {
+            if (line_custom.checklist_id) {
+                let custom_groups = fact[FACTS.CHECKLIST_CUSTOM_GROUP].items;
+                let custom_group = custom_groups.find(custom_group => `${custom_group.checklist_group_id}` === `${line_custom.checklist_group_id}`); // Returns undefined if not found
+                if (custom_group) {
+                    selector_checklist_group_part.push({
+                        document_id: values.document_id,
+                        name_group: custom_group.checklist_group_name,
+                        unit_maintenance_location_id: parseInt(line_custom.unit_maintenance_location_id)
+                    })
+                }
+            }
+        })
+        // ของ Equipment line item
+        values.line_equipment.map((line_equipment) => {
+            if (line_equipment.checklist_id) {
+                let equipment_groups = fact[FACTS.CHECKLIST_EQUIPMENT_GROUP].items;
+                let equipment_group = equipment_groups.find(equipment_group => `${equipment_group.checklist_group_id}` === `${line_equipment.checklist_group_id}`); // Returns undefined if not found
+                if (equipment_group) {
+                    selector_checklist_group_part.push({
+                        document_id: values.document_id,
+                        name_group: equipment_group.checklist_group_name,
+                        unit_maintenance_location_id: parseInt(line_equipment.unit_maintenance_location_id)
+                    })
+                }
+            }
+        })
 
+        // ต้องเป็น Array selector_checklist_part
+        let selector_checklist_part = [];
+        // ของ Custom line item
+        values.line_custom.map((line_custom) => {
+            if (line_custom.checklist_id) {
+                let custom_groups = fact[FACTS.CHECKLIST].items;
+                let custom_group = custom_groups.find(custom_group => `${custom_group.checklist_id}` === `${line_custom.checklist_id}`); // Returns undefined if not found
+                if (custom_group) {
+                    selector_checklist_part.push({
+                        selector_checklist_id: custom_group.checklist_id,
+                        document_id: values.document_id,
+                        name: custom_group.checklist_name,
+                        remark: custom_group.remark,
+                        start_on: values.start_on + 'T01:01:01+00:00',
+                        unit_maintenance_location_id: parseInt(line_custom.unit_maintenance_location_id),
+                        // equipment_id: 
+                    })
+                }
+            }
+        })
+        // ของ Equipment line item
+        values.line_equipment.map((line_equipment) => {
+            if (line_equipment.checklist_id) {
+                let equipment_groups = fact[FACTS.CHECKLIST].items;
+                let equipment_group = equipment_groups.find(equipment_group => `${equipment_group.checklist_id}` === `${line_equipment.checklist_id}`); // Returns undefined if not found
+                if (equipment_group) {
+                    selector_checklist_part.push({
+                        selector_checklist_id: equipment_group.checklist_id,
+                        document_id: values.document_id,
+                        name: equipment_group.checklist_name,
+                        remark: equipment_group.remark,
+                        start_on: values.start_on + 'T00:00:00+00:00',
+                        unit_maintenance_location_id: parseInt(line_equipment.unit_maintenance_location_id),
+                        // equipment_id: 
+                    })
+                }
+            }
+        })
+
+        // ต้องเป็น Array  selector_checklist_line_item_part
+        let selector_checklist_line_item_part = [];
+        // ของ Custom line item
+        values.line_custom.map((line_custom) => {
+            if (line_custom.checklist_id) {
+                let custom_groups = fact[FACTS.CHECKLIST_LINE_ITEM].items;
+                custom_groups.map((checklist_line_item) => {
+                    if (checklist_line_item.checklist_id == line_custom.checklist_id){
+                        selector_checklist_line_item_part.push({
+                        selector_checklist_line_item_id: checklist_line_item.checklist_line_item,
+                        name: checklist_line_item.name,
+                        freq: checklist_line_item.freq,
+                        freq_unit_id: checklist_line_item.freq_unit_id,
+                        start_on: values.start_on + 'T00:00:00+00:00',
+                        active: checklist_line_item.active.data[0] === "1" ? true : false,
+                        remark: checklist_line_item.remark,
+                        selector_checklist_id: checklist_line_item.checklist_id
+                    })
+                    }
+                });
+            }
+        })
+        values.line_equipment.map((line_equipment) => {
+            if (line_equipment.checklist_id) {
+                let equipment_groups = fact[FACTS.CHECKLIST_LINE_ITEM].items;
+                equipment_groups.map((checklist_line_item) => {
+                    if (checklist_line_item.checklist_id == line_equipment.checklist_id) {
+                        selector_checklist_line_item_part.push({
+                            selector_checklist_line_item_id: checklist_line_item.checklist_line_item,
+                            name: checklist_line_item.name,
+                            freq: checklist_line_item.freq,
+                            freq_unit_id: checklist_line_item.freq_unit_id,
+                            start_on: values.start_on + 'T01:01:01+00:00',
+                            active: checklist_line_item.active.data[0] === "1" ? true : false,
+                            remark: checklist_line_item.remark,
+                            selector_checklist_id: checklist_line_item.checklist_id
+                        })
+                    }
+                })
+            }
+        })
+
+        // ต้องเป็น Array selector_checklist_line_item_use_equipment_part
+        let selector_checklist_line_item_use_equipment_part = []
+        // ของ Custom line item
+        selector_checklist_line_item_part.map((line_custom, index) => {
+                let custom_groups = fact[FACTS.CHECKLIST_LINE_ITEM_USE_EQUIPMENT].items;
+                custom_groups.map((checklist_line_item_use_equipment) => {
+                    if (checklist_line_item_use_equipment.checklist_line_item_id == line_custom.selector_checklist_line_item_id) {
+                        selector_checklist_line_item_use_equipment_part.push({
+                            selector_checklist_line_item_use_equipment_id: checklist_line_item_use_equipment.checklist_line_item_use_equipment_id,
+                            selector_checklist_line_item_id: checklist_line_item_use_equipment.checklist_line_item_id,
+                            item_id: checklist_line_item_use_equipment.item_id,
+                            quantity: checklist_line_item_use_equipment.quantity,
+                            uom_id: checklist_line_item_use_equipment.uom_id
+                        })
+                    }
+                })
+        })
+
+        let prev_part = {
+            selector_pm_plan: {},
+            selector_checklist_group: [],
+            selector_checklist: [],
+            selector_checklist_line_item: [],
+            selector_checklist_line_item_use_equipment: []
+        }
+        
+        let specific_selector = {
+            selector_pm_plan: selector_pm_plan_part,
+            selector_checklist_group: selector_checklist_group_part,
+            selector_checklist: selector_checklist_part,
+            selector_checklist_line_item: selector_checklist_line_item_part,
+            selector_checklist_line_item_use_equipment: selector_checklist_line_item_use_equipment_part,
+            prev: prev_part
         }
 
-        // ต้องเป็น Array
-        let selector_checklist_part = {
+        console.log("specific_selector", specific_selector)
 
+        return {
+            document: document_part_selector,
+            specific: specific_selector
         }
-
-        // ต้องเป็น Array
-        let selector_checklist_line_item_part = {
-
-        }
-
-        // ต้องเป็น Array
-        let selector_checklist_line_item_use_equipment_part = {
-
-        }
-
-        console.log("selector_pm_plan", selector_pm_plan)
-        console.log("selector_checklist_group", selector_checklist_group_part)
-        console.log("selector_checklist", selector_checklist_part)
-        console.log("selector_checklist_line_item", selector_checklist_line_item_part)
-        console.log("selector_checklist_line_item_use_equipment", selector_checklist_line_item_use_equipment_part)
-
-        // return {
-        //     document: document_part_selector,
-        //     specific: specific_selector,
-        // }
     }
 }
 
@@ -1558,8 +1688,8 @@ const responseToFormState = (fact, data, document_type_group_id) => {
             Object.entries(data.specific)
                 .filter(([key]) => Object.keys(SS101_SCHEMA).includes(key))
         )
-        console.log("this is document_part 123  ", document_part)
-        console.log("this is ss101_part ", ss101_part)
+        // console.log("this is document_part 123  ", document_part)
+        // console.log("this is ss101_part ", ss101_part)
         return { ...transformDocumentResponseToFormState(document_part, fact, document_type_group_id), ...transformSS101ResponseToFormState(ss101_part, data) }
     } else if (document_type_group_id === DOCUMENT_TYPE_ID.MAINTENANT_ITEM) {
         for (var i = data.specific.line_items.length; i <= 9; i++) {
@@ -1662,17 +1792,18 @@ function transformWorkOrderResponseToFormState(work_order_part) {
     }
 }
 function transformSS101ResponseToFormState(ss101_part, data) {
+    console.log("ss101_part", data)
     return {
         ...ss101_part,
         ...transformWorkRequestResponseToFormState(ss101_part),
 
-        // Bottom Content
+        // // Bottom Content
         car_type_id: returnEmptyStringIfNull(ss101_part.car_type_id),
         departed_on: ss101_part.departed_on.split(".")[0],
         arrived_on: ss101_part.arrived_on.split(".")[0],
         request_on: ss101_part.request_on.split(".")[0],
         finished_on: ss101_part.finished_on.split(".")[0],
-        // system_type_group_id: returnEmptyStringIfNull(data.specific.system_type.system_type_group_id),
+        system_type_group_id: returnEmptyStringIfNull(data.specific.system_type.system_type_group_id),
         sub_maintenance_type_id: returnEmptyStringIfNull(ss101_part.sub_maintenance_type_id),
         hardware_type_id: returnEmptyStringIfNull(ss101_part.hardware_type_id),
 
@@ -1680,17 +1811,17 @@ function transformSS101ResponseToFormState(ss101_part, data) {
         service_method_id: returnEmptyStringIfNull(ss101_part.service_method_id),
         interrupt_id: returnEmptyStringIfNull(ss101_part.interrupt_id),
 
-        // Bottom Content ผู้เกี่ยวข้อง
+        // // Bottom Content ผู้เกี่ยวข้อง
         auditor_position_id: returnEmptyStringIfNull(ss101_part.auditor_position_id),
         fixer_position_id: returnEmptyStringIfNull(ss101_part.fixer_position_id),
         member_1_position_id: returnEmptyStringIfNull(ss101_part.member_1_position_id),
         member_2_position_id: returnEmptyStringIfNull(ss101_part.member_2_position_id),
         member_3_position_id: returnEmptyStringIfNull(ss101_part.member_3_position_id),
 
-        line_items: [ss101_part.line_items],
-        // line_items: returnFullArrayHasEquipmentItemNull(ss101_part.line_items),
+        // line_items: [ss101_part.line_items],
+        line_items: returnFullArrayHasEquipmentItemNull(data.specific.ss101_line_item),
 
-        loss_line_items: returnFullArrayLossLineItemNull(ss101_part.loss_line_items)
+        loss_line_items: returnFullArrayLossLineItemNull(data.specific.loss_line_item)
     }
 }
 

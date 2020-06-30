@@ -16,12 +16,17 @@ import { getNumberFromEscapedString, fetchGoodsOnhandDataForItemmasterData, DOCU
 import { FACTS } from '../../redux/modules/api/fact.js';
 
 import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
+
+import useFetchPernissionUser from '../../hooks/fetch-permission-user';
 const TopContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
+
+  // Fetch permissiton
+  useFetchPernissionUser();
 
   const validateWarehouseIDField = (fieldName, warehouse_id) => {
     if (warehouse_id === values.warehouse_id) {
@@ -30,6 +35,13 @@ const TopContent = (props) => {
 
     const warehouseIDRegex = /^[0-9]{3}$/g;
     if (!warehouse_id) {
+      setFieldValue("warehouse_id", '', false);
+        setFieldValue("name", '', false);
+        setFieldValue("abbreviation", '', false);
+        setFieldValue("active", '', false);
+        setFieldValue("location", '', false);
+        setFieldValue("warehouse_type_id", '', false);
+        setFieldValue("use_central", '', false);
       return 'Required';
     } else if (!warehouseIDRegex.test(warehouse_id)) {
       return 'Invalid Warehouse Format Be sure to use the format ie. 100';
@@ -52,7 +64,7 @@ const TopContent = (props) => {
         setFieldValue("use_central", warehouse.use_central.data[0], false);
 
         // IF Check user If User is Admin -> return true Else -> return false
-        if (decoded_token.id === 4) { //{/* TODO USER_ID FOR ADMIN */}
+        if (values.line_position_permission[0].module_5 === true) { //{/* TODO USER_ID FOR ADMIN */}
           console.log(" YES I AM ADMIN ")
           setFieldValue("modeEdit", true, false);
         } else {

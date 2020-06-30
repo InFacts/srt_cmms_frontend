@@ -564,17 +564,17 @@ const BottomContent = (props) => {
                                     <tr key={index}>
                                         <td className="edit-padding text-center">{index + 1}</td>
                                         <td className="edit-padding">
-                                            <TextInput name={`loss_line_items[${index}].description`} tabIndex="6"
+                                            <TextInput name={`loss_line_items[${index}].description`} tabIndex={41 + index + 1}
                                                 disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
                                             />
                                         </td>
                                         <td className="edit-padding text-center">
-                                            <NumberInput step={0.01} name={`loss_line_items[${index}].quantity`} tabIndex="7"
+                                            <NumberInput step={0.01} name={`loss_line_items[${index}].quantity`} tabIndex={41 + index + 1}
                                                 disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
                                             />
                                         </td>
                                         <td className="edit-padding text-center">
-                                            <SelectNoChildrenInput name={`loss_line_items[${index}].uom_code`} disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                                            <SelectNoChildrenInput name={`loss_line_items[${index}].uom_code`} disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex={41 + index + 1}>
                                                 <option value='' selected></option>
                                                 {factUnit.items.map((factUnit) => {
                                                     if (values.loss_line_items[index].uom_code === factUnit.uom_id) {
@@ -584,12 +584,12 @@ const BottomContent = (props) => {
                                             </SelectNoChildrenInput>
                                         </td>
                                         <td className="edit-padding text-center">
-                                            <NumberInput step={1} name={`loss_line_items[${index}].price`} tabIndex="9"
+                                            <NumberInput step={1} name={`loss_line_items[${index}].price`} tabIndex={41 + index + 1}
                                                 disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
                                             />
                                         </td>
                                         <td className="edit-padding">
-                                            <TextInput name={`loss_line_items[${index}].remark`} tabIndex="11"
+                                            <TextInput name={`loss_line_items[${index}].remark`} tabIndex={41 + index + 1}
                                                 disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
                                             />
                                         </td>

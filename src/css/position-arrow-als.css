@@ -156,3 +156,23 @@
 
     color: #000000;
 }
+
+.p-tooltip__message.edit_p_tooltip__message.Atooltip1 {
+    top: 150px;
+    left: 135px;
+}
+
+.p-tooltip__message.edit_p_tooltip__message.Atooltip2 {
+    top: 170px;
+    left: 385px;
+}
+
+.p-tooltip__message.edit_p_tooltip__message.Atooltip3 {
+    top: 275px;
+    left: 390px;
+}
+
+.p-tooltip__message.edit_p_tooltip__message.Atooltip4 {
+    top: 275px;
+    left: 137px;
+}

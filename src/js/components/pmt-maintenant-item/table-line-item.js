@@ -45,12 +45,14 @@ const Table = (props) => {
                 <td className="edit-padding text-center">
                   <NumberInput step={0.01} name={`line_items[${index}].quantity_used`}
                     disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                    tabIndex={props.tabIndex + line_number}
                     redBorderForError="error-in-table"
                   />
                 </td>
                 <td className="edit-padding text-center">
                   <NumberInput step={0.01} name={`line_items[${index}].quantity_salvage`}
                     disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                    tabIndex={props.tabIndex + line_number}
                     redBorderForError="error-in-table"
                   />
                 </td>

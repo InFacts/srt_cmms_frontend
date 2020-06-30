@@ -31,7 +31,6 @@ const BottomContent = (props) => {
     if (!name) {
       return 'Required'
     }
-    setFieldValue(fieldName, name, false);
   };
   const validateLocationWarehouseIDField = (...args) => validateWarehouseField("location", ...args);
   const validateActionWarehouseIDField = (...args) => validateWarehouseField("active", ...args);

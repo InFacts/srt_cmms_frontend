@@ -89,6 +89,7 @@ const EnhancedItemMasterDataComponent = withFormik({
 
         // FOR CHECK USER_ID ADMIN FOR EDIT
         modeEdit: false,
+        line_position_permission: [],
     })
 })(ItemMasterDataComponent);
 

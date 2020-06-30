@@ -19,7 +19,7 @@ import useFooterInitializer from '../../hooks/footer-initializer';
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
 import BgRed from '../../../images/spare/bg_red.jpg';
-import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
+import { changeTheam } from '../../helper.js'
 const WarehouesMasterDataComponent = (props) => {
     
     const {resetForm, setFieldValue, setValues, values} = useFormikContext();
@@ -60,7 +60,8 @@ const EnhancedWarehouseMasterDataComponent = withFormik({
         location: '',
         warehouse_type_id: '',
         use_central: '',
-        
+
+        line_position_permission: [],
         files: [],
         
         // FOR CHECK USER_ID ADMIN FOR EDIT

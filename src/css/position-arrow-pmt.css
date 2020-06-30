@@ -362,3 +362,18 @@
     left: 665px;
     top: 0px;
 }
+
+.p-tooltip__message.edit_p_tooltip__message.Ptooltip1 {
+    top: 160px;
+    left: 490px;
+}
+
+.p-tooltip__message.edit_p_tooltip__message.Ptooltip2 {
+    top: 380px;
+    left: 479px;
+}
+
+.p-tooltip__message.edit_p_tooltip__message.Ptooltip3 {
+    top: 140px;
+    left: 95px;
+}

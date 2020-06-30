@@ -25,12 +25,14 @@ const Table = (props) => {
       </thead>
       <tbody>
         {props.checklist_line_item_use_equipment.map((list, index) => {
+          let line_number = index +1;
           return (
             <tr>
               <th className="edit-padding text-center">{index + 1}</th>
               <td className="edit-padding">
                 <TextInput name={`checklist_line_item_use_equipment[${index}].internal_item_id`}
-                  validate={internal_item_id => props.validateLineNumberInternalItemIDField(`checklist_line_item_use_equipment[${index}]`, internal_item_id, index)} tabIndex="6"
+                  validate={internal_item_id => props.validateLineNumberInternalItemIDField(`checklist_line_item_use_equipment[${index}]`, internal_item_id, index)} 
+                  tabIndex={props.tabIndex + line_number}
                   disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
                   searchable={toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart"
                   handleModalClick={() => props.setLineNumber(index + 1)}
@@ -40,13 +42,13 @@ const Table = (props) => {
               <td className="edit-padding">{list && list.description}</td>
               <td className="edit-padding text-center">
                 {/* {list.quantity && list.quantity} */}
-                <NumberInput step={1} name={`checklist_line_item_use_equipment[${index}].quantity`} tabIndex="7"
+                <NumberInput step={1} name={`checklist_line_item_use_equipment[${index}].quantity`} tabIndex={props.tabIndex + line_number}
                   disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
                   redBorderForError="error-in-table" />
               </td>
               <td className="edit-padding text-center">
                 {/* {list.item && list.item.uom_group.uom[0].name} */}
-                <SelectNoChildrenInput name={`checklist_line_item_use_equipment[${index}].uom_id`} disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                <SelectNoChildrenInput name={`checklist_line_item_use_equipment[${index}].uom_id`} disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex={props.tabIndex + line_number}>
                   <option value=''></option>
                   {factUnit.items.map((factUnit) => {
                     if (props.checklist_line_item_use_equipment[index].uom_group_id === factUnit.uom_group_id)

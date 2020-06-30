@@ -24,6 +24,18 @@ const useFillDefaultsOnModeAdd = (document_type_group_id) => {
             }
             setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(fact.users, decoded_token.id));
             setFieldValue("created_on", localISOTime.slice(0, 16), false);
+            console.log("decoded_token.has_position[0].warehouse_id", decoded_token.has_position[0].warehouse_id)
+            // setFieldValue("src_warehouse_id", decoded_token.has_position[0].warehouse_id, true)
+            // setFieldValue("dest_warehouse_id", decoded_token.has_position[0].warehouse_id, true)
+            if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO || document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RETURN 
+            || document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX || document_type_group_id === DOCUMENT_TYPE_ID.INVENTORY_TRANSFER) {
+                setFieldValue("dest_warehouse_id", decoded_token.has_position[0].warehouse_id, true)
+            }
+            if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_USAGE || document_type_group_id === DOCUMENT_TYPE_ID.GOODS_FIX 
+            || document_type_group_id === DOCUMENT_TYPE_ID.GOODS_ISSUE || document_type_group_id === DOCUMENT_TYPE_ID.PHYSICAL_COUNT
+            || document_type_group_id === DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT || document_type_group_id === DOCUMENT_TYPE_ID.SALVAGE_RETURN) {
+                setFieldValue("src_warehouse_id", decoded_token.has_position[0].warehouse_id, true)
+            }
             
             if (document_type_group_id === DOCUMENT_TYPE_ID.SALVAGE_SOLD) {
                 setFieldValue("src_warehouse_id", 100, true);

@@ -68,7 +68,7 @@ const TopContent = (props) => {
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
   // Fill Default Forms
-  useFillDefaultsOnModeAdd();
+  useFillDefaultsOnModeAdd(DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT);
 
   const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args)
 

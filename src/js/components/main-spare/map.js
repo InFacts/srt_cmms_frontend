@@ -148,14 +148,21 @@ class Map extends React.Component {
                             <h4 className="head-title" style={{ color: "black" }}>ระบบบริหารข้อมูลอะไหล่ - Spare</h4>
                             <div id="blackground-white" style={ changeTheam() === true ? { borderRadius: "25px", border: "2px dashed gray", height: "380px"} : {height: "380px"} }>
 
-                                <Link to="/spare-goods-receipt2"><img alt='some value' src={changeTheam() === true ? OneoneNew : Oneone} 
-                                className={changeTheam() === true ? "one-one-new" : "one-one"} style={ changeTheam() === true ? { width: "60px" } : {} }/></Link>
+                                <Link to="/spare-goods-receipt2">
+                                <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
+                                    <img alt='some value' src={changeTheam() === true ? OneoneNew : Oneone} 
+                                    className={changeTheam() === true ? "one-one-new" : "one-one"} style={ changeTheam() === true ? { width: "60px" } : {} }/>
+                                    <span className="p-tooltip__message edit_p_tooltip__message tooltip1" role="tooltip" id="btm-cntr">Spare 1</span>
+                                    </div>
+                                </Link>
 
                                 <img alt='some value' src={changeTheam() === true ? OnetwoNew : Onetwo} 
                                 className={changeTheam() === true ? "one-two-new" : "one-two"} style={ changeTheam() === true ? { width: "85px" } : {} } />
 
-                                <Link to="/spare-goods-receipt-no-po"><img alt='some value' src={changeTheam() === true ? OnethreeNew : Onethree} 
-                                className={changeTheam() === true ? "one-three-new" : "one-three"} style={ changeTheam() === true ? { width: "85px" } : {} } /></Link>
+                                <Link to="/spare-goods-receipt-no-po">
+                                <img alt='some value' src={changeTheam() === true ? OnethreeNew : Onethree} 
+                                className={changeTheam() === true ? "one-three-new" : "one-three"} style={ changeTheam() === true ? { width: "85px" } : {} } />
+                                </Link>
 
                                 <img alt='some value' src={Arrow1} className="arrow1" />
                                 <img alt='some value' src={Arrow2} className="arrow2" />
@@ -168,11 +175,22 @@ class Map extends React.Component {
                                 className={changeTheam() === true ? "center-new" : "center"} style={ changeTheam() === true ? { width: "75px" } : {} } /></Link>
 
                                 <img alt='some value' src={Text4} className="text4" />
-                                <Link to="/spare-goods-usage"><img alt='some value' src={changeTheam() === true ? TwooneNew : Twoone} 
-                                className={changeTheam() === true ? "two-one-new" : "two-one"} style={ changeTheam() === true ? { width: "75px" } : {} }  /></Link>
 
-                                <Link to="/spare-goods-fix"><img alt='some value' src={changeTheam() === true ? TwotwoNew : Twotwo} 
-                                className={changeTheam() === true ? "two-two-new" : "two-two"} style={ changeTheam() === true ? { width: "70px" } : {} }  /></Link>
+                                <Link to="/spare-goods-usage">
+                                 <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
+                                <img alt='some value' src={changeTheam() === true ? TwooneNew : Twoone} 
+                                className={changeTheam() === true ? "two-one-new" : "two-one"} style={ changeTheam() === true ? { width: "75px" } : {} }  />
+                                <span className="p-tooltip__message edit_p_tooltip__message tooltip3" role="tooltip" id="btm-cntr">Spare 3</span>
+                                    </div>
+                                </Link>
+
+                                <Link to="/spare-goods-fix">
+                                <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
+                                <img alt='some value' src={changeTheam() === true ? TwotwoNew : Twotwo} 
+                                className={changeTheam() === true ? "two-two-new" : "two-two"} style={ changeTheam() === true ? { width: "70px" } : {} }  />
+                                <span className="p-tooltip__message edit_p_tooltip__message tooltip5" role="tooltip" id="btm-cntr">PMT 3</span>
+                                    </div>
+                                    </Link>
 
                                 <Link to="/spare-goods-issue"><img alt='some value' src={changeTheam() === true ? TwothreeNew : Twothree} 
                                 className={changeTheam() === true ? "two-three-new" : "two-three"} style={ changeTheam() === true ? { width: "80px" } : {} }  /></Link>
@@ -184,8 +202,13 @@ class Map extends React.Component {
                                 <img alt='some value' src={Text6} className="text7" />
                                 <img alt='some value' src={Text7} className="text6" />
 
-                                <Link to="/spare-inventory-transfer"><img alt='some value' src={changeTheam() === true ? ThreeoneNew : Threeone} 
-                                className={changeTheam() === true ? "three-one-new" : "three-one"} style={ changeTheam() === true ? { width: "85px" } : {} }/></Link>
+                                <Link to="/spare-inventory-transfer">
+                                <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
+                                <img alt='some value' src={changeTheam() === true ? ThreeoneNew : Threeone} 
+                                className={changeTheam() === true ? "three-one-new" : "three-one"} style={ changeTheam() === true ? { width: "85px" } : {} }/>
+                                <span className="p-tooltip__message edit_p_tooltip__message tooltip4" role="tooltip" id="btm-cntr">Spare 4</span>
+                                    </div>
+                                </Link>
 
                                 <img alt='some value' src={changeTheam() === true ? ThreethreeNew : Threetwo} 
                                 className={changeTheam() === true ? "three-two-new" : "three-two"} style={ changeTheam() === true ? { width: "80px" } : {} }/>
@@ -232,7 +255,7 @@ class Map extends React.Component {
                                     <button className="p-contextual-menu__toggle" style={{ border: "none", padding: "0" }} aria-controls="menu-3" aria-expanded="false" aria-haspopup="true"><img alt='some value' src={Dropdown} /></button>
                                     <span className="p-contextual-menu__dropdown" id="menu-3" aria-hidden="true" aria-label="submenu">
                                         <span className="p-contextual-menu__group">
-                                            <Link to="/spare-salvage-return" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>คืนซากอะไหล่</Link>
+                                            <Link to="/spare-salvage-return" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>คืนซากอะไหล่ Spare5</Link>
                                             <Link to="/spare-salvage-sold" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>จำหหน่ายซากอะไหล่</Link>
                                         </span>
                                     </span>
@@ -241,8 +264,8 @@ class Map extends React.Component {
                                     <button className="p-contextual-menu__toggle" style={{ border: "none", padding: "0" }} aria-controls="menu-4" aria-expanded="false" aria-haspopup="true"><img alt='some value' src={Dropdown} /></button>
                                     <span className="p-contextual-menu__dropdown" id="menu-4" aria-hidden="true" aria-label="submenu">
                                         <span className="p-contextual-menu__group">
-                                            <Link to="/spare-report-b22" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รายงาน บ.22 (Spare6)</Link>
-                                            <Link to="/spare-report-s-1" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รายงาน ส.1 (Spare7)</Link>
+                                            <Link to="/spare-report-b22" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รายงาน บ.22 (Spare 6)</Link>
+                                            <Link to="/spare-report-s-1" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รายงาน ส.1 (Spare 7)</Link>
                                         </span>
                                     </span>
                                 </span>

@@ -54,7 +54,7 @@ const BottomContent = (props) => {
                 <p className="top-text">แขวง</p>
               </div>
               <div className="grid_7">
-                <SelectNoChildrenInput name="district_id"
+                <SelectNoChildrenInput name="district_id" tabIndex="7"
                   disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                   <option value=''></option>
                   {factDistricts.items.map((districts) => (
@@ -70,7 +70,7 @@ const BottomContent = (props) => {
                 <p className="top-text">ตอน</p>
               </div>
               <div className="grid_7">
-                <SelectNoChildrenInput name="node_id"
+                <SelectNoChildrenInput name="node_id" tabIndex="8"
                   disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                   <option value=''></option>
                   {factNodes.items.map((node) => {
@@ -88,7 +88,7 @@ const BottomContent = (props) => {
                 <p className="top-text">สถานี</p>
               </div>
               <div className="grid_7">
-                <SelectNoChildrenInput name="station_id"
+                <SelectNoChildrenInput name="station_id" tabIndex="9"
                   disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                   <option value=''></option>
                   {factStations.items.map((stations) => {
@@ -126,7 +126,9 @@ const BottomContent = (props) => {
                       <tr>
                         <th className="edit-padding text-center">{line_number}</th>
                         <td className="edit-padding">
-                          <SelectNoChildrenInput name={`line_custom[${index}].checklist_group_id`} disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                          <SelectNoChildrenInput name={`line_custom[${index}].checklist_group_id`} 
+                          tabIndex={10 + line_number}
+                          disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} >
                             <option value=''></option>
                             {factChecklistCustom.items.map((custom_group) => (
                               <option value={custom_group.checklist_group_id} key={custom_group.checklist_group_id}> {custom_group.checklist_group_name} </option>
@@ -134,7 +136,9 @@ const BottomContent = (props) => {
                           </SelectNoChildrenInput>
                         </td>
                         <td className="edit-padding">
-                          <SelectNoChildrenInput name={`line_custom[${index}].checklist_id`} disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                          <SelectNoChildrenInput name={`line_custom[${index}].checklist_id`} 
+                          tabIndex={10 + line_number}
+                          disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} >
                             <option value=''></option>
                             {factChecklist.items.map((custom_group) => {
                               if (values.line_custom[index].checklist_group_id == custom_group.checklist_group_id) {
@@ -144,12 +148,16 @@ const BottomContent = (props) => {
                           </SelectNoChildrenInput>
                         </td>
                         <td className="edit-padding text-center">
-                          <NumberInput step={0.01} name={`line_custom[${index}].quantity_location`} tabIndex="7" cssStyle={{ left: "60px", top: "-5px" }}
+                          <NumberInput step={0.01} name={`line_custom[${index}].quantity_location`} 
+                          tabIndex={10 + line_number}
+                           cssStyle={{ left: "60px", top: "-5px" }}
                             disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
                           />
                         </td>
                         <td className="edit-padding">
-                          <SelectNoChildrenInput name={`line_custom[${index}].unit_maintenance_location_id`} disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                          <SelectNoChildrenInput name={`line_custom[${index}].unit_maintenance_location_id`} 
+                          tabIndex={10 + line_number}
+                          disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} >
                             <option value=''></option>
                             {factUnitMaintenanceLocation.items.map((unit) => (
                               <option value={unit.unit_maintenance_location_id} key={unit.unit_maintenance_location_id}> {unit.unit_type} </option>

@@ -60,7 +60,7 @@ const TopContent = (props) => {
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
   // Fill Default Forms
-  useFillDefaultsOnModeAdd();
+  useFillDefaultsOnModeAdd(DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX);
 
   const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
 
