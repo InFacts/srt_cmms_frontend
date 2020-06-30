@@ -153,7 +153,7 @@ const useFooterInitializer = (document_type_id) => {
                 dispatch(footerToModeSearch());
             }
         }
-    }, [toolbar.mode, values.document_id, values.step_approve, values.warehouse_id]);
+    }, [toolbar.mode, values.document_id, values.step_approve, values.warehouse_id, values.active]);
 
     // Handle Back
     useEffect(() => {
