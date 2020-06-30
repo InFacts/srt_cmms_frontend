@@ -1880,9 +1880,9 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
     // Internal Document ID
     //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
     //  ie. GR-PYO-2563/0001
-    if (checkBooleanForEdit === true) {
-        return resolve();
-    }
+    // if (checkBooleanForEdit === true) {
+    //     return resolve();
+    // }
     console.log("I am validating internal document id ", internal_document_id)
     if (!internal_document_id) {
         console.log("I dont have any internal doc id")

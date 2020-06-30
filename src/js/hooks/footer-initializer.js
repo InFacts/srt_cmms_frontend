@@ -201,8 +201,6 @@ const useFooterInitializer = (document_type_id) => {
                         if (values.document_id) { // If have document_id, no need to create new doc
                             let data = packDataFromValues(fact, values, document_type_id);
                             console.log("I AM SUBMITTING ", data);
-                            if (document_type_id !== DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA && document_type_id !== DOCUMENT_TYPE_ID.ITEM_MASTER_DATA 
-                                && document_type_id !== DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA && document_type_id !== DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM) {
                                 editDocument(values.document_id, document_type_id, data, values.files)
                                     .then((document_id) => {
                                         setFieldValue('document_id', values.document_id, true);
@@ -216,19 +214,6 @@ const useFooterInitializer = (document_type_id) => {
                                         console.log(" I submitted and i am now handling click")
                                         dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
                                     });
-                            } else { // For POST MASTER DATA
-                                editMasterDataHelper(document_type_id, data)
-                                    .then(() => {
-                                        dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
-                                    })
-                                    .catch((err) => {
-                                        console.log("Submit Failed ", err.response);
-                                        dispatch(navBottomError('[PUT]', 'Submit Failed', err));
-                                    })
-                                    .finally(() => { // Set that I already handled the Click
-                                        console.log(" I submitted and i am now handling click")
-                                    });
-                            }
                         } else { // If not have document_id
                             let data = packDataFromValues(fact, values, document_type_id);
                             console.log("I AM SUBMITTING ", data);
@@ -247,7 +232,20 @@ const useFooterInitializer = (document_type_id) => {
                                         console.log(" I submitted and i am now handling click")
                                         dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
                                     });
-                            } else { // For POST MASTER DATA
+                            } else { 
+                                if (values.modeEdit === true) {// Mode Edit Mater data
+                                    editMasterDataHelper(document_type_id, data)
+                                        .then(() => {
+                                            dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
+                                        })
+                                        .catch((err) => {
+                                            console.log("Submit Failed ", err.response);
+                                            dispatch(navBottomError('[PUT]', 'Submit Failed', err));
+                                        })
+                                        .finally(() => { // Set that I already handled the Click
+                                            console.log(" I submitted and i am now handling click")
+                                        });
+                                } else {// For POST MASTER DATA
                                 saveMasterData(document_type_id, data)
                                     .then(() => {
                                         dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
@@ -259,6 +257,7 @@ const useFooterInitializer = (document_type_id) => {
                                     .finally(() => { // Set that I already handled the Click
                                         console.log(" I submitted and i am now handling click")
                                     });
+                                }
                             }
                         }
                     }
