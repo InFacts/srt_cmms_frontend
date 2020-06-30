@@ -23,11 +23,11 @@ const BottomContent = (props) => {
                     "enable_permission": true,
                     "position_id": list.position_id,
                     "function": [
-                        list.module_1 === true ? 1 : 0,
-                        list.module_2 === true ? 2 : 0,
-                        list.module_3 === true ? 3 : 0,
-                        list.module_4 === true ? 4 : 0,
-                        list.module_5 === true ? 5 : 0,
+                        list.module_spare === true ? 1 : 0,
+                        list.module_pmt === true ? 2 : 0,
+                        list.module_als === true ? 3 : 0,
+                        list.module_track_document === true ? 4 : 0,
+                        list.module_admin === true ? 5 : 0,
                     ]
                 }
                 // console.log("data", data)
@@ -81,23 +81,23 @@ const BottomContent = (props) => {
                                     <td className="edit-padding text-center">{index + 1}</td>
                                     <td className="edit-padding">{list.abbreviation} - {list.name}</td>
                                     <td className="edit-padding" style={{ padding: "5px 60px" }}>
-                                        <CheckboxInput name={`line_position_permission[${index}].module_1`}
+                                        <CheckboxInput name={`line_position_permission[${index}].module_spare`}
                                             checked={values.line_position_permission[index].module_1} value={true} />
                                     </td>
                                     <td className="edit-padding" style={{ padding: "5px 60px" }}>
-                                        <CheckboxInput name={`line_position_permission[${index}].module_2`}
+                                        <CheckboxInput name={`line_position_permission[${index}].module_pmt`}
                                             checked={values.line_position_permission[index].module_2} value={true} />
                                     </td>
                                     <td className="edit-padding" style={{ padding: "5px 95px" }}>
-                                        <CheckboxInput name={`line_position_permission[${index}].module_3`}
+                                        <CheckboxInput name={`line_position_permission[${index}].module_als`}
                                             checked={values.line_position_permission[index].module_3} value={true} />
                                     </td>
                                     <td className="edit-padding" style={{ padding: "5px 60px" }}>
-                                        <CheckboxInput name={`line_position_permission[${index}].module_4`}
+                                        <CheckboxInput name={`line_position_permission[${index}].module_track_document`}
                                             checked={values.line_position_permission[index].module_4} value={true} />
                                     </td>
                                     <td className="edit-padding" style={{ padding: "5px 60px" }}>
-                                        <CheckboxInput name={`line_position_permission[${index}].module_5`}
+                                        <CheckboxInput name={`line_position_permission[${index}].module_admin`}
                                             checked={values.line_position_permission[index].module_5} value={true} />
                                     </td>
                                 </tr>

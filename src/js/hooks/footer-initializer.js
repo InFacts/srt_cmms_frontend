@@ -127,10 +127,11 @@ const useFooterInitializer = (document_type_id) => {
     useEffect(() => {
         let document_id = values.document_id;
         let routeLocation = getRouteLocation();
-        if (routeLocation === spacialPage.ITEM_MASTER_DATA || routeLocation === spacialPage.WAREHOUSE || routeLocation === spacialPage.PMT_EQUIPMENT_MASTER || routeLocation === spacialPage.PMT_CREATE_CHECKOUT) {
+        if (routeLocation === spacialPage.ITEM_MASTER_DATA || routeLocation === spacialPage.WAREHOUSE || routeLocation === spacialPage.PMT_EQUIPMENT_MASTER
+            || routeLocation === spacialPage.PMT_CREATE_CHECKOUT) {
             if (toolbar.mode === TOOLBAR_MODE.SEARCH) {
                 // TODO: Check is_Admin
-                if (values.active !== undefined && values.active !== "") { dispatch(footerToModeSave()); }
+                if (values.active !== undefined && values.active !== "" && values.modeEdit === true) { dispatch(footerToModeSave()); }
                 else { dispatch(footerToModeSearch()); }
             }
             else if (toolbar.mode === TOOLBAR_MODE.ADD) {

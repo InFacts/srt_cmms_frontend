@@ -30,11 +30,11 @@ const TopContent = (props) => {
             <h4 className="head-title" style={{ color: "black" }}>ระบบฐานข้อมูลระบบอาณัติสัญญาณเพื่อวิเคราะห์และวางแผนซ่อมบำรุง</h4>
 
             <div className="grid_4">
-              <Link to={values.line_position_permission.length !== 0 && values.line_position_permission[0].module_1 ? "/main-spare" : "#"}>
+              <Link to={values.line_position_permission.length !== 0 && values.line_position_permission[0].module_spare ? "/main-spare" : "#"}>
                 <div className="card p-tooltip--btm-center" aria-describedby="btm-cntr" 
                 style={changeTheam() === true
                   ?
-                  values.line_position_permission.length !== 0 && values.line_position_permission[0].module_1 === true
+                  values.line_position_permission.length !== 0 && values.line_position_permission[0].module_spare === true
                     ?
                     { background: "#EFAAA1", border: "2px solid #E92D13" }
                     :
@@ -54,11 +54,11 @@ const TopContent = (props) => {
             </div>
 
             <div className="grid_4">
-              <Link to={values.line_position_permission.length !== 0 && values.line_position_permission[0].module_2 ? "/main-pmt" : "#"}>
+              <Link to={values.line_position_permission.length !== 0 && values.line_position_permission[0].module_pmt ? "/main-pmt" : "#"}>
                 <div className="card p-tooltip--btm-center" aria-describedby="btm-cntr" 
                 style={changeTheam() === true
                   ?
-                  values.line_position_permission.length !== 0 && values.line_position_permission[0].module_2 === true
+                  values.line_position_permission.length !== 0 && values.line_position_permission[0].module_pmt === true
                     ?
                     { background: "#CBECFD", border: "2px solid #00B0F7" }
                     :
@@ -80,11 +80,11 @@ const TopContent = (props) => {
             </div>
 
             <div className="grid_4">
-              <Link to={values.line_position_permission.length !== 0 && values.line_position_permission[0].module_3 ? "/main-als" : "#"}>
+              <Link to={values.line_position_permission.length !== 0 && values.line_position_permission[0].module_als ? "/main-als" : "#"}>
                 <div className="card p-tooltip--btm-center" aria-describedby="btm-cntr"
                   style={changeTheam() === true
                     ?
-                    values.line_position_permission.length !== 0 && values.line_position_permission[0].module_3 === true
+                    values.line_position_permission.length !== 0 && values.line_position_permission[0].module_als === true
                       ?
                       { background: "#D3F1A1", border: "2px solid #9CCC11" }
                       :
@@ -106,11 +106,11 @@ const TopContent = (props) => {
             </div>
 
             <div className="grid_4">
-              <Link to={values.line_position_permission.length !== 0 && values.line_position_permission[0].module_4 ? "/track" : "#"}>
+              <Link to={values.line_position_permission.length !== 0 && values.line_position_permission[0].module_track_document ? "/track" : "#"}>
                 <div className="card p-tooltip--btm-center" aria-describedby="btm-cntr"
                   style={changeTheam() === true
                     ?
-                    values.line_position_permission.length !== 0 && values.line_position_permission[0].module_4 === true
+                    values.line_position_permission.length !== 0 && values.line_position_permission[0].module_track_document === true
                       ?
                       { background: "#F5F8BF", border: "2px solid #FAF700" }
                       :
@@ -132,9 +132,9 @@ const TopContent = (props) => {
             </div>
 
             <div className="grid_4">
-              <Link to={values.line_position_permission.length !== 0 && values.line_position_permission[0].module_5 ? "/main-admin" : "#"}>
+              <Link to={values.line_position_permission.length !== 0 && values.line_position_permission[0].module_admin ? "/main-admin" : "#"}>
                 <div className="card p-tooltip--btm-center" aria-describedby="btm-cntr"
-                  style={values.line_position_permission.length !== 0 && values.line_position_permission[0].module_5 ? {} : { background: "gray" }}>
+                  style={values.line_position_permission.length !== 0 && values.line_position_permission[0].module_admin ? {} : { background: "gray" }}>
                   <div className="image">
                     <img src={Spare} alt="Generic placeholder thumbnail" />
                   </div>
