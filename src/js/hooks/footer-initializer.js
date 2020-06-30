@@ -45,9 +45,9 @@ const useFooterInitializer = (document_type_id) => {
     
     //Handle Document Status TODO: move it out of footer!!
     const hadleDocumentStatusWithFooter = (document_id) => {
-        console.log("hadleDocumentStatusWithFooter")
+        // console.log("hadleDocumentStatusWithFooter")
         checkDocumentStatus(values).then(function (docuementStatus) {
-            console.log("checkDocumentStatus", docuementStatus)
+            // console.log("checkDocumentStatus", docuementStatus)
             setFieldValue("status_name_th", docuementStatus, false);
             let userInfo = {
                 id: user_id.id, // TEST: User ID
@@ -86,9 +86,9 @@ const useFooterInitializer = (document_type_id) => {
                 // Check Next Approver from postion_id
                 fetchLatestStepApprovalDocumentData(track_document_id).then((latestApprovalInfo) => {
                     if (latestApprovalInfo !== undefined || latestApprovalInfo.length !== 0) {
-                        console.log("latestApprovalInfo------> ", latestApprovalInfo)
-                        console.log("user------> ", latestApprovalInfo.position_id, userInfo.position_id)
-                        console.log("approval_step_action_id------> ", latestApprovalInfo.approval_step_action_id, APPROVAL_STEP_ACTION.APPROVAL)
+                        // console.log("latestApprovalInfo------> ", latestApprovalInfo)
+                        // console.log("user------> ", latestApprovalInfo.position_id, userInfo.position_id)
+                        // console.log("approval_step_action_id------> ", latestApprovalInfo.approval_step_action_id, APPROVAL_STEP_ACTION.APPROVAL)
                         if (latestApprovalInfo.position_id === userInfo.position_id) {
                             if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_APPROVAL) {
                                 dispatch(footerToModeApApproval());
@@ -145,6 +145,7 @@ const useFooterInitializer = (document_type_id) => {
             }
             else if (toolbar.mode === TOOLBAR_MODE.ADD) {
                 // ADD_DRAFT mode
+                hadleDocumentStatusWithFooter(document_id);
                 dispatch(footerToModeAddDraft());
             }
             else {
