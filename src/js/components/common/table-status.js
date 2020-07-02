@@ -39,7 +39,7 @@ const TableStatus = (props) => {
   return (
     <>
       {[0].map((newTable,j) => (
-        <div style={{ padding: "10px"}}>
+        <div style={{ paddingRight: "10px", paddingLeft: "10px" }}>
           <h2>Approval Process ID #{props.bodyTableStatus.length !== 0 ? props.bodyTableStatus[j].approval_process_id: "ไม่มี"}</h2>
           <table className="table-many-column mt-2">
             <thead>

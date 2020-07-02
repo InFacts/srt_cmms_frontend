@@ -15,6 +15,8 @@ import Text9 from '../../../images/admin/text9.svg'
 
 import RedHouse from '../../../images/red-house.svg';
 
+import BgPink from '../../../images/admin/bg_pink.jpg';
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 // Start Function For Drop Dawn
 const toggleMenu = (element, show, top) => {
     var target = document.getElementById(element.getAttribute('aria-controls'));
@@ -80,44 +82,42 @@ class Map extends React.Component {
     componentDidMount() {
         // Setup DropDawn
         setupAllContextualMenus('.p-contextual-menu__toggle');
-      }
+    }
 
     render() {
 
         return (
-            <div>
-                <div>
-                    <div className="container_12 clearfix">
-                        <section className="grid_12 ">
-                            <h4 className="head-title" style={{ color: "black" }}>บริหารจัดการผู้ใช้งาน</h4>
-                            <div style={{ height: "350px" }} id="blackground-white">
-                                <Link to="/user-management"><img alt='some value' src={Oneone} className="Aone-one" /></Link>
-                                <img alt='some value' src={Text1} className="Atext1" />
-                                <Link to="/permissiton-admin"><img alt='some value' src={Twoone} className="Atwo-one" /></Link>
-                                <img alt='some value' src={Text4} className="Atext4" />
-                                <Link to="/activity-log"><img alt='some value' src={Threeone} className="Athree-one" /></Link>
-                                <img alt='some value' src={Text7} className="Atext7" />
-                                <Link to="/register"><img alt='some value' src={Fourone} className="AFour-one" /></Link>
-                                <img alt='some value' src={Text9} className="Atext9" />
-                            </div>
-                        </section>
-                    </div>
-                </div>
-                <div id="red-house2">
-                    <div className="container_12 clearfix">
-                        <div className="grid_12 from-red-house">
-                            <img alt='red house' src={RedHouse} />
+            <div style={changeTheam() === true ? { backgroundImage: `url(${BgPink})`, width: "100vw", height: "100vh" } : {}}>
+                <div className="container_12 clearfix">
+                    <section className="grid_12 ">
+                        <h4 className="head-title" style={{ color: "black" }} >บริหารจัดการผู้ใช้งาน</h4>
+                        <div style={{ height: "350px" }} id="blackground-white" style={ changeTheam() === true ? { borderRadius: "25px", border: "2px dashed gray", height: "380px" } : {height: "380px"}}>
+                            <Link to="/user-management"><img alt='some value' src={Oneone} className="Aone-one" /></Link>
+                            <img alt='some value' src={Text1} className="Atext1" />
+                            <Link to="/permissiton-admin"><img alt='some value' src={Twoone} className="Atwo-one" /></Link>
+                            <img alt='some value' src={Text4} className="Atext4" />
+                            <Link to="/activity-log"><img alt='some value' src={Threeone} className="Athree-one" /></Link>
+                            <img alt='some value' src={Text7} className="Atext7" />
+                            <Link to="/register"><img alt='some value' src={Fourone} className="AFour-one" /></Link>
+                            <img alt='some value' src={Text9} className="Atext9" />
                         </div>
-                    </div>
-                </div>
-
-                <div id="red-house">
-                    <div className="container_12 clearfix">
-                        <div className="grid_12">
-                        </div>
-                    </div>
+                    </section>
                 </div>
             </div>
+            // <div id="red-house2">
+            //     <div className="container_12 clearfix">
+            //         <div className="grid_12 from-red-house">
+            //             <img alt='red house' src={RedHouse} />
+            //         </div>
+            //     </div>
+            // </div>
+
+            // <div id="red-house">
+            //     <div className="container_12 clearfix">
+            //         <div className="grid_12">
+            //         </div>
+            //     </div>
+            // </div>
         )
     };
 }

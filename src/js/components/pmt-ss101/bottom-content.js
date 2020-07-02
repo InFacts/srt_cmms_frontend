@@ -43,7 +43,7 @@ const BottomContent = (props) => {
     const factPosition = useSelector((state) => ({ ...state.api.fact[FACTS.POSITION] }), shallowEqual);
 
     const factUnit = useSelector((state) => ({ ...state.api.fact[FACTS.UNIT_OF_MEASURE] }), shallowEqual);
-    const { values, setFieldValue } = useFormikContext();
+    const { values, setFieldValue, validateField } = useFormikContext();
 
     const [lineNumber, setLineNumber] = useState('');
 
@@ -101,7 +101,11 @@ const BottomContent = (props) => {
         }
     }
 
-    const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
+  let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
+  useEffect(() => {
+    checkBooleanForEdit = false
+    validateField("internal_document_id")
+  }, [values.internal_document_id])
     return (
         <div id={changeTheam() === true ? "" : "blackground-gray"}>
             <div className="container_12 clearfix" id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>
@@ -565,12 +569,12 @@ const BottomContent = (props) => {
                                         <td className="edit-padding text-center">{index + 1}</td>
                                         <td className="edit-padding">
                                             <TextInput name={`loss_line_items[${index}].description`} tabIndex={41 + index + 1}
-                                                disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
+                                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                                             />
                                         </td>
                                         <td className="edit-padding text-center">
                                             <NumberInput step={0.01} name={`loss_line_items[${index}].quantity`} tabIndex={41 + index + 1}
-                                                disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
+                                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                                             />
                                         </td>
                                         <td className="edit-padding text-center">
@@ -585,12 +589,12 @@ const BottomContent = (props) => {
                                         </td>
                                         <td className="edit-padding text-center">
                                             <NumberInput step={1} name={`loss_line_items[${index}].price`} tabIndex={41 + index + 1}
-                                                disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
+                                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                                             />
                                         </td>
                                         <td className="edit-padding">
                                             <TextInput name={`loss_line_items[${index}].remark`} tabIndex={41 + index + 1}
-                                                disabled={props.actionMode === TOOLBAR_MODE.SEARCH}
+                                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                                             />
                                         </td>
                                     </tr>

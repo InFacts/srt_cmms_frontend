@@ -264,7 +264,7 @@ export const getNumberFromEscapedString = (escapedString) => {
 }
 
 export const isValidInternalDocumentIDFormat = (internal_document_id) => {
-    const internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SD|WR|WO|WP|SS|MI|EI|CS)-[A-Z]{3}-\d{4}\/\d{4}$/g;
+    const internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SD|WR|WO|WP|SS|MI|EI|PM)-[A-Z]{3}-\d{4}\/\d{4}$/g;
     return internalDocumentIDRegex.test(internal_document_id);
 }
 export const isValidInternalDocumentIDDraftFormat = (internal_document_id) => {
@@ -346,7 +346,8 @@ export const packDataFromValues = (fact, values, document_type_id) => {
 
         let equipment_item_part = {
             item_id: lastItemId,
-            equipment_group_id: parseInt(values.equipment_group_id)
+            equipment_group_id: parseInt(values.equipment_group_id),
+            checklist_id: parseInt(values.checklist_id)
         }
 
         let item_part = {
@@ -710,6 +711,11 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             delete ss101_line_item_part[index].description
             delete ss101_line_item_part[index].equipment_item_id
             delete ss101_line_item_part[index].equipment_status_id
+
+            delete ss101_line_item_part[index].per_unit_price
+            delete ss101_line_item_part[index].quantity
+            delete ss101_line_item_part[index].uom_id
+            delete ss101_line_item_part[index].list_uoms
         })
 
         let ss101_part_big = {
@@ -769,8 +775,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             location_district_id: values.location_district_id ? parseInt(values.location_district_id) : null,
             location_node_id: values.location_node_id ? parseInt(values.location_node_id) : null,
             location_station_id: values.location_station_id ? parseInt(values.location_station_id) : null,
-            // location_description: values.location_description ,
-            location_description: 1 ,
+            location_description: values.location_description,
             installed_on: values.installed_on + 'T00:00:00+00:00',
             announce_use_on: values.announce_use_on + 'T00:00:00+00:00',
             // equipment_status_id: values.equipment_status_id,
@@ -818,157 +823,64 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             name: values.name,
             active: values.active === "1" ? true : false,
             node_id: parseInt(values.node_id),
-            station_id: parseInt(values.station_id)
+            station_id: parseInt(values.station_id),
+            start_on: values.start_on + 'T01:01:01+00:00',
         }
         
         // ต้องเป็น Array selector_checklist_group_part
         let selector_checklist_group_part = []
         // ของ Custom line item
-        values.line_custom.map((line_custom) => {
+        let line_number;
+        values.line_custom.map((line_custom, index) => {
             if (line_custom.checklist_id) {
                 let custom_groups = fact[FACTS.CHECKLIST_CUSTOM_GROUP].items;
                 let custom_group = custom_groups.find(custom_group => `${custom_group.checklist_group_id}` === `${line_custom.checklist_group_id}`); // Returns undefined if not found
+                line_number = index + 1;
                 if (custom_group) {
                     selector_checklist_group_part.push({
                         document_id: values.document_id,
                         name_group: custom_group.checklist_group_name,
-                        unit_maintenance_location_id: parseInt(line_custom.unit_maintenance_location_id)
+                        unit_maintenance_location_id: parseInt(line_custom.unit_maintenance_location_id),
+                        line_number: line_number,
+                        checklist: [
+                            {
+                                checklist_id: parseInt(line_custom.checklist_id),
+                                equipment_id: null,
+                                quantity: line_custom.quantity_location,
+                            }
+                        ]
                     })
                 }
             }
         })
         // ของ Equipment line item
-        values.line_equipment.map((line_equipment) => {
+        values.line_equipment.map((line_equipment, index) => {
             if (line_equipment.checklist_id) {
                 let equipment_groups = fact[FACTS.CHECKLIST_EQUIPMENT_GROUP].items;
                 let equipment_group = equipment_groups.find(equipment_group => `${equipment_group.checklist_group_id}` === `${line_equipment.checklist_group_id}`); // Returns undefined if not found
+                console.log("equipment_group", equipment_group)
                 if (equipment_group) {
                     selector_checklist_group_part.push({
                         document_id: values.document_id,
-                        name_group: equipment_group.checklist_group_name,
-                        unit_maintenance_location_id: parseInt(line_equipment.unit_maintenance_location_id)
-                    })
-                }
-            }
-        })
-
-        // ต้องเป็น Array selector_checklist_part
-        let selector_checklist_part = [];
-        // ของ Custom line item
-        values.line_custom.map((line_custom) => {
-            if (line_custom.checklist_id) {
-                let custom_groups = fact[FACTS.CHECKLIST].items;
-                let custom_group = custom_groups.find(custom_group => `${custom_group.checklist_id}` === `${line_custom.checklist_id}`); // Returns undefined if not found
-                if (custom_group) {
-                    selector_checklist_part.push({
-                        selector_checklist_id: custom_group.checklist_id,
-                        document_id: values.document_id,
-                        name: custom_group.checklist_name,
-                        remark: custom_group.remark,
-                        start_on: values.start_on + 'T01:01:01+00:00',
-                        unit_maintenance_location_id: parseInt(line_custom.unit_maintenance_location_id),
-                        // equipment_id: 
-                    })
-                }
-            }
-        })
-        // ของ Equipment line item
-        values.line_equipment.map((line_equipment) => {
-            if (line_equipment.checklist_id) {
-                let equipment_groups = fact[FACTS.CHECKLIST].items;
-                let equipment_group = equipment_groups.find(equipment_group => `${equipment_group.checklist_id}` === `${line_equipment.checklist_id}`); // Returns undefined if not found
-                if (equipment_group) {
-                    selector_checklist_part.push({
-                        selector_checklist_id: equipment_group.checklist_id,
-                        document_id: values.document_id,
-                        name: equipment_group.checklist_name,
-                        remark: equipment_group.remark,
-                        start_on: values.start_on + 'T00:00:00+00:00',
+                        name_group: equipment_group.name,
                         unit_maintenance_location_id: parseInt(line_equipment.unit_maintenance_location_id),
-                        // equipment_id: 
+                        line_number: line_number + index + 1,
+                        checklist: [
+                            {
+                                checklist_id: parseInt(line_equipment.checklist_id),
+                                equipment_id: line_equipment.equipment_id,
+                                quantity: line_equipment.quantity_location,
+                            }
+                        ]
                     })
                 }
             }
         })
 
-        // ต้องเป็น Array  selector_checklist_line_item_part
-        let selector_checklist_line_item_part = [];
-        // ของ Custom line item
-        values.line_custom.map((line_custom) => {
-            if (line_custom.checklist_id) {
-                let custom_groups = fact[FACTS.CHECKLIST_LINE_ITEM].items;
-                custom_groups.map((checklist_line_item) => {
-                    if (checklist_line_item.checklist_id == line_custom.checklist_id){
-                        selector_checklist_line_item_part.push({
-                        selector_checklist_line_item_id: checklist_line_item.checklist_line_item,
-                        name: checklist_line_item.name,
-                        freq: checklist_line_item.freq,
-                        freq_unit_id: checklist_line_item.freq_unit_id,
-                        start_on: values.start_on + 'T00:00:00+00:00',
-                        active: checklist_line_item.active.data[0] === "1" ? true : false,
-                        remark: checklist_line_item.remark,
-                        selector_checklist_id: checklist_line_item.checklist_id
-                    })
-                    }
-                });
-            }
-        })
-        values.line_equipment.map((line_equipment) => {
-            if (line_equipment.checklist_id) {
-                let equipment_groups = fact[FACTS.CHECKLIST_LINE_ITEM].items;
-                equipment_groups.map((checklist_line_item) => {
-                    if (checklist_line_item.checklist_id == line_equipment.checklist_id) {
-                        selector_checklist_line_item_part.push({
-                            selector_checklist_line_item_id: checklist_line_item.checklist_line_item,
-                            name: checklist_line_item.name,
-                            freq: checklist_line_item.freq,
-                            freq_unit_id: checklist_line_item.freq_unit_id,
-                            start_on: values.start_on + 'T01:01:01+00:00',
-                            active: checklist_line_item.active.data[0] === "1" ? true : false,
-                            remark: checklist_line_item.remark,
-                            selector_checklist_id: checklist_line_item.checklist_id
-                        })
-                    }
-                })
-            }
-        })
-
-        // ต้องเป็น Array selector_checklist_line_item_use_equipment_part
-        let selector_checklist_line_item_use_equipment_part = []
-        // ของ Custom line item
-        selector_checklist_line_item_part.map((line_custom, index) => {
-                let custom_groups = fact[FACTS.CHECKLIST_LINE_ITEM_USE_EQUIPMENT].items;
-                custom_groups.map((checklist_line_item_use_equipment) => {
-                    if (checklist_line_item_use_equipment.checklist_line_item_id == line_custom.selector_checklist_line_item_id) {
-                        selector_checklist_line_item_use_equipment_part.push({
-                            selector_checklist_line_item_use_equipment_id: checklist_line_item_use_equipment.checklist_line_item_use_equipment_id,
-                            selector_checklist_line_item_id: checklist_line_item_use_equipment.checklist_line_item_id,
-                            item_id: checklist_line_item_use_equipment.item_id,
-                            quantity: checklist_line_item_use_equipment.quantity,
-                            uom_id: checklist_line_item_use_equipment.uom_id
-                        })
-                    }
-                })
-        })
-
-        let prev_part = {
-            selector_pm_plan: {},
-            selector_checklist_group: [],
-            selector_checklist: [],
-            selector_checklist_line_item: [],
-            selector_checklist_line_item_use_equipment: []
-        }
-        
         let specific_selector = {
             selector_pm_plan: selector_pm_plan_part,
             selector_checklist_group: selector_checklist_group_part,
-            selector_checklist: selector_checklist_part,
-            selector_checklist_line_item: selector_checklist_line_item_part,
-            selector_checklist_line_item_use_equipment: selector_checklist_line_item_use_equipment_part,
-            prev: prev_part
         }
-
-        console.log("specific_selector", specific_selector)
 
         return {
             document: document_part_selector,
@@ -1745,6 +1657,27 @@ const responseToFormState = (fact, data, document_type_group_id) => {
             location_station_id: data.specific.location_station_id,
             installed_on: data.specific.installed_on.slice(0, 10),
         }
+    } else if (document_type_group_id === DOCUMENT_TYPE_ID.SELECTOR) {
+        var created_on = new Date(data.document.created_on);
+        created_on.setHours(created_on.getHours() + 7);
+        return {
+            document_id: data.document.document_id,
+            internal_document_id: data.document.internal_document_id,
+            created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_user_id) || '',
+            created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_admin_id) || '',
+            created_on: created_on.toISOString().split(".")[0],
+            src_warehouse_id: data.document.warehouse_id,
+            remark: data.document.remark,
+            document_date: data.document.document_date.slice(0, 10),
+            
+            name: data.specific.selector_pm_plan.name,
+            district_id: data.specific.selector_pm_plan.node.district_id,
+            node_id: data.specific.selector_pm_plan.node_id,
+            station_id: data.specific.selector_pm_plan.station_id,
+            start_on: data.specific.selector_pm_plan.start_on.slice(0, 10),
+            line_custom: returnFullArrayLineCustom(data.specific.selector_pm_plan.selector_checklist_group),
+            line_equipment: returnFullArrayLineEquipment(data.specific.selector_pm_plan.selector_checklist_group),
+        }
     }
 }
 
@@ -1873,6 +1806,62 @@ function returnFullArrayLossLineItemNull(loss_line_items) {
         });
     }
     return loss_line_items;
+}
+
+function returnFullArrayLineCustom(line_custom) {
+    console.log("line_custom", line_custom)
+    let initialLineCustom = {
+        name_group: '',
+        unit_maintenance_location_id: '',
+        checklist_name: '',
+        quantity: ''
+    }
+    let line_customs = [];
+    line_custom.map((line_custom, index) => {
+        console.log("line_custom", line_custom)
+        if (!line_custom.selector_checklist[index].equipment_id) {
+        line_customs.push({
+            checklist_group_id: line_custom.selector_checklist[index].checklist.checklist_group_id,
+            unit_maintenance_location_id: line_custom.unit_maintenance_location_id,
+            checklist_id: line_custom.selector_checklist[index].checklist.checklist_id,
+            quantity_location: line_custom.selector_checklist[index].quantity
+        });
+        }
+    })
+    for (var i = line_custom.length; i <= 9 ; i++) {
+        line_customs.push({
+            initialLineCustom
+        });
+    }
+    return line_customs;
+}
+
+function returnFullArrayLineEquipment(line_equipment) {
+    let initialLineEquipment = {
+        internal_item_id: '',
+        name_group: '',
+        unit_maintenance_location_id: '',
+        checklist_name: '',
+        quantity: ''
+    }
+    let line_equipments = [];
+    line_equipment.map((line_equipment, index) => {
+        if (line_equipment.selector_checklist[index].equipment_id) {
+        line_equipments.push({
+            internal_item_id: line_equipment.selector_checklist[index].equipment.equipment_item.item.internal_item_id,
+            checklist_group_id: line_equipment.selector_checklist[index].checklist.checklist_group_id,
+            unit_maintenance_location_id: line_equipment.unit_maintenance_location_id,
+            checklist_id: line_equipment.selector_checklist[index].checklist.checklist_id,
+            quantity_location: line_equipment.selector_checklist[index].quantity
+        });
+        }
+    })
+    for (var i = line_equipment.length; i <= 9 ; i++) {
+        line_equipments.push({
+            initialLineEquipment
+        });
+    }
+    return line_equipments;
 }
 
 // Validation 
@@ -2126,7 +2115,7 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
                 if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
                     && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
                     console.log("validateInternalDocumentIDField:: I got document ID ")
-                    // setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
+                    setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
                     validateField("created_by_user_employee_id");
                     validateField("created_by_admin_employee_id");
                     return resolve(null);

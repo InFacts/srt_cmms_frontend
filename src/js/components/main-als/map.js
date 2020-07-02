@@ -5,6 +5,7 @@ import '../../../vender/fontawesome-free/css/all.css';
 import '../../../css/position-arrow-als.css';
 
 import Oneone from '../../../images/als/one-one.svg'
+import OneoneNew from '../../../images/als/one-one-new.svg'
 
 import Text1 from '../../../images/als/text1.svg'
 
@@ -17,7 +18,10 @@ import Threeone from '../../../images/als/three-one.svg'
 import ThreeoneNew from '../../../images/als/three-one-new.svg'
 
 import Text7 from '../../../images/als/text7.svg'
+
 import Fourone from '../../../images/als/four-one.svg'
+import FouroneNew from '../../../images/als/four-one-new.svg'
+
 import Text9 from '../../../images/als/text9.svg'
 
 import Fiveone from '../../../images/als/five-one.svg'
@@ -108,7 +112,7 @@ class Map extends React.Component {
 
                                 <Link to="/als-spare">
                                 <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
-                                <img alt='some value' src={Oneone} className="ALSone-one" />
+                                <img alt='some value'src={changeTheam() === true ? OneoneNew : Oneone} className={changeTheam() === true ? "ALSone-one-new" : "ALSone-one"} style={ changeTheam() === true ? { width: "70px" } : {} } />
                                 <span className="p-tooltip__message edit_p_tooltip__message Atooltip1" role="tooltip" id="btm-cntr">ALS 2</span>
                                     </div>
                                     </Link>
@@ -130,7 +134,9 @@ class Map extends React.Component {
 
                                 <Link to="/als-preventive-maintenance">
                                 <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
-                                <img alt='some value' src={Fourone} className="ALSFour-one" />
+
+                                <img alt='some value' src={changeTheam() === true ? FouroneNew : Fourone} className={changeTheam() === true ? "ALSFour-one-new" : "ALSFour-one"} style={ changeTheam() === true ? { width: "65px" } : {} } />
+
                                 <span className="p-tooltip__message edit_p_tooltip__message Atooltip4" role="tooltip" id="btm-cntr">ALS 4</span>
                                     </div>
                                     </Link>

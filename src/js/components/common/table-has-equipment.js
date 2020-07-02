@@ -12,8 +12,8 @@ const Table = (props) => {
   const factItemStatus = useSelector((state) => ({ ...state.api.fact[FACTS.ITEM_STATUS] }), shallowEqual);
 
   return (
-    <div style={{ padding: "10px" }}>
-      <table className="table-many-column">
+    <div style={{ paddingRight: "10px", paddingLeft: "10px" }}>
+      <table className="table-many-column mt-2">
         <thead>
           <tr>
             <th className="font text-center" style={{ width: "50px" }}>#</th>

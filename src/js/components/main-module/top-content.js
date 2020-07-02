@@ -10,6 +10,8 @@ import Spare from '../../../images/main/spare.svg';
 import Pmt from '../../../images/main/pmt.svg';
 import Als from '../../../images/main/als.svg';
 import Approval from '../../../images/main/approval.svg';
+import UserManagement from '../../../images/main/user-management.svg';
+import Flow from '../../../images/main/flow.svg';
 import BgWhite from '../../../images/main/bg_white.jpg';
 import useFetchPernissionUser from '../../hooks/fetch-permission-user';
 import { changeTheam } from '../../helper.js'
@@ -134,9 +136,17 @@ const TopContent = (props) => {
             <div className="grid_4">
               <Link to={values.line_position_permission.length !== 0 && values.line_position_permission[0].module_admin ? "/main-admin" : "#"}>
                 <div className="card p-tooltip--btm-center" aria-describedby="btm-cntr"
-                  style={values.line_position_permission.length !== 0 && values.line_position_permission[0].module_admin ? {} : { background: "gray" }}>
+                 style={changeTheam() === true
+                  ?
+                  values.line_position_permission.length !== 0 && values.line_position_permission[0].module_track_document === true
+                    ?
+                    { background: "#CBB0E9", border: "2px solid #652D90" }
+                    :
+                    { background: "gray" }
+                  :
+                  {}}>
                   <div className="image">
-                    <img src={Spare} alt="Generic placeholder thumbnail" />
+                    <img src={UserManagement} alt="Generic placeholder thumbnail" />
                   </div>
                   <div className="content ">
                     <div className="card-body">บริหารจัดการผู้ใช้งาน</div>
@@ -149,9 +159,15 @@ const TopContent = (props) => {
 
             <div className="grid_4">
               <Link to="/approval-flow">
-                <div className="card p-tooltip--btm-center" aria-describedby="btm-cntr">
+                <div className="card p-tooltip--btm-center" aria-describedby="btm-cntr"
+                style={changeTheam() === true
+                    ?
+                    { background: "#F8CFDC", border: "2px solid #ED145B" }
+                    :
+                    { background: "gray" }
+                }>
                   <div className="image ">
-                    <img src={Spare} alt="Generic placeholder thumbnail" />
+                    <img src={Flow} width="65px" alt="Generic placeholder thumbnail" />
                   </div>
                   <div className="content ">
                     <div className="card-body">บริหารจัดการเส้นทางเอกสาร</div>

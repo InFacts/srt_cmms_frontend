@@ -1,5 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from "redux-thunk";
 // import reducers from './reducers';
@@ -15,6 +16,8 @@ import useFactInitializer from '../../hooks/fact-initializer';
 import { useFormik, withFormik, useFormikContext } from 'formik';
 import useTokenInitializer from '../../hooks/token-initializer';
 
+import BgPink from '../../../images/admin/bg_pink.jpg';
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const Home = (props) => {
     const dispatch = useDispatch();
     useToolbarChangeModeInitializer(TOOLBAR_MODE.NONE);
@@ -23,8 +26,11 @@ const Home = (props) => {
     useEffect(() => {
         dispatch(footerToModeInvisible());
     }, []);
+    const loggedIn = useSelector(state => state.token.isLoggedIn);
+
     return (
         <>
+        {!loggedIn ? <Redirect to="/" /> : null}
             <ActivityLog />
         </>
     )

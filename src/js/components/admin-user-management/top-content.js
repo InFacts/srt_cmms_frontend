@@ -14,6 +14,7 @@ import PopupModalDocument from '../common/popup-modal-document'
 import PopupModalUsername from '../common/popup-modal-username'
 import { validateEmployeeIDField, DOCUMENT_TYPE_ID, validateInternalDocumentIDFieldHelper, getUserIDFromEmployeeID } from '../../helper';
 
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const TopContent = (props) => {
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
@@ -47,11 +48,15 @@ const TopContent = (props) => {
     const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
 
     return (
-        <div id="blackground-white">
+        <div id={changeTheam() === true ? "" : "blackground-white"}>
             <div className="container_12 clearfix" >
                 {/* Section Title */}
                 <section className="container_12 ">
                     <h4 className="head-title">บริหารจัดการผู้ใช้งาน</h4>
+
+                    <div id={changeTheam() === true ? "blackground-white" : ""}
+                     style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "55px", paddingTop: "10px" } : {}} >
+
                     {/* <div className="container_12">
                         <div className="grid_2 cancel-default">
                             <p className="cancel-default">หน่วยงาน </p>
@@ -74,7 +79,8 @@ const TopContent = (props) => {
                                 validate={validateUserEmployeeIDField}
                                 searchable={true} ariaControls="modalUserName" />
                         </div>
-                        <button className="button-blue edit grid_1 float-right mr-5" type="button" onClick={searchUser}>ค้นหา</button>
+                        <button className="button-blue edit grid_1 mr-5" type="button" onClick={searchUser}>ค้นหา</button>
+                    </div>
                     </div>
                 </section>
             </div>

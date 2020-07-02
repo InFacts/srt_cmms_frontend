@@ -96,14 +96,24 @@
     /* identical to box height */
     text-align: center;
 
-    color: #000000;
+    color: hsl(0, 0%, 0%);
 }
+
+
 
 .ALSFour-one{
     position: absolute;
     left: 105px;
     top: 220px;
 }
+.ALSFour-one-new{
+    position: absolute;
+    left: 105px;
+    top: 190px;
+}
+
+
+
 
 .ALStext9{
     /* นำเข้าอะไหล่โดยมีใบสั่งซื้อ */

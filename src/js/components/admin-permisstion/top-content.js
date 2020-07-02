@@ -12,6 +12,7 @@ import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
 
 import { useFormikContext, useField } from 'formik';
 
+import { changeTheam } from '../../helper.js'
 const TopContent = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
     const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
@@ -41,29 +42,33 @@ const TopContent = (props) => {
     });
 
     return (
-        <div id="blackground-white">
+        <div id={changeTheam() === true ? "" : "blackground-white"}>
             <div className="container_12 clearfix" style={{ marginTop: "55px" }}>
                 {/* Section Title */}
                 <h4 className="head-title">สิทธิการเข้าถึงระบบ</h4>
 
-                {/* === One Column === */}
-                <div className="grid_11`" style={{ paddingLeft: "10px" }}>
-                    <Label>ตำแหน่ง</Label>
-                    <div className="grid_4 alpha">
-                        {/* <SelectNoChildrenInput name="position_id">
+                <div id={changeTheam() === true ? "blackground-white" : ""}
+                    style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "55px", paddingTop: "10px" } : {}} >
+
+                    {/* === One Column === */}
+                    <div className="grid_11`" style={{ paddingLeft: "10px" }}>
+                        <Label>ตำแหน่ง</Label>
+                        <div className="grid_4 alpha">
+                            {/* <SelectNoChildrenInput name="position_id">
                             <option value=''></option>
                             {values.line_position_permission.map((list_position) => (
                                 <option value={list_position.position_id} key={list_position.position_id}>{list_position.name}</option>
                             ))}
                         </SelectNoChildrenInput> */}
-                        <TextInput name='position_name'
+                            <TextInput name='position_name'
                             // validate={validateInternalDocumentIDField}
-                        />
+                            />
+                        </div>
+                        <div className="grid_1">
+                            <button type="button" className="button-blue" onClick={searchPermisstion}>ค้นหา</button>
+                        </div>
+                        <div class="clear" />
                     </div>
-                    <div className="grid_1">
-                        <button type="button" className="button-blue" onClick={searchPermisstion}>ค้นหา</button>
-                    </div>
-                    <div class="clear" />
                 </div>
 
             </div>

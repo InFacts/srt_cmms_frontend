@@ -13,7 +13,7 @@ const Table = (props) => {
   const factUnit = useSelector((state) => ({ ...state.api.fact[FACTS.UNIT_OF_MEASURE] }), shallowEqual);
 
   return (
-    <table className="table-many-column" style={{ padding: "10px" }}>
+    <table className="table-many-column mt-2" style={{ paddingRight: "10px", paddingLeft: "10px" }}>
       <thead>
         <tr>
           <th className="font text-center" style={{ minWidth: "30px" }}>#</th>

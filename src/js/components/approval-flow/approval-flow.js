@@ -10,6 +10,8 @@ import { useSelector, shallowEqual } from 'react-redux';
 import { fetchDocuments } from '../../redux/modules/track_doc.js';
 import { FACTS } from '../../redux/modules/api/fact.js'
 
+import BgPink from '../../../images/bg-light-pink.jpg';
+import { changeTheam } from '../../helper.js'
 const ApprovalFlow = (props) => {
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
     
@@ -30,7 +32,8 @@ const ApprovalFlow = (props) => {
     // }, [props.track_document_show]);
 
     return (
-        <div id="blackground-white" style={{minHeight: "100vh"}}>
+        <div id={changeTheam() === true ? "" : "blackground-white"}
+        style={changeTheam() === true ? { backgroundImage: `url(${BgPink})`, width: "100vw", height: "100vh" } : {minHeight: "100vh"}}>
             <div className="container_12 clearfix">
                 {/* Section Title */}
                 <h4 className="head-title" style={{ marginTop: "80px" }}>บริหารจัดการเส้นทางเอกสาร</h4>

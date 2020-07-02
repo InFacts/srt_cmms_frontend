@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { useFormik , withFormik ,useFormikContext} from 'formik';
 import { Redirect } from 'react-router-dom';
-import { useSelector  } from 'react-redux';
+import { useSelector, shallowEqual  } from 'react-redux';
 
 import TabBar from '../common/tab-bar';
 
@@ -25,6 +25,7 @@ import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const ReportS1Component = (props) => {
     
     const {resetForm, setFieldValue, setValues, values} = useFormikContext();
+    const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
@@ -32,9 +33,14 @@ const ReportS1Component = (props) => {
     ]);
 
     useToolbarInitializer(TOOLBAR_MODE.SEARCH);
+    useTokenInitializer();
     useFactInitializer();
     useExportPdfInitializer();
     const loggedIn = useSelector(state => state.token.isLoggedIn); 
+
+    useEffect(() => {
+        setFieldValue("src_warehouse_id", decoded_token.has_position && decoded_token.has_position[0].warehouse_id, true)
+    }, [decoded_token.has_position])
 
     return (
         <>
@@ -66,18 +72,18 @@ const initialLineYears = (n=10) => {
     }
     return rows_year;
 }
-
+var now_date = new Date();
 const EnhancedReportS1Component = withFormik({
     mapPropsToValues: (props) => ({ 
         // Field ที่ให้ User กรอก
         internal_document_id: '',
         internal_item_id: '',
         src_warehouse_id: '', 
-        item_status_id: '',
+        item_status_id: 1,
         document_date: '', 
         line_items: [],
-        year_id: 0,
-        mouth_id: 0,
+        year_id: now_date.getFullYear() + 543,
+        mouth_id: now_date.getMonth(),
         
         // Field ที่ให้ User ไม่ได้กรอก
         year: initialLineYears(),

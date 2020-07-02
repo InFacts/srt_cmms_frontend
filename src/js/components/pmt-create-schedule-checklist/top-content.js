@@ -46,7 +46,12 @@ const TopContent = (props) => {
   const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
   const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
 
-  const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
+  let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
+  useEffect(() => {
+    checkBooleanForEdit = false
+    validateField("internal_document_id")
+  }, [values.internal_document_id])
+  console.log("checkBooleanForEdit", checkBooleanForEdit)
 
   return (
     <div id={changeTheam() === true ? "" : "blackground-white"}>

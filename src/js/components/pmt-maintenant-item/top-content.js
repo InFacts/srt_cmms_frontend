@@ -109,7 +109,12 @@ const TopContent = (props) => {
             });
     });
 
-    const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
+  let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
+  useEffect(() => {
+    checkBooleanForEdit = false
+    validateField("internal_document_id")
+  }, [values.internal_document_id])
+
     return (
         <div id={changeTheam() === true ? "" : "blackground-white"}>
             <div className="container_12 clearfix" style={{ marginTop: "55px" }}>
@@ -165,7 +170,7 @@ const TopContent = (props) => {
                             <TextInput name='refer_to_document_internal_id'
                                 validate={validateInternalDocumentGoodFixID}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                searchable={toolbar.mode === TOOLBAR_MODE.ADD}
+                                searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH}
                                 ariaControls="modalDocument2"
                                 tabIndex="4" />
                         </div>

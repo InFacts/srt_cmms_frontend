@@ -12,6 +12,9 @@ import TextInput from '../common/formik-text-input'
 
 import '../../../vender/fontawesome-free/css/all.css';
 import '../../../css/style-register.css';
+
+import BgPink from '../../../images/admin/bg_pink.jpg';
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const Register = (props) => {
     // const [register, setRegister] = useState(false)
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
@@ -95,16 +98,18 @@ const Register = (props) => {
     }
 
     return (
-        <div id="blackground-white" style={{ height: "100vh" }}>
+        <div id={changeTheam() === true ? "" : "blackground-white"} style={changeTheam() === true ? { backgroundImage: `url(${BgPink})`, width: "100vw", height: "100vh" } : { height: "100vh" }}>
             <div className="container_12 clearfix">
                 <form onSubmit={handleSubmit}>
                     <div className="container_12 from-register">
                         <h4 className="head-register">สร้างผู้ใช้งานภายในระบบ</h4>
 
+                        <div id={changeTheam() === true ? "blackground-white" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "350px", paddingTop: "10px" } : {}} >
+
                         <div className="grid_5">
                             <div className="card-profile">
                                 <div className="card-profile-header">ข้อมูลส่วนตัว</div>
-                                <div className="card-profile-main" style={{ height: "400px" }}>
+                                <div className="card-profile-main" style={{ height: "300px" }}>
 
                                     <div className="container_12">
                                         <div className="container_12"><p className="cancel-default">รหัสพนักงาน</p></div>
@@ -151,7 +156,7 @@ const Register = (props) => {
                         <div className="grid_5 float-right">
                             <div className="card-profile">
                                 <div className="card-profile-header">ตำแหน่งงาน</div>
-                                <div className="card-profile-main" style={{ height: "400px" }}>
+                                <div className="card-profile-main" style={{ height: "300px" }}>
 
                                     <div className="container_12">
                                         <div className="container_12"><p className="cancel-default">ชื่อ</p></div>
@@ -206,8 +211,9 @@ const Register = (props) => {
                             :
                             null
                     }
-                    <div className="container_12 " style={{ "text-align": "center" }}>
+                    <div className="grid_10 " style={{ "text-align": "center" }}>
                         <button className="button-red from-register-button" style={{ "width": "300px" }} type="submit">สร้างผู้ใช้งาน</button>
+                    </div>
                     </div>
                 </form>
             </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from "redux-thunk";
 // import reducers from './reducers';
@@ -15,6 +16,9 @@ import { TOOLBAR_MODE, TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 import useFactInitializer from '../../hooks/fact-initializer';
 import { useFormik, withFormik, useFormikContext } from 'formik';
 import useTokenInitializer from '../../hooks/token-initializer';
+
+import BgPink from '../../../images/admin/bg_pink.jpg';
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const Home = (props) => {
     const dispatch = useDispatch();
     useToolbarChangeModeInitializer(TOOLBAR_MODE.NONE);
@@ -23,10 +27,14 @@ const Home = (props) => {
     useEffect(() => {
         dispatch(footerToModeInvisible());
     }, []);
+    const loggedIn = useSelector(state => state.token.isLoggedIn);
     return (
         <>
-            <TopContent />
-            <BottomContent />
+            {!loggedIn ? <Redirect to="/" /> : null}
+            <form style={changeTheam() === true ? { backgroundImage: `url(${BgPink})`, width: "100vw", height: "100vh" } : {}}>
+                <TopContent />
+                <BottomContent />
+            </form>
         </>
     )
 }
@@ -36,7 +44,7 @@ const EnhancedUserManagementComponent = withFormik({
         // ฟิวที่ให้ user กรอก
         internal_document_id: '',
         created_by_user_employee_id: '',
-        
+
         name: '',
         created_by_user_employee_id: '',
         item_list: [],

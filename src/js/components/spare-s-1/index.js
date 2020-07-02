@@ -5,7 +5,6 @@ import { useSelector, shallowEqual } from 'react-redux';
 
 import TabBar from '../common/tab-bar';
 
-
 import TopContent from './top-content';
 import BottomContent from './bottom-content';
 import Footer from '../common/footer.js';

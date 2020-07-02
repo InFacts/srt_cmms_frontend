@@ -93,6 +93,8 @@ const initialRowsCustom = (n = 10) => {
 }
 
 const initiaLineEquipment = {
+    equipment_id: '',
+    checklist_group_id: '',
     checklist_id: '',
     item_id: '',
     internal_item_id: '',

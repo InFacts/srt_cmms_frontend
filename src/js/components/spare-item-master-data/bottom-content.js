@@ -237,7 +237,7 @@ const BottomContent = () => {
               </div>
             </div>
 
-            <div className="container_12 mt-1" style={{ paddingRight: "px" }}>
+            <div className="container_12 mt-1" style={{ paddingRight: "10px", paddingLeft: "10px" }}>
               <table className="table-many-column">
                 <thead>
                   <tr>
@@ -259,7 +259,7 @@ const BottomContent = () => {
                   {values.goods_onhand.map((goods_onhand, index) => (
                     goods_onhand.warehouse_id !== 0 && goods_onhand.warehouse_id !== 999 &&
                     <tr>
-                      <th className="edit-padding text-center">{index}</th>
+                      <th className="edit-padding text-center">{index + 1}</th>
                       <td className="edit-padding">{goods_onhand.warehouse_id}</td>
                       <td className="edit-padding">{goods_onhand.warehouse_name}</td>
                       <td className="edit-padding text-center disable">{goods_onhand.current_unit_count}</td>

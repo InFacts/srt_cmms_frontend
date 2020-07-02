@@ -36,8 +36,47 @@ const BottomContent = (props) => {
   const factStations = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
-  const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
+  useEffect(() => {
+    console.log(">>>>>>>>>")
+    searchLocationEquipment()
+  }, [values.station_id]);
 
+const searchLocationEquipment = () => new Promise(resolve => {
+  if (toolbar.mode !== TOOLBAR_MODE.SEARCH) {
+            const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/equipment-install?location_station_id=${values.station_id}`;
+            axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+              .then((res) => {
+                console.log("res", res)
+                let line_equipments = [];
+                res.data.results.map((results) => {
+                  line_equipments.push({
+                    equipment_id: results.equipment_id,
+                    checklist_group_id: results.equipment.equipment_item.equipment_group_id,
+                    checklist_id: results.equipment.equipment_item.checklist_id,
+                    item_id: results.equipment.item_id,
+                    internal_item_id: results.equipment.equipment_item.item.internal_item_id,
+                    quantity_location: '',
+                    unit_maintenance_location_id: results.equipment.equipment_item.checklist.unit_maintenance_location_id
+                  })
+                })
+                setFieldValue("line_equipment", line_equipments, false);
+                return resolve()
+              })
+              .finally(() => {
+                return resolve()
+              });
+  }
+  else {
+    return resolve()
+  }
+  });
+
+  let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
+  // useEffect(() => {
+  //   checkBooleanForEdit = false
+  //   validateField("internal_document_id")
+  // }, [values.internal_document_id])
+  
   return (
     <>
       {/* THIS MAKES THE BACKGROUND NOT GRAY!! NEEDS TO FIX */}
@@ -55,7 +94,7 @@ const BottomContent = (props) => {
               </div>
               <div className="grid_7">
                 <SelectNoChildrenInput name="district_id" tabIndex="7"
-                  disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                   <option value=''></option>
                   {factDistricts.items.map((districts) => (
                     <option key={districts.district_id} value={districts.district_id}>{districts.name}</option>
@@ -71,7 +110,7 @@ const BottomContent = (props) => {
               </div>
               <div className="grid_7">
                 <SelectNoChildrenInput name="node_id" tabIndex="8"
-                  disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                   <option value=''></option>
                   {factNodes.items.map((node) => {
                     if (values.district_id == node.district_id) {
@@ -89,7 +128,7 @@ const BottomContent = (props) => {
               </div>
               <div className="grid_7">
                 <SelectNoChildrenInput name="station_id" tabIndex="9"
-                  disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                   <option value=''></option>
                   {factStations.items.map((stations) => {
                     if (values.node_id == stations.node_id) {
@@ -128,7 +167,7 @@ const BottomContent = (props) => {
                         <td className="edit-padding">
                           <SelectNoChildrenInput name={`line_custom[${index}].checklist_group_id`} 
                           tabIndex={10 + line_number}
-                          disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                          disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                             <option value=''></option>
                             {factChecklistCustom.items.map((custom_group) => (
                               <option value={custom_group.checklist_group_id} key={custom_group.checklist_group_id}> {custom_group.checklist_group_name} </option>
@@ -138,7 +177,7 @@ const BottomContent = (props) => {
                         <td className="edit-padding">
                           <SelectNoChildrenInput name={`line_custom[${index}].checklist_id`} 
                           tabIndex={10 + line_number}
-                          disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                          disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                             <option value=''></option>
                             {factChecklist.items.map((custom_group) => {
                               if (values.line_custom[index].checklist_group_id == custom_group.checklist_group_id) {
@@ -151,13 +190,13 @@ const BottomContent = (props) => {
                           <NumberInput step={0.01} name={`line_custom[${index}].quantity_location`} 
                           tabIndex={10 + line_number}
                            cssStyle={{ left: "60px", top: "-5px" }}
-                            disabled={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                            disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                           />
                         </td>
                         <td className="edit-padding">
                           <SelectNoChildrenInput name={`line_custom[${index}].unit_maintenance_location_id`} 
                           tabIndex={10 + line_number}
-                          disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                          disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                             <option value=''></option>
                             {factUnitMaintenanceLocation.items.map((unit) => (
                               <option value={unit.unit_maintenance_location_id} key={unit.unit_maintenance_location_id}> {unit.unit_type} </option>
@@ -202,18 +241,18 @@ const BottomContent = (props) => {
                         <td className="edit-padding">
                           <SelectNoChildrenInput name={`line_equipment[${index}].checklist_id`} disabled >
                             <option value=''></option>
-                            {factChecklist.items.map((custom_group) => (
-                              <option value={custom_group.checklist_group_id} key={custom_group.checklist_group_id}> {custom_group.checklist_name} </option>
-                            ))}
+                               {factChecklist.items.map((custom_group) => {
+                              return <option value={custom_group.checklist_id} key={custom_group.checklist_id}> {custom_group.checklist_name} </option>
+                               })}
                           </SelectNoChildrenInput>
                         </td>
                         <td className="edit-padding text-center">
-                          <NumberInput step={0.01} name={`line_equipment[${index}].quantity_location`} disabled />
+                          <NumberInput step={1} name={`line_equipment[${index}].quantity_location`} disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </td>
                         <td className="edit-padding">
                           <SelectNoChildrenInput name={`line_equipment[${index}].unit_maintenance_location_id`} disabled >
                             <option value=''></option>
-                            {factUnitMaintenanceLocation.items.map((unit) => (
+                         {factUnitMaintenanceLocation.items.map((unit) => (
                               <option value={unit.unit_maintenance_location_id} key={unit.unit_maintenance_location_id}> {unit.unit_type} </option>
                             ))}
                           </SelectNoChildrenInput>

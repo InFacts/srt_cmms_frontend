@@ -23,14 +23,19 @@ const BottomContent = (props) => {
     const factStations = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
     const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
     const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
-    const { values, setFieldValue } = useFormikContext();
+    const { values, setFieldValue, validateField } = useFormikContext();
 
     const validateDocumentAccidentOnField = (...args) => validatedataDocumentField("accident_on", setFieldValue, ...args)
     const validateDocumentLocationDistrictIDField = (...args) => validatedataDocumentField("location_district_id", setFieldValue, ...args)
     const validateDocumentLocationNodeIDField = (...args) => validatedataDocumentField("location_node_id", setFieldValue, ...args)
     const validateDocumentLocationStationIDField = (...args) => validatedataDocumentField("location_station_id", setFieldValue, ...args)
 
-    const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
+  let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
+  useEffect(() => {
+    checkBooleanForEdit = false
+    validateField("internal_document_id")
+  }, [values.internal_document_id])
+  
     return (
         <div id={changeTheam() === true ? "" : "blackground-gray"}>
             <div className="container_12 clearfix" id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>

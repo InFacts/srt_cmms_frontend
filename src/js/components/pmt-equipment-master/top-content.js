@@ -43,6 +43,9 @@ const TopContent = (props) => {
     return {
       internal_item_id: data.equipment_group.item.internal_item_id,
       description: data.equipment_group.item.description,
+      item_group_id: data.equipment_group.item.item_group_id,
+      checklist_id: data.equipment_group.checklist_id,
+      equipment_group_id: data.equipment_group.checklist_id,
       active: data.equipment_group.item.active.data[0],
       item_type_id: data.equipment_group.item.item_type_id,
       uom_group_id: data.equipment_group.item.uom_group_id,                    //UOM
@@ -59,16 +62,14 @@ const TopContent = (props) => {
       depreciation: data.depreciation,
       useful_life: data.useful_life,
       responsible_district_id: data.responsible_district_id,
-      responsible_node_id: data.responsible_node_id
+      responsible_node_id: data.responsible_node_id,
     }
   }
 
   const validateInternalItemIDField = internal_item_id => new Promise((resolve, reject) =>{
     if (!internal_item_id) {
-      console.log("I dont have any internal item id")
       return resolve('Required');
     }
-
     if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
       && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) {
       var item_match_equipments = factEquipment.items;
@@ -78,35 +79,42 @@ const TopContent = (props) => {
         setValues({ ...values, ...responseToFormState(item_match_equipment) }, false); //Setvalues and don't validate
         
         // validateField("item_type_id");
-        // IF Check user If User is Admin -> return true Else -> return false
-        if (decoded_token.id === 4) { //{/* TODO USER_ID FOR ADMIN */}
-          console.log(" YES I AM ADMIN ")
-          setFieldValue("modeEdit", true, false);
-        } else {
-          console.log(" NO I NOT ADMIN ")
-          setFieldValue("modeEdit", false, false);
-        }
+        // // IF Check user If User is Admin -> return true Else -> return false
+        // if (decoded_token.id === 4) { //{/* TODO USER_ID FOR ADMIN */}
+        //   console.log(" YES I AM ADMIN ")
+        //   setFieldValue("modeEdit", true, false);
+        // } else {
+        //   console.log(" NO I NOT ADMIN ")
+        //   setFieldValue("modeEdit", false, false);
+        // }
 
         const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/equipment/${item_match_equipment.equipment_id}/history`;
         axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
           .then((res) => {
             console.log(res.data);
             setFieldValue("ref_document", res.data.results, false);
+            return resolve();
           });
 
       } else {
-        return 'Invalid Equipment ID';
+        return resolve('Invalid Equipment ID');
       }
     } else {//If mode add, ok
       console.log("document ID doesn't exist but I am in mode add")
       if (internal_item_id) {
-        let items = fact.items.items;
-        let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
-        // console.log("warehouse", item)
-        if (!item) { // Check Dulplication
+        console.log("internal_item_id", internal_item_id)
+      var item_match_equipments = factEquipment.items;
+      let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.equipment_group.item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+      console.log("item_match_equipment", item_match_equipment)
+        if (item_match_equipment) { // Check Dulplication
+        console.log("Dulplication")
+        return resolve('Dulplication Internal item');
+        } else {
+          console.log(">>>>>>>>>>>>>")
           setFieldValue("internal_item_id", internal_item_id, false);
-        } else return 'Internal Item Id Duplication'
-      } else return 'Required';
+          return resolve();
+        }
+      } else return resolve('Required');
     }
   });
 
@@ -119,6 +127,7 @@ const TopContent = (props) => {
   const validateItemDescriptionField = (...args) => validateItemMasterdataField("description", ...args);
   const validateItemTypeIDField = (...args) => validateItemMasterdataField("item_type_id", ...args);
   const validateItemStatusIDField = (...args) => validateItemMasterdataField("item_status_id", ...args);
+  const validateItemGroupIDField = (...args) => validateItemMasterdataField("item_group_id", ...args);
 
   return (
     <div id={changeTheam() === true ? "" : "blackground-white"}>
@@ -160,24 +169,24 @@ const TopContent = (props) => {
                 <TextInput name="description" validate={validateItemDescriptionField} disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="3" />
               </div>
 
-              {/* === uom_group_id === */}
-              <div className="float-right">
+<div className="float-right">
                 <div className="grid_3 float-right">
-                  <SelectNoChildrenInput name="uom_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="4">
+                  <SelectNoChildrenInput name="item_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateItemGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="4">
                     <option value=''></option>
-                    {fact[FACTS.UNIT_OF_MEASURE_GROUPS].items.map((uom) => (
-                      values.uom_group_id === uom.uom_group_id
+                    {fact[FACTS.ITEM_GROUP].items.map((item_group) => (
+                      values.item_group_id === item_group.item_group_id
                         ?
-                        <option value={uom.uom_group_id} key={uom.uom_group_id} selected> {uom.name} </option>
+                        <option value={item_group.item_group_id} key={item_group.item_group_id} selected> {item_group.abbreviation} </option>
                         :
-                        <option value={uom.uom_group_id} key={uom.uom_group_id}> {uom.name} </option>
+                        <option value={item_group.item_group_id} key={item_group.item_group_id}> {item_group.abbreviation} </option>
                     ))}
                   </SelectNoChildrenInput>
                 </div>
                 <div className="grid_2 float-right">
-                  <p className="top-text float-right">กลุ่มหน่วยนับ</p>
+                  <p className="top-text float-right">กลุ่มอุปกรณ์</p>
                 </div>
               </div>
+
             </div>
 
             <div className="container_12">
@@ -197,6 +206,26 @@ const TopContent = (props) => {
                   })}
                 </SelectNoChildrenInput>
               </div>
+
+              {/* === uom_group_id === */}
+              <div className="float-right">
+                <div className="grid_3 float-right">
+                  <SelectNoChildrenInput name="uom_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="4">
+                    <option value=''></option>
+                    {fact[FACTS.UNIT_OF_MEASURE_GROUPS].items.map((uom) => (
+                      values.uom_group_id === uom.uom_group_id
+                        ?
+                        <option value={uom.uom_group_id} key={uom.uom_group_id} selected> {uom.name} </option>
+                        :
+                        <option value={uom.uom_group_id} key={uom.uom_group_id}> {uom.name} </option>
+                    ))}
+                  </SelectNoChildrenInput>
+                </div>
+                <div className="grid_2 float-right">
+                  <p className="top-text float-right">กลุ่มหน่วยนับ</p>
+                </div>
+              </div>
+
             </div>
 
           </div>

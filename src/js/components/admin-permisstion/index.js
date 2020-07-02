@@ -17,6 +17,8 @@ import useDocumentSubscription from '../../hooks/document-subscription';
 
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
+import BgPink from '../../../images/admin/bg_pink.jpg';
+import { changeTheam } from '../../helper.js'
 const PermisstionAdminComponent = (props) => {
 
     useToolbarInitializer(TOOLBAR_MODE.NONE);
@@ -24,7 +26,6 @@ const PermisstionAdminComponent = (props) => {
     useFactInitializer();
     // useFooterInitializer(DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA); // TODO Need to not be document type group id, and need to not check for values.document_id since this is not a document. 
     useDocumentSubscription();
-    const loggedIn = useSelector(state => state.token.isLoggedIn);
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
     let module = [];
@@ -47,14 +48,13 @@ const PermisstionAdminComponent = (props) => {
                 setFieldValue('line_position_permission', module, false);
             })
     }, []);
-
+    const loggedIn = useSelector(state => state.token.isLoggedIn);
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
-            <form>
+            <form style={changeTheam() === true ? { backgroundImage: `url(${BgPink})`, width: "100vw", height: "100vh" } : {}}>
                 <TopContent />
                 <BottomContent />
-                {/* <Footer /> */}
             </form>
         </>
     )

@@ -21,13 +21,14 @@ const BottomContent = (props) => {
 
   const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
+  console.log("values.line_items", values.line_items)
   return (
     <div id={changeTheam() === true ? "" : "blackground-gray"}>
       <div className="container_12 clearfix" id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>
 
-        <div className="container_12 ">
+        <div className="grid_12 ">
           <div id="listItem_content" className="tabcontent">
-            <table className="table-many-column mt-2">
+            <table className="table-many-column mt-1" style={{ padding: "10px"}}>
               <thead>
                 <tr>
                   <th className="font text-center" rowspan="2" style={{ minWidth: "30px", verticalAlign: 'middle' }}>ลำดับ</th>
@@ -71,18 +72,26 @@ const BottomContent = (props) => {
                   return (
                     <tr key={index}>
                       <th className="edit-padding text-center">{index + 1}</th>
-                      <td className="edit-padding">{line_items.item_id}</td>
+                      <td className="edit-padding">{line_items.internal_item_id} - {line_items.item_description}</td>
+                      <td className="edit-padding text-center">{line_items.uom_name}</td>
+
+                      <td className="edit-padding text-center">{line_items.begin_unit_count}</td> {/* เหลือเดือนก่อน */}
                       <td className="edit-padding text-center">{line_items.item_id}</td>
+
+                      <td className="edit-padding text-center">{line_items.receive_unit_count}</td> {/* รับเดือนนี้ */}
                       <td className="edit-padding text-center">{line_items.item_id}</td>
+
+                      <td className="edit-padding text-center">{line_items.item_id}</td> {/* รับจาก */}
+                      
+                      <td className="edit-padding text-center">{line_items.item_id}</td> {/* ใบส่งของ */}
+
+                      <td className="edit-padding text-center">{line_items.item_id}</td> {/* ฎีกาเบิก	 */}
+
+                      <td className="edit-padding text-center">{line_items.item_id}</td> {/* จ่ายเดือนนี้ */}
                       <td className="edit-padding text-center">{line_items.item_id}</td>
-                      <td className="edit-padding text-center">{line_items.item_id}</td>
-                      <td className="edit-padding text-center">{line_items.item_id}</td>
-                      <td className="edit-padding text-center">{line_items.item_id}</td>
-                      <td className="edit-padding text-center">{line_items.item_id}</td>
-                      <td className="edit-padding text-center">{line_items.item_id}</td>
-                      <td className="edit-padding text-center">{line_items.item_id}</td>
-                      <td className="edit-padding text-center">{line_items.item_id}</td>
-                      <td className="edit-padding text-center">{line_items.item_id}</td>
+
+                      <td className="edit-padding text-center">{line_items.ending_unit_count}</td> {/* คงเหลือ */}
+
                       <td className="edit-padding text-center">{line_items.item_id}</td>
                       <td className="edit-padding text-center">{line_items.item_id}</td>
                       <td className="edit-padding text-center">{line_items.item_id}</td>

@@ -87,6 +87,17 @@ const MainModule = (props) => {
             || url === "/als-preventive-maintenance" || url === "/als-plan-preventive-maintenance") {
             return "#CCE7B2";
         }
+        if (url === "/main-admin" || url === "/user-management"
+            || url === "/permissiton-admin" || url === "/activity-log"
+            || url === "/register") {
+            return "#EBE0F8";
+        }
+        if (url === "/approval-flow" || url === "/approval-flow-step") {
+            return "#F8CFDC";
+        }
+        if (url === "/track") {
+            return "#F5F8BF";
+        }
     }
 
     // console.log("nav.mode", toolbar.mode, footer.mode)
@@ -94,7 +105,6 @@ const MainModule = (props) => {
         return null
     }
     else {
-        console.log("checkPermission",checkPermission)
         return (
             <div>
                 <div id="header" style={{ backgroundColor: `${colorTopBar()}` }}>
@@ -133,7 +143,7 @@ const MainModule = (props) => {
 
                             <li className="p-navigation__item p-subnav a nav-li" style={{ marginRight: "0", marginLeft: "auto" }} role="menuitem" id="link-1">
                                 <Link to="#" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu" style={{ padding: "10px 12px 0 0" }}
-                                    onClick={() => setCheckNav(1)}>
+                                    onClick={(e) => setCheckNav(1)}>
                                     <i className="fas fa-bell" style={{ fontSize: "24px", color: "#823D35" }}></i>
                                     {props.notify.not_read_count !== 0
                                         ?
@@ -170,7 +180,7 @@ const MainModule = (props) => {
 
                             <li className="p-navigation__item p-subnav a nav-li" style={{ marginLeft: "15px" }} role="menuitem" id="link-1">
                                 <Link to="#" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu" style={{ padding: "10px 0 0 0" }}
-                                    onClick={() => setCheckNav(1)}>
+                                    onClick={(e) => setCheckNav(1)}>
                                     <i className="fas fa-user-circle" style={{ fontSize: "24px", color: "#823D35" }}></i>
                                 </Link>
                                 <ul className="p-subnav__items--right" id="account-menu" aria-hidden="true">

@@ -156,8 +156,10 @@ class Map extends React.Component {
                                     </div>
                                 </Link>
 
+                                <Link to="/spare-goods-return">
                                 <img alt='some value' src={changeTheam() === true ? OnetwoNew : Onetwo} 
                                 className={changeTheam() === true ? "one-two-new" : "one-two"} style={ changeTheam() === true ? { width: "85px" } : {} } />
+                                </Link>
 
                                 <Link to="/spare-goods-receipt-no-po">
                                 <img alt='some value' src={changeTheam() === true ? OnethreeNew : Onethree} 
@@ -210,11 +212,15 @@ class Map extends React.Component {
                                     </div>
                                 </Link>
 
+                                <Link to="/spare-physical-count">
                                 <img alt='some value' src={changeTheam() === true ? ThreethreeNew : Threetwo} 
                                 className={changeTheam() === true ? "three-two-new" : "three-two"} style={ changeTheam() === true ? { width: "80px" } : {} }/>
+    </Link>
 
+<Link to="/spare-salvage-return">
                                 <img alt='some value' src={changeTheam() === true ? ThreethreeNew : Threethree} 
                                 className={changeTheam() === true ? "three-three-new" : "three-three"} style={ changeTheam() === true ? { width: "75px" } : {} } />
+                                </Link>
 
                                 <img alt='some value' src={Text8} className="text8" />
                                 <img alt='some value' src={Text9} className="text9" />
@@ -226,8 +232,10 @@ class Map extends React.Component {
                                 <Link to="/spare-item-master-data"><img alt='some value' src={changeTheam() === true ? FourtwoNew : Fourtwo} 
                                 className={changeTheam() === true ? "four-two-new" : "four-two"} style={ changeTheam() === true ? { width: "60px" } : {} } /></Link>
 
+<Link to="/spare-report-s-1">
                                 <img alt='some value' src={changeTheam() === true ? FourthreeNew : Fourthree} 
                                 className={changeTheam() === true ? "four-three-new" : "four-three"} style={ changeTheam() === true ? { width: "70px" } : {} }/>
+                                </Link>
 
                                 <img alt='some value' src={Text11} className="text11" />
                                 <img alt='some value' src={Text12} className="text12" />

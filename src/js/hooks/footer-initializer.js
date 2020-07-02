@@ -86,9 +86,9 @@ const useFooterInitializer = (document_type_id) => {
                 // Check Next Approver from postion_id
                 fetchLatestStepApprovalDocumentData(track_document_id).then((latestApprovalInfo) => {
                     if (latestApprovalInfo !== undefined || latestApprovalInfo.length !== 0) {
-                        // console.log("latestApprovalInfo------> ", latestApprovalInfo)
-                        // console.log("user------> ", latestApprovalInfo.position_id, userInfo.position_id)
-                        // console.log("approval_step_action_id------> ", latestApprovalInfo.approval_step_action_id, APPROVAL_STEP_ACTION.APPROVAL)
+                        console.log("latestApprovalInfo------> ", latestApprovalInfo)
+                        console.log("user------> ", latestApprovalInfo.position_id, userInfo.position_id)
+                        console.log("approval_step_action_id------> ", latestApprovalInfo.approval_step_action_id, APPROVAL_STEP_ACTION.APPROVAL)
                         if (latestApprovalInfo.position_id === userInfo.position_id) {
                             if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_APPROVAL) {
                                 dispatch(footerToModeApApproval());
@@ -192,6 +192,7 @@ const useFooterInitializer = (document_type_id) => {
     // Handle Click Save
     useEffect(() => {
         if (footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) {
+            console.log(">>>validateForm", values)
             validateForm()
                 .then((err) => {
                     setTouched(setNestedObjectValues(values, true))
@@ -199,6 +200,7 @@ const useFooterInitializer = (document_type_id) => {
                     setErrors(err);
                     if (isEmpty(err)) {
                         if (values.document_id) { // If have document_id, no need to create new doc
+                        console.log("Before packDataFromValues")
                             let data = packDataFromValues(fact, values, document_type_id);
                             console.log("I AM SUBMITTING ", data);
                                 editDocument(values.document_id, document_type_id, data, values.files)

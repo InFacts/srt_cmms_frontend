@@ -52,7 +52,7 @@ const BottomContent = (props) => {
   const validateLeadTimeField = (...args) => validateItemMasterdataField("lead_time", ...args);
   const validateToleranceTimeField = (...args) => validateItemMasterdataField("tolerance_time", ...args);
   const validateActiveField = (...args) => validateItemMasterdataField("active", ...args);
-  const validateItemGroupIDField = (...args) => validateItemMasterdataField("item_group_id", ...args);
+  const validateItemGroupIDField = (...args) => validateItemMasterdataField("equipment_group_id", ...args);
 
   const validatePriceCurrently = (...args) => validateItemMasterdataField("price_currently", ...args);
   const validateDepreciation = (...args) => validateItemMasterdataField("depreciation", ...args);
@@ -299,7 +299,7 @@ const BottomContent = (props) => {
                 <p className="top-text">แขวง</p>
               </div>
               <div className="grid_5 alpha omega">
-                <SelectNoChildrenInput name="location_district_id" disabled>
+                <SelectNoChildrenInput name="responsible_district_id" disabled>
                   <option value=''></option>
                   {factDistict.items.map((factDistict) => {
                     return <option value={factDistict.distict_id}>{factDistict.name}</option>
@@ -312,7 +312,7 @@ const BottomContent = (props) => {
                 <p className="top-text">ตอน</p>
               </div>
               <div className="grid_5 alpha omega">
-                <SelectNoChildrenInput name="location_node_id" disabled>
+                <SelectNoChildrenInput name="responsible_node_id" disabled>
                   <option value=''></option>
                   {factNodes.items.map((node) => {
                     if (values.location_district_id == node.district_id) {

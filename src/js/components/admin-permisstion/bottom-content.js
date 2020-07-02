@@ -10,6 +10,7 @@ import { API_URL_DATABASE } from '../../config_url.js';
 import CheckboxInput from '../common/formik-checkbox-input';
 import Label from '../common/form-label'
 
+import { changeTheam } from '../../helper.js'
 const BottomContent = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
     const { values } = useFormikContext();
@@ -60,9 +61,10 @@ const BottomContent = (props) => {
     });
     // console.log("alertMessage", alertMessage)
     return (
-        <div id="blackground-gray">
-            <div className="container_12 clearfix">
-                <table className="table-many-column mt-2" style={{ height: "450px" }}>
+        <div id={changeTheam() === true ? "" : "blackground-gray"}>
+            <div className="container_12 clearfix" id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>
+            <div className="grid_12">
+                <table className="table-many-column mt-2" style={{ height: "350px", paddingLeft: "10px", paddingRight: "10px" }}>
                     <thead>
                         <tr>
                             <th className="font text-center">#</th>
@@ -117,6 +119,7 @@ const BottomContent = (props) => {
                 }
 
                 <button type="button" className="button-blue float-right mt-1 mb-1" onClick={postPermission}>บันทึก</button>
+            </div>
             </div>
         </div>
     );
