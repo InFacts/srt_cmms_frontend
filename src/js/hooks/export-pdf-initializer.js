@@ -33,6 +33,7 @@ const useExportPdfInitializer = () => {
 
   // Handle Toolbar Mode
   useEffect(() => {
+    console.log(">>>><<<>><")
     // let document_id = values.src_warehouse_id;
     let document_item = values.internal_document_id;
     let document_item_list = values.line_items;
@@ -40,7 +41,7 @@ const useExportPdfInitializer = () => {
     let routeLocation = getRouteLocation();
     // console.log(routeLocation)
     if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF] && document_item) {
-      if (routeLocation === '/ss-101') {
+      if (routeLocation === '/pmt-ss-101') {
         console.log(values)
         let car_type_id = "";
         let system_type_group_id = "";
@@ -142,14 +143,14 @@ const useExportPdfInitializer = () => {
         let dateTimeParts = values.accident_on.split('T')
         let timeParts = dateTimeParts[1]
         let dateParts = dateTimeParts[0].split('-')
-        let day = Number(dateParts[0])+543
+        let day = Number(dateParts[0]) + 543
         let mount = dateParts[1]
         let year = dateParts[2]
 
         let dateTimeParts2 = values.request_on.split('T')
         let timeParts2 = dateTimeParts2[1]
         let dateParts2 = dateTimeParts2[0].split('-')
-        let day2 = Number(dateParts2[0])+543
+        let day2 = Number(dateParts2[0]) + 543
         let mount2 = dateParts2[1]
         let year2 = dateParts2[2]
 
@@ -157,22 +158,22 @@ const useExportPdfInitializer = () => {
         let dateTimeParts3 = values.departed_on.split('T')
         let timeParts3 = dateTimeParts3[1]
         let dateParts3 = dateTimeParts3[0].split('-')
-        let day3 = Number(dateParts3[0])+543
+        let day3 = Number(dateParts3[0]) + 543
         let mount3 = dateParts3[1]
         let year3 = dateParts3[2]
 
         let dateTimeParts4 = values.arrived_on.split('T')
         let timeParts4 = dateTimeParts4[1]
         let dateParts4 = dateTimeParts4[0].split('-')
-        let day4 = Number(dateParts4[0])+543
+        let day4 = Number(dateParts4[0]) + 543
         let mount4 = dateParts4[1]
         let year4 = dateParts4[2]
-        
+
 
         let dateTimeParts5 = values.finished_on.split('T')
         let timeParts5 = dateTimeParts5[1]
         let dateParts5 = dateTimeParts5[0].split('-')
-        let day5 = Number(dateParts5[0])+543
+        let day5 = Number(dateParts5[0]) + 543
         let mount5 = dateParts5[1]
         let year5 = dateParts5[2]
 
@@ -294,7 +295,7 @@ const useExportPdfInitializer = () => {
 
         exportPDF(routeLocation, data_json).then(function (htmlCode) {
 
-          // console.log(htmlCode)
+          console.log(htmlCode)
           // const blob = pdf(htmlCode).toBlob();
           // console.log(blob)
           // MyDocument(htmlCode)
@@ -321,7 +322,7 @@ const useExportPdfInitializer = () => {
         dispatch(handleClickExportPDF())
       }
     }
-    else if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF] && document_item_list && document_item_list.length > 0 && routeLocation === "/report-s-1") {
+    else if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF] && document_item_list && document_item_list.length > 0 && routeLocation === "/spare-report-s-1") {
       exportPDF(routeLocation, values).then(function (htmlCode) {
         var w = window.open();
         w.document.write(htmlCode);
@@ -332,7 +333,7 @@ const useExportPdfInitializer = () => {
       })
       dispatch(handleClickExportPDF())
     }
-    else if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF] && document_item_list && document_item_list.length > 0 && routeLocation === "/report-b22") {
+    else if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF] && document_item_list && document_item_list.length > 0 && routeLocation === "/spare-report-b22") {
       exportPDF(routeLocation, values).then(function (htmlCode) {
         var w = window.open();
         w.document.write(htmlCode);
@@ -1855,7 +1856,7 @@ const createPageReportPage2 = (table1, table2) => `
 
 
 export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve, reject) => {
-  if (routeLocation === '/report-s-1') {
+  if (routeLocation === '/spare-report-s-1') {
     let newDate = new Date()
     let date = newDate.getDate();
     let mouth = newDate.getMonth() + 1;
@@ -1908,8 +1909,10 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
           "internal_item_id": item.internal_item_id,
           "unit": item.uom_name,
           "quantity": item.current_unit_count,
-          "uom_group_id": (item.pricing.average_price.toFixed(4) * (item.current_unit_count - item.committed_unit_count)).toFixed(2),
-          "per_unit_price": item.pricing.average_price.toFixed(4)
+          "uom_group_id": (item.pricing.average_price && item.pricing.average_price.toFixed(4) * ((item.current_unit_count - item.committed_unit_count) && (item.current_unit_count - item.committed_unit_count)).toFixed(2)),
+          "per_unit_price": item.pricing.average_price && item.pricing.average_price.toFixed(4)
+          // "uom_group_id": (item.pricing.average_price * (item.current_unit_count - item.committed_unit_count)),
+          // "per_unit_price": item.pricing.average_price
         };
         line_number = line_number + 1;
         total = total + item.committed_unit_count
@@ -1971,7 +1974,7 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
     const html = createHtmlS1(pageAll);
     return resolve(html);
   }
-  else if (routeLocation === '/inventory-transfer') {
+  else if (routeLocation === '/spare-inventory-transfer') {
 
     console.log(valuesContext)
     let data = [];
@@ -2075,7 +2078,7 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
     const html = createHtmlS16_46(pageAll);
     return resolve(html);
   }
-  else if (routeLocation === '/report-b22') {
+  else if (routeLocation === '/spare-report-b22') {
     console.log(valuesContext)
     let data = [];
     let p = 1
@@ -2236,7 +2239,7 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
     const html = createHtmlB22(pageAll);
     return resolve(html);
   }
-  else if (routeLocation === '/ss-101') {
+  else if (routeLocation === '/pmt-ss-101') {
 
     // console.log(valuesContext)
     const data_json = valuesContext;

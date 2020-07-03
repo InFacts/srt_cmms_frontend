@@ -38,7 +38,7 @@ const PopupModalNoPart = (props) => {
                     </div>
 
                     <div className="container_12">
-                        <table className="table-many-column mt-3" style={{height: "270px"}}>
+                        <table className="table-many-column mt-3" style={{ height: "270px" }}>
                             <thead>
                                 <tr>
                                     <th className="font" style={{ minWidth: "300px" }}>เลขที่อะไหล่</th>
@@ -48,6 +48,7 @@ const PopupModalNoPart = (props) => {
                             </thead>
                             <tbody>
                                 {data.map(function (no_part_show, index) {
+                                    if (props.itemTypeID === no_part_show.item_type_id) {
                                     return (
                                         <tr key={index} id={index}>
                                             <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show.internal_item_id} </td>
@@ -58,7 +59,7 @@ const PopupModalNoPart = (props) => {
                                                 aria-label="Close active modal" aria-controls="modalNoPart" id="closeModalNoPart" >เลือก</button>
                                             </td>
                                         </tr>
-                                    )
+                                    )}
                                 })}
                             </tbody>
                         </table>

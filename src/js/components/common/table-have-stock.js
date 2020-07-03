@@ -72,7 +72,7 @@ const Table = (props) => {
               <td className="edit-padding text-center">
                 <NumberInput step={0.01} name={`line_items[${index}].quantity`} tabIndex={props.tabIndex + line_number}
                   validate={quantity => props.validateLineNumberQuatityItemIDField(`line_items[${index}].quantity`, quantity, index)}
-                  disabled={props.disabledBothMode !== true ? props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true}
+                  disabled={list.item_type_id == 1 ? props.disabledBothMode !== true ? props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true : true}
                   redBorderForError="error-in-table" />
               </td>
 

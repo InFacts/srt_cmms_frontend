@@ -32,20 +32,21 @@ const BottomContent = (props) => {
               <thead>
                 <tr>
                   <th className="font text-center" rowspan="2" style={{ minWidth: "30px", verticalAlign: 'middle' }}>ลำดับ</th>
-                  <th className="font text-center" rowspan="2" style={{ minWidth: "310px", verticalAlign: 'middle' }}>รายการ</th>
+                  <th className="font text-center" rowspan="2" style={{ minWidth: "380px", verticalAlign: 'middle' }}>รายการ</th>
                   <th className="font text-center" rowspan="2" style={{ minWidth: "80px", verticalAlign: 'middle' }}>หน่วย</th>
 
                   <th className="font text-center" colSpan="2" style={{ minWidth: "80px" }}>เหลือเดือนก่อน</th>
                   <th className="font text-center" colSpan="2" style={{ minWidth: "80px" }}>รับเดือนนี้</th>
-                  <th className="font text-center" rowspan="2" style={{ minWidth: "80px", verticalAlign: 'middle' }}>รับจาก</th>
 
-                  <th className="font text-center" style={{ minWidth: "80px" }}>ใบส่งของ</th>
-                  <th className="font text-center" style={{ minWidth: "80px" }}>ฎีกาเบิก</th>
+                  {/* <th className="font text-center" rowspan="2" style={{ minWidth: "80px", verticalAlign: 'middle' }}>รับจาก</th> */}
+
+                  {/* <th className="font text-center" style={{ minWidth: "80px" }}>ใบส่งของ</th> */}
+                  {/* <th className="font text-center" style={{ minWidth: "80px" }}>ฎีกาเบิก</th> */}
 
                   <th className="font text-center" colSpan="2" style={{ minWidth: "80px" }}>จ่ายเดือนนี้</th>
                   <th className="font text-center" colSpan="2" style={{ minWidth: "80px" }}>คงเหลือ</th>
 
-                  <th className="font text-center" style={{ minWidth: "80px" }}>จ่ายให้ใคร</th>
+                  {/* <th className="font text-center" style={{ minWidth: "80px" }}>จ่ายให้ใคร</th> */}
                   <th className="font text-center" style={{ minWidth: "80px" }}>ประเภทบัญชี</th>
                 </tr>
                 <tr>
@@ -54,15 +55,15 @@ const BottomContent = (props) => {
                   <th className="font text-center" style={{ minWidth: "40px" }}>จำนวน</th>
                   <th className="font text-center" style={{ minWidth: "40px" }}>ราคา</th>
 
-                  <th className="font text-center" style={{ minWidth: "80px" }}>เลขที่/ลงวันที่</th>
-                  <th className="font text-center" style={{ minWidth: "80px" }}>เลขที่/ลงวันที่</th>
+                  {/* <th className="font text-center" style={{ minWidth: "80px" }}>เลขที่/ลงวันที่</th>
+                  <th className="font text-center" style={{ minWidth: "80px" }}>เลขที่/ลงวันที่</th> */}
 
                   <th className="font text-center" style={{ minWidth: "40px" }}>จำนวน</th>
                   <th className="font text-center" style={{ minWidth: "40px" }}>ราคา</th>
                   <th className="font text-center" style={{ minWidth: "40px" }}>จำนวน</th>
                   <th className="font text-center" style={{ minWidth: "40px" }}>ราคา</th>
                 
-                  <th className="font text-center" style={{ minWidth: "80px" }}>ใบส่งเลขที่</th>
+                  {/* <th className="font text-center" style={{ minWidth: "80px" }}>ใบส่งเลขที่</th> */}
                   <th className="font text-center" style={{ minWidth: "80px" }}>๒๐๓๑๐๕๑</th>
                 
                 </tr>
@@ -76,25 +77,25 @@ const BottomContent = (props) => {
                       <td className="edit-padding text-center">{line_items.uom_name}</td>
 
                       <td className="edit-padding text-center">{line_items.begin_unit_count}</td> {/* เหลือเดือนก่อน */}
-                      <td className="edit-padding text-center">{line_items.item_id}</td>
+                      <td className="edit-padding text-center">-</td>
 
                       <td className="edit-padding text-center">{line_items.receive_unit_count}</td> {/* รับเดือนนี้ */}
-                      <td className="edit-padding text-center">{line_items.item_id}</td>
+                      <td className="edit-padding text-center">-</td>
 
-                      <td className="edit-padding text-center">{line_items.item_id}</td> {/* รับจาก */}
+                      {/* <td className="edit-padding text-center">-</td> รับจาก */}
                       
-                      <td className="edit-padding text-center">{line_items.item_id}</td> {/* ใบส่งของ */}
+                      {/* <td className="edit-padding text-center">-</td> ใบส่งของ */}
 
-                      <td className="edit-padding text-center">{line_items.item_id}</td> {/* ฎีกาเบิก	 */}
+                      {/* <td className="edit-padding text-center">-</td> ฎีกาเบิก	 */}
 
-                      <td className="edit-padding text-center">{line_items.item_id}</td> {/* จ่ายเดือนนี้ */}
-                      <td className="edit-padding text-center">{line_items.item_id}</td>
+                      <td className="edit-padding text-center">{line_items.issue_unit_count}</td> {/* จ่ายเดือนนี้ */}
+                      <td className="edit-padding text-center">-</td>
 
                       <td className="edit-padding text-center">{line_items.ending_unit_count}</td> {/* คงเหลือ */}
 
-                      <td className="edit-padding text-center">{line_items.item_id}</td>
-                      <td className="edit-padding text-center">{line_items.item_id}</td>
-                      <td className="edit-padding text-center">{line_items.item_id}</td>
+                      <td className="edit-padding text-center">-</td>
+                      {/* <td className="edit-padding text-center">-</td> */}
+                      <td className="edit-padding text-center">-</td>
                     </tr>
                   )
                 })}

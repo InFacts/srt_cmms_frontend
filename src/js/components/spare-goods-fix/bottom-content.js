@@ -56,16 +56,27 @@ const BottomContent = (props) => {
     let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
 
     if (item) {
-      setFieldValue(fieldName + `.description`, `${item.description}`, false);
-      setFieldValue(fieldName + `.quantity`, 0, false);
-      setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
-      setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
-      // setFieldValue(fieldName + `.per_unit_price`, 0, false);
-      setFieldValue(fieldName + `.line_number`, index + 1, false);
-      setFieldValue(fieldName + `.item_status_id`, 2, false);
-      setFieldValue(fieldName + `.item_id`, item.item_id, false);
-      setFieldValue(fieldName + `.at_source`, [], false);
-
+      if (item.item_type_id === 1) {
+        setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+        setFieldValue(fieldName + `.description`, `${item.description}`, false);
+        setFieldValue(fieldName + `.quantity`, 0, false);
+        setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+        setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+        setFieldValue(fieldName + `.line_number`, index + 1, false);
+        setFieldValue(fieldName + `.item_status_id`, 2, false);
+        setFieldValue(fieldName + `.item_id`, item.item_id, false);
+        setFieldValue(fieldName + `.at_source`, [], false);
+      } else {
+        setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+        setFieldValue(fieldName + `.description`, `${item.description}`, false);
+        setFieldValue(fieldName + `.quantity`, 1, false);
+        setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+        setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+        setFieldValue(fieldName + `.line_number`, index + 1, false);
+        setFieldValue(fieldName + `.item_status_id`, 1, false);
+        setFieldValue(fieldName + `.item_id`, item.item_id, false);
+        setFieldValue(fieldName + `.at_source`, [], false);
+      }
       fetchGoodsOnhandData(getNumberFromEscapedString(values.src_warehouse_id), item.item_id)
         .then((at_source) => {
           var at_sources = at_source;
@@ -150,7 +161,7 @@ const BottomContent = (props) => {
                   validateLineNumberItemStatusIDField={validateLineNumberItemStatusIDField}
                   setLineNumber={setLineNumber}
                   checkBooleanForEdit={checkBooleanForEdit}
-                   tabIndex={6}
+                  tabIndex={6}
                 />
               </div>
 

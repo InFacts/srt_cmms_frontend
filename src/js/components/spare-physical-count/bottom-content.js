@@ -20,7 +20,7 @@ import {
   isValidInternalDocumentIDFormat, isValidInternalDocumentIDDraftFormat,
   fetchAttachmentDocumentData, validateEmployeeIDField, validateWarehouseIDField,
   validateInternalDocumentIDFieldHelper, DOCUMENT_STATUS, getUserIDFromEmployeeID,
-  validatedataDocumentField,sumTotalLineItemHelper, sumTotalHelper, checkBooleanForEditHelper
+  validatedataDocumentField, sumTotalLineItemHelper, sumTotalHelper, checkBooleanForEditHelper
 } from '../../helper';
 
 import PopupModalNoPart from '../common/popup-modal-nopart'
@@ -32,7 +32,7 @@ const BottomContent = (props) => {
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
-  const decoded_token = useSelector((state) => ({...state.token.decoded_token}), shallowEqual);
+  const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
   const [lineNumber, setLineNumber] = useState('');
 
   const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
@@ -58,13 +58,25 @@ const BottomContent = (props) => {
     let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
     console.log(item)
     if (item) {
-      setFieldValue(fieldName + `.description`, `${item.description}`, false);
-      setFieldValue(fieldName + `.unit_count`, 0, false);
-      setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
-      setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
-      setFieldValue(fieldName + `.line_number`, index+1, false);
-      setFieldValue(fieldName + `.item_status_id`, 1, false);
-      setFieldValue(fieldName + `.per_unit_price`, 0, false);
+      if (item.item_type_id === 1) {
+        setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+        setFieldValue(fieldName + `.description`, `${item.description}`, false);
+        setFieldValue(fieldName + `.unit_count`, 0, false);
+        setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+        setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+        setFieldValue(fieldName + `.line_number`, index + 1, false);
+        setFieldValue(fieldName + `.item_status_id`, 1, false);
+        setFieldValue(fieldName + `.per_unit_price`, 0, false);
+      } else {
+        setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+        setFieldValue(fieldName + `.description`, `${item.description}`, false);
+        setFieldValue(fieldName + `.unit_count`, 1, false);
+        setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+        setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+        setFieldValue(fieldName + `.line_number`, index + 1, false);
+        setFieldValue(fieldName + `.item_status_id`, 1, false);
+        setFieldValue(fieldName + `.per_unit_price`, 0, false);
+      }
       return;
     } else {
       return 'Invalid Number ID';
@@ -155,11 +167,11 @@ const BottomContent = (props) => {
 
           <div id="table_status_content" className="tabcontent">
             {/* {console.log("values.step_approve", values.step_approve)} */}
-            <TableStatus bodyTableStatus = {values.step_approve} />
+            <TableStatus bodyTableStatus={values.step_approve} />
           </div>
 
           {/* PopUp ค้นหาอะไหล่ MODE ADD */}
-          <PopupModalNoPart keyname='line_items' lineNumber={lineNumber} nameModal="modalNoPart"  />
+          <PopupModalNoPart keyname='line_items' lineNumber={lineNumber} nameModal="modalNoPart" />
 
         </div>
       </div>

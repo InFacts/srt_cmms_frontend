@@ -20,7 +20,7 @@ import {
   isValidInternalDocumentIDFormat, isValidInternalDocumentIDDraftFormat,
   fetchAttachmentDocumentData, validateEmployeeIDField, validateWarehouseIDField,
   validateInternalDocumentIDFieldHelper, DOCUMENT_STATUS, getUserIDFromEmployeeID,
-  validatedataDocumentField,sumTotalLineItemHelper, sumTotalHelper, checkBooleanForEditHelper
+  validatedataDocumentField, sumTotalLineItemHelper, sumTotalHelper, checkBooleanForEditHelper
 } from '../../helper';
 import '../../../css/table.css';
 
@@ -29,14 +29,14 @@ const BottomContent = (props) => {
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
-  const decoded_token = useSelector((state) => ({...state.token.decoded_token}), shallowEqual);
+  const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
   const [lineNumber, setLineNumber] = useState('');
   const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
   const sumTotalLineItem = (quantity, per_unit_price, description) => sumTotalLineItemHelper(quantity, per_unit_price, description);
   const sumTotal = (list_show) => sumTotalHelper(list_show);
-  
+
   const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => {
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
     if (values.line_items[index].internal_item_id === internal_item_id) {
@@ -54,13 +54,25 @@ const BottomContent = (props) => {
     let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
     console.log(item)
     if (item) {
-      setFieldValue(fieldName + `.description`, `${item.description}`, false);
-      setFieldValue(fieldName + `.quantity`, 0, false);
-      setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
-      setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
-      setFieldValue(fieldName + `.line_number`, index+1, false);
-      setFieldValue(fieldName + `.item_status_id`, 1, false);
-      setFieldValue(fieldName + `.per_unit_price`, 0, false);
+      if (item.item_type_id === 1) {
+        setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+        setFieldValue(fieldName + `.description`, `${item.description}`, false);
+        setFieldValue(fieldName + `.quantity`, 0, false);
+        setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+        setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+        setFieldValue(fieldName + `.line_number`, index + 1, false);
+        setFieldValue(fieldName + `.item_status_id`, 1, false);
+        setFieldValue(fieldName + `.per_unit_price`, 0, false);
+      } else {
+        setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+        setFieldValue(fieldName + `.description`, `${item.description}`, false);
+        setFieldValue(fieldName + `.quantity`, 1, false);
+        setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+        setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+        setFieldValue(fieldName + `.line_number`, index + 1, false);
+        setFieldValue(fieldName + `.item_status_id`, 1, false);
+        setFieldValue(fieldName + `.per_unit_price`, 0, false);
+      }
       return;
     } else {
       return 'Invalid Number ID';
@@ -96,7 +108,7 @@ const BottomContent = (props) => {
     checkBooleanForEdit = false
     validateField("internal_document_id")
   }, [values.internal_document_id])
-  
+
   return (
     <div id={changeTheam() === true ? "" : "blackground-gray"}>
       <div className="container_12 clearfix" id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>

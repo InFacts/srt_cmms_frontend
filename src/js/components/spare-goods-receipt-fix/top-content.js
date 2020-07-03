@@ -90,18 +90,10 @@ const TopContent = (props) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/internal_document_id/${encodeURIComponent(refer_to_document_internal_document_id)}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
       .then((res) => {
-        if (res.data.internal_document_id === refer_to_document_internal_document_id) { // If input document ID exists
-          // if (props.toolbar.mode === TOOLBAR_MODE.SEARCH && !props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
-          // console.log(" I AM STILL IN MODE ADD AND SET VALUE")
-          // setValues({ ...values, ...responseToFormState(res.data) }, false); //Setvalues and don't validate
+        if (res.data.document.internal_document_id === refer_to_document_internal_document_id) { // If input document ID exists
           setFieldValue("line_items", setLineItem(res.data), false)
-          setFieldValue("refer_to_document_id", res.data.document_id, false)
-          // setFieldValue("line_items", setLineItem(res.data), false)
+          setFieldValue("refer_to_document_id", res.data.document.document_id, false)
           return resolve(null);
-          // } else { //If Mode add, need to error duplicate Document ID
-          //   console.log("I AM DUPLICATE")
-          //   error = 'Duplicate Document ID';
-          // }
         } else { // If input Document ID doesn't exists
           // console.log("I KNOW IT'sINVALID")
           error = 'Invalid Document ID';

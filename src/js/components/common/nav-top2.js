@@ -12,7 +12,7 @@ import { identifyEndpoinsHelper } from '../../helper';
 const MainModule = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }));
     const footer = useSelector((state) => ({ ...state.footer }));
-    const [checkNav, setCheckNav] = useState(0);
+    const [checkNav, setCheckNav] = useState(false);
     const [checkPermission, setCheckPermission] = useState([]);
     const fact = useSelector((state) => ({...state.api.fact}), shallowEqual);
     const decoded_token = useSelector((state) => ({...state.token.decoded_token}), shallowEqual);
@@ -49,6 +49,8 @@ const MainModule = (props) => {
         // Setup SubNav
         setupAllSubNav();
     }, [checkNav]);
+
+    console.log("checkNav", checkNav)
 
     const identifyEndpoins = (document_type_id) => identifyEndpoinsHelper(document_type_id)
 
@@ -143,7 +145,7 @@ const MainModule = (props) => {
 
                             <li className="p-navigation__item p-subnav a nav-li" style={{ marginRight: "0", marginLeft: "auto" }} role="menuitem" id="link-1">
                                 <Link to="#" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu" style={{ padding: "10px 12px 0 0" }}
-                                    onClick={(e) => setCheckNav(1)}>
+                                    onClick={() => setCheckNav(true)}>
                                     <i className="fas fa-bell" style={{ fontSize: "24px", color: "#823D35" }}></i>
                                     {props.notify.not_read_count !== 0
                                         ?
@@ -180,7 +182,7 @@ const MainModule = (props) => {
 
                             <li className="p-navigation__item p-subnav a nav-li" style={{ marginLeft: "15px" }} role="menuitem" id="link-1">
                                 <Link to="#" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu" style={{ padding: "10px 0 0 0" }}
-                                    onClick={(e) => setCheckNav(1)}>
+                                    onClick={() => setCheckNav(true)}>
                                     <i className="fas fa-user-circle" style={{ fontSize: "24px", color: "#823D35" }}></i>
                                 </Link>
                                 <ul className="p-subnav__items--right" id="account-menu" aria-hidden="true">

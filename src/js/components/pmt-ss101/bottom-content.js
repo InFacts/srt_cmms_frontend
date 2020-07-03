@@ -255,7 +255,7 @@ const BottomContent = (props) => {
                                 <option value='' selected></option>
                                 {factSystemType.items.map((factSystemType) => {
                                     if (values.system_type_group_id == factSystemType.system_type_group_id)
-                                    return <option key={factSystemType.system_type_id} value={factSystemType.system_type_id}>{factSystemType.abbreviation}</option>
+                                return <option key={factSystemType.system_type_id} value={factSystemType.system_type_id}>{factSystemType.abbreviation} - {factSystemType.system_type}</option>
                                 })}
                             </SelectNoChildrenInput>
                         </div>
@@ -270,7 +270,8 @@ const BottomContent = (props) => {
                             <SelectNoChildrenInput name="hardware_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="19">
                                 <option value=''></option>
                                 {factHardwareType.items.map((factHardwareType) => {
-                                    return <option key={factHardwareType.hardware_type_id} value={factHardwareType.hardware_type_id}>{factHardwareType.abbreviation} - {factHardwareType.system_type}</option>
+                                    if (values.sub_maintenance_type_id == factHardwareType.system_type_id)
+                                    return <option key={factHardwareType.hardware_type_id} value={factHardwareType.hardware_type_id}>{factHardwareType.abbreviation} - {factHardwareType.hardware_type}</option>
                                 })}
                             </SelectNoChildrenInput>
                         </div>

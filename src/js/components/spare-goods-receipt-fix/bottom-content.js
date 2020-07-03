@@ -57,13 +57,25 @@ const BottomContent = (props) => {
     let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
     // console.log(item)
     if (item) {
-      setFieldValue(fieldName + `.description`, `${item.description}`, false);
-      setFieldValue(fieldName + `.quantity`, 0, false);
-      setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
-      setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
-      setFieldValue(fieldName + `.line_number`, index + 1, false);
-      setFieldValue(fieldName + `.item_status_id`, 3, false);
-      setFieldValue(fieldName + `.per_unit_price`, 0, false);
+      if (item.item_type_id === 1) {
+        setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+        setFieldValue(fieldName + `.description`, `${item.description}`, false);
+        setFieldValue(fieldName + `.quantity`, 0, false);
+        setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+        setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+        setFieldValue(fieldName + `.line_number`, index + 1, false);
+        setFieldValue(fieldName + `.item_status_id`, 3, false);
+        setFieldValue(fieldName + `.per_unit_price`, 0, false);
+      } else {
+        setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+        setFieldValue(fieldName + `.description`, `${item.description}`, false);
+        setFieldValue(fieldName + `.quantity`, 1, false);
+        setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+        setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+        setFieldValue(fieldName + `.line_number`, index + 1, false);
+        setFieldValue(fieldName + `.item_status_id`, 1, false);
+        setFieldValue(fieldName + `.per_unit_price`, 0, false);
+      }
       return;
     } else {
       return 'Invalid Number ID';

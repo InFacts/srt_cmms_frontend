@@ -53,7 +53,10 @@ const TopContent = (props) => {
       remark: data.remark,
       active: data.active.data[0],
       accounting_type: data.accounting_type,
-      list_uoms: data.list_uoms
+      list_uoms: data.list_uoms,
+
+      modeEdit: values.line_position_permission[0].module_admin === true ? true : false     // IF Check user If User is Admin -> return true Else -> return false
+
     }
   }
 
@@ -61,36 +64,44 @@ const TopContent = (props) => {
   useFetchPernissionUser();
 
   const validateInternalItemIDField = internal_item_id => {
-    if (internal_item_id === values.internal_item_id) {
-      return;
-    }
     if (!internal_item_id) {
+      setFieldValue("description", "", false)
+      setFieldValue("item_group_id", "", false)
+      setFieldValue("item_type_id", "", false)
+      setFieldValue("uom_group_id", "", false)
+      setFieldValue("uom_id", "", false)
+      setFieldValue("uom_name", "", false)
+      setFieldValue("minimum_order_quantity", "", false)
+      setFieldValue("lead_time", "", false)
+      setFieldValue("tolerance_time", "", false)
+      setFieldValue("quantity_required", "", false)
+      setFieldValue("quantity_lowest", "", false)
+      setFieldValue("quantity_highest", "", false)
+      setFieldValue("remark", "", false)
+      setFieldValue("active", "", false)
+      setFieldValue("accounting_type", "", false)
+      setFieldValue("list_uoms", "", false)
+      setFieldValue("modeEdit", false, false);
       return 'Required';
     }
+
     if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
       && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) {
-      let items = fact.items.items;
-      let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
-      if (item) {
-        setValues({ ...values, ...responseToFormState(item) }, false); //Setvalues and don't validate
-        validateField("item_type_id");
+      if (internal_item_id !== values.internal_item_id) {
+        let items = fact.items.items;
+        let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}` && `${item.item_type_id}` === `${1}`); // Returns undefined if not found
+        if (item) {
+          setValues({ ...values, ...responseToFormState(item) }, false);
 
-        // IF Check user If User is Admin -> return true Else -> return false
-        if (values.line_position_permission[0].module_admin === true) { //{/* TODO USER_ID FOR ADMIN */}
-          console.log(" YES I AM ADMIN ")
-          setFieldValue("modeEdit", true, false);
+          fetchGoodsOnhandDataForItemmasterData(item.item_id)
+            .then((goods_onhand) => {
+              // console.log("good on hand", goods_onhand)
+              setFieldValue('goods_onhand', goods_onhand, false);
+            })
+          return;
         } else {
-          console.log(" NO I NOT ADMIN ")
-          setFieldValue("modeEdit", false, false);
+          return 'Invalid Number ID';
         }
-        fetchGoodsOnhandDataForItemmasterData(item.item_id)
-          .then((goods_onhand) => {
-            // console.log("good on hand", goods_onhand)
-            setFieldValue('goods_onhand', goods_onhand, false);
-          })
-        return;
-      } else {
-        return 'Invalid Number ID';
       }
     } else {//If mode add, ok
       console.log("document ID doesn't exist but I am in mode add")
@@ -104,7 +115,7 @@ const TopContent = (props) => {
       } else return 'Required';
     }
   };
-
+  console.log("values.modeEdit", values.modeEdit)
   const validateItemMasterdataField = (fieldName, name) => {
     if (!name) {
       return 'Required'
@@ -121,9 +132,9 @@ const TopContent = (props) => {
       <div className="container_12 clearfix">
         <section className="container_12 ">
 
-            <FormTitle>ข้อมูลอุปกรณ์</FormTitle>
+          <FormTitle>ข้อมูลอุปกรณ์</FormTitle>
 
-            <div id={changeTheam() === true ? "blackground-white" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "120px", paddingTop: "10px" } : {}} >
+          <div id={changeTheam() === true ? "blackground-white" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "120px", paddingTop: "10px" } : {}} >
 
             <div className="container_12">
               <FormLabel>เลขที่อุปกรณ์</FormLabel>
@@ -193,7 +204,7 @@ const TopContent = (props) => {
         </section>
 
         {/* PopUp ค้นหาอะไหล่ */}
-        <PopupModalNoPartNoChildren />
+        <PopupModalNoPartNoChildren itemTypeID={1} />
       </div>
     </div>
   )

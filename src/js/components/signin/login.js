@@ -42,8 +42,8 @@ const Login = (props) => {
       <div className="container_12 clearfix">
         <div className="grid_12 from-sigin">
           <img alt='some value' src={logo} width="200px" />
-          <p className="text-signin">ระบบฐานข้อมูลระบบอาณัติสัญญาณเพื่อวิเคราะห์และวางแผนซ่อมบำรุง</p>
-          <p className="text-signin">ฝ่ายการอาณัติสัญญาณและโทรคมนาคม</p>
+          <p className="text-signin" style={{ color: "#0086EE", fontWeight: "bold", fontSize: "16px" }}>ระบบฐานข้อมูลระบบอาณัติสัญญาณเพื่อวิเคราะห์และวางแผนซ่อมบำรุง</p>
+          <p className="text-signin" style={{ color: "#0086EE", fontWeight: "bold", fontSize: "16px" }}>ฝ่ายการอาณัติสัญญาณและโทรคมนาคม</p>
           <h4 className="head-signin">เข้าสู่ระบบ</h4>
 
           <form className="from-sigin-input" onSubmit={handleSubmit}>
@@ -53,7 +53,7 @@ const Login = (props) => {
             <input className="cancel-default-signin" type="password" id="exampleInputPassword1" value={password} onChange={(e) => setPassword(e.target.value)} required/>
             {checkIdPassword === false && <label className="float-left alert_error_input">ชื่อผู้ใช้งาน หรือรหัสผ่านไม่ถูกต้อง</label>}
             <Link to="forgot-password"><label className="alert-signin float-right mt-1 font-signin" style={{ marginTop: "9px" }}>ลืมรหัสผ่าน ?</label></Link>
-            <button className="button-red font-signin" type="submit">เข้าสู่ระบบ</button>
+            <button className="button-red font-signin" type="submit" style={{ backgroundColor : "#00ADEF" }}>เข้าสู่ระบบ</button>
           </form>
         </div>
       </div>
