@@ -47,6 +47,7 @@ const BottomContent = (props) => {
     if (!name) {
       return 'Required'
     }
+    return;
   };
   const validateMinimumOrderQuantityField = (...args) => validateItemMasterdataField("minimum_order_quantity", ...args);
   const validateLeadTimeField = (...args) => validateItemMasterdataField("lead_time", ...args);
@@ -58,7 +59,6 @@ const BottomContent = (props) => {
   const validateDepreciation = (...args) => validateItemMasterdataField("depreciation", ...args);
   const validateUsefulLife = (...args) => validateItemMasterdataField("useful_life", ...args);
   const validateResposibleDistrictID = (...args) => validateItemMasterdataField("responsible_district_id", ...args);
-  // const validatePriceCurrently = (...args) => validateItemMasterdataField("price_currently", ...args);
 
   return (
     <>
@@ -75,7 +75,7 @@ const BottomContent = (props) => {
                 <p className="cancel-default">ชื่อย่อหน่วยนับ </p>
               </div>
               <div className="grid_3 pull_1">
-                <SelectNoChildrenInput name="uom_id" disabled={values.modeEdit ? false : values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomIDField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="6" >
+                <SelectNoChildrenInput name="uom_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomIDField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="6" >
                   <option value=''></option>
                   {fact['unit-of-measures'].items.map((list_uoms) => (
                     list_uoms.uom_id === values.uom_id
@@ -95,7 +95,7 @@ const BottomContent = (props) => {
                 <div className="grid_2">
                   <NumberInput step={0.01} name="minimum_order_quantity" tabIndex="7" cssStyle={{ left: "60px", top: "-5px" }}
                     validate={validateMinimumOrderQuantityField}
-                    disabled={values.modeEdit ? false : values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                   />
                 </div>
                 <div className="grid_1 ml-0 pull_0">
@@ -120,7 +120,7 @@ const BottomContent = (props) => {
                 </div>
                 <div className="grid_2">
                   <NumberInput step={1} name="lead_time" tabIndex="8" validate={validateLeadTimeField} cssStyle={{ left: "60px", top: "-5px" }}
-                    disabled={values.modeEdit ? false : values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                   />
                 </div>
                 <div className="grid_1">
@@ -138,7 +138,7 @@ const BottomContent = (props) => {
                 <div className="grid_2">
                   <NumberInput step={1} name="tolerance_time" tabIndex="9"
                     validate={validateToleranceTimeField} cssStyle={{ left: "60px", top: "-5px" }}
-                    disabled={values.modeEdit ? false : values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                   />
                 </div>
                 <div className="grid_1">
@@ -153,7 +153,7 @@ const BottomContent = (props) => {
                 <p className="cancel-default">สถานะอะไหล่ </p>
               </div>
               <div className="grid_3 pull_1">
-                <SelectNoChildrenInput name="active" disabled={values.modeEdit ? false : values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                <SelectNoChildrenInput name="active" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                   validate={validateActiveField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="10" >
                   <option value=''></option>
                   {values.active === 0
@@ -178,7 +178,7 @@ const BottomContent = (props) => {
                 </div>
                 <div className="grid_2">
                   <TextInput name="accounting_type"
-                    disabled={values.modeEdit ? false : values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="11" />
+                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="11" />
                 </div>
                 <div className="grid_1">
                   <p className="cancel-default"></p>
@@ -191,7 +191,7 @@ const BottomContent = (props) => {
               <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
               <div className="grid_11">
                 <TextareaInput name="remark" tabIndex="12"
-                  disabled={values.modeEdit ? false : values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                 />
               </div>
             </div>
@@ -213,7 +213,7 @@ const BottomContent = (props) => {
               
               {/* === responsible_by === */}
               <div className="grid_3 alpha omega float-right">
-                <SelectNoChildrenInput name="responsible_district_id" disabled={values.modeEdit ? false : values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="13" validate={validateResposibleDistrictID} cssStyle={{ left: "-160px", top: "10px" }}>
+                <SelectNoChildrenInput name="responsible_district_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="13" validate={validateResposibleDistrictID} cssStyle={{ left: "-160px", top: "10px" }}>
                   <option value=''></option>
                   {factDistict.items.map((factDistict) => {
                     return <option value={factDistict.district_id}>{factDistict.name}</option>
@@ -231,7 +231,7 @@ const BottomContent = (props) => {
               </div>
               <div className="grid_2 alpha omega">
               <NumberInput step={0.01} name="price_currently" tabIndex="14" validate={validatePriceCurrently} cssStyle={{ left: "60px", top: "-5px" }}
-                    disabled={values.modeEdit ? false : values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                   />
               </div>
               <Label>บาท</Label>
@@ -257,7 +257,7 @@ const BottomContent = (props) => {
               </div>
               <div className="grid_2 alpha omega">
               <NumberInput step={0.01} name="depreciation" tabIndex="15" validate={validateDepreciation} cssStyle={{ left: "60px", top: "-5px" }}
-                    disabled={values.modeEdit ? false : values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                   />
               </div>
               <Label>บาท</Label>
@@ -282,7 +282,7 @@ const BottomContent = (props) => {
               </div>
               <div className="grid_2 alpha omega">
               <NumberInput step={1} name="useful_life" tabIndex="16" validate={validateUsefulLife} cssStyle={{ left: "60px", top: "-5px" }}
-                    disabled={values.modeEdit ? false : values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                   />
               </div>
               <Label>เดือน</Label>
@@ -382,7 +382,7 @@ const BottomContent = (props) => {
               </div>
               <div className="grid_3 alpha omega">
                 <SelectNoChildrenInput name="checklist_id"
-                  disabled={values.modeEdit ? false : values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                   cssStyle={{ left: "-160px", top: "10px" }} tabIndex="18" >
                   <option value=''></option>
                   {factChecklist.items.map((factChecklist) => {

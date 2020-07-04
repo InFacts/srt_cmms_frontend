@@ -395,7 +395,14 @@ export const handleFooterClickApprovalProcess = makeActionCreator(HANDLE_CLICK_C
 export const handleFooterClickVoid = makeActionCreator(HANDLE_CLICK_VOID);
 export const handleFooterClickApprovalDone = makeActionCreator(HANDLE_CLICK_APPROVAL_DONE);
 
-export const handleClickBackToSpareMain = () => {
+export const handleClickBackToSpareMain = (routeLocation) => {
+    console.log("routeLocation", routeLocation.search("pmt"))
+    if (routeLocation.search("pmt") !== -1) {
+        return (dispatch) => {
+            dispatch(handleFooterClickBack());
+            history.push('/main-pmt');
+        };
+    }
     return (dispatch) => {
         dispatch(handleFooterClickBack());
         history.push('/main-spare');

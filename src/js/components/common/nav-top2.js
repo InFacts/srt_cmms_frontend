@@ -13,31 +13,33 @@ const MainModule = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }));
     const footer = useSelector((state) => ({ ...state.footer }));
     const [checkNav, setCheckNav] = useState(false);
+    const [checkNav2, setCheckNav2] = useState(false);
+
     const [checkPermission, setCheckPermission] = useState([]);
-    const fact = useSelector((state) => ({...state.api.fact}), shallowEqual);
-    const decoded_token = useSelector((state) => ({...state.token.decoded_token}), shallowEqual);
+    const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
+    const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
     let module = [];
     useEffect(() => {
-      if (decoded_token.has_position) {
-        fetchPositionPermissionData(decoded_token.has_position[0].position_id)
-          .then((position_permission) => {
-            // console.log("position_permission", position_permission)
-            position_permission.map((list_module) => {
-              module.push({
-                position_id: list_module.position_id,
-                name: list_module.name,
-                abbreviation: list_module.abbreviation,
-                module_spare: list_module.function.indexOf(1) !== -1,
-                module_pmt: list_module.function.indexOf(2) !== -1,
-                module_als: list_module.function.indexOf(3) !== -1,
-                module_track_document: list_module.function.indexOf(4) !== -1,
-                module_admin: list_module.function.indexOf(5) !== -1,
-              })
-            })
-            setCheckPermission(module);
-          })
-      }
+        if (decoded_token.has_position) {
+            fetchPositionPermissionData(decoded_token.has_position[0].position_id)
+                .then((position_permission) => {
+                    // console.log("position_permission", position_permission)
+                    position_permission.map((list_module) => {
+                        module.push({
+                            position_id: list_module.position_id,
+                            name: list_module.name,
+                            abbreviation: list_module.abbreviation,
+                            module_spare: list_module.function.indexOf(1) !== -1,
+                            module_pmt: list_module.function.indexOf(2) !== -1,
+                            module_als: list_module.function.indexOf(3) !== -1,
+                            module_track_document: list_module.function.indexOf(4) !== -1,
+                            module_admin: list_module.function.indexOf(5) !== -1,
+                        })
+                    })
+                    setCheckPermission(module);
+                })
+        }
     }, [decoded_token.has_position]);
 
     useEffect(() => {
@@ -49,8 +51,6 @@ const MainModule = (props) => {
         // Setup SubNav
         setupAllSubNav();
     }, [checkNav]);
-
-    console.log("checkNav", checkNav)
 
     const identifyEndpoins = (document_type_id) => identifyEndpoinsHelper(document_type_id)
 
@@ -81,7 +81,7 @@ const MainModule = (props) => {
             || url === "/pmt-ss-101" || url === "/pmt-equipment-master"
             || url === "/pmt-equipment-installation" || url === "/pmt-fixed-asset"
             || url === "/pmt-create-checklist" || url === "/pmt-all-checklist"
-            || url === "/pmt-create-schedule-checklist") {
+            || url === "/pmt-create-schedule-checklist" || url === "/pmt-report") {
             return "#9ADFF9";
         }
         if (url === "/main-als" || url === "/als-spare"
@@ -120,32 +120,30 @@ const MainModule = (props) => {
                                 </Link>
                             </li>
 
-                            {
-                                url !== "/main"
-                                    ?
-                                    <>
-                                        <li className="nav-li box-red-top-bar">
-                                            <Link to={checkPermission.length !== 0 && checkPermission[0].module_spare ? "/main-spare" : "#"}>ระบบบริหารข้อมูลอะไหล่</Link>
-                                        </li>
-                                        <li className="nav-li box-blue-top-bar">
-                                            <Link to={checkPermission.length !== 0 && checkPermission[0].module_pmt ? "/main-pmt" : "#"}>ระบบบริหารงานซ่อมบำรุง</Link>
-                                        </li>
+                            {url !== "/main"
+                                ?
+                                <>
+                                    <li className="nav-li box-red-top-bar">
+                                        <Link to={checkPermission.length !== 0 && checkPermission[0].module_spare ? "/main-spare" : "#"}>ระบบบริหารข้อมูลอะไหล่</Link>
+                                    </li>
+                                    <li className="nav-li box-blue-top-bar">
+                                        <Link to={checkPermission.length !== 0 && checkPermission[0].module_pmt ? "/main-pmt" : "#"}>ระบบบริหารงานซ่อมบำรุง</Link>
+                                    </li>
 
-                                        <li className="nav-li box-green-top-bar">
-                                            <Link to={checkPermission.length !== 0 && checkPermission[0].module_als ? "/main-als" : "#"}>ระบบวิเคราห์ะวางแผนทรัพยากรซ่อมบำรุง</Link>
-                                        </li>
+                                    <li className="nav-li box-green-top-bar">
+                                        <Link to={checkPermission.length !== 0 && checkPermission[0].module_als ? "/main-als" : "#"}>ระบบวิเคราห์ะวางแผนทรัพยากรซ่อมบำรุง</Link>
+                                    </li>
 
-                                        <li className="nav-li box-yellow-top-bar">
-                                            <Link to={checkPermission.length !== 0 && checkPermission[0].module_track_document ? "/track" : "#"}>สถานรออนุมัติ</Link>
-                                        </li>
-                                    </>
-                                    :
-                                    null
-                            }
+                                    <li className="nav-li box-yellow-top-bar">
+                                        <Link to={checkPermission.length !== 0 && checkPermission[0].module_track_document ? "/track" : "#"}>สถานรออนุมัติ</Link>
+                                    </li>
+                                </>
+                                :
+                                null}
 
-                            <li className="p-navigation__item p-subnav a nav-li" style={{ marginRight: "0", marginLeft: "auto" }} role="menuitem" id="link-1">
+                            <li className={`p-navigation__item p-subnav a nav-li ${checkNav ? `is-active` : ``}`} style={{ marginRight: "0", marginLeft: "auto" }} role="menuitem" id="link-1">
                                 <Link to="#" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu" style={{ padding: "10px 12px 0 0" }}
-                                    onClick={() => setCheckNav(true)}>
+                                    onClick={() => setCheckNav(true)} >
                                     <i className="fas fa-bell" style={{ fontSize: "24px", color: "#823D35" }}></i>
                                     {props.notify.not_read_count !== 0
                                         ?
@@ -180,9 +178,9 @@ const MainModule = (props) => {
                                 </ul>
                             </li>
 
-                            <li className="p-navigation__item p-subnav a nav-li" style={{ marginLeft: "15px" }} role="menuitem" id="link-1">
+                            <li className={`p-navigation__item p-subnav a nav-li ${checkNav2 ? `is-active` : ``}`} style={{ marginLeft: "15px" }} role="menuitem" id="link-1">
                                 <Link to="#" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu" style={{ padding: "10px 0 0 0" }}
-                                    onClick={() => setCheckNav(true)}>
+                                    onClick={() => setCheckNav2(true)}>
                                     <i className="fas fa-user-circle" style={{ fontSize: "24px", color: "#823D35" }}></i>
                                 </Link>
                                 <ul className="p-subnav__items--right" id="account-menu" aria-hidden="true">

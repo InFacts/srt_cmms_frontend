@@ -62,16 +62,17 @@ const BottomContent = (props) => {
         let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
         console.log(item)
         if (item) {
-            setFieldValue(fieldName + `.item_id`, item.item_id, false);
-            setFieldValue(fieldName + `.description`, `${item.description}`, false);
-            setFieldValue(fieldName + `.equipment_status_id`, 3, false);
             var item_match_equipments = props.equipment;
             let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.item_id}` === `${item.item_id}`);
             console.log("item_match_equipment", item_match_equipment)
             if (item_match_equipment) {
+                setFieldValue(fieldName + `.item_id`, item.item_id, false);
+                setFieldValue(fieldName + `.description`, `${item.description}`, false);
+                setFieldValue(fieldName + `.equipment_status_id`, 3, false);
+
                 setFieldValue(fieldName + `.equipment_item_id`, parseInt(item.item_id), false);
             }
-            return;
+            return 'Invalid Number ID';
         } else {
             return 'Invalid Number ID';
         }

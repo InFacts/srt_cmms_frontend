@@ -13,6 +13,8 @@ import { API_URL_DATABASE } from '../../config_url.js';
 import { useFormikContext, useField } from 'formik';
 
 import PopupModalDocument from '../common/popup-modal-document'
+import PopupModalRefDocument from '../common/popup-modal-ref-document'
+
 import PopupModalUsername from '../common/popup-modal-username'
 
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
@@ -190,7 +192,7 @@ const TopContent = (props) => {
             />
 
             {/* PopUp ค้นหาเลขที่เอกสาร WO*/}
-            <PopupModalDocument
+            <PopupModalRefDocument
                 documentTypeGroupID={DOCUMENT_TYPE_ID.WORK_ORDER}
                 id="modalWODocument" //For Open POPUP
                 name="refer_to_document_internal_id" //For setFieldValue 

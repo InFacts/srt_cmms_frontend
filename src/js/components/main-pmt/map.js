@@ -197,7 +197,7 @@ class Map extends React.Component {
                                 <img alt='some value' src={Text8} className="Ptext8" />
                                 <img alt='some value' src={Text9} className="Ptext9" />
 
-                                <Link to="/report"><img alt='some value' src={changeTheam() === true ? FiveoneNew : Fiveone} 
+                                <Link to="/pmt-report"><img alt='some value' src={changeTheam() === true ? FiveoneNew : Fiveone} 
                                 className={changeTheam() === true ? "Pfive-one-new" : "Pfive-one"} style={ changeTheam() === true ? { width: "70px" } : {} } /></Link>
 
                                 <img alt='some value' src={Text10} className="Ptext10" />

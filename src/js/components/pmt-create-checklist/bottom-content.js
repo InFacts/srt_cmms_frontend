@@ -78,7 +78,7 @@ const BottomContent = (props) => {
               validateLineNumberInternalItemIDField={validateLineNumberInternalItemIDField}
               setLineNumber={setLineNumber}
               tabIndex={7}
-            // checkBooleanForEdit={checkBooleanForEdit}
+              checkBooleanForEdit={values.modeEdit}
             />
           </div>
 

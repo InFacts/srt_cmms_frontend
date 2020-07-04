@@ -14,7 +14,7 @@ import DateInput from '../common/formik-date-input'
 import { useFormikContext, useField } from 'formik';
 
 import PopupModalDocument from '../common/popup-modal-document'
-import PopupModalDocumentS1646 from '../common/popup-modal-document'
+import PopupModalDocumentS1646 from '../common/popup-modal-ref-document'
 import PopupModalInventory from '../common/popup-modal-inventory'
 import PopupModalUsername from '../common/popup-modal-username'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';

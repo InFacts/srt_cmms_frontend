@@ -14,6 +14,8 @@ import DateInput from '../common/formik-date-input'
 import { useFormikContext, useField } from 'formik';
 
 import PopupModalDocument from '../common/popup-modal-document'
+import PopupModalRefDocument from '../common/popup-modal-ref-document'
+
 import PopupModalUsername from '../common/popup-modal-username'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import {
@@ -47,7 +49,6 @@ const TopContent = (props) => {
         // Internal Document ID
         //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
         //  ie. GR-PYO-2563/0001
-        // console.log("I am validating document id")
         let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS|WR)-[A-Z]{3}-\d{4}\/\d{4}$/g
         let draftInternalDocumentIDRegex = /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
         // let draftInternalDocumentIDRegex = /^heh/g
@@ -57,24 +58,14 @@ const TopContent = (props) => {
             return resolve('Invalid Document ID Format\nBe sure to use the format ie. S1646-PYO-2563/0001')
         }
 
-        // if (!refer_to_document_internal_id) {
-        //   return resolve(); // Resolve doesn't return
-        // }
         let error;
         const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/internal_document_id/${encodeURIComponent(refer_to_document_internal_id)}`;
         axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
             .then((res) => {
                 if (res.data.document.internal_document_id === refer_to_document_internal_id) { // If input document ID exists
-                    // if (props.toolbar.mode === TOOLBAR_MODE.SEARCH && !props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
-                    // console.log(" I AM STILL IN MODE ADD AND SET VALUE")
-                    // setValues({ ...values, ...responseToFormState(res.data) }, false); //Setvalues and don't validate
                     setFieldValue("refer_to_document_id", res.data.document.document_id, false)
                     // setFieldValue("line_items", setLineItem(res.data), false)
                     return resolve(null);
-                    // } else { //If Mode add, need to error duplicate Document ID
-                    //   console.log("I AM DUPLICATE")
-                    //   error = 'Duplicate Document ID';
-                    // }
                 } else { // If input Document ID doesn't exists
                     // console.log("I KNOW IT'sINVALID")
                     error = 'Invalid Document ID';
@@ -197,7 +188,7 @@ const TopContent = (props) => {
                 name="internal_document_id" //For setFieldValue 
             />
 
-            <PopupModalDocument
+            <PopupModalRefDocument
                 documentTypeGroupID={DOCUMENT_TYPE_ID.WORK_REQUEST}
                 id="modalDocument2" //For Open POPUP
                 name="refer_to_document_internal_id" //For setFieldValue 

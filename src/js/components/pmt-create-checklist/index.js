@@ -76,7 +76,7 @@ const EnhancedGoodsReceiptComponent = withFormik({
         name: '',  // ชื่อแผน
         freq: '', //ความถี่
         freq_unit_id: '',
-        active: '',
+        active: 1,
         checklist_group_id: '',
 
         // Bottom Content

@@ -6,7 +6,7 @@ import { API_PORT_DATABASE } from '../../config_port.js';
 import { API_URL_DATABASE } from '../../config_url.js';
 
 import PopupModalDocument from '../common/popup-modal-document'
-import PopupModalDocumentGoodsFix from '../common/popup-modal-document'
+import PopupModalDocumentGoodsFix from '../common/popup-modal-ref-document'
 import PopupModalUsername from '../common/popup-modal-username'
 
 import TextInput from '../common/formik-text-input'

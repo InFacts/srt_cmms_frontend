@@ -115,7 +115,7 @@ const TopContent = (props) => {
       } else return 'Required';
     }
   };
-  console.log("values.modeEdit", values.modeEdit)
+
   const validateItemMasterdataField = (fieldName, name) => {
     if (!name) {
       return 'Required'

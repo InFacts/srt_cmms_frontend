@@ -66,7 +66,10 @@ const ToolbarItemComponent = (props) => {
     return (
         <li className="nav-li">
             <a className={a_className}>
-                <img className={img_className} alt={toolbarAction} src={TOOLBAR_TO_ICON[toolbarAction]} onClick={handleClick} />
+                <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
+                    <img className={img_className} alt={toolbarAction} src={TOOLBAR_TO_ICON[toolbarAction]} onClick={handleClick} />
+                    <span className="p-tooltip__message edit_p_tooltip__message tooltip1" role="tooltip" id="btm-cntr">Spare 1</span>
+                </div>
             </a>
         </li>
     )

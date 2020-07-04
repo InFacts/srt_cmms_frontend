@@ -138,7 +138,7 @@ const TopContent = (props) => {
                 <div className="card p-tooltip--btm-center" aria-describedby="btm-cntr"
                  style={changeTheam() === true
                   ?
-                  values.line_position_permission.length !== 0 && values.line_position_permission[0].module_track_document === true
+                  values.line_position_permission.length !== 0 && values.line_position_permission[0].module_admin === true
                     ?
                     { background: "#CBB0E9", border: "2px solid #652D90" }
                     :

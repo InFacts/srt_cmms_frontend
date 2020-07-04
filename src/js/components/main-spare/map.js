@@ -141,29 +141,29 @@ class Map extends React.Component {
 
     render() {
         return (
-            <div style={ changeTheam() === true ? {backgroundImage: `url(${BgRed})`,  width: "100vw", height: "100vh"} : {} }>
+            <div style={changeTheam() === true ? { backgroundImage: `url(${BgRed})`, width: "100vw", height: "100vh" } : {}}>
                 <div>
                     <div className="container_12 clearfix">
                         <section className="grid_12 ">
                             <h4 className="head-title" style={{ color: "black" }}>ระบบบริหารข้อมูลอะไหล่ - Spare</h4>
-                            <div id="blackground-white" style={ changeTheam() === true ? { borderRadius: "25px", border: "2px dashed gray", height: "380px"} : {height: "380px"} }>
+                            <div id="blackground-white" style={changeTheam() === true ? { borderRadius: "25px", border: "2px dashed gray", height: "380px" } : { height: "380px" }}>
 
                                 <Link to="/spare-goods-receipt2">
-                                <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
-                                    <img alt='some value' src={changeTheam() === true ? OneoneNew : Oneone} 
-                                    className={changeTheam() === true ? "one-one-new" : "one-one"} style={ changeTheam() === true ? { width: "60px" } : {} }/>
-                                    <span className="p-tooltip__message edit_p_tooltip__message tooltip1" role="tooltip" id="btm-cntr">Spare 1</span>
+                                    <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
+                                        <img alt='some value' src={changeTheam() === true ? OneoneNew : Oneone}
+                                            className={changeTheam() === true ? "one-one-new" : "one-one"} style={changeTheam() === true ? { width: "60px" } : {}} />
+                                        <span className="p-tooltip__message edit_p_tooltip__message tooltip1" role="tooltip" id="btm-cntr">Spare 1</span>
                                     </div>
                                 </Link>
 
                                 <Link to="/spare-goods-return">
-                                <img alt='some value' src={changeTheam() === true ? OnetwoNew : Onetwo} 
-                                className={changeTheam() === true ? "one-two-new" : "one-two"} style={ changeTheam() === true ? { width: "85px" } : {} } />
+                                    <img alt='some value' src={changeTheam() === true ? OnetwoNew : Onetwo}
+                                        className={changeTheam() === true ? "one-two-new" : "one-two"} style={changeTheam() === true ? { width: "85px" } : {}} />
                                 </Link>
 
                                 <Link to="/spare-goods-receipt-no-po">
-                                <img alt='some value' src={changeTheam() === true ? OnethreeNew : Onethree} 
-                                className={changeTheam() === true ? "one-three-new" : "one-three"} style={ changeTheam() === true ? { width: "85px" } : {} } />
+                                    <img alt='some value' src={changeTheam() === true ? OnethreeNew : Onethree}
+                                        className={changeTheam() === true ? "one-three-new" : "one-three"} style={changeTheam() === true ? { width: "85px" } : {}} />
                                 </Link>
 
                                 <img alt='some value' src={Arrow1} className="arrow1" />
@@ -173,29 +173,29 @@ class Map extends React.Component {
                                 <img alt='some value' src={Text2} className="text2" />
                                 <img alt='some value' src={Text3} className="text3" />
 
-                                <Link to="/spare-warehouse"><img alt='some value' src={changeTheam() === true ? CenterNew : Center} 
-                                className={changeTheam() === true ? "center-new" : "center"} style={ changeTheam() === true ? { width: "75px" } : {} } /></Link>
+                                <Link to="/spare-warehouse"><img alt='some value' src={changeTheam() === true ? CenterNew : Center}
+                                    className={changeTheam() === true ? "center-new" : "center"} style={changeTheam() === true ? { width: "75px" } : {}} /></Link>
 
                                 <img alt='some value' src={Text4} className="text4" />
 
                                 <Link to="/spare-goods-usage">
-                                 <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
-                                <img alt='some value' src={changeTheam() === true ? TwooneNew : Twoone} 
-                                className={changeTheam() === true ? "two-one-new" : "two-one"} style={ changeTheam() === true ? { width: "75px" } : {} }  />
-                                <span className="p-tooltip__message edit_p_tooltip__message tooltip3" role="tooltip" id="btm-cntr">Spare 3</span>
+                                    <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
+                                        <img alt='some value' src={changeTheam() === true ? TwooneNew : Twoone}
+                                            className={changeTheam() === true ? "two-one-new" : "two-one"} style={changeTheam() === true ? { width: "75px" } : {}} />
+                                        <span className="p-tooltip__message edit_p_tooltip__message tooltip3" role="tooltip" id="btm-cntr">Spare 3</span>
                                     </div>
                                 </Link>
 
                                 <Link to="/spare-goods-fix">
-                                <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
-                                <img alt='some value' src={changeTheam() === true ? TwotwoNew : Twotwo} 
-                                className={changeTheam() === true ? "two-two-new" : "two-two"} style={ changeTheam() === true ? { width: "70px" } : {} }  />
-                                <span className="p-tooltip__message edit_p_tooltip__message tooltip5" role="tooltip" id="btm-cntr">PMT 3</span>
+                                    <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
+                                        <img alt='some value' src={changeTheam() === true ? TwotwoNew : Twotwo}
+                                            className={changeTheam() === true ? "two-two-new" : "two-two"} style={changeTheam() === true ? { width: "70px" } : {}} />
+                                        <span className="p-tooltip__message edit_p_tooltip__message tooltip5" role="tooltip" id="btm-cntr">PMT 3</span>
                                     </div>
-                                    </Link>
+                                </Link>
 
-                                <Link to="/spare-goods-issue"><img alt='some value' src={changeTheam() === true ? TwothreeNew : Twothree} 
-                                className={changeTheam() === true ? "two-three-new" : "two-three"} style={ changeTheam() === true ? { width: "80px" } : {} }  /></Link>
+                                <Link to="/spare-goods-issue"><img alt='some value' src={changeTheam() === true ? TwothreeNew : Twothree}
+                                    className={changeTheam() === true ? "two-three-new" : "two-three"} style={changeTheam() === true ? { width: "80px" } : {}} /></Link>
 
                                 <img alt='some value' src={Arrow4} className="arrow4" />
                                 <img alt='some value' src={Arrow5} className="arrow5" />
@@ -205,36 +205,36 @@ class Map extends React.Component {
                                 <img alt='some value' src={Text7} className="text6" />
 
                                 <Link to="/spare-inventory-transfer">
-                                <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
-                                <img alt='some value' src={changeTheam() === true ? ThreeoneNew : Threeone} 
-                                className={changeTheam() === true ? "three-one-new" : "three-one"} style={ changeTheam() === true ? { width: "85px" } : {} }/>
-                                <span className="p-tooltip__message edit_p_tooltip__message tooltip4" role="tooltip" id="btm-cntr">Spare 4</span>
+                                    <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
+                                        <img alt='some value' src={changeTheam() === true ? ThreeoneNew : Threeone}
+                                            className={changeTheam() === true ? "three-one-new" : "three-one"} style={changeTheam() === true ? { width: "85px" } : {}} />
+                                        <span className="p-tooltip__message edit_p_tooltip__message tooltip4" role="tooltip" id="btm-cntr">Spare 4</span>
                                     </div>
                                 </Link>
 
                                 <Link to="/spare-physical-count">
-                                <img alt='some value' src={changeTheam() === true ? ThreethreeNew : Threetwo} 
-                                className={changeTheam() === true ? "three-two-new" : "three-two"} style={ changeTheam() === true ? { width: "80px" } : {} }/>
-    </Link>
+                                    <img alt='some value' src={changeTheam() === true ? ThreethreeNew : Threetwo}
+                                        className={changeTheam() === true ? "three-two-new" : "three-two"} style={changeTheam() === true ? { width: "80px" } : {}} />
+                                </Link>
 
-<Link to="/spare-salvage-return">
-                                <img alt='some value' src={changeTheam() === true ? ThreethreeNew : Threethree} 
-                                className={changeTheam() === true ? "three-three-new" : "three-three"} style={ changeTheam() === true ? { width: "75px" } : {} } />
+                                <Link to="/spare-salvage-return">
+                                    <img alt='some value' src={changeTheam() === true ? ThreethreeNew : Threethree}
+                                        className={changeTheam() === true ? "three-three-new" : "three-three"} style={changeTheam() === true ? { width: "75px" } : {}} />
                                 </Link>
 
                                 <img alt='some value' src={Text8} className="text8" />
                                 <img alt='some value' src={Text9} className="text9" />
                                 <img alt='some value' src={Text10} className="text10" />
 
-                                <Link to="/track"><img alt='some value' src={changeTheam() === true ? FouroneNew : Fourone} 
-                                className={changeTheam() === true ? "four-one-new" : "four-one"} style={ changeTheam() === true ? { width: "70px" } : {} } /></Link>
+                                <Link to="/track"><img alt='some value' src={changeTheam() === true ? FouroneNew : Fourone}
+                                    className={changeTheam() === true ? "four-one-new" : "four-one"} style={changeTheam() === true ? { width: "70px" } : {}} /></Link>
 
-                                <Link to="/spare-item-master-data"><img alt='some value' src={changeTheam() === true ? FourtwoNew : Fourtwo} 
-                                className={changeTheam() === true ? "four-two-new" : "four-two"} style={ changeTheam() === true ? { width: "60px" } : {} } /></Link>
+                                <Link to="/spare-item-master-data"><img alt='some value' src={changeTheam() === true ? FourtwoNew : Fourtwo}
+                                    className={changeTheam() === true ? "four-two-new" : "four-two"} style={changeTheam() === true ? { width: "60px" } : {}} /></Link>
 
-<Link to="/spare-report-s-1">
-                                <img alt='some value' src={changeTheam() === true ? FourthreeNew : Fourthree} 
-                                className={changeTheam() === true ? "four-three-new" : "four-three"} style={ changeTheam() === true ? { width: "70px" } : {} }/>
+                                <Link to="/spare-report-s-1">
+                                    <img alt='some value' src={changeTheam() === true ? FourthreeNew : Fourthree}
+                                        className={changeTheam() === true ? "four-three-new" : "four-three"} style={changeTheam() === true ? { width: "70px" } : {}} />
                                 </Link>
 
                                 <img alt='some value' src={Text11} className="text11" />

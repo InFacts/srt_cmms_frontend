@@ -90,7 +90,6 @@ const EnhancedGoodsReceiptComponent = withFormik({
         internal_item_id: '',
         item_type_id: '',
         description: '',
-        equipment_status_id: '',
         uom_group_id: '',
         active: '',
         
@@ -103,22 +102,12 @@ const EnhancedGoodsReceiptComponent = withFormik({
         tolerance_time: '',
         active: '',
         accounting_type: '',
-        quantity_highest: '',
-        quantity_lowest: '',
-        quantity_required: '',
         remark: '',
         // Equipment Content
         price_import: '',
         price_currently: '',
-        description_equipment: '',
-        location_amphure_id: '',
         responsible_by: '',
         useful_life: '',
-        // จังหวัด
-        // อำเภอ
-        districts_id: '',
-        location_station_id: '',
-        location: '',
         // Equipment Plane Content
         equipment_group_id: '',
         checklist_id: '',
@@ -127,21 +116,12 @@ const EnhancedGoodsReceiptComponent = withFormik({
         ref_document: initialRowsDocument(),
 
         //Field ที่ไม่ได้กรอก
-        list_uoms: [],
-        line_items: [],
         files: [],
-        goods_onhand: [],       //อะไหล่ที่มีอยู่ในทุกคลัง
-        method: '',
-        
-        // NOT USE FOR FOOTER
-        step_approve: [],
-        created_by_admin_employee_id: '',
-
-        //Field ที่ไม่ได้ display
-        document_id: '', // changes when document is displayed (internal_document_id field validation)
 
         // FOR CHECK USER_ID ADMIN FOR EDIT
         modeEdit: false,
+        line_position_permission: [],
+        
         // For Attactment
         desrciption_files_length: '',
         desrciption_files: [],

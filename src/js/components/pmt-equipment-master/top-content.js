@@ -13,12 +13,15 @@ import PopupModalEquipmentNoChildren from '../common/popup-modal-equipment-no-ch
 import { useFormikContext, useField } from 'formik';
 
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
-import { getNumberFromEscapedString, fetchGoodsOnhandDataForItemmasterData, DOCUMENT_TYPE_ID, getDocumentbyInternalDocumentID } from '../../helper';
+import {
+  getNumberFromEscapedString, fetchGoodsOnhandDataForItemmasterData, DOCUMENT_TYPE_ID,
+  getDocumentbyInternalDocumentID, changeTheam
+} from '../../helper';
+import useFetchPernissionUser from '../../hooks/fetch-permission-user';
 
 import { FACTS } from '../../redux/modules/api/fact.js';
 
 import BgBlue from '../../../images/pmt/bg_blue.jpg';
-import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 
 const FormLabel = ({ children }) => (
   <div className={`grid_2`}>
@@ -39,8 +42,8 @@ const TopContent = (props) => {
   const factItemStatus = useSelector((state) => ({ ...state.api.fact[FACTS.ITEM_STATUS] }), shallowEqual);
 
   const responseToFormState = (data) => {
-    console.log("data", data)
     return {
+      item_id: data.equipment_group.item_id,
       internal_item_id: data.equipment_group.item.internal_item_id,
       description: data.equipment_group.item.description,
       item_group_id: data.equipment_group.item.item_group_id,
@@ -63,66 +66,90 @@ const TopContent = (props) => {
       useful_life: data.useful_life,
       responsible_district_id: data.responsible_district_id,
       responsible_node_id: data.responsible_node_id,
+
+      modeEdit: values.line_position_permission[0].module_admin === true ? true : false     // IF Check user If User is Admin -> return true Else -> return false
+
     }
   }
 
-  const validateInternalItemIDField = internal_item_id => new Promise((resolve, reject) =>{
+  // Fetch permissiton
+  useFetchPernissionUser();
+
+  const validateInternalItemIDField = internal_item_id => {
+
     if (!internal_item_id) {
-      return resolve('Required');
+      setFieldValue("internal_item_id", "", false)
+      setFieldValue("description", "", false)
+      setFieldValue("item_group_id", "", false)
+      setFieldValue("checklist_id", "", false)
+      setFieldValue("equipment_group_id", "", false)
+      setFieldValue("active", "", false)
+      setFieldValue("item_type_id", "", false)
+      setFieldValue("uom_group_id", "", false)
+      setFieldValue("uom_id", "", false)
+      setFieldValue("uom_name", "", false)
+      setFieldValue("remark", "", false)
+      setFieldValue("minimum_order_quantity", "", false)
+      setFieldValue("tolerance_time", "", false)
+      setFieldValue("lead_time", "", false)
+      setFieldValue("accounting_type", "", false)
+      setFieldValue("item_status_id", "", false)
+      setFieldValue("price_import", "", false)
+      setFieldValue("price_currently", "", false)
+      setFieldValue("depreciation", "", false)
+      setFieldValue("useful_life", "", false)
+      setFieldValue("responsible_district_id", "", false)
+      setFieldValue("responsible_node_id", "", false)
+      setFieldValue("modeEdit", false, false)
+      return 'Required';
     }
     if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
       && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) {
-      var item_match_equipments = factEquipment.items;
-      let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.equipment_group.item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
-      console.log("item_match_equipment", item_match_equipment)
-      if (item_match_equipment) {
-        setValues({ ...values, ...responseToFormState(item_match_equipment) }, false); //Setvalues and don't validate
-        
-        // validateField("item_type_id");
-        // // IF Check user If User is Admin -> return true Else -> return false
-        // if (decoded_token.id === 4) { //{/* TODO USER_ID FOR ADMIN */}
-        //   console.log(" YES I AM ADMIN ")
-        //   setFieldValue("modeEdit", true, false);
-        // } else {
-        //   console.log(" NO I NOT ADMIN ")
-        //   setFieldValue("modeEdit", false, false);
-        // }
+      if (internal_item_id !== values.internal_item_id) {
+        var item_match_equipments = factEquipment.items;
+        let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.equipment_group.item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+        console.log("item_match_equipment", item_match_equipment)
 
-        const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/equipment/${item_match_equipment.equipment_id}/history`;
-        axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-          .then((res) => {
-            console.log(res.data);
-            setFieldValue("ref_document", res.data.results, false);
-            return resolve();
-          });
+        if (item_match_equipment) {
+          setValues({ ...values, ...responseToFormState(item_match_equipment) }, false); //Setvalues and don't validate
 
-      } else {
-        return resolve('Invalid Equipment ID');
+          const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/equipment/${item_match_equipment.equipment_id}/history`;
+          axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+            .then((res) => {
+              // console.log(res.data);
+              setFieldValue("ref_document", res.data.results, false);
+              return;
+            });
+
+        } else {
+          return 'Invalid Equipment ID';
+        }
       }
     } else {//If mode add, ok
       console.log("document ID doesn't exist but I am in mode add")
       if (internal_item_id) {
         console.log("internal_item_id", internal_item_id)
-      var item_match_equipments = factEquipment.items;
-      let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.equipment_group.item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
-      console.log("item_match_equipment", item_match_equipment)
+        var item_match_equipments = factEquipment.items;
+        let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.equipment_group.item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+        console.log("item_match_equipment", item_match_equipment)
         if (item_match_equipment) { // Check Dulplication
-        console.log("Dulplication")
-        return resolve('Dulplication Internal item');
+          console.log("Dulplication")
+          return 'Dulplication Internal item';
         } else {
-          console.log(">>>>>>>>>>>>>")
           setFieldValue("internal_item_id", internal_item_id, false);
-          return resolve();
+          return;
         }
-      } else return resolve('Required');
+      } else return 'Required';
     }
-  });
+  };
 
   const validateItemMasterdataField = (fieldName, name) => {
     if (!name) {
       return 'Required'
-    }
+    } 
+    return;
   };
+
   const validateUomGroupIDField = (...args) => validateItemMasterdataField("uom_group_id", ...args);
   const validateItemDescriptionField = (...args) => validateItemMasterdataField("description", ...args);
   const validateItemTypeIDField = (...args) => validateItemMasterdataField("item_type_id", ...args);
@@ -149,8 +176,8 @@ const TopContent = (props) => {
               {/* === item_type_id === */}
               <div className="float-right">
                 <div className="grid_3 float-right">
-                  <SelectNoChildrenInput name="item_type_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="2" 
-                  validate={validateItemTypeIDField} cssStyle={{ left: "-160px", top: "10px" }}>
+                  <SelectNoChildrenInput name="item_type_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="2"
+                    validate={validateItemTypeIDField} cssStyle={{ left: "-160px", top: "10px" }}>
                     <option value=''></option>
                     {values.item_type_id === 1 ? <option value='2' selected>asset</option> : <option value='2'>asset</option>}
                   </SelectNoChildrenInput>
@@ -169,7 +196,7 @@ const TopContent = (props) => {
                 <TextInput name="description" validate={validateItemDescriptionField} disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="3" />
               </div>
 
-<div className="float-right">
+              <div className="float-right">
                 <div className="grid_3 float-right">
                   <SelectNoChildrenInput name="item_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateItemGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="4">
                     <option value=''></option>
@@ -194,8 +221,8 @@ const TopContent = (props) => {
               {/* === equipment_status_id_th === */}
               <FormLabel>สถานะการใช้งาน</FormLabel>
               <div className="grid_3 pull_0">
-                <SelectNoChildrenInput name="item_status_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="5" 
-                validate={validateItemStatusIDField} cssStyle={{ left: "-160px", top: "10px" }}>
+                <SelectNoChildrenInput name="item_status_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="5"
+                  validate={validateItemStatusIDField} cssStyle={{ left: "-160px", top: "10px" }}>
                   <option value=''></option>
                   {factItemStatus.items.map((item_status) => {
                     if (values.item_status_id === item_status.item_status_id) {

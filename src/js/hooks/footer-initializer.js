@@ -42,7 +42,7 @@ const useFooterInitializer = (document_type_id) => {
 
     const { values, touched, setFieldTouched, setTouched, submitForm, validateForm, setFieldValue, setErrors } = useFormikContext();
     useTokenInitializer();
-    
+
     //Handle Document Status TODO: move it out of footer!!
     const hadleDocumentStatusWithFooter = (document_id) => {
         // console.log("hadleDocumentStatusWithFooter")
@@ -138,7 +138,7 @@ const useFooterInitializer = (document_type_id) => {
                 dispatch(footerToModeSave());
             }
         }
-        else {  
+        else {
             // In General
             if (toolbar.mode === TOOLBAR_MODE.SEARCH && document_id !== "" && document_id !== undefined) {
                 // SEARCH mode
@@ -153,12 +153,13 @@ const useFooterInitializer = (document_type_id) => {
                 dispatch(footerToModeSearch());
             }
         }
-    }, [toolbar.mode, values.document_id, values.step_approve, values.warehouse_id, values.active]);
+    }, [toolbar.mode, values.document_id, values.step_approve, values.warehouse_id, values.active, values.modeEdit]);
 
     // Handle Back
     useEffect(() => {
         if (footer.requiresHandleClick[FOOTER_ACTIONS.BACK]) {
-            dispatch(handleClickBackToSpareMain()); // TODO Needs to have logic from URL ? or pass props?
+            let routeLocation = getRouteLocation();
+            dispatch(handleClickBackToSpareMain(routeLocation)); // TODO Needs to have logic from URL ? or pass props?
         }
     }, [footer.requiresHandleClick[FOOTER_ACTIONS.BACK]]);
 
@@ -200,22 +201,22 @@ const useFooterInitializer = (document_type_id) => {
                     setErrors(err);
                     if (isEmpty(err)) {
                         if (values.document_id) { // If have document_id, no need to create new doc
-                        console.log("Before packDataFromValues")
+                            console.log("Before packDataFromValues")
                             let data = packDataFromValues(fact, values, document_type_id);
                             console.log("I AM SUBMITTING ", data);
-                                editDocument(values.document_id, document_type_id, data, values.files)
-                                    .then((document_id) => {
-                                        setFieldValue('document_id', values.document_id, true);
-                                        dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
-                                    })
-                                    .catch((err) => {
-                                        console.log("Submit Failed ", err.response);
-                                        dispatch(navBottomError('[PUT]', 'Submit Failed', err));
-                                    })
-                                    .finally(() => { // Set that I already handled the Click
-                                        console.log(" I submitted and i am now handling click")
-                                        dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
-                                    });
+                            editDocument(values.document_id, document_type_id, data, values.files)
+                                .then((document_id) => {
+                                    setFieldValue('document_id', values.document_id, true);
+                                    dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
+                                })
+                                .catch((err) => {
+                                    console.log("Submit Failed ", err.response);
+                                    dispatch(navBottomError('[PUT]', 'Submit Failed', err));
+                                })
+                                .finally(() => { // Set that I already handled the Click
+                                    console.log(" I submitted and i am now handling click")
+                                    dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
+                                });
                         } else { // If not have document_id
                             let data = packDataFromValues(fact, values, document_type_id);
                             console.log("I AM SUBMITTING ", data);
@@ -234,7 +235,7 @@ const useFooterInitializer = (document_type_id) => {
                                         console.log(" I submitted and i am now handling click")
                                         dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
                                     });
-                            } else { 
+                            } else {
                                 if (values.modeEdit === true) {// Mode Edit Mater data
                                     editMasterDataHelper(document_type_id, data)
                                         .then(() => {
@@ -248,21 +249,24 @@ const useFooterInitializer = (document_type_id) => {
                                             console.log(" I submitted and i am now handling click")
                                         });
                                 } else {// For POST MASTER DATA
-                                saveMasterData(document_type_id, data)
-                                    .then(() => {
-                                        dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
-                                    })
-                                    .catch((err) => {
-                                        console.log("Submit Failed ", err.response);
-                                        dispatch(navBottomError('[PUT]', 'Submit Failed', err));
-                                    })
-                                    .finally(() => { // Set that I already handled the Click
-                                        console.log(" I submitted and i am now handling click")
-                                    });
+                                    saveMasterData(document_type_id, data)
+                                        .then(() => {
+                                            dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
+                                        })
+                                        .catch((err) => {
+                                            console.log("Submit Failed ", err.response);
+                                            dispatch(navBottomError('[PUT]', 'Submit Failed', err));
+                                        })
+                                        .finally(() => { // Set that I already handled the Click
+                                            console.log(" I submitted and i am now handling click")
+                                        });
                                 }
                             }
                         }
                     }
+                })
+                .catch((err) => {
+                    console.log("err validate", err)
                 })
         }
     }, [footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]]);

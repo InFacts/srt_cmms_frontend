@@ -409,7 +409,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             name: values.name,
             freq: values.freq,
             freq_unit_id: parseInt(values.freq_unit_id),
-            active: values.active === "1" ? true : false,
+            // active: values.active === "1" ? true : false,
             remark: values.remark,
             line_item: line_items_part
         }
@@ -698,6 +698,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             loss_line_item_part[index].quantity = parseInt(line_items.quantity)
             loss_line_item_part[index].remark = line_items.remark
             loss_line_item_part[index].uom_code = parseInt(line_items.uom_code)
+            delete loss_line_item_part[index].item_id
         })
 
         let ss101_line_item_part = values.line_items
@@ -959,6 +960,9 @@ export const editMasterData = (data, document_type_group_id) => new Promise((res
     }
     if (document_type_group_id === DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
         var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items/${data.item_id}`;
+    }
+    if (document_type_group_id === DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA) {
+        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/equipment/${data.equipment.item_id}`;
     }
     axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
@@ -1639,6 +1643,8 @@ const responseToFormState = (fact, data, document_type_group_id) => {
         created_on.setHours(created_on.getHours() + 7);
         return {
             document_id: data.document.document_id,
+            item_id: data.specific.equipment.item_id,
+            equipment_id: data.specific.equipment.equipment_id,
             internal_document_id: data.document.internal_document_id,
             internal_item_id: data.specific.equipment.equipment_item.item.internal_item_id,
             description: data.specific.equipment.equipment_item.item.description,
@@ -1667,7 +1673,6 @@ const responseToFormState = (fact, data, document_type_group_id) => {
             created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_admin_id) || '',
             created_on: created_on.toISOString().split(".")[0],
             src_warehouse_id: data.document.warehouse_id,
-            remark: data.document.remark,
             document_date: data.document.document_date.slice(0, 10),
             
             name: data.specific.selector_pm_plan.name,
@@ -1735,10 +1740,10 @@ function transformSS101ResponseToFormState(ss101_part, data) {
 
         // // Bottom Content
         car_type_id: returnEmptyStringIfNull(ss101_part.car_type_id),
-        departed_on: ss101_part.departed_on.split(".")[0],
-        arrived_on: ss101_part.arrived_on.split(".")[0],
-        request_on: ss101_part.request_on.split(".")[0],
-        finished_on: ss101_part.finished_on.split(".")[0],
+        departed_on: ss101_part.departed_on.slice(0, 16),
+        arrived_on: ss101_part.arrived_on.slice(0, 16),
+        request_on: ss101_part.request_on.slice(0, 16),
+        finished_on: ss101_part.finished_on.slice(0, 16),
         system_type_group_id: returnEmptyStringIfNull(data.specific.system_type.system_type_group_id),
         sub_maintenance_type_id: returnEmptyStringIfNull(ss101_part.sub_maintenance_type_id),
         hardware_type_id: returnEmptyStringIfNull(ss101_part.hardware_type_id),
@@ -1765,24 +1770,28 @@ function returnFullArrayHasEquipmentItemNull(has_equipment_item) {
     let initialEquipmentLineItem = {
         internal_item_id: '',
         description: '',
-        ss101_document_id: '',
+        document_id: '',
         equipment_item_id: '',
         equipment_status_id: '',
         remark: '',
+        line_number: '',
+        item_id: ''
     }
     for (var i = 0; i < has_equipment_item.length; i++) {
         has_equipment_item[i] = {
             internal_item_id: has_equipment_item[i].equipment_item.equipment.equipment_item.item.internal_item_id,
             description: has_equipment_item[i].equipment_item.equipment.equipment_item.item.description,
-            ss101_document_id: has_equipment_item[i].ss101_document_id,
+            document_id: has_equipment_item[i].document_id,
             equipment_item_id: has_equipment_item[i].equipment_item_id,
             item_status_id: has_equipment_item[i].item_status_id,
             remark: has_equipment_item[i].remark,
+            line_number: has_equipment_item[i].line_number,
+            item_id: has_equipment_item[i].item_id,
         };
     }
     for (var i = has_equipment_item.length; i <= 9; i++) {
         has_equipment_item.push({
-            initialEquipmentLineItem,
+            ...initialEquipmentLineItem,
         });
     }
     return has_equipment_item;
@@ -1801,7 +1810,7 @@ function returnFullArrayLossLineItemNull(loss_line_items) {
 
     for (var i = loss_line_items.length; i <= 9; i++) {
         loss_line_items.push({
-            initialLossLineItem,
+            ...initialLossLineItem,
             line_number: i
         });
     }
@@ -1830,7 +1839,7 @@ function returnFullArrayLineCustom(line_custom) {
     })
     for (var i = line_custom.length; i <= 9 ; i++) {
         line_customs.push({
-            initialLineCustom
+            ...initialLineCustom
         });
     }
     return line_customs;
@@ -1858,7 +1867,7 @@ function returnFullArrayLineEquipment(line_equipment) {
     })
     for (var i = line_equipment.length; i <= 9 ; i++) {
         line_equipments.push({
-            initialLineEquipment
+            ...initialLineEquipment
         });
     }
     return line_equipments;

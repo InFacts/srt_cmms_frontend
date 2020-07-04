@@ -68,11 +68,9 @@ const BottomContent = (props) => {
 
     const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => {
         //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
-        console.log("11111")
         if (values.line_items[index].internal_item_id === internal_item_id) {
             return;
         }
-        console.log("2222")
         if (internal_item_id === "") {
             setFieldValue(fieldName + `.description`, '', false);
             setFieldValue(fieldName + `.quantity`, '', false);
@@ -81,18 +79,17 @@ const BottomContent = (props) => {
             setFieldValue(fieldName + `.per_unit_price`, '', false);
             return;
         }
-        console.log("333333")
         let items = props.fact.items.items;
         let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
         console.log(item)
         if (item) {
-            setFieldValue(fieldName + `.item_id`, item.item_id, false);
-            setFieldValue(fieldName + `.description`, `${item.description}`, false);
-            setFieldValue(fieldName + `.equipment_status_id`, 3, false);
             var item_match_equipments = props.equipment;
             let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.item_id}` === `${item.item_id}`);
             console.log("item_match_equipment", item_match_equipment)
             if (item_match_equipment) {
+                setFieldValue(fieldName + `.item_id`, item.item_id, false);
+                setFieldValue(fieldName + `.description`, `${item.description}`, false);
+                setFieldValue(fieldName + `.equipment_status_id`, 3, false);
                 setFieldValue(fieldName + `.equipment_item_id`, parseInt(item_match_equipment.item_id), false);
             }
             return;
@@ -101,11 +98,11 @@ const BottomContent = (props) => {
         }
     }
 
-  let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
-  useEffect(() => {
-    checkBooleanForEdit = false
-    validateField("internal_document_id")
-  }, [values.internal_document_id])
+    let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
+    useEffect(() => {
+        checkBooleanForEdit = false
+        validateField("internal_document_id")
+    }, [values.internal_document_id])
     return (
         <div id={changeTheam() === true ? "" : "blackground-gray"}>
             <div className="container_12 clearfix" id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>
@@ -167,7 +164,9 @@ const BottomContent = (props) => {
                         </div>
                         <div className="grid_3 alpha omega">
                             {/* Need to change to radio button later */}
-                            <SelectNoChildrenInput name="recv_accident_from_recv_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentRecvAccidentFromRecvIDField} cssStyle={{ left: "-160px", top: "14px" }} tabIndex="12">
+                            <SelectNoChildrenInput name="recv_accident_from_recv_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} 
+                            validate={validateDocumentRecvAccidentFromRecvIDField} 
+                            cssStyle={{ left: "-160px", top: "14px" }} tabIndex="12">
                                 <option value='' selected></option>
                                 {factRecvAccidentFrom.items.map((recv_accident_from) => {
                                     if (values.recv_accident_from_recv_id === recv_accident_from.recv_id) {
@@ -255,7 +254,7 @@ const BottomContent = (props) => {
                                 <option value='' selected></option>
                                 {factSystemType.items.map((factSystemType) => {
                                     if (values.system_type_group_id == factSystemType.system_type_group_id)
-                                return <option key={factSystemType.system_type_id} value={factSystemType.system_type_id}>{factSystemType.abbreviation} - {factSystemType.system_type}</option>
+                                        return <option key={factSystemType.system_type_id} value={factSystemType.system_type_id}>{factSystemType.abbreviation} - {factSystemType.system_type}</option>
                                 })}
                             </SelectNoChildrenInput>
                         </div>
@@ -271,7 +270,7 @@ const BottomContent = (props) => {
                                 <option value=''></option>
                                 {factHardwareType.items.map((factHardwareType) => {
                                     if (values.sub_maintenance_type_id == factHardwareType.system_type_id)
-                                    return <option key={factHardwareType.hardware_type_id} value={factHardwareType.hardware_type_id}>{factHardwareType.abbreviation} - {factHardwareType.hardware_type}</option>
+                                        return <option key={factHardwareType.hardware_type_id} value={factHardwareType.hardware_type_id}>{factHardwareType.abbreviation} - {factHardwareType.hardware_type}</option>
                                 })}
                             </SelectNoChildrenInput>
                         </div>

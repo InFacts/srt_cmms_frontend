@@ -17,7 +17,7 @@ import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/to
 import {
   getNumberFromEscapedString, fetchGoodsOnhandDataForItemmasterData, DOCUMENT_TYPE_ID,
   getDocumentbyInternalDocumentID, checkBooleanForEditHelper, validateEmployeeIDField,
-  validateInternalDocumentIDFieldHelper
+  validateInternalDocumentIDFieldHelper, validatedataDocumentField
 } from '../../helper';
 
 import { FACTS } from '../../redux/modules/api/fact.js';
@@ -46,12 +46,15 @@ const TopContent = (props) => {
   const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
   const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
 
+  const validateNameField = (...args) => validatedataDocumentField("name", setFieldValue, ...args)
+  const validateDocumentDateField = (...args) => validatedataDocumentField("document_date", setFieldValue, ...args)
+  const validateStartOnField = (...args) => validatedataDocumentField("start_on", setFieldValue, ...args)
+
   let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
   useEffect(() => {
     checkBooleanForEdit = false
     validateField("internal_document_id")
   }, [values.internal_document_id])
-  console.log("checkBooleanForEdit", checkBooleanForEdit)
 
   return (
     <div id={changeTheam() === true ? "" : "blackground-white"}>
@@ -84,8 +87,9 @@ const TopContent = (props) => {
               </div>
               <div className="grid_3">
                 <TextInput name="name"
+                  validate={validateNameField}
                   disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                  tabIndex="3" />
+                  tabIndex="2" />
               </div>
               <div class="clear" />
 
@@ -98,7 +102,7 @@ const TopContent = (props) => {
                   validate={validateUserEmployeeIDField}
                   disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                   searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"
-                  tabIndex="2" />
+                  tabIndex="3" />
               </div>
               <div class="clear" />
 
@@ -110,7 +114,7 @@ const TopContent = (props) => {
                 <TextInput name="created_by_admin_employee_id"
                   validate={validateAdminEmployeeIDField}
                   disabled
-                  tabIndex="3" />
+                  tabIndex="4" />
               </div>
               <div class="clear" />
             </div>
@@ -125,7 +129,7 @@ const TopContent = (props) => {
               <div className="grid_3 alpha">
                 <TextInput name="status_name_th"
                   disabled
-                  tabIndex="4" />
+                  tabIndex="5" />
               </div>
               <div class="clear" />
 
@@ -134,7 +138,7 @@ const TopContent = (props) => {
               <div className="grid_3 alpha">
                 <DateTimeInput name="created_on"
                   disabled
-                  tabIndex="5" />
+                  tabIndex="6" />
               </div>
               <div class="clear" />
 
@@ -142,9 +146,9 @@ const TopContent = (props) => {
               <Label>วันที่เอกสาร</Label>
               <div className="grid_3 alpha">
                 <DateInput name="document_date"
-                  // validate={validateDocumentDateField}
+                  validate={validateDocumentDateField}
                   disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                  tabIndex="6" />
+                  tabIndex="7" />
               </div>
               <div class="clear" />
 
@@ -152,8 +156,9 @@ const TopContent = (props) => {
               <Label>วันเวลาที่เริ่มทำวาระ</Label>
               <div className="grid_3 alpha">
                 <DateInput name="start_on"
+                validate={validateStartOnField}
                   disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                  tabIndex="6" />
+                  tabIndex="8" />
               </div>
               <div class="clear" />
 

@@ -20,6 +20,7 @@ import {
 } from '../../helper';
 
 import { FACTS } from '../../redux/modules/api/fact.js';
+import useFetchPernissionUser from '../../hooks/fetch-permission-user';
 
 import BgBlue from '../../../images/pmt/bg_blue.jpg';
 import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
@@ -44,8 +45,14 @@ const TopContent = (props) => {
   const factChecklistEquipmentGroup = useSelector((state) => ({ ...state.api.fact[FACTS.CHECKLIST_EQUIPMENT_GROUP] }), shallowEqual);
   const factChecklist = useSelector((state) => ({ ...state.api.fact.checklist }), shallowEqual);
 
+  // Fetch permissiton
+  useFetchPernissionUser();
+
+  console.log("modeEdit", values.modeEdit)
+
   const validateNameChecklist = name => new Promise(resolve => {
     if (!name) {
+      setFieldValue("modeEdit", false, false);
       return resolve('Required');
     }
 
@@ -53,38 +60,42 @@ const TopContent = (props) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/checklist-line-item/name/${name}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
       .then((res) => {
-        console.log("I Got data", res.data.checklist_line_item)
+        console.log("I Got data", res.data)
         if (res.data.checklist_line_item.name === name) { // If input document ID exists
-          if (toolbar.mode === TOOLBAR_MODE.SEARCH && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
-            
-            setFieldValue("checklist_line_item", res.data.checklist_line_item.checklist_line_item, false)
-            setFieldValue("checklist_id", res.data.checklist_line_item.checklist_id, false)
-            setFieldValue("freq", res.data.checklist_line_item.freq, false)
-            setFieldValue("freq_unit_id", res.data.checklist_line_item.freq_unit_id, false)
-            setFieldValue("active", res.data.checklist_line_item.active.data[0], false)
-            setFieldValue("checklist_group_id", res.data.checklist_line_item.checklist.checklist_group_id, false)
-            setFieldValue("checklist_id", res.data.checklist_line_item.checklist.checklist_id, false)
+          if (toolbar.mode === TOOLBAR_MODE.SEARCH && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value
+            if (name !== values.name) {
 
-            for (var i = 0; i < res.data.checklist_line_item.checklist_line_item_use_equipment.length; i++) {
-              res.data.checklist_line_item.checklist_line_item_use_equipment[i].internal_item_id = res.data.checklist_line_item.checklist_line_item_use_equipment[i].item.internal_item_id
-              res.data.checklist_line_item.checklist_line_item_use_equipment[i].description = res.data.checklist_line_item.checklist_line_item_use_equipment[i].item.description
-              res.data.checklist_line_item.checklist_line_item_use_equipment[i].quantity = res.data.checklist_line_item.checklist_line_item_use_equipment[i].quantity
-              res.data.checklist_line_item.checklist_line_item_use_equipment[i].uom_id = res.data.checklist_line_item.checklist_line_item_use_equipment[i].item.uom_group.uom[0].uom_id
-              res.data.checklist_line_item.checklist_line_item_use_equipment[i].uom_group_id = res.data.checklist_line_item.checklist_line_item_use_equipment[i].item.uom_group.uom[0].uom_group_id
-              delete res.data.checklist_line_item.checklist_line_item_use_equipment[i].item
-            }
-            for (var i = res.data.checklist_line_item.checklist_line_item_use_equipment.length; i <= 9; i++) {
-              res.data.checklist_line_item.checklist_line_item_use_equipment.push({
-                internal_item_id: '',
-                description: '',
-                quantity: '',
-                uom_id: '',
-                uom_group_id: ''
-              });
-            }
+              setFieldValue("active", 2, false) // demo
 
-            setFieldValue("checklist_line_item_use_equipment", res.data.checklist_line_item.checklist_line_item_use_equipment, false)
-            return resolve(null);
+              setFieldValue("checklist_line_item", res.data.checklist_line_item.checklist_line_item, false)
+              setFieldValue("checklist_id", res.data.checklist_line_item.checklist_id, false)
+              setFieldValue("freq", res.data.checklist_line_item.freq, false)
+              setFieldValue("freq_unit_id", res.data.checklist_line_item.freq_unit_id, false)
+              setFieldValue("checklist_group_id", res.data.checklist_line_item.checklist.checklist_group_id, false)
+              setFieldValue("checklist_id", res.data.checklist_line_item.checklist.checklist_id, false)
+              setFieldValue("modeEdit", values.line_position_permission[0].module_admin === true ? true : false, false)
+
+              for (var i = 0; i < res.data.checklist_line_item.checklist_line_item_use_equipment.length; i++) {
+                res.data.checklist_line_item.checklist_line_item_use_equipment[i].internal_item_id = res.data.checklist_line_item.checklist_line_item_use_equipment[i].item.internal_item_id
+                res.data.checklist_line_item.checklist_line_item_use_equipment[i].description = res.data.checklist_line_item.checklist_line_item_use_equipment[i].item.description
+                res.data.checklist_line_item.checklist_line_item_use_equipment[i].quantity = res.data.checklist_line_item.checklist_line_item_use_equipment[i].quantity
+                res.data.checklist_line_item.checklist_line_item_use_equipment[i].uom_id = res.data.checklist_line_item.checklist_line_item_use_equipment[i].item.uom_group.uom[0].uom_id
+                res.data.checklist_line_item.checklist_line_item_use_equipment[i].uom_group_id = res.data.checklist_line_item.checklist_line_item_use_equipment[i].item.uom_group.uom[0].uom_group_id
+                delete res.data.checklist_line_item.checklist_line_item_use_equipment[i].item
+              }
+              for (var i = res.data.checklist_line_item.checklist_line_item_use_equipment.length; i <= 9; i++) {
+                res.data.checklist_line_item.checklist_line_item_use_equipment.push({
+                  internal_item_id: '',
+                  description: '',
+                  quantity: '',
+                  uom_id: '',
+                  uom_group_id: ''
+                });
+              }
+
+              setFieldValue("checklist_line_item_use_equipment", res.data.checklist_line_item.checklist_line_item_use_equipment, false)
+              return resolve(null);
+            }
           } else { //If Mode add, need to error duplicate Document ID
             console.log("I AM DUPLICATE")
             error = 'Duplicate CheckLIst Name';
@@ -104,7 +115,7 @@ const TopContent = (props) => {
       });
   });
 
-  const validateActiveField = (...args) => validatedataDocumentField("active", setFieldValue, ...args)
+  // const validateActiveField = (...args) => validatedataDocumentField("active", setFieldValue, ...args)
   const validateChecklistGroupIDField = (...args) => validatedataDocumentField("checklist_group_id", setFieldValue, ...args)
   const validateChecklistIDField = (...args) => validatedataDocumentField("checklist_id", setFieldValue, ...args)
   const validateFrepField = (...args) => validatedataDocumentField("frep", setFieldValue, ...args)
@@ -117,7 +128,7 @@ const TopContent = (props) => {
           <FormTitle>สร้างวาระ</FormTitle>
 
           <div id={changeTheam() === true ? "blackground-white" : ""}
-            style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "180px", paddingTop: "10px" } : {}}>
+            style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "150px", paddingTop: "10px" } : {}}>
 
             <div className="container_12" >
               <div className="grid_2 omega">
@@ -130,9 +141,8 @@ const TopContent = (props) => {
 
             </div>
 
-            <div className="container_12">
+            {/* <div className="container_12">
 
-              {/* === equipment_status_id_th === */}
               <div className="grid_2 omega">
                 <p className="top-text">สถานะการใช้งาน</p>
               </div>
@@ -145,7 +155,7 @@ const TopContent = (props) => {
                 </SelectNoChildrenInput>
               </div>
 
-            </div>
+            </div> */}
 
             <div className="container_12">
 
@@ -154,8 +164,8 @@ const TopContent = (props) => {
                 <p className="top-text">กลุ่มการทำวาระ</p>
               </div>
               <div className="grid_3 alpha omega pull_0">
-                <SelectNoChildrenInput name="checklist_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="3" 
-                validate={validateChecklistGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} >
+                <SelectNoChildrenInput name="checklist_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="3"
+                  validate={validateChecklistGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} >
                   <option value=''></option>
                   {factChecklistEquipmentGroup.items.map((factChecklistEquipmentGroup) => {
                     return (<option value={factChecklistEquipmentGroup.checklist_group_id}>{factChecklistEquipmentGroup.name}</option>)
@@ -175,8 +185,8 @@ const TopContent = (props) => {
                 <p className="top-text">ชนิดการทำวาระ</p>
               </div>
               <div className="grid_3 alpha omega pull_0">
-                <SelectNoChildrenInput name="checklist_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="4" 
-                validate={validateChecklistIDField} cssStyle={{ left: "-160px", top: "10px" }}>
+                <SelectNoChildrenInput name="checklist_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="4"
+                  validate={validateChecklistIDField} cssStyle={{ left: "-160px", top: "10px" }}>
                   <option value=''></option>
                   {factChecklist.items.map((factChecklist) => {
                     if (values.checklist_group_id == factChecklist.checklist_group_id) {
@@ -195,14 +205,14 @@ const TopContent = (props) => {
               </div>
               <div className="grid_3 alpha omega pull_0">
                 <NumberInput name="freq" step={1} tabIndex="5" validate={validateFrepField}
-                  disabled={toolbar.mode === TOOLBAR_MODE.SEARCH} cssStyle={{ left: "60px", top: "-5px" }}/>
+                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} cssStyle={{ left: "60px", top: "-5px" }} />
               </div>
               <div className="grid_1 omega pull_0">
                 <p className="top-text">ครั้งต่อ</p>
               </div>
               <div className="grid_2 alpha omega pull_0">
                 <SelectNoChildrenInput name="freq_unit_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="6"
-                validate={validateFrepUnitIDField} cssStyle={{ left: "-80px", top: "10px" }}>
+                  validate={validateFrepUnitIDField} cssStyle={{ left: "-80px", top: "10px" }}>
                   <option value=''></option>
                   <option value='1'>วัน</option>
                   <option value='2'>เดือน</option>

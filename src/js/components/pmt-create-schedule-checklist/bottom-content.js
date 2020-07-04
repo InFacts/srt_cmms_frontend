@@ -21,7 +21,7 @@ import { FACTS } from '../../redux/modules/api/fact.js';
 import '../../../css/table.css';
 
 import BgBlue from '../../../images/pmt/bg_blue.jpg';
-import { fetchPositionPermissionData, changeTheam, checkBooleanForEditHelper } from '../../helper.js'
+import { fetchPositionPermissionData, changeTheam, checkBooleanForEditHelper, validatedataDocumentField } from '../../helper.js'
 const BottomContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
@@ -71,6 +71,10 @@ const searchLocationEquipment = () => new Promise(resolve => {
   }
   });
 
+  const validateDistrictIDField = (...args) => validatedataDocumentField("district_id", setFieldValue, ...args)
+  const validateNodeIDField = (...args) => validatedataDocumentField("node_id", setFieldValue, ...args)
+  const validateStationIDField = (...args) => validatedataDocumentField("station_id", setFieldValue, ...args)
+
   let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
   // useEffect(() => {
   //   checkBooleanForEdit = false
@@ -94,6 +98,8 @@ const searchLocationEquipment = () => new Promise(resolve => {
               </div>
               <div className="grid_7">
                 <SelectNoChildrenInput name="district_id" tabIndex="7"
+                validate={validateDistrictIDField}
+                cssStyle={{ left: "-480px", top: "14px" }}
                   disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                   <option value=''></option>
                   {factDistricts.items.map((districts) => (
@@ -110,6 +116,8 @@ const searchLocationEquipment = () => new Promise(resolve => {
               </div>
               <div className="grid_7">
                 <SelectNoChildrenInput name="node_id" tabIndex="8"
+                cssStyle={{ left: "-480px", top: "14px" }}
+                validate={validateNodeIDField}
                   disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                   <option value=''></option>
                   {factNodes.items.map((node) => {
@@ -128,6 +136,8 @@ const searchLocationEquipment = () => new Promise(resolve => {
               </div>
               <div className="grid_7">
                 <SelectNoChildrenInput name="station_id" tabIndex="9"
+                cssStyle={{ left: "-480px", top: "14px" }}
+                validate={validateStationIDField}
                   disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                   <option value=''></option>
                   {factStations.items.map((stations) => {

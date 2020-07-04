@@ -13,7 +13,8 @@ import { FACTS } from '../../redux/modules/api/fact';
 import Label from '../common/form-label'
 import {
     getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, validateEmployeeIDField,
-    validateWarehouseIDField, validateInternalDocumentIDFieldHelper, checkBooleanForEditHelper
+    validateWarehouseIDField, validateInternalDocumentIDFieldHelper, checkBooleanForEditHelper,
+    validatedataDocumentField
 } from '../../helper';
 import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
 import PopupModalEquipmentNoChildren from '../common/popup-modal-equipment-no-children'
@@ -51,14 +52,13 @@ const TopContent = (props) => {
             setFieldValue("equipment_id", '', false);
             setFieldValue("equipment_status_id", '', false);
             setFieldValue("responsible_node_id", '', false);
-            return;
+            return 'Required';
         }
 
         var item_match_equipments = factEquipment.items;
         let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.equipment_group.item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
         console.log("item_match_equipment", item_match_equipment)
         if (item_match_equipment) {
-            // item_match_equipment
             setFieldValue("item_id", item_match_equipment.equipment_group.item_id, false);
             setFieldValue("description", item_match_equipment.equipment_group.item.description, false);
             setFieldValue("uom_group_id", item_match_equipment.equipment_group.item.uom_group_id, false);
@@ -79,6 +79,8 @@ const TopContent = (props) => {
             return 'Invalid Number ID';
         }
     }
+
+    const validateDocumentDateField = (...args) => validatedataDocumentField("document_date", setFieldValue, ...args)
 
     const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
     return (
@@ -172,6 +174,7 @@ const TopContent = (props) => {
                         <Label>วันที่เอกสาร</Label>
                         <div className="grid_3 alpha">
                             <DateInput name="document_date"
+                                validate={validateDocumentDateField}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                                 tabIndex="6" />
                         </div>
