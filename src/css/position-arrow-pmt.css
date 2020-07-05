@@ -1,0 +1,379 @@
+.Pone-one{
+    position: absolute;
+    left: 70px;
+    top: 80px;
+}
+
+.Pone-one-new{
+    position: absolute;
+    left: 55px;
+    top: 90px;
+}
+
+
+
+
+.Pone-two{
+    position: absolute;
+    left: 70px;
+    top: 200px;
+}
+
+.Pone-two-new{
+    position: absolute;
+    left: 75px;
+    top: 180px;
+}
+
+
+
+
+
+.Pone-three{
+    position: absolute;
+    left: 70px; 
+    top: 310px;
+}
+
+.Pone-three-new{
+    position: absolute;
+    left: 74px; 
+    top: 305px;
+}
+
+
+
+
+.Parrow1{
+    position: absolute;
+    left: 170px;
+    top: 105px;
+}
+
+.Ptext1{
+    /* นำเข้าอะไหล่โดยมีใบสั่งซื้อ */
+    position: absolute;
+    left: 39px;
+    top: 145px;
+
+    font-family: Kanit;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+    /* identical to box height */
+    text-align: center;
+
+    color: #000000;
+}
+
+.Ptext2{
+    position: absolute;
+    left: 47px;
+    top: 260px;
+
+    font-family: Kanit;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+    /* identical to box height */
+    text-align: center;
+
+    color: #000000;
+}
+
+.Ptext3{
+    /* นำอะไหล่เข้าโดยไม่มีใบสั่งซื้อ (สำหรับโอนย้ายอะไหล่) */
+    position: absolute;
+    left: 74px;
+    top: 390px;
+
+    font-family: Kanit;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+    text-align: center;
+
+    color: #000000;
+}
+
+
+
+.Ptwo-one{
+    position: absolute;
+    left: 260px;
+    top: 80px;
+}
+
+.Ptwo-one-new{
+    position: absolute;
+    left: 260px;
+    top: 80px;
+}
+
+
+
+
+
+.Ptwo-two{
+    position: absolute;
+    left: 250px;
+    top: 200px;
+}
+.Ptwo-two-new{
+    position: absolute;
+    left: 260px;
+    top: 180px;
+}
+
+
+
+
+
+.Ptwo-three{
+    position: absolute;
+    left: 260px;
+    top: 320px;
+}
+.Ptwo-three-new{
+    position: absolute;
+    left: 265px;
+    top: 305px;
+}
+
+
+
+
+.Ptext4{
+    position: absolute;
+    left: 210px;
+    top: 145px;
+
+    font-family: Kanit;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+    text-align: center;
+
+    color: #000000;
+}
+
+.Ptext5{
+    position: absolute;
+    left: 255px;
+    top: 260px;
+
+    font-family: Kanit;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+    text-align: center;
+
+    color: #000000;
+}
+
+.Ptext6{
+    position: absolute;
+    left: 230px;
+    top: 390px;
+
+    font-family: Kanit;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+    text-align: center;
+
+    color: #000000;
+}
+
+
+
+.Pthree-one{
+    position: absolute;
+    left: 460px;
+    top: 75px;
+}
+.Pthree-one-new{
+    position: absolute;
+    left: 465px;
+    top: 75px;
+}
+
+.Pthree-three{
+    position: absolute;
+    left: 450px;
+    top: 305px;
+}
+.Pthree-three-new{
+    position: absolute;
+    left: 450px;
+    top: 305px;
+}
+
+
+
+
+.Parrow2{
+    position: absolute;
+    left: 380px;
+    top: 105px;
+}
+
+.Ptext7{
+    /* นำเข้าอะไหล่โดยมีใบสั่งซื้อ */
+    position: absolute;
+    left: 440px;
+    top: 150px;
+    font-family: Kanit;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+    /* identical to box height */
+    text-align: center;
+
+    color: #000000;
+}
+
+.Ptext11{
+    /* นำเข้าอะไหล่โดยมีใบสั่งซื้อ */
+    position: absolute;
+    left: 460px;
+    top: 390px;
+    font-family: Kanit;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+    /* identical to box height */
+    text-align: center;
+
+    color: #000000;
+}
+
+
+
+.Pfour-one{
+    position: absolute;
+    left: 640px;
+    top: 80px;
+}
+.Pfour-one-new{
+    position: absolute;
+    left: 633px;
+    top: 75px;
+}
+
+
+
+.Pfour-two{
+    position: absolute;
+    left: 645px;
+    top: 210px;
+}
+.Pfour-two-new{
+    position: absolute;
+    left: 635px;
+    top: 190px;
+}
+
+
+.Ptext8{
+    /* นำเข้าอะไหล่โดยมีใบสั่งซื้อ */
+    position: absolute;
+    left: 630px;
+    top: 150px;
+
+    font-family: Kanit;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+    /* identical to box height */
+    text-align: center;
+
+    color: #000000;
+}
+
+.Ptext9{
+    /* นำเข้าอะไหล่โดยมีใบสั่งซื้อ */
+    position: absolute;
+    left: 620px;
+    top: 265px;
+
+    font-family: Kanit;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+    /* identical to box height */
+    text-align: center;
+
+    color: #000000;
+}
+
+
+
+
+.Pfive-one{
+    position: absolute;
+    left: 800px;
+    top: 85px;
+}
+.Pfive-one-new{
+    position: absolute;
+    left: 800px;
+    top: 70px;
+}
+
+
+
+
+.Ptext10{
+    /* นำเข้าอะไหล่โดยมีใบสั่งซื้อ */
+    position: absolute;
+    left: 805px;
+    top: 155px;
+
+    font-family: Kanit;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+    /* identical to box height */
+    text-align: center;
+
+    color: #000000;
+}
+
+.Pdrop-dawn1{
+    position: absolute;
+    left: 130px;
+    top: 230px;
+}
+
+.Pdrop-dawn2{
+    position: absolute;
+    left: 665px;
+    top: 0px;
+}
+
+.p-tooltip__message.edit_p_tooltip__message.Ptooltip1 {
+    top: 160px;
+    left: 490px;
+}
+
+.p-tooltip__message.edit_p_tooltip__message.Ptooltip2 {
+    top: 380px;
+    left: 479px;
+}
+
+.p-tooltip__message.edit_p_tooltip__message.Ptooltip3 {
+    top: 140px;
+    left: 95px;
+}

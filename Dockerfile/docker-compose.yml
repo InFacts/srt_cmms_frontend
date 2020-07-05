@@ -1,0 +1,13 @@
+version: '3'
+services:
+  srt-frontend:
+    image: 127.0.0.1:5000/test:1
+    container_name: srt-frontend
+    restart: always
+    ports:
+      - 80:81
+    deploy:
+     mode: replicated
+     replicas: 1
+     placement:
+      constraints: [node.role == worker]

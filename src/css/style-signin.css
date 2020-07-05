@@ -1,0 +1,62 @@
+.from-sigin{
+  text-align: center;
+  padding: 80px 230px 0px 230px;
+  font-family: Anakotmai-Light;
+}
+
+.text-signin{
+  font-family: Anakotmai-Light;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 21px;
+  margin-bottom: 5px;
+}
+
+.head-signin{
+  font-family: Anakotmai-Light;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 21px;
+  padding-top: 5px;
+}
+
+.from-sigin-input{
+  padding: 0px 70px 0px 70px;
+  font-family: Anakotmai-Light;
+}
+
+label.input-signin{
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 20px;
+  margin-bottom: auto;
+  top: 1px;
+  font-family: Anakotmai-Light;
+}
+
+label.alert-signin{
+  font-size: 14px;
+  line-height: 20px;
+  margin-bottom: auto;
+  top: 1px;
+  font-family: Anakotmai-Light;
+}
+
+input.cancel-default-signin{
+  width: 100%;
+  padding-right: 2rem;
+  padding-top: 0rem;
+  padding-bottom: 0rem;
+  min-width: 0em;
+  margin-bottom: 0rem;
+  margin-right: 0rem;
+  margin-left: auto;
+  font-size: 14px;
+}
+.alert_error_input {
+  color: red;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-weight: bold;
+  font-family: Anakotmai-Light;
+}

@@ -1,0 +1,21 @@
+.from-register{
+    padding: 60px 50px 0px 50px;
+    font-family: Anakotmai-Light;
+  }
+  
+  .head-register{
+    font-family: Anakotmai-Light;
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+    line-height: 21px;
+    padding-top: 50px;
+  }
+
+  .from-register-button{
+    font-family: Anakotmai-Light;
+    width: 350px;
+    text-align: center;
+  }
+  
+ 

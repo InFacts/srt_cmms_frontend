@@ -1,0 +1,51 @@
+
+.modal{
+  align-items: center;
+  background: rgba(17, 17, 17, 0.85);
+  content: '';
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  left: 0;
+  margin: 0;
+  overflow: scroll;
+  padding: 1.5rem;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 5;
+}
+
+.gray-board{
+  background-color: #F7F7F7;
+  width: 960px;
+  height: 500px;
+  z-index: 5;
+}
+
+.head-title-modal{
+  padding: 10px 20px 5px 20px;
+  width: 100%;
+  background-color: white;
+  color: #2F6FCA;
+  font-weight: bold;
+  font-size: 20px;
+  font-family: Anakotmai-Light;
+  line-height: 36px;
+}
+
+p.edit{
+  max-width: 960px;
+}
+
+.container_12.edit-padding{
+  padding: 5px 20px 10px 20px;
+}
+
+.fa-check-circle.green{
+  color: green;
+}
+
+.fa-check-circle.gray{
+  color: gray;
+}
