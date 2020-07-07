@@ -197,6 +197,18 @@ const BottomContent = (props) => {
 
                             <div class="clear" />
 
+                            {/* Responsible person Station ID */}
+                            <div className="grid_2 alpha white-space">
+                                <p className="top-text">ศูนย์กลางทางผ่าน</p>
+                            </div>
+                            <div className="grid_7 pull_0">
+                                <TextInput name="TODO" 
+                                    disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                    tabIndex="15" />
+                            </div>
+
+                            <div class="clear" />
+
                         </div>
                     </div>
                 </div>

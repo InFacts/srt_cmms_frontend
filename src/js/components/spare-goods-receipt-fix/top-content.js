@@ -187,9 +187,9 @@ const TopContent = (props) => {
 
             <div className="container_12">
               <div className="grid_2">
-                <p className="top-text">เอกสารอ้างอิง สส.101</p>
+                <p className="top-text">เอกสารอ้างอิง</p>
               </div>
-              <div className="grid_3">
+              <div className="grid_3 pull_1">
                 <TextInput name="refer_to_document_internal_document_id"
                   validate={validateInternalDocumentSS101ID}
                   disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
@@ -217,7 +217,7 @@ const TopContent = (props) => {
       />
 
       {/* PopUp ค้นหาเลขที่เอกสาร สส.101 */}
-      <PopupModalDocumentSS101 documentTypeGroupID={DOCUMENT_TYPE_ID.SS101}
+      <PopupModalDocumentSS101 documentTypeGroupID={DOCUMENT_TYPE_ID.MAINTENANT_ITEM}
         id="modalDocument2"
         name="refer_to_document_internal_document_id" //For setFieldValue
       />

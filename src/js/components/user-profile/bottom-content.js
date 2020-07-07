@@ -9,8 +9,9 @@ import { useSelector, shallowEqual } from 'react-redux';
 import TabBar from '../common/tab-bar';
 import SelectNoChildrenInput from '../common/formik-select-no-children';
 import TextInput from '../common/formik-text-input'
+import DateInput from '../common/formik-date-input';
 
-import {identifyEndpoinsHelper} from '../../helper';
+import { identifyEndpoinsHelper } from '../../helper';
 import '../../../vender/fontawesome-free/css/all.css';
 
 const BottomContent = (props) => {
@@ -47,7 +48,10 @@ const BottomContent = (props) => {
                     "employee_id": values.employee_id,
                     "firstname_th": values.firstname_th,
                     "lastname_th": values.lastname_th,
-                    "email": values.email
+                    "email": values.email,
+                    "address": values.address,
+                    "birthdate": values.birthdate,
+                    "phone": values.phone
                 }
                 console.log("information", information)
                 axios.put(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/profile`, information, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
@@ -75,12 +79,10 @@ const BottomContent = (props) => {
                     })
             } else if (content === "position") {
 
-
             }
 
         } else {
-
-
+            console.log("HEllo i am admin ican edit them all")
         }
 
     }
@@ -186,7 +188,25 @@ const BottomContent = (props) => {
                                 <div className="grid_3 pull_0">
                                     <TextInput name='email' type="email"
                                         tabIndex="1" />
+                                </div>
 
+                                <div className="grid_2"><p className="cancel-default float-left">ที่อยู่</p></div>
+                                <div className="grid_3 pull_0">
+                                    <TextInput name='address'
+                                        tabIndex="1" />
+                                </div>
+                            </div>
+
+                            <div className="grid_12">
+                                <div className="grid_2"><p className="cancel-default">วันเกิด</p></div>
+                                <div className="grid_3 pull_0">
+                                    <DateInput name="birthdate" tabIndex="1" />
+                                </div>
+
+                                <div className="grid_2"><p className="cancel-default float-left">เบอร์โทรศัพท์</p></div>
+                                <div className="grid_3 pull_0">
+                                    <TextInput name='phone'
+                                        tabIndex="1" />
                                 </div>
                             </div>
 
@@ -250,7 +270,6 @@ const BottomContent = (props) => {
                         </div>
                     </div>
 
-
                     <div className="card-profile">
                         <div className="card-profile-header">ตำแหน่งงาน</div>
                         <div className="card-profile-main">
@@ -285,11 +304,7 @@ const BottomContent = (props) => {
                                     <SelectNoChildrenInput name="position_id" disabled={values.user_my === "user-profile"}>
                                         <option value=''></option>
                                         {factPosition.items.map(function ({ position_id, name }) {
-                                            if (position_id === values.position_id) {
-                                                return <option value={position_id} key={position_id} selected> {name} </option>
-                                            } else {
-                                                return <option value={position_id} key={position_id}> {name} </option>
-                                            }
+                                            return <option value={position_id} key={position_id}> {name} </option>
                                         })}
                                     </SelectNoChildrenInput>
                                 </div>
@@ -322,7 +337,7 @@ const BottomContent = (props) => {
                 <div id="usage_history_content" className="tabcontent">
                     <h3 className="head-title-bottom mt-2">ประวัติการใช้งาน</h3>
                     <div className="grid_12">
-                        <table className="table-many-column mt-3">
+                        <table className="table-many-column">
                             <thead>
                                 <tr>
                                     <th className="font" style={{ minWidth: "200px" }}>วันเวลา</th>

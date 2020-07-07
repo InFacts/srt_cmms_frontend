@@ -27,7 +27,7 @@ export const DOCUMENT_TYPE_ID = {
 
     WORK_REQUEST: 201,
     WORK_ORDER: 202,
-    WORK_ORDER_PM: 203,
+    WORK_ORDER_PM: 205,
     SS101: 204,
     EQUIPMENT_INSTALLATION: 206,
     MAINTENANT_ITEM: 207,
@@ -377,12 +377,12 @@ export const packDataFromValues = (fact, values, document_type_id) => {
     } else if (document_type_id === DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM) {
         let last_checklist_line_item = 0;
         fact[FACTS.CHECKLIST_LINE_ITEM].items.map(item => {
-            console.log("item", item)
+            // console.log("item", item)
             if (item.checklist_line_item > last_checklist_line_item) {
                 last_checklist_line_item = item.checklist_line_item;
             }
         });
-        console.log("values", values)
+        // console.log("values", values)
         let last_checklist_line_item_use_equipment_id = 0;
         fact[FACTS.CHECKLIST_LINE_ITEM_USE_EQUIPMENT].items.map(item => {
             if (item.checklist_line_item_use_equipment_id > last_checklist_line_item_use_equipment_id) {
@@ -825,7 +825,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             active: values.active === "1" ? true : false,
             node_id: parseInt(values.node_id),
             station_id: parseInt(values.station_id),
-            start_on: values.start_on + 'T01:01:01+00:00',
+            start_on: values.start_on + 'T00:00:00+00:00',
         }
         
         // ต้องเป็น Array selector_checklist_group_part
@@ -964,12 +964,17 @@ export const editMasterData = (data, document_type_group_id) => new Promise((res
     if (document_type_group_id === DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA) {
         var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/equipment/${data.equipment.item_id}`;
     }
+    if (document_type_group_id === DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM) {
+        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/checklist-line-item/${data.checklist_line_item}`;
+    }
+    console.log("url", url, "data", data)
     axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             console.log(" I am successful in creating master data ", res)
             resolve();
         })
         .catch((err) => {
+            console.log("ERR", err.response)
             reject(err)
         });
 });
@@ -2280,7 +2285,7 @@ export const approveDocuement = (document_id, obj_body) => new Promise((resolve,
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/${obj_body.approval_process_id}/approve`;
     axios.post(url, obj_body, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then(res => {
-            console.log(" I am successful in creating approval to document with document_id ", res.data);
+            console.log(" I am successful in creating approval to document with document_id ", res);
             resolve(res);
         }).catch(function (err) {
             reject(err);
