@@ -48,23 +48,52 @@ const BottomContent = (props) => {
     const [lineNumber, setLineNumber] = useState('');
 
     const validateDocumentAccidentNameField = (...args) => validatedataDocumentField("accident_name", setFieldValue, ...args)
-    const validateDocumentAccidentOnField = (...args) => validatedataDocumentField("accident_on", setFieldValue, ...args)
-    const validateDocumentRequestOnField = (...args) => validatedataDocumentField("request_on", setFieldValue, ...args)
     const validateDocumentRequestByField = (...args) => validatedataDocumentField("request_by", setFieldValue, ...args)
+
     const validateDocumentRecvAccidentFromRecvIDField = (...args) => validatedataDocumentField("recv_accident_from_recv_id", setFieldValue, ...args)
-    const validateDocumentCarTypeIDField = (...args) => validatedataDocumentField("car_type_id", setFieldValue, ...args)
-    const validateDocumentDepartedOnField = (...args) => validatedataDocumentField("departed_on", setFieldValue, ...args)
-    const validateDocumentArrivedOnField = (...args) => validatedataDocumentField("arrived_on", setFieldValue, ...args)
-    const validateDocumentFinishedOnField = (...args) => validatedataDocumentField("finished_on", setFieldValue, ...args)
+    // const validateDocumentCarTypeIDField = (...args) => validatedataDocumentField("car_type_id", setFieldValue, ...args)
     const validateDocumentSystemTypeGroupIDnField = (...args) => validatedataDocumentField("system_type_group_id", setFieldValue, ...args)
     const validateDocumentSystemTypeIDField = (...args) => validatedataDocumentField("system_type_id", setFieldValue, ...args)
-
     const validateDocumentLocationDistrictIDField = (...args) => validatedataDocumentField("location_district_id", setFieldValue, ...args)
     const validateDocumentLocationNodeIDField = (...args) => validatedataDocumentField("location_node_id", setFieldValue, ...args)
     const validateDocumentLocationStationIDField = (...args) => validatedataDocumentField("location_station_id", setFieldValue, ...args)
     const validateDocumentInterruptIDField = (...args) => validatedataDocumentField("interrupt_id", setFieldValue, ...args)
     const validateDocumentTotalFailTimeField = (...args) => validatedataDocumentField("total_fail_time", setFieldValue, ...args)
     const validateDocumentServiceMethodIDField = (...args) => validatedataDocumentField("service_method_id", setFieldValue, ...args)
+
+    const validateDocumentAccidentOnField = (...args) => validatedataDocumentField("accident_on", setFieldValue, ...args)
+
+    const validateDocumentRequestOnField = (request_on) => {
+        if (request_on > values.accident_on) {
+            return;
+        } else {
+            return "Invalid Request On"
+        }
+    }
+
+    const validateDocumentDepartedOnField = (departed_on) => {
+        if (departed_on > values.request_on) {
+            return;
+        } else {
+            return "Invalid Departed On"
+        }
+    }
+
+    const validateDocumentArrivedOnField = (arrived_on) => {
+        if (arrived_on > values.departed_on) {
+            return;
+        } else {
+            return "Invalid Arrived On"
+        }
+    }
+
+    const validateDocumentFinishedOnField = (finished_on) => {
+        if (finished_on > values.arrived_on) {
+            return;
+        } else {
+            return "Invalid Finished On On"
+        }
+    }
 
     const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => {
         //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
@@ -130,6 +159,7 @@ const BottomContent = (props) => {
                             <p className="top-text">วันเวลาที่เกิดเหตุ</p>
                         </div>
                         <div className="grid_3 alpha omega">
+                            {/* <input type="datetime-local" name="datemin" min="2020-07-06T00:00" /> */}
                             <DateTimeInput name="accident_on" validate={validateDocumentAccidentOnField} cssStyle={{ left: "-160px", top: "14px" }}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="9" />
                         </div>
@@ -141,7 +171,9 @@ const BottomContent = (props) => {
                             <p className="top-text">วันเวลาที่รับแจ้ง</p>
                         </div>
                         <div className="grid_3 alpha omega">
-                            <DateTimeInput name="request_on" validate={validateDocumentRequestOnField} cssStyle={{ left: "-160px", top: "14px" }}
+                            <DateTimeInput name="request_on" validate={validateDocumentRequestOnField}
+                                min={values.accident_on}
+                                cssStyle={{ left: "-160px", top: "14px" }}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="10" />
                         </div>
 
@@ -178,31 +210,14 @@ const BottomContent = (props) => {
 
                         <div className="clear" />
 
-                        {/* car_type_id  */}
-                        <div className="grid_2 alpha white-space">
-                            <p className="top-text">เดินทางโดย</p>
-                        </div>
-                        <div className="grid_3 alpha omega">
-                            <SelectNoChildrenInput name="car_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentCarTypeIDField} cssStyle={{ left: "-160px", top: "14px" }} tabIndex="13">
-                                <option value=''></option>
-                                {factCarType.items.map((factCarType) => {
-                                    if (values.car_type_id === factCarType.car_id) {
-                                        return <option value={factCarType.car_id} key={factCarType.car_id} selected>{factCarType.car_type}</option>
-                                    } else {
-                                        return <option value={factCarType.car_id} key={factCarType.car_id}>{factCarType.car_type}</option>
-                                    }
-                                })}
-                            </SelectNoChildrenInput>
-                        </div>
-
-                        <div className="clear" />
-
                         {/* departed_on  */}
                         <div className="grid_2 alpha white-space">
                             <p className="top-text">ออกเดินทาง</p>
                         </div>
                         <div className="grid_3 alpha omega">
-                            <DateTimeInput name="departed_on" validate={validateDocumentDepartedOnField} cssStyle={{ left: "-160px", top: "14px" }}
+                            <DateTimeInput name="departed_on"
+                                min={values.request_on}
+                                validate={validateDocumentDepartedOnField} cssStyle={{ left: "-160px", top: "14px" }}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="14" />
                         </div>
 
@@ -213,7 +228,9 @@ const BottomContent = (props) => {
                             <p className="top-text">เดินทางถึง</p>
                         </div>
                         <div className="grid_3 alpha omega">
-                            <DateTimeInput name="arrived_on" validate={validateDocumentArrivedOnField} cssStyle={{ left: "-160px", top: "14px" }}
+                            <DateTimeInput name="arrived_on" 
+                                min={values.departed_on}
+                                validate={validateDocumentArrivedOnField} cssStyle={{ left: "-160px", top: "14px" }}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="15" />
                         </div>
 
@@ -224,7 +241,9 @@ const BottomContent = (props) => {
                             <p className="top-text">วันเวลาที่แล้วเสร็จ</p>
                         </div>
                         <div className="grid_3 alpha omega">
-                            <DateTimeInput name="finished_on" validate={validateDocumentFinishedOnField} cssStyle={{ left: "-160px", top: "14px" }}
+                            <DateTimeInput name="finished_on" 
+                                min={values.arrived_on}
+                                validate={validateDocumentFinishedOnField} cssStyle={{ left: "-160px", top: "14px" }}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="16" />
                         </div>
 
@@ -232,7 +251,7 @@ const BottomContent = (props) => {
 
                         {/* system_type_group_id  */}
                         <div className="grid_2 alpha white-space">
-                            <p className="top-text">ระบบตรวจซ่อม</p>
+                            <p className="top-text">กลุ่มระบบตรวจซ่อม</p>
                         </div>
                         <div className="grid_3 alpha omega">
                             <SelectNoChildrenInput name="system_type_group_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentSystemTypeGroupIDnField} cssStyle={{ left: "-160px", top: "14px" }} tabIndex="17">
@@ -247,7 +266,7 @@ const BottomContent = (props) => {
 
                         {/* system_type_id  */}
                         <div className="grid_2 alpha white-space">
-                            <p className="top-text">ชนิดระบบตรวจซ่อม</p>
+                            <p className="top-text">ระบบตรวจซ่อมหลัก</p>
                         </div>
                         <div className="grid_3 alpha omega">
                             <SelectNoChildrenInput name="sub_maintenance_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentSystemTypeIDField} cssStyle={{ left: "-160px", top: "14px" }} tabIndex="18">
@@ -263,7 +282,7 @@ const BottomContent = (props) => {
 
                         {/* hardware_type_id  */}
                         <div className="grid_2 alpha white-space">
-                            <p className="top-text">ชื่ออุปกรณ์ที่บำรุงรักษา</p>
+                            <p className="top-text">ระบบตรวจซ่อมย่อย</p>
                         </div>
                         <div className="grid_3 alpha omega pull">
                             <SelectNoChildrenInput name="hardware_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="19">
@@ -276,6 +295,47 @@ const BottomContent = (props) => {
                         </div>
 
                         <div className="clear" />
+
+                        <h3 className="head-title-bottom mt-1" style={{ marginBottom: "0"}}>ทางผ่าน</h3>
+
+                        <div class="clear" />
+
+                        {/* hardware_type_id  */}
+                        <div className="grid_2 alpha white-space">
+                            <p className="top-text">ศูนย์กลางทางผ่าน</p>
+                        </div>
+                        <div className="grid_3 alpha omega pull">
+                            <SelectNoChildrenInput name="TODO" disabled={values.system_type_group_id == 3 ? checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true} tabIndex="19">
+                                <option value=''></option>
+                                {factHardwareType.items.map((factHardwareType) => {
+                                    if (values.sub_maintenance_type_id == factHardwareType.system_type_id)
+                                        return <option key={factHardwareType.hardware_type_id} value={factHardwareType.hardware_type_id}>{factHardwareType.abbreviation} - {factHardwareType.hardware_type}</option>
+                                })}
+                            </SelectNoChildrenInput>
+                        </div>
+
+                        <div className="clear" />
+                        
+                        {/* car_type_id  */}
+                        <div className="grid_2 alpha white-space">
+                            <p className="top-text">ประเภทรถ</p>
+                        </div>
+                        <div className="grid_3 alpha omega">
+                        <SelectNoChildrenInput name="car_type_id" disabled={values.system_type_group_id == 3 ? checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true}
+                            cssStyle={{ left: "-160px", top: "14px" }} tabIndex="19">
+                                <option value=''></option>
+                                {factCarType.items.map((factCarType) => {
+                                    if (values.car_type_id === factCarType.car_id) {
+                                        return <option value={factCarType.car_id} key={factCarType.car_id} selected>{factCarType.car_type}</option>
+                                    } else {
+                                        return <option value={factCarType.car_id} key={factCarType.car_id}>{factCarType.car_type}</option>
+                                    }
+                                })}
+                            </SelectNoChildrenInput>
+                        </div>
+
+                        <div className="clear" />
+
                     </div>
 
 
@@ -334,6 +394,14 @@ const BottomContent = (props) => {
                         <Label>รายละเอียดสถานที่</Label>
                         <div className="grid_4 alpha omega">
                             <TextareaInput name="location_detail" tabIndex="23"
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                        </div>
+
+                        <div className="clear" />
+
+                        <Label>การมอบ กรฟ.</Label>
+                        <div className="grid_4 alpha omega">
+                            <TextInput name="TODO" tabIndex="23"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 
@@ -398,7 +466,7 @@ const BottomContent = (props) => {
                         <div className="clear" />
 
                         {/* interrupt_id */}
-                        <Label>ยังไมไ่ด้จัดการแก้ไขเพราะเหตุนี้</Label>
+                        <Label>อุปสรรค</Label>
                         <div className="grid_4 alpha omega">
                             <SelectNoChildrenInput name="interrupt_id" validate={validateDocumentInterruptIDField} disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="29" cssStyle={{ left: "-240px", top: "10px" }}>
                                 <option value='' selected></option>

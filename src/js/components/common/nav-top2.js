@@ -47,10 +47,10 @@ const MainModule = (props) => {
         props.loadNotify();
     }, [toolbar.mode]);
 
-    useEffect(() => {
-        // Setup SubNav
-        setupAllSubNav();
-    }, [checkNav]);
+    // useEffect(() => {
+    //     // Setup SubNav
+    // setupAllSubNav();
+    // }, [checkNav, checkNav2]);
 
     const identifyEndpoins = (document_type_id) => identifyEndpoinsHelper(document_type_id)
 
@@ -62,7 +62,7 @@ const MainModule = (props) => {
     }, [url]);
 
     const colorTopBar = () => {
-        if (url === "/main") {
+        if (url === "/main" || url === "/profile") {
             return "#FFFFFF";
         }
         if (url === "/main-spare" || url === "/spare-item-master-data"
@@ -141,34 +141,45 @@ const MainModule = (props) => {
                                 :
                                 null}
 
-                            <li className={`p-navigation__item p-subnav a nav-li ${checkNav ? `is-active` : ``}`} style={{ marginRight: "0", marginLeft: "auto" }} role="menuitem" id="link-1">
-                                <Link to="#" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu" style={{ padding: "10px 12px 0 0" }}
-                                    onClick={() => setCheckNav(true)} >
-                                    <i className="fas fa-bell" style={{ fontSize: "24px", color: "#823D35" }}></i>
+                            <li className={`p-navigation__item p-subnav a nav-li ${checkNav ? `is-active` : ``}`} style={{ marginRight: "0", marginLeft: "auto" }}
+                                role="menuitem" id="link-1" onClick={() => setCheckNav(true)} onBlur={() =>
+                                    document.addEventListener('click', function (e) {
+                                        var currentElement = null;
+                                        currentElement = e.target.id;
+                                        if (currentElement === "dropDawnNoti") {
+                                            return setCheckNav(true)
+                                        } else {
+                                            return setCheckNav(false)
+                                        }
+                                    })
+                                }>
+                                <Link to="#" className="p-subnav__toggle p-navigation__link" id="dropDawnNoti" aria-controls="account-menu" style={{ padding: "10px 12px 0 0" }}
+                                >
+                                    <i className="fas fa-bell" style={{ fontSize: "24px", color: "#823D35" }} id="dropDawnNoti"></i>
                                     {props.notify.not_read_count !== 0
                                         ?
-                                        <span className="badge badge-danger badge-counter">{props.notify.not_read_count}</span>
+                                        <span className="badge badge-danger badge-counter" id="dropDawnNoti">{props.notify.not_read_count}</span>
                                         :
                                         <span></span>
                                     }
                                 </Link>
-                                <ul className="p-subnav__items--right" id="account-menu" aria-hidden="true" style={{ overflowY: "auto", overflowX: "hidden", whiteSpace: "nowrap", height: "270px", backgroundColor: "white" }}>
+                                <ul className="p-subnav__items--right" id="dropDawnNoti" aria-hidden="true" style={{ overflowY: "auto", overflowX: "hidden", whiteSpace: "nowrap", height: "270px", backgroundColor: "white" }} >
                                     {props.notify.notify.length === 0
                                         ?
                                         <li>
-                                            <Link to="#" className="p-subnav__item sub">ไม่มีข้อมูลการแจ้งเตือนในระบบ</Link>
+                                            <Link to="#" className="p-subnav__item sub" id="dropDawnNoti">ไม่มีข้อมูลการแจ้งเตือนในระบบ</Link>
                                         </li>
                                         :
                                         props.notify.notify.map(function (notify) {
                                             return (
-                                                <li key={notify.notification_id} id={notify.notification_id}>
-                                                    <Link to={identifyEndpoins(notify.document_type_id) + "?internal_document_id=" + notify.internal_document_id + "&document_id=" + notify.document_id} className="p-subnav__item sub_notify" onClick={(e) => props.readNotify(e)} style={notify.is_read.data[0] === 1 ? {} : { backgroundColor: "#edf2fa" }} >
-                                                        <div>
-                                                            <i className="fas fa-file-alt float-left" style={{ fontSize: "30px", "marginTop": "16px", "marginLeft": "10px", "color": "#111" }}></i>
-                                                            <p className="cancel-default_notify" style={{ "color": "#111" }}>{notify.created_on.replace("T", " เวลา ").slice(0, 21) + " น."}</p>
-                                                            <p className="cancel-default_notify" style={{ "color": "#111" }}>ประเภท: {notify.document_type_name}</p>
-                                                            <p className="cancel-default_notify" style={{ "color": "#111" }}>เลขที่: {notify.internal_document_id}</p>
-                                                            <p className="cancel-default_notify" style={{ "color": "#111" }}>{notify.action_document}</p>
+                                                <li key={notify.notification_id} id="dropDawnNoti">
+                                                    <Link to={identifyEndpoins(notify.document_type_id) + "?internal_document_id=" + notify.internal_document_id + "&document_id=" + notify.document_id} className="p-subnav__item sub_notify" onClick={(e) => props.readNotify(e)} style={notify.is_read.data[0] === 1 ? {} : { backgroundColor: "#edf2fa" }} onClick={() => setCheckNav(true)} id="dropDawnNoti">
+                                                        <div id="dropDawnNoti">
+                                                            <i className="fas fa-file-alt float-left" id="dropDawnNoti" style={{ fontSize: "30px", "marginTop": "16px", "marginLeft": "10px", "color": "#111" }}></i>
+                                                            <p className="cancel-default_notify" id="dropDawnNoti" style={{ "color": "#111" }}>{notify.created_on.replace("T", " เวลา ").slice(0, 21) + " น."}</p>
+                                                            <p className="cancel-default_notify" id="dropDawnNoti" style={{ "color": "#111" }}>ประเภท: {notify.document_type_name}</p>
+                                                            <p className="cancel-default_notify" id="dropDawnNoti" style={{ "color": "#111" }}>เลขที่: {notify.internal_document_id}</p>
+                                                            <p className="cancel-default_notify" id="dropDawnNoti" style={{ "color": "#111" }}>{notify.action_document}</p>
                                                         </div>
                                                     </Link>
                                                 </li>
@@ -178,17 +189,27 @@ const MainModule = (props) => {
                                 </ul>
                             </li>
 
-                            <li className={`p-navigation__item p-subnav a nav-li ${checkNav2 ? `is-active` : ``}`} style={{ marginLeft: "15px" }} role="menuitem" id="link-1">
-                                <Link to="#" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu" style={{ padding: "10px 0 0 0" }}
-                                    onClick={() => setCheckNav2(true)}>
-                                    <i className="fas fa-user-circle" style={{ fontSize: "24px", color: "#823D35" }}></i>
+                            <li className={`p-navigation__item p-subnav a nav-li ${checkNav2 ? `is-active` : ``}`} style={{ marginLeft: "15px" }} role="menuitem" id="link-1"
+                                onClick={() => setCheckNav2(true)} id="dropDawnNoti2" onBlur={() =>
+                                    document.addEventListener('click', function (e) {
+                                        var currentElement2 = null;
+                                        currentElement2 = e.target.id;
+                                        if (currentElement2 === "dropDawnNoti2") {
+                                            return setCheckNav2(true)
+                                        } else {
+                                            return setCheckNav2(false)
+                                        }
+                                    })
+                                }>
+                                <Link to="#" id="dropDawnNoti2" className="p-subnav__toggle p-navigation__link" aria-controls="account-menu" style={{ padding: "10px 0 0 0" }}>
+                                    <i id="dropDawnNoti2" className="fas fa-user-circle" style={{ fontSize: "24px", color: "#823D35" }}></i>
                                 </Link>
-                                <ul className="p-subnav__items--right" id="account-menu" aria-hidden="true">
-                                    <li>
-                                        <Link to="/profile" className="p-subnav__item sub" style={{ color: "#111" }}>โปรไฟล์</Link>
+                                <ul id="dropDawnNoti2" className="p-subnav__items--right" id="account-menu" aria-hidden="true">
+                                    <li id="dropDawnNoti2">
+                                        <Link id="dropDawnNoti2" to="/profile" className="p-subnav__item sub" style={{ color: "#111" }}>โปรไฟล์</Link>
                                     </li>
-                                    <li>
-                                        <Link to="/" className="p-subnav__item sub" style={{ color: "#111" }} onClick={(e) => { if (window.confirm('คุณต้องการออกจากระบบใช่หรือไม่')) { return localStorage.removeItem('token_auth') } else { e.preventDefault(); } }} >ออกจากระบบ</Link>
+                                    <li id="dropDawnNoti2">
+                                        <Link id="dropDawnNoti2" to="/" className="p-subnav__item sub" style={{ color: "#111" }} onClick={(e) => { if (window.confirm('คุณต้องการออกจากระบบใช่หรือไม่')) { return localStorage.removeItem('token_auth') } else { e.preventDefault(); } }} >ออกจากระบบ</Link>
                                     </li>
                                 </ul>
                             </li>

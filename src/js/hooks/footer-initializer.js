@@ -116,7 +116,7 @@ const useFooterInitializer = (document_type_id) => {
                     }
                     else {
                         // Everyone for Search mode
-                        dispatch(footerToModeSearch());
+                        // dispatch(footerToModeSearch());
                     }
                 })
             }
@@ -142,14 +142,17 @@ const useFooterInitializer = (document_type_id) => {
             // In General
             if (toolbar.mode === TOOLBAR_MODE.SEARCH && document_id !== "" && document_id !== undefined) {
                 // SEARCH mode
+                console.log(">>>if")
                 hadleDocumentStatusWithFooter(document_id);
             }
             else if (toolbar.mode === TOOLBAR_MODE.ADD) {
                 // ADD_DRAFT mode
+                console.log(">>>else if", document_id)
                 hadleDocumentStatusWithFooter(document_id);
                 dispatch(footerToModeAddDraft());
             }
             else {
+                console.log(">>>else")
                 dispatch(footerToModeSearch());
             }
         }

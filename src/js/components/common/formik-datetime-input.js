@@ -7,7 +7,7 @@ const DateTimeInput = ({ ...props }) => {
   const [field, meta] = useField(props);
   return (
     <>
-      <input type="datetime-local" className="cancel-default" {...field} {...props}></input>
+      <input type="datetime-local" className="cancel-default" min={props.min} {...field} {...props}></input>
       {meta.touched && meta.error ? (
         <div className="error">
           <span class="tooltiptext" style={props.cssStyle}>{meta.error}</span>

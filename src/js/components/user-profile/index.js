@@ -60,10 +60,12 @@ const Home = (props) => {
                 setFieldValue("firstname_th", data.results[0].firstname_th);
                 setFieldValue("lastname_th", data.results[0].lastname_th);
                 setFieldValue("address", data.results[0].address);
-                setFieldValue("birthdate", data.results[0].birthdate);
+                setFieldValue("birthdate", data.results[0].birthdate.slice(0, 10));
                 setFieldValue("phone", data.results[0].phone);
                 setFieldValue("created_at", data.results[0].created_at);
                 setFieldValue("updated_at", data.results[0].updated_at);
+                setFieldValue("position_name", data.results[0].position[0].name);
+                setFieldValue("position_id", data.results[0].position[0].position_id);
             })
             fetchDocumentUsers(user_id).then(function (data) {
                 setFieldValue("items", data.results);
@@ -85,18 +87,19 @@ const Home = (props) => {
                 setFieldValue("firstname_th", data.firstname_th);
                 setFieldValue("lastname_th", data.lastname_th);
                 setFieldValue("address", data.address);
-                setFieldValue("birthdate", data.birthdate);
+                setFieldValue("birthdate", data.birthdate.slice(0, 10));
                 setFieldValue("phone", data.phone);
                 setFieldValue("created_at", data.created_at);
                 setFieldValue("updated_at", data.updated_at);
                 setFieldValue("position_name", data.has_positions[0].name);
+                setFieldValue("position_id", data.has_positions[0].position_id);
 
                 fetchDocumentUsers(data.user_id).then(function (data2) {
                     setFieldValue("items", data2.results);
                     // console.log(data2.results)
                 })
             })
-            
+
             setFieldValue("user_my", "user-profile");
         }
     }, []);
