@@ -43,9 +43,9 @@ const PmtSS101Componant = (props) => {
         { id: "breakdown", name: "อาการเสีย" },
         { id: "related_parties", name: "ผู้ที่เกี่ยวข้อง" },
         { id: "compensation_list", name: "รายการค่าเสียหาย" },
+        { id: "assets_under_maintenance", name: "สินทรัพที่ดำเดินการซ่อมบำรุง" },
         { id: "attachment", name: "แนบไฟล์" },
         { id: "table_status", name: "สถานะเอกสาร" },
-        { id: "assets_under_maintenance", name: "สินทรัพที่ดำเดินการซ่อมบำรุง" },
     ]);
 
     useEffect(() => {
@@ -162,7 +162,7 @@ const EnhancedPmtSS101Component = withFormik({
         service_method_id: '', // ประเภทการซ่อม FK_ID
         service_method_desc: '', //สรุปการแก้ไขและการซ่อมแซม STRING
         interrupt_id: '', //ยังไมไ่ด้จัดการแก้ไขเพราะเหตุนี้ FK_ID
-
+        location_x_cross_id: '',
 
         // Bottom Content ผู้เกี่ยวข้อง
         auditor_name: '',           //ผู้ควบคุมตรวจสอบชื่อ NVARCHAR

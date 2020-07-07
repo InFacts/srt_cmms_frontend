@@ -11,6 +11,7 @@ import { useFormikContext, useField } from 'formik';
 import PopupModalDocument from '../common/popup-modal-document'
 import PopupModalInventory from '../common/popup-modal-inventory'
 import PopupModalUsername from '../common/popup-modal-username'
+import PopupModalRemarkAppoval from '../common/popup-modal-remark-appoval'
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import {
   getEmployeeIDFromUserID, fetchStepApprovalDocumentData,
@@ -143,6 +144,7 @@ const TopContent = (props) => {
           </div>
 
         </section>
+
       </div>
 
       {/* PopUp ค้นหาเลขที่เอกสาร */}
@@ -158,6 +160,8 @@ const TopContent = (props) => {
 
       {/* PopUp ค้นหาชื่อพนักงาน MODE ADD */}
       <PopupModalUsername />
+
+      <PopupModalRemarkAppoval />
 
     </div>
   )

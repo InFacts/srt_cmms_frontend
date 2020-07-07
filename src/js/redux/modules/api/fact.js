@@ -33,6 +33,7 @@ export const FACTS = {
     CHECKLIST_CUSTOM_GROUP:"checklist-custom-group",
     CHECKLIST_EQUIPMENT_GROUP:"checklist-equipment-group",
     UNIT_MAINTENANCE_LOCATION: "unit-maintenance-location",
+    X_CROSS: "x-cross",
 
     // FOR SS101 LOOK UP
     SS101_RECV_ACCIDENT_FROM: "ss101/recv-accident-from",
@@ -44,6 +45,7 @@ export const FACTS = {
     SS101_CAR_TYPE: "ss101/car-type",
     SS101_CASE_TYPE: "ss101/case-type",
     SS101_INTERRUPT: "ss101/interrupt",
+    SS101_DOC_BYPASS: "ss101/doc-bypass"
 }
 
 // Actions

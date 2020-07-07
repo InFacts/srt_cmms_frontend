@@ -195,6 +195,8 @@ export const SS101_SCHEMA = {
     member_2_position_id: -1, //รายชื่อเพื่อนร่วมงาน 2 ตำแหน่ง FK_ID
     member_3: '',             //รายชื่อเพื่อนร่วมงาน 3
     member_3_position_id: -1,  //รายชื่อเพื่อนร่วมงาน 3 ตำแหน่ง
+    location_x_cross_id: -1,
+    doc_bypass_doc_bypass_id: -1,
 
     loss_line_items: [],
     line_items: [],
@@ -677,14 +679,15 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             request_by: values.request_by,
             location_district_id: values.location_district_id ? parseInt(values.location_district_id) : null,
             departed_on: values.departed_on + ':00+00:00',
-            // cargo_id: values.cargo_id ? parseInt(values.cargo_id) : null,
+            location_x_cross_id: values.location_x_cross_id ? parseInt(values.location_x_cross_id) : null,
             auditor_name: values.auditor_name,
             auditor_position_id: values.auditor_position_id ? parseInt(values.auditor_position_id) : null,
             fixer_name: values.fixer_name,
             fixer_position_id: values.fixer_position_id ? parseInt(values.fixer_position_id) : null,
             member_1_position_id: values.member_1_position_id ? parseInt(values.member_1_position_id) : null,
             member_2_position_id: values.member_2_position_id ? parseInt(values.member_2_position_id) : null,
-            member_3_position_id: values.member_3_position_id ? parseInt(values.member_3_position_id) : null
+            member_3_position_id: values.member_3_position_id ? parseInt(values.member_3_position_id) : null,
+            doc_bypass_doc_bypass_id: values.doc_bypass_doc_bypass_id ? parseInt(values.doc_bypass_doc_bypass_id) : null
         }
         values.loss_line_items = removeEmptyLineItems(values.loss_line_items);
         values.line_items = removeEmptyLineItems(values.line_items);
@@ -779,7 +782,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             location_description: values.location_description,
             installed_on: values.installed_on + 'T00:00:00+00:00',
             announce_use_on: values.announce_use_on + 'T00:00:00+00:00',
-            // equipment_status_id: values.equipment_status_id,
+            x_cross_x_cross_id: values.x_cross_x_cross_id ? parseInt(values.x_cross_x_cross_id) : null,
             responsible_node_id: values.location_node_id ? parseInt(values.location_node_id) : null
         }
         var line_items_part = [
@@ -1667,6 +1670,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
             location_node_id: data.specific.location_node_id,
             location_station_id: data.specific.location_station_id,
             installed_on: data.specific.installed_on.slice(0, 10),
+            x_cross_x_cross_id: data.specific.x_cross_x_cross_id
         }
     } else if (document_type_group_id === DOCUMENT_TYPE_ID.SELECTOR) {
         var created_on = new Date(data.document.created_on);
@@ -1756,6 +1760,8 @@ function transformSS101ResponseToFormState(ss101_part, data) {
         cargo_id: returnEmptyStringIfNull(ss101_part.cargo_id),
         service_method_id: returnEmptyStringIfNull(ss101_part.service_method_id),
         interrupt_id: returnEmptyStringIfNull(ss101_part.interrupt_id),
+        doc_bypass_doc_bypass_id: data.specific.doc_bypass_doc_bypass_id,
+        location_x_cross_id: data.specific.location_x_cross_id,
 
         // // Bottom Content ผู้เกี่ยวข้อง
         auditor_position_id: returnEmptyStringIfNull(ss101_part.auditor_position_id),

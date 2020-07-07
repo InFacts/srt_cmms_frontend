@@ -147,6 +147,7 @@ const useFooterInitializer = (document_type_id) => {
             }
             else if (toolbar.mode === TOOLBAR_MODE.ADD) {
                 // ADD_DRAFT mode
+                document_id = null // NUK edit COde รอพี่นีทมาดู
                 console.log(">>>else if", document_id)
                 hadleDocumentStatusWithFooter(document_id);
                 dispatch(footerToModeAddDraft());
@@ -282,6 +283,9 @@ const useFooterInitializer = (document_type_id) => {
             console.log(">>>validateForm", values)
             validateForm()
                 .then((err) => {
+                    setTouched(setNestedObjectValues(values, true))
+                    dispatch(navBottomSending('[API]', 'Sending ...', ''));
+                    setErrors(err);
                     if (isEmpty(err)) {
                         if (values.document_id) { // If have document_id, no need to create new doc
                             let data = packDataFromValues(fact, values, document_type_id);

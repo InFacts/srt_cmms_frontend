@@ -131,7 +131,7 @@ const MainModule = (props) => {
                                     </li>
 
                                     <li className="nav-li box-green-top-bar">
-                                        <Link to={checkPermission.length !== 0 && checkPermission[0].module_als ? "/main-als" : "#"}>ระบบวิเคราห์ะวางแผนทรัพยากรซ่อมบำรุง</Link>
+                                        <Link to={checkPermission.length !== 0 && checkPermission[0].module_als ? "/main-als" : "#"}>ระบบวิเคราะห์วางแผนทรัพยากรซ่อมบำรุง</Link>
                                     </li>
 
                                     <li className="nav-li box-yellow-top-bar">

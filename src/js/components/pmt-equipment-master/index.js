@@ -29,8 +29,8 @@ const GoodsReceiptComponent = (props) => {
         { id: "general", name: "ทั่วไป" },
         { id: "equipment", name: "รายการสินทรัพย์" },
         { id: "equipment_plane", name: "แผนบำรุงรักษา" },
+        { id: "history", name: "ประวัติการใช้" },
         { id: "attachment", name: "แนบไฟล์" },
-        { id: "history", name: "ประวัติการใช้" }
     ]);
 
     useToolbarInitializer(TOOLBAR_MODE.SEARCH, DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA);
