@@ -98,6 +98,7 @@ const EnhancedEquipmentInstallationComponent = withFormik({
         installed_on: '',              // วันที่ติดตั้งเสร็จ (Default === NOW )
         announce_use_on: '',             // วันที่ประกาศใช้ (Default === NOW )
         equipment_status_id: '',        //สถานะ
+        x_cross_x_cross_id: '',
         remark: '', 
 
         // Location Content

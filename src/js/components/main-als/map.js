@@ -107,7 +107,7 @@ class Map extends React.Component {
                 <div>
                     <div className="container_12 clearfix">
                         <section className="grid_12 ">
-                            <h4 className="head-title" style={{ color: "black" }}>ระบบวิเคราห์ะวางแผนทรัพยากรซ่อมบำรุง</h4>
+                            <h4 className="head-title" style={{ color: "black" }}>ระบบวิเคราะห์วางแผนทรัพยากรซ่อมบำรุง</h4>
                             <div style={{ height: "350px" }} id="blackground-white" style={ changeTheam() === true ? { borderRadius: "25px", border: "2px dashed gray", height: "380px" } : {height: "380px"} }>
 
                                 <Link to="/als-spare">

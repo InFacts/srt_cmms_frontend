@@ -41,6 +41,8 @@ const BottomContent = (props) => {
     const factCaseType = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_CASE_TYPE] }), shallowEqual);
     const factInterrupt = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_INTERRUPT] }), shallowEqual);
     const factPosition = useSelector((state) => ({ ...state.api.fact[FACTS.POSITION] }), shallowEqual);
+    const factXCross = useSelector((state) => ({ ...state.api.fact[FACTS.X_CROSS] }), shallowEqual);
+    const factDocByPass = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_DOC_BYPASS] }), shallowEqual);
 
     const factUnit = useSelector((state) => ({ ...state.api.fact[FACTS.UNIT_OF_MEASURE] }), shallowEqual);
     const { values, setFieldValue, validateField } = useFormikContext();
@@ -196,9 +198,9 @@ const BottomContent = (props) => {
                         </div>
                         <div className="grid_3 alpha omega">
                             {/* Need to change to radio button later */}
-                            <SelectNoChildrenInput name="recv_accident_from_recv_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} 
-                            validate={validateDocumentRecvAccidentFromRecvIDField} 
-                            cssStyle={{ left: "-160px", top: "14px" }} tabIndex="12">
+                            <SelectNoChildrenInput name="recv_accident_from_recv_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                validate={validateDocumentRecvAccidentFromRecvIDField}
+                                cssStyle={{ left: "-160px", top: "14px" }} tabIndex="12">
                                 <option value='' selected></option>
                                 {factRecvAccidentFrom.items.map((recv_accident_from) => {
                                     if (values.recv_accident_from_recv_id === recv_accident_from.recv_id) {
@@ -228,7 +230,7 @@ const BottomContent = (props) => {
                             <p className="top-text">เดินทางถึง</p>
                         </div>
                         <div className="grid_3 alpha omega">
-                            <DateTimeInput name="arrived_on" 
+                            <DateTimeInput name="arrived_on"
                                 min={values.departed_on}
                                 validate={validateDocumentArrivedOnField} cssStyle={{ left: "-160px", top: "14px" }}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="15" />
@@ -241,7 +243,7 @@ const BottomContent = (props) => {
                             <p className="top-text">วันเวลาที่แล้วเสร็จ</p>
                         </div>
                         <div className="grid_3 alpha omega">
-                            <DateTimeInput name="finished_on" 
+                            <DateTimeInput name="finished_on"
                                 min={values.arrived_on}
                                 validate={validateDocumentFinishedOnField} cssStyle={{ left: "-160px", top: "14px" }}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="16" />
@@ -296,7 +298,7 @@ const BottomContent = (props) => {
 
                         <div className="clear" />
 
-                        <h3 className="head-title-bottom mt-1" style={{ marginBottom: "0"}}>ทางผ่าน</h3>
+                        <h3 className="head-title-bottom mt-1" style={{ marginBottom: "0" }}>ทางผ่าน</h3>
 
                         <div class="clear" />
 
@@ -305,31 +307,38 @@ const BottomContent = (props) => {
                             <p className="top-text">ศูนย์กลางทางผ่าน</p>
                         </div>
                         <div className="grid_3 alpha omega pull">
-                            <SelectNoChildrenInput name="TODO" disabled={values.system_type_group_id == 3 ? checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true} tabIndex="19">
+                            <SelectNoChildrenInput name="location_x_cross_id" disabled={values.system_type_group_id == 3 ? checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true} tabIndex="19">
                                 <option value=''></option>
-                                {factHardwareType.items.map((factHardwareType) => {
-                                    if (values.sub_maintenance_type_id == factHardwareType.system_type_id)
-                                        return <option key={factHardwareType.hardware_type_id} value={factHardwareType.hardware_type_id}>{factHardwareType.abbreviation} - {factHardwareType.hardware_type}</option>
+                                {factXCross.items.map((x_cross) => {
+                                    if (values.system_type_group_id == 3) {
+                                        if (values.sub_maintenance_type_id == factHardwareType.system_type_id) {
+                                            return <option key={x_cross.x_cross_id} value={x_cross.x_cross_id} selected>{x_cross.road_center} \\ {x_cross.name} \\ {x_cross.x_road_name}</option>
+                                        } else {
+                                            return <option key={x_cross.x_cross_id} value={x_cross.x_cross_id}>{x_cross.road_center} \\ {x_cross.name} \\ {x_cross.x_road_name}</option>
+                                        }
+                                    } else return null
                                 })}
                             </SelectNoChildrenInput>
                         </div>
 
                         <div className="clear" />
-                        
+
                         {/* car_type_id  */}
                         <div className="grid_2 alpha white-space">
                             <p className="top-text">ประเภทรถ</p>
                         </div>
                         <div className="grid_3 alpha omega">
-                        <SelectNoChildrenInput name="car_type_id" disabled={values.system_type_group_id == 3 ? checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true}
-                            cssStyle={{ left: "-160px", top: "14px" }} tabIndex="19">
+                            <SelectNoChildrenInput name="car_type_id" disabled={values.system_type_group_id == 3 ? checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true}
+                                cssStyle={{ left: "-160px", top: "14px" }} tabIndex="19">
                                 <option value=''></option>
                                 {factCarType.items.map((factCarType) => {
-                                    if (values.car_type_id === factCarType.car_id) {
-                                        return <option value={factCarType.car_id} key={factCarType.car_id} selected>{factCarType.car_type}</option>
-                                    } else {
-                                        return <option value={factCarType.car_id} key={factCarType.car_id}>{factCarType.car_type}</option>
-                                    }
+                                    if (values.system_type_group_id == 3) {
+                                        if (values.car_type_id === factCarType.car_id) {
+                                            return <option value={factCarType.car_id} key={factCarType.car_id} selected>{factCarType.car_type}</option>
+                                        } else {
+                                            return <option value={factCarType.car_id} key={factCarType.car_id}>{factCarType.car_type}</option>
+                                        }
+                                    } else return null
                                 })}
                             </SelectNoChildrenInput>
                         </div>
@@ -401,8 +410,14 @@ const BottomContent = (props) => {
 
                         <Label>การมอบ กรฟ.</Label>
                         <div className="grid_4 alpha omega">
-                            <TextInput name="TODO" tabIndex="23"
-                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                            <SelectNoChildrenInput name="doc_bypass_doc_bypass_id"
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                cssStyle={{ left: "-240px", top: "10px" }} tabIndex="23">
+                                <option value=''></option>
+                                {factDocByPass.items.map(function ({ doc_bypass_id, name }) {
+                                    return <option value={doc_bypass_id} key={doc_bypass_id}> {name} </option>
+                                })}
+                            </SelectNoChildrenInput>
                         </div>
 
                         <div className="clear" />

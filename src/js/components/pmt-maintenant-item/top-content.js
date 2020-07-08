@@ -33,6 +33,14 @@ const TopContent = (props) => {
 
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
+    useEffect(() => {
+        console.log("decoded_token", decoded_token.has_position ? decoded_token.has_position[0].node_id : null)
+        setFieldValue("division_id", decoded_token.has_position ? decoded_token.has_position[0].division_id : null, false);
+        setFieldValue("district_id", decoded_token.has_position ? decoded_token.has_position[0].district_id : null, false);
+        setFieldValue("node_id", decoded_token.has_position ? decoded_token.has_position[0].node_id : null, false);
+    }, [toolbar.mode]);
+    console.log("values:?????,", values)
+
     // Fill Default Forms
     useFillDefaultsOnModeAdd();
     const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.MAINTENANT_ITEM, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
@@ -109,11 +117,11 @@ const TopContent = (props) => {
             });
     });
 
-  let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
-  useEffect(() => {
-    checkBooleanForEdit = false
-    validateField("internal_document_id")
-  }, [values.internal_document_id])
+    let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
+    useEffect(() => {
+        checkBooleanForEdit = false
+        validateField("internal_document_id")
+    }, [values.internal_document_id])
 
     return (
         <div id={changeTheam() === true ? "" : "blackground-white"}>

@@ -27,6 +27,7 @@ const BottomContent = (props) => {
     const factDistricts = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
     const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
     const factStations = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
+    const factXCross = useSelector((state) => ({ ...state.api.fact[FACTS.X_CROSS] }), shallowEqual);
     const factItemStatus = useSelector((state) => ({ ...state.api.fact[FACTS.ITEM_STATUS] }), shallowEqual);
     const { values, setFieldValue } = useFormikContext();
 
@@ -190,7 +191,7 @@ const BottomContent = (props) => {
                                 <p className="top-text">รายละเอียดเพิ่มเติม</p>
                             </div>
                             <div className="grid_7 pull_0">
-                                <TextInput name="location_description" 
+                                <TextInput name="location_description"
                                     disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                                     tabIndex="14" />
                             </div>
@@ -202,9 +203,13 @@ const BottomContent = (props) => {
                                 <p className="top-text">ศูนย์กลางทางผ่าน</p>
                             </div>
                             <div className="grid_7 pull_0">
-                                <TextInput name="TODO" 
-                                    disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                    tabIndex="15" />
+                                <SelectNoChildrenInput name="x_cross_x_cross_id" tabIndex="15" validate={validateLocationStationIDField} cssStyle={{ left: "-480px", top: "10px" }}
+                                    disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                                    <option value=''></option>
+                                    {factXCross.items.map((x_cross) => {
+                                        return <option key={x_cross.x_cross_id} value={x_cross.x_cross_id} selected>{x_cross.road_center} \\ {x_cross.name} \\ {x_cross.x_road_name}</option>
+                                    })}
+                                </SelectNoChildrenInput>
                             </div>
 
                             <div class="clear" />

@@ -40,10 +40,10 @@ const WorkOrderComponent = (props) => {
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
         {id:"broken", name:"อาการเสีย"},
+        { id: "assets_under_maintenance", name: "สินทรัพที่ดำเดินการซ่อมบำรุง" },
         {id:"attachment", name:"แนบไฟล์"},
         // {id:"fixed_asset", name:"สินทรัพย์ที่เกี่ยวข้อง"},
         {id:"table_status", name:"สถานะเอกสาร"},
-        { id: "assets_under_maintenance", name: "สินทรัพที่ดำเดินการซ่อมบำรุง" },
     ]);
 
     useEffect(() => {

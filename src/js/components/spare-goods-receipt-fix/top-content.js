@@ -218,6 +218,7 @@ const TopContent = (props) => {
 
       {/* PopUp ค้นหาเลขที่เอกสาร สส.101 */}
       <PopupModalDocumentSS101 documentTypeGroupID={DOCUMENT_TYPE_ID.MAINTENANT_ITEM}
+      documentTypeGroupID2={DOCUMENT_TYPE_ID.SS101}
         id="modalDocument2"
         name="refer_to_document_internal_document_id" //For setFieldValue
       />
