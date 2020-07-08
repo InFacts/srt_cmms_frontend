@@ -11,6 +11,7 @@ const PopupModalDocument = (props) => {
     const [data, setData] = useState([]);
     const [documentID, setDocumentID] = useState("");
     const [url, setUrl] = useState(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/document-reference?document_type_group_id=${props.documentTypeGroupID}&internal_document_id=${documentID}`)
+    const [url2, setUrl2] = useState(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/document-reference?document_type_group_id=${props.documentTypeGroupID2}&internal_document_id=${documentID}`)
     const { setFieldValue } = useFormikContext();
     const [forceRefresh, setForceRefresh] = useState(false);
     const toolbar = useSelector((state ) => ({...state.toolbar}), shallowEqual);
@@ -22,6 +23,16 @@ const PopupModalDocument = (props) => {
                     console.log("url", url, res)
                     setData(res.data.results);
                 })
+            // axios.get(url2, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+            //     .then((res) => {
+            //         console.log("res.data.results", res.data.results)
+            //         res.data.results.map((results) => {
+            //             data.push(
+            //                 results
+            //             )
+            //         })
+            //         setData(data);
+            //     })
         };
         fetchData();
     }, [url, toolbar.mode]);
@@ -36,7 +47,11 @@ const PopupModalDocument = (props) => {
                         <div className="grid_2"><p className="cancel-default">เลขที่เอกสาร</p></div>
                         <div className="grid_8 pull_0">
                             <input type="text" className="cancel-default grid_3" value={documentID} onChange={e => setDocumentID(e.target.value)} />
-                            <button className="button-blue edit grid_1 mr-5" type="button" onClick={() => setUrl(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/document-reference?document_type_group_id=${props.documentTypeGroupID}&internal_document_id=${documentID}`)}>ค้นหา</button>
+                            <button className="button-blue edit grid_1 mr-5" type="button" onClick={() => {
+                                setUrl(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/document-reference?document_type_group_id=${props.documentTypeGroupID}&internal_document_id=${documentID}`)
+                                setUrl2(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/document-reference?document_type_group_id=${props.documentTypeGroupID2}&internal_document_id=${documentID}`)
+                            }
+                            }>ค้นหา</button>
                         </div>
                     </div>
 

@@ -753,6 +753,9 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         })
         var icd_part = {
             document_id: values.document_id,
+            node_id: 0,
+            district_id: 0,
+            division_id: 0,
             line_items: line_items_part,
         }
         return {

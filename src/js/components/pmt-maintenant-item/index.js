@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux'
+import { shallowEqual, useSelector, useDispatch } from 'react-redux'
 
 import { useFormik, withFormik, useFormikContext } from 'formik';
 import TabBar from '../common/tab-bar';
@@ -24,7 +24,9 @@ import { changeTheam } from '../../helper.js'
 const MaintenantItemComponent = () => {
     const { resetForm, setFieldValue, setValues, values } = useFormikContext();
     const dispatch = useDispatch();
-    
+    const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
+    const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
+
     useToolbarInitializer(TOOLBAR_MODE.SEARCH, DOCUMENT_TYPE_ID.MAINTENANT_ITEM);
     useTokenInitializer();
     useFactInitializer();
@@ -44,17 +46,17 @@ const MaintenantItemComponent = () => {
         dispatch(footerToModeSearch());
     }, []);
 
-        // If Link to this url via Track Document
-        useEffect(() => {
-            getUrlParamsLink()
-                .then((internal_document_id) => {
+    // If Link to this url via Track Document
+    useEffect(() => {
+        getUrlParamsLink()
+            .then((internal_document_id) => {
                 if (internal_document_id !== "") {
                     // action_approval
                     setFieldValue("status_name_th", "", true);
                     setFieldValue("internal_document_id", internal_document_id, true);
                 }
             })
-        }, [])
+    }, [])
 
     return (
         <>
@@ -84,7 +86,7 @@ const initialLossLineItem = {
     quantity_damaged: '',
     quantity_used: '',
     quantity_salvage: '',
-    remark:'',
+    remark: '',
 }
 const initialRows = (n = 10) => {
     let rows = [];
@@ -121,6 +123,10 @@ const EnhancedMaintenantItemComponent = withFormik({
 
         //Field ที่ไม่ได้ display
         document_id: '', // changes when document is displayed (internal_document_id field validation)
+
+        division_id: '',
+        district_id: '',
+        node_id: ''
     })
 })(MaintenantItemComponent);
 

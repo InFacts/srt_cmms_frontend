@@ -302,7 +302,7 @@ const BottomContent = (props) => {
                 <SelectNoChildrenInput name="responsible_district_id" disabled>
                   <option value=''></option>
                   {factDistict.items.map((factDistict) => {
-                    return <option value={factDistict.distict_id}>{factDistict.name}</option>
+                    return <option value={factDistict.district_id}>{factDistict.name}</option>
                   })}
                 </SelectNoChildrenInput>
               </div>
@@ -315,9 +315,7 @@ const BottomContent = (props) => {
                 <SelectNoChildrenInput name="responsible_node_id" disabled>
                   <option value=''></option>
                   {factNodes.items.map((node) => {
-                    if (values.location_district_id == node.district_id) {
-                      return <option key={node.node_id} value={node.node_id} selected>{node.name}</option>
-                    }
+                      return <option key={node.node_id} value={node.node_id}>{node.name}</option>
                   })}
                 </SelectNoChildrenInput>
               </div>
@@ -331,9 +329,7 @@ const BottomContent = (props) => {
                 <SelectNoChildrenInput name="location_station_id" disabled>
                   <option value=''></option>
                   {factStations.items.map((stations) => {
-                    if (values.location_node_id == stations.node_id) {
-                      return <option key={stations.station_id} value={stations.station_id} selected>{stations.name}</option>
-                    }
+                      return <option key={stations.station_id} value={stations.station_id}>{stations.name}</option>
                   })}
                 </SelectNoChildrenInput>
               </div>

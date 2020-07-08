@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import {FOOTER_MODE, FOOTER_ACTIONS, FOOTER_ACTIONS_TEXT, clickApproval, clickSend, clickSave, clickReject, clickBack, clickCheckApproval, clickApprovalOrder, clickFastTrack, clickCancleApprovalProcess, clickVoid, clickApprovalDone} from '../../redux/modules/footer.js';
+import {FOOTER_MODE, FOOTER_ACTIONS, FOOTER_ACTIONS_TEXT, clickApproval, clickSend, clickSave, clickReject, clickBack, clickCheckApproval, clickApprovalOrder, clickFastTrack, clickCancleApprovalProcess, clickVoid, clickApprovalDone, clickGotIt} from '../../redux/modules/footer.js';
 import { useDispatch, useSelector  } from 'react-redux'
 
 const FOOTER_ACTIONS_TO_ACTION_CREATOR = {
@@ -15,7 +15,8 @@ const FOOTER_ACTIONS_TO_ACTION_CREATOR = {
   [FOOTER_ACTIONS.FAST_TRACK]: clickFastTrack,
   [FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]: clickCancleApprovalProcess,
   [FOOTER_ACTIONS.VOID]: clickVoid,
-  [FOOTER_ACTIONS.APPROVAL_DONE]: clickApprovalDone
+  [FOOTER_ACTIONS.APPROVAL_DONE]: clickApprovalDone,
+  [FOOTER_ACTIONS.GOT_IT]:clickGotIt
 }
 
 const ALL_DISABLED_PROP = {}
@@ -143,6 +144,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   handleClick: (e) => {
     let footerAction = e.target.title;
+    console.log("footerAction", footerAction)
     return dispatch(FOOTER_ACTIONS_TO_ACTION_CREATOR[footerAction]());
   }
 })

@@ -382,6 +382,7 @@ export const clickFastTrack = makeActionCreator(CLICK_FAST_TRACK);
 export const clickCancleApprovalProcess = makeActionCreator(CLICK_CANCEL_APPROVAL_PROCESS);
 export const clickVoid = makeActionCreator(CLICK_VOID);
 export const clickApprovalDone = makeActionCreator(CLICK_APPROVAL_DONE);
+export const clickGotIt = makeActionCreator(CLICK_GOT_IT);
 
 export const handleFooterClickApproval = makeActionCreator(HANDLE_CLICK_APPROVAL);
 export const handleFooterClickSend = makeActionCreator(HANDLE_CLICK_SEND);
