@@ -41,6 +41,12 @@ const useFillDefaultsOnModeAdd = (document_type_group_id) => {
             if (document_type_group_id === DOCUMENT_TYPE_ID.SALVAGE_SOLD) {
                 setFieldValue("src_warehouse_id", 100, true);
             }
+
+            if (document_type_group_id === DOCUMENT_TYPE_ID.MAINTENANT_ITEM) {
+                setFieldValue("division_id", decoded_token.has_position[0].division_id, false);
+                setFieldValue("district_id", decoded_token.has_position[0].district_id, false);
+                setFieldValue("node_id", decoded_token.has_position[0].node_id, false);
+            }
         }
         
     }, [fact.users, toolbar.mode, touched.internal_document_id, !values.internal_document_id,
