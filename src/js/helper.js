@@ -428,7 +428,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         remark: values.remark,
         created_by_admin_id: getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id),
         created_by_user_id: getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_user_employee_id),
-        document_date: values.document_date
+        document_date: values.document_date + 'T00:00:00+00:00'
     }
     if (isICD(document_type_id)) {
         let line_items_part = [];
@@ -524,8 +524,8 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                             unit_count: line_item.unit_count,
                             per_unit_price: line_item.per_unit_price,
                             item_id: getItemIDFromInternalItemID(fact[FACTS.ITEM], line_item.internal_item_id),
-                            item_status_id: line_item.item_status_id,
-                            count_datetime: `${values.document_date} 00:00:00`
+                            item_status_id: parseInt(line_item.item_status_id),
+                            count_datetime: values.document_date + 'T00:00:00'
                         });
                     }
                 })
@@ -657,7 +657,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             accident_on: values.accident_on + ':00+00:00',
             arrived_on: values.arrived_on + ':00+00:00',
             finished_on: values.finished_on + ':00+00:00',
-            total_fail_time: values.total_fail_time,
+            total_fail_time: values.total_fail_time ? parseInt(values.total_fail_time) : null,
             recv_accident_from_recv_id: values.recv_accident_from_recv_id ? parseInt(values.recv_accident_from_recv_id) : null,
             recv_accident_from_desc: values.recv_accident_from_desc,
             summary_cause_condition: values.summary_cause_condition,
@@ -896,6 +896,131 @@ export const packDataFromValues = (fact, values, document_type_id) => {
     }
 }
 
+export const packDataFromValuesMasterDataForEdit = (fact, values, document_type_id) => {
+    if (document_type_id === DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA) {
+        return {
+            warehouse_id: values.warehouse_id,
+            name: values.name,
+            abbreviation: values.abbreviation,
+            location: values.location,
+            warehouse_type_id: values.warehouse_type_id,
+            node_id: 1,
+            active: values.active === "1" ? true : false,
+            use_central: values.use_central === "1" ? true : false
+        }
+    } else if (document_type_id === DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
+        let last = 0;
+        fact[FACTS.ITEM].items.map(item => {
+            if (item.item_id > last) {
+                last = item.item_id;
+            }
+        });
+        return {
+            item_id: last + 1,
+            internal_item_id: values.internal_item_id,
+            description: values.description,
+            item_type_id: values.item_type_id,
+            item_group_id: values.item_group_id,
+            uom_group_id: values.uom_group_id,
+            active: values.active === "1" ? true : false,
+            remark: values.remark,
+            uom_id_inventory: values.uom_id,
+            default_warehouse_id: 100,
+            quantity_lowest: values.quantity_lowest,
+            quantity_highest: values.quantity_highest,
+            quantity_required: values.quantity_required,
+            minimum_order_quantity: values.minimum_order_quantity,
+            lead_time: values.lead_time,
+            tolerance_time: values.tolerance_time,
+            accounting_type: values.accounting_type
+        }
+    } else if (document_type_id === DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA) {
+        console.log("item_id", values.item_id)
+        let equipment_part = {
+            item_id: values.item_id,
+            equipment_id: values.equipment_id,
+            price_currently: values.price_currently,
+            depreciation: parseInt(values.depreciation),
+            useful_life: values.useful_life,
+            item_status_id: parseInt(values.item_status_id),
+            responsible_district_id: parseInt(values.responsible_district_id),
+        }
+
+        let equipment_item_part = {
+            item_id: values.item_id,
+            equipment_group_id: parseInt(values.equipment_group_id),
+            checklist_id: parseInt(values.checklist_id)
+        }
+
+        let item_part = {
+            item_id: values.item_id,
+            internal_item_id: values.internal_item_id,
+            description: values.description,
+            item_type_id: parseInt(values.item_type_id),
+            item_group_id: parseInt(values.item_group_id),
+            uom_group_id: parseInt(values.uom_group_id),
+            active: values.active === "1" ? true : false,
+            remark: values.remark,
+            default_warehouse_id: 100,
+            quantity_lowest: 1,
+            quantity_highest: 1,
+            quantity_required: 1,
+            minimum_order_quantity: values.minimum_order_quantity,
+            lead_time: values.lead_time,
+            tolerance_time: values.tolerance_time,
+            accounting_type: values.accounting_type
+        }
+
+        return {
+            equipment: equipment_part,
+            equipment_item: equipment_item_part,
+            item: item_part,
+        }
+    } else if (document_type_id === DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM) {
+        let last_checklist_line_item = 0;
+        fact[FACTS.CHECKLIST_LINE_ITEM].items.map(item => {
+            // console.log("item", item)
+            if (item.checklist_line_item > last_checklist_line_item) {
+                last_checklist_line_item = item.checklist_line_item;
+            }
+        });
+        // console.log("values", values)
+        let last_checklist_line_item_use_equipment_id = 0;
+        fact[FACTS.CHECKLIST_LINE_ITEM_USE_EQUIPMENT].items.map(item => {
+            if (item.checklist_line_item_use_equipment_id > last_checklist_line_item_use_equipment_id) {
+                last_checklist_line_item_use_equipment_id = item.checklist_line_item_use_equipment_id;
+            }
+        });
+
+        var line_items_part = [];
+        values.checklist_line_item_use_equipment.map((line_item, index) => {
+            if (line_item.item_id) {
+            line_items_part.push({
+                checklist_line_item_use_equipment_id: parseInt(last_checklist_line_item_use_equipment_id) + 1, // ต้อง Get อัน่าสุดออกมาก่อน
+                checklist_line_item_id: parseInt(last_checklist_line_item) + 1,
+                item_id: line_item.item_id,
+                quantity: line_item.quantity,
+                uom_id: parseInt(line_item.uom_id)
+            });
+        }
+        })
+
+        let create_checklist_part = {
+            checklist_line_item: parseInt(last_checklist_line_item) + 1,
+            checklist_id: parseInt(values.checklist_id),
+            name: values.name,
+            freq: values.freq,
+            freq_unit_id: parseInt(values.freq_unit_id),
+            // active: values.active === "1" ? true : false,
+            remark: values.remark,
+            line_item: line_items_part
+        }
+        console.log("create_checklist_part", create_checklist_part)
+        return create_checklist_part;
+
+    }
+}
+
 
 
 function removeEmptyLineItems(line_items) {
@@ -968,7 +1093,7 @@ export const editMasterData = (data, document_type_group_id) => new Promise((res
         var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items/${data.item_id}`;
     }
     if (document_type_group_id === DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA) {
-        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/equipment/${data.equipment.item_id}`;
+        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/equipment/${data.equipment.equipment_id}`;
     }
     if (document_type_group_id === DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM) {
         var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/checklist-line-item/${data.checklist_line_item}`;
@@ -2446,16 +2571,17 @@ export const sumTotalLineItemHelper = (quantity, per_unit_price, description) =>
         var findDot = conventToString.indexOf(".")
         if (findDot == -1) {
             conventToString = conventToString + ".00"
-            return conventToString;
+            return conventToString.replace(/\d(?=(\d{3})+\.)/g, '$&,');
         }
         else {
             conventToString = conventToString.slice(0, findDot + 3)
             var addOneDot = conventToString.length - findDot;
             if (addOneDot === 2) {
-                return conventToString + "0";
+                conventToString = conventToString + "0"
+                return conventToString.replace(/\d(?=(\d{3})+\.)/g, '$&,');
             }
             else {
-                return conventToString;
+                return conventToString.replace(/\d(?=(\d{3})+\.)/g, '$&,');
             }
         }
     } else {
@@ -2476,11 +2602,11 @@ export const sumTotalHelper = (list_show) => {
     var n = s.indexOf(".")
     if (n == -1) {
         s = s + ".00"
-        return s;
+        return s.replace(/\d(?=(\d{3})+\.)/g, '$&,');
     }
     else {
         s = s.slice(0, n + 3)
-        return s;
+        return s.replace(/\d(?=(\d{3})+\.)/g, '$&,');
     }
 }
 

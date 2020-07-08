@@ -180,8 +180,8 @@ const useExportPdfInitializer = () => {
         values.loss_line_items.map(lineItem => {
           data.push({
             "item_id": p,
-            "description": lineItem.initialLossLineItem.description,
-            "internal_item_id": lineItem.initialLossLineItem.document_id,
+            // "description": lineItem.initialLossLineItem.description,
+            // "internal_item_id": lineItem.initialLossLineItem.document_id,
             "unit": lineItem.initialLossLineItem.uom_code,
             "price_quantity": lineItem.initialLossLineItem.price,
             "quantity": lineItem.initialLossLineItem.quantity,
