@@ -48,16 +48,14 @@ const TopContent = (props) => {
   // Fetch permissiton
   useFetchPernissionUser();
 
-  console.log("modeEdit", values.modeEdit)
-
   const validateNameChecklist = name => new Promise(resolve => {
     if (!name) {
       setFieldValue("modeEdit", false, false);
       return resolve('Required');
     }
-
+    console.log("name", name)
     let error;
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/checklist-line-item/name/${name}`;
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/checklist-line-item/name/${encodeURIComponent(name)}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
       .then((res) => {
         console.log("I Got data", res.data)
@@ -108,6 +106,7 @@ const TopContent = (props) => {
       .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
         if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
           error = 'Invalid Document ID';
+          console.log("err", err.response)
         }//If mode add, ok
       })
       .finally(() => {

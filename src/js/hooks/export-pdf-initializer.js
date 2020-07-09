@@ -178,13 +178,14 @@ const useExportPdfInitializer = () => {
         let year5 = dateParts5[2]
 
         values.loss_line_items.map(lineItem => {
+          console.log("lineItem", lineItem)
           data.push({
             "item_id": p,
-            // "description": lineItem.initialLossLineItem.description,
-            // "internal_item_id": lineItem.initialLossLineItem.document_id,
-            "unit": lineItem.initialLossLineItem.uom_code,
-            "price_quantity": lineItem.initialLossLineItem.price,
-            "quantity": lineItem.initialLossLineItem.quantity,
+            "description": lineItem.description,
+            "internal_item_id": lineItem.document_id,
+            "unit": lineItem.uom_code,
+            "price_quantity": lineItem.price,
+            "quantity": lineItem.quantity,
             "price": " ",
             "type": " "
           });
