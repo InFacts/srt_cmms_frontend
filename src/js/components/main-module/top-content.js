@@ -50,7 +50,7 @@ const TopContent = (props) => {
                     <div className="card-body">ระบบบริหารข้อมูลอะไหล่</div>
                     <div className="card-footer">ระบบบริหารข้อมูลอะไหล่สำหรับซ่อมบำรุง</div>
                   </div>
-                  <span className="p-tooltip__message edit_p_tooltip__message" role="tooltip" id="btm-cntr">ระบบบริหารข้อมูลอะไหล่</span>
+                  <span className="p-tooltip__message edit_p_tooltip__message" role="tooltip" id="btm-cntr">SPARE</span>
                 </div>
               </Link>
             </div>
@@ -76,7 +76,7 @@ const TopContent = (props) => {
                       ระบบบริหารข้อมูลอะไหล่สำหรับซ่อมบำรุง
                             </div>
                   </div>
-                  <span className="p-tooltip__message edit_p_tooltip__message" role="tooltip" id="btm-cntr">ระบบบริหารงานซ่อมบำรุง</span>
+                  <span className="p-tooltip__message edit_p_tooltip__message" role="tooltip" id="btm-cntr">PMT</span>
                 </div>
               </Link>
             </div>
@@ -102,7 +102,7 @@ const TopContent = (props) => {
                       ระบบบริหารข้อมูลอะไหล่สำหรับซ่อมบำรุง
                     </div>
                   </div>
-                  <span className="p-tooltip__message edit_p_tooltip__message" role="tooltip" id="btm-cntr">ระบบบริหารงานซ่อมบำรุง</span>
+                  <span className="p-tooltip__message edit_p_tooltip__message" role="tooltip" id="btm-cntr">ALS</span>
                 </div>
               </Link>
             </div>

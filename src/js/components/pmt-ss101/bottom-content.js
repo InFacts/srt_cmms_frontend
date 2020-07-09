@@ -60,7 +60,6 @@ const BottomContent = (props) => {
     const validateDocumentLocationNodeIDField = (...args) => validatedataDocumentField("location_node_id", setFieldValue, ...args)
     const validateDocumentLocationStationIDField = (...args) => validatedataDocumentField("location_station_id", setFieldValue, ...args)
     const validateDocumentInterruptIDField = (...args) => validatedataDocumentField("interrupt_id", setFieldValue, ...args)
-    const validateDocumentTotalFailTimeField = (...args) => validatedataDocumentField("total_fail_time", setFieldValue, ...args)
     const validateDocumentServiceMethodIDField = (...args) => validatedataDocumentField("service_method_id", setFieldValue, ...args)
 
     const validateDocumentAccidentOnField = (...args) => validatedataDocumentField("accident_on", setFieldValue, ...args)
@@ -443,7 +442,7 @@ const BottomContent = (props) => {
                         {/* total_fail_time  */}
                         <Label>เสียเวลาเพราะเหตุนี้</Label>
                         <div className="grid_3 alpha omega">
-                            <NumberInput name="total_fail_time" step={1} validate={validateDocumentTotalFailTimeField} tabIndex="26"
+                            <NumberInput name="total_fail_time" step={1} tabIndex="26"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} cssStyle={{ left: "60px", top: "-5px" }} />
                         </div>
                         <div className="grid_1  omega">

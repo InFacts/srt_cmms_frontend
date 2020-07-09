@@ -8,7 +8,7 @@ import { FOOTER_MODE, FOOTER_ACTIONS, handleClickBackToSpareMain, ACTION_TO_HAND
 import { useDispatch, useSelector } from 'react-redux';
 import useTokenInitializer from '../hooks/token-initializer';
 import { useFormikContext } from 'formik';
-import { cancelApproval, startDocumentApprovalFlow, APPROVAL_STATUS, DOCUMENT_TYPE_ID, saveDocument, editDocument, packDataFromValues, fetchLatestStepApprovalDocumentData, getUserIDFromEmployeeID, DOCUMENT_STATUS, APPROVAL_STEP_ACTION, checkDocumentStatus, approveDocument, packDataFromValuesMasterdata, saveMasterData, editMasterDataHelper } from '../helper';
+import { cancelApproval, startDocumentApprovalFlow, APPROVAL_STATUS, DOCUMENT_TYPE_ID, saveDocument, editDocument, packDataFromValuesMasterDataForEdit, packDataFromValues, fetchLatestStepApprovalDocumentData, getUserIDFromEmployeeID, DOCUMENT_STATUS, APPROVAL_STEP_ACTION, checkDocumentStatus, approveDocument, packDataFromValuesMasterdata, saveMasterData, editMasterDataHelper } from '../helper';
 import { FACTS } from '../redux/modules/api/fact';
 import { navBottomError, navBottomSuccess, navBottomSending } from '../redux/modules/nav-bottom'
 import history from '../history';
@@ -147,7 +147,7 @@ const useFooterInitializer = (document_type_id) => {
             }
             else if (toolbar.mode === TOOLBAR_MODE.ADD) {
                 // ADD_DRAFT mode
-                document_id = null // NUK edit COde รอพี่นีทมาดู
+                // document_id = null // NUK edit COde รอพี่นีทมาดู
                 console.log(">>>else if", document_id)
                 hadleDocumentStatusWithFooter(document_id);
                 dispatch(footerToModeAddDraft());
@@ -241,6 +241,7 @@ const useFooterInitializer = (document_type_id) => {
                                     });
                             } else {
                                 if (values.modeEdit === true) {// Mode Edit Mater data
+                                    let data = packDataFromValuesMasterDataForEdit(fact, values, document_type_id);
                                     editMasterDataHelper(document_type_id, data)
                                         .then(() => {
                                             dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
