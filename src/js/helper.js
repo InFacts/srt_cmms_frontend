@@ -2454,23 +2454,37 @@ export const weightedAverage = (lots) => {
 }
 
 export const getLotFromQty = (fifo, quantity) => {
+    var stopFprEach = false; 
     var fifoCopy = fifo.slice(); // make a copy
+    // console.log("fifoCopy", fifoCopy)
     var quantityLeft = quantity;
+    // console.log("quantityLeft", quantityLeft)
     var lotsFrom = [];
     fifo.forEach((currentLot) => {
+        if (stopFprEach === true){
+            // console.log("break")
+            return;
+        }
         if (quantityLeft >= currentLot.quantity) { // if Quantity Left >= Current Lot Quantity, shift and push
+            // console.log("if")
             lotsFrom.push(fifoCopy.shift());
             quantityLeft -= currentLot.quantity;
+            // console.log("quantityLeft IF", quantityLeft)
+            if (quantityLeft === 0) {
+                stopFprEach = true
+            }
         } else { // if Quantity Left < Current Lot Quantity, shift and push only required # of lot
+            // console.log("else")
             lotsFrom.push({ ...fifoCopy.shift(), quantity: quantityLeft });
             quantityLeft = 0;
+            // console.log("quantityLeft ELSE", quantityLeft)
         }
     })
     // Artificial Lots if QTY leftover
-    if (quantityLeft > 0) {
-        lotsFrom.push({ quantity: quantityLeft, per_unit_price: weightedAverage(lotsFrom) });
-    }
-
+    // if (quantityLeft > 0) {
+    //     lotsFrom.push({ quantity: quantityLeft, per_unit_price: weightedAverage(lotsFrom) });
+    // }
+    console.log("lotsFrom", lotsFrom)
     return lotsFrom;
 };
 
