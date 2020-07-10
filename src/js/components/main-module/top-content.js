@@ -33,22 +33,24 @@ const TopContent = (props) => {
 
             <div className="grid_4">
               <Link to={values.line_position_permission.length !== 0 && values.line_position_permission[0].module_spare ? "/main-spare" : "#"}>
-                <div className="card p-tooltip--btm-center" aria-describedby="btm-cntr" 
-                style={changeTheam() === true
-                  ?
-                  values.line_position_permission.length !== 0 && values.line_position_permission[0].module_spare === true
+                <div className="card p-tooltip--btm-center" aria-describedby="btm-cntr"
+                  style={changeTheam() === true
                     ?
-                    { background: "#EFAAA1", border: "2px solid #E92D13" }
+                    values.line_position_permission.length !== 0 && values.line_position_permission[0].module_spare === true
+                      ?
+                      { background: "#EFAAA1", border: "2px solid #E92D13" }
+                      :
+                      { background: "gray" }
                     :
-                    { background: "gray" }
-                  :
-                  {}} >
+                    {}} >
                   <div className="image ">
                     <img src={Spare} alt="Generic placeholder thumbnail" width="78px" />
                   </div>
                   <div className="content ">
                     <div className="card-body">ระบบบริหารข้อมูลอะไหล่</div>
-                    <div className="card-footer">ระบบบริหารข้อมูลอะไหล่สำหรับซ่อมบำรุง</div>
+                    <div className="card-footer">
+                      {/* ระบบบริหารข้อมูลอะไหล่สำหรับซ่อมบำรุง */}
+                    </div>
                   </div>
                   <span className="p-tooltip__message edit_p_tooltip__message" role="tooltip" id="btm-cntr">SPARE</span>
                 </div>
@@ -57,24 +59,24 @@ const TopContent = (props) => {
 
             <div className="grid_4">
               <Link to={values.line_position_permission.length !== 0 && values.line_position_permission[0].module_pmt ? "/main-pmt" : "#"}>
-                <div className="card p-tooltip--btm-center" aria-describedby="btm-cntr" 
-                style={changeTheam() === true
-                  ?
-                  values.line_position_permission.length !== 0 && values.line_position_permission[0].module_pmt === true
+                <div className="card p-tooltip--btm-center" aria-describedby="btm-cntr"
+                  style={changeTheam() === true
                     ?
-                    { background: "#CBECFD", border: "2px solid #00B0F7" }
+                    values.line_position_permission.length !== 0 && values.line_position_permission[0].module_pmt === true
+                      ?
+                      { background: "#CBECFD", border: "2px solid #00B0F7" }
+                      :
+                      { background: "gray" }
                     :
-                    { background: "gray" }
-                  :
-                  {}} >
+                    {}} >
                   <div className="image ">
                     <img src={Pmt} alt="Generic placeholder thumbnail" width="78px" />
                   </div>
                   <div className="content ">
                     <div className="card-body">ระบบบริหารงานซ่อมบำรุง</div>
                     <div className="card-footer ">
-                      ระบบบริหารข้อมูลอะไหล่สำหรับซ่อมบำรุง
-                            </div>
+                      {/* ระบบบริหารข้อมูลอะไหล่สำหรับซ่อมบำรุง */}
+                    </div>
                   </div>
                   <span className="p-tooltip__message edit_p_tooltip__message" role="tooltip" id="btm-cntr">PMT</span>
                 </div>
@@ -99,7 +101,7 @@ const TopContent = (props) => {
                   <div className="content ">
                     <div className="card-body">ระบบวิเคราะห์และวางแผนทรัพยากรซ่อมบำรุง</div>
                     <div className="card-footer ">
-                      ระบบบริหารข้อมูลอะไหล่สำหรับซ่อมบำรุง
+                      {/* ระบบบริหารข้อมูลอะไหล่สำหรับซ่อมบำรุง */}
                     </div>
                   </div>
                   <span className="p-tooltip__message edit_p_tooltip__message" role="tooltip" id="btm-cntr">ALS</span>
@@ -125,8 +127,8 @@ const TopContent = (props) => {
                   <div className="content ">
                     <div className="card-body">สถานะรอการอนุมัติ</div>
                     <div className="card-footer ">
-                      ระบบบริหารข้อมูลอะไหล่สำหรับซ่อมบำรุง
-                      </div>
+                      {/* ระบบบริหารข้อมูลอะไหล่สำหรับซ่อมบำรุง */}
+                    </div>
                   </div>
                   <span className="p-tooltip__message edit_p_tooltip__message" role="tooltip" id="btm-cntr">สถานะรอการอนุมัติ</span>
                 </div>
@@ -136,21 +138,23 @@ const TopContent = (props) => {
             <div className="grid_4">
               <Link to={values.line_position_permission.length !== 0 && values.line_position_permission[0].module_admin ? "/main-admin" : "#"}>
                 <div className="card p-tooltip--btm-center" aria-describedby="btm-cntr"
-                 style={changeTheam() === true
-                  ?
-                  values.line_position_permission.length !== 0 && values.line_position_permission[0].module_admin === true
+                  style={changeTheam() === true
                     ?
-                    { background: "#CBB0E9", border: "2px solid #652D90" }
+                    values.line_position_permission.length !== 0 && values.line_position_permission[0].module_admin === true
+                      ?
+                      { background: "#CBB0E9", border: "2px solid #652D90" }
+                      :
+                      { background: "gray" }
                     :
-                    { background: "gray" }
-                  :
-                  {}}>
+                    {}}>
                   <div className="image">
                     <img src={UserManagement} alt="Generic placeholder thumbnail" />
                   </div>
                   <div className="content ">
                     <div className="card-body">บริหารจัดการผู้ใช้งาน</div>
-                    <div className="card-footer ">ระบบบริหารข้อมูลอะไหล่สำหรับซ่อมบำรุง</div>
+                    <div className="card-footer ">
+                      {/* ระบบบริหารข้อมูลอะไหล่สำหรับซ่อมบำรุง */}
+                    </div>
                   </div>
                   <span className="p-tooltip__message edit_p_tooltip__message" role="tooltip" id="btm-cntr">สถานะรอการอนุมัติ</span>
                 </div>
@@ -160,18 +164,20 @@ const TopContent = (props) => {
             <div className="grid_4">
               <Link to="/approval-flow">
                 <div className="card p-tooltip--btm-center" aria-describedby="btm-cntr"
-                style={changeTheam() === true
+                  style={changeTheam() === true
                     ?
                     { background: "#F8CFDC", border: "2px solid #ED145B" }
                     :
                     { background: "gray" }
-                }>
+                  }>
                   <div className="image ">
                     <img src={Flow} width="65px" alt="Generic placeholder thumbnail" />
                   </div>
                   <div className="content ">
                     <div className="card-body">บริหารจัดการเส้นทางเอกสาร</div>
-                    <div className="card-footer ">ระบบบริหารข้อมูลอะไหล่สำหรับซ่อมบำรุง</div>
+                    <div className="card-footer ">
+                      {/* ระบบบริหารข้อมูลอะไหล่สำหรับซ่อมบำรุง */}
+                    </div>
                   </div>
                   <span className="p-tooltip__message edit_p_tooltip__message" role="tooltip" id="btm-cntr">สถานะรอการอนุมัติ</span>
                 </div>

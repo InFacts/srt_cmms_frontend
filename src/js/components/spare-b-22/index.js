@@ -83,7 +83,7 @@ const EnhancedReportS1Component = withFormik({
         document_date: '', 
         line_items: [],
         year_id: now_date.getFullYear() + 543,
-        mouth_id: now_date.getMonth(),
+        mouth_id: now_date.getMonth() + 1,
         
         // Field ที่ให้ User ไม่ได้กรอก
         year: initialLineYears(),

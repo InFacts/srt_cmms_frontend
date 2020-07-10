@@ -77,10 +77,10 @@ const BottomContent = (props) => {
                       <td className="edit-padding text-center">{line_items.uom_name}</td>
 
                       <td className="edit-padding text-center">{line_items.begin_unit_count}</td> {/* เหลือเดือนก่อน */}
-                      <td className="edit-padding text-center">-</td>
+                      <td className="edit-padding text-center">{line_items.begin_state_in_total_price}</td>
 
                       <td className="edit-padding text-center">{line_items.receive_unit_count}</td> {/* รับเดือนนี้ */}
-                      <td className="edit-padding text-center">-</td>
+                      <td className="edit-padding text-center">{line_items.end_state_in_total_price}</td>
 
                       {/* <td className="edit-padding text-center">-</td> รับจาก */}
                       
@@ -89,7 +89,7 @@ const BottomContent = (props) => {
                       {/* <td className="edit-padding text-center">-</td> ฎีกาเบิก	 */}
 
                       <td className="edit-padding text-center">{line_items.issue_unit_count}</td> {/* จ่ายเดือนนี้ */}
-                      <td className="edit-padding text-center">-</td>
+                      <td className="edit-padding text-center">{line_items.end_state_out_total_price}</td>
 
                       <td className="edit-padding text-center">{line_items.ending_unit_count}</td> {/* คงเหลือ */}
 
