@@ -2419,7 +2419,42 @@ export const validateLineNumberInternalItemIDFieldHelper = (document_type_group_
           } else {
             return 'Invalid Number ID';
           }
-    } 
+    } else if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO) {
+        if (values.line_items[index].internal_item_id === internal_item_id) {
+            return;
+          }
+          if (internal_item_id === "") {
+            setFieldValue(fieldName + `.description`, '', false);
+            setFieldValue(fieldName + `.quantity`, '', false);
+            setFieldValue(fieldName + `.list_uoms`, [], false);
+            setFieldValue(fieldName + `.uom_id`, '', false);
+            setFieldValue(fieldName + `.per_unit_price`, '', false);
+            return;
+          }
+          let items = fact.items.items;
+          let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+          // console.log(item)
+          if (item) {
+            if (item.item_type_id === 1) {
+              setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+              setFieldValue(fieldName + `.description`, `${item.description}`, false);
+              setFieldValue(fieldName + `.quantity`, 0, false);
+              setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+              setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+              setFieldValue(fieldName + `.per_unit_price`, 0, false);
+            } else {
+              setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+              setFieldValue(fieldName + `.description`, `${item.description}`, false);
+              setFieldValue(fieldName + `.quantity`, 1, false);
+              setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+              setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+              setFieldValue(fieldName + `.per_unit_price`, 0, false);
+            }
+            return;
+          } else {
+            return 'Invalid Number ID';
+          }
+    }
 };
 
 export const validateLineNumberQuatityItemIDFieldHelper = (setFieldValue, fieldName, quantity, index) => {

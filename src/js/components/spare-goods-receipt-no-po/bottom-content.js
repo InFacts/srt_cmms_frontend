@@ -22,7 +22,9 @@ import {
   isValidInternalDocumentIDFormat, isValidInternalDocumentIDDraftFormat,
   fetchAttachmentDocumentData, validateEmployeeIDField, validateWarehouseIDField,
   validateInternalDocumentIDFieldHelper, DOCUMENT_STATUS, getUserIDFromEmployeeID,
-  validatedataDocumentField, sumTotalLineItemHelper, sumTotalHelper, checkBooleanForEditHelper
+  validatedataDocumentField, sumTotalLineItemHelper, sumTotalHelper, checkBooleanForEditHelper,
+  validateLineNumberInternalItemIDFieldHelper, validateLineNumberQuatityItemIDFieldHelper,
+  validateLineNumberPerUnitPriceItemIDFieldHelper
 } from '../../helper';
 import '../../../css/table.css';
 
@@ -38,7 +40,15 @@ const BottomContent = (props) => {
   const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
   const sumTotalLineItem = (quantity, per_unit_price, description) => sumTotalLineItemHelper(quantity, per_unit_price, description);
+
   const sumTotal = (list_show) => sumTotalHelper(list_show);
+
+  const validateLineNumberInternalItemIDField = (...args) => validateLineNumberInternalItemIDFieldHelper(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO, fact, values, setFieldValue, ...args);
+
+  const validateLineNumberQuatityItemIDField = (...args) => validateLineNumberQuatityItemIDFieldHelper(setFieldValue, ...args)
+
+  const validateLineNumberPerUnitPriceItemIDField = (...args) => validateLineNumberPerUnitPriceItemIDFieldHelper(setFieldValue, ...args)
+
 
   let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
   useEffect(() => {
@@ -56,6 +66,9 @@ const BottomContent = (props) => {
             <div className="container_12 mt-1" style={{ paddingRight: "10px" }}>
               <Table line_items={values.line_items}
                 sumTotalLineItem={sumTotalLineItem}
+                validateLineNumberInternalItemIDField={validateLineNumberInternalItemIDField}
+                validateLineNumberQuatityItemIDField={validateLineNumberQuatityItemIDField}
+                validateLineNumberPerUnitPriceItemIDField={validateLineNumberPerUnitPriceItemIDField}
                 setLineNumber={setLineNumber}
                 disabledBothMode={true}
               />
