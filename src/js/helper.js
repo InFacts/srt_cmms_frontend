@@ -395,14 +395,14 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         var line_items_part = [];
         values.checklist_line_item_use_equipment.map((line_item, index) => {
             if (line_item.item_id) {
-            line_items_part.push({
-                checklist_line_item_use_equipment_id: parseInt(last_checklist_line_item_use_equipment_id) + 1, // ต้อง Get อัน่าสุดออกมาก่อน
-                checklist_line_item_id: parseInt(last_checklist_line_item) + 1,
-                item_id: line_item.item_id,
-                quantity: line_item.quantity,
-                uom_id: parseInt(line_item.uom_id)
-            });
-        }
+                line_items_part.push({
+                    checklist_line_item_use_equipment_id: parseInt(last_checklist_line_item_use_equipment_id) + 1, // ต้อง Get อัน่าสุดออกมาก่อน
+                    checklist_line_item_id: parseInt(last_checklist_line_item) + 1,
+                    item_id: line_item.item_id,
+                    quantity: line_item.quantity,
+                    uom_id: parseInt(line_item.uom_id)
+                });
+            }
         })
 
         let create_checklist_part = {
@@ -647,7 +647,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
     } else if (document_type_id === DOCUMENT_TYPE_ID.SS101) {
         document_part = {
             ...document_part,
-            refer_to_document_id: values.refer_to_document_id,
+            refer_to_document_id: values.refer_to_document_id ? values.refer_to_document_id : null,
             document_date: values.document_date + 'T00:00:00+00:00'
         };
         console.log("document_part", document_part)
@@ -696,7 +696,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         loss_line_item_part.map((line_items, index) => {
             loss_line_item_part[index].description = line_items.description
             loss_line_item_part[index].document_id = values.document_id
-            loss_line_item_part[index].line_number = index+1
+            loss_line_item_part[index].line_number = index + 1
             loss_line_item_part[index].price = parseInt(line_items.price)
             loss_line_item_part[index].quantity = parseInt(line_items.quantity)
             loss_line_item_part[index].remark = line_items.remark
@@ -710,7 +710,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             ss101_line_item_part[index].item_status_id = parseInt(line_items.item_status_id)
             ss101_line_item_part[index].remark = line_items.remark
             ss101_line_item_part[index].document_id = values.document_id
-            ss101_line_item_part[index].line_number = index+1
+            ss101_line_item_part[index].line_number = index + 1
             delete ss101_line_item_part[index].internal_item_id
             delete ss101_line_item_part[index].description
             delete ss101_line_item_part[index].equipment_item_id
@@ -833,7 +833,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             station_id: parseInt(values.station_id),
             start_on: values.start_on + 'T00:00:00+00:00',
         }
-        
+
         // ต้องเป็น Array selector_checklist_group_part
         let selector_checklist_group_part = []
         // ของ Custom line item
@@ -995,14 +995,14 @@ export const packDataFromValuesMasterDataForEdit = (fact, values, document_type_
         var line_items_part = [];
         values.checklist_line_item_use_equipment.map((line_item, index) => {
             if (line_item.item_id) {
-            line_items_part.push({
-                checklist_line_item_use_equipment_id: parseInt(last_checklist_line_item_use_equipment_id) + 1, // ต้อง Get อัน่าสุดออกมาก่อน
-                checklist_line_item_id: parseInt(last_checklist_line_item) + 1,
-                item_id: line_item.item_id,
-                quantity: line_item.quantity,
-                uom_id: parseInt(line_item.uom_id)
-            });
-        }
+                line_items_part.push({
+                    checklist_line_item_use_equipment_id: parseInt(last_checklist_line_item_use_equipment_id) + 1, // ต้อง Get อัน่าสุดออกมาก่อน
+                    checklist_line_item_id: parseInt(last_checklist_line_item) + 1,
+                    item_id: line_item.item_id,
+                    quantity: line_item.quantity,
+                    uom_id: parseInt(line_item.uom_id)
+                });
+            }
         })
 
         let create_checklist_part = {
@@ -1811,7 +1811,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
             created_on: created_on.toISOString().split(".")[0],
             src_warehouse_id: data.document.warehouse_id,
             document_date: data.document.document_date.slice(0, 10),
-            
+
             name: data.specific.selector_pm_plan.name,
             district_id: data.specific.selector_pm_plan.node.district_id,
             node_id: data.specific.selector_pm_plan.node_id,
@@ -1968,15 +1968,15 @@ function returnFullArrayLineCustom(line_custom) {
     line_custom.map((line_custom, index) => {
         console.log("line_custom", line_custom)
         if (!line_custom.selector_checklist[index].equipment_id) {
-        line_customs.push({
-            checklist_group_id: line_custom.selector_checklist[index].checklist.checklist_group_id,
-            unit_maintenance_location_id: line_custom.unit_maintenance_location_id,
-            checklist_id: line_custom.selector_checklist[index].checklist.checklist_id,
-            quantity_location: line_custom.selector_checklist[index].quantity
-        });
+            line_customs.push({
+                checklist_group_id: line_custom.selector_checklist[index].checklist.checklist_group_id,
+                unit_maintenance_location_id: line_custom.unit_maintenance_location_id,
+                checklist_id: line_custom.selector_checklist[index].checklist.checklist_id,
+                quantity_location: line_custom.selector_checklist[index].quantity
+            });
         }
     })
-    for (var i = line_custom.length; i <= 9 ; i++) {
+    for (var i = line_custom.length; i <= 9; i++) {
         line_customs.push({
             ...initialLineCustom
         });
@@ -1995,16 +1995,16 @@ function returnFullArrayLineEquipment(line_equipment) {
     let line_equipments = [];
     line_equipment.map((line_equipment, index) => {
         if (line_equipment.selector_checklist[index].equipment_id) {
-        line_equipments.push({
-            internal_item_id: line_equipment.selector_checklist[index].equipment.equipment_item.item.internal_item_id,
-            checklist_group_id: line_equipment.selector_checklist[index].checklist.checklist_group_id,
-            unit_maintenance_location_id: line_equipment.unit_maintenance_location_id,
-            checklist_id: line_equipment.selector_checklist[index].checklist.checklist_id,
-            quantity_location: line_equipment.selector_checklist[index].quantity
-        });
+            line_equipments.push({
+                internal_item_id: line_equipment.selector_checklist[index].equipment.equipment_item.item.internal_item_id,
+                checklist_group_id: line_equipment.selector_checklist[index].checklist.checklist_group_id,
+                unit_maintenance_location_id: line_equipment.unit_maintenance_location_id,
+                checklist_id: line_equipment.selector_checklist[index].checklist.checklist_id,
+                quantity_location: line_equipment.selector_checklist[index].quantity
+            });
         }
     })
-    for (var i = line_equipment.length; i <= 9 ; i++) {
+    for (var i = line_equipment.length; i <= 9; i++) {
         line_equipments.push({
             ...initialLineEquipment
         });
@@ -2300,6 +2300,153 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
         });
 });
 
+export const validateLineNumberInternalItemIDFieldHelper = (document_type_group_id, fact, values, setFieldValue, fieldName, internal_item_id, index) => {
+    //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
+    if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO) {
+        if (values.line_items[index].internal_item_id === internal_item_id) {
+            return;
+        }
+        if (internal_item_id === "") {
+            setFieldValue(fieldName + `.description`, '', false);
+            setFieldValue(fieldName + `.quantity`, '', false);
+            setFieldValue(fieldName + `.list_uoms`, [], false);
+            setFieldValue(fieldName + `.uom_id`, '', false);
+            setFieldValue(fieldName + `.per_unit_price`, '', false);
+            return;
+        }
+        let items = fact.items.items;
+        let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+        console.log(item)
+        if (item) {
+            if (item.item_type_id === 1) {
+                setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+                setFieldValue(fieldName + `.description`, `${item.description}`, false);
+                setFieldValue(fieldName + `.quantity`, 0, false);
+                setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+                setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+                setFieldValue(fieldName + `.line_number`, index + 1, false);
+                setFieldValue(fieldName + `.item_status_id`, 1, false);
+                setFieldValue(fieldName + `.per_unit_price`, 0, false);
+            } else {
+                setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+                setFieldValue(fieldName + `.description`, `${item.description}`, false);
+                setFieldValue(fieldName + `.quantity`, 1, false);
+                setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+                setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+                setFieldValue(fieldName + `.line_number`, index + 1, false);
+                setFieldValue(fieldName + `.item_status_id`, 1, false);
+                setFieldValue(fieldName + `.per_unit_price`, 0, false);
+            }
+            return;
+        } else {
+            return 'Invalid Number ID';
+        }
+    } else if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RETURN) {
+        if (values.line_items[index].internal_item_id === internal_item_id) {
+            return;
+          }
+          if (internal_item_id === "") {
+            setFieldValue(fieldName + `.description`, '', false);
+            setFieldValue(fieldName + `.quantity`, '', false);
+            setFieldValue(fieldName + `.list_uoms`, [], false);
+            setFieldValue(fieldName + `.uom_id`, '', false);
+            setFieldValue(fieldName + `.per_unit_price`, '', false);
+            return;
+          }
+          let items = fact.items.items;
+          let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+          // console.log(item)
+          if (item) {
+            if (item.item_type_id === 1) {
+              setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+              setFieldValue(fieldName + `.description`, `${item.description}`, false);
+              setFieldValue(fieldName + `.quantity`, 0, false);
+              setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+              setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+              setFieldValue(fieldName + `.line_number`, index + 1, false);
+              setFieldValue(fieldName + `.item_status_id`, 2, false);
+              setFieldValue(fieldName + `.per_unit_price`, 0, false);
+            } else {
+              setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+              setFieldValue(fieldName + `.description`, `${item.description}`, false);
+              setFieldValue(fieldName + `.quantity`, 1, false);
+              setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+              setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+              setFieldValue(fieldName + `.line_number`, index + 1, false);
+              setFieldValue(fieldName + `.item_status_id`, 2, false);
+              setFieldValue(fieldName + `.per_unit_price`, 0, false);
+            }
+            return;
+          } else {
+            return 'Invalid Number ID';
+          }
+    } else if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX) {
+        if (values.line_items[index].internal_item_id === internal_item_id) {
+            return;
+          }
+          if (internal_item_id === "") {
+            setFieldValue(fieldName + `.description`, '', false);
+            setFieldValue(fieldName + `.quantity`, '', false);
+            setFieldValue(fieldName + `.list_uoms`, [], false);
+            setFieldValue(fieldName + `.uom_id`, '', false);
+            setFieldValue(fieldName + `.per_unit_price`, '', false);
+            return;
+          }
+          let items = fact.items.items;
+          let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+          // console.log(item)
+          if (item) {
+            if (item.item_type_id === 1) {
+              setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+              setFieldValue(fieldName + `.description`, `${item.description}`, false);
+              setFieldValue(fieldName + `.quantity`, 0, false);
+              setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+              setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+              setFieldValue(fieldName + `.line_number`, index + 1, false);
+              setFieldValue(fieldName + `.item_status_id`, 4, false);
+              setFieldValue(fieldName + `.per_unit_price`, 0, false);
+            } else {
+              setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+              setFieldValue(fieldName + `.description`, `${item.description}`, false);
+              setFieldValue(fieldName + `.quantity`, 1, false);
+              setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+              setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+              setFieldValue(fieldName + `.line_number`, index + 1, false);
+              setFieldValue(fieldName + `.item_status_id`, 4, false);
+              setFieldValue(fieldName + `.per_unit_price`, 0, false);
+            }
+            return;
+          } else {
+            return 'Invalid Number ID';
+          }
+    } 
+};
+
+export const validateLineNumberQuatityItemIDFieldHelper = (setFieldValue, fieldName, quantity, index) => {
+    if (quantity === "") {
+        return;
+    }
+
+    if (quantity !== 0) {
+        setFieldValue(fieldName, quantity, false);
+        return;
+    } else {
+        return 'Invalid Quantity Line Item';
+    }
+}
+
+export const validateLineNumberPerUnitPriceItemIDFieldHelper = (setFieldValue, fieldName, per_unit_price, index) => {
+    if (per_unit_price === "") {
+        return;
+    }
+
+    if (per_unit_price !== "") {
+        setFieldValue(fieldName, per_unit_price, false);
+        return;
+    } else {
+        return 'Invalid Per Unit Price Line Item';
+    }
+}
 
 export const validateEmployeeIDField = (fieldName, fact, setFieldValue, employee_id) => {
     console.log("I am validating employee id")
@@ -2454,23 +2601,44 @@ export const weightedAverage = (lots) => {
 }
 
 export const getLotFromQty = (fifo, quantity) => {
+    var stopFprEach = false;
     var fifoCopy = fifo.slice(); // make a copy
+    // console.log("fifoCopy", fifoCopy)
     var quantityLeft = quantity;
+    // console.log("quantityLeft", quantityLeft)
     var lotsFrom = [];
-    fifo.forEach((currentLot) => {
+    console.log("lotsFrom fifo ", fifo)
+    for (var currentLot of fifo) {
+        // fifo.forEach((currentLot) => {
+        console.log("lotsFrom currentLot ", currentLot)
+        // if (stopFprEach === true){
+        //     // console.log("break")
+        //     return;
+        // }
         if (quantityLeft >= currentLot.quantity) { // if Quantity Left >= Current Lot Quantity, shift and push
+            // console.log("if")
             lotsFrom.push(fifoCopy.shift());
             quantityLeft -= currentLot.quantity;
+            // console.log("quantityLeft IF", quantityLeft)
+            // if (quantityLeft === 0) {
+            //     stopFprEach = true
+            // }
         } else { // if Quantity Left < Current Lot Quantity, shift and push only required # of lot
+            // console.log("else")
+            if (quantityLeft == 0) {
+                break;
+            }
             lotsFrom.push({ ...fifoCopy.shift(), quantity: quantityLeft });
             quantityLeft = 0;
+
+            // console.log("quantityLeft ELSE", quantityLeft)
         }
-    })
+    }
     // Artificial Lots if QTY leftover
     if (quantityLeft > 0) {
         lotsFrom.push({ quantity: quantityLeft, per_unit_price: weightedAverage(lotsFrom) });
     }
-
+    console.log("lotsFrom", lotsFrom)
     return lotsFrom;
 };
 
@@ -2639,7 +2807,7 @@ export const identifyEndpoinsHelper = (document_type_id) => {
 }
 
 export const checkBooleanForEditHelper = (values, decoded_token, fact) => (
-    values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.DRAFT) 
+    values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.DRAFT)
     && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
 
 export const filterAlsEquipment = (equipmentData, formData) => {
