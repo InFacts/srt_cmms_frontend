@@ -31,34 +31,6 @@ import { FOOTER_MODE, FOOTER_ACTIONS } from '../../redux/modules/footer.js';
 import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
 
 import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
-const responseToFormState = (userFact, data) => {
-  for (var i = data.line_items.length; i <= 9; i++) {
-    data.line_items.push(
-      {
-        item_id: "",
-        internal_item_id: "",
-        description: "",
-        quantity: "",
-        uom_group_id: "",
-        unit: "",
-        per_unit_price: "",
-        list_uoms: []
-      }
-    );
-  }
-  return {
-    internal_document_id: data.internal_document_id,
-    created_by_user_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_user_id) || '',
-    created_by_admin_employee_id: getEmployeeIDFromUserID(userFact, data.created_by_admin_id) || '',
-    created_on: data.created_on.split(".")[0],
-    line_items: data.line_items,
-    src_warehouse_id: data.src_warehouse_id,
-    remark: data.remark,
-    status_name_th: data.status_name,
-    refer_to_document_name: data.refer_to_document_name,
-    document_date: data.document_date.slice(0, 10)
-  }
-}
 
 const TopContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();

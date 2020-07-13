@@ -156,18 +156,8 @@ const BottomContent = (props) => {
                 <SelectNoChildrenInput name="active" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                   validate={validateActiveField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="10" >
                   <option value=''></option>
-                  {values.active === 0
-                    ?
-                    <>
-                      <option value='0' selected>ปิดการใช้งาน</option>
-                      <option value='1'>เปิดการใช้งาน</option>
-                    </>
-                    :
-                    <>
                       <option value='0'>ปิดการใช้งาน</option>
-                      <option value='1' selected>เปิดการใช้งาน</option>
-                    </>
-                  }
+                      <option value='1'>เปิดการใช้งาน</option>
                 </SelectNoChildrenInput>
               </div>
 

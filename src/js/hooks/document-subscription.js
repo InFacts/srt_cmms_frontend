@@ -15,6 +15,7 @@ const useDocumentSubscription = () => {
 
     // Get approval Step when values.document_id changes
     useEffect(() => {
+        console.log("INNNNNNN")
         if(values.document_id && 
             !footer.requiresHandleClick[FOOTER_ACTIONS.SEND] && 
             !footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL] && 
@@ -31,7 +32,6 @@ const useDocumentSubscription = () => {
         // console.log("BEFORE fetchStepApprovalDocumentData")
         fetchStepApprovalDocumentData(values.document_id)
         .then((result) => {
-            // console.log("AFTER fetchStepApprovalDocumentData", result)
             setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
             if(result.is_canceled){
                 setFieldValue("document_is_canceled", result.is_canceled.data, false);

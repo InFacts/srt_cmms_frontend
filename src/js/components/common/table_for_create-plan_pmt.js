@@ -18,9 +18,11 @@ const Table = (props) => {
         <tr>
           <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
           <th className="font" style={{ minWidth: "130px" }}>เลขที่อะไหล่</th>
-          <th className="font" style={{ minWidth: "435px" }}>รายละเอียด</th>
-          <th className="font text-center" style={{ minWidth: "160px" }}>จำนวน</th>
-          <th className="font text-center" style={{ minWidth: "160px" }}>หน่วยนับ</th>
+          <th className="font" style={{ minWidth: "335px" }}>รายละเอียด</th>
+          <th className="font text-center" style={{ minWidth: "110px" }}>จำนวน</th>
+          <th className="font text-center" style={{ minWidth: "110px" }}>ราคาต่อหน่วย</th>
+          <th className="font text-center" style={{ minWidth: "100px" }}>หน่วยนับ</th>
+          <th className="font text-center" style={{ minWidth: "100px" }}>จำนวนเงิน</th>
         </tr>
       </thead>
       <tbody>
@@ -47,6 +49,9 @@ const Table = (props) => {
                   redBorderForError="error-in-table" />
               </td>
               <td className="edit-padding text-center">
+                <NumberInput step={0.0001} name={`checklist_line_item_use_equipment[${index}].per_unit_price`} disabled />
+              </td>
+              <td className="edit-padding text-center">
                 {/* {list.item && list.item.uom_group.uom[0].name} */}
                 <SelectNoChildrenInput name={`checklist_line_item_use_equipment[${index}].uom_id`} disabled={props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex={props.tabIndex + line_number}>
                   <option value=''></option>
@@ -56,6 +61,8 @@ const Table = (props) => {
                   })}
                 </SelectNoChildrenInput>
               </td>
+              <td className="edit-padding text-right">{props.sumTotalLineItem(list.quantity, list.per_unit_price, list.description)}</td>
+
             </tr>
           )
         })}

@@ -288,8 +288,8 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             location: values.location,
             warehouse_type_id: values.warehouse_type_id,
             node_id: 1,
-            active: values.active === "1" ? true : false,
-            use_central: values.use_central === "1" ? true : false
+            active: values.active == "1" ? true : false,
+            use_central: values.use_central == "1" ? true : false
         }
     } else if (document_type_id === DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
         let last = 0;
@@ -305,7 +305,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             item_type_id: values.item_type_id,
             item_group_id: values.item_group_id,
             uom_group_id: values.uom_group_id,
-            active: values.active === "1" ? true : false,
+            active: values.active == "1" ? true : false,
             remark: values.remark,
             uom_id_inventory: values.uom_id,
             default_warehouse_id: 100,
@@ -359,7 +359,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             item_type_id: parseInt(values.item_type_id),
             item_group_id: parseInt(values.item_group_id),
             uom_group_id: parseInt(values.uom_group_id),
-            active: values.active === "1" ? true : false,
+            active: values.active == "1" ? true : false,
             remark: values.remark,
             default_warehouse_id: 100,
             quantity_lowest: 1,
@@ -412,7 +412,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             freq: values.freq,
             freq_unit_id: parseInt(values.freq_unit_id),
             // active: values.active === "1" ? true : false,
-            remark: values.remark,
+            remark: "string",
             line_item: line_items_part
         }
         console.log("create_checklist_part", create_checklist_part)
@@ -831,7 +831,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             active: values.active === "1" ? true : false,
             node_id: parseInt(values.node_id),
             station_id: parseInt(values.station_id),
-            start_on: values.start_on + 'T00:00:00+00:00',
+            start_on: values.start_on + 'T23:57:00+07:00',
         }
 
         // ต้องเป็น Array selector_checklist_group_part
@@ -905,7 +905,7 @@ export const packDataFromValuesMasterDataForEdit = (fact, values, document_type_
             location: values.location,
             warehouse_type_id: values.warehouse_type_id,
             node_id: 1,
-            active: values.active === "1" ? true : false,
+            active: values.active == "1" ? true : false,
             use_central: values.use_central === "1" ? true : false
         }
     } else if (document_type_id === DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
@@ -922,7 +922,7 @@ export const packDataFromValuesMasterDataForEdit = (fact, values, document_type_
             item_type_id: values.item_type_id,
             item_group_id: values.item_group_id,
             uom_group_id: values.uom_group_id,
-            active: values.active === "1" ? true : false,
+            active: values.active == "1" ? true : false,
             remark: values.remark,
             uom_id_inventory: values.uom_id,
             default_warehouse_id: 100,
@@ -959,7 +959,7 @@ export const packDataFromValuesMasterDataForEdit = (fact, values, document_type_
             item_type_id: parseInt(values.item_type_id),
             item_group_id: parseInt(values.item_group_id),
             uom_group_id: parseInt(values.uom_group_id),
-            active: values.active === "1" ? true : false,
+            active: values.active == "1" ? true : false,
             remark: values.remark,
             default_warehouse_id: 100,
             quantity_lowest: 1,
@@ -1306,6 +1306,7 @@ export const fetchStepApprovalDocumentData = (document_id) => new Promise((resol
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/latest/plus`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((step_approve) => {
+            console.log("Fetfch Appoval", step_approve.data)
             resolve(step_approve.data);
         })
         .catch((err) => {
@@ -1542,6 +1543,9 @@ export const checkDocumentStatus = (valuesContext) => new Promise((resolve, reje
 const responseToFormState = (fact, data, document_type_group_id) => {
     if (isICD(document_type_group_id)) {
         if (document_type_group_id !== DOCUMENT_TYPE_ID.PHYSICAL_COUNT && document_type_group_id !== DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT) {
+            data.line_items.map((item) => {
+                item.item_type_id = item.item.item_type_id
+            })
             for (var i = data.line_items.length; i <= 9; i++) {
                 data.line_items.push(
                     {
@@ -1638,6 +1642,9 @@ const responseToFormState = (fact, data, document_type_group_id) => {
             }
         } else {
             if (document_type_group_id === DOCUMENT_TYPE_ID.PHYSICAL_COUNT) {
+                data.specific.line_items.map((item) => {
+                    item.item_type_id = item.item.item_type_id
+                })
                 for (var i = data.specific.line_items.length; i <= 9; i++) {
                     data.specific.line_items.push(
                         {
@@ -1656,6 +1663,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                 var created_on = new Date(data.document.created_on);
                 created_on.setHours(created_on.getHours() + 7)
                 return {
+                    document_id: data.document.document_id,
                     internal_document_id: data.document.internal_document_id,
                     created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_user_id) || '',
                     created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_admin_id) || '',
@@ -1669,6 +1677,9 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                 }
             }
             if (document_type_group_id === DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT) {
+                data.specific.line_items.map((item) => {
+                    item.item_type_id = item.item.item_type_id
+                })
                 for (var i = data.specific.line_items.length; i <= 9; i++) {
                     data.specific.line_items.push(
                         {
@@ -1687,6 +1698,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                 var created_on = new Date(data.document.created_on);
                 created_on.setHours(created_on.getHours() + 7)
                 return {
+                    document_id: data.document.document_id,
                     internal_document_id: data.document.internal_document_id,
                     created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_user_id) || '',
                     created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_admin_id) || '',
@@ -1957,7 +1969,7 @@ function returnFullArrayLossLineItemNull(loss_line_items) {
 }
 
 function returnFullArrayLineCustom(line_custom) {
-    console.log("line_custom", line_custom)
+    // console.log("line_custom", line_custom)
     let initialLineCustom = {
         name_group: '',
         unit_maintenance_location_id: '',
@@ -1966,7 +1978,7 @@ function returnFullArrayLineCustom(line_custom) {
     }
     let line_customs = [];
     line_custom.map((line_custom, index) => {
-        console.log("line_custom", line_custom)
+        // console.log("line_custom", line_custom)
         if (!line_custom.selector_checklist[index].equipment_id) {
             line_customs.push({
                 checklist_group_id: line_custom.selector_checklist[index].checklist.checklist_group_id,

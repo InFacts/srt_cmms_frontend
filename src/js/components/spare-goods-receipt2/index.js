@@ -57,7 +57,6 @@ const GoodsReceiptComponent = (props) => {
             }
         })
     }, [])
-
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
