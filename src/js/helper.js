@@ -893,6 +893,26 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             document: document_part_selector,
             specific: specific_selector
         }
+    } else if (document_type_id === DOCUMENT_TYPE_ID.SELECTOR) {
+
+        console.log("data values", values)
+
+        let document_part = {
+            ...DOCUMENT_SCHEMA,
+            document_status_id: 1,
+            document_action_type_id: 1,
+            document_id: values.document_id,
+            internal_document_id: values.internal_document_id,
+            remark: values.remark,
+            created_by_admin_id: 0,
+            created_by_user_id: 0,
+            document_date: values.document_date + 'T00:00:00+00:00',
+        }
+
+        // return {
+        //     document: document_part_selector,
+        //     specific: specific_selector
+        // }
     }
 }
 
@@ -1832,6 +1852,34 @@ const responseToFormState = (fact, data, document_type_group_id) => {
             line_custom: returnFullArrayLineCustom(data.specific.selector_pm_plan.selector_checklist_group),
             line_equipment: returnFullArrayLineEquipment(data.specific.selector_pm_plan.selector_checklist_group),
         }
+    } else if (document_type_group_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM) {
+        console.log("data", data)
+        var created_on = new Date(data.document.created_on);
+        created_on.setHours(created_on.getHours() + 7);
+        let checklists = fact[FACTS.CHECKLIST_LINE_ITEM].items;
+        let checklist = checklists.find(checklist => `${checklist.checklist_line_item}` === `${data.specific.selector_checklist_line_item[0].checklist_line_item_id}`)
+
+        let nodes = fact.nodes.items;
+        let node = nodes.find(node => `${node.node_id}` === `${data.specific.location_node_id}`)
+
+        if (checklist || node) {
+        return {
+            document_id: data.document.document_id,
+            internal_document_id: data.document.internal_document_id,
+            created_on: created_on.toISOString().split(".")[0],
+            document_date: data.document.document_date.slice(0, 10),
+
+            checklist_id: checklist.checklist_id,
+            name: data.specific.selector_checklist_line_item[0].name,
+            freq: data.specific.selector_checklist_line_item[0].freq,
+            freq_unit_id: data.specific.selector_checklist_line_item[0].freq_unit_id,
+            checklist_line_item_use_equipment: data.specific.selector_checklist_line_item[0].selector_checklist_line_item_use_equipment,
+            
+            location_district_id: node.district_id,
+            location_node_id: data.specific.location_node_id,
+            location_station_id: data.specific.location_station_id,
+        }
+    }
     }
 }
 
@@ -2025,6 +2073,40 @@ function returnFullArrayLineEquipment(line_equipment) {
 }
 
 // Validation 
+export const validateInternalDocumentIDWorfOrderPMFieldHelper = (checkBooleanForEdit, document_type_group_id, toolbar, footer, fact, values, setValues, setFieldValue, validateField, internal_document_id) => new Promise(resolve => {
+    // Internal Document ID
+    //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
+    //  ie. GR-PYO-2563/0001
+    if (document_type_group_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM) {
+        let error;
+        getDocumentbyInternalDocumentID(internal_document_id)
+        .then((data) => {
+            console.log(" i got data", data);
+            if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
+                    && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
+                    console.log("validateInternalDocumentIDField:: I got document ID ")
+                    setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
+                    return resolve(null);
+                }
+        })
+        .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
+            console.log("I think I have 404 not found in doc id.")
+            setFieldValue('document_id', '', false);
+
+            if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
+                error = 'Document ID not Found in System';
+            } else {//If mode add, ok
+                console.log("document ID doesn't exist but I am in mode add")
+                error = ''
+            }
+        })
+        .finally(() => {
+            return resolve(error)
+        });
+    }
+});
+
+// Validation 
 export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, document_type_group_id, toolbar, footer, fact, values, setValues, setFieldValue, validateField, internal_document_id) => new Promise(resolve => {
     // Internal Document ID
     //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
@@ -2032,15 +2114,13 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
     if (checkBooleanForEdit === true && (toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)) {
         return resolve();
     }
-    console.log("I am validating internal document id ", internal_document_id)
     if (!internal_document_id) {
         console.log("I dont have any internal doc id")
         return resolve('Required');
     } else if (!isValidInternalDocumentIDFormat(internal_document_id) && !isValidInternalDocumentIDDraftFormat(internal_document_id)) {
-        console.log(">>>>>")
+        console.log("Invalid Document ID Format Be sure to use the format ie. GR-PYO-2563/0001")
         return resolve('Invalid Document ID Format Be sure to use the format ie. GR-PYO-2563/0001')
     }
-    console.log(">>>>NUK")
     // Checking from Database if Internal Document ID Exists
     let error;
     getDocumentbyInternalDocumentID(internal_document_id)

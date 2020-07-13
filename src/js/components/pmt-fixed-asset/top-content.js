@@ -17,7 +17,7 @@ import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/to
 import {
   getNumberFromEscapedString, fetchGoodsOnhandDataForItemmasterData, DOCUMENT_TYPE_ID,
   getDocumentbyInternalDocumentID, checkBooleanForEditHelper, validateEmployeeIDField,
-  validateInternalDocumentIDFieldHelper
+  validateInternalDocumentIDWorfOrderPMFieldHelper
 } from '../../helper';
 
 import { FACTS } from '../../redux/modules/api/fact.js';
@@ -44,11 +44,10 @@ const TopContent = (props) => {
 
   const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
 
-  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.WORK_ORDER_PM, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
+  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDWorfOrderPMFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.WORK_ORDER_PM, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
 
-  const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
-  const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
-
+  // const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
+  // const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
 
   return (
     <div id={changeTheam() === true ? "" : "blackground-white"}>
@@ -76,7 +75,7 @@ const TopContent = (props) => {
               <div class="clear" />
 
               {/* User Employee ID  */}
-              <div className="grid_1 alpha white-space">
+              {/* <div className="grid_1 alpha white-space">
                 <p className="top-text">ผู้ดำเนินเรื่อง</p>
               </div>
               <div className="grid_3">
@@ -86,10 +85,10 @@ const TopContent = (props) => {
                   searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"
                   tabIndex="2" />
               </div>
-              <div class="clear" />
+              <div class="clear" /> */}
 
               {/* Admin Employee ID  */}
-              <div className="grid_1 alpha white-space">
+              {/* <div className="grid_1 alpha white-space">
                 <p className="top-text">ผู้สร้างเอกสาร</p>
               </div>
               <div className="grid_3">
@@ -98,7 +97,7 @@ const TopContent = (props) => {
                   disabled
                   tabIndex="3" />
               </div>
-              <div class="clear" />
+              <div class="clear" /> */}
 
               {/* Admin Employee ID  */}
               <div className="grid_1 alpha white-space">
@@ -191,7 +190,7 @@ const TopContent = (props) => {
                 <SelectNoChildrenInput name="location_district_id" disabled>
                   <option value=''></option>
                   {factDistict.items.map((factDistict) => {
-                    return <option value={factDistict.distict_id}>{factDistict.name}</option>
+                          return <option value={factDistict.district_id} key={factDistict.district_id} selected>{factDistict.name}</option>
                   })}
                 </SelectNoChildrenInput>
               </div>
@@ -202,9 +201,7 @@ const TopContent = (props) => {
                 <SelectNoChildrenInput name="location_node_id" disabled>
                   <option value=''></option>
                   {factNodes.items.map((node) => {
-                    if (values.location_district_id == node.district_id) {
-                      return <option key={node.node_id} value={node.node_id} selected>{node.name}</option>
-                    }
+                    return <option key={node.node_id} value={node.node_id}>{node.name}</option>
                   })}
                 </SelectNoChildrenInput>
               </div>
@@ -216,9 +213,7 @@ const TopContent = (props) => {
                 <SelectNoChildrenInput name="location_station_id" disabled>
                   <option value=''></option>
                   {factStations.items.map((stations) => {
-                    if (values.location_node_id == stations.node_id) {
-                      return <option key={stations.station_id} value={stations.station_id} selected>{stations.name}</option>
-                    }
+                    return <option key={stations.station_id} value={stations.station_id}>{stations.name}</option>
                   })}
                 </SelectNoChildrenInput>
               </div>

@@ -30,7 +30,7 @@ const GoodsReceiptComponent = (props) => {
 
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
-        { id: "general", name: "รายการบำรุงรักษา" },
+        // { id: "general", name: "รายการบำรุงรักษา" },
         { id: "related_parties", name: "ผู้ที่เกี่ยวข้อง" },
         { id: "item", name: "อุปกรณ์ที่ต้องนำไปปฎิบัติงาน" },
         { id: "attachment", name: "แนบไฟล์" },
@@ -66,7 +66,7 @@ const GoodsReceiptComponent = (props) => {
             {!loggedIn ? <Redirect to="/" /> : null}
             <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "130vh" } : {}}>
                 <TopContent />
-                <TabBar tabNames={tabNames} initialTabID="general">
+                <TabBar tabNames={tabNames} initialTabID="related_parties">
                     <BottomContent />
                 </TabBar>
                 <Footer />
@@ -116,8 +116,8 @@ const EnhancedGoodsReceiptComponent = withFormik({
         // Field ที่ให้ User กรอก
         // Top Content
         internal_item_id: '',
-        created_by_user_employee_id: '',
-        created_by_admin_employee_id: '',
+        // created_by_user_employee_id: '',
+        // created_by_admin_employee_id: '',
         checklist_id: '',
         name: '',
         freq: '',

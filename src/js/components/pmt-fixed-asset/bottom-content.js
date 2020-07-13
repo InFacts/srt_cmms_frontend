@@ -13,7 +13,7 @@ import Label from '../common/form-label'
 import PopupModalCheckListLineItem from '../common/popup-modal-checklist'
 import TableHasEquipment from '../common/table-has-equipment';
 import TableStatus from '../common/table-status';
-import TableCreatePlan from '../common/table_for_create-plan_pmt';
+import TableCreatePlan from '../common/table_word_order_pm';
 
 import Files from '../common/files2'
 
@@ -52,7 +52,7 @@ const BottomContent = (props) => {
         {/* <div className="container_12 clearfix"> */}
         <div className="container_12 " id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>
           {/* General Tab */}
-          <div id="general_content" className="tabcontent">
+          {/* <div id="general_content" className="tabcontent">
 
             <table className="table-many-column" style={{ padding: "10px" }}>
               <thead>
@@ -115,7 +115,7 @@ const BottomContent = (props) => {
               </div>
             </div>
 
-          </div>
+          </div> */}
 
           {/* === Tab related_parties_content  === */}
           <div id="related_parties_content" className="tabcontent">
