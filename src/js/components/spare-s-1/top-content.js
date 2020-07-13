@@ -38,6 +38,7 @@ const TopContent = (props) => {
     // console.log("warehouse1", warehouse)
     if (warehouse) {
       setFieldValue(fieldName, `${warehouse_id}\\[${warehouse.abbreviation}] ${warehouse.name}`, false);
+      setFieldValue("warehouse_type_id", warehouse.warehouse_type_id, false);
       return;
     } else {
       return 'Invalid Warehouse ID';

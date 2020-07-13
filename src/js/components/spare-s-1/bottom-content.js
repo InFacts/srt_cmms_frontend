@@ -75,7 +75,7 @@ const BottomContent = (props) => {
               </thead>
               <tbody>
                 {values.line_items.map(function (line_items, index) {
-                  if (getNumberFromEscapedString(values.src_warehouse_id) !== 100) {
+                  if (values.warehouse_type_id !== 1 && values.warehouse_type_id !== 2 && values.warehouse_type_id !== 4) {
                     return (
                       <tr key={index}>
                         <th className="edit-padding text-center">{index + 1}</th>
@@ -93,10 +93,9 @@ const BottomContent = (props) => {
                         <td className="edit-padding">{line_items.pricing.average_price ? line_items.pricing.average_price.toFixed(4).replace(/\d(?=(\d{3})+\.)/g, '$&,') : 0}</td>
                       </tr>
                     )
-                  } else { //ถ้าเป็นคลัง กลางบางซื่อ
+                  } else { //ถ้าไม่เป็นคลังของตอน
                     let items = factItems.items;
                     let item = items.find(item => `${item.item_id}` === `${line_items.item_id}`)
-                    console.log("item>>>>>", item)
                     if (item) {
                       return (
                         <tr key={index}>
@@ -119,8 +118,12 @@ const BottomContent = (props) => {
               </tbody>
             </table>
 
-            <div className="float-right">
-            <ExportCSV csvData={values.new_line_items} fileName="ส.1" />
+            <div className="grid_12">
+              <p style={{ fontSize: "18px" }}>* หมายเหตุ: <span style={{ color: "DarkRed" }}>สีแดง: ของต่ำกว่าเกณฑ์</span>, <span style={{ color: "DarkBlue" }}>สีน้ำเงิน: ของมากกว่าเกณฑ์</span>, <span style={{ color: "DarkGreen" }}>สีเขียว: ของอยู่ในเกณฑ์</span>, สีดำ: ของในคลังของตอน</p>
+
+              <div className="float-right">
+                <ExportCSV csvData={values.new_line_items} fileName="ส.1" />
+              </div>
             </div>
 
           </div>
