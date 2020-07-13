@@ -56,6 +56,7 @@ const BottomContent = (props) => {
     // console.log(item)
     if (item) {
       if (item.item_type_id === 1) {
+        setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
         setFieldValue(fieldName + `.description`, `${item.description}`, false);
         setFieldValue(fieldName + `.quantity`, 0, false);
         setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
@@ -160,6 +161,7 @@ const BottomContent = (props) => {
   }
 
   let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
+  
   useEffect(() => {
     checkBooleanForEdit = false
     validateField("internal_document_id")

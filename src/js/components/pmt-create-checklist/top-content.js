@@ -63,7 +63,7 @@ const TopContent = (props) => {
           if (toolbar.mode === TOOLBAR_MODE.SEARCH && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value
             if (name !== values.name) {
 
-              setFieldValue("active", 2, false) // demo
+              // setFieldValue("active", 2, false) // demo
 
               setFieldValue("checklist_line_item", res.data.checklist_line_item.checklist_line_item, false)
               setFieldValue("checklist_id", res.data.checklist_line_item.checklist_id, false)

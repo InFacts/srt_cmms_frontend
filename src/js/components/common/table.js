@@ -24,6 +24,7 @@ const Table = (props) => {
       </thead>
       <tbody>
         {props.line_items.map(function (list, index) {
+          console.log("list", list)
           let line_number = index + 1;
           return (
             <tr key={index}>

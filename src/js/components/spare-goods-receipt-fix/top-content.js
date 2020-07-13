@@ -74,15 +74,23 @@ const TopContent = (props) => {
     //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
     //  ie. GR-PYO-2563/0001
     // console.log("I am validating document id")
-    let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS)-[A-Z]{3}-\d{4}\/\d{4}$/g
+    let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS|MI)-[A-Z]{3}-\d{4}\/\d{4}$/g
     let draftInternalDocumentIDRegex = /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
     // let draftInternalDocumentIDRegex = /^heh/g
-    if (!refer_to_document_internal_document_id) {
-      return resolve('Required');
-    } else if (!internalDocumentIDRegex.test(refer_to_document_internal_document_id) && !draftInternalDocumentIDRegex.test(refer_to_document_internal_document_id)) { //
-      return resolve('Invalid Document ID Format\nBe sure to use the format ie. S1646-PYO-2563/0001')
-    }
+    // if (!refer_to_document_internal_document_id) {
+    //   return resolve('Required');
+    // } else if (!internalDocumentIDRegex.test(refer_to_document_internal_document_id) && !draftInternalDocumentIDRegex.test(refer_to_document_internal_document_id)) { //
+    //   return resolve('Invalid Document ID Format\nBe sure to use the format ie. S1646-PYO-2563/0001')
+    // }
 
+    if (refer_to_document_internal_document_id) {
+      if (!internalDocumentIDRegex.test(refer_to_document_internal_document_id) && !draftInternalDocumentIDRegex.test(refer_to_document_internal_document_id)) { //
+        return resolve('Invalid Document ID Format\nBe sure to use the format ie. S1646-PYO-2563/0001')
+      }
+    }
+    if (values.refer_to_document_internal_document_id === refer_to_document_internal_document_id) {
+      return resolve(null);
+    }
     // if (!refer_to_document_internal_document_id) {
     //   return resolve(); // Resolve doesn't return
     // }
@@ -90,8 +98,9 @@ const TopContent = (props) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/internal_document_id/${encodeURIComponent(refer_to_document_internal_document_id)}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
       .then((res) => {
+        console.log("res.data", res.data)
         if (res.data.document.internal_document_id === refer_to_document_internal_document_id) { // If input document ID exists
-          setFieldValue("line_items", setLineItem(res.data), false)
+          setFieldValue("line_items", setLineItem(res.data.specific), false)
           setFieldValue("refer_to_document_id", res.data.document.document_id, false)
           return resolve(null);
         } else { // If input Document ID doesn't exists
@@ -211,14 +220,14 @@ const TopContent = (props) => {
       </div>
 
       {/* PopUp ค้นหาเลขที่เอกสาร */}
-      <PopupModalDocument documentTypeGroupID={DOCUMENT_TYPE_ID.GOODS_FIX}
+      <PopupModalDocument documentTypeGroupID={DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX}
         id="modalDocument" //For Open POPUP
         name="internal_document_id" //For setFieldValue
       />
 
       {/* PopUp ค้นหาเลขที่เอกสาร สส.101 */}
       <PopupModalDocumentSS101 documentTypeGroupID={DOCUMENT_TYPE_ID.MAINTENANT_ITEM}
-      documentTypeGroupID2={DOCUMENT_TYPE_ID.SS101}
+        documentTypeGroupID2={DOCUMENT_TYPE_ID.SS101}
         id="modalDocument2"
         name="refer_to_document_internal_document_id" //For setFieldValue
       />

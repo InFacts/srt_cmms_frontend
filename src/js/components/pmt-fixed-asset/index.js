@@ -27,10 +27,11 @@ import { changeTheam, getUrlParamsLink } from '../../helper.js'
 const GoodsReceiptComponent = (props) => {
     const { resetForm, setFieldValue, setValues, values } = useFormikContext();
     const dispatch = useDispatch();
-    
+
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
         { id: "general", name: "รายการบำรุงรักษา" },
+        { id: "related_parties", name: "ผู้ที่เกี่ยวข้อง" },
         { id: "item", name: "อุปกรณ์ที่ต้องนำไปปฎิบัติงาน" },
         { id: "attachment", name: "แนบไฟล์" },
         { id: "table_status", name: "สถานะเอกสาร" }
@@ -48,18 +49,18 @@ const GoodsReceiptComponent = (props) => {
         dispatch(footerToModeSearch());
     }, []);
 
-        // If Link to this url via Track Document
-        useEffect(() => {
-            getUrlParamsLink()
-                .then((internal_document_id) => {
+    // If Link to this url via Track Document
+    useEffect(() => {
+        getUrlParamsLink()
+            .then((internal_document_id) => {
                 if (internal_document_id !== "") {
                     // action_approval
                     setFieldValue("status_name_th", "", true);
                     setFieldValue("internal_document_id", internal_document_id, true);
                 }
             })
-        }, [])
-        
+    }, [])
+
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
@@ -127,15 +128,27 @@ const EnhancedGoodsReceiptComponent = withFormik({
         location_district_id: '',
         location_node_id: '',
         location_station_id: '',
-        
+
         // Bottom
         line_items: initialRowsDocument(),
         remark: '',
         checklist_line_item_use_equipment: initialRowsEquipmentPlan(),
 
+        // Bottom Content ผู้เกี่ยวข้อง
+        auditor_name: '',           //ผู้ควบคุมตรวจสอบชื่อ NVARCHAR
+        auditor_position_id: '', //ผู้ควบคุมตรวจสอบชื่อ ตำแหน่ง FK_ID
+        fixer_name: '',               //ดำเนินการแก้ไขชื่อ  NVARCHAR
+        fixer_position_id: '', //ดำเนินการแก้ไขชื่อ ตำแหน่ง FK_ID
+        member_1: '',               //รายชื่อเพื่อนร่วมงาน 1 NVARCHAR
+        member_1_position_id: '', //รายชื่อเพื่อนร่วมงาน 1 ตำแหน่ง FK_ID
+        member_2: '',              //รายชื่อเพื่อนร่วมงาน 2 NVARCHAR
+        member_2_position_id: '', //รายชื่อเพื่อนร่วมงาน 2 ตำแหน่ง FK_ID
+        member_3: '',             //รายชื่อเพื่อนร่วมงาน 3
+        member_3_position_id: '',  //รายชื่อเพื่อนร่วมงาน 3 ตำแหน่ง
+
         //Field ที่ไม่ได้กรอก
         files: [],
-        
+
         // NOT USE FOR FOOTER
         step_approve: [],
         created_by_admin_employee_id: '',

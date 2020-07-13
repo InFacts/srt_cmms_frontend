@@ -47,10 +47,10 @@ const Table = (props) => {
 
               <td className="edit-padding gray-column"> {/* คงคลัง */}
                 {list.description !== '' ? list.at_source.length !== 0 ? list.at_source[0].current_unit_count : 0 : ''}
-                </td>
+              </td>
               <td className="edit-padding gray-column"> {/* รอส่งมอบ */}
                 {list.description !== '' ? list.at_source.length !== 0 ? list.at_source[0].committed_unit_count : 0 : ''}
-                </td> 
+              </td>
               <td className="edit-padding gray-column">{/* ระหว่างจัดซ้ือ */}
                 {list.description !== '' ? list.at_source.length !== 0 ? 0 : 0 : ''}
                 {/* {list.at_source.length !== 0 ? list.at_source[0].order : ''} */} {/* TODO Database Send Value */}
@@ -68,11 +68,16 @@ const Table = (props) => {
                   optionValue='item_status_id' optionName='description_th'
                 />
               </td>
-
               <td className="edit-padding text-center">
                 <NumberInput step={0.01} name={`line_items[${index}].quantity`} tabIndex={props.tabIndex + line_number}
                   validate={quantity => props.validateLineNumberQuatityItemIDField(`line_items[${index}].quantity`, quantity, index)}
-                  disabled={list.item_type_id == 1 ? props.disabledBothMode !== true ? props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true : true}
+                  disabled={list.item_type_id == 1 ?
+                    props.disabledBothMode !== true ?
+                      props.checkBooleanForEdit === true ?
+                        false :
+                        toolbar.mode === TOOLBAR_MODE.SEARCH :
+                      true :
+                    true}
                   redBorderForError="error-in-table" />
               </td>
 

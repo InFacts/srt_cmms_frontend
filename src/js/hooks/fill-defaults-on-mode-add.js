@@ -30,6 +30,7 @@ const useFillDefaultsOnModeAdd = (document_type_group_id) => {
             if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO || document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RETURN 
             || document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX || document_type_group_id === DOCUMENT_TYPE_ID.INVENTORY_TRANSFER
             || document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO) {
+                console.log("decoded_token.has_position", decoded_token.has_position)
                 setFieldValue("dest_warehouse_id", decoded_token.has_position[0].warehouse_id, true)
             }
             if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_USAGE || document_type_group_id === DOCUMENT_TYPE_ID.GOODS_FIX 
