@@ -893,7 +893,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             document: document_part_selector,
             specific: specific_selector
         }
-    } else if (document_type_id === DOCUMENT_TYPE_ID.SELECTOR) {
+    } else if (document_type_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM) {
 
         console.log("data values", values)
 
@@ -909,10 +909,17 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             document_date: values.document_date + 'T00:00:00+00:00',
         }
 
-        // return {
-        //     document: document_part_selector,
-        //     specific: specific_selector
-        // }
+        let specific_part = {
+            document_id: values.document_id,
+            wo_checklist_status_id: values.wo_checklist_status_id,
+            selector_checklist_line_item_id: values.selector_checklist_line_item_id,
+            work_order_pm_line_item: []
+        }
+
+        return {
+            document: document_part,
+            specific: specific_part
+        }
     }
 }
 
@@ -1668,9 +1675,10 @@ const responseToFormState = (fact, data, document_type_group_id) => {
             }
         } else {
             if (document_type_group_id === DOCUMENT_TYPE_ID.PHYSICAL_COUNT) {
-                data.specific.line_items.map((item) => {
-                    item.item_type_id = item.item.item_type_id
-                })
+                console.log(" I AM PHYSICAL_COUNT ")
+                // data.specific.line_items.map((item) => {
+                //     item.item_type_id = item.item.item_type_id
+                // })
                 for (var i = data.specific.line_items.length; i <= 9; i++) {
                     data.specific.line_items.push(
                         {
@@ -1697,15 +1705,15 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                     line_items: data.specific.line_items,
                     src_warehouse_id: data.specific.warehouse_id,
                     remark: data.document.remark,
-                    // status_name_th: '',
+                    status_name_th: data.document.document_status.status,
                     // refer_to_document_name: data.specific.refer_to_document_name,
                     document_date: data.document.document_date.slice(0, 10)
                 }
             }
             if (document_type_group_id === DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT) {
-                data.specific.line_items.map((item) => {
-                    item.item_type_id = item.item.item_type_id
-                })
+                // data.specific.line_items.map((item) => {
+                //     item.item_type_id = item.item.item_type_id
+                // })
                 for (var i = data.specific.line_items.length; i <= 9; i++) {
                     data.specific.line_items.push(
                         {
@@ -1732,7 +1740,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                     line_items: data.specific.line_items,
                     src_warehouse_id: data.specific.warehouse_id,
                     remark: data.document.remark,
-                    // status_name_th: '',
+                    status_name_th: data.document.document_status.status,
                     // refer_to_document_name: data.specific.refer_to_document_name,
                     document_date: data.document.document_date.slice(0, 10)
                 }
@@ -1875,6 +1883,8 @@ const responseToFormState = (fact, data, document_type_group_id) => {
             created_on: created_on.toISOString().split(".")[0],
             document_date: data.document.document_date.slice(0, 10),
 
+            wo_checklist_status_id: data.specific.wo_checklist_status_id,
+            selector_checklist_line_item_id: data.specific.selector_checklist_line_item_id,
             checklist_id: checklist.checklist_id,
             name: data.specific.selector_checklist_line_item[0].name,
             freq: data.specific.selector_checklist_line_item[0].freq,
@@ -2425,16 +2435,17 @@ export const validateLineNumberInternalItemIDFieldHelper = (document_type_group_
                 setFieldValue(fieldName + `.line_number`, index + 1, false);
                 setFieldValue(fieldName + `.item_status_id`, 1, false);
                 setFieldValue(fieldName + `.per_unit_price`, 0, false);
-            } else {
-                setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
-                setFieldValue(fieldName + `.description`, `${item.description}`, false);
-                setFieldValue(fieldName + `.quantity`, 1, false);
-                setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
-                setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
-                setFieldValue(fieldName + `.line_number`, index + 1, false);
-                setFieldValue(fieldName + `.item_status_id`, 1, false);
-                setFieldValue(fieldName + `.per_unit_price`, 0, false);
-            }
+            } 
+            // else {
+            //     setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+            //     setFieldValue(fieldName + `.description`, `${item.description}`, false);
+            //     setFieldValue(fieldName + `.quantity`, 1, false);
+            //     setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+            //     setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+            //     setFieldValue(fieldName + `.line_number`, index + 1, false);
+            //     setFieldValue(fieldName + `.item_status_id`, 1, false);
+            //     setFieldValue(fieldName + `.per_unit_price`, 0, false);
+            // }
             return;
         } else {
             return 'Invalid Number ID';
@@ -2464,16 +2475,17 @@ export const validateLineNumberInternalItemIDFieldHelper = (document_type_group_
               setFieldValue(fieldName + `.line_number`, index + 1, false);
               setFieldValue(fieldName + `.item_status_id`, 2, false);
               setFieldValue(fieldName + `.per_unit_price`, 0, false);
-            } else {
-              setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
-              setFieldValue(fieldName + `.description`, `${item.description}`, false);
-              setFieldValue(fieldName + `.quantity`, 1, false);
-              setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
-              setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
-              setFieldValue(fieldName + `.line_number`, index + 1, false);
-              setFieldValue(fieldName + `.item_status_id`, 2, false);
-              setFieldValue(fieldName + `.per_unit_price`, 0, false);
-            }
+            } 
+            // else {
+            //   setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+            //   setFieldValue(fieldName + `.description`, `${item.description}`, false);
+            //   setFieldValue(fieldName + `.quantity`, 1, false);
+            //   setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+            //   setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+            //   setFieldValue(fieldName + `.line_number`, index + 1, false);
+            //   setFieldValue(fieldName + `.item_status_id`, 2, false);
+            //   setFieldValue(fieldName + `.per_unit_price`, 0, false);
+            // }
             return;
           } else {
             return 'Invalid Number ID';
@@ -2503,16 +2515,17 @@ export const validateLineNumberInternalItemIDFieldHelper = (document_type_group_
               setFieldValue(fieldName + `.line_number`, index + 1, false);
               setFieldValue(fieldName + `.item_status_id`, 4, false);
               setFieldValue(fieldName + `.per_unit_price`, 0, false);
-            } else {
-              setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
-              setFieldValue(fieldName + `.description`, `${item.description}`, false);
-              setFieldValue(fieldName + `.quantity`, 1, false);
-              setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
-              setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
-              setFieldValue(fieldName + `.line_number`, index + 1, false);
-              setFieldValue(fieldName + `.item_status_id`, 4, false);
-              setFieldValue(fieldName + `.per_unit_price`, 0, false);
-            }
+            } 
+            // else {
+            //   setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+            //   setFieldValue(fieldName + `.description`, `${item.description}`, false);
+            //   setFieldValue(fieldName + `.quantity`, 1, false);
+            //   setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+            //   setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+            //   setFieldValue(fieldName + `.line_number`, index + 1, false);
+            //   setFieldValue(fieldName + `.item_status_id`, 4, false);
+            //   setFieldValue(fieldName + `.per_unit_price`, 0, false);
+            // }
             return;
           } else {
             return 'Invalid Number ID';
@@ -2540,14 +2553,15 @@ export const validateLineNumberInternalItemIDFieldHelper = (document_type_group_
               setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
               setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
               setFieldValue(fieldName + `.per_unit_price`, 0, false);
-            } else {
-              setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
-              setFieldValue(fieldName + `.description`, `${item.description}`, false);
-              setFieldValue(fieldName + `.quantity`, 1, false);
-              setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
-              setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
-              setFieldValue(fieldName + `.per_unit_price`, 0, false);
-            }
+            } 
+            // else {
+            //   setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+            //   setFieldValue(fieldName + `.description`, `${item.description}`, false);
+            //   setFieldValue(fieldName + `.quantity`, 1, false);
+            //   setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+            //   setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+            //   setFieldValue(fieldName + `.per_unit_price`, 0, false);
+            // }
             return;
           } else {
             return 'Invalid Number ID';
@@ -2896,6 +2910,27 @@ export const sumTotalHelper = (list_show) => {
     list_show.map(function (list, index) {
         var sum = 0;
         sum = list.quantity * list.per_unit_price;
+        sumTotal = sumTotal + sum;
+        // return sumTotal
+    })
+    var s = sumTotal.toString();
+    var n = s.indexOf(".")
+    if (n == -1) {
+        s = s + ".00"
+        return s.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    }
+    else {
+        s = s.slice(0, n + 3)
+        return s.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    }
+}
+
+// FOR Phycical count and inventory adjustment
+export const sumTotalPhycicalCountAndInventoryAdjustmentHelper = (list_show) => {
+    var sumTotal = 0;
+    list_show.map(function (list, index) {
+        var sum = 0;
+        sum = list.unit_count * list.per_unit_price;
         sumTotal = sumTotal + sum;
         // return sumTotal
     })

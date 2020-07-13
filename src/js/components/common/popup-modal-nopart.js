@@ -48,6 +48,7 @@ const PopupModalNoPart = (props) => {
                             </thead>
                             <tbody>
                                 {data.map(function (no_part_show, index) {
+                                    if (no_part_show.item_type_id === 1) {
                                     return (
                                         <tr key={index} id={index}>
                                             <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show.internal_item_id} </td>
@@ -59,6 +60,7 @@ const PopupModalNoPart = (props) => {
                                             </td>
                                         </tr>
                                     )
+                                    }
                                 })}
                             </tbody>
                         </table>
