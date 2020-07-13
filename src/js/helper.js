@@ -421,7 +421,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
     }
     let document_part = {
         ...DOCUMENT_SCHEMA,
-        document_status_id: 1,
+        document_status_id: 1, // ["สร้าง Draft", "รอการอนุมัติ", "อนุมัติเรียบร้อยแล้ว", "เอกสารหมดสถานะการใช้งาน", "แก้ไขเอกสาร", "Fast Track"]
         document_action_type_id: 1,
         document_id: values.document_id,
         internal_document_id: values.internal_document_id,
@@ -1146,17 +1146,14 @@ export const getDocumentbyInternalDocumentID = (internal_document_id) => new Pro
 })
 
 // PUT /document/{document_id}/{document_type_group_id}
-export const editDocument = (document_id, document_type_group_id, data, files) => new Promise((resolve, reject) => {
-    console.log("files", files)
+export const editDocument = (document_id, document_type_group_id, data, files, flag_create_approval_flow) => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}/${document_type_group_id}`;
-    console.log("files", files)
-    console.log("data>>", data)
     axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             console.log(" I am successful in updating contents of document_id ", document_id)
             if (res.status === 200) {
-                console.log("wow i putted successfully status 200 ", res.data)
-                if (files !== undefined) {
+                console.log("wow i putted successfully status 200 flag_create_approval_flow", flag_create_approval_flow, "files", files)
+                if (flag_create_approval_flow && files !== undefined) {
                     if (files.length !== 0) {
                         uploadAttachmentDocumentData(document_id, files)
                             .then(() => {
@@ -1243,10 +1240,10 @@ const mutateDataFillDocumentID = (object, document_id) => {
 // Save a Document Draft (without getting beginning approval flow)
 //   1. POST /document/new/0: createDocumentEmptyRow()
 //   2. PUT /document/{document_id}/{document_type_group_id}: editDocument(document_id, document_type_group_id, data)
-export const saveDocument = (document_type_group_id, data, files) => new Promise((resolve, reject) => {
+export const saveDocument = (document_type_group_id, data, files, flag_create_approval_flow) => new Promise((resolve, reject) => {
     createDocumentEmptyRow()
         .then(({ document_id, internal_document_id, status }) => { // Get the Document_ID
-            editDocument(document_id, document_type_group_id, mutateDataFillDocumentID(data, document_id), files)
+            editDocument(document_id, document_type_group_id, mutateDataFillDocumentID(data, document_id), files, flag_create_approval_flow)
                 .then(() => {
                     return resolve(document_id, internal_document_id, status);
                 })
@@ -1455,6 +1452,14 @@ export const DOCUMENT_STATUS = {
     REOPEN: "แก้ไขเอกสาร",
     FAST_TRACK: "Fast Track",
 }
+export const DOCUMENT_STATUS_ID = {
+    DRAFT: 1,
+    WAIT_APPROVE: 2,
+    APPROVE_DONE: 3,
+    VOID: 4,
+    REOPEN: 5,
+    FAST_TRACK: 6,
+}
 // approval_step_action_id
 export const APPROVAL_STEP_ACTION = {
     CHECK_APPROVAL: 1, // "ตรวจสอบและรับทราบลงนาม",
@@ -1540,6 +1545,7 @@ export const checkDocumentStatus = (valuesContext) => new Promise((resolve, reje
 
 
 const responseToFormState = (fact, data, document_type_group_id) => {
+    console.log("TEST >>> data", data)
     if (isICD(document_type_group_id)) {
         if (document_type_group_id !== DOCUMENT_TYPE_ID.PHYSICAL_COUNT && document_type_group_id !== DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT) {
             for (var i = data.line_items.length; i <= 9; i++) {
@@ -1567,7 +1573,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                 created_on: created_on.toISOString().split(".")[0],
                 line_items: data.line_items,
                 remark: data.remark,
-                // status_name_th: "",
+                status_name_th: data.status_name,
                 document_action_type_id: "",
             }
             if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO) {
@@ -2025,10 +2031,8 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
         console.log("I dont have any internal doc id")
         return resolve('Required');
     } else if (!isValidInternalDocumentIDFormat(internal_document_id) && !isValidInternalDocumentIDDraftFormat(internal_document_id)) {
-        console.log(">>>>>")
         return resolve('Invalid Document ID Format Be sure to use the format ie. GR-PYO-2563/0001')
     }
-    console.log(">>>>NUK")
     // Checking from Database if Internal Document ID Exists
     let error;
     getDocumentbyInternalDocumentID(internal_document_id)
