@@ -33,7 +33,6 @@ const useExportPdfInitializer = () => {
 
   // Handle Toolbar Mode
   useEffect(() => {
-    console.log(">>>><<<>><")
     // let document_id = values.src_warehouse_id;
     let document_item = values.internal_document_id;
     let document_item_list = values.line_items;

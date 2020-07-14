@@ -17,9 +17,10 @@ export const useToolbarChangeModeInitializer = (initial_mode) => {
     // Handle toolbar mode change + requireClick Changes, navBottom onReady 
     useEffect(()=> {
         // Handle make navBottom onready (Blue) once change mode
+        console.log("Change navBottomOnReady")
         dispatch(navBottomOnReady('', '', ''));
-    }, [toolbar.mode, toolbar.requiresHandleClick]);
-
+    }, [toolbar.mode]);
+    // toolbar.mode, toolbar.requiresHandleClick
     return;
 }
 
