@@ -1330,7 +1330,7 @@ export const fetchStepApprovalDocumentData = (document_id) => new Promise((resol
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/latest/plus`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((step_approve) => {
-            console.log("Fetfch Appoval", step_approve.data)
+            // console.log("Fetfch Appoval", step_approve.data)
             resolve(step_approve.data);
         })
         .catch((err) => {
@@ -1573,7 +1573,6 @@ export const checkDocumentStatus = (valuesContext) => new Promise((resolve, reje
 
 
 const responseToFormState = (fact, data, document_type_group_id) => {
-    console.log("TEST >>> data", data)
     if (isICD(document_type_group_id)) {
         if (document_type_group_id !== DOCUMENT_TYPE_ID.PHYSICAL_COUNT && document_type_group_id !== DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT) {
             data.line_items.map((item) => {
@@ -2596,7 +2595,7 @@ export const validateLineNumberPerUnitPriceItemIDFieldHelper = (setFieldValue, f
 }
 
 export const validateEmployeeIDField = (fieldName, fact, setFieldValue, employee_id) => {
-    console.log("I am validating employee id")
+    // console.log("I am validating employee id")
     employee_id = employee_id.split('\\')[0]; // Escape Character USERNAME CANT HAVE ESCAPE CHARACTER!
     let users = fact[FACTS.USERS].items;
     let user = users.find(user => user.employee_id === employee_id); // Returns undefined if not found

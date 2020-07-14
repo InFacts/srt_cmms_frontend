@@ -47,9 +47,6 @@ const useFooterInitializer = (document_type_id) => {
     const hadleDocumentStatusWithFooter = (document_id) => {
         // console.log("hadleDocumentStatusWithFooter")
         // checkDocumentStatus(values).then(function (docuementStatus) {
-        let docuementStatus = values.document_status_id
-        // console.log("checkDocumentStatus", docuementStatus)
-        // setFieldValue("status_name_th", docuementStatus, false);
         let userInfo = {
             id: user_id.id, // TEST: User ID
             position_id: user_id.has_position[0].position_id,
@@ -57,11 +54,11 @@ const useFooterInitializer = (document_type_id) => {
         };
         let track_document_id = document_id; // TEST: Track Document
         let previousApprovalInfo = values.step_approve; // Check Previous Approver 
-        let document_status = docuementStatus; // TEST: values.status_name_th
+        let document_status = values.status_name_th; // TEST: values.status_name_th
         let created_by_admin_employee_id = getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id); // TEST: values.created_by_admin_employee_id;
 
         // Check That user who create document?
-        // console.log("userInfo.id", userInfo.id,"created_by_admin_employee_id", created_by_admin_employee_id, "document_status", document_status)
+        // console.log("userInfo.id", userInfo.id,"created_by_admin_employee_id", created_by_admin_employee_id, "document_status", document_status,DOCUMENT_STATUS.WAIT_APPROVE, values)
         if (userInfo.id === created_by_admin_employee_id) {
             if (document_status === DOCUMENT_STATUS.DRAFT) { dispatch(footerToModeAddDraft()); }
             else if (document_status === DOCUMENT_STATUS.WAIT_APPROVE) { dispatch(footerToModeOwnDocument()); }
@@ -148,17 +145,24 @@ const useFooterInitializer = (document_type_id) => {
             }
             else if (toolbar.mode === TOOLBAR_MODE.ADD) {
                 // ADD_DRAFT mode
-                // document_id = null // NUK edit COde รอพี่นีทมาดู
                 console.log("Footer-initializer >> TOOLBAR_MODE.ADD", document_id)
-                hadleDocumentStatusWithFooter(document_id);
                 dispatch(footerToModeAddDraft());
+                hadleDocumentStatusWithFooter(document_id);
             }
             else {
                 console.log("Footer-initializer >> TOOLBAR_MODE.SEARCH")
                 dispatch(footerToModeSearch());
             }
         }
-    }, [toolbar.mode, values.document_id, values.step_approve, values.warehouse_id, values.active, values.modeEdit]);
+    }, [toolbar.mode, values.document_id, values.step_approve, values.warehouse_id, values.active, values.modeEdit, values.status_name_th]);
+
+    // useEffect(() => {
+    //     let document_id = values.document_id;
+    //     if (toolbar.mode === TOOLBAR_MODE.ADD) {
+    //         console.log("Footer-initializer .........", document_id)
+    //         hadleDocumentStatusWithFooter(document_id);
+    //     }
+    // }, [values.status_name_th]);
 
     // Handle Back
     useEffect(() => {
@@ -334,6 +338,7 @@ const useFooterInitializer = (document_type_id) => {
                     if (values.document_id) { // Case If you ever saved document and then you SEND document. (If have document_id, no need to create new doc)
                         putDocument(values.document_id, document_type_id, data, values.files, DOCUMENT_STATUS_ID.DRAFT, true);
                     } else { // Case If you never saved document, but you want to SEND document
+                        console.log(">>> TEST")
                         saveDocument(document_type_id, data, values.files, true)
                             .then((document_id) => {
                                 setFieldValue('document_id', document_id, true);
