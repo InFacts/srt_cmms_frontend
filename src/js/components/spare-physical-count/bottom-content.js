@@ -20,7 +20,7 @@ import {
   isValidInternalDocumentIDFormat, isValidInternalDocumentIDDraftFormat,
   fetchAttachmentDocumentData, validateEmployeeIDField, validateWarehouseIDField,
   validateInternalDocumentIDFieldHelper, DOCUMENT_STATUS, getUserIDFromEmployeeID,
-  validatedataDocumentField, sumTotalLineItemHelper, sumTotalHelper, checkBooleanForEditHelper
+  validatedataDocumentField, sumTotalLineItemHelper, sumTotalPhycicalCountAndInventoryAdjustmentHelper, checkBooleanForEditHelper
 } from '../../helper';
 
 import PopupModalNoPart from '../common/popup-modal-nopart'
@@ -38,7 +38,7 @@ const BottomContent = (props) => {
   const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
   const sumTotalLineItem = (quantity, per_unit_price, description) => sumTotalLineItemHelper(quantity, per_unit_price, description);
-  const sumTotal = (list_show) => sumTotalHelper(list_show);
+  const sumTotal = (list_show) => sumTotalPhycicalCountAndInventoryAdjustmentHelper(list_show);
 
   const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => {
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
@@ -67,16 +67,17 @@ const BottomContent = (props) => {
         setFieldValue(fieldName + `.line_number`, index + 1, false);
         setFieldValue(fieldName + `.item_status_id`, 1, false);
         setFieldValue(fieldName + `.per_unit_price`, 0, false);
-      } else {
-        setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
-        setFieldValue(fieldName + `.description`, `${item.description}`, false);
-        setFieldValue(fieldName + `.unit_count`, 1, false);
-        setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
-        setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
-        setFieldValue(fieldName + `.line_number`, index + 1, false);
-        setFieldValue(fieldName + `.item_status_id`, 1, false);
-        setFieldValue(fieldName + `.per_unit_price`, 0, false);
-      }
+      } 
+      // else {
+      //   setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+      //   setFieldValue(fieldName + `.description`, `${item.description}`, false);
+      //   setFieldValue(fieldName + `.unit_count`, 1, false);
+      //   setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+      //   setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+      //   setFieldValue(fieldName + `.line_number`, index + 1, false);
+      //   setFieldValue(fieldName + `.item_status_id`, 1, false);
+      //   setFieldValue(fieldName + `.per_unit_price`, 0, false);
+      // }
       return;
     } else {
       return 'Invalid Number ID';

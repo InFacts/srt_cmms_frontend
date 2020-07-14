@@ -33,11 +33,12 @@ const TopContent = (props) => {
     console.log("I am validating warehouse id",fieldName, warehouse_id)
     warehouse_id = `${warehouse_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
     let warehouses = fact.warehouses.items;
-    console.log("warehouses", warehouses)
+    // console.log("warehouses", warehouses)
     let warehouse = warehouses.find(warehouse => `${warehouse.warehouse_id}` === `${warehouse_id}`); // Returns undefined if not found
-    console.log("warehouse1", warehouse)
+    // console.log("warehouse1", warehouse)
     if (warehouse) {
       setFieldValue(fieldName, `${warehouse_id}\\[${warehouse.abbreviation}] ${warehouse.name}`, false);
+      setFieldValue("warehouse_type_id", warehouse.warehouse_type_id, false);
       return;
     } else {
       return 'Invalid Warehouse ID';
@@ -116,6 +117,7 @@ const TopContent = (props) => {
               .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
                 if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
                   error = 'Invalid Document ID';
+                  console.log("err1", err.response)
                 }//If mode add, ok
               })
               .finally(() => {
@@ -140,6 +142,7 @@ const TopContent = (props) => {
               .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
                 if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
                   error = 'Invalid Document ID';
+                  console.log("err2", err.response)
                 }//If mode add, ok
               })
               .finally(() => {

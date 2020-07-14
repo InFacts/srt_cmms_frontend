@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useSelector, shallowEqual} from 'react-redux'
 import { useFormikContext } from 'formik';
 import {fetchStepApprovalDocumentData, 
-    fetchAttachmentDocumentData} from '../helper';
+    fetchAttachmentDocumentData, getDocumentbyInternalDocumentID} from '../helper';
     
 import { FOOTER_ACTIONS} from '../redux/modules/footer.js';
 
@@ -28,14 +28,40 @@ const useDocumentSubscription = () => {
         // If not an empty string AND isn't handlingSEND process
         // console.log("fetchStepApprovalDocumentData: SEND/Doc ID Changed")
         // Start Axios Get step_approve and attachment By nuk
-        // console.log("BEFORE fetchStepApprovalDocumentData")
         fetchStepApprovalDocumentData(values.document_id)
         .then((result) => {
-            // console.log("AFTER fetchStepApprovalDocumentData", result)
             setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
             if(result.is_canceled){
                 setFieldValue("document_is_canceled", result.is_canceled.data, false);
             }
+        });
+        }
+    }, [values.document_id, footer.requiresHandleClick[FOOTER_ACTIONS.SEND], footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL] , 
+    footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL_DONE],
+    footer.requiresHandleClick[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS],
+    footer.requiresHandleClick[FOOTER_ACTIONS.CHECK_APPROVAL],
+    footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK], 
+    footer.requiresHandleClick[FOOTER_ACTIONS.GOT_IT],
+    footer.requiresHandleClick[FOOTER_ACTIONS.REJECT] ]);
+
+    // Get approval Step when values.document_id changes
+    useEffect(() => {
+        if(values.document_id && 
+            !footer.requiresHandleClick[FOOTER_ACTIONS.SEND] && 
+            !footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL] && 
+            !footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL_DONE] && 
+            !footer.requiresHandleClick[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS] && 
+            !footer.requiresHandleClick[FOOTER_ACTIONS.CHECK_APPROVAL] && 
+            !footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK] && 
+            !footer.requiresHandleClick[FOOTER_ACTIONS.GOT_IT] && 
+            !footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]
+        ){ 
+        // If not an empty string AND isn't handlingSEND process
+        // console.log("fetchStepApprovalDocumentData: SEND/Doc ID Changed")
+        // Start Axios Get step_approve and attachment By nuk
+        getDocumentbyInternalDocumentID(values.internal_document_id)
+        .then((data) => {
+            setFieldValue('status_name_th', data.status_name, false);
         });
         }
     }, [values.document_id, footer.requiresHandleClick[FOOTER_ACTIONS.SEND], footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL] , 

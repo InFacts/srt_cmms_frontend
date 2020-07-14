@@ -288,8 +288,8 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             location: values.location,
             warehouse_type_id: values.warehouse_type_id,
             node_id: 1,
-            active: values.active === "1" ? true : false,
-            use_central: values.use_central === "1" ? true : false
+            active: values.active == "1" ? true : false,
+            use_central: values.use_central == "1" ? true : false
         }
     } else if (document_type_id === DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
         let last = 0;
@@ -305,7 +305,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             item_type_id: values.item_type_id,
             item_group_id: values.item_group_id,
             uom_group_id: values.uom_group_id,
-            active: values.active === "1" ? true : false,
+            active: values.active == "1" ? true : false,
             remark: values.remark,
             uom_id_inventory: values.uom_id,
             default_warehouse_id: 100,
@@ -359,7 +359,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             item_type_id: parseInt(values.item_type_id),
             item_group_id: parseInt(values.item_group_id),
             uom_group_id: parseInt(values.uom_group_id),
-            active: values.active === "1" ? true : false,
+            active: values.active == "1" ? true : false,
             remark: values.remark,
             default_warehouse_id: 100,
             quantity_lowest: 1,
@@ -395,14 +395,14 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         var line_items_part = [];
         values.checklist_line_item_use_equipment.map((line_item, index) => {
             if (line_item.item_id) {
-            line_items_part.push({
-                checklist_line_item_use_equipment_id: parseInt(last_checklist_line_item_use_equipment_id) + 1, // ต้อง Get อัน่าสุดออกมาก่อน
-                checklist_line_item_id: parseInt(last_checklist_line_item) + 1,
-                item_id: line_item.item_id,
-                quantity: line_item.quantity,
-                uom_id: parseInt(line_item.uom_id)
-            });
-        }
+                line_items_part.push({
+                    checklist_line_item_use_equipment_id: parseInt(last_checklist_line_item_use_equipment_id) + 1, // ต้อง Get อัน่าสุดออกมาก่อน
+                    checklist_line_item_id: parseInt(last_checklist_line_item) + 1,
+                    item_id: line_item.item_id,
+                    quantity: line_item.quantity,
+                    uom_id: parseInt(line_item.uom_id)
+                });
+            }
         })
 
         let create_checklist_part = {
@@ -412,7 +412,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             freq: values.freq,
             freq_unit_id: parseInt(values.freq_unit_id),
             // active: values.active === "1" ? true : false,
-            remark: values.remark,
+            remark: "string",
             line_item: line_items_part
         }
         console.log("create_checklist_part", create_checklist_part)
@@ -421,14 +421,14 @@ export const packDataFromValues = (fact, values, document_type_id) => {
     }
     let document_part = {
         ...DOCUMENT_SCHEMA,
-        document_status_id: 1,
+        document_status_id: 1, // ["สร้าง Draft", "รอการอนุมัติ", "อนุมัติเรียบร้อยแล้ว", "เอกสารหมดสถานะการใช้งาน", "แก้ไขเอกสาร", "Fast Track"]
         document_action_type_id: 1,
         document_id: values.document_id,
         internal_document_id: values.internal_document_id,
         remark: values.remark,
         created_by_admin_id: getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id),
         created_by_user_id: getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_user_employee_id),
-        document_date: values.document_date
+        document_date: values.document_date + 'T00:00:00+00:00'
     }
     if (isICD(document_type_id)) {
         let line_items_part = [];
@@ -524,8 +524,8 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                             unit_count: line_item.unit_count,
                             per_unit_price: line_item.per_unit_price,
                             item_id: getItemIDFromInternalItemID(fact[FACTS.ITEM], line_item.internal_item_id),
-                            item_status_id: line_item.item_status_id,
-                            count_datetime: `${values.document_date} 00:00:00`
+                            item_status_id: parseInt(line_item.item_status_id),
+                            count_datetime: values.document_date + 'T00:00:00'
                         });
                     }
                 })
@@ -647,7 +647,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
     } else if (document_type_id === DOCUMENT_TYPE_ID.SS101) {
         document_part = {
             ...document_part,
-            refer_to_document_id: values.refer_to_document_id,
+            refer_to_document_id: values.refer_to_document_id ? values.refer_to_document_id : null,
             document_date: values.document_date + 'T00:00:00+00:00'
         };
         console.log("document_part", document_part)
@@ -657,7 +657,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             accident_on: values.accident_on + ':00+00:00',
             arrived_on: values.arrived_on + ':00+00:00',
             finished_on: values.finished_on + ':00+00:00',
-            total_fail_time: values.total_fail_time,
+            total_fail_time: values.total_fail_time ? parseInt(values.total_fail_time) : null,
             recv_accident_from_recv_id: values.recv_accident_from_recv_id ? parseInt(values.recv_accident_from_recv_id) : null,
             recv_accident_from_desc: values.recv_accident_from_desc,
             summary_cause_condition: values.summary_cause_condition,
@@ -696,7 +696,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         loss_line_item_part.map((line_items, index) => {
             loss_line_item_part[index].description = line_items.description
             loss_line_item_part[index].document_id = values.document_id
-            loss_line_item_part[index].line_number = index+1
+            loss_line_item_part[index].line_number = index + 1
             loss_line_item_part[index].price = parseInt(line_items.price)
             loss_line_item_part[index].quantity = parseInt(line_items.quantity)
             loss_line_item_part[index].remark = line_items.remark
@@ -710,7 +710,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             ss101_line_item_part[index].item_status_id = parseInt(line_items.item_status_id)
             ss101_line_item_part[index].remark = line_items.remark
             ss101_line_item_part[index].document_id = values.document_id
-            ss101_line_item_part[index].line_number = index+1
+            ss101_line_item_part[index].line_number = index + 1
             delete ss101_line_item_part[index].internal_item_id
             delete ss101_line_item_part[index].description
             delete ss101_line_item_part[index].equipment_item_id
@@ -831,9 +831,9 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             active: values.active === "1" ? true : false,
             node_id: parseInt(values.node_id),
             station_id: parseInt(values.station_id),
-            start_on: values.start_on + 'T00:00:00+00:00',
+            start_on: values.start_on + 'T01:20:00+07:00',
         }
-        
+
         // ต้องเป็น Array selector_checklist_group_part
         let selector_checklist_group_part = []
         // ของ Custom line item
@@ -893,6 +893,158 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             document: document_part_selector,
             specific: specific_selector
         }
+    } else if (document_type_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM) {
+
+        console.log("data values", values)
+
+        let document_part = {
+            ...DOCUMENT_SCHEMA,
+            document_status_id: 1,
+            document_action_type_id: 1,
+            document_id: values.document_id,
+            internal_document_id: values.internal_document_id,
+            remark: values.remark,
+            created_by_admin_id: 0,
+            created_by_user_id: 0,
+            document_date: values.document_date + 'T00:00:00+00:00',
+        }
+
+        let specific_part = {
+            document_id: values.document_id,
+            wo_checklist_status_id: values.wo_checklist_status_id,
+            selector_checklist_line_item_id: values.selector_checklist_line_item_id,
+            work_order_pm_line_item: []
+        }
+
+        return {
+            document: document_part,
+            specific: specific_part
+        }
+    }
+}
+
+export const packDataFromValuesMasterDataForEdit = (fact, values, document_type_id) => {
+    if (document_type_id === DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA) {
+        return {
+            warehouse_id: values.warehouse_id,
+            name: values.name,
+            abbreviation: values.abbreviation,
+            location: values.location,
+            warehouse_type_id: values.warehouse_type_id,
+            node_id: 1,
+            active: values.active == "1" ? true : false,
+            use_central: values.use_central === "1" ? true : false
+        }
+    } else if (document_type_id === DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
+        let last = 0;
+        fact[FACTS.ITEM].items.map(item => {
+            if (item.item_id > last) {
+                last = item.item_id;
+            }
+        });
+        return {
+            item_id: last + 1,
+            internal_item_id: values.internal_item_id,
+            description: values.description,
+            item_type_id: values.item_type_id,
+            item_group_id: values.item_group_id,
+            uom_group_id: values.uom_group_id,
+            active: values.active == "1" ? true : false,
+            remark: values.remark,
+            uom_id_inventory: values.uom_id,
+            default_warehouse_id: 100,
+            quantity_lowest: values.quantity_lowest,
+            quantity_highest: values.quantity_highest,
+            quantity_required: values.quantity_required,
+            minimum_order_quantity: values.minimum_order_quantity,
+            lead_time: values.lead_time,
+            tolerance_time: values.tolerance_time,
+            accounting_type: values.accounting_type
+        }
+    } else if (document_type_id === DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA) {
+        console.log("item_id", values.item_id)
+        let equipment_part = {
+            item_id: values.item_id,
+            equipment_id: values.equipment_id,
+            price_currently: values.price_currently,
+            depreciation: parseInt(values.depreciation),
+            useful_life: values.useful_life,
+            item_status_id: parseInt(values.item_status_id),
+            responsible_district_id: parseInt(values.responsible_district_id),
+        }
+
+        let equipment_item_part = {
+            item_id: values.item_id,
+            equipment_group_id: parseInt(values.equipment_group_id),
+            checklist_id: parseInt(values.checklist_id)
+        }
+
+        let item_part = {
+            item_id: values.item_id,
+            internal_item_id: values.internal_item_id,
+            description: values.description,
+            item_type_id: parseInt(values.item_type_id),
+            item_group_id: parseInt(values.item_group_id),
+            uom_group_id: parseInt(values.uom_group_id),
+            active: values.active == "1" ? true : false,
+            remark: values.remark,
+            default_warehouse_id: 100,
+            quantity_lowest: 1,
+            quantity_highest: 1,
+            quantity_required: 1,
+            minimum_order_quantity: values.minimum_order_quantity,
+            lead_time: values.lead_time,
+            tolerance_time: values.tolerance_time,
+            accounting_type: values.accounting_type
+        }
+
+        return {
+            equipment: equipment_part,
+            equipment_item: equipment_item_part,
+            item: item_part,
+        }
+    } else if (document_type_id === DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM) {
+        let last_checklist_line_item = 0;
+        fact[FACTS.CHECKLIST_LINE_ITEM].items.map(item => {
+            // console.log("item", item)
+            if (item.checklist_line_item > last_checklist_line_item) {
+                last_checklist_line_item = item.checklist_line_item;
+            }
+        });
+        // console.log("values", values)
+        let last_checklist_line_item_use_equipment_id = 0;
+        fact[FACTS.CHECKLIST_LINE_ITEM_USE_EQUIPMENT].items.map(item => {
+            if (item.checklist_line_item_use_equipment_id > last_checklist_line_item_use_equipment_id) {
+                last_checklist_line_item_use_equipment_id = item.checklist_line_item_use_equipment_id;
+            }
+        });
+
+        var line_items_part = [];
+        values.checklist_line_item_use_equipment.map((line_item, index) => {
+            if (line_item.item_id) {
+                line_items_part.push({
+                    checklist_line_item_use_equipment_id: parseInt(last_checklist_line_item_use_equipment_id) + 1, // ต้อง Get อัน่าสุดออกมาก่อน
+                    checklist_line_item_id: parseInt(last_checklist_line_item) + 1,
+                    item_id: line_item.item_id,
+                    quantity: line_item.quantity,
+                    uom_id: parseInt(line_item.uom_id)
+                });
+            }
+        })
+
+        let create_checklist_part = {
+            checklist_line_item: parseInt(last_checklist_line_item) + 1,
+            checklist_id: parseInt(values.checklist_id),
+            name: values.name,
+            freq: values.freq,
+            freq_unit_id: parseInt(values.freq_unit_id),
+            // active: values.active === "1" ? true : false,
+            remark: values.remark,
+            line_item: line_items_part
+        }
+        console.log("create_checklist_part", create_checklist_part)
+        return create_checklist_part;
+
     }
 }
 
@@ -968,7 +1120,7 @@ export const editMasterData = (data, document_type_group_id) => new Promise((res
         var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items/${data.item_id}`;
     }
     if (document_type_group_id === DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA) {
-        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/equipment/${data.equipment.item_id}`;
+        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/equipment/${data.equipment.equipment_id}`;
     }
     if (document_type_group_id === DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM) {
         var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/checklist-line-item/${data.checklist_line_item}`;
@@ -1021,17 +1173,14 @@ export const getDocumentbyInternalDocumentID = (internal_document_id) => new Pro
 })
 
 // PUT /document/{document_id}/{document_type_group_id}
-export const editDocument = (document_id, document_type_group_id, data, files) => new Promise((resolve, reject) => {
-    console.log("files", files)
+export const editDocument = (document_id, document_type_group_id, data, files, flag_create_approval_flow) => new Promise((resolve, reject) => {
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}/${document_type_group_id}`;
-    console.log("files", files)
-    console.log("data>>", data)
     axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             console.log(" I am successful in updating contents of document_id ", document_id)
             if (res.status === 200) {
-                console.log("wow i putted successfully status 200 ", res.data)
-                if (files !== undefined) {
+                console.log("wow i putted successfully status 200 flag_create_approval_flow", flag_create_approval_flow, "files", files)
+                if (flag_create_approval_flow && files !== undefined) {
                     if (files.length !== 0) {
                         uploadAttachmentDocumentData(document_id, files)
                             .then(() => {
@@ -1118,10 +1267,10 @@ const mutateDataFillDocumentID = (object, document_id) => {
 // Save a Document Draft (without getting beginning approval flow)
 //   1. POST /document/new/0: createDocumentEmptyRow()
 //   2. PUT /document/{document_id}/{document_type_group_id}: editDocument(document_id, document_type_group_id, data)
-export const saveDocument = (document_type_group_id, data, files) => new Promise((resolve, reject) => {
+export const saveDocument = (document_type_group_id, data, files, flag_create_approval_flow) => new Promise((resolve, reject) => {
     createDocumentEmptyRow()
         .then(({ document_id, internal_document_id, status }) => { // Get the Document_ID
-            editDocument(document_id, document_type_group_id, mutateDataFillDocumentID(data, document_id), files)
+            editDocument(document_id, document_type_group_id, mutateDataFillDocumentID(data, document_id), files, flag_create_approval_flow)
                 .then(() => {
                     return resolve(document_id, internal_document_id, status);
                 })
@@ -1181,6 +1330,7 @@ export const fetchStepApprovalDocumentData = (document_id) => new Promise((resol
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/latest/plus`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((step_approve) => {
+            // console.log("Fetfch Appoval", step_approve.data)
             resolve(step_approve.data);
         })
         .catch((err) => {
@@ -1330,6 +1480,14 @@ export const DOCUMENT_STATUS = {
     REOPEN: "แก้ไขเอกสาร",
     FAST_TRACK: "Fast Track",
 }
+export const DOCUMENT_STATUS_ID = {
+    DRAFT: 1,
+    WAIT_APPROVE: 2,
+    APPROVE_DONE: 3,
+    VOID: 4,
+    REOPEN: 5,
+    FAST_TRACK: 6,
+}
 // approval_step_action_id
 export const APPROVAL_STEP_ACTION = {
     CHECK_APPROVAL: 1, // "ตรวจสอบและรับทราบลงนาม",
@@ -1417,6 +1575,9 @@ export const checkDocumentStatus = (valuesContext) => new Promise((resolve, reje
 const responseToFormState = (fact, data, document_type_group_id) => {
     if (isICD(document_type_group_id)) {
         if (document_type_group_id !== DOCUMENT_TYPE_ID.PHYSICAL_COUNT && document_type_group_id !== DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT) {
+            data.line_items.map((item) => {
+                item.item_type_id = item.item.item_type_id
+            })
             for (var i = data.line_items.length; i <= 9; i++) {
                 data.line_items.push(
                     {
@@ -1431,18 +1592,18 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                     }
                 );
             }
-            var created_on = new Date(data.created_on);
-            created_on.setHours(created_on.getHours() + 7)
+            // var created_on = new Date(data.created_on);
+            // created_on.setHours(created_on.getHours() + 7)
             let form_state = {
                 document_id: data.document_id,
                 internal_document_id: data.internal_document_id,
                 document_date: data.document_date.split("T")[0],
                 created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.created_by_user_id) || '',
                 created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.created_by_admin_id) || '',
-                created_on: created_on.toISOString().split(".")[0],
+                created_on: data.created_on.split(".")[0],
                 line_items: data.line_items,
                 remark: data.remark,
-                // status_name_th: "",
+                status_name_th: data.status_name,
                 document_action_type_id: "",
             }
             if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO) {
@@ -1513,6 +1674,10 @@ const responseToFormState = (fact, data, document_type_group_id) => {
             }
         } else {
             if (document_type_group_id === DOCUMENT_TYPE_ID.PHYSICAL_COUNT) {
+                console.log(" I AM PHYSICAL_COUNT ")
+                // data.specific.line_items.map((item) => {
+                //     item.item_type_id = item.item.item_type_id
+                // })
                 for (var i = data.specific.line_items.length; i <= 9; i++) {
                     data.specific.line_items.push(
                         {
@@ -1531,6 +1696,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                 var created_on = new Date(data.document.created_on);
                 created_on.setHours(created_on.getHours() + 7)
                 return {
+                    document_id: data.document.document_id,
                     internal_document_id: data.document.internal_document_id,
                     created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_user_id) || '',
                     created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_admin_id) || '',
@@ -1538,12 +1704,15 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                     line_items: data.specific.line_items,
                     src_warehouse_id: data.specific.warehouse_id,
                     remark: data.document.remark,
-                    // status_name_th: '',
+                    status_name_th: data.document.document_status.status,
                     // refer_to_document_name: data.specific.refer_to_document_name,
                     document_date: data.document.document_date.slice(0, 10)
                 }
             }
             if (document_type_group_id === DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT) {
+                // data.specific.line_items.map((item) => {
+                //     item.item_type_id = item.item.item_type_id
+                // })
                 for (var i = data.specific.line_items.length; i <= 9; i++) {
                     data.specific.line_items.push(
                         {
@@ -1562,6 +1731,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                 var created_on = new Date(data.document.created_on);
                 created_on.setHours(created_on.getHours() + 7)
                 return {
+                    document_id: data.document.document_id,
                     internal_document_id: data.document.internal_document_id,
                     created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_user_id) || '',
                     created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_admin_id) || '',
@@ -1569,7 +1739,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                     line_items: data.specific.line_items,
                     src_warehouse_id: data.specific.warehouse_id,
                     remark: data.document.remark,
-                    // status_name_th: '',
+                    status_name_th: data.document.document_status.status,
                     // refer_to_document_name: data.specific.refer_to_document_name,
                     document_date: data.document.document_date.slice(0, 10)
                 }
@@ -1634,14 +1804,14 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                 }
             );
         }
-        var created_on = new Date(data.document.created_on);
-        created_on.setHours(created_on.getHours() + 7);
+        // var created_on = new Date(data.document.created_on);
+        // created_on.setHours(created_on.getHours() + 7);
         return {
             document_id: data.document.document_id,
             internal_document_id: data.document.internal_document_id,
             created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_user_id) || '',
             created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_admin_id) || '',
-            created_on: created_on.toISOString().split(".")[0],
+            created_on: data.document.created_on.split(".")[0],
             line_items: data.specific.line_items,
             src_warehouse_id: data.document.warehouse_id,
             remark: data.document.remark,
@@ -1650,8 +1820,8 @@ const responseToFormState = (fact, data, document_type_group_id) => {
             document_date: data.document.document_date.slice(0, 10)
         }
     } else if (document_type_group_id === DOCUMENT_TYPE_ID.EQUIPMENT_INSTALLATION) {
-        var created_on = new Date(data.document.created_on);
-        created_on.setHours(created_on.getHours() + 7);
+        // var created_on = new Date(data.document.created_on);
+        // created_on.setHours(created_on.getHours() + 7);
         return {
             document_id: data.document.document_id,
             item_id: data.specific.equipment.item_id,
@@ -1664,7 +1834,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
             responsible_district_id: data.specific.equipment.responsible_district_id,
             created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_user_id) || '',
             created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_admin_id) || '',
-            created_on: created_on.toISOString().split(".")[0],
+            created_on: data.document.created_on.split(".")[0],
             remark: data.document.remark,
             document_date: data.document.document_date.slice(0, 10),
             announce_use_on: data.specific.announce_use_on.slice(0, 10),
@@ -1676,17 +1846,17 @@ const responseToFormState = (fact, data, document_type_group_id) => {
             x_cross_x_cross_id: data.specific.x_cross_x_cross_id
         }
     } else if (document_type_group_id === DOCUMENT_TYPE_ID.SELECTOR) {
-        var created_on = new Date(data.document.created_on);
-        created_on.setHours(created_on.getHours() + 7);
+        // var created_on = new Date(data.document.created_on);
+        // created_on.setHours(created_on.getHours() + 7);
         return {
             document_id: data.document.document_id,
             internal_document_id: data.document.internal_document_id,
             created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_user_id) || '',
             created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_admin_id) || '',
-            created_on: created_on.toISOString().split(".")[0],
+            created_on: data.document.created_on.split(".")[0],
             src_warehouse_id: data.document.warehouse_id,
             document_date: data.document.document_date.slice(0, 10),
-            
+
             name: data.specific.selector_pm_plan.name,
             district_id: data.specific.selector_pm_plan.node.district_id,
             node_id: data.specific.selector_pm_plan.node_id,
@@ -1695,12 +1865,42 @@ const responseToFormState = (fact, data, document_type_group_id) => {
             line_custom: returnFullArrayLineCustom(data.specific.selector_pm_plan.selector_checklist_group),
             line_equipment: returnFullArrayLineEquipment(data.specific.selector_pm_plan.selector_checklist_group),
         }
+    } else if (document_type_group_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM) {
+        console.log("data", data)
+        // var created_on = new Date(data.document.created_on);
+        // created_on.setHours(created_on.getHours() + 7);
+        let checklists = fact[FACTS.CHECKLIST_LINE_ITEM].items;
+        let checklist = checklists.find(checklist => `${checklist.checklist_line_item}` === `${data.specific.selector_checklist_line_item[0].checklist_line_item_id}`)
+
+        let nodes = fact.nodes.items;
+        let node = nodes.find(node => `${node.node_id}` === `${data.specific.location_node_id}`)
+
+        if (checklist || node) {
+        return {
+            document_id: data.document.document_id,
+            internal_document_id: data.document.internal_document_id,
+            created_on: data.document.created_on.split(".")[0],
+            document_date: data.document.document_date.slice(0, 10),
+
+            wo_checklist_status_id: data.specific.wo_checklist_status_id,
+            selector_checklist_line_item_id: data.specific.selector_checklist_line_item_id,
+            checklist_id: checklist.checklist_id,
+            name: data.specific.selector_checklist_line_item[0].name,
+            freq: data.specific.selector_checklist_line_item[0].freq,
+            freq_unit_id: data.specific.selector_checklist_line_item[0].freq_unit_id,
+            checklist_line_item_use_equipment: data.specific.selector_checklist_line_item[0].selector_checklist_line_item_use_equipment,
+
+            location_district_id: node.district_id,
+            location_node_id: data.specific.location_node_id,
+            location_station_id: data.specific.location_station_id,
+        }
+        }
     }
 }
 
 function transformDocumentResponseToFormState(document_part, fact, document_type_group_id) {
-    var created_on = new Date(document_part.created_on);
-    created_on.setHours(created_on.getHours() + 7)
+    // var created_on = new Date(document_part.created_on);
+    // created_on.setHours(created_on.getHours() + 7)
     // if (document_type_group_id === DOCUMENT_TYPE_ID.SS101) {
     return {
         document_id: document_part.document_id,
@@ -1708,7 +1908,7 @@ function transformDocumentResponseToFormState(document_part, fact, document_type
         document_date: document_part.document_date.split("T")[0],
         created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_user_id) || '',
         created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_admin_id) || '',
-        created_on: created_on.toISOString().split(".")[0],
+        created_on: document_part.created_on.split(".")[0],
         refer_to_document_id: document_part.refer_to_document_id,
         refer_to_document_internal_id: document_part.refer_to_document_internal_id
     }
@@ -1832,7 +2032,7 @@ function returnFullArrayLossLineItemNull(loss_line_items) {
 }
 
 function returnFullArrayLineCustom(line_custom) {
-    console.log("line_custom", line_custom)
+    // console.log("line_custom", line_custom)
     let initialLineCustom = {
         name_group: '',
         unit_maintenance_location_id: '',
@@ -1841,17 +2041,17 @@ function returnFullArrayLineCustom(line_custom) {
     }
     let line_customs = [];
     line_custom.map((line_custom, index) => {
-        console.log("line_custom", line_custom)
+        // console.log("line_custom", line_custom)
         if (!line_custom.selector_checklist[index].equipment_id) {
-        line_customs.push({
-            checklist_group_id: line_custom.selector_checklist[index].checklist.checklist_group_id,
-            unit_maintenance_location_id: line_custom.unit_maintenance_location_id,
-            checklist_id: line_custom.selector_checklist[index].checklist.checklist_id,
-            quantity_location: line_custom.selector_checklist[index].quantity
-        });
+            line_customs.push({
+                checklist_group_id: line_custom.selector_checklist[index].checklist.checklist_group_id,
+                unit_maintenance_location_id: line_custom.unit_maintenance_location_id,
+                checklist_id: line_custom.selector_checklist[index].checklist.checklist_id,
+                quantity_location: line_custom.selector_checklist[index].quantity
+            });
         }
     })
-    for (var i = line_custom.length; i <= 9 ; i++) {
+    for (var i = line_custom.length; i <= 9; i++) {
         line_customs.push({
             ...initialLineCustom
         });
@@ -1870,22 +2070,56 @@ function returnFullArrayLineEquipment(line_equipment) {
     let line_equipments = [];
     line_equipment.map((line_equipment, index) => {
         if (line_equipment.selector_checklist[index].equipment_id) {
-        line_equipments.push({
-            internal_item_id: line_equipment.selector_checklist[index].equipment.equipment_item.item.internal_item_id,
-            checklist_group_id: line_equipment.selector_checklist[index].checklist.checklist_group_id,
-            unit_maintenance_location_id: line_equipment.unit_maintenance_location_id,
-            checklist_id: line_equipment.selector_checklist[index].checklist.checklist_id,
-            quantity_location: line_equipment.selector_checklist[index].quantity
-        });
+            line_equipments.push({
+                internal_item_id: line_equipment.selector_checklist[index].equipment.equipment_item.item.internal_item_id,
+                checklist_group_id: line_equipment.selector_checklist[index].checklist.checklist_group_id,
+                unit_maintenance_location_id: line_equipment.unit_maintenance_location_id,
+                checklist_id: line_equipment.selector_checklist[index].checklist.checklist_id,
+                quantity_location: line_equipment.selector_checklist[index].quantity
+            });
         }
     })
-    for (var i = line_equipment.length; i <= 9 ; i++) {
+    for (var i = line_equipment.length; i <= 9; i++) {
         line_equipments.push({
             ...initialLineEquipment
         });
     }
     return line_equipments;
 }
+
+// Validation 
+export const validateInternalDocumentIDWorfOrderPMFieldHelper = (checkBooleanForEdit, document_type_group_id, toolbar, footer, fact, values, setValues, setFieldValue, validateField, internal_document_id) => new Promise(resolve => {
+    // Internal Document ID
+    //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
+    //  ie. GR-PYO-2563/0001
+    if (document_type_group_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM) {
+        let error;
+        getDocumentbyInternalDocumentID(internal_document_id)
+            .then((data) => {
+                console.log(" i got data", data);
+                if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
+                    && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
+                    console.log("validateInternalDocumentIDField:: I got document ID ")
+                    setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
+                    return resolve(null);
+                }
+            })
+            .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
+                console.log("I think I have 404 not found in doc id.")
+                setFieldValue('document_id', '', false);
+
+                if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
+                    error = 'Document ID not Found in System';
+                } else {//If mode add, ok
+                    console.log("document ID doesn't exist but I am in mode add")
+                    error = ''
+                }
+            })
+            .finally(() => {
+                return resolve(error)
+            });
+    }
+});
 
 // Validation 
 export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, document_type_group_id, toolbar, footer, fact, values, setValues, setFieldValue, validateField, internal_document_id) => new Promise(resolve => {
@@ -1895,15 +2129,13 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
     if (checkBooleanForEdit === true && (toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)) {
         return resolve();
     }
-    console.log("I am validating internal document id ", internal_document_id)
     if (!internal_document_id) {
         console.log("I dont have any internal doc id")
         return resolve('Required');
     } else if (!isValidInternalDocumentIDFormat(internal_document_id) && !isValidInternalDocumentIDDraftFormat(internal_document_id)) {
-        console.log(">>>>>")
+        console.log("Invalid Document ID Format Be sure to use the format ie. GR-PYO-2563/0001")
         return resolve('Invalid Document ID Format Be sure to use the format ie. GR-PYO-2563/0001')
     }
-    console.log(">>>>NUK")
     // Checking from Database if Internal Document ID Exists
     let error;
     getDocumentbyInternalDocumentID(internal_document_id)
@@ -2175,9 +2407,195 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
         });
 });
 
+export const validateLineNumberInternalItemIDFieldHelper = (document_type_group_id, fact, values, setFieldValue, fieldName, internal_item_id, index) => {
+    //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
+    if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO) {
+        if (values.line_items[index].internal_item_id === internal_item_id) {
+            return;
+        }
+        if (internal_item_id === "") {
+            setFieldValue(fieldName + `.description`, '', false);
+            setFieldValue(fieldName + `.quantity`, '', false);
+            setFieldValue(fieldName + `.list_uoms`, [], false);
+            setFieldValue(fieldName + `.uom_id`, '', false);
+            setFieldValue(fieldName + `.per_unit_price`, '', false);
+            return;
+        }
+        let items = fact.items.items;
+        let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+        console.log(item)
+        if (item) {
+            if (item.item_type_id === 1) {
+                setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+                setFieldValue(fieldName + `.description`, `${item.description}`, false);
+                setFieldValue(fieldName + `.quantity`, 0, false);
+                setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+                setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+                setFieldValue(fieldName + `.line_number`, index + 1, false);
+                setFieldValue(fieldName + `.item_status_id`, 1, false);
+                setFieldValue(fieldName + `.per_unit_price`, 0, false);
+            }
+            // else {
+            //     setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+            //     setFieldValue(fieldName + `.description`, `${item.description}`, false);
+            //     setFieldValue(fieldName + `.quantity`, 1, false);
+            //     setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+            //     setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+            //     setFieldValue(fieldName + `.line_number`, index + 1, false);
+            //     setFieldValue(fieldName + `.item_status_id`, 1, false);
+            //     setFieldValue(fieldName + `.per_unit_price`, 0, false);
+            // }
+            return;
+        } else {
+            return 'Invalid Number ID';
+        }
+    } else if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RETURN) {
+        if (values.line_items[index].internal_item_id === internal_item_id) {
+            return;
+        }
+        if (internal_item_id === "") {
+            setFieldValue(fieldName + `.description`, '', false);
+            setFieldValue(fieldName + `.quantity`, '', false);
+            setFieldValue(fieldName + `.list_uoms`, [], false);
+            setFieldValue(fieldName + `.uom_id`, '', false);
+            setFieldValue(fieldName + `.per_unit_price`, '', false);
+            return;
+        }
+        let items = fact.items.items;
+        let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+        // console.log(item)
+        if (item) {
+            if (item.item_type_id === 1) {
+                setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+                setFieldValue(fieldName + `.description`, `${item.description}`, false);
+                setFieldValue(fieldName + `.quantity`, 0, false);
+                setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+                setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+                setFieldValue(fieldName + `.line_number`, index + 1, false);
+                setFieldValue(fieldName + `.item_status_id`, 2, false);
+                setFieldValue(fieldName + `.per_unit_price`, 0, false);
+            }
+            // else {
+            //   setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+            //   setFieldValue(fieldName + `.description`, `${item.description}`, false);
+            //   setFieldValue(fieldName + `.quantity`, 1, false);
+            //   setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+            //   setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+            //   setFieldValue(fieldName + `.line_number`, index + 1, false);
+            //   setFieldValue(fieldName + `.item_status_id`, 2, false);
+            //   setFieldValue(fieldName + `.per_unit_price`, 0, false);
+            // }
+            return;
+        } else {
+            return 'Invalid Number ID';
+        }
+    } else if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX) {
+        if (values.line_items[index].internal_item_id === internal_item_id) {
+            return;
+        }
+        if (internal_item_id === "") {
+            setFieldValue(fieldName + `.description`, '', false);
+            setFieldValue(fieldName + `.quantity`, '', false);
+            setFieldValue(fieldName + `.list_uoms`, [], false);
+            setFieldValue(fieldName + `.uom_id`, '', false);
+            setFieldValue(fieldName + `.per_unit_price`, '', false);
+            return;
+        }
+        let items = fact.items.items;
+        let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+        // console.log(item)
+        if (item) {
+            if (item.item_type_id === 1) {
+                setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+                setFieldValue(fieldName + `.description`, `${item.description}`, false);
+                setFieldValue(fieldName + `.quantity`, 0, false);
+                setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+                setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+                setFieldValue(fieldName + `.line_number`, index + 1, false);
+                setFieldValue(fieldName + `.item_status_id`, 4, false);
+                setFieldValue(fieldName + `.per_unit_price`, 0, false);
+            }
+            // else {
+            //   setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+            //   setFieldValue(fieldName + `.description`, `${item.description}`, false);
+            //   setFieldValue(fieldName + `.quantity`, 1, false);
+            //   setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+            //   setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+            //   setFieldValue(fieldName + `.line_number`, index + 1, false);
+            //   setFieldValue(fieldName + `.item_status_id`, 4, false);
+            //   setFieldValue(fieldName + `.per_unit_price`, 0, false);
+            // }
+            return;
+        } else {
+            return 'Invalid Number ID';
+        }
+    } else if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO) {
+        if (values.line_items[index].internal_item_id === internal_item_id) {
+            return;
+        }
+        if (internal_item_id === "") {
+            setFieldValue(fieldName + `.description`, '', false);
+            setFieldValue(fieldName + `.quantity`, '', false);
+            setFieldValue(fieldName + `.list_uoms`, [], false);
+            setFieldValue(fieldName + `.uom_id`, '', false);
+            setFieldValue(fieldName + `.per_unit_price`, '', false);
+            return;
+        }
+        let items = fact.items.items;
+        let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+        // console.log(item)
+        if (item) {
+            if (item.item_type_id === 1) {
+                setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+                setFieldValue(fieldName + `.description`, `${item.description}`, false);
+                setFieldValue(fieldName + `.quantity`, 0, false);
+                setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+                setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+                setFieldValue(fieldName + `.per_unit_price`, 0, false);
+            }
+            // else {
+            //   setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+            //   setFieldValue(fieldName + `.description`, `${item.description}`, false);
+            //   setFieldValue(fieldName + `.quantity`, 1, false);
+            //   setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+            //   setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+            //   setFieldValue(fieldName + `.per_unit_price`, 0, false);
+            // }
+            return;
+        } else {
+            return 'Invalid Number ID';
+        }
+    }
+};
+
+export const validateLineNumberQuatityItemIDFieldHelper = (setFieldValue, fieldName, quantity, index) => {
+    if (quantity === "") {
+        return;
+    }
+
+    if (quantity !== 0) {
+        setFieldValue(fieldName, quantity, false);
+        return;
+    } else {
+        return 'Invalid Quantity Line Item';
+    }
+}
+
+export const validateLineNumberPerUnitPriceItemIDFieldHelper = (setFieldValue, fieldName, per_unit_price, index) => {
+    if (per_unit_price === "") {
+        return;
+    }
+
+    if (per_unit_price !== "") {
+        setFieldValue(fieldName, per_unit_price, false);
+        return;
+    } else {
+        return 'Invalid Per Unit Price Line Item';
+    }
+}
 
 export const validateEmployeeIDField = (fieldName, fact, setFieldValue, employee_id) => {
-    console.log("I am validating employee id")
+    // console.log("I am validating employee id")
     employee_id = employee_id.split('\\')[0]; // Escape Character USERNAME CANT HAVE ESCAPE CHARACTER!
     let users = fact[FACTS.USERS].items;
     let user = users.find(user => user.employee_id === employee_id); // Returns undefined if not found
@@ -2329,23 +2747,44 @@ export const weightedAverage = (lots) => {
 }
 
 export const getLotFromQty = (fifo, quantity) => {
+    var stopFprEach = false;
     var fifoCopy = fifo.slice(); // make a copy
+    // console.log("fifoCopy", fifoCopy)
     var quantityLeft = quantity;
+    // console.log("quantityLeft", quantityLeft)
     var lotsFrom = [];
-    fifo.forEach((currentLot) => {
+    console.log("lotsFrom fifo ", fifo)
+    for (var currentLot of fifo) {
+        // fifo.forEach((currentLot) => {
+        console.log("lotsFrom currentLot ", currentLot)
+        // if (stopFprEach === true){
+        //     // console.log("break")
+        //     return;
+        // }
         if (quantityLeft >= currentLot.quantity) { // if Quantity Left >= Current Lot Quantity, shift and push
+            // console.log("if")
             lotsFrom.push(fifoCopy.shift());
             quantityLeft -= currentLot.quantity;
+            // console.log("quantityLeft IF", quantityLeft)
+            // if (quantityLeft === 0) {
+            //     stopFprEach = true
+            // }
         } else { // if Quantity Left < Current Lot Quantity, shift and push only required # of lot
+            // console.log("else")
+            if (quantityLeft == 0) {
+                break;
+            }
             lotsFrom.push({ ...fifoCopy.shift(), quantity: quantityLeft });
             quantityLeft = 0;
+
+            // console.log("quantityLeft ELSE", quantityLeft)
         }
-    })
+    }
     // Artificial Lots if QTY leftover
     if (quantityLeft > 0) {
         lotsFrom.push({ quantity: quantityLeft, per_unit_price: weightedAverage(lotsFrom) });
     }
-
+    console.log("lotsFrom", lotsFrom)
     return lotsFrom;
 };
 
@@ -2446,16 +2885,17 @@ export const sumTotalLineItemHelper = (quantity, per_unit_price, description) =>
         var findDot = conventToString.indexOf(".")
         if (findDot == -1) {
             conventToString = conventToString + ".00"
-            return conventToString;
+            return conventToString.replace(/\d(?=(\d{3})+\.)/g, '$&,');
         }
         else {
             conventToString = conventToString.slice(0, findDot + 3)
             var addOneDot = conventToString.length - findDot;
             if (addOneDot === 2) {
-                return conventToString + "0";
+                conventToString = conventToString + "0"
+                return conventToString.replace(/\d(?=(\d{3})+\.)/g, '$&,');
             }
             else {
-                return conventToString;
+                return conventToString.replace(/\d(?=(\d{3})+\.)/g, '$&,');
             }
         }
     } else {
@@ -2476,11 +2916,32 @@ export const sumTotalHelper = (list_show) => {
     var n = s.indexOf(".")
     if (n == -1) {
         s = s + ".00"
-        return s;
+        return s.replace(/\d(?=(\d{3})+\.)/g, '$&,');
     }
     else {
         s = s.slice(0, n + 3)
-        return s;
+        return s.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    }
+}
+
+// FOR Phycical count and inventory adjustment
+export const sumTotalPhycicalCountAndInventoryAdjustmentHelper = (list_show) => {
+    var sumTotal = 0;
+    list_show.map(function (list, index) {
+        var sum = 0;
+        sum = list.unit_count * list.per_unit_price;
+        sumTotal = sumTotal + sum;
+        // return sumTotal
+    })
+    var s = sumTotal.toString();
+    var n = s.indexOf(".")
+    if (n == -1) {
+        s = s + ".00"
+        return s.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    }
+    else {
+        s = s.slice(0, n + 3)
+        return s.replace(/\d(?=(\d{3})+\.)/g, '$&,');
     }
 }
 
@@ -2513,7 +2974,7 @@ export const identifyEndpoinsHelper = (document_type_id) => {
 }
 
 export const checkBooleanForEditHelper = (values, decoded_token, fact) => (
-    values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.DRAFT) 
+    values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.DRAFT)
     && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
 
 export const filterAlsEquipment = (equipmentData, formData) => {

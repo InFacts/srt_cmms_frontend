@@ -42,8 +42,9 @@ const TopContent = (props) => {
   const factItemStatus = useSelector((state) => ({ ...state.api.fact[FACTS.ITEM_STATUS] }), shallowEqual);
 
   const responseToFormState = (data) => {
+    console.log("data>>>>", data.item_id)
     return {
-      item_id: data.equipment_group.item_id,
+      item_id: data.item_id,
       internal_item_id: data.equipment_group.item.internal_item_id,
       description: data.equipment_group.item.description,
       item_group_id: data.equipment_group.item.item_group_id,
@@ -66,7 +67,7 @@ const TopContent = (props) => {
       useful_life: data.useful_life,
       responsible_district_id: data.responsible_district_id,
       responsible_node_id: data.responsible_node_id,
-
+      equipment_id: data.equipment_id,
       modeEdit: values.line_position_permission[0].module_admin === true ? true : false     // IF Check user If User is Admin -> return true Else -> return false
 
     }
@@ -122,7 +123,12 @@ const TopContent = (props) => {
             });
 
         } else {
+          console.log("values.modeEdit", values.modeEdit)
+          if (values.modeEdit) {
+            return;
+          } else {
           return 'Invalid Equipment ID';
+          }
         }
       }
     } else {//If mode add, ok

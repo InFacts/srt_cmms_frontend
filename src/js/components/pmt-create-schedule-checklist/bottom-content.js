@@ -55,7 +55,7 @@ const searchLocationEquipment = () => new Promise(resolve => {
                     checklist_id: results.equipment.equipment_item.checklist_id,
                     item_id: results.equipment.item_id,
                     internal_item_id: results.equipment.equipment_item.item.internal_item_id,
-                    quantity_location: '',
+                    quantity_location: 1,
                     unit_maintenance_location_id: results.equipment.equipment_item.checklist.unit_maintenance_location_id
                   })
                 })
@@ -257,7 +257,7 @@ const searchLocationEquipment = () => new Promise(resolve => {
                           </SelectNoChildrenInput>
                         </td>
                         <td className="edit-padding text-center">
-                          <NumberInput step={1} name={`line_equipment[${index}].quantity_location`} disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                          <NumberInput step={1} name={`line_equipment[${index}].quantity_location`} disabled />
                         </td>
                         <td className="edit-padding">
                           <SelectNoChildrenInput name={`line_equipment[${index}].unit_maintenance_location_id`} disabled >

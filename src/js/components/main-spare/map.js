@@ -157,13 +157,19 @@ class Map extends React.Component {
                                 </Link>
 
                                 <Link to="/spare-goods-return">
+                                <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
                                     <img alt='some value' src={changeTheam() === true ? OnetwoNew : Onetwo}
                                         className={changeTheam() === true ? "one-two-new" : "one-two"} style={changeTheam() === true ? { width: "85px" } : {}} />
+                                         <span className="p-tooltip__message edit_p_tooltip__message tooltip2" role="tooltip" id="btm-cntr">Spare 2</span>
+                                    </div>
                                 </Link>
 
                                 <Link to="/spare-goods-receipt-no-po">
+                                <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
                                     <img alt='some value' src={changeTheam() === true ? OnethreeNew : Onethree}
                                         className={changeTheam() === true ? "one-three-new" : "one-three"} style={changeTheam() === true ? { width: "85px" } : {}} />
+                                <span className="p-tooltip__message edit_p_tooltip__message tooltip2_5" role="tooltip" id="btm-cntr">Spare 3</span>
+                                    </div>
                                 </Link>
 
                                 <img alt='some value' src={Arrow1} className="arrow1" />
@@ -182,7 +188,7 @@ class Map extends React.Component {
                                     <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
                                         <img alt='some value' src={changeTheam() === true ? TwooneNew : Twoone}
                                             className={changeTheam() === true ? "two-one-new" : "two-one"} style={changeTheam() === true ? { width: "75px" } : {}} />
-                                        <span className="p-tooltip__message edit_p_tooltip__message tooltip3" role="tooltip" id="btm-cntr">Spare 3</span>
+                                        <span className="p-tooltip__message edit_p_tooltip__message tooltip3" role="tooltip" id="btm-cntr">Spare 4</span>
                                     </div>
                                 </Link>
 
@@ -190,12 +196,17 @@ class Map extends React.Component {
                                     <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
                                         <img alt='some value' src={changeTheam() === true ? TwotwoNew : Twotwo}
                                             className={changeTheam() === true ? "two-two-new" : "two-two"} style={changeTheam() === true ? { width: "70px" } : {}} />
-                                        <span className="p-tooltip__message edit_p_tooltip__message tooltip5" role="tooltip" id="btm-cntr">PMT 3</span>
+                                        <span className="p-tooltip__message edit_p_tooltip__message tooltip5" role="tooltip" id="btm-cntr">Spare 5</span>
                                     </div>
                                 </Link>
 
-                                <Link to="/spare-goods-issue"><img alt='some value' src={changeTheam() === true ? TwothreeNew : Twothree}
-                                    className={changeTheam() === true ? "two-three-new" : "two-three"} style={changeTheam() === true ? { width: "80px" } : {}} /></Link>
+                                <Link to="/spare-goods-issue">
+                                <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
+                                    <img alt='some value' src={changeTheam() === true ? TwothreeNew : Twothree}
+                                    className={changeTheam() === true ? "two-three-new" : "two-three"} style={changeTheam() === true ? { width: "80px" } : {}} />
+                                    <span className="p-tooltip__message edit_p_tooltip__message tooltip6" role="tooltip" id="btm-cntr">Spare 6</span>
+                                    </div>
+                                </Link>
 
                                 <img alt='some value' src={Arrow4} className="arrow4" />
                                 <img alt='some value' src={Arrow5} className="arrow5" />
@@ -208,18 +219,24 @@ class Map extends React.Component {
                                     <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
                                         <img alt='some value' src={changeTheam() === true ? ThreeoneNew : Threeone}
                                             className={changeTheam() === true ? "three-one-new" : "three-one"} style={changeTheam() === true ? { width: "85px" } : {}} />
-                                        <span className="p-tooltip__message edit_p_tooltip__message tooltip4" role="tooltip" id="btm-cntr">Spare 4</span>
+                                        <span className="p-tooltip__message edit_p_tooltip__message tooltip4" role="tooltip" id="btm-cntr">Spare 7</span>
                                     </div>
                                 </Link>
 
                                 <Link to="/spare-physical-count">
+                                <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
                                     <img alt='some value' src={changeTheam() === true ? ThreethreeNew : Threetwo}
                                         className={changeTheam() === true ? "three-two-new" : "three-two"} style={changeTheam() === true ? { width: "80px" } : {}} />
+                                        <span className="p-tooltip__message edit_p_tooltip__message tooltip8" role="tooltip" id="btm-cntr">Spare 8</span>
+                                    </div>
                                 </Link>
 
                                 <Link to="/spare-salvage-return">
+                                <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
                                     <img alt='some value' src={changeTheam() === true ? ThreethreeNew : Threethree}
                                         className={changeTheam() === true ? "three-three-new" : "three-three"} style={changeTheam() === true ? { width: "75px" } : {}} />
+                                        <span className="p-tooltip__message edit_p_tooltip__message tooltip9" role="tooltip" id="btm-cntr">Spare 9</span>
+                                    </div>
                                 </Link>
 
                                 <img alt='some value' src={Text8} className="text8" />
@@ -229,8 +246,13 @@ class Map extends React.Component {
                                 <Link to="/track"><img alt='some value' src={changeTheam() === true ? FouroneNew : Fourone}
                                     className={changeTheam() === true ? "four-one-new" : "four-one"} style={changeTheam() === true ? { width: "70px" } : {}} /></Link>
 
-                                <Link to="/spare-item-master-data"><img alt='some value' src={changeTheam() === true ? FourtwoNew : Fourtwo}
-                                    className={changeTheam() === true ? "four-two-new" : "four-two"} style={changeTheam() === true ? { width: "60px" } : {}} /></Link>
+                                <Link to="/spare-item-master-data">
+                                <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
+                                    <img alt='some value' src={changeTheam() === true ? FourtwoNew : Fourtwo}
+                                    className={changeTheam() === true ? "four-two-new" : "four-two"} style={changeTheam() === true ? { width: "60px" } : {}} />
+                                    <span className="p-tooltip__message edit_p_tooltip__message tooltip10" role="tooltip" id="btm-cntr">Spare 10</span>
+                                    </div>
+                                    </Link>
 
                                 <Link to="/spare-report-s-1">
                                     <img alt='some value' src={changeTheam() === true ? FourthreeNew : Fourthree}
@@ -272,8 +294,8 @@ class Map extends React.Component {
                                     <button className="p-contextual-menu__toggle" style={{ border: "none", padding: "0" }} aria-controls="menu-4" aria-expanded="false" aria-haspopup="true"><img alt='some value' src={Dropdown} /></button>
                                     <span className="p-contextual-menu__dropdown" id="menu-4" aria-hidden="true" aria-label="submenu">
                                         <span className="p-contextual-menu__group">
-                                            <Link to="/spare-report-b22" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รายงาน บ.22 (Spare 6)</Link>
-                                            <Link to="/spare-report-s-1" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รายงาน ส.1 (Spare 7)</Link>
+                                            <Link to="/spare-report-b22" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รายงาน บ.22 (Spare 11)</Link>
+                                            <Link to="/spare-report-s-1" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รายงาน ส.1 (Spare 12)</Link>
                                         </span>
                                     </span>
                                 </span>

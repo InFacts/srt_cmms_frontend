@@ -66,22 +66,23 @@ const BottomContent = (props) => {
         setFieldValue(fieldName + `.item_status_id`, 1, false);
         setFieldValue(fieldName + `.item_id`, item.item_id, false);
         setFieldValue(fieldName + `.at_source`, [], false);
-      } else {
-        setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
-        setFieldValue(fieldName + `.description`, `${item.description}`, false);
-        setFieldValue(fieldName + `.quantity`, 1, false);
-        setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
-        setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
-        setFieldValue(fieldName + `.line_number`, index + 1, false);
-        setFieldValue(fieldName + `.item_id`, item.item_id, false);
-        setFieldValue(fieldName + `.item_status_id`, 1, false);
-        setFieldValue(fieldName + `.at_source`, [], false);
-      }
+      } 
+      // else {
+      //   setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+      //   setFieldValue(fieldName + `.description`, `${item.description}`, false);
+      //   setFieldValue(fieldName + `.quantity`, 1, false);
+      //   setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+      //   setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+      //   setFieldValue(fieldName + `.line_number`, index + 1, false);
+      //   setFieldValue(fieldName + `.item_id`, item.item_id, false);
+      //   setFieldValue(fieldName + `.item_status_id`, 1, false);
+      //   setFieldValue(fieldName + `.at_source`, [], false);
+      // }
       fetchGoodsOnhandData(getNumberFromEscapedString(values.src_warehouse_id), item.item_id)
         .then((at_source) => {
           var at_sources = at_source;
           var at_source = at_sources.find(at_source => `${at_source.item_status_id}` === `1`); // Returns undefined if not found
-          console.log("at_source", at_source)
+          // console.log("at_source", at_source)
           if (at_source) {
             setFieldValue(`line_items[${index}].at_source`, [at_source], false);
             setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(at_source.pricing.fifo, values.line_items[index].quantity)), false);

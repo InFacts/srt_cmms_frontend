@@ -1,7 +1,7 @@
 
 .drop-dawn1{
     position: absolute;
-    left: 160px;
+    left: 165px;
     top: 130px;
 }
 
@@ -509,6 +509,16 @@ color: #000000;
     left: 120px;
 }
 
+.p-tooltip__message.edit_p_tooltip__message.tooltip2 {
+    top: 270px;
+    left: 120px;
+}
+
+.p-tooltip__message.edit_p_tooltip__message.tooltip2_5 {
+    top: 360px;
+    left: 120px;
+}
+
 .p-tooltip__message.edit_p_tooltip__message.tooltip3 {
     top: 160px;
     left: 460px;
@@ -522,4 +532,24 @@ color: #000000;
 .p-tooltip__message.edit_p_tooltip__message.tooltip5 {
     top: 280px;
     left: 460px;
+}
+
+.p-tooltip__message.edit_p_tooltip__message.tooltip6 {
+    top: 380px;
+    left: 460px;
+}
+
+.p-tooltip__message.edit_p_tooltip__message.tooltip8 {
+    top: 270px;
+    left: 630px;
+}
+
+.p-tooltip__message.edit_p_tooltip__message.tooltip9 {
+    top: 370px;
+    left: 630px;
+}
+
+.p-tooltip__message.edit_p_tooltip__message.tooltip10 {
+    top: 275px;
+    left: 775px;
 }

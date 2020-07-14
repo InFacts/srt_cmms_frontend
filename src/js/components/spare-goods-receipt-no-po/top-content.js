@@ -97,6 +97,7 @@ const TopContent = (props) => {
           // setValues({ ...values, ...responseToFormState(res.data) }, false); //Setvalues and don't validate
           setFieldValue("line_items", setLineItem(res.data), false)
           setFieldValue("refer_to_document_id", res.data.document_id, false)
+          setFieldValue("dest_warehouse_id", res.data.dest_warehouse_id, true)
           // setFieldValue("line_items", setLineItem(res.data), false)
           return resolve(null);
           // } else { //If Mode add, need to error duplicate Document ID
@@ -210,8 +211,9 @@ const TopContent = (props) => {
               {/* Dest Warehouse ID */}
               <div className="grid_3 float-right">
                 <TextInput name="dest_warehouse_id" validate={validateDestWarehouseIDField}
-                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                  searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalInventory" tabIndex="5" />
+                  disabled
+                  // searchable={props.actionMode !== TOOLBAR_MODE.SEARCH} ariaControls="modalInventory"
+                  tabIndex="5" />
               </div>
               <div className="grid_2 float-right">
                 <p className="top-text float-right">เลขที่คลัง</p>

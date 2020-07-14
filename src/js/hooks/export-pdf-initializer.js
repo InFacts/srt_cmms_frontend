@@ -33,7 +33,6 @@ const useExportPdfInitializer = () => {
 
   // Handle Toolbar Mode
   useEffect(() => {
-    console.log(">>>><<<>><")
     // let document_id = values.src_warehouse_id;
     let document_item = values.internal_document_id;
     let document_item_list = values.line_items;
@@ -178,13 +177,14 @@ const useExportPdfInitializer = () => {
         let year5 = dateParts5[2]
 
         values.loss_line_items.map(lineItem => {
+          console.log("lineItem", lineItem)
           data.push({
             "item_id": p,
-            "description": lineItem.initialLossLineItem.description,
-            "internal_item_id": lineItem.initialLossLineItem.document_id,
-            "unit": lineItem.initialLossLineItem.uom_code,
-            "price_quantity": lineItem.initialLossLineItem.price,
-            "quantity": lineItem.initialLossLineItem.quantity,
+            "description": lineItem.description,
+            "internal_item_id": lineItem.document_id,
+            "unit": lineItem.uom_code,
+            "price_quantity": lineItem.price,
+            "quantity": lineItem.quantity,
             "price": " ",
             "type": " "
           });

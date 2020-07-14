@@ -98,7 +98,7 @@ class Map extends React.Component {
     componentDidMount() {
         // Setup DropDawn
         setupAllContextualMenus('.p-contextual-menu__toggle');
-      }
+    }
 
     render() {
 
@@ -108,47 +108,52 @@ class Map extends React.Component {
                     <div className="container_12 clearfix">
                         <section className="grid_12 ">
                             <h4 className="head-title" style={{ color: "black" }}>ระบบวิเคราะห์วางแผนทรัพยากรซ่อมบำรุง</h4>
-                            <div style={{ height: "350px" }} id="blackground-white" style={ changeTheam() === true ? { borderRadius: "25px", border: "2px dashed gray", height: "380px" } : {height: "380px"} }>
+                            <div style={{ height: "350px" }} id="blackground-white" style={changeTheam() === true ? { borderRadius: "25px", border: "2px dashed gray", height: "380px" } : { height: "380px" }}>
 
                                 <Link to="/als-spare">
-                                <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
-                                <img alt='some value'src={changeTheam() === true ? OneoneNew : Oneone} className={changeTheam() === true ? "ALSone-one-new" : "ALSone-one"} style={ changeTheam() === true ? { width: "70px" } : {} } />
-                                <span className="p-tooltip__message edit_p_tooltip__message Atooltip1" role="tooltip" id="btm-cntr">ALS 2</span>
+                                    <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
+                                        <img alt='some value' src={changeTheam() === true ? OneoneNew : Oneone} className={changeTheam() === true ? "ALSone-one-new" : "ALSone-one"} style={changeTheam() === true ? { width: "70px" } : {}} />
+                                        <span className="p-tooltip__message edit_p_tooltip__message Atooltip1" role="tooltip" id="btm-cntr">ALS 1</span>
                                     </div>
-                                    </Link>
-                                
+                                </Link>
+
                                 <img alt='some value' src={Text1} className="ALStext1" />
 
                                 <Link to="/als-equipment-status">
-                                <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
-                                <img alt='some value' src={changeTheam() === true ? TwooneNew : Twoone} className={changeTheam() === true ? "ALStwo-one-new" : "ALStwo-one"} style={ changeTheam() === true ? { width: "70px" } : {} }/>
-                                <span className="p-tooltip__message edit_p_tooltip__message Atooltip2" role="tooltip" id="btm-cntr">ALS 5</span>
+                                    <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
+                                        <img alt='some value' src={changeTheam() === true ? TwooneNew : Twoone} className={changeTheam() === true ? "ALStwo-one-new" : "ALStwo-one"} style={changeTheam() === true ? { width: "70px" } : {}} />
+                                        <span className="p-tooltip__message edit_p_tooltip__message Atooltip2" role="tooltip" id="btm-cntr">ALS 2</span>
                                     </div>
-                                    </Link>
+                                </Link>
 
                                 <img alt='some value' src={Text4} className="ALStext4" />
 
-                                <Link to="/als-summary-ss101"><img alt='some value' src={changeTheam() === true ? ThreeoneNew : Threeone} className={changeTheam() === true ? "ALSthree-one-new" : "ALSthree-one"} style={ changeTheam() === true ? { width: "50px" } : {} }/></Link>
+                                <Link to="/als-summary-ss101">
+                                    <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
+                                        <img alt='some value' src={changeTheam() === true ? ThreeoneNew : Threeone} className={changeTheam() === true ? "ALSthree-one-new" : "ALSthree-one"} style={changeTheam() === true ? { width: "50px" } : {}} />
+                                        <span className="p-tooltip__message edit_p_tooltip__message Atooltip5" role="tooltip" id="btm-cntr">ALS 3</span>
+                                    </div>
+                                </Link>
 
                                 <img alt='some value' src={Text7} className="ALStext7" />
 
                                 <Link to="/als-preventive-maintenance">
-                                <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
+                                    <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
 
-                                <img alt='some value' src={changeTheam() === true ? FouroneNew : Fourone} className={changeTheam() === true ? "ALSFour-one-new" : "ALSFour-one"} style={ changeTheam() === true ? { width: "65px" } : {} } />
+                                        <img alt='some value' src={changeTheam() === true ? FouroneNew : Fourone} className={changeTheam() === true ? "ALSFour-one-new" : "ALSFour-one"} style={changeTheam() === true ? { width: "65px" } : {}} />
 
-                                <span className="p-tooltip__message edit_p_tooltip__message Atooltip4" role="tooltip" id="btm-cntr">ALS 4</span>
+                                        <span className="p-tooltip__message edit_p_tooltip__message Atooltip4" role="tooltip" id="btm-cntr">ALS 4</span>
                                     </div>
-                                    </Link>
+                                </Link>
 
                                 <img alt='some value' src={Text9} className="ALStext9" />
 
                                 <Link to="/als-plan-preventive-maintenance">
-                                <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
-                                <img alt='some value' src={changeTheam() === true ? FiveoneNew : Fiveone} className={changeTheam() === true ? "ALSFive-one-new" : "ALSFive-one"} style={ changeTheam() === true ? { width: "60px" } : {} }/>
-                                <span className="p-tooltip__message edit_p_tooltip__message Atooltip3" role="tooltip" id="btm-cntr">ALS 3</span>
+                                    <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
+                                        <img alt='some value' src={changeTheam() === true ? FiveoneNew : Fiveone} className={changeTheam() === true ? "ALSFive-one-new" : "ALSFive-one"} style={changeTheam() === true ? { width: "60px" } : {}} />
+                                        <span className="p-tooltip__message edit_p_tooltip__message Atooltip3" role="tooltip" id="btm-cntr">ALS 5</span>
                                     </div>
-                                    </Link>
+                                </Link>
 
                                 <img alt='some value' src={Text11} className="ALStext11" />
                             </div>

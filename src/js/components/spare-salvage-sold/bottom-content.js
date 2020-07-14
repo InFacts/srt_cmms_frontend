@@ -56,6 +56,7 @@ const BottomContent = (props) => {
     // console.log(item)
     if (item) {
       if (item.item_type_id === 1) {
+        setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
         setFieldValue(fieldName + `.description`, `${item.description}`, false);
         setFieldValue(fieldName + `.quantity`, 0, false);
         setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
@@ -65,17 +66,18 @@ const BottomContent = (props) => {
         setFieldValue(fieldName + `.item_status_id`, 5, false);
         setFieldValue(fieldName + `.item_id`, item.item_id, false);
         setFieldValue(fieldName + `.at_source`, [], false);
-      } else {
-        setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
-        setFieldValue(fieldName + `.description`, `${item.description}`, false);
-        setFieldValue(fieldName + `.quantity`, 1, false);
-        setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
-        setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
-        setFieldValue(fieldName + `.line_number`, index + 1, false);
-        setFieldValue(fieldName + `.item_status_id`, 5, false);
-        setFieldValue(fieldName + `.item_id`, item.item_id, false);
-        setFieldValue(fieldName + `.at_source`, [], false);
-      }
+      } 
+      // else {
+      //   setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
+      //   setFieldValue(fieldName + `.description`, `${item.description}`, false);
+      //   setFieldValue(fieldName + `.quantity`, 1, false);
+      //   setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+      //   setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+      //   setFieldValue(fieldName + `.line_number`, index + 1, false);
+      //   setFieldValue(fieldName + `.item_status_id`, 5, false);
+      //   setFieldValue(fieldName + `.item_id`, item.item_id, false);
+      //   setFieldValue(fieldName + `.at_source`, [], false);
+      // }
 
       fetchGoodsOnhandData(getNumberFromEscapedString(values.src_warehouse_id), item.item_id)
         .then((at_source) => {
@@ -160,6 +162,7 @@ const BottomContent = (props) => {
   }
 
   let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
+  
   useEffect(() => {
     checkBooleanForEdit = false
     validateField("internal_document_id")

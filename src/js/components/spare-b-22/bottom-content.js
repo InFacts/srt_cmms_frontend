@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
+import { shallowEqual, useSelector } from 'react-redux'
 
 import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
@@ -11,24 +12,58 @@ import TableHaveStock from '../common/table-have-stock';
 
 import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
 import { useFormikContext } from 'formik';
+import { ExportCSV } from '../common/exportCSV';
 
 import '../../../css/table.css';
 
-import { fetchGoodsOnhandData, getNumberFromEscapedString } from '../../helper';
+import { fetchGoodsOnhandData, getNumberFromEscapedString, changeTheam } from '../../helper';
 
-import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const BottomContent = (props) => {
 
   const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
+  const factItems = useSelector((state) => ({ ...state.api.fact.items }), shallowEqual);
 
-  console.log("values.line_items", values.line_items)
+  const setValuesForCSV = (line_items) => {
+    line_items.map((line_item) => {
+      let items = factItems.items;
+      let item = items.find(item => `${item.item_id}` === `${line_item.item_id}`)
+      if (item) {
+        values.new_line_items.push({
+          "warehouse_name": line_item.warehouse_name,
+          "internal_item_id": line_item.internal_item_id,
+          "item_description": line_item.item_description,
+          "item_status_description_th": line_item.item_status_description_th,
+          "จำนวนเหลือเดือนก่อน": line_item.begin_unit_count,
+          "ราคาเดือนก่อน": line_item.begin_state_in_total_price,
+
+          "จำนวนรับเดือนนี้": line_item.state_in_unit_count,
+          "ราคารับเดือนนี้": line_item.end_state_in_total_price,
+
+          "จำนวนจ่ายเดือนนี้": line_item.state_out_unit_count,
+          "ราคาจ่ายเดือนนี้": line_item.end_state_out_total_price,
+
+          "จำนวนคงเหลือ": line_item.ending_unit_count,
+          "ราคาคงเหลือ": "-",
+
+          "ประเภทบัญชี": item.accounting_type
+        })
+      }
+    });
+  }
+
+
+  useEffect(() => {
+    setValuesForCSV(values.line_items)
+  }, [values.line_items, factItems])
+
   return (
     <div id={changeTheam() === true ? "" : "blackground-gray"}>
       <div className="container_12 clearfix" id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>
 
         <div className="grid_12 ">
           <div id="listItem_content" className="tabcontent">
-            <table className="table-many-column mt-1" style={{ padding: "10px"}}>
+
+            <table className="table-many-column mt-1" style={{ padding: "10px" }}>
               <thead>
                 <tr>
                   <th className="font text-center" rowspan="2" style={{ minWidth: "30px", verticalAlign: 'middle' }}>ลำดับ</th>
@@ -62,45 +97,48 @@ const BottomContent = (props) => {
                   <th className="font text-center" style={{ minWidth: "40px" }}>ราคา</th>
                   <th className="font text-center" style={{ minWidth: "40px" }}>จำนวน</th>
                   <th className="font text-center" style={{ minWidth: "40px" }}>ราคา</th>
-                
+
                   {/* <th className="font text-center" style={{ minWidth: "80px" }}>ใบส่งเลขที่</th> */}
                   <th className="font text-center" style={{ minWidth: "80px" }}>๒๐๓๑๐๕๑</th>
-                
+
                 </tr>
               </thead>
               <tbody>
                 {values.line_items.map(function (line_items, index) {
-                  return (
-                    <tr key={index}>
-                      <th className="edit-padding text-center">{index + 1}</th>
-                      <td className="edit-padding">{line_items.internal_item_id} - {line_items.item_description}</td>
-                      <td className="edit-padding text-center">{line_items.uom_name}</td>
+                  let items = factItems.items;
+                  let item = items.find(item => `${item.item_id}` === `${line_items.item_id}`)
+                  if (item) {
+                    return (
+                      <tr key={index}>
+                        <th className="edit-padding text-center">{index + 1}</th>
+                        <td className="edit-padding">{line_items.internal_item_id} - {line_items.item_description}</td>
+                        <td className="edit-padding text-center">{line_items.uom_name}</td>
 
-                      <td className="edit-padding text-center">{line_items.begin_unit_count}</td> {/* เหลือเดือนก่อน */}
-                      <td className="edit-padding text-center">-</td>
+                        <td className="edit-padding text-center">{line_items.begin_unit_count}</td> {/* เหลือเดือนก่อน */}
+                        <td className="edit-padding text-center">{line_items.begin_state_in_total_price}</td>
 
-                      <td className="edit-padding text-center">{line_items.receive_unit_count}</td> {/* รับเดือนนี้ */}
-                      <td className="edit-padding text-center">-</td>
+                        <td className="edit-padding text-center">{line_items.state_in_unit_count}</td> {/* รับเดือนนี้ */}
+                        <td className="edit-padding text-center">{line_items.end_state_in_total_price}</td>
 
-                      {/* <td className="edit-padding text-center">-</td> รับจาก */}
-                      
-                      {/* <td className="edit-padding text-center">-</td> ใบส่งของ */}
+                        <td className="edit-padding text-center">{line_items.state_out_unit_count}</td> {/* จ่ายเดือนนี้ */}
+                        <td className="edit-padding text-center">{line_items.end_state_out_total_price}</td>
 
-                      {/* <td className="edit-padding text-center">-</td> ฎีกาเบิก	 */}
+                        <td className="edit-padding text-center">{line_items.ending_unit_count}</td> {/* คงเหลือ */}
+                        <td className="edit-padding text-center">-</td>
 
-                      <td className="edit-padding text-center">{line_items.issue_unit_count}</td> {/* จ่ายเดือนนี้ */}
-                      <td className="edit-padding text-center">-</td>
-
-                      <td className="edit-padding text-center">{line_items.ending_unit_count}</td> {/* คงเหลือ */}
-
-                      <td className="edit-padding text-center">-</td>
-                      {/* <td className="edit-padding text-center">-</td> */}
-                      <td className="edit-padding text-center">-</td>
-                    </tr>
-                  )
+                        {/* <td className="edit-padding text-center">-</td> */}
+                        <td className="edit-padding text-center">{item.accounting_type}</td>
+                      </tr>
+                    )
+                  }
                 })}
               </tbody>
             </table>
+
+            <div className="float-right">
+            <ExportCSV csvData={values.new_line_items} fileName="บ.22" />
+            </div>
+
           </div>
         </div>
       </div>

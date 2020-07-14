@@ -22,7 +22,9 @@ import {
   isValidInternalDocumentIDFormat, isValidInternalDocumentIDDraftFormat,
   fetchAttachmentDocumentData, validateEmployeeIDField, validateWarehouseIDField,
   validateInternalDocumentIDFieldHelper, DOCUMENT_STATUS, getUserIDFromEmployeeID,
-  validatedataDocumentField, sumTotalLineItemHelper, sumTotalHelper, checkBooleanForEditHelper
+  validatedataDocumentField, sumTotalLineItemHelper, sumTotalHelper, checkBooleanForEditHelper,
+  validateLineNumberInternalItemIDFieldHelper, validateLineNumberQuatityItemIDFieldHelper,
+  validateLineNumberPerUnitPriceItemIDFieldHelper
 } from '../../helper';
 import '../../../css/table.css';
 
@@ -38,82 +40,15 @@ const BottomContent = (props) => {
   const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
   const sumTotalLineItem = (quantity, per_unit_price, description) => sumTotalLineItemHelper(quantity, per_unit_price, description);
+
   const sumTotal = (list_show) => sumTotalHelper(list_show);
 
-  const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => {
-    //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
+  const validateLineNumberInternalItemIDField = (...args) => validateLineNumberInternalItemIDFieldHelper(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO, fact, values, setFieldValue, ...args);
 
-    if (values.line_items[index].internal_item_id === internal_item_id) {
-      return;
-    }
-    if (internal_item_id === "") {
-      setFieldValue(fieldName + `.description`, '', false);
-      setFieldValue(fieldName + `.quantity`, '', false);
-      setFieldValue(fieldName + `.list_uoms`, [], false);
-      setFieldValue(fieldName + `.uom_id`, '', false);
-      setFieldValue(fieldName + `.per_unit_price`, '', false);
-      return;
-    }
-    let items = props.fact.items.items;
-    let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
-    // console.log(item)
-    if (item) {
-      if (item.item_type_id === 1) {
-        setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
-        setFieldValue(fieldName + `.description`, `${item.description}`, false);
-        setFieldValue(fieldName + `.quantity`, 0, false);
-        setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
-        setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
-        setFieldValue(fieldName + `.per_unit_price`, 0, false);
-      } else {
-        setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
-        setFieldValue(fieldName + `.description`, `${item.description}`, false);
-        setFieldValue(fieldName + `.quantity`, 1, false);
-        setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
-        setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
-        setFieldValue(fieldName + `.per_unit_price`, 0, false);
-      }
-      return;
-    } else {
-      return 'Invalid Number ID';
-    }
-  }
+  const validateLineNumberQuatityItemIDField = (...args) => validateLineNumberQuatityItemIDFieldHelper(setFieldValue, ...args)
 
-  const validateLineNumberQuatityItemIDField = (fieldName, quantity, index) => {
-    // internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
-    //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
-    // if (values.line_items[index].quantity === quantity) {
-    //   return;
-    // }
-    if (quantity === "") {
-      return;
-    }
+  const validateLineNumberPerUnitPriceItemIDField = (...args) => validateLineNumberPerUnitPriceItemIDFieldHelper(setFieldValue, ...args)
 
-    if (quantity !== 0) {
-      setFieldValue(fieldName, quantity, false);
-      return;
-    } else {
-      return 'Invalid Quantity Line Item';
-    }
-  }
-
-  const validateLineNumberPerUnitPriceItemIDField = (fieldName, per_unit_price, index) => {
-    // internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
-    //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
-    // if (values.line_items[index].per_unit_price === per_unit_price) {
-    //   return;
-    // }
-    if (per_unit_price === "") {
-      return;
-    }
-
-    if (per_unit_price !== "") {
-      setFieldValue(fieldName, per_unit_price, false);
-      return;
-    } else {
-      return 'Invalid Per Unit Price Line Item';
-    }
-  }
 
   let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
   useEffect(() => {

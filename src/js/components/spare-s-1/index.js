@@ -77,12 +77,14 @@ const EnhancedReportS1Component = withFormik({
     mapPropsToValues: (props) => ({
         // Field ที่ให้ User กรอก
         internal_item_id: '',
+        warehouse_type_id: -1,
         src_warehouse_id: '',
         item_status_id: 1,
         line_items: [],
         year_id: now_date.getFullYear() + 543,
         mouth_id: now_date.getMonth() + 1,
 
+        new_line_items: [],
         // Field ที่ให้ User ไม่ได้กรอก
         year: initialLineYears(),
         mouth: [

@@ -13,7 +13,7 @@ import Label from '../common/form-label'
 import PopupModalCheckListLineItem from '../common/popup-modal-checklist'
 import TableHasEquipment from '../common/table-has-equipment';
 import TableStatus from '../common/table-status';
-import TableCreatePlan from '../common/table_for_create-plan_pmt';
+import TableCreatePlan from '../common/table_word_order_pm';
 
 import Files from '../common/files2'
 
@@ -24,7 +24,8 @@ import { FACTS } from '../../redux/modules/api/fact.js';
 import '../../../css/table.css';
 
 import BgBlue from '../../../images/pmt/bg_blue.jpg';
-import { fetchPositionPermissionData, changeTheam, checkBooleanForEditHelper } from '../../helper.js'
+import { fetchPositionPermissionData, changeTheam, checkBooleanForEditHelper,sumTotalLineItemHelper } from '../../helper.js'
+
 const BottomContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
@@ -40,6 +41,8 @@ const BottomContent = (props) => {
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
   const factItemStatus = useSelector((state) => ({ ...state.api.fact[FACTS.ITEM_STATUS] }), shallowEqual);
 
+  const sumTotalLineItem = (quantity, per_unit_price, description) => sumTotalLineItemHelper(quantity, per_unit_price, description);
+
   const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
 
   return (
@@ -49,7 +52,7 @@ const BottomContent = (props) => {
         {/* <div className="container_12 clearfix"> */}
         <div className="container_12 " id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>
           {/* General Tab */}
-          <div id="general_content" className="tabcontent">
+          {/* <div id="general_content" className="tabcontent">
 
             <table className="table-many-column" style={{ padding: "10px" }}>
               <thead>
@@ -112,10 +115,129 @@ const BottomContent = (props) => {
               </div>
             </div>
 
+          </div> */}
+
+          {/* === Tab related_parties_content  === */}
+          <div id="related_parties_content" className="tabcontent">
+            {/* Component Title */}
+            <h3 className="head-title-bottom mt-2">ผู้ปฎิบัติงาน</h3>
+
+            {/* === One Column   ==== */}
+            <div className="grid_12">
+              {/* auditor_name  */}
+              <div className="grid_2 alpha white-space">
+                <p className="top-text">ผู้ควบคุมตรวจสอบชื่อ</p>
+              </div>
+              <div className="grid_4 alpha omega">
+                <TextInput name="auditor_name" tabIndex="31"
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+              </div>
+
+              <Label>ตำแหน่ง</Label>
+              <div className="grid_4 alpha omega">
+                <SelectNoChildrenInput name="auditor_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="32">
+                  <option value='' selected></option>
+                  {factPosition.items.map((position) => {
+                    if (values.auditor_position_id === position.position_id) {
+                      return <option key={position.position_id} value={position.position_id} selected>{position.name}</option>
+                    } else return <option key={position.position_id} value={position.position_id}>{position.name}</option>
+                  })}
+                </SelectNoChildrenInput>
+              </div>
+              <div className="clear" />
+
+              {/* fixer_name  */}
+              <div className="grid_2 alpha white-space">
+                <p className="top-text">ดำเนินการแก้ไขชื่อ</p>
+              </div>
+              <div className="grid_4 alpha omega">
+                <TextInput name="fixer_name" tabIndex="33"
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+              </div>
+              <Label>ตำแหน่ง</Label>
+              <div className="grid_4 alpha omega">
+                <SelectNoChildrenInput name="fixer_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="34">
+                  <option value='' selected></option>
+                  {factPosition.items.map((position) => {
+                    if (values.fixer_position_id === position.position_id) {
+                      return <option key={position.position_id} value={position.position_id} selected>{position.name}</option>
+                    } else return <option key={position.position_id} value={position.position_id}>{position.name}</option>
+                  })}
+                </SelectNoChildrenInput>
+              </div>
+              <div className="clear" />
+
+
+              {/* member_1  */}
+              <div className="grid_2 alpha white-space">
+                <p className="top-text">รายชื่อเพื่อนร่วมงาน</p>
+              </div>
+              <div className="grid_4 alpha omega">
+                <TextInput name="member_1" tabIndex="35"
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+              </div>
+              <Label>ตำแหน่ง</Label>
+              <div className="grid_4 alpha omega">
+                <SelectNoChildrenInput name="member_1_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="36">
+                  <option value='' selected></option>
+                  {factPosition.items.map((position) => {
+                    if (values.member_1_position_id === position.position_id) {
+                      return <option key={position.position_id} value={position.position_id} selected>{position.name}</option>
+                    } else return <option key={position.position_id} value={position.position_id}>{position.name}</option>
+                  })}
+                </SelectNoChildrenInput>
+              </div>
+              <div className="clear" />
+
+              {/* member_2  */}
+              <div className="grid_2 alpha white-space">
+                <p className="top-text">รายชื่อเพื่อนร่วมงาน</p>
+              </div>
+              <div className="grid_4 alpha omega">
+                <TextInput name="member_2"
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="37" />
+              </div>
+              <Label>ตำแหน่ง</Label>
+              <div className="grid_4 alpha omega">
+                <SelectNoChildrenInput name="member_2_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="38">
+                  <option value='' selected></option>
+                  {factPosition.items.map((position) => {
+                    if (values.member_2_position_id === position.position_id) {
+                      return <option key={position.position_id} value={position.position_id} selected>{position.name}</option>
+                    } else return <option key={position.position_id} value={position.position_id}>{position.name}</option>
+                  })}
+                </SelectNoChildrenInput>
+              </div>
+              <div className="clear" />
+
+              {/* member_3  */}
+              <div className="grid_2 alpha white-space">
+                <p className="top-text">รายชื่อเพื่อนร่วมงาน</p>
+              </div>
+              <div className="grid_4 alpha omega">
+                <TextInput name="member_3" tabIndex="39"
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+              </div>
+              <Label>ตำแหน่ง</Label>
+              <div className="grid_4 alpha omega">
+                <SelectNoChildrenInput name="member_3_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="40">
+                  <option value='' selected></option>
+                  {factPosition.items.map((position) => {
+                    if (values.member_3_position_id === position.position_id) {
+                      return <option key={position.position_id} value={position.position_id} selected>{position.name}</option>
+                    } else return <option key={position.position_id} value={position.position_id}>{position.name}</option>
+                  })}
+                </SelectNoChildrenInput>
+              </div>
+              <div className="clear" />
+            </div>
+
           </div>
 
           <div id="item_content" className="tabcontent">
-            <TableCreatePlan checklist_line_item_use_equipment={values.checklist_line_item_use_equipment} />
+            <TableCreatePlan checklist_line_item_use_equipment={values.checklist_line_item_use_equipment}
+              sumTotalLineItem={sumTotalLineItem}
+            />
           </div>
 
           {/* Attachment Tab */}

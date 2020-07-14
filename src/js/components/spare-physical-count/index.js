@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { useFormik , withFormik ,useFormikContext} from 'formik';
 import { Redirect } from 'react-router-dom';
-import { useSelector  } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import TabBar from '../common/tab-bar';
 
@@ -16,14 +16,17 @@ import useFactInitializer from '../../hooks/fact-initializer';
 import useTokenInitializer from '../../hooks/token-initializer';
 import useFooterInitializer from '../../hooks/footer-initializer';
 import useDocumentSubscription from '../../hooks/document-subscription';
+import useNavBottomStatusInitializer from '../../hooks/nav-bottom-status-initializer';
 
 import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
+import { footerToModeSearch } from '../../redux/modules/footer.js';
 
 import BgRed from '../../../images/spare/bg_red.jpg';
 import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const PhysicalCountComponent = (props) => {
     
     const {resetForm, setFieldValue, setValues, values} = useFormikContext();
+    const dispatch = useDispatch();
 
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
@@ -35,9 +38,16 @@ const PhysicalCountComponent = (props) => {
     useToolbarInitializer(TOOLBAR_MODE.SEARCH);
     useTokenInitializer();
     useFactInitializer();
-    useFooterInitializer(DOCUMENT_TYPE_ID.PHYSICAL_COUNT);
     useDocumentSubscription();
+    useNavBottomStatusInitializer();
+    useFooterInitializer(DOCUMENT_TYPE_ID.PHYSICAL_COUNT);
     const loggedIn = useSelector(state => state.token.isLoggedIn); 
+
+    useEffect(() => {
+        dispatch(footerToModeSearch());
+    }, []);
+
+
     // If Link to this url via Track Document
     useEffect(() => {
         getUrlParamsLink()
