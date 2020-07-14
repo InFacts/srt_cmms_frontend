@@ -77,6 +77,7 @@ const EnhancedReportS1Component = withFormik({
     mapPropsToValues: (props) => ({
         // Field ที่ให้ User กรอก
         internal_item_id: '',
+        warehouse_type_id: -1,
         src_warehouse_id: '',
         item_status_id: 1,
         line_items: [],

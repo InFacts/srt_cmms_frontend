@@ -59,7 +59,7 @@ const GoodsInventoryAdjustmentComponent = (props) => {
             }
         })
     }, [])
-    console.log("document_id", values.document_id)
+
     return (
         <>
         {!loggedIn ? <Redirect to="/" /> : null}
