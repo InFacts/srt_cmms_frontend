@@ -48,18 +48,18 @@ const EquipmentInstallationComponent = (props) => {
         dispatch(footerToModeSearch());
     }, []);
 
-        // If Link to this url via Track Document
-        useEffect(() => {
-            getUrlParamsLink()
-                .then((internal_document_id) => {
+    // If Link to this url via Track Document
+    useEffect(() => {
+        getUrlParamsLink()
+            .then((internal_document_id) => {
                 if (internal_document_id !== "") {
                     // action_approval
                     setFieldValue("status_name_th", "", true);
                     setFieldValue("internal_document_id", internal_document_id, true);
                 }
             })
-        }, [])
-        
+    }, [])
+
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
@@ -99,7 +99,7 @@ const EnhancedEquipmentInstallationComponent = withFormik({
         announce_use_on: '',             // วันที่ประกาศใช้ (Default === NOW )
         equipment_status_id: '',        //สถานะ
         x_cross_x_cross_id: '',
-        remark: '', 
+        remark: '',
 
         // Location Content
         location_district_id: '',        // สถานที่ แขวง  [รายงานการตรวจซ่อมอุปกรณ์แขวง] FK_ID

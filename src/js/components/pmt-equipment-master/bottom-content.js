@@ -31,6 +31,7 @@ const BottomContent = (props) => {
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
   const factEquipmentGroup = useSelector((state) => ({ ...state.api.fact[FACTS.EQUIPMENT_GROUP] }), shallowEqual);
   const factChecklist = useSelector((state) => ({ ...state.api.fact.checklist }), shallowEqual);
+  const factXCross = useSelector((state) => ({ ...state.api.fact[FACTS.X_CROSS] }), shallowEqual);
 
   const validateUomItemmasterDataIDField = (fieldName, uom_id) => {
     if (!uom_id) {
@@ -110,7 +111,7 @@ const BottomContent = (props) => {
                 <p className="cancel-default">ชื่อหน่วยนับ  </p>
               </div>
               <div className="grid_3 pull_1">
-                <TextInput name='uom_name' disabled  />
+                <TextInput name='uom_name' disabled />
               </div>
 
               {/* === lead_time === */}
@@ -153,11 +154,10 @@ const BottomContent = (props) => {
                 <p className="cancel-default">สถานะอะไหล่ </p>
               </div>
               <div className="grid_3 pull_1">
-                <SelectNoChildrenInput name="active" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                  validate={validateActiveField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="10" >
+                <SelectNoChildrenInput name="active" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="10" >
                   <option value=''></option>
-                      <option value='0'>ปิดการใช้งาน</option>
-                      <option value='1'>เปิดการใช้งาน</option>
+                  <option value='0'>ปิดการใช้งาน</option>
+                  <option value='1'>เปิดการใช้งาน</option>
                 </SelectNoChildrenInput>
               </div>
 
@@ -197,10 +197,10 @@ const BottomContent = (props) => {
                 <p className="top-text">มูลค่านำเข้า</p>
               </div>
               <div className="grid_2 alpha omega">
-                <NumberInput step={0.01} name="price_import" disabled/>
+                <NumberInput step={0.01} name="price_import" disabled />
               </div>
               <Label>บาท</Label>
-              
+
               {/* === responsible_by === */}
               <div className="grid_3 alpha omega float-right">
                 <SelectNoChildrenInput name="responsible_district_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="13" validate={validateResposibleDistrictID} cssStyle={{ left: "-160px", top: "10px" }}>
@@ -220,9 +220,9 @@ const BottomContent = (props) => {
                 <p className="top-text">มูลค่าปัจจุบัน</p>
               </div>
               <div className="grid_2 alpha omega">
-              <NumberInput step={0.01} name="price_currently" tabIndex="14" validate={validatePriceCurrently} cssStyle={{ left: "60px", top: "-5px" }}
-                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                  />
+                <NumberInput step={0.01} name="price_currently" tabIndex="14" validate={validatePriceCurrently} cssStyle={{ left: "60px", top: "-5px" }}
+                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                />
               </div>
               <Label>บาท</Label>
 
@@ -231,7 +231,7 @@ const BottomContent = (props) => {
                 <SelectNoChildrenInput name="responsible_node_id" disabled>
                   <option value=''></option>
                   {factNodes.items.map((node) => {
-                      return <option key={node.node_id} value={node.node_id}>{node.name}</option>
+                    return <option key={node.node_id} value={node.node_id}>{node.name}</option>
                   })}
                 </SelectNoChildrenInput>
               </div>
@@ -246,9 +246,9 @@ const BottomContent = (props) => {
                 <p className="top-text">ค่าเสื่อมต่อปี</p>
               </div>
               <div className="grid_2 alpha omega">
-              <NumberInput step={0.01} name="depreciation" tabIndex="15" validate={validateDepreciation} cssStyle={{ left: "60px", top: "-5px" }}
-                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                  />
+                <NumberInput step={0.01} name="depreciation" tabIndex="15" validate={validateDepreciation} cssStyle={{ left: "60px", top: "-5px" }}
+                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                />
               </div>
               <Label>บาท</Label>
 
@@ -271,9 +271,9 @@ const BottomContent = (props) => {
                 <p className="top-text">อายุการใช้งาน</p>
               </div>
               <div className="grid_2 alpha omega">
-              <NumberInput step={1} name="useful_life" tabIndex="16" validate={validateUsefulLife} cssStyle={{ left: "60px", top: "-5px" }}
-                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                  />
+                <NumberInput step={1} name="useful_life" tabIndex="16" validate={validateUsefulLife} cssStyle={{ left: "60px", top: "-5px" }}
+                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                />
               </div>
               <Label>เดือน</Label>
               <div className="clear" />
@@ -289,7 +289,7 @@ const BottomContent = (props) => {
                 <p className="top-text">แขวง</p>
               </div>
               <div className="grid_5 alpha omega">
-                <SelectNoChildrenInput name="responsible_district_id" disabled>
+                <SelectNoChildrenInput name="location_district_id" disabled>
                   <option value=''></option>
                   {factDistict.items.map((factDistict) => {
                     return <option value={factDistict.district_id}>{factDistict.name}</option>
@@ -302,10 +302,10 @@ const BottomContent = (props) => {
                 <p className="top-text">ตอน</p>
               </div>
               <div className="grid_5 alpha omega">
-                <SelectNoChildrenInput name="responsible_node_id" disabled>
+                <SelectNoChildrenInput name="location_node_id" disabled>
                   <option value=''></option>
                   {factNodes.items.map((node) => {
-                      return <option key={node.node_id} value={node.node_id}>{node.name}</option>
+                    return <option key={node.node_id} value={node.node_id}>{node.name}</option>
                   })}
                 </SelectNoChildrenInput>
               </div>
@@ -319,7 +319,7 @@ const BottomContent = (props) => {
                 <SelectNoChildrenInput name="location_station_id" disabled>
                   <option value=''></option>
                   {factStations.items.map((stations) => {
-                      return <option key={stations.station_id} value={stations.station_id}>{stations.name}</option>
+                    return <option key={stations.station_id} value={stations.station_id}>{stations.name}</option>
                   })}
                 </SelectNoChildrenInput>
               </div>
@@ -329,10 +329,24 @@ const BottomContent = (props) => {
                 <p className="top-text">รายละเอียดสถานี</p>
               </div>
               <div className="grid_5 alpha omega">
-                <TextInput name="location"
+                <TextInput name="location_description"
                   disabled />
               </div>
 
+              <div className="clear" />
+
+              {/* === location === */}
+              <div className="grid_2">
+                <p className="top-text">ศูนย์กลางทางผ่าน</p>
+              </div>
+              <div className="grid_5 alpha omega">
+                <SelectNoChildrenInput name="x_cross_x_cross_id" disabled>
+                  <option value=''></option>
+                  {factXCross.items.map((x_cross) => {
+                    return <option key={x_cross.x_cross_id} value={x_cross.x_cross_id}>{x_cross.road_center} \\ {x_cross.name} \\ {x_cross.x_road_name}</option>
+                  })}
+                </SelectNoChildrenInput>
+              </div>
               <div className="clear" />
 
             </div>
@@ -351,10 +365,6 @@ const BottomContent = (props) => {
                 <SelectNoChildrenInput name="equipment_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateItemGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="17" >
                   <option value=''></option>
                   {factEquipmentGroup.items.map((item_group) => (
-                    values.equipment_group_id === item_group.equipment_group_id
-                      ?
-                      <option value={item_group.equipment_group_id} key={item_group.equipment_group_id} selected> {item_group.name} </option>
-                      :
                       <option value={item_group.equipment_group_id} key={item_group.equipment_group_id}> {item_group.name} </option>
                   ))}
                 </SelectNoChildrenInput>
@@ -372,10 +382,8 @@ const BottomContent = (props) => {
                   cssStyle={{ left: "-160px", top: "10px" }} tabIndex="18" >
                   <option value=''></option>
                   {factChecklist.items.map((factChecklist) => {
-                    if (factChecklist.checklist_id === values.checklist_id) {
-                      return <option value={factChecklist.checklist_id} key={factChecklist.checklist_id} selected>{factChecklist.checklist_name}</option>
-                    } else {
-                      return <option value={factChecklist.checklist_id} key={factChecklist.checklist_id}>{factChecklist.checklist_name}</option>
+                    if (values.equipment_group_id == factChecklist.checklist_group_id) {
+                      return (<option value={factChecklist.checklist_id}>{factChecklist.checklist_name}</option>)
                     }
                   })}
                 </SelectNoChildrenInput>
@@ -434,10 +442,10 @@ const BottomContent = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {values.ref_document.map((document,index) => {
+                  {values.ref_document.map((document, index) => {
                     return (
                       <tr>
-                        <td className="edit-padding text-center">{index+1}</td>
+                        <td className="edit-padding text-center">{index + 1}</td>
                         <td className="edit-padding">{document.timestamp && document.timestamp.split("T")[0]}</td>
                         <td className="edit-padding">{document.internal_document_id}</td>
                         <td className="edit-padding">{document.document_type_name}</td>

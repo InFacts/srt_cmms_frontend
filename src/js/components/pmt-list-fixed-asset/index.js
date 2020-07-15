@@ -42,29 +42,85 @@ const GoodsReceiptComponent = (props) => {
     )
 }
 
-// const initiaLineEquipmentPlan = {
-//     description: '',
-// }
-// const initialRowsEquipmentPlan = (n = 10) => {
-//     let rows = [];
-//     for (var i = 1; i <= n; i++) {
-//         rows.push({
-//             ...initiaLineEquipmentPlan,
-//         });
-//     }
-//     return rows;
-// }
+const initialLineYears = (n = 10) => {
+    var new_date = new Date();
+    var start_year = new_date.getFullYear() + 543; //ปีปัจุบัน(ค.ศ.) + 543(แปลงเป็น พ.ศ.) - 10(ย้อนหลังสิบปี) 
+    let rows_year = [
+        {
+            year_id: start_year
+        }
+    ];
+    for (var i = 1; i <= n; i++) {
+        start_year = start_year - 1
+        rows_year.push({
+            year_id: start_year
+        });
+    }
+    return rows_year;
+}
+var now_date = new Date();
 
 const EnhancedGoodsReceiptComponent = withFormik({
     mapPropsToValues: (props) => ({
         // Field ที่ให้ User กรอก
         // Top Content
-        checklist_id: '',
-        checklist_line_item: '',
-        checklist_group_id: '',
 
+        year_id: now_date.getFullYear() + 543,
+        mouth_id: now_date.getMonth() + 1,
+
+        year: initialLineYears(),
+        mouth: [
+            {
+                id: 1,
+                mouth: "มกราคม"
+            },
+            {
+                id: 2,
+                mouth: "กุมภาพันธ์"
+            },
+            {
+                id: 3,
+                mouth: "มีนาคม"
+            },
+            {
+                id: 4,
+                mouth: "เมษายน "
+            },
+            {
+                id: 5,
+                mouth: "พฤษภาคม"
+            },
+            {
+                id: 6,
+                mouth: "มิถุนายน"
+            },
+            {
+                id: 7,
+                mouth: "กรกฎาคม"
+            },
+            {
+                id: 8,
+                mouth: "สิงหาคม"
+            },
+            {
+                id: 9,
+                mouth: "กันยายน"
+            },
+            {
+                id: 10,
+                mouth: "ตุลาคม"
+            },
+            {
+                id: 11,
+                mouth: "พฤศจิกายน"
+            },
+            {
+                id: 12,
+                mouth: "ธันวาคม"
+            }
+        ],
         // Bottom Content
-        // checklist_line_item: initialRowsEquipmentPlan(),
+        list_documents: []
     })
 })(GoodsReceiptComponent);
 

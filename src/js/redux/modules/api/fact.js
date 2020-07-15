@@ -24,6 +24,7 @@ export const FACTS = {
     WAREHOUSES_TYPE: "warehouse-type",
     APPROVAL_PROCESS_LOOKUP: "approval-process-lookup",
     POSITION:"position",
+    LEVEL: "level",
     EQUIPMENT:"equipment",
     EQUIPMENT_GROUP: "equipment-group",
     CHECKLIST_LINE_ITEM_USE_EQUIPMENT: "checklist-line-item-use-equipment",
