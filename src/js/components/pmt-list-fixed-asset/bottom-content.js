@@ -25,33 +25,33 @@ const BottomContent = (props) => {
             <thead>
               <tr>
                 <th className="font text-center" style={{ width: "30px" }}>#</th>
-                <th className="font" style={{ width: "300px" }}>แผน</th>
-                <th className="font text-center" style={{ width: "100px" }}>ความถี่</th>
-                <th className="font text-center" style={{ width: "100px" }}>หน่วย</th>
-                <th className="font text-center" style={{ width: "100px" }}>Active</th>
-                <th className="font" style={{ width: "300px" }}>หมายเหตุ</th>
+                <th className="font" style={{ width: "300px" }}>เลขที่เอกสาร</th>
+                <th className="font text-center" style={{ width: "170px" }}>งาน</th>
+                <th className="font text-center" style={{ width: "170px" }}>สร้างวันที่	</th>
+                <th className="font text-center" style={{ width: "170px" }}>สถานะเอกสาร</th>
+                <th className="font text-center" style={{ width: "170px" }}>Active</th>
               </tr>
             </thead>
             <tbody>
-              {/* {values.checklist_line_item.map((list, index) => {
+              {values.list_documents.map((list, index) => {
                 return (
                   <tr key={index} id={index}>
                     <td className="edit-padding text-center">{index + 1}</td>
-                    <td className="edit-padding">{list.name}</td>
-                    <td className="edit-padding text-center">{list.freq}</td>
+                    <td className="edit-padding">{list.internal_document_id}</td>
+                    <td className="edit-padding text-center">-</td>
+                    <td className="edit-padding text-center">{list.created_on.split(".")[0].replace("T", " เวลา ") + " น."}</td>
                     <td className="edit-padding text-center">
-                      <SelectNoChildrenInput name={`checklist_line_item[${index}].freq_unit_id`} disabled>
+                      <select className="edit-select" value={list.document_status_id}>
                         <option value=''></option>
-                        <option value='1'>วัน</option>
-                        <option value='2'>เดือน</option>
-                        <option value='3'>ปี</option>
-                      </SelectNoChildrenInput>
+                        {fact[FACTS.DOCUMENT_STATUS].items.map((status) => {
+                          return <option value={status.document_status_id}>{status.status}</option>
+                        })}
+                      </select>
                     </td>
-                    <td className="edit-padding text-center">{list.active && list.active.data[0] === 1 ? "เปิดการใช้งาน" : "ปิดการใช้งาน"}</td>
-                    <td className="edit-padding">{}</td>
+                    <td className="edit-padding">-</td>
                   </tr>
                 )
-              })} */}
+              })}
             </tbody>
           </table>
 

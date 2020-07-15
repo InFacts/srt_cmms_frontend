@@ -40,7 +40,7 @@ const BottomContent = (props) => {
     const factCarType = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_CAR_TYPE] }), shallowEqual);
     const factCaseType = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_CASE_TYPE] }), shallowEqual);
     const factInterrupt = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_INTERRUPT] }), shallowEqual);
-    const factPosition = useSelector((state) => ({ ...state.api.fact[FACTS.POSITION] }), shallowEqual);
+    const factLevel = useSelector((state) => ({ ...state.api.fact[FACTS.LEVEL] }), shallowEqual);
     const factXCross = useSelector((state) => ({ ...state.api.fact[FACTS.X_CROSS] }), shallowEqual);
     const factDocByPass = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_DOC_BYPASS] }), shallowEqual);
 
@@ -530,10 +530,10 @@ const BottomContent = (props) => {
                         <div className="grid_4 alpha omega">
                             <SelectNoChildrenInput name="auditor_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="32">
                                 <option value='' selected></option>
-                                {factPosition.items.map((position) => {
-                                    if (values.auditor_position_id === position.position_id) {
-                                        return <option key={position.position_id} value={position.position_id} selected>{position.name}</option>
-                                    } else return <option key={position.position_id} value={position.position_id}>{position.name}</option>
+                                {factLevel.items.map((position) => {
+                                    if (values.auditor_position_id === position.level_id) {
+                                        return <option key={position.level_id} value={position.level_id} selected>{position.level}</option>
+                                    } else return <option key={position.level_id} value={position.level_id}>{position.level}</option>
                                 })}
                             </SelectNoChildrenInput>
                         </div>
@@ -551,10 +551,10 @@ const BottomContent = (props) => {
                         <div className="grid_4 alpha omega">
                             <SelectNoChildrenInput name="fixer_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="34">
                                 <option value='' selected></option>
-                                {factPosition.items.map((position) => {
-                                    if (values.fixer_position_id === position.position_id) {
-                                        return <option key={position.position_id} value={position.position_id} selected>{position.name}</option>
-                                    } else return <option key={position.position_id} value={position.position_id}>{position.name}</option>
+                                {factLevel.items.map((position) => {
+                                    if (values.fixer_position_id === position.level_id) {
+                                        return <option key={position.level_id} value={position.level_id} selected>{position.level}</option>
+                                    } else return <option key={position.level_id} value={position.level_id}>{position.level}</option>
                                 })}
                             </SelectNoChildrenInput>
                         </div>
@@ -573,10 +573,10 @@ const BottomContent = (props) => {
                         <div className="grid_4 alpha omega">
                             <SelectNoChildrenInput name="member_1_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="36">
                                 <option value='' selected></option>
-                                {factPosition.items.map((position) => {
-                                    if (values.member_1_position_id === position.position_id) {
-                                        return <option key={position.position_id} value={position.position_id} selected>{position.name}</option>
-                                    } else return <option key={position.position_id} value={position.position_id}>{position.name}</option>
+                                {factLevel.items.map((position) => {
+                                    if (values.member_1_position_id === position.level_id) {
+                                        return <option key={position.level_id} value={position.level_id} selected>{position.level}</option>
+                                    } else return <option key={position.level_id} value={position.level_id}>{position.level}</option>
                                 })}
                             </SelectNoChildrenInput>
                         </div>
@@ -594,10 +594,10 @@ const BottomContent = (props) => {
                         <div className="grid_4 alpha omega">
                             <SelectNoChildrenInput name="member_2_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="38">
                                 <option value='' selected></option>
-                                {factPosition.items.map((position) => {
-                                    if (values.member_2_position_id === position.position_id) {
-                                        return <option key={position.position_id} value={position.position_id} selected>{position.name}</option>
-                                    } else return <option key={position.position_id} value={position.position_id}>{position.name}</option>
+                                {factLevel.items.map((position) => {
+                                    if (values.member_2_position_id === position.level_id) {
+                                        return <option key={position.level_id} value={position.level_id} selected>{position.level}</option>
+                                    } else return <option key={position.level_id} value={position.level_id}>{position.level}</option>
                                 })}
                             </SelectNoChildrenInput>
                         </div>
@@ -615,10 +615,10 @@ const BottomContent = (props) => {
                         <div className="grid_4 alpha omega">
                             <SelectNoChildrenInput name="member_3_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="40">
                                 <option value='' selected></option>
-                                {factPosition.items.map((position) => {
-                                    if (values.member_3_position_id === position.position_id) {
-                                        return <option key={position.position_id} value={position.position_id} selected>{position.name}</option>
-                                    } else return <option key={position.position_id} value={position.position_id}>{position.name}</option>
+                                {factLevel.items.map((position) => {
+                                    if (values.member_3_position_id === position.level_id) {
+                                        return <option key={position.level_id} value={position.level_id} selected>{position.level}</option>
+                                    } else return <option key={position.level_id} value={position.level_id}>{position.level}</option>
                                 })}
                             </SelectNoChildrenInput>
                         </div>

@@ -831,7 +831,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             active: values.active === "1" ? true : false,
             node_id: parseInt(values.node_id),
             station_id: parseInt(values.station_id),
-            start_on: values.start_on + 'T01:20:00+07:00',
+            start_on: values.start_on + 'T13:05:00+07:00',
         }
 
         // ต้องเป็น Array selector_checklist_group_part
@@ -1296,7 +1296,8 @@ export const saveMasterData = (document_type_group_id, data, image) => new Promi
 // EDIT /fact/warehouses
 export const editMasterDataHelper = (document_type_group_id, data, image) => new Promise((resolve, reject) => {
     editMasterData(data, document_type_group_id)
-        .then(() => { // Get the Document_ID
+        .then((res) => { // Get the Document_ID
+            console.log("res", res)
             return resolve();
         })
         .catch((err) => {
