@@ -133,6 +133,7 @@ const BottomContent = (props) => {
         checkBooleanForEdit = false
         validateField("internal_document_id")
     }, [values.internal_document_id])
+    
     return (
         <div id={changeTheam() === true ? "" : "blackground-gray"}>
             <div className="container_12 clearfix" id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>
@@ -660,14 +661,9 @@ const BottomContent = (props) => {
                                             />
                                         </td>
                                         <td className="edit-padding text-center">
-                                            <SelectNoChildrenInput name={`loss_line_items[${index}].uom_code`} disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex={41 + index + 1}>
-                                                <option value='' selected></option>
-                                                {factUnit.items.map((factUnit) => {
-                                                    if (values.loss_line_items[index].uom_code === factUnit.uom_id) {
-                                                        return <option key={factUnit.uom_id} value={parseInt(factUnit.uom_id)} selected>{factUnit.name}</option>
-                                                    } else return <option key={factUnit.uom_id} value={parseInt(factUnit.uom_id)}>{factUnit.name}</option>
-                                                })}
-                                            </SelectNoChildrenInput>
+                                            <TextInput name={`loss_line_items[${index}].uom_name`} tabIndex={41 + index + 1}
+                                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                            />
                                         </td>
                                         <td className="edit-padding text-center">
                                             <NumberInput step={1} name={`loss_line_items[${index}].price`} tabIndex={41 + index + 1}

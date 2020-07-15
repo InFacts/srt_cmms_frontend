@@ -24,7 +24,6 @@ const BottomContent = (props) => {
   const factItems = useSelector((state) => ({ ...state.api.fact.items }), shallowEqual);
 
   const returnUnitCount = (quantity, item) => {
-    console.log("quantity", quantity)
     if (quantity < item.quantity_lowest) {
       return <td className="edit-padding" style={{ color: "DarkRed" }}>{quantity}</td>
     } else if (quantity > item.quantity_highest) {
@@ -34,23 +33,26 @@ const BottomContent = (props) => {
     }
   }
 
-  const setValuesForCSV = (line_items) => {
-    line_items.map((line_item) => {
-      values.new_line_items.push({
-        "warehouse_name": line_item.warehouse_name,
-        "internal_item_id": line_item.internal_item_id,
-        "item_description": line_item.item_description,
-        "item_status_description_th": line_item.item_status_description_th,
-        "quantity": line_item.current_unit_count - line_item.committed_unit_count,
-        "total": line_item.pricing.average_price ? (line_item.pricing.average_price.toFixed(4) * (line_item.current_unit_count - line_item.committed_unit_count)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : 0,
-        "per_unit_price": line_item.pricing.average_price ? line_item.pricing.average_price.toFixed(4).replace(/\d(?=(\d{3})+\.)/g, '$&,') : 0
-      })
-    });
-  }
+  // const setValuesForCSV = (line_items) => {
+  //   values.new_line_items = [];
+  //   line_items.map((line_item) => {
+  //     values.new_line_items.push({
+  //       "warehouse_name": line_item.warehouse_name,
+  //       "item_id": line_item.item_id,
+  //       "internal_item_id": line_item.internal_item_id,
+  //       "item_description": line_item.item_description,
+  //       "uom_name": line_item.uom_name,
+  //       "item_status_description_th": line_item.item_status_description_th,
+  //       "quantity": line_item.current_unit_count - line_item.committed_unit_count,
+  //       "total": line_item.pricing !== undefined ? (line_item.pricing.average_price.toFixed(4) * (line_item.current_unit_count - line_item.committed_unit_count)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : line_item.end_state_in_total_price,
+  //       "per_unit_price": line_item.pricing !== undefined ? line_item.pricing.average_price.toFixed(4) : line_item.end_state_in_total_price / (line_item.current_unit_count - line_item.committed_unit_count)
+  //     })
+  //   });
+  // }
 
-  useEffect(() => {
-    setValuesForCSV(values.line_items)
-  }, [values.line_items])
+  // useEffect(() => {
+  //   setValuesForCSV(values.line_items)
+  // }, [values.line_items])
 
   return (
     <div id={changeTheam() === true ? "" : "blackground-gray"}>
@@ -63,7 +65,7 @@ const BottomContent = (props) => {
               <thead>
                 <tr>
                   <th className="font text-center" style={{ minWidth: "30px" }}>ลำดับที่</th>
-                  <th className="font" style={{ minWidth: "310px" }}>รายการสิ่งของ</th>
+                  <th className="font" style={{ minWidth: "280px" }}>รายการสิ่งของ</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>เลขที่สิ่งของคงคลัง</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>สถานะ</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>หน่วย</th>
@@ -74,7 +76,7 @@ const BottomContent = (props) => {
                 </tr>
               </thead>
               <tbody>
-                {values.line_items.map(function (line_items, index) {
+                {values.line_item_shows.map(function (line_items, index) {
                   if (values.warehouse_type_id !== 1 && values.warehouse_type_id !== 2 && values.warehouse_type_id !== 4) {
                     return (
                       <tr key={index}>
@@ -100,16 +102,16 @@ const BottomContent = (props) => {
                       return (
                         <tr key={index}>
                           <th className="edit-padding text-center">{index + 1}</th>
-                          <td className="edit-padding">{line_items.item_description_th}</td>
+                          <td className="edit-padding">{line_items.item_description}</td>
                           <td className="edit-padding">{line_items.internal_item_id}</td>
-                          <td className="edit-padding">{line_items.item_status_description_th}</td>
+                          <td className="edit-padding text-center">{line_items.item_status_description_th}</td>
                           <td className="edit-padding text-center">{line_items.uom_name}</td>
 
-                          {returnUnitCount(line_items.current_unit_count - line_items.committed_unit_count, item)}
+                          {returnUnitCount(line_items.quantity, item)}
 
-                          <td className="edit-padding">{line_items.pricing.average_price ? (line_items.pricing.average_price.toFixed(4) * (line_items.current_unit_count - line_items.committed_unit_count)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : 0}</td>
+                          <td className="edit-padding">{line_items.total}</td>
 
-                          <td className="edit-padding">{line_items.pricing.average_price ? line_items.pricing.average_price.toFixed(4).replace(/\d(?=(\d{3})+\.)/g, '$&,') : 0}</td>
+                          <td className="edit-padding">{line_items.per_unit_price}</td>
                         </tr>
                       )
                     }
@@ -122,7 +124,7 @@ const BottomContent = (props) => {
               <p style={{ fontSize: "18px" }}>* หมายเหตุ: <span style={{ color: "DarkRed" }}>สีแดง: ของต่ำกว่าเกณฑ์</span>, <span style={{ color: "DarkBlue" }}>สีน้ำเงิน: ของมากกว่าเกณฑ์</span>, <span style={{ color: "DarkGreen" }}>สีเขียว: ของอยู่ในเกณฑ์</span>, สีดำ: ของในคลังของตอน</p>
 
               <div className="float-right">
-                <ExportCSV csvData={values.new_line_items} fileName="ส.1" />
+                <ExportCSV csvData={values.line_item_shows} fileName="ส.1" />
               </div>
             </div>
 

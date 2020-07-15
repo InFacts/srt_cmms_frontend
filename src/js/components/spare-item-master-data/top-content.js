@@ -37,6 +37,7 @@ const TopContent = (props) => {
     let uoms = fact['unit-of-measures'].items;
     let uom = uoms.find(uom => `${uom.uom_id}` === `${data.uom_id_inventory}`); // Returns undefined if not found
     return {
+      item_id: data.item_id,
       internal_item_id: data.internal_item_id,
       description: data.description,
       item_group_id: data.item_group_id,

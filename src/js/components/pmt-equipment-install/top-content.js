@@ -65,15 +65,6 @@ const TopContent = (props) => {
             setFieldValue("equipment_id", item_match_equipment.equipment_id, false);
             setFieldValue("equipment_status_id", item_match_equipment.item_status_id, false);
             setFieldValue("responsible_district_id", item_match_equipment.responsible_district_id, false);
-
-            // IF Check user If User is Admin -> return true Else -> return false
-            if (decoded_token.id === 4) { //{/* TODO USER_ID FOR ADMIN */}
-                console.log(" YES I AM ADMIN ")
-                setFieldValue("modeEdit", true, false);
-            } else {
-                console.log(" NO I NOT ADMIN ")
-                setFieldValue("modeEdit", false, false);
-            }
         }
         else {
             return 'Invalid Number ID';
