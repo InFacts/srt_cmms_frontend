@@ -347,7 +347,7 @@ const useExportPdfInitializer = () => {
     else {
       dispatch(handleClickExportPDF())
     }
-  }, [toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF], values])
+  }, [toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF]])
   return;
 
 }

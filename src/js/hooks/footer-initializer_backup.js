@@ -39,100 +39,129 @@ const useFooterInitializer = (document_type_id) => {
     const user_id = useSelector((state) => ({ ...state.token.decoded_token }));
     const footer = useSelector((state) => ({ ...state.footer }));
     const fact = useSelector((state) => ({ ...state.api.fact }));
-    const nav_bottom_status = useSelector((state) => ({ ...state.nav_bottom_status }));
 
-    const { values, touched, setFieldTouched, setTouched, resetForm, validateForm, setFieldValue, setErrors } = useFormikContext();
+    const { values, touched, setFieldTouched, setTouched, submitForm, validateForm, setFieldValue, setErrors } = useFormikContext();
     useTokenInitializer();
 
-    // Handle Document Status TODO: move it out of footer!!
-    const hadleDocumentStatusWithFooter = (document_id) => {
-        let userInfo = {
-            id: user_id.id, // TEST: User ID
-            position_id: user_id.has_position[0].position_id,
-            has_positions: user_id.has_position,
-        };
-        let document_status = values.status_name_th; // TEST: values.status_name_th
-        console.log("document_status", document_status)
-        console.log("document_status values", values)
-        let created_by_admin_employee_id = getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id); // TEST: values.created_by_admin_employee_id;
+    //Handle Document Status TODO: move it out of footer!!
+    // const hadleDocumentStatusWithFooter = (document_id) => {
+    //     let userInfo = {
+    //         id: user_id.id, // TEST: User ID
+    //         position_id: user_id.has_position[0].position_id,
+    //         has_positions: user_id.has_position,
+    //     };
+    //     let track_document_id = document_id; // TEST: Track Document
+    //     let previousApprovalInfo = values.step_approve; // Check Previous Approver 
+    //     let document_status = values.status_name_th; // TEST: values.status_name_th
+    //     let created_by_admin_employee_id = getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id); // TEST: values.created_by_admin_employee_id;
 
-        // Check That user who create document?
-        if (userInfo.id === created_by_admin_employee_id) {
-            console.log("hadleDocumentStatusWithFooter", document_status)
-            if (document_status === DOCUMENT_STATUS.DRAFT) { dispatch(footerToModeAddDraft()); }
-            else if (document_status === DOCUMENT_STATUS.WAIT_APPROVE) { dispatch(footerToModeOwnDocument()); }
-            else if (document_status === DOCUMENT_STATUS.APPROVE_DONE) { dispatch(footerToModeApApprovalDone()); }
-            else if (document_status === DOCUMENT_STATUS.VOID) { dispatch(footerToModeVoid()); }
-            else if (document_status === DOCUMENT_STATUS.REOPEN) { dispatch(footerToModeEdit()); }
-            else if (document_status === DOCUMENT_STATUS.FAST_TRACK) { dispatch(footerToModeFastTrack()); }
-            else { dispatch(footerToModeSearch()); }
-        }
-        else {
-            // Check Next Approver from postion_id
-            console.log("fetchLatestStepApprovalDocumentData")
-            fetchLatestStepApprovalDocumentData(document_id).then((latestApprovalInfo) => {
-                if (latestApprovalInfo !== undefined || latestApprovalInfo.length !== 0) {
-                    if (latestApprovalInfo.position_id === userInfo.position_id) {
-                        if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_APPROVAL) { dispatch(footerToModeApApproval()); }
-                        else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.APPROVAL) { dispatch(footerToModeApCheckApproval()); }
-                        else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.GOT_IT) { dispatch(footerToModeApGotIt()); }
-                        else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_ORDER) { dispatch(footerToModeApCheckOrder()); }
-                        else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_MAINTENANCE) { dispatch(footerToModeApCheckMaintenance()); }
-                        else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.GUARANTEE_MAINTENANCE) { dispatch(footerToModeApGuarnteeMaintenance()); }
-                    }
-                    else { // Everyone for Search mode
-                        dispatch(footerToModeSearch());
-                    }
-                }
-                else { // Everyone for Search mode
-                    if (toolbar.mode === TOOLBAR_MODE.ADD) { dispatch(footerToModeAddDraft()); }
-                    else { dispatch(footerToModeSearch()); }
-                }
-            })
-        }
-    }
+    //     // Check That user who create document?
+    //     // console.log("userInfo.id", userInfo.id,"created_by_admin_employee_id", created_by_admin_employee_id, "document_status", document_status,DOCUMENT_STATUS.WAIT_APPROVE, values)
+    //     if (userInfo.id === created_by_admin_employee_id) {
+    //         if (document_status === DOCUMENT_STATUS.DRAFT) { dispatch(footerToModeAddDraft()); }
+    //         else if (document_status === DOCUMENT_STATUS.WAIT_APPROVE) { dispatch(footerToModeOwnDocument()); }
+    //         else if (document_status === DOCUMENT_STATUS.APPROVE_DONE) { dispatch(footerToModeApApprovalDone()); }
+    //         else if (document_status === DOCUMENT_STATUS.VOID) { dispatch(footerToModeVoid()); }
+    //         else if (document_status === DOCUMENT_STATUS.REOPEN) { dispatch(footerToModeEdit()); }
+    //         else if (document_status === DOCUMENT_STATUS.FAST_TRACK) { dispatch(footerToModeFastTrack()); }
+    //         else { dispatch(footerToModeSearch()); }
+    //     }
+    //     else {
+    //         // Check That user_id into Previous Approval Flow ?
+    //         previousApprovalInfo.map(prevApprval => {
+    //             if (prevApprval.approval_by !== undefined || prevApprval.approval_by.length !== 0) {
+    //                 prevApprval.approval_by.map(prevApprvalBy => {
+    //                     if (userInfo.id === prevApprvalBy.user_id) {
+    //                         dispatch(footerToModeApApprovalDone());
+    //                         return "";
+    //                     }
+    //                 });
+    //             }
+    //         });
 
-    // Handle Toolbar Mode
-    useEffect(() => {
-        let document_id = values.document_id;
-        console.log("document_id", document_id)
-        let routeLocation = getRouteLocation();
-        if (routeLocation === spacialPage.ITEM_MASTER_DATA || routeLocation === spacialPage.WAREHOUSE || routeLocation === spacialPage.PMT_EQUIPMENT_MASTER || routeLocation === spacialPage.PMT_CREATE_CHECKOUT) {
-            if (toolbar.mode === TOOLBAR_MODE.SEARCH) {
-                // TODO: Check is_Admin
-                if (values.active !== undefined && values.active !== "" && values.modeEdit === true) { dispatch(footerToModeSave()); }
-                else { dispatch(footerToModeSearch()); }
-            }
-            else if (toolbar.mode === TOOLBAR_MODE.ADD) {
-                dispatch(footerToModeSave());
-            }
-        }
-        else {
-            // In General
-            if (document_id !== undefined) {
-                if (toolbar.mode === TOOLBAR_MODE.SEARCH && document_id !== "") { // SEARCH mode
-                    dispatch(footerToModeSearch());
-                    hadleDocumentStatusWithFooter(document_id);
-                }
-                else if (toolbar.mode === TOOLBAR_MODE.ADD) { // ADD_DRAFT mode
-                    dispatch(footerToModeAddDraft());
-                    hadleDocumentStatusWithFooter(document_id);
-                    
-                }
-                else { dispatch(footerToModeSearch()); }
-            }
-            else {
-                if (toolbar.mode !== TOOLBAR_MODE.SEARCH) { dispatch(footerToModeAddDraft()); }
-                else { dispatch(footerToModeSearch()); }
-            }
-            
-        }
-    }, [toolbar.mode, values.warehouse_id, values.active, values.modeEdit, values.status_name_th, nav_bottom_status.mode]);
+    //         // Check Next Approver from postion_id
+    //         fetchLatestStepApprovalDocumentData(track_document_id).then((latestApprovalInfo) => {
+    //             if (latestApprovalInfo !== undefined || latestApprovalInfo.length !== 0) {
+    //                 // console.log("latestApprovalInfo------> ", latestApprovalInfo)
+    //                 // console.log("user------> ", latestApprovalInfo.position_id, userInfo.position_id)
+    //                 // console.log("approval_step_action_id------> ", latestApprovalInfo.approval_step_action_id, APPROVAL_STEP_ACTION.APPROVAL)
+    //                 if (latestApprovalInfo.position_id === userInfo.position_id) {
+    //                     if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_APPROVAL) {
+    //                         dispatch(footerToModeApApproval());
+    //                     }
+    //                     else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.APPROVAL) {
+    //                         dispatch(footerToModeApCheckApproval());
+    //                     }
+    //                     else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.GOT_IT) {
+    //                         dispatch(footerToModeApGotIt());
+    //                     }
+    //                     else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_ORDER) {
+    //                         dispatch(footerToModeApCheckOrder());
+    //                     }
+    //                     else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_MAINTENANCE) {
+    //                         dispatch(footerToModeApCheckMaintenance());
+    //                     }
+    //                     else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.GUARANTEE_MAINTENANCE) {
+    //                         dispatch(footerToModeApGuarnteeMaintenance());
+    //                     }
+    //                 }
+    //                 else {
+    //                     // Everyone for Search mode
+    //                     dispatch(footerToModeSearch());
+    //                 }
+    //             }
+    //             else {
+    //                 // Everyone for Search mode
+    //                 if (toolbar.mode === TOOLBAR_MODE.ADD) { dispatch(footerToModeAddDraft()); }
+    //                 else { dispatch(footerToModeSearch()); }
+    //             }
+    //         })
+    //     }
+    // }
 
-    // Handle Back
-    useEffect(() => {
-        if (footer.requiresHandleClick[FOOTER_ACTIONS.BACK]) { dispatch(handleClickBackToSpareMain(getRouteLocation())); }
-    }, [footer.requiresHandleClick[FOOTER_ACTIONS.BACK]]);
+    // // Handle Toolbar Mode
+    // useEffect(() => {
+    //     let document_id = values.document_id;
+    //     let routeLocation = getRouteLocation();
+    //     if (routeLocation === spacialPage.ITEM_MASTER_DATA || routeLocation === spacialPage.WAREHOUSE || routeLocation === spacialPage.PMT_EQUIPMENT_MASTER
+    //         || routeLocation === spacialPage.PMT_CREATE_CHECKOUT) {
+    //         if (toolbar.mode === TOOLBAR_MODE.SEARCH) {
+    //             // TODO: Check is_Admin
+    //             if (values.active !== undefined && values.active !== "" && values.modeEdit === true) { dispatch(footerToModeSave()); }
+    //             else { dispatch(footerToModeSearch()); }
+    //         }
+    //         else if (toolbar.mode === TOOLBAR_MODE.ADD) {
+    //             dispatch(footerToModeSave());
+    //         }
+    //     }
+    //     else {
+    //         // In General
+    //         if (toolbar.mode === TOOLBAR_MODE.SEARCH && document_id !== "" && document_id !== undefined) {
+    //             // SEARCH mode
+    //             console.log("Footer-initializer >> TOOLBAR_MODE.SEARCH")
+    //             dispatch(footerToModeSearch());
+    //             // hadleDocumentStatusWithFooter(document_id);
+    //         }
+    //         else if (toolbar.mode === TOOLBAR_MODE.ADD) {
+    //             // ADD_DRAFT mode
+    //             console.log("Footer-initializer >> TOOLBAR_MODE.ADD", document_id)
+    //             dispatch(footerToModeAddDraft());
+    //             // hadleDocumentStatusWithFooter(document_id);
+    //         }
+    //         else {
+    //             console.log("Else Footer-initializer >> TOOLBAR_MODE.SEARCH")
+    //             dispatch(footerToModeSearch());
+    //         }
+    //     }
+    // }, [toolbar.mode, values.document_id, values.step_approve, values.warehouse_id, values.active, values.modeEdit, values.status_name_th]);
+
+    // // Handle Back
+    // useEffect(() => {
+    //     if (footer.requiresHandleClick[FOOTER_ACTIONS.BACK]) {
+    //         let routeLocation = getRouteLocation();
+    //         dispatch(handleClickBackToSpareMain(routeLocation)); // TODO Needs to have logic from URL ? or pass props?
+    //     }
+    // }, [footer.requiresHandleClick[FOOTER_ACTIONS.BACK]]);
 
     const isObject = (obj) =>
         obj !== null && typeof obj === 'object';
@@ -239,162 +268,142 @@ const useFooterInitializer = (document_type_id) => {
     //     }
     // }, [footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]]);
 
-    const postDocumentApprovalFlow = (document_id, data) => {
-        startDocumentApprovalFlow(document_id)
-        .then(() => {
-            putDocument(document_id, document_type_id, data, values.files, DOCUMENT_STATUS_ID.WAIT_APPROVE, false);
-            dispatch(navBottomSuccess('[PUT]', 'Submit Approval Flow Success', ''));
-            fetchApprovalStep(document_id);
-        })
-        .catch((err) => {
-            dispatch(navBottomError('[PUT] postDocumentApprovalFlow', 'Submit Approval Flow Failed', err));
-        }).finally(() => {
-            console.log(" I submitted ")
-            dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
-        });
-    }
+    // const postDocumentApprovalFlow = (document_id, data) => {
+    //     startDocumentApprovalFlow(document_id)
+    //     .then(() => {
+    //         putDocument(document_id, document_type_id, data, values.files, DOCUMENT_STATUS_ID.WAIT_APPROVE, false);
+    //         dispatch(navBottomSuccess('[PUT]', 'Submit Approval Flow Success', ''));
+    //         fetchApprovalStep(document_id);
+    //     })
+    //     .catch((err) => {
+    //         dispatch(navBottomError('[PUT]', 'Submit Approval Flow Failed', err));
+    //     }).finally(() => {
+    //         console.log(" I submitted ")
+    //         dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
+    //     });
+    // }
 
-    const editDocumentAggregateAPI = (document_id, document_type_id, data, files, flag_create_approval_flow) => {
-        editDocument(document_id, document_type_id, data, files, flag_create_approval_flow)
-        .then(() => {
-            setFieldValue('document_id', document_id, true);
-            if (flag_create_approval_flow) {
-                postDocumentApprovalFlow(document_id, data);
-            }
-        }).catch((err) => {
-            console.warn("Submit Failed ", err.response);
-            dispatch(navBottomError('[PUT] editDocumentAggregateAPI', 'Submit Failed', err));
-        }).finally(() => { // Set that I already handled the Click
-            dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
-        });
-    }
+    // const editDocumentAggregateAPI = (document_id, document_type_id, data, files, flag_create_approval_flow) => {
+    //     editDocument(document_id, document_type_id, data, files, flag_create_approval_flow)
+    //     .then(() => {
+    //         setFieldValue('document_id', document_id, true);
+    //         if (flag_create_approval_flow) {
+    //             postDocumentApprovalFlow(document_id, data);
+    //         }
+    //     }).catch((err) => {
+    //         console.warn("Submit Failed ", err.response);
+    //         dispatch(navBottomError('[PUT]', 'Submit Failed', err));
+    //     }).finally(() => { // Set that I already handled the Click
+    //         dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
+    //     });
+    // }
 
-    const putDocument = (document_id, document_type_id, data, files, document_status_id, flag_create_approval_flow) => {
-        if (DOCUMENT_STATUS_ID.WAIT_APPROVE === document_status_id) {
-            console.log("putDocument WAIT_APPROVE",document_status_id )
-            setFieldValue('status_name_th', DOCUMENT_STATUS.WAIT_APPROVE, true);
-            fetchLatestStepApprovalDocumentData(document_id).then((latestApprovalInfo) => {
-                if (latestApprovalInfo.position === undefined) {
-                    data.document.document_status_id = DOCUMENT_STATUS_ID.APPROVE_DONE;
-                }
-                editDocumentAggregateAPI(document_id, document_type_id, data, files, flag_create_approval_flow)
-            });         
-        }
-        else {
-            editDocumentAggregateAPI(document_id, document_type_id, data, files, flag_create_approval_flow)
-        }
-    }
+    // const putDocument = (document_id, document_type_id, data, files, document_status_id, flag_create_approval_flow) => {
+    //     if (DOCUMENT_STATUS_ID.WAIT_APPROVE === document_status_id) {
+    //         fetchLatestStepApprovalDocumentData(document_id).then((latestApprovalInfo) => {
+    //             if (latestApprovalInfo.position === undefined) {
+    //                 data.document.document_status_id = DOCUMENT_STATUS_ID.APPROVE_DONE;
+    //             }
+    //             editDocumentAggregateAPI(document_id, document_type_id, data, files, flag_create_approval_flow)
+    //         });         
+    //     }
+    //     else {
+    //         editDocumentAggregateAPI(document_id, document_type_id, data, files, flag_create_approval_flow)
+    //     }
+    // }
 
-    const fetchApprovalStep = (document_id) => {
-        fetchStepApprovalDocumentData(document_id).then((result) => {
-            setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
-            if(result.is_canceled) {
-                setFieldValue("document_is_canceled", result.is_canceled.data, false);
-            }
-        });
-    }
+    // const fetchApprovalStep = (document_id) => {
+    //     fetchStepApprovalDocumentData(document_id).then((result) => {
+    //         console.log(">>> result >>>>>", result)
+    //         setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
+    //         if(result.is_canceled) {
+    //             setFieldValue("document_is_canceled", result.is_canceled.data, false);
+    //         }
+    //     });
+    // }
  
-    // Handle Click Send Document & Create Approval Process
-    useEffect(() => {
-        if (footer.requiresHandleClick[FOOTER_ACTIONS.SEND]) {
-            // Move Dispatch to `finally` in the async functions
-            validateForm().then((err) => {
-                setTouched(setNestedObjectValues(values, true))
-                dispatch(navBottomSending('[API]', 'Sending ...', ''));
-                setErrors(err);
-                let data = packDataFromValues(fact, values, document_type_id);
-                data.document.document_status_id = DOCUMENT_STATUS_ID.WAIT_APPROVE;
-                if (isEmpty(err)) { 
-                    if (values.document_id) { // Case If you ever saved document and then you SEND document. (If have document_id, no need to create new doc)
-                        putDocument(values.document_id, document_type_id, data, values.files, DOCUMENT_STATUS_ID.DRAFT, true);
-                    } 
-                    else { // Case If you never saved document, but you want to SEND document
-                        saveDocument(document_type_id, data, values.files, true)
-                            .then((document_id) => {
-                                setFieldValue('document_id', document_id, true);
-                                dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
-                                postDocumentApprovalFlow(document_id, data);
-                            }).catch((err) => {
-                                console.warn("Submit Failed", err.response);
-                                dispatch(navBottomError('[PUT] saveDocument', 'Submit Failed', err));
-                            }).finally(() => { // Set that I already handled the Click
-                                dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
-                            });
-                    }
-                }
-                else {
-                    dispatch(navBottomError('[PUT] validateForm', 'Submit Failed', err));
-                    dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
-                }
-            }).catch((err) => {
-                console.warn("Validate Failed ", err.response);
-                dispatch(navBottomError('[PUT]', 'Do not have document', err));
-                dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
-            })
-        }
-    }, [footer.requiresHandleClick[FOOTER_ACTIONS.SEND]]);
+    // // Handle Click Send Document & Create Approval Process
+    // useEffect(() => {
+    //     if (footer.requiresHandleClick[FOOTER_ACTIONS.SEND]) {
+    //         // Move Dispatch to `finally` in the async functions
+    //         validateForm().then((err) => {
+    //             setTouched(setNestedObjectValues(values, true))
+    //             dispatch(navBottomSending('[API]', 'Sending ...', ''));
+    //             setErrors(err);
+    //             let data = packDataFromValues(fact, values, document_type_id);
+    //             data.document.document_status_id = DOCUMENT_STATUS_ID.WAIT_APPROVE;
+    //             if (isEmpty(err)) { 
+    //                 if (values.document_id) { // Case If you ever saved document and then you SEND document. (If have document_id, no need to create new doc)
+    //                     putDocument(values.document_id, document_type_id, data, values.files, DOCUMENT_STATUS_ID.DRAFT, true);
+    //                 } else { // Case If you never saved document, but you want to SEND document
+    //                     saveDocument(document_type_id, data, values.files, true)
+    //                         .then((document_id) => {
+    //                             setFieldValue('document_id', document_id, true);
+    //                             dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
+    //                             postDocumentApprovalFlow(document_id, data);
+    //                         }).catch((err) => {
+    //                             console.warn("Submit Failed ", err.response);
+    //                             dispatch(navBottomError('[PUT]', 'Submit Failed', err));
+    //                         }).finally(() => { // Set that I already handled the Click
+    //                             dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
+    //                         });
+    //                 }
+    //             }
+    //             else {
+    //                 dispatch(navBottomError('[PUT]', 'Submit Failed', err));
+    //                 dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
+    //             }
+    //         }).catch((err) => {
+    //             console.warn("Validate Failed ", err.response);
+    //             dispatch(navBottomError('[PUT]', 'Do not have document', err));
+    //             dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
+    //         })
+    //     }
+    // }, [footer.requiresHandleClick[FOOTER_ACTIONS.SEND]]);
 
-    const clearFooterAction = () => {
-        if (footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL]) {dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.APPROVAL]());}
-        else if (footer.requiresHandleClick[FOOTER_ACTIONS.CHECK_APPROVAL]) {dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.CHECK_APPROVAL]());}
-        else if (footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL_ORDER]) {dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.APPROVAL_ORDER]());}
-        else if (footer.requiresHandleClick[FOOTER_ACTIONS.GOT_IT]) {dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.GOT_IT]());}
-        else if (footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK]) {dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.FAST_TRACK]());}
-        else if (footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]) {dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.REJECT]());}
-        else if (footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]) {dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]());}
-    }
-
-    // Handle Click Approval
-    useEffect(() => {
-        console.log(">> Handle Click Approval <<", footer.requiresHandleClick[FOOTER_ACTIONS.CHECK_APPROVAL])
-        if (footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL] || footer.requiresHandleClick[FOOTER_ACTIONS.CHECK_APPROVAL] || footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL_ORDER] || footer.requiresHandleClick[FOOTER_ACTIONS.GOT_IT] || footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK] || footer.requiresHandleClick[FOOTER_ACTIONS.REJECT] || footer.requiresHandleClick[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]) {
-            // console.log("I AM Handle APPROVAL", values);
-            validateForm().then((err) => {
-                dispatch(navBottomSending('[API]', 'Sending ...', ''));
-                setErrors(err);
-                if (isEmpty(err)) {
-                    let data = packDataFromValues(fact, values, document_type_id);
-                    data.document.document_status_id = DOCUMENT_STATUS_ID.WAIT_APPROVE;
-                    if (values.document_id) { // Case If you ever saved document and then you SEND document. (If have document_id, no need to create new doc)
-                        let remark = "demo body";
-                        approveDocument(values.document_id, APPROVAL_STATUS.APPROVED, user_id, remark).then(() => {
-                            dispatch(navBottomSuccess('[PUT]', 'Submit Success', ''));
-                            putDocument(values.document_id, document_type_id, data, null, DOCUMENT_STATUS_ID.WAIT_APPROVE, false);
-                            fetchApprovalStep(values.document_id);
-                        })
-                        .catch((err) => {
-                            console.warn("Approve Document Failed ", err.response);
-                            dispatch(navBottomError('[PUT] approveDocument', 'Approve Document Failed', err));
-                        })
-                        .finally(() => { // Set that I already handled the Click
-                            console.log(" I submitted and i am now handling click")
-                            clearFooterAction();
-                        });
-                    }
-                    else { // Case If you never saved document, but you want to SEND document
-                        dispatch(navBottomError('[PUT ]values.document_id', 'Do not have document', err));
-                        clearFooterAction();
-                    }
-                }
-                else {
-                    console.warn("err", err);
-                    console.warn("toolbar.mode", toolbar.mode, "TOOLBAR_MODE.SEARCH", TOOLBAR_MODE.SEARCH);
-                    if (toolbar.mode !== TOOLBAR_MODE.SEARCH && toolbar.mode !== TOOLBAR_MODE.NONE) { dispatch(navBottomError('[PUT] isEmpty', 'Error Validate Form', err)); }
-                    else { 
-                        dispatch(navBottomOnReady('', '', '')); 
-                    }
-                    clearFooterAction();
-                }
-            })
-            .catch((err) => {
-                console.warn("Submit Failed ", err.response);
-                if (toolbar.mode !== TOOLBAR_MODE.SEARCH && toolbar.mode !== TOOLBAR_MODE.NONE) { dispatch(navBottomError('[PUT] validateForm', 'Error Validate Form', err)); }
-                clearFooterAction();
-            })
-        }
-    }, [ footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL], footer.requiresHandleClick[FOOTER_ACTIONS.CHECK_APPROVAL],
-    footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL_ORDER], footer.requiresHandleClick[FOOTER_ACTIONS.GOT_IT],
-    footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK], footer.requiresHandleClick[FOOTER_ACTIONS.REJECT], footer.requiresHandleClick[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS],]);
+    // // Handle Click Approval
+    // useEffect(() => {
+    //     if (footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL]) {
+    //         // console.log("I AM Handle APPROVAL", values);
+    //         validateForm().then((err) => {
+    //             dispatch(navBottomSending('[API]', 'Sending ...', ''));
+    //             setErrors(err);
+    //             if (isEmpty(err)) {
+    //                 let data = packDataFromValues(fact, values, document_type_id);
+    //                 data.document.document_status_id = DOCUMENT_STATUS_ID.WAIT_APPROVE;
+    //                 if (values.document_id) { // Case If you ever saved document and then you SEND document. (If have document_id, no need to create new doc)
+    //                     let remark = "demo body";
+    //                     approveDocument(values.document_id, APPROVAL_STATUS.APPROVED, user_id, remark).then(() => {
+    //                         dispatch(navBottomSuccess('[PUT]', 'Submit Success', ''));
+    //                         putDocument(values.document_id, document_type_id, data, null, DOCUMENT_STATUS_ID.WAIT_APPROVE, false);
+    //                         fetchApprovalStep(values.document_id);
+    //                     })
+    //                     .catch((err) => {
+    //                         console.warn("Approve Document Failed ", err.response);
+    //                         dispatch(navBottomError('[PUT]', 'Approve Document Failed', err));
+    //                     })
+    //                     .finally(() => { // Set that I already handled the Click
+    //                         console.log(" I submitted and i am now handling click")
+    //                         dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.APPROVAL]());
+    //                     });
+    //                 }
+    //                 else { // Case If you never saved document, but you want to SEND document
+    //                     dispatch(navBottomError('[PUT]', 'Do not have document', err));
+    //                     dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.APPROVAL]());
+    //                 }
+    //             }
+    //             else {
+    //                 dispatch(navBottomError('[PUT]', 'Submit Failed', err));
+    //                 dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.APPROVAL]());
+    //             }
+    //         })
+    //         .catch((err) => {
+    //             console.warn("Submit Failed ", err.response);
+    //             dispatch(navBottomError('[PUT]', 'Error Validate Form', err));
+    //             dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.APPROVAL]());
+    //         })
+    //     }
+    // }, [footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL]]);
 
     // // Handle Click Check Approval
     // useEffect(() => {
