@@ -161,83 +161,83 @@ const useFooterInitializer = (document_type_id) => {
 
         return response;
     }
-    // // Handle Click Save
-    // useEffect(() => {
-    //     if (footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) {
-    //         validateForm()
-    //             .then((err) => {
-    //                 setTouched(setNestedObjectValues(values, true))
-    //                 dispatch(navBottomSending('[API]', 'Sending ...', ''));
-    //                 setErrors(err);
-    //                 if (isEmpty(err)) {
-    //                     if (values.document_id) { // If have document_id, no need to create new doc
-    //                         let data = packDataFromValues(fact, values, document_type_id);
-    //                         editDocument(values.document_id, document_type_id, data, values.files)
-    //                             .then((document_id) => {
-    //                                 setFieldValue('document_id', values.document_id, true);
-    //                                 dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
-    //                             })
-    //                             .catch((err) => {
-    //                                 console.log("Submit Failed ", err.response);
-    //                                 dispatch(navBottomError('[PUT]', 'Submit Failed', err));
-    //                             })
-    //                             .finally(() => { // Set that I already handled the Click
-    //                                 console.log(" I submitted and i am now handling click")
-    //                                 dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
-    //                             });
-    //                     } else { // If not have document_id
-    //                         let data = packDataFromValues(fact, values, document_type_id);
-    //                         if (document_type_id !== DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA && document_type_id !== DOCUMENT_TYPE_ID.ITEM_MASTER_DATA
-    //                             && document_type_id !== DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA && document_type_id !== DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM) {
-    //                             saveDocument(document_type_id, data, values.files)
-    //                                 .then((document_id) => {
-    //                                     setFieldValue('document_id', document_id, true);
-    //                                     dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
-    //                                 })
-    //                                 .catch((err) => {
-    //                                     console.log("Submit Failed ", err.response);
-    //                                     dispatch(navBottomError('[PUT]', 'Submit Failed', err));
-    //                                 })
-    //                                 .finally(() => { // Set that I already handled the Click
-    //                                     console.log(" I submitted and i am now handling click")
-    //                                     dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
-    //                                 });
-    //                         } else {
-    //                             if (values.modeEdit === true) {// Mode Edit Mater data
-    //                                 let data = packDataFromValuesMasterDataForEdit(fact, values, document_type_id);
-    //                                 editMasterDataHelper(document_type_id, data)
-    //                                     .then(() => {
-    //                                         dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
-    //                                     })
-    //                                     .catch((err) => {
-    //                                         console.log("Submit Failed ", err.response);
-    //                                         dispatch(navBottomError('[PUT]', 'Submit Failed', err));
-    //                                     })
-    //                                     .finally(() => { // Set that I already handled the Click
-    //                                         console.log(" I submitted and i am now handling click")
-    //                                     });
-    //                             } else {// For POST MASTER DATA
-    //                                 saveMasterData(document_type_id, data)
-    //                                     .then(() => {
-    //                                         dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
-    //                                     })
-    //                                     .catch((err) => {
-    //                                         console.log("Submit Failed ", err.response);
-    //                                         dispatch(navBottomError('[PUT]', 'Submit Failed', err));
-    //                                     })
-    //                                     .finally(() => { // Set that I already handled the Click
-    //                                         console.log(" I submitted and i am now handling click")
-    //                                     });
-    //                             }
-    //                         }
-    //                     }
-    //                 }
-    //             })
-    //             .catch((err) => {
-    //                 console.log("err validate", err)
-    //             })
-    //     }
-    // }, [footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]]);
+    // Handle Click Save
+    useEffect(() => {
+        if (footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) {
+            validateForm()
+                .then((err) => {
+                    setTouched(setNestedObjectValues(values, true))
+                    dispatch(navBottomSending('[API]', 'Sending ...', ''));
+                    setErrors(err);
+                    if (isEmpty(err)) {
+                        if (values.document_id) { // If have document_id, no need to create new doc
+                            let data = packDataFromValues(fact, values, document_type_id);
+                            editDocument(values.document_id, document_type_id, data, values.files)
+                                .then((document_id) => {
+                                    setFieldValue('document_id', values.document_id, true);
+                                    dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
+                                })
+                                .catch((err) => {
+                                    console.log("Submit Failed ", err.response);
+                                    dispatch(navBottomError('[PUT]', 'Submit Failed', err));
+                                })
+                                .finally(() => { // Set that I already handled the Click
+                                    console.log(" I submitted and i am now handling click")
+                                    dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
+                                });
+                        } else { // If not have document_id
+                            let data = packDataFromValues(fact, values, document_type_id);
+                            if (document_type_id !== DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA && document_type_id !== DOCUMENT_TYPE_ID.ITEM_MASTER_DATA
+                                && document_type_id !== DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA && document_type_id !== DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM) {
+                                saveDocument(document_type_id, data, values.files)
+                                    .then((document_id) => {
+                                        setFieldValue('document_id', document_id, true);
+                                        dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
+                                    })
+                                    .catch((err) => {
+                                        console.log("Submit Failed ", err.response);
+                                        dispatch(navBottomError('[PUT]', 'Submit Failed', err));
+                                    })
+                                    .finally(() => { // Set that I already handled the Click
+                                        console.log(" I submitted and i am now handling click")
+                                        dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
+                                    });
+                            } else {
+                                if (values.modeEdit === true) {// Mode Edit Mater data
+                                    let data = packDataFromValuesMasterDataForEdit(fact, values, document_type_id);
+                                    editMasterDataHelper(document_type_id, data)
+                                        .then(() => {
+                                            dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
+                                        })
+                                        .catch((err) => {
+                                            console.log("Submit Failed ", err.response);
+                                            dispatch(navBottomError('[PUT]', 'Submit Failed', err));
+                                        })
+                                        .finally(() => { // Set that I already handled the Click
+                                            console.log(" I submitted and i am now handling click")
+                                        });
+                                } else {// For POST MASTER DATA
+                                    saveMasterData(document_type_id, data)
+                                        .then(() => {
+                                            dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
+                                        })
+                                        .catch((err) => {
+                                            console.log("Submit Failed ", err.response);
+                                            dispatch(navBottomError('[PUT]', 'Submit Failed', err));
+                                        })
+                                        .finally(() => { // Set that I already handled the Click
+                                            console.log(" I submitted and i am now handling click")
+                                        });
+                                }
+                            }
+                        }
+                    }
+                })
+                .catch((err) => {
+                    console.log("err validate", err)
+                })
+        }
+    }, [footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]]);
 
     const postDocumentApprovalFlow = (document_id, data) => {
         startDocumentApprovalFlow(document_id)
@@ -395,281 +395,6 @@ const useFooterInitializer = (document_type_id) => {
     }, [ footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL], footer.requiresHandleClick[FOOTER_ACTIONS.CHECK_APPROVAL],
     footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL_ORDER], footer.requiresHandleClick[FOOTER_ACTIONS.GOT_IT],
     footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK], footer.requiresHandleClick[FOOTER_ACTIONS.REJECT], footer.requiresHandleClick[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS],]);
-
-    // // Handle Click Check Approval
-    // useEffect(() => {
-    //     if (footer.requiresHandleClick[FOOTER_ACTIONS.CHECK_APPROVAL]) {
-    //         validateForm()
-    //             .then((err) => {
-    //                 dispatch(navBottomSending('[API]', 'Sending ...', ''));
-    //                 setErrors(err);
-    //                 if (isEmpty(err)) {
-    //                     let data = packDataFromValues(fact, values, document_type_id);
-    //                     data.document.document_status_id = DOCUMENT_STATUS_ID.WAIT_APPROVE;
-    //                     if (values.document_id) { // If have document_id, no need to create new doc
-    //                         let remark = "demo body";
-    //                         approveDocument(values.document_id, APPROVAL_STATUS.APPROVED, user_id, remark).then(() => {
-    //                             dispatch(navBottomSuccess('[PUT]', 'Submit Success', ''));
-    //                             putDocument(values.document_id, document_type_id, data, null, DOCUMENT_STATUS_ID.WAIT_APPROVE, false);
-    //                             fetchApprovalStep(values.document_id);
-    //                         })
-    //                         .catch((err) => {
-    //                             console.warn("Approve Document Failed ", err.response);
-    //                             dispatch(navBottomError('[PUT]', 'Approve Document Failed', err));
-    //                         })
-    //                         .finally(() => { // Set that I already handled the Click
-    //                             dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.CHECK_APPROVAL]());
-    //                         });
-    //                     }
-    //                     else { // If not have document_id
-    //                         console.warn("CHECK_APPROVAL ATEST ", err.response);
-    //                         dispatch(navBottomError('[PUT]', 'Do not have document', err));
-    //                         dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.CHECK_APPROVAL]());
-    //                     }
-    //                 }
-    //                 else {
-    //                     if (err.response !== undefined) {
-    //                         console.warn("CHECK_APPROVAL BTEST ", err.response);
-    //                         dispatch(navBottomError('[PUT]', 'Submit Failed', err));
-    //                         dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.CHECK_APPROVAL]());
-    //                     }
-    //                     else {
-    //                         dispatch(navBottomOnReady('', '', ''));
-    //                         dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.CHECK_APPROVAL]());
-    //                     }
-    //                 }
-    //             })
-    //             .catch((err) => {
-    //                 console.warn("Submit Failed ", err.response);
-    //                 dispatch(navBottomError('[PUT]', 'Error Validate Form', err));
-    //                 dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.CHECK_APPROVAL]());
-    //             })
-    //     }
-    // }, [footer.requiresHandleClick[FOOTER_ACTIONS.CHECK_APPROVAL]]);
-
-
-    // // Handle Click Check Approval Order
-    // useEffect(() => {
-    //     if (footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL_ORDER]) {
-    //         validateForm()
-    //             .then((err) => {
-    //                 dispatch(navBottomSending('[API]', 'Sending ...', ''));
-    //                 setErrors(err);
-    //                 if (isEmpty(err)) {
-    //                     let data = packDataFromValues(fact, values, document_type_id);
-    //                     if (values.document_id) { // If have document_id, no need to create new doc
-    //                         let remark = "demo body";
-    //                         approveDocument(values.document_id, APPROVAL_STATUS.APPROVED, user_id, remark)
-    //                             .then(() => {
-    //                                 dispatch(navBottomSuccess('[PUT]', 'Submit Success', ''));
-    //                                 putDocument(values.document_id, document_type_id, data, null, DOCUMENT_STATUS_ID.WAIT_APPROVE, false);
-    //                                 fetchApprovalStep(values.document_id);
-    //                             })
-    //                             .catch((err) => {
-    //                                 console.warn("Approve Document Failed ", err.response);
-    //                                 dispatch(navBottomError('[PUT]', 'Approve Document Failed', err));
-    //                             })
-    //                             .finally(() => { // Set that I already handled the Click
-    //                                 dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.APPROVAL_ORDER]());
-    //                             });
-    //                     }
-    //                     else { // If not have document_id
-    //                         console.warn("ATEST ", err.response);
-    //                         dispatch(navBottomError('[PUT]', 'Do not have document', err));
-    //                         dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.APPROVAL_ORDER]());
-    //                     }
-    //                 }
-    //                 else {
-    //                     console.warn("BTEST ", err.response);
-    //                     dispatch(navBottomError('[PUT]', 'Submit Failed', err));
-    //                     dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.CHECK_APPROVAL]());
-    //                 }
-    //             })
-    //             .catch((err) => {
-    //                 console.warn("Submit Failed ", err.response);
-    //                 dispatch(navBottomError('[PUT]', 'Error Validate Form', err));
-    //                 dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.APPROVAL_ORDER]());
-    //             })
-    //     }
-    // }, [footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL_ORDER]]);
-
-
-    // // Handle Click GOT_IT
-    // useEffect(() => {
-    //     if (footer.requiresHandleClick[FOOTER_ACTIONS.GOT_IT]) {
-    //         validateForm()
-    //             .then((err) => {
-    //                 dispatch(navBottomSending('[API]', 'Sending ...', ''));
-    //                 setErrors(err);
-    //                 if (isEmpty(err)) {
-    //                     let data = packDataFromValues(fact, values, document_type_id);
-    //                     if (values.document_id) { // If have document_id, no need to create new doc
-    //                         let remark = "demo body";
-    //                         approveDocument(values.document_id, APPROVAL_STATUS.APPROVED, user_id, remark)
-    //                             .then(() => {
-    //                                 dispatch(navBottomSuccess('[PUT]', 'Submit Success', ''));
-    //                                 putDocument(values.document_id, document_type_id, data, null, DOCUMENT_STATUS_ID.WAIT_APPROVE, false);
-    //                                 fetchApprovalStep(values.document_id);
-    //                             })
-    //                             .catch((err) => {
-    //                                 console.warn("Approve Document Failed ", err.response);
-    //                                 dispatch(navBottomError('[PUT]', 'Approve Document Failed', err));
-    //                             })
-    //                             .finally(() => { // Set that I already handled the Click
-    //                                 console.log(" I submitted and i am now handling click")
-    //                                 dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.GOT_IT]());
-    //                             });
-    //                     }
-    //                     else { // If not have document_id
-    //                         dispatch(navBottomError('[PUT]', 'Do not have document', err));
-    //                         dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.GOT_IT]());
-    //                     }
-    //                 }
-    //                 else {
-    //                     dispatch(navBottomError('[PUT]', 'Submit Failed', err));
-    //                     dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.GOT_IT]());
-    //                 }
-    //             })
-    //             .catch((err) => {
-    //                 console.warn("Submit Failed ", err.response);
-    //                 dispatch(navBottomError('[PUT]', 'Error Validate Form', err));
-    //                 dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.GOT_IT]());
-    //             })
-    //     }
-    // }, [footer.requiresHandleClick[FOOTER_ACTIONS.GOT_IT]]);
-
-    // // Handle Click FAST_TRACK
-    // useEffect(() => {
-    //     if (footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK]) {
-    //         validateForm()
-    //             .then((err) => {
-    //                 dispatch(navBottomSending('[API]', 'Sending ...', ''));
-    //                 setErrors(err);
-    //                 if (isEmpty(err)) {
-    //                     let data = packDataFromValues(fact, values, document_type_id);
-    //                     if (values.document_id) { // If have document_id, no need to create new doc
-    //                         let remark = "demo body";
-    //                         approveDocument(values.document_id, APPROVAL_STATUS.FAST_TRACKED, user_id, remark)
-    //                             .then(() => {
-    //                                 dispatch(navBottomSuccess('[PUT]', 'Submit Success', ''));
-    //                                 putDocument(values.document_id, document_type_id, data, null, DOCUMENT_STATUS_ID.WAIT_APPROVE, false);
-    //                                 fetchApprovalStep(values.document_id);
-    //                             })
-    //                             .catch((err) => {
-    //                                 console.warn("Approve Document Failed ", err.response);
-    //                                 dispatch(navBottomError('[PUT]', 'Approve Document Failed', err));
-    //                             })
-    //                             .finally(() => { // Set that I already handled the Click
-    //                                 console.log(" I submitted and i am now handling click")
-    //                                 dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.FAST_TRACK]());
-    //                             });
-    //                     }
-    //                     else { // If not have document_id
-    //                         dispatch(navBottomError('[PUT]', 'Do not have document', err));
-    //                         dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.FAST_TRACK]());
-    //                     }
-    //                 }
-    //                 else {
-    //                     dispatch(navBottomError('[PUT]', 'Submit Failed', err));
-    //                     dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.FAST_TRACK]());
-    //                 }
-    //             })
-    //             .catch((err) => {
-    //                 console.warn("Submit Failed ", err.response);
-    //                 dispatch(navBottomError('[PUT]', 'Error Validate Form', err));
-    //                 dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.FAST_TRACK]());
-    //             })
-    //     }
-    // }, [footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK]]);
-
-    // // Handle Click REJECT
-    // useEffect(() => {
-    //     if (footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]) {
-    //         validateForm()
-    //             .then((err) => {
-    //                 dispatch(navBottomSending('[API]', 'Sending ...', ''));
-    //                 setErrors(err);
-    //                 if (isEmpty(err)) {
-    //                     let data = packDataFromValues(fact, values, document_type_id);
-    //                     if (values.document_id) { // If have document_id, no need to create new doc
-    //                         let remark = "demo body";
-    //                         approveDocument(values.document_id, APPROVAL_STATUS.REJECTED, user_id, remark)
-    //                             .then(() => {
-    //                                 dispatch(navBottomSuccess('[PUT]', 'Submit Success', ''));
-    //                                 putDocument(values.document_id, document_type_id, data, null, DOCUMENT_STATUS_ID.REOPEN, false);
-    //                                 fetchApprovalStep(values.document_id);
-    //                             })
-    //                             .catch((err) => {
-    //                                 console.warn("Approve Document Failed ", err.response);
-    //                                 dispatch(navBottomError('[PUT]', 'Approve Document Failed', err));
-    //                             })
-    //                             .finally(() => { // Set that I already handled the Click
-    //                                 console.log(" I submitted and i am now handling click")
-    //                                 dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.REJECT]());
-    //                             });
-    //                     }
-    //                     else { // If not have document_id
-    //                         dispatch(navBottomError('[PUT]', 'Do not have document', err));
-    //                         dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.REJECT]());
-    //                     }
-    //                 }
-    //                 else {
-    //                     dispatch(navBottomError('[PUT]', 'Submit Failed', err));
-    //                     dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.REJECT]());
-    //                 }
-    //             })
-    //             .catch((err) => {
-    //                 console.warn("Submit Failed ", err.response);
-    //                 dispatch(navBottomError('[PUT]', 'Error Validate Form', err));
-    //                 dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.REJECT]());
-    //             })
-    //     }
-    // }, [footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]]);
-
-    // // Handle Click CANCEL_APPROVAL_PROCESS
-    // useEffect(() => {
-    //     console.log("CANCEL_APPROVAL_PROCESS");
-    //     if (footer.requiresHandleClick[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]) {
-    //         validateForm()
-    //             .then((err) => {
-    //                 dispatch(navBottomSending('[API]', 'Sending ...', ''));
-    //                 setErrors(err);
-    //                 if (isEmpty(err)) {
-    //                     let data = packDataFromValues(fact, values, document_type_id);
-    //                     if (values.document_id) { // If have document_id, no need to create new doc
-    //                         cancelApproval(values.document_id, values.step_approve[0].approval_process_id)
-    //                             .then(() => {
-    //                                 dispatch(navBottomSuccess('[PUT]', 'Submit Success', ''));
-    //                                 putDocument(values.document_id, document_type_id, data, null, DOCUMENT_STATUS_ID.REOPEN, false);
-    //                                 fetchApprovalStep(values.document_id);
-    //                             })
-    //                             .catch((err) => {
-    //                                 console.warn("Canceled Approval Process Failed ", err.response);
-    //                                 dispatch(navBottomError('[PUT]', 'Approve Document Failed', err));
-    //                             })
-    //                             .finally(() => { // Set that I already handled the Click
-    //                                 console.log(" I submitted and i am now handling click")
-    //                                 dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.REJECT]());
-    //                             });
-    //                     }
-    //                     else { // If not have document_id
-    //                         dispatch(navBottomError('[PUT]', 'Do not have document', err));
-    //                         dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.REJECT]());
-    //                     }
-    //                 }
-    //                 else {
-    //                     dispatch(navBottomError('[PUT]', 'Submit Failed', err));
-    //                     dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.REJECT]());
-    //                 }
-    //             })
-    //             .catch((err) => {
-    //                 console.warn("Submit Failed ", err.response);
-    //                 dispatch(navBottomError('[PUT]', 'Error Validate Form', err));
-    //                 dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.REJECT]());
-    //             })
-    //     }
-    // }, [footer.requiresHandleClick[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]]);
-
 
 
     return;
