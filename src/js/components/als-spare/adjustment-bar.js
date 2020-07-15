@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import SelectNoChildrenInput from '../common/formik-select-no-children';
 import RangeInput from '../common/formik-range-input';
 import { useFormikContext } from 'formik';
+import { useSelector, shallowEqual } from 'react-redux';
+import { FACTS } from '../../redux/modules/api/fact.js';
 
 const AdjustmentBarComponent = () => {
 
     const {values} = useFormikContext();
+    const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
 
     return (
         <div className="gray-background adjustment-bar">
@@ -21,47 +24,42 @@ const AdjustmentBarComponent = () => {
 
                 <div className="space-10px" />
 
-                <div className="adjustment-bar-inner-text">ประเภทการตรวจซ่อม</div  >
+                <div className="adjustment-bar-inner-text">คลัง</div  >
                 <SelectNoChildrenInput
-                    name="fix_type" >
+                    name="warehouse_id" >
                     <option value='' selected>ทั้งหมด</option>
-                    <option value='1' >โทรศัพท์</option>
-                    <option value='2' >จดหมาย</option>
-                    <option value='3' >Work Request</option>
+                    {fact[FACTS.WAREHOUSES].items.map((warehouse) => (
+                        <option 
+                            key={warehouse.warehouse_id} 
+                            value={warehouse.warehouse_id}
+                        >{warehouse.name}</option>
+                    ))}
                 </SelectNoChildrenInput>
 
                 <div className="space-10px" />
 
-                <div className="adjustment-bar-inner-text">กอง</div>
+                <div className="adjustment-bar-inner-text">อะไหล่</div>
                 <SelectNoChildrenInput
-                    name="division_id" >
+                    name="item_id" >
                     <option value='' selected>ทั้งหมด</option>
-                    <option value='1' >โทรศัพท์</option>
-                    <option value='2' >จดหมาย</option>
-                    <option value='3' >Work Request</option>
+                    {fact[FACTS.ITEM].items.map((item) => (
+                        <option 
+                            key={item.item_id} 
+                            value={item.item_id}
+                    >{`${item.internal_item_id}/${item.description}`}</option>
+                    ))}
                 </SelectNoChildrenInput>
 
                 <div className="space-10px" />
 
-                <div className="adjustment-bar-inner-text">หน่วยงาน/แขวง</div>
-                <SelectNoChildrenInput
-                    name="district_id" >
-                    <option value='' selected>ทั้งหมด</option>
-                    <option value='1' >โทรศัพท์</option>
-                    <option value='2' >จดหมาย</option>
-                    <option value='3' >Work Request</option>
-                </SelectNoChildrenInput>
-
-                <div className="space-10px" />
-
-                <div className="adjustment-bar-inner-text">ตอน</div>
-                <SelectNoChildrenInput
-                    name="node_id" >
-                    <option value='' selected>ทั้งหมด</option>
-                    <option value='1' >โทรศัพท์</option>
-                    <option value='2' >จดหมาย</option>
-                    <option value='3' >Work Request</option>
-                </SelectNoChildrenInput>
+                <div className="adjustment-bar-inner-text">Goal Inventory Month {values.goal_inventory_month}</div>
+                <RangeInput
+                    name="goal_inventory_month"
+                    min="1"
+                    max="12"
+                    step="1"
+                    disabled={true}
+                />
             </div>
         </div>);
 }
