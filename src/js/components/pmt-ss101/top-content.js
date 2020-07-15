@@ -87,11 +87,13 @@ const TopContent = (props) => {
             });
     });
 
-  let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
-  useEffect(() => {
-    checkBooleanForEdit = false
-    validateField("internal_document_id")
-  }, [values.internal_document_id])
+    let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
+    // useEffect(() => {
+    //     checkBooleanForEdit = false
+    //     validateField("internal_document_id")
+    // }, [values.internal_document_id])
+
+    console.log("checkBooleanForEdit", checkBooleanForEdit)
     return (
         <div id={changeTheam() === true ? "" : "blackground-white"}>
             <div className="container_12 clearfix" style={{ marginTop: "55px" }}>

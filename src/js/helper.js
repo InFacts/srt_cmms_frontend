@@ -79,7 +79,7 @@ export const DOCUMENT_SCHEMA = {
     remark: '',
     created_by_admin_id: -1,
     created_by_user_id: -1,
-    // document_status_id:	-1, // NOT USED, handled by Backend
+    document_status_id:	-1, // NOT USED, handled by Backend
     // document_action_type_id	string // NOT USED, handled by Backend
     // refer_to_document_id	string // NOT USED, handled by Backend
 }
@@ -92,7 +92,7 @@ export const DOCUMENT_SCHEMA_GET = {
     created_by_admin_id: -1,
     created_by_user_id: -1,
     document_date: "",
-    // document_status_id:	-1, // NOT USED, handled by Backend
+    document_status_id:	-1, // NOT USED, handled by Backend
     // document_action_type_id	string // NOT USED, handled by Backend
     refer_to_document_id: '',	 // string NOT USED, handled by Backend
     refer_to_document_internal_id: '',
@@ -1903,15 +1903,22 @@ function transformDocumentResponseToFormState(document_part, fact, document_type
     // var created_on = new Date(document_part.created_on);
     // created_on.setHours(created_on.getHours() + 7)
     // if (document_type_group_id === DOCUMENT_TYPE_ID.SS101) {
-    return {
-        document_id: document_part.document_id,
-        internal_document_id: document_part.internal_document_id,
-        document_date: document_part.document_date.split("T")[0],
-        created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_user_id) || '',
-        created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_admin_id) || '',
-        created_on: document_part.created_on.split(".")[0],
-        refer_to_document_id: document_part.refer_to_document_id,
-        refer_to_document_internal_id: document_part.refer_to_document_internal_id
+    let document_statuses = fact[FACTS.DOCUMENT_STATUS].items;
+    // console.log("document_statuses", document_statuses, "document_part.document_status_id", document_part)
+    let document_status = document_statuses.find(document_status => `${document_status.document_status_id}` === `${document_part.document_status_id}`);
+    console.log("document_status", document_status)
+    if (document_status) {
+        return {
+            document_id: document_part.document_id,
+            internal_document_id: document_part.internal_document_id,
+            document_date: document_part.document_date.split("T")[0],
+            created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_user_id) || '',
+            created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_admin_id) || '',
+            created_on: document_part.created_on.split(".")[0],
+            refer_to_document_id: document_part.refer_to_document_id,
+            refer_to_document_internal_id: document_part.refer_to_document_internal_id,
+            status_name_th: document_status.status
+        }
     }
 }
 
