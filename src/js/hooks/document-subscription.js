@@ -15,16 +15,7 @@ const useDocumentSubscription = () => {
 
     // Get approval Step when values.document_id changes
     useEffect(() => {
-        if(values.document_id && 
-            !footer.requiresHandleClick[FOOTER_ACTIONS.SEND] && 
-            !footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL] && 
-            !footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL_DONE] && 
-            !footer.requiresHandleClick[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS] && 
-            !footer.requiresHandleClick[FOOTER_ACTIONS.CHECK_APPROVAL] && 
-            !footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK] && 
-            !footer.requiresHandleClick[FOOTER_ACTIONS.GOT_IT] && 
-            !footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]
-        ){ 
+        if(values.document_id !== ""){ 
         // If not an empty string AND isn't handlingSEND process
         // console.log("fetchStepApprovalDocumentData: SEND/Doc ID Changed")
         // Start Axios Get step_approve and attachment By nuk
