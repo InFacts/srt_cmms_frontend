@@ -84,7 +84,7 @@ const initialLossLineItem = {
 
     description: '',   // รายการ
     quantity: '',
-    uom_code: '',
+    uom_name: '',
     price: '',
 
     remark: '',

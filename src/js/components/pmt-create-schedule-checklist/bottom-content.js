@@ -41,34 +41,34 @@ const BottomContent = (props) => {
     searchLocationEquipment()
   }, [values.station_id]);
 
-const searchLocationEquipment = () => new Promise(resolve => {
-  if (toolbar.mode !== TOOLBAR_MODE.SEARCH) {
-            const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/equipment-install?location_station_id=${values.station_id}`;
-            axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-              .then((res) => {
-                console.log("res", res)
-                let line_equipments = [];
-                res.data.results.map((results) => {
-                  line_equipments.push({
-                    equipment_id: results.equipment_id,
-                    checklist_group_id: results.equipment.equipment_item.equipment_group_id,
-                    checklist_id: results.equipment.equipment_item.checklist_id,
-                    item_id: results.equipment.item_id,
-                    internal_item_id: results.equipment.equipment_item.item.internal_item_id,
-                    quantity_location: 1,
-                    unit_maintenance_location_id: results.equipment.equipment_item.checklist.unit_maintenance_location_id
-                  })
-                })
-                setFieldValue("line_equipment", line_equipments, false);
-                return resolve()
-              })
-              .finally(() => {
-                return resolve()
-              });
-  }
-  else {
-    return resolve()
-  }
+  const searchLocationEquipment = () => new Promise(resolve => {
+    if (toolbar.mode !== TOOLBAR_MODE.SEARCH) {
+      const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/equipment-install?location_station_id=${values.station_id}`;
+      axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((res) => {
+          console.log("res", res)
+          let line_equipments = [];
+          res.data.results.map((results) => {
+            line_equipments.push({
+              equipment_id: results.equipment_id,
+              checklist_group_id: results.equipment.equipment_item.equipment_group_id,
+              checklist_id: results.equipment.equipment_item.checklist_id,
+              item_id: results.equipment.item_id,
+              internal_item_id: results.equipment.equipment_item.item.internal_item_id,
+              quantity_location: 1,
+              unit_maintenance_location_id: results.equipment.equipment_item.checklist.unit_maintenance_location_id
+            })
+          })
+          setFieldValue("line_equipment", line_equipments, false);
+          return resolve()
+        })
+        .finally(() => {
+          return resolve()
+        });
+    }
+    else {
+      return resolve()
+    }
   });
 
   const validateDistrictIDField = (...args) => validatedataDocumentField("district_id", setFieldValue, ...args)
@@ -80,13 +80,14 @@ const searchLocationEquipment = () => new Promise(resolve => {
   //   checkBooleanForEdit = false
   //   validateField("internal_document_id")
   // }, [values.internal_document_id])
-  
+
   return (
     <>
       {/* THIS MAKES THE BACKGROUND NOT GRAY!! NEEDS TO FIX */}
       <div id={changeTheam() === true ? "" : "blackground-gray"}>
         {/* <div className="container_12 clearfix"> */}
         <div className="container_12 " id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>
+         
           {/* General Tab */}
           <div id="general_content" className="tabcontent">
 
@@ -98,8 +99,8 @@ const searchLocationEquipment = () => new Promise(resolve => {
               </div>
               <div className="grid_7">
                 <SelectNoChildrenInput name="district_id" tabIndex="7"
-                validate={validateDistrictIDField}
-                cssStyle={{ left: "-480px", top: "14px" }}
+                  validate={validateDistrictIDField}
+                  cssStyle={{ left: "-480px", top: "14px" }}
                   disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                   <option value=''></option>
                   {factDistricts.items.map((districts) => (
@@ -116,8 +117,8 @@ const searchLocationEquipment = () => new Promise(resolve => {
               </div>
               <div className="grid_7">
                 <SelectNoChildrenInput name="node_id" tabIndex="8"
-                cssStyle={{ left: "-480px", top: "14px" }}
-                validate={validateNodeIDField}
+                  cssStyle={{ left: "-480px", top: "14px" }}
+                  validate={validateNodeIDField}
                   disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                   <option value=''></option>
                   {factNodes.items.map((node) => {
@@ -136,8 +137,8 @@ const searchLocationEquipment = () => new Promise(resolve => {
               </div>
               <div className="grid_7">
                 <SelectNoChildrenInput name="station_id" tabIndex="9"
-                cssStyle={{ left: "-480px", top: "14px" }}
-                validate={validateStationIDField}
+                  cssStyle={{ left: "-480px", top: "14px" }}
+                  validate={validateStationIDField}
                   disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                   <option value=''></option>
                   {factStations.items.map((stations) => {
@@ -175,9 +176,9 @@ const searchLocationEquipment = () => new Promise(resolve => {
                       <tr>
                         <th className="edit-padding text-center">{line_number}</th>
                         <td className="edit-padding">
-                          <SelectNoChildrenInput name={`line_custom[${index}].checklist_group_id`} 
-                          tabIndex={10 + line_number}
-                          disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                          <SelectNoChildrenInput name={`line_custom[${index}].checklist_group_id`}
+                            tabIndex={10 + line_number}
+                            disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                             <option value=''></option>
                             {factChecklistCustom.items.map((custom_group) => (
                               <option value={custom_group.checklist_group_id} key={custom_group.checklist_group_id}> {custom_group.checklist_group_name} </option>
@@ -185,28 +186,28 @@ const searchLocationEquipment = () => new Promise(resolve => {
                           </SelectNoChildrenInput>
                         </td>
                         <td className="edit-padding">
-                          <SelectNoChildrenInput name={`line_custom[${index}].checklist_id`} 
-                          tabIndex={10 + line_number}
-                          disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                          <SelectNoChildrenInput name={`line_custom[${index}].checklist_id`}
+                            tabIndex={10 + line_number}
+                            disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                             <option value=''></option>
                             {factChecklist.items.map((custom_group) => {
                               if (values.line_custom[index].checklist_group_id == custom_group.checklist_group_id) {
-                              return <option value={custom_group.checklist_id} key={custom_group.checklist_id}> {custom_group.checklist_name} </option>
+                                return <option value={custom_group.checklist_id} key={custom_group.checklist_id}> {custom_group.checklist_name} </option>
                               }
-                          })}
+                            })}
                           </SelectNoChildrenInput>
                         </td>
                         <td className="edit-padding text-center">
-                          <NumberInput step={0.01} name={`line_custom[${index}].quantity_location`} 
-                          tabIndex={10 + line_number}
-                           cssStyle={{ left: "60px", top: "-5px" }}
+                          <NumberInput step={0.01} name={`line_custom[${index}].quantity_location`}
+                            tabIndex={10 + line_number}
+                            cssStyle={{ left: "60px", top: "-5px" }}
                             disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                           />
                         </td>
                         <td className="edit-padding">
-                          <SelectNoChildrenInput name={`line_custom[${index}].unit_maintenance_location_id`} 
-                          tabIndex={10 + line_number}
-                          disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                          <SelectNoChildrenInput name={`line_custom[${index}].unit_maintenance_location_id`}
+                            tabIndex={10 + line_number}
+                            disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                             <option value=''></option>
                             {factUnitMaintenanceLocation.items.map((unit) => (
                               <option value={unit.unit_maintenance_location_id} key={unit.unit_maintenance_location_id}> {unit.unit_type} </option>
@@ -251,9 +252,9 @@ const searchLocationEquipment = () => new Promise(resolve => {
                         <td className="edit-padding">
                           <SelectNoChildrenInput name={`line_equipment[${index}].checklist_id`} disabled >
                             <option value=''></option>
-                               {factChecklist.items.map((custom_group) => {
+                            {factChecklist.items.map((custom_group) => {
                               return <option value={custom_group.checklist_id} key={custom_group.checklist_id}> {custom_group.checklist_name} </option>
-                               })}
+                            })}
                           </SelectNoChildrenInput>
                         </td>
                         <td className="edit-padding text-center">
@@ -262,7 +263,7 @@ const searchLocationEquipment = () => new Promise(resolve => {
                         <td className="edit-padding">
                           <SelectNoChildrenInput name={`line_equipment[${index}].unit_maintenance_location_id`} disabled >
                             <option value=''></option>
-                         {factUnitMaintenanceLocation.items.map((unit) => (
+                            {factUnitMaintenanceLocation.items.map((unit) => (
                               <option value={unit.unit_maintenance_location_id} key={unit.unit_maintenance_location_id}> {unit.unit_type} </option>
                             ))}
                           </SelectNoChildrenInput>
