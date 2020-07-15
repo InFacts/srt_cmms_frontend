@@ -244,16 +244,15 @@ class Map extends React.Component {
                                 </span>
                             </span>
 
-                            {/* <span className="p-contextual-menu--left Pdrop-dawn2">
+                            <span className="p-contextual-menu--left Pdrop-dawn2">
                                     <button className="p-contextual-menu__toggle" style={{ border: "none", padding: "0" }} aria-controls="menu-2" aria-expanded="false" aria-haspopup="true"><img alt='some value' src={Dropdown} /></button>
                                     <span className="p-contextual-menu__dropdown" id="menu-2" aria-hidden="true" aria-label="submenu">
                                         <span className="p-contextual-menu__group">
-                                            <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>Commission</Link>
-                                            <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>Aquire</Link>
-                                            <Link to="/" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>Deploy</Link>
+                                            <Link to="/pmt-fixed-asset" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>ทำวาระ (PMT 9)</Link>
+                                            <Link to="/pmt-list-fixed-asset" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รายการทำวาระ</Link>
                                         </span>
                                     </span>
-                                </span> */}
+                                </span>
 
                         </div>
                     </section>
