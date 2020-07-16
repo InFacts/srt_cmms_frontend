@@ -74,6 +74,7 @@ const TopContent = (props) => {
               setFieldValue("modeEdit", values.line_position_permission[0].module_admin === true ? true : false, false)
 
               for (var i = 0; i < res.data.checklist_line_item.checklist_line_item_use_equipment.length; i++) {
+                res.data.checklist_line_item.checklist_line_item_use_equipment[i].item_id = res.data.checklist_line_item.checklist_line_item_use_equipment[i].item.item_id
                 res.data.checklist_line_item.checklist_line_item_use_equipment[i].internal_item_id = res.data.checklist_line_item.checklist_line_item_use_equipment[i].item.internal_item_id
                 res.data.checklist_line_item.checklist_line_item_use_equipment[i].description = res.data.checklist_line_item.checklist_line_item_use_equipment[i].item.description
                 res.data.checklist_line_item.checklist_line_item_use_equipment[i].quantity = res.data.checklist_line_item.checklist_line_item_use_equipment[i].quantity

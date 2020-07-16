@@ -33,8 +33,6 @@ const TopContent = (props) => {
 
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
-    console.log("values:?????,", values)
-
     // Fill Default Forms
     useFillDefaultsOnModeAdd(DOCUMENT_TYPE_ID.MAINTENANT_ITEM);
     const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.MAINTENANT_ITEM, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);

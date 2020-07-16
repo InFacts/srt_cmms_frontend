@@ -810,9 +810,6 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             specific: equipment_installation_part,
         }
     } else if (document_type_id === DOCUMENT_TYPE_ID.SELECTOR) {
-
-        console.log("data values", values)
-
         let document_part_selector = {
             ...DOCUMENT_SCHEMA,
             document_status_id: 1,
@@ -831,7 +828,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             active: values.active === "1" ? true : false,
             node_id: parseInt(values.node_id),
             station_id: parseInt(values.station_id),
-            start_on: values.start_on + 'T13:05:00+07:00',
+            start_on: values.start_on + 'T04:19:00+07:00',
         }
 
         // ต้องเป็น Array selector_checklist_group_part
@@ -894,9 +891,6 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             specific: specific_selector
         }
     } else if (document_type_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM) {
-
-        console.log("data values", values)
-
         let document_part = {
             ...DOCUMENT_SCHEMA,
             document_status_id: 1,
@@ -1017,8 +1011,8 @@ export const packDataFromValuesMasterDataForEdit = (fact, values, document_type_
         values.checklist_line_item_use_equipment.map((line_item, index) => {
             if (line_item.item_id) {
                 line_items_part.push({
-                    checklist_line_item_use_equipment_id: parseInt(last_checklist_line_item_use_equipment_id) + 1, // ต้อง Get อัน่าสุดออกมาก่อน
-                    checklist_line_item_id: parseInt(last_checklist_line_item) + 1,
+                    checklist_line_item_use_equipment_id: parseInt(line_item.item_id),
+                    checklist_line_item_id: parseInt(values.checklist_line_item),
                     item_id: line_item.item_id,
                     quantity: line_item.quantity,
                     uom_id: parseInt(line_item.uom_id)
@@ -1027,7 +1021,7 @@ export const packDataFromValuesMasterDataForEdit = (fact, values, document_type_
         })
 
         let create_checklist_part = {
-            checklist_line_item: parseInt(last_checklist_line_item) + 1,
+            checklist_line_item: parseInt(values.checklist_line_item),
             checklist_id: parseInt(values.checklist_id),
             name: values.name,
             freq: values.freq,
@@ -1803,7 +1797,6 @@ const responseToFormState = (fact, data, document_type_group_id) => {
         // created_on.setHours(created_on.getHours() + 7);
         let document_statuses = fact[FACTS.DOCUMENT_STATUS].items;
         let document_status = document_statuses.find(document_status => `${document_status.document_status_id}` === `${data.document.document_status_id}`);
-        console.log("document_status", document_status)
         if (document_status) {
             return {
                 document_id: data.document.document_id,
@@ -1817,7 +1810,10 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                 refer_to_document_internal_id: data.document.refer_to_document_internal_id,
                 refer_to_document_id: data.document.refer_to_document_id,
                 document_date: data.document.document_date.slice(0, 10),
-                status_name_th: document_status.status
+                status_name_th: document_status.status,
+                node_id: data.specific.node_id,
+                district_id: data.specific.district_id,
+                division_id: data.specific.division_id
             }
         }
     } else if (document_type_group_id === DOCUMENT_TYPE_ID.EQUIPMENT_INSTALLATION) {
@@ -2487,7 +2483,7 @@ export const validateLineNumberInternalItemIDFieldHelper = (document_type_group_
                 setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
                 setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
                 setFieldValue(fieldName + `.line_number`, index + 1, false);
-                setFieldValue(fieldName + `.item_status_id`, 2, false);
+                setFieldValue(fieldName + `.item_status_id`, 1, false);
                 setFieldValue(fieldName + `.per_unit_price`, 0, false);
             }
             // else {
