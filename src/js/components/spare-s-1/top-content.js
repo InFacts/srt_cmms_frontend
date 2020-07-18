@@ -166,8 +166,8 @@ const TopContent = (props) => {
         "uom_name": line_item.uom_name,
         "item_status_description_th": line_item.item_status_description_th,
         "quantity": line_item.pricing !== undefined ? line_item.current_unit_count - line_item.committed_unit_count : line_item.ending_unit_count,
-        "total": line_item.pricing !== undefined ? (line_item.pricing.average_price.toFixed(4) * (line_item.current_unit_count - line_item.committed_unit_count)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : line_item.end_state_in_total_price,
-        "per_unit_price": line_item.pricing !== undefined ? line_item.pricing.average_price.toFixed(4) : line_item.end_state_in_total_price / line_item.current_ending_unit_count ? line_item.end_state_in_total_price / line_item.current_ending_unit_count : 0
+        "total": line_item.pricing !== undefined ? (line_item.pricing.average_price * (line_item.current_unit_count - line_item.committed_unit_count)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : line_item.end_state_in_total_price,
+        "per_unit_price": line_item.pricing !== undefined ? line_item.pricing.average_price ? line_item.pricing.average_price.toFixed(4) : 0 : line_item.end_state_in_total_price / line_item.current_ending_unit_count ? line_item.end_state_in_total_price / line_item.current_ending_unit_count : 0
       })
     })
     setFieldValue("checkClick", false, false)

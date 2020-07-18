@@ -32,28 +32,6 @@ const BottomContent = (props) => {
       return <td className="edit-padding" style={{ color: "DarkGreen" }}>{quantity}</td>
     }
   }
-
-  // const setValuesForCSV = (line_items) => {
-  //   values.new_line_items = [];
-  //   line_items.map((line_item) => {
-  //     values.new_line_items.push({
-  //       "warehouse_name": line_item.warehouse_name,
-  //       "item_id": line_item.item_id,
-  //       "internal_item_id": line_item.internal_item_id,
-  //       "item_description": line_item.item_description,
-  //       "uom_name": line_item.uom_name,
-  //       "item_status_description_th": line_item.item_status_description_th,
-  //       "quantity": line_item.current_unit_count - line_item.committed_unit_count,
-  //       "total": line_item.pricing !== undefined ? (line_item.pricing.average_price.toFixed(4) * (line_item.current_unit_count - line_item.committed_unit_count)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : line_item.end_state_in_total_price,
-  //       "per_unit_price": line_item.pricing !== undefined ? line_item.pricing.average_price.toFixed(4) : line_item.end_state_in_total_price / (line_item.current_unit_count - line_item.committed_unit_count)
-  //     })
-  //   });
-  // }
-
-  // useEffect(() => {
-  //   setValuesForCSV(values.line_items)
-  // }, [values.line_items])
-
   return (
     <div id={changeTheam() === true ? "" : "blackground-gray"}>
       <div className="container_12 clearfix" id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>
@@ -81,18 +59,16 @@ const BottomContent = (props) => {
                     return (
                       <tr key={index}>
                         <th className="edit-padding text-center">{index + 1}</th>
-                        <td className="edit-padding">{line_items.item_description_th}</td>
+                        <td className="edit-padding">{line_items.item_description}</td>
                         <td className="edit-padding">{line_items.internal_item_id}</td>
                         <td className="edit-padding">{line_items.item_status_description_th}</td>
                         <td className="edit-padding text-center">{line_items.uom_name}</td>
 
-                        {/* <td className="edit-padding text-center">{!line_items.committed_unit_count ? line_items.current_unit_count - line_items.committed_unit_count : line_items.current_unit_count}</td> */}
+                        <td className="edit-padding text-center">{line_items.quantity}</td>
 
-                        <td className="edit-padding text-center">{line_items.current_unit_count - line_items.committed_unit_count}</td>
+                        <td className="edit-padding">{line_items.total}</td>
 
-                        <td className="edit-padding">{line_items.pricing.average_price ? (line_items.pricing.average_price.toFixed(4) * (line_items.current_unit_count - line_items.committed_unit_count)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : 0}</td>
-
-                        <td className="edit-padding">{line_items.pricing.average_price ? line_items.pricing.average_price.toFixed(4).replace(/\d(?=(\d{3})+\.)/g, '$&,') : 0}</td>
+                        <td className="edit-padding">{line_items.per_unit_price}</td>
                       </tr>
                     )
                   } else { //ถ้าไม่เป็นคลังของตอน
