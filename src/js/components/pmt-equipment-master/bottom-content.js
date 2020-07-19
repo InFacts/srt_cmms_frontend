@@ -60,7 +60,7 @@ const BottomContent = (props) => {
   const validateDepreciation = (...args) => validateItemMasterdataField("depreciation", ...args);
   const validateUsefulLife = (...args) => validateItemMasterdataField("useful_life", ...args);
   const validateResposibleDistrictID = (...args) => validateItemMasterdataField("responsible_district_id", ...args);
-
+  console.log("factEquipmentGroup​>>>>>>>>", factEquipmentGroup.items)
   return (
     <>
       {/* THIS MAKES THE BACKGROUND NOT GRAY!! NEEDS TO FIX */}

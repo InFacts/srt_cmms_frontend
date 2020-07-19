@@ -35,6 +35,8 @@ const TopContent = (props) => {
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
   const factEquipment = useSelector((state) => ({ ...state.api.fact.equipment }), shallowEqual);
+  const factDistricts = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
+  const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
   const factEquipmentStatus = useSelector((state) => ({ ...state.api.fact[FACTS.EQUIPMENT_STATUS] }), shallowEqual);
@@ -50,6 +52,9 @@ const TopContent = (props) => {
   const validateDocumentDateField = (...args) => validatedataDocumentField("document_date", setFieldValue, ...args)
   const validateStartOnField = (...args) => validatedataDocumentField("start_on", setFieldValue, ...args)
 
+  const validateDistrictIDField = (...args) => validatedataDocumentField("district_id", setFieldValue, ...args)
+  const validateNodeIDField = (...args) => validatedataDocumentField("node_id", setFieldValue, ...args)
+
   let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
   useEffect(() => {
     checkBooleanForEdit = false
@@ -63,7 +68,7 @@ const TopContent = (props) => {
           <FormTitle>กำหนดแผนการทำวาระ</FormTitle>
 
           <div id={changeTheam() === true ? "blackground-white" : ""}
-            style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "150px", paddingTop: "10px" } : {}}>
+            style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "210px", paddingTop: "10px" } : {}}>
 
             {/* === Left Column === */}
             <div className={changeTheam() === true ? "grid_5" : "grid_6"} style={{ paddingLeft: "10px" }}>
@@ -159,6 +164,38 @@ const TopContent = (props) => {
                 validate={validateStartOnField}
                   disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                   tabIndex="8" />
+              </div>
+              <div class="clear" />
+
+              {/* Document date */}
+              <Label>แขวง</Label>
+              <div className="grid_3 alpha">
+              <SelectNoChildrenInput name="district_id" tabIndex="7"
+                  validate={validateDistrictIDField}
+                  cssStyle={{ left: "-160px", top: "14px" }}
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                  <option value=''></option>
+                  {factDistricts.items.map((districts) => (
+                    <option key={districts.district_id} value={districts.district_id}>{districts.name}</option>
+                  ))}
+                </SelectNoChildrenInput>
+              </div>
+              <div class="clear" />
+
+              {/* Document date */}
+              <Label>ตอน</Label>
+              <div className="grid_3 alpha">
+              <SelectNoChildrenInput name="node_id" tabIndex="7"
+                  cssStyle={{ left: "-160px", top: "14px" }}
+                  validate={validateNodeIDField}
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                  <option value=''></option>
+                  {factNodes.items.map((node) => {
+                    if (values.district_id == node.district_id) {
+                      return <option key={node.node_id} value={node.node_id} selected>{node.name}</option>
+                    }
+                  })}
+                </SelectNoChildrenInput>
               </div>
               <div class="clear" />
 

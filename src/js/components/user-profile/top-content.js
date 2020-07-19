@@ -19,7 +19,7 @@ const TopContent = (props) => {
                         {/* <p className="top-text">สังกัด</p> */}
                     </div>
                     <div className="grid_8 pull_0">
-                        <p className="top-text" >{values.firstname_th} {values.lastname_th}</p>
+                        <p className="top-text" >{values.firstname_th_show} {values.lastname_th_show}</p>
                         <p className="top-text" >{values.employee_id}</p>
                         <p className="top-text" >{values.position_name}</p> {/* รอ API พี่ลี ส่งมาให้ที่เป็น position */}
                     </div>

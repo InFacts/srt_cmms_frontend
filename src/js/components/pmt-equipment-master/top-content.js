@@ -49,7 +49,7 @@ const TopContent = (props) => {
       description: data.equipment_group.item.description,
       item_group_id: data.equipment_group.item.item_group_id,
       checklist_id: data.equipment_group.checklist_id,
-      equipment_group_id: data.equipment_group.checklist_id,
+      equipment_group_id: data.equipment_group.equipment_group_id,
       active: data.equipment_group.item.active.data[0],
       item_type_id: data.equipment_group.item.item_type_id,
       uom_group_id: data.equipment_group.item.uom_group_id,                    //UOM
