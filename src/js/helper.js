@@ -845,10 +845,10 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         let selector_pm_plan_part = {
             document_id: values.document_id,
             name: values.name,
-            active: values.active === "1" ? true : false,
+            active: true,
             node_id: parseInt(values.node_id),
             station_id: parseInt(values.station_id),
-            start_on: values.start_on + 'T04:19:00+07:00',
+            start_on: values.start_on + 'T10:55:00+07:00',
         }
 
         // ต้องเป็น Array selector_checklist_group_part

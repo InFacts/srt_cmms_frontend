@@ -3,6 +3,7 @@ import { useSelector, shallowEqual } from 'react-redux'
 import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
 import { API_URL_DATABASE } from '../../config_url.js';
+import { FACTS } from '../../redux/modules/api/fact.js';
 
 // import {handleChange} from '../../redux/modules/form_data.js';
 import { useFormikContext } from 'formik';
@@ -13,7 +14,8 @@ const PopupModalDocument = (props) => {
     const [url, setUrl] = useState(props.documentTypeGroupID !== "document_all_type" ? `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=${props.documentTypeGroupID}&internal_document_id=${documentID}` : `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?&internal_document_id=${documentID}`)
     const { setFieldValue } = useFormikContext();
     const [forceRefresh, setForceRefresh] = useState(false);
-    const toolbar = useSelector((state ) => ({...state.toolbar}), shallowEqual);
+    const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
+    const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
 
     useEffect(() => {
         const fetchData = () => {
@@ -40,11 +42,12 @@ const PopupModalDocument = (props) => {
                     </div>
 
                     <div className="container_12">
-                        <table className="table-many-column mt-3" style={{height: "270px"}}>
+                        <table className="table-many-column mt-3" style={{ height: "270px" }}>
                             <thead>
                                 <tr>
                                     <th className="font" style={{ minWidth: "300px" }}>เลขที่เอกสาร</th>
-                                    <th className="font" style={{ minWidth: "450px" }}>สร้างวันที่</th>
+                                    <th className="font" style={{ minWidth: "225px" }}>สร้างวันที่</th>
+                                    <th className="font" style={{ minWidth: "225px" }}>สถานะเอกสาร</th>
                                     <th className="font" style={{ minWidth: "150px" }}>Action</th>
                                 </tr>
                             </thead>
@@ -54,9 +57,17 @@ const PopupModalDocument = (props) => {
                                     // created_on.setHours(created_on.getHours() + 7)
                                     return (
                                         <tr key={index} id={index}>
-                                            <td className="edit-padding" style={{ minWidth: "150px" }}> {document.internal_document_id} </td>
-                                            <td className="edit-padding" style={{ minWidth: "300px" }}> {document.created_on.split(".")[0].replace("T", " เวลา ") + " น."} </td>
-                                            <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
+                                            <td className="edit-padding"> {document.internal_document_id} </td>
+                                            <td className="edit-padding"> {document.created_on.split(".")[0].replace("T", " เวลา ") + " น."} </td>
+                                            <td className="edit-padding">
+                                                <select className="edit-select" value={document.document_status_id} disabled>
+                                                    <option value=''></option>
+                                                    {fact[FACTS.DOCUMENT_STATUS].items.map((status) => {
+                                                        return <option value={status.document_status_id}>{status.status}</option>
+                                                    })}
+                                                </select>
+                                            </td>
+                                            <td className="edit-padding text-center">
                                                 <button type="button" className="button-blue" onClick={() => setFieldValue(`${props.name}`, document.internal_document_id, true)} aria-label="Close active modal" aria-controls={props.id} >เลือก</button>
                                             </td>
                                         </tr>
