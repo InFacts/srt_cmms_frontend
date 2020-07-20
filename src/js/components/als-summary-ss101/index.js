@@ -37,25 +37,6 @@ const AlsEquipmentStatusComponent = () => {
         dispatch(footerToModeInvisible());
     }, []);
 
-    const biColorMap = (count_color_map) => {
-        let xLabels = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
-        let yLabels = ["สสญ.ธบ.", "สสญ.อย.", "สสญ.ก.", "สญก.", "สญค.", "สญพ.", "สสญ.กค.", "สสญ.ลช.", "สสญ.ขอ.", "สสญ.นว.","สสญ.ลป.",
-                        "สสญ.หห.", "สสญ.ทส.", "สสญ.หใ.", "สสญ.ฉท.","สสญ.ศช."]
-        let values_data = [];
-        for (let i=0; i<yLabels.length; i++ ){
-            let _tempRow = [];
-            let lax = (Math.random() > 0.4) ? true : false;
-            for (let j=0; j<xLabels.length; j++){
-                let value = count_color_map[j];
-                value = lax ? Math.max(0, value-2.5) : Math.min( 10, value+ 2.5)
-                _tempRow.push(value);
-                console.log("_tempRow", _tempRow)
-            }
-            values_data.push(_tempRow)
-        }
-        setFieldValue('accident_color_map', values_data);
-    }
-
     useEffect(() => {
         let begin_document_date = (values.year-543).toString() + "-01-01";
         let end_document_date = (values.year-543).toString() + "-12-31";
@@ -69,16 +50,15 @@ const AlsEquipmentStatusComponent = () => {
             data_ss101.map((item) => { 
                 let d = new Date(item.document.document_date);
                 count_color_map[d.getMonth()-1]++;
-                // console.log("d???", d, d.getMonth())
                 count_groups[item.specific.system_type.system_type_group_id]++; 
             })
             // PieChartDataSystemType
             for (let i = 0; i < groups.length; i++) {
                 results.push({key: groups[i], value: count_groups[i]});
             }
-            console.log("biColorMap", count_color_map)
             setFieldValue('maintenance_system', results);
 
+            // ColorMap
             let xLabels = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
             let yLabels = ["สสญ.ธบ.", "สสญ.อย.", "สสญ.ก.", "สญก.", "สญค.", "สญพ.", "สสญ.กค.", "สสญ.ลช.", "สสญ.ขอ.", "สสญ.นว.","สสญ.ลป.",
                             "สสญ.หห.", "สสญ.ทส.", "สสญ.หใ.", "สสญ.ฉท.","สสญ.ศช."]
@@ -90,11 +70,10 @@ const AlsEquipmentStatusComponent = () => {
                     let value = count_color_map[j];
                     value = lax ? Math.max(0, value-2.5) : Math.min( 10, value+ 2.5)
                     _tempRow.push(value);
-                    console.log("_tempRow", _tempRow)
                 }
                 values_data.push(_tempRow)
             }
-            setFieldValue('accident_color_map', values_data);
+            setFieldValue('accident_color_map', {values_data, xLabels, yLabels});
         })
     }, [values.year, values.district_id, values.node_id]);
 
@@ -172,6 +151,8 @@ const AlsEquipmentStatusComponent = () => {
                                     <div className="col-12"
                                         // style={{ border: "1px purple solid" }}
                                     >
+                                        {console.log("values.accident_color_map", values.accident_color_map)}
+                                        {console.log("randomColorMapData()", randomColorMapData())}
                                         <ColorMap 
                                             title="สถิติจำนวนครั้งการขัดข้องของแขวงเทียบแต่ละเดือน"
                                             // data={values.accident_color_map}
