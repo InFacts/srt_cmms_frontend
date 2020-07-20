@@ -6,3 +6,9 @@ services:
     restart: always
     ports:
       - 80:81
+    deploy:
+      mode: replicated
+      replicas: 10
+      placement:
+          constraints:
+              - node.role == worker

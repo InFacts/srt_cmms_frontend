@@ -56,7 +56,6 @@ const AlsEquipmentStatusComponent = () => {
             for (let i = 0; i < groups.length; i++) {
                 results.push({key: groups[i], value: count_groups[i]});
             }
-            setFieldValue('maintenance_system', results);
 
             // ColorMap
             let xLabels = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
@@ -73,6 +72,7 @@ const AlsEquipmentStatusComponent = () => {
                 }
                 values_data.push(_tempRow)
             }
+            setFieldValue('maintenance_system', results);
             setFieldValue('accident_color_map', {values_data, xLabels, yLabels});
         })
     }, [values.year, values.district_id, values.node_id]);
@@ -155,8 +155,8 @@ const AlsEquipmentStatusComponent = () => {
                                         {console.log("randomColorMapData()", randomColorMapData())}
                                         <ColorMap 
                                             title="สถิติจำนวนครั้งการขัดข้องของแขวงเทียบแต่ละเดือน"
-                                            // data={values.accident_color_map}
-                                            data={randomColorMapData()}
+                                            data={values.accident_color_map !== {} ? values.accident_color_map:randomPieChartDataSystemType()}
+                                            // data={randomColorMapData()}
                                         />
                                     </div>
 
@@ -191,7 +191,7 @@ const EnhancedAlsEquipmentStatusComponent = withFormik({
         district_id: '',
         node_id: '',
         maintenance_system: [],
-        accident_color_map: []
+        accident_color_map: {values: [], xLabels: [], yLabels: []}
     })
 })(AlsEquipmentStatusComponent);
 
