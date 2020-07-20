@@ -64,6 +64,7 @@ const AlsEquipmentStatusComponent = () => {
     const loggedIn = useSelector(state => state.token.isLoggedIn);
     const {values, setFieldValue} = useFormikContext();
     const factEquipment = useSelector((state) => ({ ...state.api.fact.equipment }), shallowEqual);
+    const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
     const [equipmentsTotal, setEquipmentsTotal] = useState(0);
     const [equipmentsInstalled, setEquipmentsInstalled] = useState(0);
     const [equipmentsBroken, setEquipmentsBroken] = useState(0);
@@ -74,7 +75,6 @@ const AlsEquipmentStatusComponent = () => {
     useTokenInitializer();
     useFactInitializer();
     useEffect(() => {
-        // setFieldValue('temp_equipment_data', mockupEquipmentData.data)
         dispatch(footerToModeInvisible());
     }, []);
 
@@ -83,6 +83,8 @@ const AlsEquipmentStatusComponent = () => {
         let count_installed = 0;
         let count_broken = 0;
         let count_maintenance = 0;
+        let tempNodeData = [];
+        let tempOnlyUniqueNodeID = [];
         let promise = new Promise(function(resolve, reject) {
             // let count_total, count_installed, count_broken, count_maintenance = 0;
             factEquipment.items.map(function ({ equipment_id, item_id, useful_life, responsible_district_id, item_status_id, responsible_node_id, is_installed, equipment_group, equipment_installation }) {
@@ -90,12 +92,45 @@ const AlsEquipmentStatusComponent = () => {
                 if (FilterByAdjustmentBar(equipment_installation, equipment_group, values)) {
                     if (item_status_id === ITEM_STATUS.INSTALLED || item_status_id === ITEM_STATUS.NEW || item_status_id === ITEM_STATUS.BROKEN || item_status_id === ITEM_STATUS.FIX) {
                         count_total++;
+                        // Plot data on Thailand
                         if (item_status_id === ITEM_STATUS.INSTALLED || item_status_id === ITEM_STATUS.NEW) { count_installed++; }
                         else if (item_status_id === ITEM_STATUS.BROKEN) { count_broken++; }
                         else if (item_status_id === ITEM_STATUS.FIX) { count_maintenance++; }
+
+                        // Plot data on equipment-status-list
+                        console.log("equipment_installation[0].location_node_id", equipment_installation[0].location_node_id)
+                        let node_id = equipment_installation[0].location_node_id - 1;
+                        if (tempNodeData.length !== 0) {
+                            let isInArray = tempOnlyUniqueNodeID.includes(node_id);
+                            let indexArray = tempOnlyUniqueNodeID.indexOf(node_id);
+                            if (isInArray) {
+                                if (item_status_id === ITEM_STATUS.WORKING || item_status_id === ITEM_STATUS.NEW) { tempNodeData[indexArray].WORKING += 1 }
+                                else if (item_status_id === ITEM_STATUS.DAMAGED) { tempNodeData[indexArray].DAMAGED += 1 }
+                                else if (item_status_id === ITEM_STATUS.MAINTENANCING) { tempNodeData[indexArray].MAINTENANCING += 1 }
+                            } else {
+                                tempOnlyUniqueNodeID.push(node_id);
+                                tempNodeData.push({
+                                    id: node_id,
+                                    name: factNodes.items[node_id],
+                                    WORKING: item_status_id === ITEM_STATUS.INSTALLED || item_status_id === ITEM_STATUS.NEW ? 1:0,
+                                    DAMAGED: item_status_id === ITEM_STATUS.BROKEN ? 1:0,
+                                    MAINTENANCING: item_status_id === ITEM_STATUS.FIX ? 1:0
+                                });
+                            }
+                        } else {
+                            tempOnlyUniqueNodeID.push(node_id);
+                            tempNodeData.push({
+                                id: node_id,
+                                name: factNodes.items[node_id],
+                                WORKING: item_status_id === ITEM_STATUS.INSTALLED || item_status_id === ITEM_STATUS.NEW ? 1:0,
+                                DAMAGED: item_status_id === ITEM_STATUS.BROKEN ? 1:0,
+                                MAINTENANCING: item_status_id === ITEM_STATUS.FIX ? 1:0
+                            });
+                        }
                     }
                 }
             })
+            setFieldValue('list_node_status', tempNodeData)
             resolve();
         });
 
@@ -215,7 +250,7 @@ const EnhancedAlsEquipmentStatusComponent = withFormik({
         equipment_group_id: 'ทั้งหมด',
         district_id: 'ทั้งหมด',
         node_id: 'ทั้งหมด',
-        thailand_location_province: [],
+        list_node_status: [],
     })
 })(AlsEquipmentStatusComponent);
 
