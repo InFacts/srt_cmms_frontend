@@ -21,7 +21,7 @@ import EquipmentStatusListComponent from './equipment-status-list';
 import {randomGroupedBarGraphData} from './mockup-data'
 
 import BgGreen from '../../../images/als/bg_als.jpg';
-import { changeTheam } from '../../helper.js'
+import { changeTheam, FilterByAdjustmentBar } from '../../helper.js'
 // import mockupEquipmentData from './mockupEquipmentData.json';
 
 const randomHistogramData = () => {
@@ -44,19 +44,6 @@ export const ITEM_STATUS = {
     USED: 4, // มือสอง
     SALVAGE: 5, // ซาก
     INSTALLED: 6, // ติดตั้งแล้ว
-}
-
-export const FilterByAdjustmentBar = (equipment_installation, equipment_group, adjustmentBar) => {
-    if (equipment_installation.length !== 0) {
-        if (adjustmentBar.equipment_group_id === "ทั้งหมด" || adjustmentBar.equipment_group_id == equipment_group.equipment_group_id) {
-            if (adjustmentBar.district_id === "ทั้งหมด" || adjustmentBar.district_id == equipment_installation[0].location_district_id) {
-                if (adjustmentBar.node_id === "ทั้งหมด" || adjustmentBar.node_id == equipment_installation[0].location_node_id) {
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
 }
 
 const AlsEquipmentStatusComponent = () => {
@@ -130,7 +117,7 @@ const AlsEquipmentStatusComponent = () => {
                     }
                 }
             })
-            setFieldValue('list_node_status', tempNodeData)
+            setFieldValue('list_node_status', tempNodeData);
             resolve();
         });
 
@@ -145,7 +132,7 @@ const AlsEquipmentStatusComponent = () => {
 
     return (
         <>
-            {/* {!loggedIn ? <Redirect to="/" /> : null} */}
+            {!loggedIn ? <Redirect to="/" /> : null}
             <div id={changeTheam() === true ? "" : "blackground-white"} style={changeTheam() === true ? { backgroundImage: `url(${BgGreen})`, width: "100vw", height: "120vh" } : {height: "120vh"}}>
                 <div className="bootstrap-wrapper">
                     <div className="container" style={{ marginTop: "70px" }}>
