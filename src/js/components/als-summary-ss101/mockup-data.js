@@ -50,7 +50,6 @@ export const randomColorMapData = () => {
             _tempRow.push(value);
         }
         values.push(_tempRow)
-        console.log("values >>", values)
     }
 
     return {values, xLabels, yLabels};
