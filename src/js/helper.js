@@ -848,7 +848,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             active: true,
             node_id: parseInt(values.node_id),
             station_id: parseInt(values.station_id),
-            start_on: values.start_on + 'T10:55:00+07:00',
+            start_on: values.start_on + 'T13:38:00+07:00',
         }
 
         // ต้องเป็น Array selector_checklist_group_part

@@ -110,7 +110,9 @@ const initialRowsW2 = (n = 10) => {
 // Week three
 const initialLineW3 = {
     station_id: '',
+    internal_item_id: '',
     checklist_id: '',
+    x_cross_x_cross_id: ''
 }
 const initialRowsW3 = (n = 10) => {
     let rows = [];

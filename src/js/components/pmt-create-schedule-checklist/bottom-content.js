@@ -7,7 +7,7 @@ import NumberInput from '../common/formik-number-input'
 import SelectNoChildrenInput from '../common/formik-select-no-children';
 import Label from '../common/form-label'
 import TableStatus from '../common/table-status';
-
+import PopupModalEquipment from '../common/popup-modal-equipment';
 import Files from '../common/files2'
 
 import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
@@ -28,7 +28,33 @@ const BottomContent = (props) => {
   const factChecklistCustom = useSelector((state) => ({ ...state.api.fact[FACTS.CHECKLIST_CUSTOM_GROUP] }), shallowEqual);
   const factUnitMaintenanceLocation = useSelector((state) => ({ ...state.api.fact[FACTS.UNIT_MAINTENANCE_LOCATION] }), shallowEqual);
   const factStations = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
+  const factXCross = useSelector((state) => ({ ...state.api.fact[FACTS.X_CROSS] }), shallowEqual);
+
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
+
+  const [lineNumber, setLineNumber] = useState('');
+
+  const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => {
+    //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
+    if (fieldName.internal_item_id === internal_item_id) {
+      return;
+    }
+    if (internal_item_id === "") {
+      setFieldValue(fieldName + `.checklist_id`, '', false);
+      setFieldValue(fieldName + `.x_cross_x_cross_id`, '', false);
+      return;
+    }
+    let items = fact.equipment.items;
+    let item = items.find(item => `${item.equipment_group.item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+    console.log(item)
+    if (item) {
+      setFieldValue(fieldName + `.checklist_id`, item.equipment_group.checklist_id, false);
+      setFieldValue(fieldName + `.x_cross_x_cross_id`, item.equipment_installation[0].x_cross_x_cross_id, false);
+      return;
+    } else {
+      return 'Invalid Number ID';
+    }
+  }
 
   let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
   useEffect(() => {
@@ -49,9 +75,14 @@ const BottomContent = (props) => {
               <table className="table-many-column" style={{ padding: "10px" }}>
                 <thead>
                   <tr>
-                    <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
-                    <th className="font" style={{ minWidth: "440px" }}>สถานี</th>
-                    <th className="font" style={{ minWidth: "440px" }}>คานกั้น</th>
+                    <th className="font text-center" rowSpan="2" style={{ minWidth: "30px" }}>#</th>
+                    <th className="font text-center" rowSpan="2" style={{ minWidth: "240px" }}>สถานี</th>
+                    <th className="font text-center" colSpan="3" style={{ minWidth: "640px" }}>คานกั้น</th>
+                  </tr>
+                  <tr>
+                    <th className="font text-center" style={{ minWidth: "216px" }}>สินทรัพย์</th>
+                    <th className="font text-center" style={{ minWidth: "216px" }}>แผน</th>
+                    <th className="font text-center" style={{ minWidth: "216px" }}>เลข กม.</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -62,7 +93,7 @@ const BottomContent = (props) => {
                         <th className="edit-padding text-center">{line_number}</th>
                         <td className="edit-padding">
                           {
-                            values.w1_list[index].checklist_id
+                            values.w1_list[index].internal_item_id
                               ?
                               "-"
                               :
@@ -83,17 +114,45 @@ const BottomContent = (props) => {
                               ?
                               "-"
                               :
+                              <TextInput name={`w1_list[${index}].internal_item_id`}
+                                validate={internal_item_id => validateLineNumberInternalItemIDField(`w1_list[${index}]`, internal_item_id, index)}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalEquipment"
+                                handleModalClick={() => setLineNumber(line_number)}
+                              />
+                          }
+                        </td>
+                        <td className="edit-padding">
+                          {
+                            values.w1_list[index].station_id
+                              ?
+                              "-"
+                              :
                               <SelectNoChildrenInput name={`w1_list[${index}].checklist_id`}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
                                 <option value=''></option>
                                 {factChecklist.items.map((checklist) => {
-                                  if (checklist.checklist_group_id === 1) {
                                     return <option key={checklist.checklist_id} value={checklist.checklist_id}>{checklist.checklist_name}</option>
-                                  }
                                 })}
                               </SelectNoChildrenInput>
                           }
                         </td>
+                        <td className="edit-padding">
+                          {
+                            values.w1_list[index].station_id
+                              ?
+                              "-"
+                              :
+                              <SelectNoChildrenInput name={`w1_list[${index}].x_cross_x_cross_id`}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                                <option value=''></option>
+                                {factXCross.items.map((x_cross) => {
+                                        return <option key={x_cross.x_cross_id} value={x_cross.x_cross_id}>{x_cross.road_center}</option>
+                                    })}
+                              </SelectNoChildrenInput>
+                          }
+                        </td>
+
                       </tr>
                     )
                   })}
@@ -114,7 +173,7 @@ const BottomContent = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                {values.w2_list.map((line_item, index) => {
+                  {values.w2_list.map((line_item, index) => {
                     let line_number = index + 1;
                     return (
                       <tr>
@@ -173,7 +232,7 @@ const BottomContent = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                {values.w3_list.map((line_item, index) => {
+                  {values.w3_list.map((line_item, index) => {
                     let line_number = index + 1;
                     return (
                       <tr>
@@ -232,7 +291,7 @@ const BottomContent = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                {values.w4_list.map((line_item, index) => {
+                  {values.w4_list.map((line_item, index) => {
                     let line_number = index + 1;
                     return (
                       <tr>
@@ -289,6 +348,8 @@ const BottomContent = (props) => {
           </div>
 
         </div>
+
+        <PopupModalEquipment keyname='w1_list' lineNumber={lineNumber} />
 
       </div>
     </>
