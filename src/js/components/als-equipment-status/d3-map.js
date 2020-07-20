@@ -3,7 +3,7 @@ import { scaleLinear ,scaleTime, scaleBand, scaleQuantize } from "d3-scale";
 import { extent, max, min, range } from "d3-array";
 import {line} from "d3-shape";
 import {schemeSet1, schemeReds, schemeOranges} from "d3-scale-chromatic";
-
+import { useDispatch, useSelector, shallowEqual } from 'react-redux'
 import useChartDimensions from '../../hooks/chart-dimensions-hook'
 import { useFormik, withFormik, useFormikContext } from 'formik';
 import ThailandTopo from './thailandWithName.json';
@@ -11,111 +11,15 @@ import ThailandTopo from './thailandWithName.json';
 import { geoPath, geoAlbers, geoMercator ,geoEqualEarth } from "d3-geo"
 import legend from './d3-color-legend';
 // import mockupEquipmentData from './mockupEquipmentData.json';
+import {ITEM_STATUS, FilterByAdjustmentBar} from './index';
 
 const chartSettings = { //Need to be at least one since 0 is a falsy value, will be replaced by defaults
     "marginLeft": 10,
     "marginBottom": 1,
     "marginTop": 1,
     "marginRight": 10,
-
     "height": 700,
 }
-
-export const LIST_EQUIPMENT_GROUP = [
-    "CCTV",
-    "PA"
-]
-
-export const LIST_DIVISION = [
-    "กองบริหารทั่วไป", "กองอาณัติสัญญาณ", "กองอาณัติสัญญาณทางไกล",
-    "กองบำรักษาเขต 1", "กองบำรักษาเขต 2", "กองก่อสร้าง",
-    "กองโครงการและแผนงาน", "กองโทรคมนาคม", "กองวิชาการและมาตรฐาน"
-]
-
-export const LIST_DISTRICT = [
-    "แขวงบำรุงรักษาอาณัติสัญญาณแขวงธนบุรี",
-    "แขวงบำรุงรักษาอาณัติสัญญาณแขวงอยุธยา",
-    "แขวงบำรุงรักษาอาณัติสัญญาณภาคกลาง",
-    "แขวงบำรุงรักษาระบบควบคุมอาณัติสัญญาณทางไกล",
-    "แขวงบำรุงรักษาตรวจสอบเครื่องกั้นทางไกล",
-    "แขวงบำรุงรักษาอาณัติสัญญาณย่านพิเศษ",
-    "แขวงบำรุงรักษาอาณัติสัญญาณแขวงแก่งคอย",
-    "แขวงบำรุงรักษาอาณัติสัญญาณแขวงลำชี",
-    "แขวงบำรุงรักษาอาณัติสัญญาณแขวงขอนแก่น",
-    "แขวงบำรุงรักษาอาณัติสัญญาณแขวงนครสวรรค์",
-    "แขวงบำรุงรักษาอาณัติสัญญาณแขวงลำปาง",
-    "แขวงบำรุงรักษาอาณัติสัญญาณแขวงหัวหิน",
-    "แขวงบำรุงรักษาอาณัติสัญญาณแขวงทุ่งสง",
-    "แขวงบำรุงรักษาอาณัติสัญญาณแขวงหาดใหญ่",
-    "แขวงบำรุงรักษาอาณัติสัญญาณแขวงฉะเชิงเทรา",
-    "แขวงบำรุงรักษาอาณัติสัญญาณแขวงศรีราชา",
-    "แขวงระบบข่ายชุมสาย",
-    "แขวงระบบไฟฟ้าแสงสว่าง",
-    "แขวงระบบส่งสัญญาณโทรคมนาคม",
-    "แขวงระบบเสาสาย",
-    "แขวงระบบวิทยุ",
-    "งานวิชาการและอบรม",
-    "งานมาตรฐานและตรวจสอบ",
-    "งานวิจัยและสถิติ",
-    "งานซ่อมบำรุงอิเล็กทรอนิกส์",
-    "แผนกสารบรรณและประวัติ",
-    "แผนกบัญชีและการเงิน",
-    "แผนกจัดซื้อจัดจ้าง",
-    "แผนกควบคุมพัสดุ",
-]
-
-export const LIST_NODE = [
-    "อยุธยา(นตส.ภช.)",
-    "แก่งคอย(นตส.กค.)",
-    "แก่งคอย(นตส.ปช.)",
-    "แก่งคอย(นตส.รส.)",
-    "ขอนแก่น(นตส.ขอ.)",
-    "ขอนแก่น(นตส.ขอ. ที่ ดร.)",
-    "ขอนแก่น(นตส.ลา.)",
-    "ขอนแก่น(นตส.ลา. ที่ จต.)",
-    "ขอนแก่น(นตส.ลา. ที่ วญ.)",
-    "ลำชี(นตส.จร. ที่ รส.)",
-    "ลำชี(นตส.จร. ที่ ลำ.)",
-    "ลำชี(นตส.ลช.)",
-    "ลำชี(นตส.ภช.)",
-    "ลำชี(นตส.ลช.ที่ อน.)",
-    "ภาคกลาง(นตส.กท.ที่ จล.)",
-    "ย่านพิเศษ(นตส.มส.)",
-    "ฉะเชิงเทรา(นตส.ฉท.)",
-    "ฉะเชิงเทรา(นตส.อษ.)",
-    "ฉะเชิงเทรา(นตส.ปจ.)",
-    "ฉะเชิงเทรา(นตส.ปจ.ที่ อร.)",
-    "ศรีราชา(นตส.ศช.)",
-    "ศรีราชา(นตส.พต.)",
-    "ธนบุรี(นตส.คฐ)",
-    "ธนบุรี(นตส.คฐ.ที่ กญ.)",
-    "ทุ่งสง(นตส.รท.)",
-    "ทุ่งสง(นตส.ชท.)",
-    "หาดใหญ่(นตส.หใ.)",
-    "ธนบุรี(นตส.ธบ.)",
-    "ภาคกลาง(นตส.บซ.)",
-    "ธนบุรี(นตส.ตช.)",
-    "ธนบุรี(นตส.คฐ.ที่ โป.)",
-    "หัวหิน(นตส.พบ.)",
-    "หัวหิน(นตส.หห.)",
-    "หัวหิน(นตส.หห.ที่ ปจ.)",
-    "หัวหิน(นตส.ชพ.ที่ พญ.)",
-    "หัวหิน(นตส.ชพ.)",
-    "ทุ่งสง(นตส.รท.ที่ ชพ.)",
-    "ทุ่งสง(นตส.ทส.)",
-    "หาดใหญ่(นตส.หใ.ที่ พท.)",
-    "หาดใหญ่(นตส.ยล.)",
-    "ภาคกลาง(นตส.กท.)",
-    "ย่านพิเศษ(นตส.รต.)",
-    "อยุธยา(นตส.อย.)",
-    "อยุธยา(นตส.ภช.)",
-    "อยุธยา(นตส.ลบ.)",
-    "นครสวรรค์(นตส.ชค.)",
-    "นครสวรรค์(นตส.นว.)",
-    "นครสวรรค์(นตส.พล.)",
-    "ลำปาง(นตส.ศล.)",
-    "ลำปาง(นตส.ลป.)",
-]
 
 export const EQUIPMENT_STATUS = {
     "READY": "1",
@@ -131,7 +35,7 @@ function ThailandMapComponent({data}) {
     // useChartDimensions will have a ref to the Chart_wrapper and get its own Height and Width
     // See reference of Amelia Wattenberger https://wattenberger.com/blog/react-and-d3#sizing-responsivity
     const [ref, dms] = useChartDimensions(chartSettings);
-
+    const factEquipment = useSelector((state) => ({ ...state.api.fact.equipment }), shallowEqual);
     const { resetForm, setFieldValue, setValues, values } = useFormikContext();
     const [timeDomain, setTimeDomain] = useState([new Date(2000, 0, 1), new Date(2000, 0, 2)]);
     const [inventoryMonthDomain, setInventoryMonthDomain] = useState([0, 100]);
@@ -185,21 +89,23 @@ function ThailandMapComponent({data}) {
                 regionName: region.properties.name,
                 value: 0
             });
-            console.log("values.....", values)
-            if (values.temp_equipment_data !== undefined && values.temp_equipment_data !== []) {
-                values.temp_equipment_data.map((mockup, j) => {
-                    if (mockup.location_province_en === region.properties.name && mockup.equipment_status_id === EQUIPMENT_STATUS.DAMAGED) {
-                        tempMapData[i] = {
-                            regionName: region.properties.name,
-                            value: tempMapData[i].value + 1
-                        };
+
+            if (factEquipment.items !== undefined && factEquipment.items !== []) {
+                factEquipment.items.map(function ({ item_status_id, equipment_installation, equipment_group }) {
+                    if (FilterByAdjustmentBar(equipment_installation, equipment_group, values)) {
+                        if (equipment_installation[0].location_province.name_en === region.properties.name && (item_status_id === ITEM_STATUS.NEW || item_status_id === ITEM_STATUS.BROKEN || item_status_id === ITEM_STATUS.FIX)) {
+                            tempMapData[i] = {
+                                regionName: region.properties.name,
+                                value: tempMapData[i].value + 1
+                            };
+                        }
                     }
                 })
             }
             
         });
         setTestMapData(tempMapData);
-    },[values.temp_equipment_data])
+    },[factEquipment.items, values.equipment_group_id, values.district_id, values.node_id])
     
 
 

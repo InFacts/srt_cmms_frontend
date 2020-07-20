@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import SelectNoChildrenInput from '../common/formik-select-no-children';
-import {LIST_EQUIPMENT_GROUP, LIST_DIVISION, LIST_DISTRICT, LIST_NODE} from './d3-map'
 
 import { useSelector, shallowEqual } from 'react-redux';
 import { useFormikContext } from 'formik';
@@ -11,14 +10,13 @@ const AdjustmentBarComponent = ({name, value}) => {
     const factEquipmentGroup = useSelector((state) => ({ ...state.api.fact['equipment-group'] }), shallowEqual);
     const factDistricts = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
     const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
-    const validateDocumentLocationDistrictIDField = (...args) => validatedataDocumentField("location_district_id", setFieldValue, ...args)
-    const validateDocumentLocationNodeIDField = (...args) => validatedataDocumentField("location_node_id", setFieldValue, ...args)
+    const validateDocumentLocationDistrictIDField = (...args) => validatedataDocumentField("district_id", setFieldValue, ...args)
+    const validateDocumentLocationNodeIDField = (...args) => validatedataDocumentField("node_id", setFieldValue, ...args)
     return (
     <div className="gray-background adjustment-bar mt-3">
         <h5 className="adjustment-bar-name">ปรับแต่งข้อมูลของภาพรวม</h5>
         <div className="white-background adjustment-bar-inner">
             <div className="adjustment-bar-inner-text">กลุ่มอุปกรณ์</div  >
-            {/* {console.log("values.equipment_group_id", values.equipment_group_id)} */}
             <SelectNoChildrenInput 
                 name="equipment_group_id" >
                     <option value='ทั้งหมด'>ทั้งหมด</option>
@@ -46,7 +44,7 @@ const AdjustmentBarComponent = ({name, value}) => {
                 cssStyle={{ left: "-240px", top: "10px" }} tabIndex="21">
                 <option value='ทั้งหมด'>ทั้งหมด</option>
                 {factNodes.items.map(function ({ node_id, name, district_id }) {
-                    if (values.location_district_id == district_id) { // Shallow equality, district ID may be string
+                    if (values.district_id == district_id) { // Shallow equality, district ID may be string
                         return <option value={node_id} key={node_id}>{name}</option>
                     }
                 })}

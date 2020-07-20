@@ -22,7 +22,7 @@ import {randomGroupedBarGraphData} from './mockup-data'
 
 import BgGreen from '../../../images/als/bg_als.jpg';
 import { changeTheam } from '../../helper.js'
-import mockupEquipmentData from './mockupEquipmentData.json';
+// import mockupEquipmentData from './mockupEquipmentData.json';
 
 const randomHistogramData = () => {
     let results = [];
@@ -34,6 +34,29 @@ const randomHistogramData = () => {
     }
 
     return results;
+}
+
+// Equipment
+export const ITEM_STATUS = {
+    NEW: 1, // ใหม่
+    BROKEN: 2, // เสีย
+    FIX: 3, // ซ่อมแล้ว
+    USED: 4, // มือสอง
+    SALVAGE: 5, // ซาก
+    INSTALLED: 6, // ติดตั้งแล้ว
+}
+
+export const FilterByAdjustmentBar = (equipment_installation, equipment_group, adjustmentBar) => {
+    if (equipment_installation.length !== 0) {
+        if (adjustmentBar.equipment_group_id === "ทั้งหมด" || adjustmentBar.equipment_group_id == equipment_group.equipment_group_id) {
+            if (adjustmentBar.district_id === "ทั้งหมด" || adjustmentBar.district_id == equipment_installation[0].location_district_id) {
+                if (adjustmentBar.node_id === "ทั้งหมด" || adjustmentBar.node_id == equipment_installation[0].location_node_id) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
 }
 
 const AlsEquipmentStatusComponent = () => {
@@ -51,20 +74,11 @@ const AlsEquipmentStatusComponent = () => {
     useTokenInitializer();
     useFactInitializer();
     useEffect(() => {
-        setFieldValue('temp_equipment_data', mockupEquipmentData.data)
+        // setFieldValue('temp_equipment_data', mockupEquipmentData.data)
         dispatch(footerToModeInvisible());
     }, []);
 
     useEffect(() => {
-        // Equipment
-        const ITEM_STATUS = {
-            NEW: 1, // ใหม่
-            BROKEN: 2, // เสีย
-            FIX: 3, // ซ่อมแล้ว
-            USED: 4, // มือสอง
-            SALVAGE: 5, // ซาก
-            INSTALLED: 6, // ติดตั้งแล้ว
-        }
         let count_total = 0;
         let count_installed = 0;
         let count_broken = 0;
@@ -73,22 +87,12 @@ const AlsEquipmentStatusComponent = () => {
             // let count_total, count_installed, count_broken, count_maintenance = 0;
             factEquipment.items.map(function ({ equipment_id, item_id, useful_life, responsible_district_id, item_status_id, responsible_node_id, is_installed, equipment_group, equipment_installation }) {
                 // is_installed.data[0] === 1 
-                if (equipment_installation.length !== 0) {
-                    if (values.equipment_group_id === "ทั้งหมด" || values.equipment_group_id == equipment_group.equipment_group_id) {
-                        if (values.district_id === "ทั้งหมด" || values.district_id == equipment_installation[0].location_district_id) {
-                            console.log("equipment_installation", equipment_installation)
-                            console.log("values.district_id", values.district_id)
-                            // console.log("values.district_id", values.district_id, "equipment_installation[0].location_district_id", equipment_installation[0].location_district_id)
-                            if (values.node_id === "ทั้งหมด" || values.node_id == equipment_installation[0].location_node_id) {
-                                // console.log("values.node_id", values.node_id, "equipment_installation[0].location_node_id", equipment_installation[0].location_node_id)
-                                if (item_status_id === ITEM_STATUS.INSTALLED || item_status_id === ITEM_STATUS.NEW || item_status_id === ITEM_STATUS.BROKEN || item_status_id === ITEM_STATUS.FIX) {
-                                    count_total++;
-                                    if (item_status_id === ITEM_STATUS.INSTALLED || item_status_id === ITEM_STATUS.NEW) { count_installed++; }
-                                    else if (item_status_id === ITEM_STATUS.BROKEN) { count_broken++; }
-                                    else if (item_status_id === ITEM_STATUS.FIX) { count_maintenance++; }
-                                }
-                            }
-                        }
+                if (FilterByAdjustmentBar(equipment_installation, equipment_group, values)) {
+                    if (item_status_id === ITEM_STATUS.INSTALLED || item_status_id === ITEM_STATUS.NEW || item_status_id === ITEM_STATUS.BROKEN || item_status_id === ITEM_STATUS.FIX) {
+                        count_total++;
+                        if (item_status_id === ITEM_STATUS.INSTALLED || item_status_id === ITEM_STATUS.NEW) { count_installed++; }
+                        else if (item_status_id === ITEM_STATUS.BROKEN) { count_broken++; }
+                        else if (item_status_id === ITEM_STATUS.FIX) { count_maintenance++; }
                     }
                 }
             })
@@ -209,9 +213,9 @@ const AlsEquipmentStatusComponent = () => {
 const EnhancedAlsEquipmentStatusComponent = withFormik({
     mapPropsToValues: () => ({
         equipment_group_id: 'ทั้งหมด',
-        // division_id: 'ทั้งหมด',
         district_id: 'ทั้งหมด',
         node_id: 'ทั้งหมด',
+        thailand_location_province: [],
     })
 })(AlsEquipmentStatusComponent);
 
