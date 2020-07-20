@@ -3055,5 +3055,31 @@ export const changeTheam = () => {
 // #####################################
 // ################ ALS ################
 // #####################################
+// GET /document/ss101/search
+export const ALSGetDocumentSS101 = (begin_document_date, end_document_date) => new Promise((resolve, reject) => {
+    let page_number = 0;
+    let page_size = 25;
+    // let begin_document_date = "2020-07-16";
+    // let end_document_date = "2020-07-16";
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/ss101/search?page_number=${page_number}&page_size=${page_size}&begin_document_date=${begin_document_date}&end_document_date=${end_document_date}`;
+    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then(res => {
+            resolve(res.data);
+        }).catch(function (err) {
+            reject(err)
+        })
+});
 
+export const FilterByAdjustmentBar = (equipment_installation, equipment_group, adjustmentBar) => {
+    if (equipment_installation.length !== 0) {
+        if (adjustmentBar.equipment_group_id === "ทั้งหมด" || adjustmentBar.equipment_group_id == equipment_group.equipment_group_id) {
+            if (adjustmentBar.district_id === "ทั้งหมด" || adjustmentBar.district_id == equipment_installation[0].location_district_id) {
+                if (adjustmentBar.node_id === "ทั้งหมด" || adjustmentBar.node_id == equipment_installation[0].location_node_id) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
 

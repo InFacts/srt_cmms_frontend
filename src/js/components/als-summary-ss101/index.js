@@ -23,10 +23,11 @@ import AdjustmentBarComponent from './adjustment-bar';
 import {randomGroupedBarGraphData , randomGroupedBarGraphDataMTBF, randomColorMapData,randomPieChartData, randomPieChartDataSystemType} from './mockup-data';
 
 import BgGreen from '../../../images/als/bg_als.jpg';
-import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
+import { ALSGetDocumentSS101, changeTheam, FilterByAdjustmentBar } from '../../helper.js'
 const AlsEquipmentStatusComponent = () => {
     const dispatch = useDispatch();
     const loggedIn = useSelector(state => state.token.isLoggedIn);
+    const {values, setFieldValue} = useFormikContext();
 
     // Initializer: Change Toolbar to Mode None
     useToolbarChangeModeInitializer(TOOLBAR_MODE.NONE_HOME); // TODO: Needs to find where to go when we press "HOME"!!
@@ -35,6 +36,67 @@ const AlsEquipmentStatusComponent = () => {
     useEffect(() => {
         dispatch(footerToModeInvisible());
     }, []);
+
+    const biColorMap = (count_color_map) => {
+        let xLabels = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+        let yLabels = ["สสญ.ธบ.", "สสญ.อย.", "สสญ.ก.", "สญก.", "สญค.", "สญพ.", "สสญ.กค.", "สสญ.ลช.", "สสญ.ขอ.", "สสญ.นว.","สสญ.ลป.",
+                        "สสญ.หห.", "สสญ.ทส.", "สสญ.หใ.", "สสญ.ฉท.","สสญ.ศช."]
+        let values_data = [];
+        for (let i=0; i<yLabels.length; i++ ){
+            let _tempRow = [];
+            let lax = (Math.random() > 0.4) ? true : false;
+            for (let j=0; j<xLabels.length; j++){
+                let value = count_color_map[j];
+                value = lax ? Math.max(0, value-2.5) : Math.min( 10, value+ 2.5)
+                _tempRow.push(value);
+                console.log("_tempRow", _tempRow)
+            }
+            values_data.push(_tempRow)
+        }
+        setFieldValue('accident_color_map', values_data);
+    }
+
+    useEffect(() => {
+        let begin_document_date = (values.year-543).toString() + "-01-01";
+        let end_document_date = (values.year-543).toString() + "-12-31";
+        let groups = ["ระบบอาณัติสัญญาณ", "ระบบสายส่ง", "ระบบทางผ่านเครื่องกั้นถนน", "ระบบเครื่องทางสะดวก", 
+                    "ระบบโทรศัพท์", "ระบบไฟฟ้า", "ระบบโทรพิมพ์", "ระบบวิทยุ", "ระบบอิเล็กทรอนิกส์"]; 
+        let count_groups = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        let count_color_map = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        let results = []
+        ALSGetDocumentSS101(begin_document_date, end_document_date).then((data) => {
+            let data_ss101 = data.results;
+            data_ss101.map((item) => { 
+                let d = new Date(item.document.document_date);
+                count_color_map[d.getMonth()-1]++;
+                // console.log("d???", d, d.getMonth())
+                count_groups[item.specific.system_type.system_type_group_id]++; 
+            })
+            // PieChartDataSystemType
+            for (let i = 0; i < groups.length; i++) {
+                results.push({key: groups[i], value: count_groups[i]});
+            }
+            console.log("biColorMap", count_color_map)
+            setFieldValue('maintenance_system', results);
+
+            let xLabels = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+            let yLabels = ["สสญ.ธบ.", "สสญ.อย.", "สสญ.ก.", "สญก.", "สญค.", "สญพ.", "สสญ.กค.", "สสญ.ลช.", "สสญ.ขอ.", "สสญ.นว.","สสญ.ลป.",
+                            "สสญ.หห.", "สสญ.ทส.", "สสญ.หใ.", "สสญ.ฉท.","สสญ.ศช."]
+            let values_data = [];
+            for (let i=0; i<yLabels.length; i++ ){
+                let _tempRow = [];
+                let lax = (Math.random() > 0.4) ? true : false;
+                for (let j=0; j<xLabels.length; j++){
+                    let value = count_color_map[j];
+                    value = lax ? Math.max(0, value-2.5) : Math.min( 10, value+ 2.5)
+                    _tempRow.push(value);
+                    console.log("_tempRow", _tempRow)
+                }
+                values_data.push(_tempRow)
+            }
+            setFieldValue('accident_color_map', values_data);
+        })
+    }, [values.year, values.district_id, values.node_id]);
 
     return (
         <>
@@ -70,7 +132,8 @@ const AlsEquipmentStatusComponent = () => {
                                             marginBottom:80,
                                             height:280,
                                         }}
-                                        data={randomPieChartDataSystemType()}
+                                        data={values.maintenance_system}
+                                        // data={randomPieChartDataSystemType()}
                                     />
                                 </div>
 
@@ -81,7 +144,7 @@ const AlsEquipmentStatusComponent = () => {
                                         // style={{ border: "1px purple solid" }}
                                     >
                                         <GroupedBarGraph
-                                            title="สถิติค่าใช้จ่ายในการซ่อมบำรุงแต่ละประเภท"
+                                            title="สถิติค่าใช้จ่ายในการซ่อมบำรุงเทียบแต่ละเดือน"
                                             data={randomGroupedBarGraphData()}
                                         />
                                     </div>
@@ -110,7 +173,8 @@ const AlsEquipmentStatusComponent = () => {
                                         // style={{ border: "1px purple solid" }}
                                     >
                                         <ColorMap 
-                                            title="สถิติจำนวนครั้งการขัดข้องของระบบที่ตรวจซ่อมเทียบกับแขวง"
+                                            title="สถิติจำนวนครั้งการขัดข้องของแขวงเทียบแต่ละเดือน"
+                                            // data={values.accident_color_map}
                                             data={randomColorMapData()}
                                         />
                                     </div>
@@ -123,7 +187,7 @@ const AlsEquipmentStatusComponent = () => {
                                         // style={{ border: "1px purple solid" }}
                                     >
                                         <GroupedBarGraph
-                                            title="ระยะเวลาเฉลี่ยก่อนการเสียหายแต่ละครั้ง - MTBF"
+                                            title="ระยะเวลาเฉลี่ยก่อนการเสียหายแต่ละครั้งเทียบแต่ละเดือน - MTBF"
                                             data={randomGroupedBarGraphDataMTBF()}
                                         />
                                     </div>
@@ -145,6 +209,8 @@ const EnhancedAlsEquipmentStatusComponent = withFormik({
         division_id: '',
         district_id: '',
         node_id: '',
+        maintenance_system: [],
+        accident_color_map: []
     })
 })(AlsEquipmentStatusComponent);
 
