@@ -85,7 +85,7 @@ const AlsEquipmentStatusComponent = () => {
                         else if (item_status_id === ITEM_STATUS.FIX) { count_maintenance++; }
 
                         // Plot data on equipment-status-list
-                        console.log("equipment_installation[0].location_node_id", equipment_installation[0].location_node_id)
+                        // console.log("equipment_installation[0].location_node_id", equipment_installation[0].location_node_id)
                         let node_id = equipment_installation[0].location_node_id - 1;
                         if (tempNodeData.length !== 0) {
                             let isInArray = tempOnlyUniqueNodeID.includes(node_id);
