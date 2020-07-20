@@ -113,6 +113,7 @@ const TopContent = (props) => {
               .then((res) => {
                 console.log("res", res)
                 setFieldValue("line_items", res.data.results, false);
+                setFieldValue("checkClick", true, false);
               })
               .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
                 if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
@@ -138,6 +139,7 @@ const TopContent = (props) => {
               .then((res) => {
                 console.log("res", res)
                 setFieldValue("line_items", res.data.results, false);
+                setFieldValue("checkClick", true, false);
               })
               .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
                 if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
@@ -152,6 +154,24 @@ const TopContent = (props) => {
         }
       })
   });
+  
+  useEffect(() => {
+    values.line_item_shows = [];
+    values.line_items.map((line_item) => {
+      values.line_item_shows.push({
+        "warehouse_name": line_item.warehouse_name,
+        "item_id": line_item.item_id,
+        "internal_item_id": line_item.internal_item_id,
+        "item_description": line_item.item_description,
+        "uom_name": line_item.uom_name,
+        "item_status_description_th": line_item.item_status_description_th,
+        "quantity": line_item.pricing !== undefined ? line_item.current_unit_count - line_item.committed_unit_count : line_item.ending_unit_count,
+        "total": line_item.pricing !== undefined ? (line_item.pricing.average_price * (line_item.current_unit_count - line_item.committed_unit_count)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : line_item.end_state_in_total_price,
+        "per_unit_price": line_item.pricing !== undefined ? line_item.pricing.average_price ? line_item.pricing.average_price.toFixed(4) : 0 : line_item.end_state_in_total_price / line_item.current_ending_unit_count ? line_item.end_state_in_total_price / line_item.current_ending_unit_count : 0
+      })
+    })
+    setFieldValue("checkClick", false, false)
+  }, [values.line_items, values.checkClick])
 
   return (
     <>

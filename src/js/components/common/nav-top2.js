@@ -81,7 +81,8 @@ const MainModule = (props) => {
             || url === "/pmt-ss-101" || url === "/pmt-equipment-master"
             || url === "/pmt-equipment-installation" || url === "/pmt-fixed-asset"
             || url === "/pmt-create-checklist" || url === "/pmt-all-checklist"
-            || url === "/pmt-create-schedule-checklist" || url === "/pmt-report") {
+            || url === "/pmt-create-schedule-checklist" || url === "/pmt-report"
+            || url === "/pmt-list-fixed-asset") {
             return "#9ADFF9";
         }
         if (url === "/main-als" || url === "/als-spare"
@@ -135,7 +136,7 @@ const MainModule = (props) => {
                                     </li>
 
                                     <li className="nav-li box-yellow-top-bar">
-                                        <Link to={checkPermission.length !== 0 && checkPermission[0].module_track_document ? "/track" : "#"}>สถานรออนุมัติ</Link>
+                                        <Link to={checkPermission.length !== 0 && checkPermission[0].module_track_document ? "/track" : "#"}>สถานะรออนุมัติ</Link>
                                     </li>
                                 </>
                                 :

@@ -42,14 +42,14 @@ const TopContent = (props) => {
   const factItemStatus = useSelector((state) => ({ ...state.api.fact[FACTS.ITEM_STATUS] }), shallowEqual);
 
   const responseToFormState = (data) => {
-    console.log("data>>>>", data.item_id)
+    console.log("data>>>>", data)
     return {
       item_id: data.item_id,
       internal_item_id: data.equipment_group.item.internal_item_id,
       description: data.equipment_group.item.description,
       item_group_id: data.equipment_group.item.item_group_id,
       checklist_id: data.equipment_group.checklist_id,
-      equipment_group_id: data.equipment_group.checklist_id,
+      equipment_group_id: data.equipment_group.equipment_group_id,
       active: data.equipment_group.item.active.data[0],
       item_type_id: data.equipment_group.item.item_type_id,
       uom_group_id: data.equipment_group.item.uom_group_id,                    //UOM
@@ -67,6 +67,13 @@ const TopContent = (props) => {
       useful_life: data.useful_life,
       responsible_district_id: data.responsible_district_id,
       responsible_node_id: data.responsible_node_id,
+
+      location_district_id: data.equipment_installation.length > 0 ? data.equipment_installation[0].location_district_id : null,
+      location_node_id: data.equipment_installation.length > 0 ? data.equipment_installation[0].location_node_id : null,
+      location_station_id: data.equipment_installation.length > 0 ? data.equipment_installation[0].location_station_id : null,
+      location_description: data.equipment_installation.length > 0 ? data.equipment_installation[0].location_description : null,
+      x_cross_x_cross_id: data.equipment_installation.length > 0 ? data.equipment_installation[0].x_cross_x_cross_id : null,
+
       equipment_id: data.equipment_id,
       modeEdit: values.line_position_permission[0].module_admin === true ? true : false     // IF Check user If User is Admin -> return true Else -> return false
 
@@ -166,7 +173,7 @@ const TopContent = (props) => {
     <div id={changeTheam() === true ? "" : "blackground-white"}>
       <div className="container_12 clearfix">
         <section className="container_12 ">
-          <FormTitle>ข้อมูลอุปกรณ์</FormTitle>
+          <FormTitle>ข้อมูลสินทรัพย์หลัก</FormTitle>
 
           <div id={changeTheam() === true ? "blackground-white" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "120px", paddingTop: "10px" } : {}}>
             <div className="container_12" >

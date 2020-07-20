@@ -321,33 +321,30 @@ const useExportPdfInitializer = () => {
         })
         dispatch(handleClickExportPDF())
       }
-    }
-    else if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF] && document_item_list && document_item_list.length > 0 && routeLocation === "/spare-report-s-1") {
+    } else if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF] && document_item_list && document_item_list.length > 0 && routeLocation === "/spare-report-s-1") {
       exportPDF(routeLocation, values).then(function (htmlCode) {
         var w = window.open();
         w.document.write(htmlCode);
         setTimeout(() => {
           w.print();
-          // w.close();
+          w.close();
         }, 500);
       })
       dispatch(handleClickExportPDF())
-    }
-    else if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF] && document_item_list && document_item_list.length > 0 && routeLocation === "/spare-report-b22") {
+    } else if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF] && document_item_list && document_item_list.length > 0 && routeLocation === "/spare-report-b22") {
       exportPDF(routeLocation, values).then(function (htmlCode) {
         var w = window.open();
         w.document.write(htmlCode);
         setTimeout(() => {
           w.print();
-          // w.close();
+          w.close();
         }, 500);
       })
       dispatch(handleClickExportPDF())
-    }
-    else {
+    } else {
       dispatch(handleClickExportPDF())
     }
-  }, [toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF], values])
+  }, [toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF]])
   return;
 
 }
@@ -875,9 +872,6 @@ const createPageS16_46 = (table, date, content) =>
   </div>`;
 
 
-
-
-
 const createHtmlB22 = (table) => `
 <html>
   <head>
@@ -976,26 +970,13 @@ const createRowB22Page1 = (item) =>
 <td style=" text-align:center ; vertical-align: middle;">${item.left_month_price}</td>
 <td style=" text-align:center ; vertical-align: middle;">${item.get_month_unit}</td>
 <td style=" text-align:center ; vertical-align: middle;">${item.get_month_price}</td>
-<td style=" text-align:center ; vertical-align: middle;">${item.from_accept}</td>
-<td style=" text-align:center ; vertical-align: middle;">${item.internal_item_create_on}</td>
-<td style=" text-align:center ; vertical-align: middle;">${item.petition_item_create_on}</td>
 <td style=" text-align:center ; vertical-align: middle;">${item.pay_month_unit}</td>
 <td style=" text-align:center ; vertical-align: middle;">${item.pay_month_price}</td>
-<td style=" text-align:center ; vertical-align: middle;">${item.balance_month_unit}</td>
-<td style=" text-align:center ; vertical-align: middle;">${item.balance_month_price}</td>
-<td style=" text-align:center ; vertical-align: middle;">${item.pay_for_internal_item}</td>
+
+<td style=" text-align:center ; vertical-align: middle;">${item.ending_unit_count}</td>
+<td style=" text-align:center ; vertical-align: middle;">${item.ending_unit_count_total}</td>
+
 <td style=" text-align:center ; vertical-align: middle;">${item.type}</td>
-</tr>`
-  ;
-
-const createRowB22Page2 = (item) =>
-  `<tr class="item">
-
-<td style=" text-align:center ; vertical-align: middle;">${item.item_id}</td>
-<td style=" text-align:left ; vertical-align: middle;">${item.description}</td>
-<td style=" text-align:center ; vertical-align: middle;">${item.unit}</td>
-<td style=" text-align:center ; vertical-align: middle;">${item.left_month_unit}</td>
-<td style=" text-align:center ; vertical-align: middle;">${item.left_month_price}</td>
 </tr>`
   ;
 
@@ -1007,13 +988,9 @@ const createTableB22Page1 = (head, rows) => `
       <td  style="width: 5%; text-align:center ; vertical-align: middle;" rowspan="2">${head.unit}</td>
       <td style=" text-align:center; vertical-align: middle;" colSpan="2">เหลือเดือนก่อน</td>
       <td style=" text-align:center; vertical-align: middle;" colSpan="2">รับเดือนนี้</td> 
-      <td  style="width: 5%; text-align:center; vertical-align: middle;" rowspan="2">${head.from_accept}</td>
       
-      <td  style="width: 5%; text-align:center; vertical-align: middle;" >${head.internal_item_create_on}</td>
-      <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.petition_item_create_on}</td>
       <td style=" text-align:center; vertical-align: middle;" colSpan="2">จ่ายเดือนนี้</td>
       <td style=" text-align:center; vertical-align: middle;" colSpan="2">คงเหลือ</td>
-      <td  style="width: 5%; text-align:center; vertical-align: middle;" >${head.pay_for_internal_item}</td>
       <td  style="width: 5%; text-align:center; vertical-align: middle;" >${head.type}</td>
     </tr>
     <tr class="heading" >
@@ -1021,43 +998,16 @@ const createTableB22Page1 = (head, rows) => `
         <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.left_month_price}</td>
         <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.get_month_unit}</td>
         <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.get_month_price}</td>
-        <td style="width: 5%; text-align:center; vertical-align: middle;">เลขที่/ลงวันที่</td>
-        <td style="width: 5%; text-align:center; vertical-align: middle;">เลขที่/ลงวันที่</td>
 
         <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.pay_month_unit}</td>
         <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.pay_month_price}</td>
-        <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.balance_month_unit}</td>
-        <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.balance_month_price}</td>
 
+        <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.pay_month_unit}</td>
+        <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.pay_month_price}</td>
 
-        <td style="width: 5%; text-align:center; vertical-align: middle;" >ใบส่งเลขที่</td>
         <td style="width: 5%; text-align:center; vertical-align: middle;" >๒๐๓๑๐๕๑</td>
     </tr>
     ${rows}
-  </table>
-`;
-
-const createTableB22Page2 = (head, rows) => `
-  <table cellpadding="0" cellspacing="0" >
-    <tr class="heading">
-      <td  style="width: 4%; text-align:center ; vertical-align: middle;"  rowspan="2">${head.item_id}</td>
-      <td  style="width: 36%; text-align:center ; vertical-align: middle;" rowspan="2">${head.description}</td>
-      <td  style="width: 10%; text-align:center ; vertical-align: middle;" rowspan="2">${head.unit}</td>
-      <td style=" text-align:center; vertical-align: middle;" colSpan="2">รับเดือนนี้</td>
-    </tr>
-    <tr class="heading" >
-        <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.left_month_unit}</td>
-        <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.left_month_price}</td>
-    </tr>
-    ${rows}
-
-    <tr class="item">
-    <td style=" text-align:center ; vertical-align: middle;"></td>
-    <td style=" text-align:center ; vertical-align: middle; "></td>
-    <td style=" text-align:center ; vertical-align: middle; ">รวม</td>
-    <td style=" text-align:center ; vertical-align: middle;">0</td>
-    <td style=" text-align:center ; vertical-align: middle;"></td>
-  </tr>
   </table>
 `;
 
@@ -1070,16 +1020,6 @@ const createPageB22Page1 = (table, date) => `
   ${table}
 </div>
 `;
-
-const createPageB22Page2 = (table, inventory, date) => `
-<div class="invoice-box">
-  <h3  style=" text-align:center ; vertical-align: middle;">บัญชีรายละเอียดแสดงรายรับสิ่งของตอน ${inventory}</h3>
-  <h3  style=" text-align:center ; vertical-align: middle; margin-bottom: 0.5cm;margin: 0">ประจำเดือน ${date}</h3>
-  ${table}
-</div>
-`;
-
-
 
 const createHtmlS101 = (table) =>
   `<html>
@@ -1538,45 +1478,6 @@ const createPageS101Page2 = (table, date, content) =>
 
     </div>`;
 
-const createPageS101Page3 = (date, content) =>
-  `<div class="invoice-box" >
-      <table style="margin-top: 1cm;">
-        <tr class="item2">
-          <td style="width: 40%; text-align:center ; vertical-align: middle;">
-              <img src=${img}   >
-          </td>
-        
-          <td style="width: 40%; text-align:center ; vertical-align: middle;">
-              <img src=${img}   >
-          </td>
-          
-        </tr>
-      </table>
-      <table >
-        <tr class="item2">
-          <td style="width: 40%; text-align:center ; vertical-align: middle;">
-              <img src=${img} >
-          </td>
-          <td style="width: 40%; text-align:center ; vertical-align: middle;">
-              <img src=${img}  >
-          </td>
-            
-        </tr>
-      </table>
-      <table >
-        <tr class="item2">
-          <td style="width: 40%; text-align:center ; vertical-align: middle;">
-              <img src=${img}  >
-          </td>
-          <td style="width: 40%; text-align:center ; vertical-align: middle;">
-              <img src=${img}  >
-          </td>
-              
-        </tr>
-      </table>
-      
-    </div>`;
-
 const createTableSS101 = (head, rows) =>
   `<table cellpadding="0" cellspacing="0" >
       <tr class="heading" >
@@ -1601,268 +1502,14 @@ const createRowSS101 = (item) =>
       <td style=" text-align:right ; vertical-align: middle;">${item.type}</td>
   </tr>`;
 
-
-
-
-const createHtmlReport = (table) => `
-    <html>
-      <head>
-        <meta charset="utf-8">
-        <style>
-    
-    
-        @page {
-            size: landscape;
-            margin:0 ;
-          }
-        @media print {
-            html, body {
-                width:29.7cm;
-                height: 210mm ; 
-              margin-bottom: 0;
-              margin-left: 0;
-              margin-right: 0;
-              margin-top: 0;
-            }
-          }
-        
-         
-    
-         .invoice-box {
-            width:29.7cm;
-            height: 210mm ;
-               margin: 0 auto;
-               margin-bottom: 0.5cm;
-               border: 0.1px solid #ffffff;
-               font-size: 16px;
-               font-family: 'AngsanaUPC', 'MS Sans Serif';  
-          }
-          .invoice-box table {
-              width: 95%;
-              margin: auto;
-              border: 0px solid #eee;
-          }
-          .invoice-box table td {
-               vertical-align: top;
-          }
-          .invoice-box table tr.heading td {
-               background: #eee;
-               border: 1px solid #ddd;
-               font-weight: bold;
-          }
-          .invoice-box table tr.item td {
-               border: 1px solid #eee;
-          }
-          .invoice-box table tr.item2 td {
-               border-bottom: 0px solid #eee;
-          }
-          .invoice-box p {
-               width: 95%;
-          }
-          .invoice-box h3 {
-               margin-top: 1cm;
-               margin-right: 0;
-               margin-left:0;
-               margin-bottom: 0;
-          }
-          .invoice-box table tr.top table td.title {
-            line-height: 45px;
-            color: #333;
-          }
-    
-         .invoice-box pp {
-            margin-top: 0.5cm;
-            float: right;
-            margin: 0;
-            width: 10%;
-         }
-    
-         .invoice-box table tr.information table td {
-            padding-bottom: 40px;
-         }
-    
-       
-    
-        
-    
-        </style>
-      </head>
-      <body>
-        ${table}
-      </body>
-    </html>
-    `;
-
-const createTableReportPage1 = (head, rows) => `
-    <table cellpadding="0" cellspacing="0" >
-      <tr class="heading">
-        <td  style="width: 4%; text-align:center ; vertical-align: middle;"  rowspan="2">${head.item_id}</td>
-        <td  style="width: 26%; text-align:center ; vertical-align: middle;" rowspan="2">${head.description}</td>
-        <td  style="width: 5%; text-align:center ; vertical-align: middle;" rowspan="2">${head.unit}</td>
-        <td style=" text-align:center; vertical-align: middle;" colSpan="2">เหลือเดือนก่อน</td>
-        <td style=" text-align:center; vertical-align: middle;" colSpan="2">รับเดือนนี้</td>
-        <td  style="width: 5%; text-align:center; vertical-align: middle;" rowspan="2">${head.from_accept}</td>
-        <td  style="width: 5%; text-align:center; vertical-align: middle;" rowspan="2">${head.internal_item_create_on}</td>
-        <td  style="width: 5%; text-align:center; vertical-align: middle;" rowspan="2">${head.petition_item_create_on}</td>
-        <td style=" text-align:center; vertical-align: middle;" colSpan="2">จ่ายเดือนนี้</td>
-        <td style=" text-align:center; vertical-align: middle;" colSpan="2">คงเหลือ</td>
-        <td  style="width: 5%; text-align:center; vertical-align: middle;" rowspan="2">${head.pay_for_internal_item}</td>
-        <td  style="width: 5%; text-align:center; vertical-align: middle;" rowspan="2">${head.type}</td>
-      </tr>
-      <tr class="heading" >
-          <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.left_month_unit}</td>
-          <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.left_month_price}</td>
-          <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.get_month_unit}</td>
-          <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.get_month_price}</td>
-          <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.pay_month_unit}</td>
-          <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.pay_month_price}</td>
-          <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.balance_month_unit}</td>
-          <td  style="width: 5%; text-align:center; vertical-align: middle;">${head.balance_month_price}</td>
-      </tr>
-      ${rows}
-    </table>
-  `;
-
-const createRowReportPage1 = (item) =>
-  `<tr class="item">
-    <td style=" text-align:center ; vertical-align: middle;">${item.item_id}</td>
-    <td style=" text-align:left ; vertical-align: middle;">${item.description}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.unit}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.left_month_unit}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.left_month_price}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.get_month_unit}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.get_month_price}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.from_accept}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.internal_item_create_on}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.petition_item_create_on}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.pay_month_unit}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.pay_month_price}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.balance_month_unit}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.balance_month_price}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.pay_for_internal_item}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.type}</td>
-    </tr>`
-  ;
-
-const createRowReportPage2_1 = (item) =>
-  `<tr class="item">
-    
-    <td style=" text-align:center ; vertical-align: middle;">${item.item_id}</td>
-    <td style=" text-align:left ; vertical-align: middle;">${item.description}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.unit}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.left_month_unit}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.left_month_price}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.left_month_sum}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.remark}</td>
-    </tr>`
-  ;
-
-
-const createRowReportPage2_2 = (item) =>
-  `<tr class="item">
-    
-    <td style=" text-align:center ; vertical-align: middle;">${item.item_id}</td>
-    <td style=" text-align:left ; vertical-align: middle;">${item.name}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.positional}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.left_month_unit}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.left_month_price}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.left_month_sum}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.left_month_sum}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.left_month_sum}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.remark}</td>
-    </tr>`
-  ;
-
-const createTableReportPage2_1 = (head, rows) => `
-      <table cellpadding="0" cellspacing="0" >
-        <tr class="heading">
-          <td  style="width: 4%; text-align:center ; vertical-align: middle;"  rowspan="2">${head.item_id}</td>
-          <td  style="width: 36%; text-align:center ; vertical-align: middle;" rowspan="2">${head.description}</td>
-          <td  style="width: 10%; text-align:center ; vertical-align: middle;" rowspan="2">${head.unit}</td>
-          <td style=" text-align:center; vertical-align: middle;" >ราคา/หน่วย</td>
-          <td style=" text-align:center; vertical-align: middle;" >จำนวน</td>
-          <td style=" text-align:center; vertical-align: middle;" >รวมเป็นเงิน</td>
-          <td  style="width: 10%; text-align:center ; vertical-align: middle;" rowspan="2">${head.remark}</td>
-        </tr>
-        <tr class="heading" >
-            <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.left_month_unit}</td>
-            <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.left_month_price}</td>
-            <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.left_month_sum}</td>
-        </tr>
-        ${rows}
-    
-        <tr class="item">
-    
-            <td style=" text-align:center ; vertical-align: middle;"></td>
-            <td style=" text-align:left ; vertical-align: middle;">รวมเป็นเงินทั้งสิ้น</td>
-            <td style=" text-align:center ; vertical-align: middle;"></td>
-            <td style=" text-align:center ; vertical-align: middle;">}</td>
-            <td style=" text-align:center ; vertical-align: middle;"></td>
-            <td style=" text-align:center ; vertical-align: middle;"></td>
-            <td style=" text-align:center ; vertical-align: middle;"></td>
-        </tr>
-      </table>
-    `;
-
-
-const createTableReportPage2_2 = (head, rows) => `
-    <table cellpadding="0" cellspacing="0" >
-      <tr class="heading">
-        <td  style="width: 4%; text-align:center ; vertical-align: middle;"  rowspan="2">${head.item_id}</td>
-        <td  style="width: 36%; text-align:center ; vertical-align: middle;" rowspan="2">${head.name}</td>
-        <td  style="width: 10%; text-align:center ; vertical-align: middle;" rowspan="2">${head.positional}</td>
-        <td style=" text-align:center; vertical-align: middle;" >ค่าแรงวันละ</td>
-        <td style=" text-align:center; vertical-align: middle;" >ค่าเบี้ยเลี้ยง</td>
-        <td style=" text-align:center; vertical-align: middle;" >ค่าที่พัก</td>
-        <td style=" text-align:center; vertical-align: middle;" >รวมวัน</td>
-        <td style=" text-align:center; vertical-align: middle;" >รวมเป็นเงิน</td>
-        <td  style="width: 10%; text-align:center ; vertical-align: middle;" rowspan="2">${head.remark}</td>
-      </tr>
-      <tr class="heading" >
-          <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.left_month_unit}</td>
-          <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.left_month_price}</td>
-          <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.left_month_sum}</td>
-          <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.left_month_sum}</td>
-          <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.left_month_sum}</td>
-      </tr>
-      ${rows}
-  
-    </table>
-  `;
-
-
-
-
-const createPageReportPage1 = (table, date) => `
-    <div class="invoice-box">
-      <h3  style=" text-align:center ; vertical-align: middle;">งานระบบเสาสาย</h3>
-      <h3  style=" text-align:center ; vertical-align: middle;">บัญชีแสดงรายการ รับ-จ่าย สิ่งของ</h3>
-      <h3  style=" text-align:center ; vertical-align: middle; margin-bottom: 0.5cm;margin: 0">ประจำเดือน ${date}</h3>
-      ${table}
-    </div>
-    `;
-
-const createPageReportPage2 = (table1, table2) => `
-    <div class="invoice-box">
-      <h3  style=" text-align:center ; vertical-align: middle; margin-bottom: 0.5cm;margin: 0">รายการวัสดุของที่ใช้ดำเนินการ</h3>
-      ${table1}
-      <h3  style=" text-align:center ; vertical-align: middle; margin-bottom: 0.5cm;margin: 0">ผู้ปฎิบัติการดังนี้</h3>
-      ${table2}
-    </div>
-    `;
-
-
-
-
-
 export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve, reject) => {
+
   if (routeLocation === '/spare-report-s-1') {
     let newDate = new Date()
     let date = newDate.getDate();
     let mouth = newDate.getMonth() + 1;
     let year = newDate.getFullYear() + 543;
     if (mouth === Number(valuesContext.mouth_id) && year === Number(valuesContext.year_id)) {
-      // console.log("ccccc")
     } else {
       date = 30
     }
@@ -1901,18 +1548,15 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
       var line_number = 1
       var total = 0;
       var keyss = group_type[i];
-
       filterResult_type.map((item) => {
         var myObj = {
           "item_id": line_number,
           "description": item.item_description_th,
           "internal_item_id": item.internal_item_id,
           "unit": item.uom_name,
-          "quantity": item.current_unit_count,
-          "uom_group_id": (item.pricing.average_price && item.pricing.average_price.toFixed(4) * ((item.current_unit_count - item.committed_unit_count) && (item.current_unit_count - item.committed_unit_count)).toFixed(2)),
-          "per_unit_price": item.pricing.average_price && item.pricing.average_price.toFixed(4)
-          // "uom_group_id": (item.pricing.average_price * (item.current_unit_count - item.committed_unit_count)),
-          // "per_unit_price": item.pricing.average_price
+          "quantity": item.current_unit_count ? item.current_unit_count.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : item.ending_unit_count,
+          "uom_group_id": item.pricing !== undefined ? (item.pricing.average_price && item.pricing.average_price.toFixed(4) * ((item.current_unit_count - item.committed_unit_count) && (item.current_unit_count - item.committed_unit_count)).toFixed(2)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : item.end_state_in_total_price,
+          "per_unit_price": item.pricing !== undefined ? item.pricing.average_price.toFixed(4) : item.end_state_in_total_price / item.current_ending_unit_count ? item.end_state_in_total_price / item.current_ending_unit_count : 0
         };
         line_number = line_number + 1;
         total = total + item.committed_unit_count
@@ -2079,7 +1723,7 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
     return resolve(html);
   }
   else if (routeLocation === '/spare-report-b22') {
-    console.log(valuesContext)
+    // console.log("valuesContext", valuesContext)
     let data = [];
     let p = 1
     let newDate = new Date()
@@ -2096,26 +1740,28 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
     })
     let create_on = date + " " + mouth.mouth + " " + year;
 
-    valuesContext.line_items.map(lineItem => {
-      data.push({
-        "item_id": p,
-        "description": lineItem.item_id,
-        "unit": lineItem.item_id,
-        "left_month_unit": lineItem.item_id,
-        "left_month_price": lineItem.item_id,
-        "get_month_unit": lineItem.item_id,
-        "get_month_price": lineItem.item_id,
-        "from_accept": lineItem.item_id,
-        "internal_item_create_on": lineItem.item_id,
-        "petition_item_create_on": lineItem.item_id,
-        "pay_month_unit": lineItem.item_id,
-        "pay_month_price": lineItem.item_id,
-        "balance_month_unit": lineItem.item_id,
-        "balance_month_price": lineItem.item_id,
-        "pay_for_internal_item": lineItem.item_id,
-        "type": lineItem.item_id
-      });
-      p = p + 1;
+    valuesContext.new_line_items_pdf.map(lineItem => {
+        data.push({
+          "item_id": p,
+          "description": lineItem.item_description,
+
+          "unit": lineItem.uom_name,
+
+          "left_month_unit": lineItem.begin_unit_count,
+          "left_month_price": lineItem.begin_state_in_total_price,
+
+          "get_month_unit": lineItem.state_in_unit_count,
+          "get_month_price": lineItem.end_state_in_total_price,
+
+          "pay_month_unit": lineItem.state_out_unit_count,
+          "pay_month_price": lineItem.end_state_out_total_price,
+
+          "ending_unit_count": lineItem.ending_unit_count,
+          "ending_unit_count_total": "-",
+          
+          "type": lineItem.accounting_type
+        });
+        p = p + 1;
     })
 
     const data_json = {
@@ -2131,14 +1777,8 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
           "left_month_price": "ราคา",
           "get_month_unit": "จำนวน",
           "get_month_price": "ราคา",
-          "from_accept": "รับจาก",
-          "internal_item_create_on": "ใบส่งของ",
-          "petition_item_create_on": "ฎีกาเบิก",
           "pay_month_unit": "จำนวน",
           "pay_month_price": "ราคา",
-          "balance_month_unit": "จำนวน",
-          "balance_month_price": "ราคา",
-          "pay_for_internal_item": "จ่ายให้ใคร",
           "type": "ประเภทบัญชี"
 
         },
@@ -2192,22 +1832,18 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
           else {
             for (let j = page[i].length; j < 12; j++) {
               page[i].push({
-                "item_id": j + 1,
+                "item_id": " ",
                 "description": " ",
                 "unit": " ",
                 "left_month_unit": " ",
                 "left_month_price": " ",
                 "get_month_unit": " ",
                 "get_month_price": " ",
-                "from_accept": " ",
-                "internal_item_create_on": " ",
-                "petition_item_create_on": " ",
                 "pay_month_unit": " ",
                 "pay_month_price": " ",
-                "balance_month_unit": " ",
-                "balance_month_price": " ",
-                "pay_for_internal_item": " ",
-                "type": " "
+                "type": " ",
+                "ending_unit_count": " ",
+                "ending_unit_count_total": " ",
               });
             }
           }
@@ -2221,27 +1857,13 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
           pageAll = pageAll + tablePage
         }
       }
-      else {
-        // var R = [];
-        // for (var i = 0; i < data_json.ItemInWarehouse[id].Item.length; i += 2) {
-        //   R.push(data_json.ItemInWarehouse[id].Item.slice(i, i + 2));
-        // }
-        // let page = R;
-        // for (let i = 0; i < page.length; i++) {
-        //   const rows = page[i].map(createRowB22Page2).join('');
-        //   const table = createTableB22Page2(data_json.Headers.Page_2, rows);
-        //   const tablePage = createPageB22Page2(table, "", data_json.CreateOn)
-        //   pageAll = pageAll + tablePage
-        // }
-      }
-
     })
     const html = createHtmlB22(pageAll);
     return resolve(html);
   }
   else if (routeLocation === '/pmt-ss-101') {
 
-    // console.log(valuesContext)
+    console.log(valuesContext)
     const data_json = valuesContext;
     let pageAll = ``;
 
@@ -2293,11 +1915,5 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
   }
 
 })
-
-
-
-
-
-
 
 export default useExportPdfInitializer;

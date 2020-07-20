@@ -24,6 +24,7 @@ export const FACTS = {
     WAREHOUSES_TYPE: "warehouse-type",
     APPROVAL_PROCESS_LOOKUP: "approval-process-lookup",
     POSITION:"position",
+    LEVEL: "level",
     EQUIPMENT:"equipment",
     EQUIPMENT_GROUP: "equipment-group",
     CHECKLIST_LINE_ITEM_USE_EQUIPMENT: "checklist-line-item-use-equipment",
@@ -45,7 +46,10 @@ export const FACTS = {
     SS101_CAR_TYPE: "ss101/car-type",
     SS101_CASE_TYPE: "ss101/case-type",
     SS101_INTERRUPT: "ss101/interrupt",
-    SS101_DOC_BYPASS: "ss101/doc-bypass"
+    SS101_DOC_BYPASS: "ss101/doc-bypass",
+
+    // For reporting period
+    REPORTING_PERIOD: "statistic/reporting-period"
 }
 
 // Actions

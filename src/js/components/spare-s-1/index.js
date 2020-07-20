@@ -81,6 +81,8 @@ const EnhancedReportS1Component = withFormik({
         src_warehouse_id: '',
         item_status_id: 1,
         line_items: [],
+        line_item_shows: [],
+
         year_id: now_date.getFullYear() + 543,
         mouth_id: now_date.getMonth() + 1,
 
@@ -138,6 +140,7 @@ const EnhancedReportS1Component = withFormik({
             }
         ],
 
+        checkClick: false
     }),
 })(ReportS1Component);
 

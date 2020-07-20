@@ -16,7 +16,7 @@ import { useFormikContext, useField } from 'formik';
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import {
   getNumberFromEscapedString, fetchGoodsOnhandDataForItemmasterData, DOCUMENT_TYPE_ID,
-  getDocumentbyInternalDocumentID, checkBooleanForEditHelper, validateEmployeeIDField,
+  getDocumentbyInternalDocumentID, checkBooleanForEditCheckNodeIDHelper, validateEmployeeIDField,
   validateInternalDocumentIDWorfOrderPMFieldHelper
 } from '../../helper';
 
@@ -42,12 +42,13 @@ const TopContent = (props) => {
   const factStations = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
   const factChecklist = useSelector((state) => ({ ...state.api.fact.checklist }), shallowEqual);
 
-  const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
-
   const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDWorfOrderPMFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.WORK_ORDER_PM, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
 
-  // const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
-  // const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
+  let checkBooleanForEdit = checkBooleanForEditCheckNodeIDHelper(values, decoded_token, fact);
+  useEffect(() => {
+    checkBooleanForEdit = false
+    validateField("internal_document_id")
+  }, [values.internal_document_id])
 
   return (
     <div id={changeTheam() === true ? "" : "blackground-white"}>
@@ -74,31 +75,6 @@ const TopContent = (props) => {
               </div>
               <div class="clear" />
 
-              {/* User Employee ID  */}
-              {/* <div className="grid_1 alpha white-space">
-                <p className="top-text">ผู้ดำเนินเรื่อง</p>
-              </div>
-              <div className="grid_3">
-                <TextInput name="created_by_user_employee_id"
-                  validate={validateUserEmployeeIDField}
-                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                  searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"
-                  tabIndex="2" />
-              </div>
-              <div class="clear" /> */}
-
-              {/* Admin Employee ID  */}
-              {/* <div className="grid_1 alpha white-space">
-                <p className="top-text">ผู้สร้างเอกสาร</p>
-              </div>
-              <div className="grid_3">
-                <TextInput name="created_by_admin_employee_id"
-                  validate={validateAdminEmployeeIDField}
-                  disabled
-                  tabIndex="3" />
-              </div>
-              <div class="clear" /> */}
-
               {/* Admin Employee ID  */}
               <div className="grid_1 alpha white-space">
                 <p className="top-text">แผน</p> {/* ก.ไฟฟ้า */}
@@ -120,7 +96,6 @@ const TopContent = (props) => {
               </div>
               <div className="grid_3">
                 <TextInput name="name"
-                  // validate={validateAdminEmployeeIDField}
                   disabled
                   tabIndex="3" />
               </div>

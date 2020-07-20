@@ -1,62 +1,48 @@
-import React, {useState, useEffect} from 'react';
-import { useFormik , withFormik ,useFormikContext} from 'formik';
+import React, { useState, useEffect } from 'react';
+import { useFormik, withFormik, useFormikContext } from 'formik';
 import { Redirect } from 'react-router-dom';
-import { useSelector, shallowEqual  } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import TabBar from '../common/tab-bar';
-
 
 import TopContent from './top-content';
 import BottomContent from './bottom-content';
 import Footer from '../common/footer.js';
 
-import {packDataFromValues, DOCUMENT_TYPE_ID, saveDocument} from '../../helper';
+import { DOCUMENT_TYPE_ID, saveDocument } from '../../helper';
 
 import useToolbarInitializer from '../../hooks/toolbar-initializer';
 import useFactInitializer from '../../hooks/fact-initializer';
 import useTokenInitializer from '../../hooks/token-initializer';
 import useFooterInitializer from '../../hooks/footer-initializer';
-import useExportPdfInitializer from '../../hooks/export-pdf-initializer';
 
-import {  TOOLBAR_MODE,TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
+import { TOOLBAR_MODE, TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
-import BgRed from '../../../images/spare/bg_red.jpg';
-import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
-const ReportS1Component = (props) => {
-    
-    const {resetForm, setFieldValue, setValues, values} = useFormikContext();
-    const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
+import BgBlue from '../../../images/pmt/bg_blue.jpg';
+import { changeTheam } from '../../helper.js'
+const GoodsReceiptComponent = (props) => {
 
-    // Initial tabbar & set default active
-    const [tabNames, setTabNames] = useState([
-        {id:"listItem", name:"รายการ"},
-    ]);
+    const { resetForm, setFieldValue, setValues, values } = useFormikContext();
 
-    useToolbarInitializer(TOOLBAR_MODE.SEARCH);
+    useToolbarInitializer(TOOLBAR_MODE.NONE_HOME, DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM);
     useTokenInitializer();
     useFactInitializer();
-    useExportPdfInitializer();
-    const loggedIn = useSelector(state => state.token.isLoggedIn); 
-
-    useEffect(() => {
-        setFieldValue("src_warehouse_id", decoded_token.has_position && decoded_token.has_position[0].warehouse_id, true)
-    }, [decoded_token.has_position])
+    useFooterInitializer(DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM);
+    const loggedIn = useSelector(state => state.token.isLoggedIn);
 
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
-            <form style={changeTheam() === true ? { backgroundImage: `url(${BgRed})`, width: "100vw", height: "140vh" } : {}}>
-            <TopContent />
-            <TabBar tabNames={tabNames} initialTabID="listItem">
+            <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "130vh" } : {}}>
+                <TopContent />
                 <BottomContent />
-            </TabBar>
-            <Footer />
+                <Footer />
             </form>
         </>
     )
 }
 
-const initialLineYears = (n=10) => {
+const initialLineYears = (n = 10) => {
     var new_date = new Date();
     var start_year = new_date.getFullYear() + 543; //ปีปัจุบัน(ค.ศ.) + 543(แปลงเป็น พ.ศ.) - 10(ย้อนหลังสิบปี) 
     let rows_year = [
@@ -73,21 +59,15 @@ const initialLineYears = (n=10) => {
     return rows_year;
 }
 var now_date = new Date();
-const EnhancedReportS1Component = withFormik({
-    mapPropsToValues: (props) => ({ 
+
+const EnhancedGoodsReceiptComponent = withFormik({
+    mapPropsToValues: (props) => ({
         // Field ที่ให้ User กรอก
-        internal_document_id: '',
-        internal_item_id: '',
-        src_warehouse_id: '', 
-        item_status_id: 1,
-        document_date: '', 
-        line_items: [],
+        // Top Content
+
         year_id: now_date.getFullYear() + 543,
         mouth_id: now_date.getMonth() + 1,
-        new_line_items: [],
-        new_line_items_pdf: [],
 
-        // Field ที่ให้ User ไม่ได้กรอก
         year: initialLineYears(),
         mouth: [
             {
@@ -139,8 +119,9 @@ const EnhancedReportS1Component = withFormik({
                 mouth: "ธันวาคม"
             }
         ],
+        // Bottom Content
+        list_documents: []
+    })
+})(GoodsReceiptComponent);
 
-    }),
-})(ReportS1Component);
-
-export default EnhancedReportS1Component;
+export default EnhancedGoodsReceiptComponent;

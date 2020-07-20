@@ -79,7 +79,7 @@ export const DOCUMENT_SCHEMA = {
     remark: '',
     created_by_admin_id: -1,
     created_by_user_id: -1,
-    // document_status_id:	-1, // NOT USED, handled by Backend
+    document_status_id: -1, // NOT USED, handled by Backend
     // document_action_type_id	string // NOT USED, handled by Backend
     // refer_to_document_id	string // NOT USED, handled by Backend
 }
@@ -92,7 +92,7 @@ export const DOCUMENT_SCHEMA_GET = {
     created_by_admin_id: -1,
     created_by_user_id: -1,
     document_date: "",
-    // document_status_id:	-1, // NOT USED, handled by Backend
+    document_status_id: -1, // NOT USED, handled by Backend
     // document_action_type_id	string // NOT USED, handled by Backend
     refer_to_document_id: '',	 // string NOT USED, handled by Backend
     refer_to_document_internal_id: '',
@@ -256,6 +256,26 @@ export function getItemIDFromInternalItemID(itemFact, internal_item_id) {
         return null;
     }
     return null;
+}
+
+export const getFieldFromFact = (subFact, fieldName, queryString, fieldQuery) => {
+    let items = subFact.items;
+    if (items && items.length > 0) {
+        let item = items.find(item => `${item[fieldName]}` === `${queryString}`)
+        if (item) {
+            return item[fieldQuery];
+        }
+        return null;
+    }
+    return null;
+}
+
+export const getItemNamefromItemID = (itemFact, itemID) =>{
+    return getFieldFromFact(itemFact, "item_id", itemID, "description"); 
+}
+
+export const getItemInternalIDfromItemID = (itemFact, itemID) =>{
+    return getFieldFromFact(itemFact, "item_id", itemID, "internal_item_id"); 
 }
 
 export const getNumberFromEscapedString = (escapedString) => {
@@ -700,7 +720,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             loss_line_item_part[index].price = parseInt(line_items.price)
             loss_line_item_part[index].quantity = parseInt(line_items.quantity)
             loss_line_item_part[index].remark = line_items.remark
-            loss_line_item_part[index].uom_code = parseInt(line_items.uom_code)
+            loss_line_item_part[index].uom_name = line_items.uom_name
             delete loss_line_item_part[index].item_id
         })
 
@@ -810,9 +830,6 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             specific: equipment_installation_part,
         }
     } else if (document_type_id === DOCUMENT_TYPE_ID.SELECTOR) {
-
-        console.log("data values", values)
-
         let document_part_selector = {
             ...DOCUMENT_SCHEMA,
             document_status_id: 1,
@@ -828,10 +845,10 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         let selector_pm_plan_part = {
             document_id: values.document_id,
             name: values.name,
-            active: values.active === "1" ? true : false,
+            active: true,
             node_id: parseInt(values.node_id),
             station_id: parseInt(values.station_id),
-            start_on: values.start_on + 'T01:20:00+07:00',
+            start_on: values.start_on + 'T10:55:00+07:00',
         }
 
         // ต้องเป็น Array selector_checklist_group_part
@@ -894,9 +911,6 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             specific: specific_selector
         }
     } else if (document_type_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM) {
-
-        console.log("data values", values)
-
         let document_part = {
             ...DOCUMENT_SCHEMA,
             document_status_id: 1,
@@ -936,14 +950,8 @@ export const packDataFromValuesMasterDataForEdit = (fact, values, document_type_
             use_central: values.use_central === "1" ? true : false
         }
     } else if (document_type_id === DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
-        let last = 0;
-        fact[FACTS.ITEM].items.map(item => {
-            if (item.item_id > last) {
-                last = item.item_id;
-            }
-        });
         return {
-            item_id: last + 1,
+            item_id: values.item_id,
             internal_item_id: values.internal_item_id,
             description: values.description,
             item_type_id: values.item_type_id,
@@ -1023,8 +1031,8 @@ export const packDataFromValuesMasterDataForEdit = (fact, values, document_type_
         values.checklist_line_item_use_equipment.map((line_item, index) => {
             if (line_item.item_id) {
                 line_items_part.push({
-                    checklist_line_item_use_equipment_id: parseInt(last_checklist_line_item_use_equipment_id) + 1, // ต้อง Get อัน่าสุดออกมาก่อน
-                    checklist_line_item_id: parseInt(last_checklist_line_item) + 1,
+                    checklist_line_item_use_equipment_id: parseInt(line_item.item_id),
+                    checklist_line_item_id: parseInt(values.checklist_line_item),
                     item_id: line_item.item_id,
                     quantity: line_item.quantity,
                     uom_id: parseInt(line_item.uom_id)
@@ -1033,7 +1041,7 @@ export const packDataFromValuesMasterDataForEdit = (fact, values, document_type_
         })
 
         let create_checklist_part = {
-            checklist_line_item: parseInt(last_checklist_line_item) + 1,
+            checklist_line_item: parseInt(values.checklist_line_item),
             checklist_id: parseInt(values.checklist_id),
             name: values.name,
             freq: values.freq,
@@ -1137,6 +1145,21 @@ export const editMasterData = (data, document_type_group_id) => new Promise((res
         });
 });
 
+const BASE_URL = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}`;
+
+// GET  /statistic/goods-monthly-summary
+export const fetchStatisticGoodsMonthlySummary = (beginReportingPeriodID = null, endReportingPeriodID = null) => new Promise((resolve, reject) => {
+    const url = `${BASE_URL}/statistic/goods-monthly-summary?${beginReportingPeriodID ? `begin_reporting_period_id=${beginReportingPeriodID}&`: ''}${endReportingPeriodID ? `end_reporting_period_id=${endReportingPeriodID}&`: ''}page_size=1000`;
+    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((res) => {
+            let results = res.data.results;
+            if (results) {
+                resolve(results);
+            } else {
+                reject('No Results in fetchStatisticGoodsMonthlySummary');
+            }
+        })
+});
 
 
 export const fetchLastestInternalDocumentID = (document_type_group_id) => new Promise((resolve, reject) => {
@@ -1296,7 +1319,8 @@ export const saveMasterData = (document_type_group_id, data, image) => new Promi
 // EDIT /fact/warehouses
 export const editMasterDataHelper = (document_type_group_id, data, image) => new Promise((resolve, reject) => {
     editMasterData(data, document_type_group_id)
-        .then(() => { // Get the Document_ID
+        .then((res) => { // Get the Document_ID
+            console.log("res", res)
             return resolve();
         })
         .catch((err) => {
@@ -1806,64 +1830,82 @@ const responseToFormState = (fact, data, document_type_group_id) => {
         }
         // var created_on = new Date(data.document.created_on);
         // created_on.setHours(created_on.getHours() + 7);
-        return {
-            document_id: data.document.document_id,
-            internal_document_id: data.document.internal_document_id,
-            created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_user_id) || '',
-            created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_admin_id) || '',
-            created_on: data.document.created_on.split(".")[0],
-            line_items: data.specific.line_items,
-            src_warehouse_id: data.document.warehouse_id,
-            remark: data.document.remark,
-            refer_to_document_internal_id: data.document.refer_to_document_internal_id,
-            refer_to_document_id: data.document.refer_to_document_id,
-            document_date: data.document.document_date.slice(0, 10)
+        let document_statuses = fact[FACTS.DOCUMENT_STATUS].items;
+        let document_status = document_statuses.find(document_status => `${document_status.document_status_id}` === `${data.document.document_status_id}`);
+        if (document_status) {
+            return {
+                document_id: data.document.document_id,
+                internal_document_id: data.document.internal_document_id,
+                created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_user_id) || '',
+                created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_admin_id) || '',
+                created_on: data.document.created_on.split(".")[0],
+                line_items: data.specific.line_items,
+                src_warehouse_id: data.document.warehouse_id,
+                remark: data.document.remark,
+                refer_to_document_internal_id: data.document.refer_to_document_internal_id,
+                refer_to_document_id: data.document.refer_to_document_id,
+                document_date: data.document.document_date.slice(0, 10),
+                status_name_th: document_status.status,
+                node_id: data.specific.node_id,
+                district_id: data.specific.district_id,
+                division_id: data.specific.division_id
+            }
         }
     } else if (document_type_group_id === DOCUMENT_TYPE_ID.EQUIPMENT_INSTALLATION) {
         // var created_on = new Date(data.document.created_on);
         // created_on.setHours(created_on.getHours() + 7);
-        return {
-            document_id: data.document.document_id,
-            item_id: data.specific.equipment.item_id,
-            equipment_id: data.specific.equipment.equipment_id,
-            internal_document_id: data.document.internal_document_id,
-            internal_item_id: data.specific.equipment.equipment_item.item.internal_item_id,
-            description: data.specific.equipment.equipment_item.item.description,
-            uom_group_id: data.specific.equipment.equipment_item.item.uom_group_id,
-            equipment_status_id: data.specific.equipment.item_status_id,
-            responsible_district_id: data.specific.equipment.responsible_district_id,
-            created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_user_id) || '',
-            created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_admin_id) || '',
-            created_on: data.document.created_on.split(".")[0],
-            remark: data.document.remark,
-            document_date: data.document.document_date.slice(0, 10),
-            announce_use_on: data.specific.announce_use_on.slice(0, 10),
-            location_description: data.specific.location_description,
-            location_district_id: data.specific.location_district_id,
-            location_node_id: data.specific.location_node_id,
-            location_station_id: data.specific.location_station_id,
-            installed_on: data.specific.installed_on.slice(0, 10),
-            x_cross_x_cross_id: data.specific.x_cross_x_cross_id
+        let document_statuses = fact[FACTS.DOCUMENT_STATUS].items;
+        let document_status = document_statuses.find(document_status => `${document_status.document_status_id}` === `${data.document.document_status_id}`);
+        if (document_status) {
+            return {
+                document_id: data.document.document_id,
+                item_id: data.specific.equipment.item_id,
+                equipment_id: data.specific.equipment.equipment_id,
+                internal_document_id: data.document.internal_document_id,
+                internal_item_id: data.specific.equipment.equipment_item.item.internal_item_id,
+                description: data.specific.equipment.equipment_item.item.description,
+                uom_group_id: data.specific.equipment.equipment_item.item.uom_group_id,
+                equipment_status_id: data.specific.equipment.item_status_id,
+                responsible_district_id: data.specific.equipment.responsible_district_id,
+                created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_user_id) || '',
+                created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_admin_id) || '',
+                created_on: data.document.created_on.split(".")[0],
+                remark: data.document.remark,
+                document_date: data.document.document_date.slice(0, 10),
+                announce_use_on: data.specific.announce_use_on.slice(0, 10),
+                location_description: data.specific.location_description,
+                location_district_id: data.specific.location_district_id,
+                location_node_id: data.specific.location_node_id,
+                location_station_id: data.specific.location_station_id,
+                installed_on: data.specific.installed_on.slice(0, 10),
+                x_cross_x_cross_id: data.specific.x_cross_x_cross_id,
+                status_name_th: document_status.status
+            }
         }
     } else if (document_type_group_id === DOCUMENT_TYPE_ID.SELECTOR) {
         // var created_on = new Date(data.document.created_on);
         // created_on.setHours(created_on.getHours() + 7);
-        return {
-            document_id: data.document.document_id,
-            internal_document_id: data.document.internal_document_id,
-            created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_user_id) || '',
-            created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_admin_id) || '',
-            created_on: data.document.created_on.split(".")[0],
-            src_warehouse_id: data.document.warehouse_id,
-            document_date: data.document.document_date.slice(0, 10),
+        let document_statuses = fact[FACTS.DOCUMENT_STATUS].items;
+        let document_status = document_statuses.find(document_status => `${document_status.document_status_id}` === `${data.document.document_status_id}`);
+        if (document_status) {
+            return {
+                document_id: data.document.document_id,
+                internal_document_id: data.document.internal_document_id,
+                created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_user_id) || '',
+                created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_admin_id) || '',
+                created_on: data.document.created_on.split(".")[0],
+                src_warehouse_id: data.document.warehouse_id,
+                document_date: data.document.document_date.slice(0, 10),
 
-            name: data.specific.selector_pm_plan.name,
-            district_id: data.specific.selector_pm_plan.node.district_id,
-            node_id: data.specific.selector_pm_plan.node_id,
-            station_id: data.specific.selector_pm_plan.station_id,
-            start_on: data.specific.selector_pm_plan.start_on.slice(0, 10),
-            line_custom: returnFullArrayLineCustom(data.specific.selector_pm_plan.selector_checklist_group),
-            line_equipment: returnFullArrayLineEquipment(data.specific.selector_pm_plan.selector_checklist_group),
+                name: data.specific.selector_pm_plan.name,
+                district_id: data.specific.selector_pm_plan.node.district_id,
+                node_id: data.specific.selector_pm_plan.node_id,
+                station_id: data.specific.selector_pm_plan.station_id,
+                start_on: data.specific.selector_pm_plan.start_on.slice(0, 10),
+                line_custom: returnFullArrayLineCustom(data.specific.selector_pm_plan.selector_checklist_group),
+                line_equipment: returnFullArrayLineEquipment(data.specific.selector_pm_plan.selector_checklist_group),
+                status_name_th: document_status.status
+            }
         }
     } else if (document_type_group_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM) {
         console.log("data", data)
@@ -1876,24 +1918,24 @@ const responseToFormState = (fact, data, document_type_group_id) => {
         let node = nodes.find(node => `${node.node_id}` === `${data.specific.location_node_id}`)
 
         if (checklist || node) {
-        return {
-            document_id: data.document.document_id,
-            internal_document_id: data.document.internal_document_id,
-            created_on: data.document.created_on.split(".")[0],
-            document_date: data.document.document_date.slice(0, 10),
+            return {
+                document_id: data.document.document_id,
+                internal_document_id: data.document.internal_document_id,
+                created_on: data.document.created_on.split(".")[0],
+                document_date: data.document.document_date.slice(0, 10),
 
-            wo_checklist_status_id: data.specific.wo_checklist_status_id,
-            selector_checklist_line_item_id: data.specific.selector_checklist_line_item_id,
-            checklist_id: checklist.checklist_id,
-            name: data.specific.selector_checklist_line_item[0].name,
-            freq: data.specific.selector_checklist_line_item[0].freq,
-            freq_unit_id: data.specific.selector_checklist_line_item[0].freq_unit_id,
-            checklist_line_item_use_equipment: data.specific.selector_checklist_line_item[0].selector_checklist_line_item_use_equipment,
+                wo_checklist_status_id: data.specific.wo_checklist_status_id,
+                selector_checklist_line_item_id: data.specific.selector_checklist_line_item_id,
+                checklist_id: checklist.checklist_id,
+                name: data.specific.selector_checklist_line_item[0].name,
+                freq: data.specific.selector_checklist_line_item[0].freq,
+                freq_unit_id: data.specific.selector_checklist_line_item[0].freq_unit_id,
+                checklist_line_item_use_equipment: data.specific.selector_checklist_line_item[0].selector_checklist_line_item_use_equipment,
 
-            location_district_id: node.district_id,
-            location_node_id: data.specific.location_node_id,
-            location_station_id: data.specific.location_station_id,
-        }
+                location_district_id: node.district_id,
+                location_node_id: data.specific.location_node_id,
+                location_station_id: data.specific.location_station_id,
+            }
         }
     }
 }
@@ -1901,16 +1943,20 @@ const responseToFormState = (fact, data, document_type_group_id) => {
 function transformDocumentResponseToFormState(document_part, fact, document_type_group_id) {
     // var created_on = new Date(document_part.created_on);
     // created_on.setHours(created_on.getHours() + 7)
-    // if (document_type_group_id === DOCUMENT_TYPE_ID.SS101) {
-    return {
-        document_id: document_part.document_id,
-        internal_document_id: document_part.internal_document_id,
-        document_date: document_part.document_date.split("T")[0],
-        created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_user_id) || '',
-        created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_admin_id) || '',
-        created_on: document_part.created_on.split(".")[0],
-        refer_to_document_id: document_part.refer_to_document_id,
-        refer_to_document_internal_id: document_part.refer_to_document_internal_id
+    let document_statuses = fact[FACTS.DOCUMENT_STATUS].items;
+    let document_status = document_statuses.find(document_status => `${document_status.document_status_id}` === `${document_part.document_status_id}`);
+    if (document_status) {
+        return {
+            document_id: document_part.document_id,
+            internal_document_id: document_part.internal_document_id,
+            document_date: document_part.document_date.split("T")[0],
+            created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_user_id) || '',
+            created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], document_part.created_by_admin_id) || '',
+            created_on: document_part.created_on.split(".")[0],
+            refer_to_document_id: document_part.refer_to_document_id,
+            refer_to_document_internal_id: document_part.refer_to_document_internal_id,
+            status_name_th: document_status.status
+        }
     }
 }
 
@@ -2017,7 +2063,7 @@ function returnFullArrayLossLineItemNull(loss_line_items) {
         line_number: '',
         description: '',   // รายการ
         quantity: '',
-        uom_code: '',
+        uom_name: '',
         price: '',
         remark: '',
     }
@@ -2472,7 +2518,7 @@ export const validateLineNumberInternalItemIDFieldHelper = (document_type_group_
                 setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
                 setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
                 setFieldValue(fieldName + `.line_number`, index + 1, false);
-                setFieldValue(fieldName + `.item_status_id`, 2, false);
+                setFieldValue(fieldName + `.item_status_id`, 1, false);
                 setFieldValue(fieldName + `.per_unit_price`, 0, false);
             }
             // else {
@@ -2977,6 +3023,10 @@ export const checkBooleanForEditHelper = (values, decoded_token, fact) => (
     values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.DRAFT)
     && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
 
+export const checkBooleanForEditCheckNodeIDHelper = (values, decoded_token, fact) => (
+    values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.DRAFT)
+    && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.specific.location_node_id) === decoded_token.has_position[0].node_id)
+
 export const filterAlsEquipment = (equipmentData, formData) => {
     let tempEquipmentData = [];
     equipmentData.map((mockup, i) => {
@@ -3001,3 +3051,9 @@ export const changeTheam = () => {
     // False คือ version Theam แบบเก่า
     // return false;
 }
+
+// #####################################
+// ################ ALS ################
+// #####################################
+
+

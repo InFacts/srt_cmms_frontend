@@ -391,10 +391,12 @@ export const handleFooterClickReject = makeActionCreator(HANDLE_CLICK_REJECT);
 export const handleFooterClickBack = makeActionCreator(HANDLE_CLICK_BACK);
 export const handleFooterClickCheckApproval = makeActionCreator(HANDLE_CLICK_CHECK_APPROVAL);
 export const handleFooterClickApprovalOrder = makeActionCreator(HANDLE_CLICK_APPROVAL_ORDER);
+export const handleFooterClickGotIt = makeActionCreator(HANDLE_CLICK_GOT_IT);
 export const handleFooterClickFastTrack = makeActionCreator(HANDLE_CLICK_FAST_TRACK);
 export const handleFooterClickApprovalProcess = makeActionCreator(HANDLE_CLICK_CANCEL_APPROVAL_PROCESS);
 export const handleFooterClickVoid = makeActionCreator(HANDLE_CLICK_VOID);
 export const handleFooterClickApprovalDone = makeActionCreator(HANDLE_CLICK_APPROVAL_DONE);
+
 
 export const handleClickBackToSpareMain = (routeLocation) => {
     console.log("routeLocation", routeLocation.search("pmt"))
@@ -414,9 +416,9 @@ export const ACTION_TO_HANDLE_CLICK = {
     [FOOTER_ACTIONS.SAVE]: handleFooterClickSave,
     [FOOTER_ACTIONS.SEND]: handleFooterClickSend,
     [FOOTER_ACTIONS.APPROVAL]: handleFooterClickApproval,
-    [FOOTER_ACTIONS.CHECK_APPROVAL]: handleFooterClickApproval,
-    [FOOTER_ACTIONS.APPROVAL_ORDER]: handleFooterClickApproval,
-    [FOOTER_ACTIONS.GOT_IT]: handleFooterClickApproval,
+    [FOOTER_ACTIONS.CHECK_APPROVAL]: handleFooterClickCheckApproval,
+    [FOOTER_ACTIONS.APPROVAL_ORDER]: handleFooterClickApprovalOrder,
+    [FOOTER_ACTIONS.GOT_IT]: handleFooterClickGotIt,
     [FOOTER_ACTIONS.FAST_TRACK]: handleFooterClickFastTrack,
     [FOOTER_ACTIONS.REJECT]: handleFooterClickReject,
 }
