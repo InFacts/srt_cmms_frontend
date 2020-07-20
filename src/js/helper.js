@@ -3082,4 +3082,11 @@ export const FilterByAdjustmentBar = (equipment_installation, equipment_group, a
     }
     return false;
 }
-
+export const FilterByAdjustmentBarSS101 = (item, adjustmentBar) => {
+    if (adjustmentBar.district_id === "ทั้งหมด" || adjustmentBar.district_id == item.specific.location_district_id) {
+        if (adjustmentBar.node_id === "ทั้งหมด" || adjustmentBar.node_id == item.specific.location_node_id) {
+            return true;
+        }
+    }
+    return false;
+}

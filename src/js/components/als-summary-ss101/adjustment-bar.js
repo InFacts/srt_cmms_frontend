@@ -8,6 +8,7 @@ import { validatedataDocumentField } from '../../helper';
 const AdjustmentBarComponent = () => {
 
     const { values, setFieldValue, validateField } = useFormikContext();
+    const factEquipmentGroup = useSelector((state) => ({ ...state.api.fact['equipment-group'] }), shallowEqual);
     const factDistricts = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
     const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
     const validateDocumentLocationDistrictIDField = (...args) => validatedataDocumentField("district_id", setFieldValue, ...args)
@@ -27,13 +28,13 @@ const AdjustmentBarComponent = () => {
 
                 <div className="space-10px" />
 
-                <div className="adjustment-bar-inner-text">ประเภทการตรวจซ่อม</div  >
-                <SelectNoChildrenInput
-                    name="fix_type" >
-                    <option value='' selected>ทั้งหมด</option>
-                    <option value='1' >โทรศัพท์</option>
-                    <option value='2' >จดหมาย</option>
-                    <option value='3' >Work Request</option>
+                <div className="adjustment-bar-inner-text">กลุ่มอุปกรณ์</div  >
+                <SelectNoChildrenInput 
+                    name="equipment_group_id" >
+                    <option value='ทั้งหมด'>ทั้งหมด</option>
+                    {factEquipmentGroup.items.map(function ({ equipment_group_id, name, description }) {
+                    return <option value={equipment_group_id} key={equipment_group_id}> {description}  </option>
+                    })}
                 </SelectNoChildrenInput>
 
                 <div className="space-10px" />

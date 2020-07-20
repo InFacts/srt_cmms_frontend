@@ -23,7 +23,7 @@ import AdjustmentBarComponent from './adjustment-bar';
 import {randomGroupedBarGraphData , randomGroupedBarGraphDataMTBF, randomColorMapData,randomPieChartData, randomPieChartDataSystemType} from './mockup-data';
 
 import BgGreen from '../../../images/als/bg_als.jpg';
-import { ALSGetDocumentSS101, changeTheam, FilterByAdjustmentBar } from '../../helper.js'
+import { ALSGetDocumentSS101, changeTheam, FilterByAdjustmentBarSS101 } from '../../helper.js'
 const AlsEquipmentStatusComponent = () => {
     const dispatch = useDispatch();
     const loggedIn = useSelector(state => state.token.isLoggedIn);
@@ -40,8 +40,7 @@ const AlsEquipmentStatusComponent = () => {
     useEffect(() => {
         let begin_document_date = (values.year-543).toString() + "-01-01";
         let end_document_date = (values.year-543).toString() + "-12-31";
-        let groups = ["ระบบอาณัติสัญญาณ", "ระบบสายส่ง", "ระบบทางผ่านเครื่องกั้นถนน", "ระบบเครื่องทางสะดวก", 
-                    "ระบบโทรศัพท์", "ระบบไฟฟ้า", "ระบบโทรพิมพ์", "ระบบวิทยุ", "ระบบอิเล็กทรอนิกส์"]; 
+        let groups = ["ระบบอาณัติสัญญาณ", "ระบบสายส่ง", "ระบบทางผ่านเครื่องกั้นถนน", "ระบบเครื่องทางสะดวก", "ระบบโทรศัพท์", "ระบบไฟฟ้า", "ระบบโทรพิมพ์", "ระบบวิทยุ", "ระบบอิเล็กทรอนิกส์"]; 
         let count_groups = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         let count_color_map = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         let results = []
@@ -49,8 +48,10 @@ const AlsEquipmentStatusComponent = () => {
             let data_ss101 = data.results;
             data_ss101.map((item) => { 
                 let d = new Date(item.document.document_date);
-                count_color_map[d.getMonth()-1]++;
-                count_groups[item.specific.system_type.system_type_group_id]++; 
+                if (FilterByAdjustmentBarSS101(item, values)) {
+                    count_color_map[d.getMonth()-1]++;
+                    count_groups[item.specific.system_type.system_type_group_id]++;
+                }
             })
             // PieChartDataSystemType
             for (let i = 0; i < groups.length; i++) {
@@ -73,7 +74,7 @@ const AlsEquipmentStatusComponent = () => {
                 values_data.push(_tempRow)
             }
             setFieldValue('maintenance_system', results);
-            setFieldValue('accident_color_map', {values_data, xLabels, yLabels});
+            setFieldValue('accident_color_map', {values:{values_data}, xLabels, yLabels});
         })
     }, [values.year, values.district_id, values.node_id]);
 
@@ -133,7 +134,7 @@ const AlsEquipmentStatusComponent = () => {
                                 <div className="row_bootstrap no-gutters">
                                     <div className="col-12"
                                         // style={{ border: "1px purple solid" }}
-                                    >
+                                    >   
                                         <PieChart 
                                             title="สถิติการซ่อมบำรุงในแต่ละหมวด"
                                             data={randomPieChartData()}
@@ -151,11 +152,11 @@ const AlsEquipmentStatusComponent = () => {
                                     <div className="col-12"
                                         // style={{ border: "1px purple solid" }}
                                     >
-                                        {console.log("values.accident_color_map", values.accident_color_map)}
+                                        {console.log("values.accident_color_map >>>>", values.accident_color_map)}
                                         {console.log("randomColorMapData()", randomColorMapData())}
                                         <ColorMap 
                                             title="สถิติจำนวนครั้งการขัดข้องของแขวงเทียบแต่ละเดือน"
-                                            data={values.accident_color_map !== {} ? values.accident_color_map:randomPieChartDataSystemType()}
+                                            data={values.accident_color_map }
                                             // data={randomColorMapData()}
                                         />
                                     </div>
