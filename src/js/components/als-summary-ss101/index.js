@@ -20,7 +20,7 @@ import ColorMap from './d3-color-map';
 import PieChart from '../common/d3-pie-chart';
 
 import AdjustmentBarComponent from './adjustment-bar';
-import {randomGroupedBarGraphData , randomGroupedBarGraphDataMTBF, randomColorMapData,randomPieChartData, randomPieChartDataSystemType} from './mockup-data';
+// import {randomGroupedBarGraphData , randomGroupedBarGraphDataMTBF, randomColorMapData,randomPieChartData, randomPieChartDataSystemType} from './mockup-data';
 
 import BgGreen from '../../../images/als/bg_als.jpg';
 import { ALSGetDocumentSS101, changeTheam, FilterByAdjustmentBarSS101 } from '../../helper.js'
@@ -95,14 +95,14 @@ const AlsEquipmentStatusComponent = () => {
 
             let results_loss = [];
             let results_accident = [];
-            let now_year = values.year-543
-            let prev_year = values.year-543 - 1
+            let now_year = values.year
+            let prev_year = values.year - 1
             results_loss.columns = [prev_year, now_year];
-            results_loss.yAxis = "ค่าใช้จ่ายในการขัดข้อง"
+            results_loss.yAxis = "ค่าใช้จ่ายในการขัดข้อง (บาท)"
             results_loss.xAxis = "เดือน"
 
             results_accident.columns = [prev_year, now_year];
-            results_accident.yAxis = "ระยะเวลาขัดข้อง";
+            results_accident.yAxis = "ระยะเวลาขัดข้อง (ชั่วโมง)";
             results_accident.xAxis = "เดือน";
     
             let xGroups = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
@@ -123,7 +123,7 @@ const AlsEquipmentStatusComponent = () => {
             
             let results_groups_interrupt = [];
             for (let i = 0; i < groups_interrupt.length; i++) {
-                results_groups_interrupt.push({key: groups_interrupt[i], value: Math.floor(Math.random()*100)});
+                results_groups_interrupt.push({key: groups_interrupt[i], value: count_interrupt[i]});
             }
             setFieldValue('loss_ss101', results_loss);
             setFieldValue('accident_ss101', results_accident);
