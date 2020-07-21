@@ -4,7 +4,7 @@ export const randomGroupedBarGraphData = () => {
     let results = [];
     results.columns = ["2018", "2019"];
     results.yAxis = "ค่าใช้จ่ายในการขัดข้อง"
-    results.xAxis = "ประเภท"
+    results.xAxis = "เดือน"
     let xGroups = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
 
     for (let i = 0; i < xGroups.length; i++) {
@@ -14,14 +14,14 @@ export const randomGroupedBarGraphData = () => {
             [results.columns[1]]: Math.random() * 8000,
         });
     }
-
+    console.log("results ..", results)
     return results;
 }
 export const randomGroupedBarGraphDataMTBF = () => {
     let results = [];
     results.columns = ["2018", "2019"];
-    results.yAxis = "ระยะเวลาเฉลี่ยก่อนการเสียหาย"
-    results.xAxis = "ประเภท"
+    results.yAxis = "ระยะเวลาขัดข้อง"
+    results.xAxis = "เดือน"
     let xGroups = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
 
     for (let i = 0; i < xGroups.length; i++) {
@@ -57,7 +57,7 @@ export const randomColorMapData = () => {
 
 // Data Format is referenced from https://observablehq.com/@marialuisacp/pie-chart
 export const randomPieChartData = () => {
-    let groups = ["จากอายุการใช้งาน", "จากอุบัติเหตุ", "จากภัยธรรมชาติ", "จากการบำรุงรักษาไม่ต่อเนี่อง", "จากอุปกรณ์ไม่ได้มาตรฐาน", "สาเหตุอื่นๆ"];
+    let groups = ["รอเครื่องมือและอะไหล่", "ธรรมชาติไม่เอื้ออำนวย", "รอเวลาในการซ่อมแก้ไข", "พนักงานไม่เพียงพอ", "พาหนะไม่มี", "ระยะทางไกล", "สาเหตุอื่นๆ", "ไม่มี"];
     let results = [];
     
     for (let i = 0; i < groups.length; i++) {

@@ -13,7 +13,7 @@ const AdjustmentBarComponent = () => {
     const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
     const validateDocumentLocationDistrictIDField = (...args) => validatedataDocumentField("district_id", setFieldValue, ...args)
     const validateDocumentLocationNodeIDField = (...args) => validatedataDocumentField("node_id", setFieldValue, ...args)
-
+    let thisYear = new Date().getFullYear() + 543
     return (
         <div className="gray-background adjustment-bar">
             <h5 className="adjustment-bar-name">ปรับแต่งข้อมูลของภาพรวม</h5>
@@ -21,8 +21,8 @@ const AdjustmentBarComponent = () => {
                 <div className="adjustment-bar-inner-text">รายงานประจำปี {values.year}</div>
                 <RangeInput
                     name="year"
-                    min="2562"
-                    max="2563"
+                    min="2563"
+                    max={thisYear}
                     step="1"
                 />
 
