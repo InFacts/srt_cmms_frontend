@@ -31,10 +31,12 @@ function ScatterPlot({ data, chartSettings, title }) {
 
     // Scales are made with .nice() so that ticks are made 
     const xScale = scaleLinear()
-        .domain(extent(data, d => d.x)).nice()
+        // .domain(extent(data, d => d.x)).nice()
+        .domain([0, Math.max( max(data, d => d.x), max(data, d => d.y)) ]).nice()
         .range([0, dms.boundedWidth]);
     const yScale = scaleLinear()
-        .domain(extent(data, d => d.y)).nice()
+        // .domain(extent(data, d => d.y)).nice()
+        .domain([0, Math.max( max(data, d => d.x), max(data, d => d.y)) ]).nice()
         .range([dms.boundedHeight, 0]);
 
     useEffect(() => {
@@ -90,21 +92,23 @@ function ScatterPlot({ data, chartSettings, title }) {
                     {/* Grid */}
                     {xScale.ticks().map((tick) => (
                         <line 
+                            key={`xScale${tick}`}
                             x1={0.5 + xScale(tick)}
                             x2={0.5 + xScale(tick)}
                             y1={0}
                             y2={dms.boundedHeight}
-                            stroke-opacity={0.1}
+                            strokeOpacity={0.1}
                             stroke={"#000"}
                         />
                     ))}
                     {yScale.ticks().map((tick) => (
                         <line 
+                            key={`yScale${tick}`}
                             y1={0.5 + yScale(tick)}
                             y2={0.5 + yScale(tick)}
                             x1={0}
                             x2={dms.boundedWidth}
-                            stroke-opacity={0.1}
+                            strokeOpacity={0.1}
                             stroke={"#000"}
                         />
                     ))}
@@ -134,8 +138,8 @@ function ScatterPlot({ data, chartSettings, title }) {
                             // Invert to find x value (X2=0.95*Y2)
                             x2={xScale(yScale.invert(0)*0.95)}
 
-                            stroke-dasharray="3,3"
-                            stroke-opacity={0.5}
+                            strokeDasharray="3,3"
+                            strokeOpacity={0.5}
                             stroke="steelblue"
                         />
                         {/* Bottom Line x<1.05y */}
@@ -148,8 +152,8 @@ function ScatterPlot({ data, chartSettings, title }) {
                             // Invert to find y value (Y2=1/0.95*X2)
                             y2={yScale(xScale.invert(dms.boundedWidth)*1/1.05)}
                             
-                            stroke-dasharray="3,3"
-                            stroke-opacity={0.5}
+                            strokeDasharray="3,3"
+                            strokeOpacity={0.5}
                             stroke="steelblue"
                         />
                         {/* Path to fill the Comparison Line */}
@@ -216,15 +220,21 @@ function ScatterPlot({ data, chartSettings, title }) {
                     {data.map((d, i) => (
                         <circle
                             key={i}
-                            r={1.3}
+                            r={2}
                             cx={xScale(d.x)}
                             cy={yScale(d.y)}
+                            // fill={!data.hasComparisonLine ? 
+                            //         "steelblue" : 
+                            //         d.x > 1.05*d.y ? "orange" // Actual > Plan
+                            //         : d.x < 0.95*d.y ?  "red" :  // Actual < Plan
+                            //         "green" // 0.95y < x < 1.05y
+                            //     }
                             fill={!data.hasComparisonLine ? 
-                                    "steelblue" : 
-                                    d.x > 1.05*d.y ? "orange" // Actual > Plan
-                                    : d.x < 0.95*d.y ?  "red" :  // Actual < Plan
-                                    "green" // 0.95y < x < 1.05y
-                                }
+                                "steelblue" : 
+                                d.colorState > 0 ? "orange" // Actual > Plan
+                                : d.colorState < 0 ?  "red" :  // Actual < Plan
+                                "green" // 0.95y < x < 1.05y
+                            }
                         >
                             <title>{d.name}</title>
                         </circle>

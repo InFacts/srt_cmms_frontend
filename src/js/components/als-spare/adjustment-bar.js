@@ -17,8 +17,8 @@ const AdjustmentBarComponent = () => {
                 <div className="adjustment-bar-inner-text">รายงานประจำปี {values.year}</div>
                 <RangeInput
                     name="year"
-                    min="2560"
-                    max="2563"
+                    min="2018"
+                    max="2020"
                     step="1"
                 />
 

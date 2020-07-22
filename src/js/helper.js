@@ -1238,8 +1238,9 @@ export const editMasterData = (data, document_type_group_id) => new Promise((res
 const BASE_URL = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}`;
 
 // GET  /statistic/goods-monthly-summary
-export const fetchStatisticGoodsMonthlySummary = (beginReportingPeriodID = null, endReportingPeriodID = null) => new Promise((resolve, reject) => {
-    const url = `${BASE_URL}/statistic/goods-monthly-summary?${beginReportingPeriodID ? `begin_reporting_period_id=${beginReportingPeriodID}&` : ''}${endReportingPeriodID ? `end_reporting_period_id=${endReportingPeriodID}&` : ''}page_size=1000`;
+export const fetchStatisticGoodsMonthlySummary = (beginReportingPeriodID = null, endReportingPeriodID = null, warehouseIDFilter=null, itemIDFilter=null) => new Promise((resolve, reject) => {
+    const url = `${BASE_URL}/statistic/goods-monthly-summary?${beginReportingPeriodID ? `begin_reporting_period_id=${beginReportingPeriodID}&`: ''}${endReportingPeriodID ? `end_reporting_period_id=${endReportingPeriodID}&`: ''}${warehouseIDFilter ? `warehouse_id=${warehouseIDFilter[0]}` : ''}${itemIDFilter ? `item_id=${itemIDFilter[0]}` : ''}page_size=1000`;
+
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             let results = res.data.results;
@@ -3157,5 +3158,38 @@ export const changeTheam = () => {
 // #####################################
 // ################ ALS ################
 // #####################################
+// GET /document/ss101/search
+export const ALSGetDocumentSS101 = (begin_document_date, end_document_date) => new Promise((resolve, reject) => {
+    let page_number = 0;
+    let page_size = 25;
+    // let begin_document_date = "2020-07-16";
+    // let end_document_date = "2020-07-16";
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/ss101/search?page_number=${page_number}&page_size=${page_size}&begin_document_date=${begin_document_date}&end_document_date=${end_document_date}`;
+    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then(res => {
+            resolve(res.data);
+        }).catch(function (err) {
+            reject(err)
+        })
+});
 
-
+export const FilterByAdjustmentBar = (equipment_installation, equipment_group, adjustmentBar) => {
+    if (equipment_installation.length !== 0) {
+        if (adjustmentBar.equipment_group_id === "ทั้งหมด" || adjustmentBar.equipment_group_id == equipment_group.equipment_group_id) {
+            if (adjustmentBar.district_id === "ทั้งหมด" || adjustmentBar.district_id == equipment_installation[0].location_district_id) {
+                if (adjustmentBar.node_id === "ทั้งหมด" || adjustmentBar.node_id == equipment_installation[0].location_node_id) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+export const FilterByAdjustmentBarSS101 = (item, adjustmentBar) => {
+    if (adjustmentBar.district_id === "ทั้งหมด" || adjustmentBar.district_id == item.specific.location_district_id) {
+        if (adjustmentBar.node_id === "ทั้งหมด" || adjustmentBar.node_id == item.specific.location_node_id) {
+            return true;
+        }
+    }
+    return false;
+}

@@ -25,7 +25,6 @@ const EquipmentStatusListComponent = () => {
                 </tr>
                 </thead>
                 <tbody>
-                    {console.log("<<<<<<  mapData", mapData) }
                     {mapData.map((data, i)=> (
                         <tr key={i} id={i}>
                             <td className="edit-padding">{data.name.name}</td>

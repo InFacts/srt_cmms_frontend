@@ -46,8 +46,8 @@ const ColorMap = ({ data, chartSettings, title}) => {
             .domain(yDomain)
             .range([0, dms.boundedHeight])
     ), [dms.boundedHeight, yDomain.join("-")])
-
-    const color = scaleSequential([0, max(data.values, d => max(d))], interpolateYlOrRd);
+    
+    const color = scaleSequential([0, max(data.values_data, d => max(d))], interpolateYlOrRd);
 
 
     // set Domain of x and y after new data.
@@ -121,7 +121,7 @@ const ColorMap = ({ data, chartSettings, title}) => {
 
 
                     {/* For Each Value */}
-                    {data.values.map((rowValues, rowIndex) => (
+                    {data.values_data.map((rowValues, rowIndex) => (
                         <g transform={`translate(0, ${yScale(data.yLabels[rowIndex])})`}> 
                             {rowValues.map((value, colIndex) => (
                                 <rect 
