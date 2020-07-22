@@ -82,7 +82,7 @@ const MainModule = (props) => {
             || url === "/pmt-equipment-installation" || url === "/pmt-fixed-asset"
             || url === "/pmt-create-checklist" || url === "/pmt-all-checklist"
             || url === "/pmt-create-schedule-checklist" || url === "/pmt-report"
-            || url === "/pmt-list-fixed-asset") {
+            || url === "/pmt-list-fixed-asset" || url === "/pmt-all-checklist-fixed-asset") {
             return "#9ADFF9";
         }
         if (url === "/main-als" || url === "/als-spare"

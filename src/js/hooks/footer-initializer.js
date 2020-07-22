@@ -330,6 +330,7 @@ const useFooterInitializer = (document_type_id) => {
                     dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
                 }
             }).catch((err) => {
+                console.log("Validate Failed ", err);
                 console.warn("Validate Failed ", err.response);
                 dispatch(navBottomError('[PUT]', 'Do not have document', err));
                 dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());

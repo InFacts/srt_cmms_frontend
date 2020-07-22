@@ -26,9 +26,9 @@ const BottomContent = (props) => {
               <tr>
                 <th className="font text-center" style={{ width: "30px" }}>#</th>
                 <th className="font" style={{ width: "300px" }}>แผน</th>
-                <th className="font text-center" style={{ width: "100px" }}>ความถี่</th>
-                <th className="font text-center" style={{ width: "100px" }}>หน่วย</th>
-                <th className="font text-center" style={{ width: "100px" }}>Active</th>
+                <th className="font text-center" style={{ width: "150px" }}>ความถี่</th>
+                <th className="font text-center" style={{ width: "150px" }}>หน่วย</th>
+                {/* <th className="font text-center" style={{ width: "100px" }}>Active</th> */}
                 <th className="font" style={{ width: "300px" }}>หมายเหตุ</th>
               </tr>
             </thead>
@@ -47,7 +47,7 @@ const BottomContent = (props) => {
                         <option value='3'>ปี</option>
                       </SelectNoChildrenInput>
                     </td>
-                    <td className="edit-padding text-center">{list.active && list.active.data[0] === 1 ? "เปิดการใช้งาน" : "ปิดการใช้งาน"}</td>
+                    {/* <td className="edit-padding text-center">{list.active && list.active.data[0] === 1 ? "เปิดการใช้งาน" : "ปิดการใช้งาน"}</td> */}
                     <td className="edit-padding">{}</td>
                   </tr>
                 )

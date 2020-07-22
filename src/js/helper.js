@@ -270,12 +270,12 @@ export const getFieldFromFact = (subFact, fieldName, queryString, fieldQuery) =>
     return null;
 }
 
-export const getItemNamefromItemID = (itemFact, itemID) =>{
-    return getFieldFromFact(itemFact, "item_id", itemID, "description"); 
+export const getItemNamefromItemID = (itemFact, itemID) => {
+    return getFieldFromFact(itemFact, "item_id", itemID, "description");
 }
 
-export const getItemInternalIDfromItemID = (itemFact, itemID) =>{
-    return getFieldFromFact(itemFact, "item_id", itemID, "internal_item_id"); 
+export const getItemInternalIDfromItemID = (itemFact, itemID) => {
+    return getFieldFromFact(itemFact, "item_id", itemID, "internal_item_id");
 }
 
 export const getNumberFromEscapedString = (escapedString) => {
@@ -683,6 +683,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             summary_cause_condition: values.summary_cause_condition,
             loss: values.loss,
             car_type_id: values.car_type_id ? parseInt(values.car_type_id) : null,
+            cargo_id: values.cargo_id ? parseInt(values.cargo_id) : null,
             interrupt_id: values.interrupt_id ? parseInt(values.interrupt_id) : null,
             service_method_id: values.service_method_id ? parseInt(values.service_method_id) : null,
             service_method_desc: values.service_method_desc,
@@ -847,59 +848,148 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             name: values.name,
             active: true,
             node_id: parseInt(values.node_id),
-            station_id: parseInt(values.station_id),
-            start_on: values.start_on + 'T13:38:00+07:00',
+            start_on: values.start_on + 'T23:02:00+07:00',
         }
 
+        // checklist สำหรับ station
+        let filter_item = [];
+        let items = fact.checklist.items;
+        items.map((item) => {
+            if (item.checklist_group_id !== 1) {
+                filter_item.push({
+                    document_id: values.document_id,
+                    checklist_name: item.checklist_name,
+                    remark: "string",
+                    checklist_id: item.checklist_id,
+                    is_have: true
+                })
+            }
+        })
+
+        var w1_part = [];
+        let line_index = '';
+        values.w1_list.map((line_item, index) => {
+            line_index = index + 1
+            if (line_item.station_id || line_item.checklist_id) {
+                w1_part.push({
+                    document_id: values.document_id,
+                    line_number: line_index,
+                    name_group: line_item.equipment_id ? "ระบบเครื่องกั้นถนน" : "ระบบอาณัติสัญญาณ//ระบบโทรมานาคม",
+                    weekly_plan_id: 1,
+                    station_id: line_item.station_id ? parseInt(line_item.station_id) : null,
+                    equipment_item_id: line_item.equipment_id ? parseInt(line_item.equipment_id) : null,
+                    selector_checklist:
+                        line_item.equipment_id && line_item.equipment_id ?
+                            [
+                                {
+                                    document_id: values.document_id,
+                                    checklist_name: line_item.checklist_th,
+                                    remark: "string",
+                                    checklist_id: parseInt(line_item.checklist_id),
+                                    is_have: true
+                                }
+                            ]
+                            :
+                            filter_item
+
+                });
+            }
+        })
+
+        var w2_part = [];
+        values.w2_list.map((line_item, index) => {
+            line_index = index + 1
+            if (line_item.station_id || line_item.checklist_id) {
+                w2_part.push({
+                    document_id: values.document_id,
+                    line_number: line_index,
+                    name_group: line_item.equipment_id ? "ระบบเครื่องกั้นถนน" : "ระบบอาณัติสัญญาณ//ระบบโทรมานาคม",
+                    weekly_plan_id: 2,
+                    station_id: line_item.station_id ? parseInt(line_item.station_id) : null,
+                    equipment_item_id: line_item.equipment_id ? parseInt(line_item.equipment_id) : null,
+                    selector_checklist:
+                        line_item.equipment_id && line_item.equipment_id ?
+                            [
+                                {
+                                    document_id: values.document_id,
+                                    checklist_name: line_item.checklist_th,
+                                    remark: "string",
+                                    checklist_id: parseInt(line_item.checklist_id),
+                                    is_have: true
+                                }
+                            ]
+                            :
+                            filter_item
+
+                });
+            }
+        })
+
+        var w3_part = [];
+        values.w3_list.map((line_item, index) => {
+            line_index = index + 1
+            if (line_item.station_id || line_item.checklist_id) {
+                w3_part.push({
+                    document_id: values.document_id,
+                    line_number: line_index,
+                    name_group: line_item.equipment_id ? "ระบบเครื่องกั้นถนน" : "ระบบอาณัติสัญญาณ//ระบบโทรมานาคม",
+                    weekly_plan_id: 3,
+                    station_id: line_item.station_id ? parseInt(line_item.station_id) : null,
+                    equipment_item_id: line_item.equipment_id ? parseInt(line_item.equipment_id) : null,
+                    selector_checklist:
+                        line_item.equipment_id && line_item.equipment_id ?
+                            [
+                                {
+                                    document_id: values.document_id,
+                                    checklist_name: line_item.checklist_th,
+                                    remark: "string",
+                                    checklist_id: parseInt(line_item.checklist_id),
+                                    is_have: true
+                                }
+                            ]
+                            :
+                            filter_item
+
+                });
+            }
+        })
+
+        var w4_part = [];
+        values.w4_list.map((line_item, index) => {
+            line_index = index + 1
+            if (line_item.station_id || line_item.checklist_id) {
+                w4_part.push({
+                    document_id: values.document_id,
+                    line_number: line_index,
+                    name_group: line_item.equipment_id ? "ระบบเครื่องกั้นถนน" : "ระบบอาณัติสัญญาณ//ระบบโทรมานาคม",
+                    weekly_plan_id: 4,
+                    station_id: line_item.station_id ? parseInt(line_item.station_id) : null,
+                    equipment_item_id: line_item.equipment_id ? parseInt(line_item.equipment_id) : null,
+                    selector_checklist:
+                        line_item.equipment_id && line_item.equipment_id ?
+                            [
+                                {
+                                    document_id: values.document_id,
+                                    checklist_name: line_item.checklist_th,
+                                    remark: "string",
+                                    checklist_id: parseInt(line_item.checklist_id),
+                                    is_have: true
+                                }
+                            ]
+                            :
+                            filter_item
+
+                });
+            }
+        })
+
         // ต้องเป็น Array selector_checklist_group_part
-        let selector_checklist_group_part = []
-        // ของ Custom line item
-        let line_number;
-        values.line_custom.map((line_custom, index) => {
-            if (line_custom.checklist_id) {
-                let custom_groups = fact[FACTS.CHECKLIST_CUSTOM_GROUP].items;
-                let custom_group = custom_groups.find(custom_group => `${custom_group.checklist_group_id}` === `${line_custom.checklist_group_id}`); // Returns undefined if not found
-                line_number = index + 1;
-                if (custom_group) {
-                    selector_checklist_group_part.push({
-                        document_id: values.document_id,
-                        name_group: custom_group.checklist_group_name,
-                        unit_maintenance_location_id: parseInt(line_custom.unit_maintenance_location_id),
-                        line_number: line_number,
-                        checklist: [
-                            {
-                                checklist_id: parseInt(line_custom.checklist_id),
-                                equipment_id: null,
-                                quantity: line_custom.quantity_location,
-                            }
-                        ]
-                    })
-                }
-            }
-        })
-        // ของ Equipment line item
-        values.line_equipment.map((line_equipment, index) => {
-            if (line_equipment.checklist_id) {
-                let equipment_groups = fact[FACTS.CHECKLIST_EQUIPMENT_GROUP].items;
-                let equipment_group = equipment_groups.find(equipment_group => `${equipment_group.checklist_group_id}` === `${line_equipment.checklist_group_id}`); // Returns undefined if not found
-                console.log("equipment_group", equipment_group)
-                if (equipment_group) {
-                    selector_checklist_group_part.push({
-                        document_id: values.document_id,
-                        name_group: equipment_group.name,
-                        unit_maintenance_location_id: parseInt(line_equipment.unit_maintenance_location_id),
-                        line_number: line_number + index + 1,
-                        checklist: [
-                            {
-                                checklist_id: parseInt(line_equipment.checklist_id),
-                                equipment_id: line_equipment.equipment_id,
-                                quantity: line_equipment.quantity_location,
-                            }
-                        ]
-                    })
-                }
-            }
-        })
+        let selector_checklist_group_part = [
+            ...w1_part,
+            ...w2_part,
+            ...w3_part,
+            ...w4_part
+        ]
 
         let specific_selector = {
             selector_pm_plan: selector_pm_plan_part,
@@ -1149,7 +1239,7 @@ const BASE_URL = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}`;
 
 // GET  /statistic/goods-monthly-summary
 export const fetchStatisticGoodsMonthlySummary = (beginReportingPeriodID = null, endReportingPeriodID = null) => new Promise((resolve, reject) => {
-    const url = `${BASE_URL}/statistic/goods-monthly-summary?${beginReportingPeriodID ? `begin_reporting_period_id=${beginReportingPeriodID}&`: ''}${endReportingPeriodID ? `end_reporting_period_id=${endReportingPeriodID}&`: ''}page_size=1000`;
+    const url = `${BASE_URL}/statistic/goods-monthly-summary?${beginReportingPeriodID ? `begin_reporting_period_id=${beginReportingPeriodID}&` : ''}${endReportingPeriodID ? `end_reporting_period_id=${endReportingPeriodID}&` : ''}page_size=1000`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             let results = res.data.results;
@@ -1200,7 +1290,7 @@ export const editDocument = (document_id, document_type_group_id, data, files, f
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}/${document_type_group_id}`;
     axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
-            console.log(" I am successful in updating contents of document_id ", document_id)
+            console.log(" I am successful in updating contents of document_id ", document_id, "res", res)
             if (res.status === 200) {
                 console.log("wow i putted successfully status 200 flag_create_approval_flow", flag_create_approval_flow, "files", files)
                 if (flag_create_approval_flow && files !== undefined) {
@@ -1238,14 +1328,36 @@ const fillObjectOfName = (object, fieldName, value) => {
                             // recursive line items
                             for (let key4 in object[key1][key2][key3]) {
                                 if (typeof object[key1][key2][key3][key4] === "object" && object[key1] !== null) {
-                                    let line_item = object[key1][key2][key3];
-                                    console.log("line_item", line_item)
-                                    if (typeof line_item === "object" && object[key1] !== null) {
-                                        if (line_item.hasOwnProperty(fieldName)) {
-                                            object[key1][key2][key3][fieldName] = value;
 
+                                    for (let key5 in object[key1][key2][key3][key4]) {
+
+                                        if (typeof object[key1][key2][key3][key4][key5] === "object" && object[key1] !== null) {
+
+                                            for (let key6 in object[key1][key2][key3][key4][key5]) {
+                                                if (typeof object[key1][key2][key3][key4][key5][key6] === "object" && object[key1] !== null) {
+                                                    let line_item = object[key1][key2][key3][key4][key5];
+
+                                                    if (typeof line_item === "object" && object[key1] !== null) {
+                                                        if (line_item.hasOwnProperty(fieldName)) {
+                                                            object[key1][key2][key3][key4][key5][fieldName] = value;
+                                                        }
+                                                    }
+                                                } else {
+                                                    // base case, stop recurring
+                                                    if (key6 === fieldName) {
+                                                        object[key1][key2][key3][key4][key5][key6] = value;
+                                                    }
+                                                }
+                                            }
+
+                                        } else {
+                                            // base case, stop recurring
+                                            if (key5 === fieldName) {
+                                                object[key1][key2][key3][key4][key5] = value;
+                                            }
                                         }
                                     }
+
                                 } else {
                                     // base case, stop recurring
                                     if (key4 === fieldName) {
@@ -1264,9 +1376,9 @@ const fillObjectOfName = (object, fieldName, value) => {
                     // base case, stop recurring
                     // console.log("I am setting ", key2, " if it is ", fieldName, " as ", value)
                     if (key2 === fieldName) {
-                        console.log("i think it is!! i am setting now ", object)
+                        // console.log("i think it is!! i am setting now ", object)
                         object[key1][key2] = value;
-                        console.log("i think it is!! i am setting now ", object)
+                        // console.log("i think it is!! i am setting now ", object)
                     }
                 }
             }
@@ -1283,7 +1395,7 @@ const fillObjectOfName = (object, fieldName, value) => {
 const mutateDataFillDocumentID = (object, document_id) => {
     let mutated_object = { ...object };
     fillObjectOfName(mutated_object, 'document_id', document_id);
-    // console.log("object", mutated_object)
+    console.log("object", mutated_object)
     return mutated_object
 }
 
@@ -1902,9 +2014,12 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                 node_id: data.specific.selector_pm_plan.node_id,
                 station_id: data.specific.selector_pm_plan.station_id,
                 start_on: data.specific.selector_pm_plan.start_on.slice(0, 10),
-                line_custom: returnFullArrayLineCustom(data.specific.selector_pm_plan.selector_checklist_group),
-                line_equipment: returnFullArrayLineEquipment(data.specific.selector_pm_plan.selector_checklist_group),
-                status_name_th: document_status.status
+                status_name_th: document_status.status,
+
+                w1_list: returnArrayLineSelector(data.specific.selector_pm_plan.selector_checklist_group, fact, 1),
+                w2_list: returnArrayLineSelector(data.specific.selector_pm_plan.selector_checklist_group, fact, 2),
+                w3_list: returnArrayLineSelector(data.specific.selector_pm_plan.selector_checklist_group, fact, 3),
+                w4_list: returnArrayLineSelector(data.specific.selector_pm_plan.selector_checklist_group, fact, 4),
             }
         }
     } else if (document_type_group_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM) {
@@ -1955,7 +2070,8 @@ function transformDocumentResponseToFormState(document_part, fact, document_type
             created_on: document_part.created_on.split(".")[0],
             refer_to_document_id: document_part.refer_to_document_id,
             refer_to_document_internal_id: document_part.refer_to_document_internal_id,
-            status_name_th: document_status.status
+            status_name_th: document_status.status,
+            remark: document_part.remark
         }
     }
 }
@@ -2077,60 +2193,36 @@ function returnFullArrayLossLineItemNull(loss_line_items) {
     return loss_line_items;
 }
 
-function returnFullArrayLineCustom(line_custom) {
-    // console.log("line_custom", line_custom)
-    let initialLineCustom = {
-        name_group: '',
-        unit_maintenance_location_id: '',
-        checklist_name: '',
-        quantity: ''
-    }
+function returnArrayLineSelector(line_custom, fact, week) {
     let line_customs = [];
-    line_custom.map((line_custom, index) => {
-        // console.log("line_custom", line_custom)
-        if (!line_custom.selector_checklist[index].equipment_id) {
+    line_custom.map((line_custom) => {
+        console.log("line_custom", line_custom)
+        let internal_item_ids = fact.equipment.items;
+        let internal_item_id = internal_item_ids.find(internal_item_id => `${internal_item_id.equipment_id}` === `${line_custom.weekly_task.equipment_item_id}`);
+        console.log("internal_item_id", internal_item_id)
+        if (line_custom.weekly_task.weekly_plan_id === week)
+        if (internal_item_id) {
+            let factXCrosses = fact[FACTS.X_CROSS].items;
+            let factXCross = factXCrosses.find(factXCross => `${factXCross.x_cross_id}` === `${internal_item_id.equipment_installation[0].x_cross_x_cross_id}`); 
+      
             line_customs.push({
-                checklist_group_id: line_custom.selector_checklist[index].checklist.checklist_group_id,
-                unit_maintenance_location_id: line_custom.unit_maintenance_location_id,
-                checklist_id: line_custom.selector_checklist[index].checklist.checklist_id,
-                quantity_location: line_custom.selector_checklist[index].quantity
+                station_id: null,
+                internal_item_id: internal_item_id.equipment_group.item.internal_item_id,
+                checklist_id: line_custom.selector_checklist[0].checklist_id,
+                x_cross_x_cross_id: internal_item_id.equipment_installation[0].x_cross_x_cross_id,
+                checklist_th: line_custom.selector_checklist[0].checklist_name,
+                x_cross_x_cross_th: factXCross.road_center
+            });
+        } else {
+            line_customs.push({
+                station_id: line_custom.weekly_task.station_id,
+                internal_item_id: null,
+                checklist_id: null,
+                x_cross_x_cross_id: null
             });
         }
     })
-    for (var i = line_custom.length; i <= 9; i++) {
-        line_customs.push({
-            ...initialLineCustom
-        });
-    }
     return line_customs;
-}
-
-function returnFullArrayLineEquipment(line_equipment) {
-    let initialLineEquipment = {
-        internal_item_id: '',
-        name_group: '',
-        unit_maintenance_location_id: '',
-        checklist_name: '',
-        quantity: ''
-    }
-    let line_equipments = [];
-    line_equipment.map((line_equipment, index) => {
-        if (line_equipment.selector_checklist[index].equipment_id) {
-            line_equipments.push({
-                internal_item_id: line_equipment.selector_checklist[index].equipment.equipment_item.item.internal_item_id,
-                checklist_group_id: line_equipment.selector_checklist[index].checklist.checklist_group_id,
-                unit_maintenance_location_id: line_equipment.unit_maintenance_location_id,
-                checklist_id: line_equipment.selector_checklist[index].checklist.checklist_id,
-                quantity_location: line_equipment.selector_checklist[index].quantity
-            });
-        }
-    })
-    for (var i = line_equipment.length; i <= 9; i++) {
-        line_equipments.push({
-            ...initialLineEquipment
-        });
-    }
-    return line_equipments;
 }
 
 // Validation 
@@ -2842,6 +2934,16 @@ export const getUrlParamsLink = () => new Promise((resolve, reject) => {
     const internal_document_id = urlParams.get('internal_document_id');
     console.log(" getUrlParamsLink internal_document_id --------", internal_document_id)
     return resolve(internal_document_id);
+})
+
+// Get Params from URL For fixed asset checklist
+export const getUrlParamsLinkForFixedAsset = () => new Promise((resolve, reject) => {
+    let url = window.location.search;
+    console.log("URL IS", url)
+    const urlParams = new URLSearchParams(url);
+    const checklist_id = urlParams.get('checklist_id');
+    console.log(" getUrlParamsLink checklist_id --------", checklist_id)
+    return resolve(checklist_id);
 })
 
 // START FOR SETUP DROP DAWN IN NAV BAR

@@ -80,7 +80,9 @@ const GoodsReceiptComponent = (props) => {
 // Week one
 const initialLineW1 = {
     station_id: '',
+    internal_item_id: '',
     checklist_id: '',
+    x_cross_x_cross_id: ''
 }
 const initialRowsW1 = (n = 10) => {
     let rows = [];
@@ -91,54 +93,6 @@ const initialRowsW1 = (n = 10) => {
     }
     return rows;
 }
-
-// Week two
-const initialLineW2 = {
-    station_id: '',
-    checklist_id: '',
-}
-const initialRowsW2 = (n = 10) => {
-    let rows = [];
-    for (var i = 1; i <= n; i++) {
-        rows.push({
-            ...initialLineW2,
-        });
-    }
-    return rows;
-}
-
-// Week three
-const initialLineW3 = {
-    station_id: '',
-    internal_item_id: '',
-    checklist_id: '',
-    x_cross_x_cross_id: ''
-}
-const initialRowsW3 = (n = 10) => {
-    let rows = [];
-    for (var i = 1; i <= n; i++) {
-        rows.push({
-            ...initialLineW3,
-        });
-    }
-    return rows;
-}
-
-// Week four
-const initialLineW4 = {
-    station_id: '',
-    checklist_id: '',
-}
-const initialRowsW4 = (n = 10) => {
-    let rows = [];
-    for (var i = 1; i <= n; i++) {
-        rows.push({
-            ...initialLineW4,
-        });
-    }
-    return rows;
-}
-
 const EnhancedGoodsReceiptComponent = withFormik({
     mapPropsToValues: (props) => ({
         // Field ที่ให้ User กรอก
@@ -157,9 +111,9 @@ const EnhancedGoodsReceiptComponent = withFormik({
 
         // Bottom
         w1_list: initialRowsW1(),
-        w2_list: initialRowsW2(),
-        w3_list: initialRowsW3(),
-        w4_list: initialRowsW4(),
+        w2_list: initialRowsW1(),
+        w3_list: initialRowsW1(),
+        w4_list: initialRowsW1(),
 
         //Field ที่ไม่ได้กรอก
         files: [],
