@@ -72,6 +72,9 @@ const useFooterInitializer = (document_type_id) => {
             console.log("fetchLatestStepApprovalDocumentData")
             fetchLatestStepApprovalDocumentData(document_id).then((latestApprovalInfo) => {
                 if (latestApprovalInfo !== undefined || latestApprovalInfo.length !== 0) {
+                    console.log("latestApprovalInfo------> ", latestApprovalInfo)
+                    console.log("user------> ", latestApprovalInfo.position_id, userInfo.position_id)
+                    console.log("approval_step_action_id------> ", latestApprovalInfo.approval_step_action_id, APPROVAL_STEP_ACTION.APPROVAL)
                     if (latestApprovalInfo.position_id === userInfo.position_id) {
                         if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_APPROVAL) { dispatch(footerToModeApApproval()); }
                         else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.APPROVAL) { dispatch(footerToModeApCheckApproval()); }

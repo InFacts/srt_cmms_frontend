@@ -25,11 +25,10 @@ const BottomContent = (props) => {
             <thead>
               <tr>
                 <th className="font text-center" style={{ width: "30px" }}>#</th>
-                <th className="font" style={{ width: "300px" }}>เลขที่เอกสาร</th>
-                <th className="font text-center" style={{ width: "170px" }}>งาน</th>
-                <th className="font text-center" style={{ width: "170px" }}>สร้างวันที่	</th>
-                <th className="font text-center" style={{ width: "170px" }}>สถานะเอกสาร</th>
-                <th className="font text-center" style={{ width: "170px" }}>Active</th>
+                <th className="font" style={{ width: "380px" }}>เลขที่เอกสาร</th>
+                <th className="font text-center" style={{ width: "200px" }}>งาน</th>
+                <th className="font text-center" style={{ width: "200px" }}>สร้างวันที่	</th>
+                <th className="font text-center" style={{ width: "200px" }}>สถานะเอกสาร</th>
               </tr>
             </thead>
             <tbody>
@@ -41,14 +40,13 @@ const BottomContent = (props) => {
                     <td className="edit-padding text-center">-</td>
                     <td className="edit-padding text-center">{list.created_on.split(".")[0].replace("T", " เวลา ") + " น."}</td>
                     <td className="edit-padding text-center">
-                      <select className="edit-select" value={list.document_status_id}>
+                      <select className="edit-select" value={list.document_status_id} disabled>
                         <option value=''></option>
                         {fact[FACTS.DOCUMENT_STATUS].items.map((status) => {
                           return <option value={status.document_status_id}>{status.status}</option>
                         })}
                       </select>
                     </td>
-                    <td className="edit-padding">-</td>
                   </tr>
                 )
               })}

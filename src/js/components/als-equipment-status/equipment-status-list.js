@@ -7,42 +7,8 @@ const EquipmentStatusListComponent = () => {
     var [mapData,setMapData] = useState([])
 
     useEffect(() => {
-        let tempNodeData = [];
-        let tempOnlyUniqueNodeID = [];
-        if (values.temp_equipment_data !== undefined && values.temp_equipment_data !== []) {
-            values.temp_equipment_data.map((data, i) => {
-                if (tempNodeData.length !== 0) {
-                    let isInArray = tempOnlyUniqueNodeID.includes(data.node_id);
-                    let indexArray = tempOnlyUniqueNodeID.indexOf(data.node_id);
-                    if (isInArray) {
-                        if (data.equipment_status_id === EQUIPMENT_STATUS.WORKING) { tempNodeData[indexArray].WORKING += 1 }
-                        else if (data.equipment_status_id === EQUIPMENT_STATUS.DAMAGED) { tempNodeData[indexArray].DAMAGED += 1 }
-                        else if (data.equipment_status_id === EQUIPMENT_STATUS.MAINTENANCING) { tempNodeData[indexArray].MAINTENANCING += 1 }
-                    } else {
-                        tempOnlyUniqueNodeID.push(data.node_id);
-                        tempNodeData.push({
-                            id: data.node_id,
-                            name: data.node_name,
-                            WORKING: data.equipment_status_id === EQUIPMENT_STATUS.WORKING? 1:0,
-                            DAMAGED: data.equipment_status_id === EQUIPMENT_STATUS.DAMAGED? 1:0,
-                            MAINTENANCING: data.equipment_status_id === EQUIPMENT_STATUS.MAINTENANCING? 1:0
-                        });
-                    }
-                } else {
-                    tempOnlyUniqueNodeID.push(data.node_id);
-                    tempNodeData.push({
-                        id: data.node_id,
-                        name: data.node_name,
-                        WORKING: data.equipment_status_id === EQUIPMENT_STATUS.WORKING? 1:0,
-                        DAMAGED: data.equipment_status_id === EQUIPMENT_STATUS.DAMAGED? 1:0,
-                        MAINTENANCING: data.equipment_status_id === EQUIPMENT_STATUS.MAINTENANCING? 1:0
-                    });
-                }
-                // console.log(">> tempNodeData", tempNodeData)
-            })
-        }
-        setMapData(tempNodeData);
-    },[values.temp_equipment_data])
+        setMapData(values.list_node_status);
+    },[values.list_node_status])
 
     return (
     <div className="gray-background equipment-status-list">
@@ -61,7 +27,7 @@ const EquipmentStatusListComponent = () => {
                 <tbody>
                     {mapData.map((data, i)=> (
                         <tr key={i} id={i}>
-                            <td className="edit-padding">{data.name}</td>
+                            <td className="edit-padding">{data.name.name}</td>
                             <td className="edit-padding">{data.WORKING}</td>
                             <td className="edit-padding">{data.DAMAGED}</td>
                             <td className="edit-padding">{data.MAINTENANCING}</td>

@@ -28,6 +28,7 @@ const Home = (props) => {
     useToolbarChangeModeInitializer(TOOLBAR_MODE.NONE);
     useFactInitializer();
     useTokenInitializer();
+    const loggedIn = useSelector(state => state.token.isLoggedIn); 
 
     const token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
@@ -57,6 +58,8 @@ const Home = (props) => {
                 setFieldValue("email", data.results[0].email);
                 setFieldValue("national_id", data.results[0].national_id);
                 setFieldValue("firstname_en", data.results[0].firstname_en);
+                setFieldValue("firstname_th_show", data.results[0].firstname_th);
+                setFieldValue("lastname_th_show", data.results[0].lastname_th);
                 setFieldValue("firstname_th", data.results[0].firstname_th);
                 setFieldValue("lastname_th", data.results[0].lastname_th);
                 setFieldValue("address", data.results[0].address);
@@ -84,6 +87,8 @@ const Home = (props) => {
                 setFieldValue("email", data.email);
                 setFieldValue("national_id", data.national_id);
                 setFieldValue("firstname_en", data.firstname_en);
+                setFieldValue("firstname_th_show", data.firstname_th);
+                setFieldValue("lastname_th_show", data.lastname_th);
                 setFieldValue("firstname_th", data.firstname_th);
                 setFieldValue("lastname_th", data.lastname_th);
                 setFieldValue("address", data.address);
@@ -108,7 +113,8 @@ const Home = (props) => {
         dispatch(footerToModeInvisible());
     }, []);
     return (
-        <>
+<>
+        {!loggedIn ? <Redirect to="/" /> : null}
             <TopContent />
             <TabBar tabNames={tabNames} initialTabID="officia_document">
                 <BottomContent />
@@ -174,7 +180,7 @@ export const fetchUsers = (user_id) => new Promise((resolve, reject) => {
 
 
 export const fetchDocumentUsers = (user_id) => new Promise((resolve, reject) => {
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?created_by_user_id=${user_id}`;
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?created_by_user_id=${user_id}&page_size=100`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((user_id) => {
             resolve(user_id.data);

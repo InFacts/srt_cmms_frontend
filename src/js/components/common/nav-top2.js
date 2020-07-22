@@ -136,7 +136,7 @@ const MainModule = (props) => {
                                     </li>
 
                                     <li className="nav-li box-yellow-top-bar">
-                                        <Link to={checkPermission.length !== 0 && checkPermission[0].module_track_document ? "/track" : "#"}>สถานรออนุมัติ</Link>
+                                        <Link to={checkPermission.length !== 0 && checkPermission[0].module_track_document ? "/track" : "#"}>สถานะรออนุมัติ</Link>
                                     </li>
                                 </>
                                 :

@@ -24,6 +24,9 @@ const BottomContent = (props) => {
   const factItems = useSelector((state) => ({ ...state.api.fact.items }), shallowEqual);
 
   const setValuesForCSV = (line_items) => {
+    values.new_line_items = [];
+    values.new_line_items_pdf = [];
+    
     line_items.map((line_item) => {
       let items = factItems.items;
       let item = items.find(item => `${item.item_id}` === `${line_item.item_id}`)
@@ -33,6 +36,7 @@ const BottomContent = (props) => {
           "internal_item_id": line_item.internal_item_id,
           "item_description": line_item.item_description,
           "item_status_description_th": line_item.item_status_description_th,
+          "หน่วย": line_item.uom_name,
           "จำนวนเหลือเดือนก่อน": line_item.begin_unit_count,
           "ราคาเดือนก่อน": line_item.begin_state_in_total_price,
 
@@ -46,6 +50,28 @@ const BottomContent = (props) => {
           "ราคาคงเหลือ": "-",
 
           "ประเภทบัญชี": item.accounting_type
+        })
+
+        values.new_line_items_pdf.push({
+          "warehouse_name": line_item.warehouse_name,
+          "internal_item_id": line_item.internal_item_id,
+          "item_description": line_item.item_description,
+          "item_status_description_th": line_item.item_status_description_th,
+
+          "uom_name": line_item.uom_name,
+          "begin_unit_count": line_item.begin_unit_count,
+          "begin_state_in_total_price": line_item.begin_state_in_total_price,
+
+          "state_in_unit_count": line_item.state_in_unit_count,
+          "end_state_in_total_price": line_item.end_state_in_total_price,
+
+          "state_out_unit_count": line_item.state_out_unit_count,
+          "end_state_out_total_price": line_item.end_state_out_total_price,
+
+          "ending_unit_count": line_item.ending_unit_count,
+          "ending_unit_count_total": "-",
+
+          "accounting_type": item.accounting_type
         })
       }
     });

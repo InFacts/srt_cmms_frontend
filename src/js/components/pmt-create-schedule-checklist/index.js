@@ -30,9 +30,10 @@ const GoodsReceiptComponent = (props) => {
 
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
-        { id: "general", name: "สถานที่" },
-        { id: "list_plan_custom", name: "รายการบำรุงรักษาสถานี" },
-        { id: "list_plan_equipment", name: "รายการบำรุงรักษาสินทรัพย์" },
+        { id: "w1", name: "สัปดาห์ที่ 1" },
+        { id: "w2", name: "สัปดาห์ที่ 2" },
+        { id: "w3", name: "สัปดาห์ที่ 3" },
+        { id: "w4", name: "สัปดาห์ที่ 4" },
         { id: "attachment", name: "แนบไฟล์" },
         { id: "table_status", name: "สถานะเอกสาร" }
     ]);
@@ -67,7 +68,7 @@ const GoodsReceiptComponent = (props) => {
             {!loggedIn ? <Redirect to="/" /> : null}
             <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "130vh" } : {}}>
                 <TopContent />
-                <TabBar tabNames={tabNames} initialTabID="general">
+                <TabBar tabNames={tabNames} initialTabID="w1">
                     <BottomContent />
                 </TabBar>
                 <Footer />
@@ -76,36 +77,61 @@ const GoodsReceiptComponent = (props) => {
     )
 }
 
-const initiaLineCustom = {
-    checklist_group_name: '',
+// Week one
+const initialLineW1 = {
+    station_id: '',
     checklist_id: '',
-    quantity_location: '',
-    unit_maintenance_location_id: ''
 }
-const initialRowsCustom = (n = 10) => {
+const initialRowsW1 = (n = 10) => {
     let rows = [];
     for (var i = 1; i <= n; i++) {
         rows.push({
-            ...initiaLineCustom,
+            ...initialLineW1,
         });
     }
     return rows;
 }
 
-const initiaLineEquipment = {
-    equipment_id: '',
-    checklist_group_id: '',
+// Week two
+const initialLineW2 = {
+    station_id: '',
     checklist_id: '',
-    item_id: '',
-    internal_item_id: '',
-    quantity_location: '',
-    unit_maintenance_location_id: ''
 }
-const initialRowsEquipment = (n = 10) => {
+const initialRowsW2 = (n = 10) => {
     let rows = [];
     for (var i = 1; i <= n; i++) {
         rows.push({
-            ...initiaLineEquipment,
+            ...initialLineW2,
+        });
+    }
+    return rows;
+}
+
+// Week three
+const initialLineW3 = {
+    station_id: '',
+    checklist_id: '',
+}
+const initialRowsW3 = (n = 10) => {
+    let rows = [];
+    for (var i = 1; i <= n; i++) {
+        rows.push({
+            ...initialLineW3,
+        });
+    }
+    return rows;
+}
+
+// Week four
+const initialLineW4 = {
+    station_id: '',
+    checklist_id: '',
+}
+const initialRowsW4 = (n = 10) => {
+    let rows = [];
+    for (var i = 1; i <= n; i++) {
+        rows.push({
+            ...initialLineW4,
         });
     }
     return rows;
@@ -123,13 +149,15 @@ const EnhancedGoodsReceiptComponent = withFormik({
         created_on: '',                  // TODO doesn't have (Field ที่ไม่ได้กรอก)
         document_date: '',              // วันที่ออกเอกสาร (Default === NOW )
         start_on: '',
-
-        // Bottom
         district_id: '',
         node_id: '',
         station_id: '',
-        line_custom: initialRowsCustom(),
-        line_equipment: initialRowsEquipment(),
+
+        // Bottom
+        w1_list: initialRowsW1(),
+        w2_list: initialRowsW2(),
+        w3_list: initialRowsW3(),
+        w4_list: initialRowsW4(),
 
         //Field ที่ไม่ได้กรอก
         files: [],

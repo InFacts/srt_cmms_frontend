@@ -830,9 +830,6 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             specific: equipment_installation_part,
         }
     } else if (document_type_id === DOCUMENT_TYPE_ID.SELECTOR) {
-
-        console.log("data values", values)
-
         let document_part_selector = {
             ...DOCUMENT_SCHEMA,
             document_status_id: 1,
@@ -848,10 +845,10 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         let selector_pm_plan_part = {
             document_id: values.document_id,
             name: values.name,
-            active: values.active === "1" ? true : false,
+            active: true,
             node_id: parseInt(values.node_id),
             station_id: parseInt(values.station_id),
-            start_on: values.start_on + 'T13:05:00+07:00',
+            start_on: values.start_on + 'T10:55:00+07:00',
         }
 
         // ต้องเป็น Array selector_checklist_group_part
@@ -914,9 +911,6 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             specific: specific_selector
         }
     } else if (document_type_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM) {
-
-        console.log("data values", values)
-
         let document_part = {
             ...DOCUMENT_SCHEMA,
             document_status_id: 1,
@@ -1037,8 +1031,8 @@ export const packDataFromValuesMasterDataForEdit = (fact, values, document_type_
         values.checklist_line_item_use_equipment.map((line_item, index) => {
             if (line_item.item_id) {
                 line_items_part.push({
-                    checklist_line_item_use_equipment_id: parseInt(last_checklist_line_item_use_equipment_id) + 1, // ต้อง Get อัน่าสุดออกมาก่อน
-                    checklist_line_item_id: parseInt(last_checklist_line_item) + 1,
+                    checklist_line_item_use_equipment_id: parseInt(line_item.item_id),
+                    checklist_line_item_id: parseInt(values.checklist_line_item),
                     item_id: line_item.item_id,
                     quantity: line_item.quantity,
                     uom_id: parseInt(line_item.uom_id)
@@ -1047,7 +1041,7 @@ export const packDataFromValuesMasterDataForEdit = (fact, values, document_type_
         })
 
         let create_checklist_part = {
-            checklist_line_item: parseInt(last_checklist_line_item) + 1,
+            checklist_line_item: parseInt(values.checklist_line_item),
             checklist_id: parseInt(values.checklist_id),
             name: values.name,
             freq: values.freq,
@@ -1839,7 +1833,6 @@ const responseToFormState = (fact, data, document_type_group_id) => {
         // created_on.setHours(created_on.getHours() + 7);
         let document_statuses = fact[FACTS.DOCUMENT_STATUS].items;
         let document_status = document_statuses.find(document_status => `${document_status.document_status_id}` === `${data.document.document_status_id}`);
-        console.log("document_status", document_status)
         if (document_status) {
             return {
                 document_id: data.document.document_id,
@@ -1853,7 +1846,10 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                 refer_to_document_internal_id: data.document.refer_to_document_internal_id,
                 refer_to_document_id: data.document.refer_to_document_id,
                 document_date: data.document.document_date.slice(0, 10),
-                status_name_th: document_status.status
+                status_name_th: document_status.status,
+                node_id: data.specific.node_id,
+                district_id: data.specific.district_id,
+                division_id: data.specific.division_id
             }
         }
     } else if (document_type_group_id === DOCUMENT_TYPE_ID.EQUIPMENT_INSTALLATION) {
@@ -2523,7 +2519,7 @@ export const validateLineNumberInternalItemIDFieldHelper = (document_type_group_
                 setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
                 setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
                 setFieldValue(fieldName + `.line_number`, index + 1, false);
-                setFieldValue(fieldName + `.item_status_id`, 2, false);
+                setFieldValue(fieldName + `.item_status_id`, 1, false);
                 setFieldValue(fieldName + `.per_unit_price`, 0, false);
             }
             // else {
@@ -3055,4 +3051,43 @@ export const changeTheam = () => {
 
     // False คือ version Theam แบบเก่า
     // return false;
+}
+
+// #####################################
+// ################ ALS ################
+// #####################################
+// GET /document/ss101/search
+export const ALSGetDocumentSS101 = (begin_document_date, end_document_date) => new Promise((resolve, reject) => {
+    let page_number = 0;
+    let page_size = 25;
+    // let begin_document_date = "2020-07-16";
+    // let end_document_date = "2020-07-16";
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/ss101/search?page_number=${page_number}&page_size=${page_size}&begin_document_date=${begin_document_date}&end_document_date=${end_document_date}`;
+    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then(res => {
+            resolve(res.data);
+        }).catch(function (err) {
+            reject(err)
+        })
+});
+
+export const FilterByAdjustmentBar = (equipment_installation, equipment_group, adjustmentBar) => {
+    if (equipment_installation.length !== 0) {
+        if (adjustmentBar.equipment_group_id === "ทั้งหมด" || adjustmentBar.equipment_group_id == equipment_group.equipment_group_id) {
+            if (adjustmentBar.district_id === "ทั้งหมด" || adjustmentBar.district_id == equipment_installation[0].location_district_id) {
+                if (adjustmentBar.node_id === "ทั้งหมด" || adjustmentBar.node_id == equipment_installation[0].location_node_id) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+export const FilterByAdjustmentBarSS101 = (item, adjustmentBar) => {
+    if (adjustmentBar.district_id === "ทั้งหมด" || adjustmentBar.district_id == item.specific.location_district_id) {
+        if (adjustmentBar.node_id === "ทั้งหมด" || adjustmentBar.node_id == item.specific.location_node_id) {
+            return true;
+        }
+    }
+    return false;
 }
