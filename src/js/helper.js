@@ -1146,10 +1146,11 @@ export const editMasterData = (data, document_type_group_id) => new Promise((res
 });
 
 const BASE_URL = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}`;
+const PAGE_SIZE = 100000;
 
 // GET  /statistic/goods-monthly-summary
-export const fetchStatisticGoodsMonthlySummary = (beginReportingPeriodID = null, endReportingPeriodID = null, warehouseIDFilter=null, itemIDFilter=null) => new Promise((resolve, reject) => {
-    const url = `${BASE_URL}/statistic/goods-monthly-summary?${beginReportingPeriodID ? `begin_reporting_period_id=${beginReportingPeriodID}&`: ''}${endReportingPeriodID ? `end_reporting_period_id=${endReportingPeriodID}&`: ''}${warehouseIDFilter ? `warehouse_id=${warehouseIDFilter[0]}` : ''}${itemIDFilter ? `item_id=${itemIDFilter[0]}` : ''}page_size=1000`;
+export const fetchStatisticGoodsMonthlySummary = (beginReportingPeriodID = null, endReportingPeriodID = null, warehouseIDFilter=null, itemIDFilter=null, itemStatusIDFilter=1) => new Promise((resolve, reject) => {
+    const url = `${BASE_URL}/statistic/goods-monthly-summary?${beginReportingPeriodID ? `begin_reporting_period_id=${beginReportingPeriodID}&`: ''}${endReportingPeriodID ? `end_reporting_period_id=${endReportingPeriodID}&`: ''}${warehouseIDFilter ? `warehouse_id=${warehouseIDFilter[0]}` : ''}${itemIDFilter ? `item_id=${itemIDFilter[0]}` : ''}${itemStatusIDFilter ? `item_status_id=${itemStatusIDFilter}` : ''}&page_size=${PAGE_SIZE}`;
 
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
@@ -1161,6 +1162,22 @@ export const fetchStatisticGoodsMonthlySummary = (beginReportingPeriodID = null,
             }
         })
 });
+// GET  /statistic/goods-onhand
+export const fetchStatisticGoodsOnhand = ( warehouseIDFilter=null, itemIDFilter=null, itemStatusIDFilter=1) => new Promise((resolve, reject) => {
+    const url = `${BASE_URL}/statistic/goods-onhand?${warehouseIDFilter ? `warehouse_id=${warehouseIDFilter[0]}` : ''}${itemIDFilter ? `item_id=${itemIDFilter[0]}` : ''}${itemStatusIDFilter ? `item_status_id=${itemStatusIDFilter}` : ''}&page_size=${PAGE_SIZE}`;
+
+    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((res) => {
+            let results = res.data.results;
+            if (results) {
+                resolve(results);
+            } else {
+                reject('No Results in fetchStatisticGoodsOnhand');
+            }
+        })
+});
+
+
 
 
 export const fetchLastestInternalDocumentID = (document_type_group_id) => new Promise((resolve, reject) => {

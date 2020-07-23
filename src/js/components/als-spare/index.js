@@ -23,7 +23,7 @@ import SimpleCard2ValuesComponent from './simple-card-2values';
 import { getAnnualInventoryMonthData, randomDivergingBarGraphData, randomScatterPlotData } from './mockup-data';
 
 import BgGreen from '../../../images/als/bg_als.jpg';
-import { fetchPositionPermissionData, changeTheam , fetchStatisticGoodsMonthlySummary,
+import { fetchPositionPermissionData, changeTheam , fetchStatisticGoodsMonthlySummary,fetchStatisticGoodsOnhand,
   getItemInternalIDfromItemID, getItemNamefromItemID} from '../../helper.js';
 import { FACTS } from '../../redux/modules/api/fact.js';
 
@@ -52,6 +52,18 @@ const AlsSpareComponent = () => {
   const [numberItemsEqualUI, setNumberItemsEqualUI] = useState(0);
   const [numberItemsHigherUI, setNumberItemsHigherUI] = useState(0);
 
+  const [itemSpecificIssueAccuUI, setItemSpecificIssueAccuUI] = useState(0);
+  const [itemSpecificIssueRateUI, setItemSpecificIssueRateUI] = useState(0);
+  const [itemSpecificReceiveAccuUI, setItemSpecificReceiveAccuUI] = useState(0);
+  const [itemSpecificReceiveRateUI, setItemSpecificReceiveRateUI] = useState(0);
+
+  const [itemSpecificCurrentQOHUI, setItemSpecificCurrentQOHUI] = useState(0);
+  const [itemSpecificGoalQOHUI, setItemSpecificGoalQOHUI] = useState(0);
+  const [itemSpecificCurrentIVMonthUI, setItemSpecificCurrentIVMonthUI] = useState(0);
+  const [itemSpecificGoalIVMonthUI, setItemSpecificGoalIVMonthUI] = useState(0);
+  const [itemSpecificCurrentTORateUI, setItemSpecificCurrentTORateUI] = useState(0);
+  const [itemSpecificGoalTORateUI, setItemSpecificGoalTORateUI] = useState(0);
+
 
   const mockupData = () => {
     setIVMonthData(getAnnualInventoryMonthData());
@@ -76,19 +88,22 @@ const AlsSpareComponent = () => {
   //    - currentReportingPeriodID         Int      : ReportingPeriodID of the current Date
   //    - currentYearReportingPeriodIDs    Array[Int] : Array of ReportingPeriodIDs' from [beginYear:now]
   //    - currentWindowReportingPeriodIDs  Array[Int] : Array of ReportingPeriodIDs' from [now-windowSize:now]
+  //    - isCurrentYear                    Boolean    : to show that this is the current year or not
   const findCurrentReportingPeriods = (reportingPeriodFact, selectedYear, windowSize=2) => {
+    var isCurrentYear = true;
     var today = new Date();
     if (selectedYear < today.getFullYear()){
       today = new Date(selectedYear, 11, 31);
+      isCurrentYear = false;
     }
 
     let reportingPeriods = reportingPeriodFact.items;
 
     // Find currentReportingPeriodID => Get the reportingPeriod that is in between the start and end date
-    const currentReportingPeriodID = reportingPeriods.find(reportingPeriod => 
+    var currentReportingPeriodID = reportingPeriods.find(reportingPeriod => 
       today.getTime() >= new Date(sneakyAddUTC7ToDate(reportingPeriod.start_datetime)).getTime() &&
       today.getTime() <= new Date(sneakyAddUTC7ToDate(reportingPeriod.end_datetime)).getTime() 
-    );
+    ) || {};
 
     // Find currentYearReportingPeriodIDs => get array of reportingperiodids from beginning of the year to now
     // Find currentWindowReportingPeriodIDs => get array of reportingperiodids from now-windowSize to now
@@ -113,16 +128,13 @@ const AlsSpareComponent = () => {
       }
     }
 
-    return [currentReportingPeriodID, currentYearReportingPeriodIDs, currentWindowReportingPeriodIDs];
+    return {currentReportingPeriodID, currentYearReportingPeriodIDs, currentWindowReportingPeriodIDs, isCurrentYear};
   }
 
 
-  const findItemsStats = (stats, reportingPeriodFilter, warehouseIDFilter=null, itemIDFilter=null, annualAverage=false) => {
+  const findItemsStats = (stats, reportingPeriodFilter, currentReportingPeriodID, isCurrentYear, warehouseIDFilter=null, itemIDFilter=null, annualAverage=false) => {
     // This assumes that the reporting period ID is populated over all item/warehouses, 
-    // because the number of _reporting_period_ids tracked will be used as a denominator of division in the final step.
 
-    // // Used to keep track of all the reporting period ids
-    // var _reporting_period_ids = [];
     // Used as a dictionary to map between item_id -> summation of state_out (qty)
     var itemUsageRate = {}; 
     // Used as a dictionary to map between item_id -> summation of state_in (qty)
@@ -133,10 +145,7 @@ const AlsSpareComponent = () => {
     var itemEndingUnitCount = {}; 
 
     for (var result of stats) {
-      // // If there is no reporting period, include it to track 
-      // if (!_reporting_period_ids.includes(result.reporting_period_id)) {
-      //   _reporting_period_ids.push(result.reporting_period_id);
-      // }
+
       if (!reportingPeriodFilter.includes(result.reporting_period_id)){
         continue;
       }
@@ -165,20 +174,33 @@ const AlsSpareComponent = () => {
       }
 
       // Update itemEndingUnitCount
-      // if (latestReportingPeriodID  === result.reporting_period_id){
-      if (itemEndingUnitCount.hasOwnProperty(result.reporting_period_id)){
-        if (itemEndingUnitCount[result.reporting_period_id].hasOwnProperty(result.item_id)){
-          itemEndingUnitCount[result.reporting_period_id][result.item_id] += result.ending_unit_count;
+      // If it is the current year and is the current reporting period, need to set current_unit_count
+      if (isCurrentYear && result.reporting_period_id === currentReportingPeriodID){
+        if (itemEndingUnitCount.hasOwnProperty(result.reporting_period_id)){
+          if (itemEndingUnitCount[result.reporting_period_id].hasOwnProperty(result.item_id)){
+            itemEndingUnitCount[result.reporting_period_id][result.item_id] += result.current_unit_count;
+          }else{
+            itemEndingUnitCount[result.reporting_period_id][result.item_id] = result.current_unit_count;
+          }
         }else{
-          itemEndingUnitCount[result.reporting_period_id][result.item_id] = result.ending_unit_count;
+          itemEndingUnitCount[result.reporting_period_id] = {
+            [result.item_id] : result.current_unit_count
+          };
         }
+
       }else{
-        itemEndingUnitCount[result.reporting_period_id] = {
-          [result.item_id] : result.ending_unit_count
-        };
+        if (itemEndingUnitCount.hasOwnProperty(result.reporting_period_id)){
+          if (itemEndingUnitCount[result.reporting_period_id].hasOwnProperty(result.item_id)){
+            itemEndingUnitCount[result.reporting_period_id][result.item_id] += result.ending_unit_count;
+          }else{
+            itemEndingUnitCount[result.reporting_period_id][result.item_id] = result.ending_unit_count;
+          }
+        }else{
+          itemEndingUnitCount[result.reporting_period_id] = {
+            [result.item_id] : result.ending_unit_count
+          };
+        }
       }
-        
-      // }
       
 
     }
@@ -235,7 +257,7 @@ const AlsSpareComponent = () => {
     var results = [];
     for (var items of macroAverageInventoryMonthHistory){
       results.push({
-        date: new Date(items.reportingPeriod.end_datetime),
+        date: new Date(sneakyAddUTC7ToDate(items.reportingPeriod.end_datetime)),
         inventory_month: items.macroAverageInventoryMonth,
       });
     }
@@ -255,16 +277,42 @@ const AlsSpareComponent = () => {
       //     y: Math.random() * 40,
         
       // }));
-  const checkItemsQOHCompliance = (itemEndingUnitCount, itemUsageAnnualRate, itemInventoryMonth, itemFact , goalInventoryMonth=6, tolerance=0.1, showInventoryMonth = false) => {
+  const checkItemsQOHCompliance = (totalWindowStats, currentReportingPeriodID, isCurrentYear, itemUsageAnnualRate, itemInventoryMonth, warehouseIDSourcesFilter, itemFact , goalInventoryMonth=6, tolerance=0.1, showInventoryMonth = false) => {
+
+
     var numberItemsLower = 0, numberItemsEqual= 0,numberItemsHigher =0;
     let results = [];
+
+    const DELIMITER = "@@";
+    // convert totalWindowStats to itemEndingUnitCount
+    var itemEndingUnitCount = {};
+    if (isCurrentYear){
+      totalWindowStats
+        .filter(element => element.reporting_period_id === currentReportingPeriodID && 
+          warehouseIDSourcesFilter.includes(element.warehouse_id))
+        .map(element => {
+          itemEndingUnitCount[`${element.warehouse_id}${DELIMITER}${element.item_id}`] = element.current_unit_count;
+        }); 
+    }else{
+      totalWindowStats
+        .filter(element => element.reporting_period_id === currentReportingPeriodID && 
+          warehouseIDSourcesFilter.includes(element.warehouse_id))
+        .map(element => {
+          itemEndingUnitCount[`${element.warehouse_id}${DELIMITER}${element.item_id}`] = element.ending_unit_count;
+        }); 
+    }
+    console.log("ALSSPARE:: THIS IS ITEM ENDING UNIT COUNT itemEndingUnitCount ", itemEndingUnitCount);
+
+
     // If the itemEndingUnitCount is not undefined
     if (typeof itemEndingUnitCount !== 'undefined') {  
-      Object.keys(itemEndingUnitCount).map(itemID => {
+      Object.keys(itemEndingUnitCount).map(key => {
+        var [warehouseID, itemID] = key.split(DELIMITER);
+
         let goalQOH = 1;
         let upperLimitQOH = goalQOH*(1+tolerance);
         let lowerLimitQOH = goalQOH*(1-tolerance);
-        let currentQOH = itemEndingUnitCount[itemID];
+        let currentQOH = itemEndingUnitCount[key];
         let itemInfo = itemFact.items.find(item => `${item.item_id}` === `${itemID}`);
         let colorState = 0; // -1 for Lower, 0 for Equal , 1 for Higher
         
@@ -294,7 +342,7 @@ const AlsSpareComponent = () => {
         if (showInventoryMonth){
           if(itemUsageAnnualRate.hasOwnProperty(itemID) && itemUsageAnnualRate[itemID] > 0){
             results.push({
-              name: `Item ${itemID}; currentQOH: ${currentQOH}; goalQOH: ${goalQOH.toFixed(1)}; upperLimitQOH: ${upperLimitQOH.toFixed(1)}; lowerLimitQOH: ${lowerLimitQOH.toFixed(1)}`,
+              name: `Warehouse ${warehouseID} Item ${itemID}; currentQOH: ${currentQOH}; goalQOH: ${goalQOH.toFixed(1)}; upperLimitQOH: ${upperLimitQOH.toFixed(1)}; lowerLimitQOH: ${lowerLimitQOH.toFixed(1)}`,
               x: currentQOH/itemUsageAnnualRate[itemID]*12,
               y: goalQOH/itemUsageAnnualRate[itemID]*12,
               colorState,
@@ -302,7 +350,7 @@ const AlsSpareComponent = () => {
           }
         }else{
           results.push({
-            name: `Item ${itemID}; currentQOH: ${currentQOH}; goalQOH: ${goalQOH.toFixed(1)}; upperLimitQOH: ${upperLimitQOH.toFixed(1)}; lowerLimitQOH: ${lowerLimitQOH.toFixed(1)}`,
+            name: `Warehouse ${warehouseID} Item ${itemID}; currentQOH: ${currentQOH}; goalQOH: ${goalQOH.toFixed(1)}; upperLimitQOH: ${upperLimitQOH.toFixed(1)}; lowerLimitQOH: ${lowerLimitQOH.toFixed(1)}`,
             x: currentQOH,
             y: goalQOH,
             colorState,
@@ -338,6 +386,13 @@ const AlsSpareComponent = () => {
 
   const reportingPeriodIDSelectorLatest = (reportingPeriodIDs) => {
     return Math.max(...reportingPeriodIDs.map(reportingPeriod => reportingPeriod.reporting_period_id), 0); 
+  }
+
+  const sumObjectValues = (obj) => {
+    if (typeof obj !== 'undefined'){
+      return Object.keys(obj).reduce((prevValue, nextValue) => prevValue + obj[nextValue], 0);
+    }
+    return 0;
   }
 
   const macroAverageItems = (itemInventoryMonth) => {
@@ -386,52 +441,129 @@ const AlsSpareComponent = () => {
     return itemInventoryMonths;
   }
 
-  useEffect (() => {
-    if (!isMockup){
-      if(fact[FACTS.REPORTING_PERIOD].lastUpdated > 0 &&
-        fact[FACTS.ITEM].lastUpdated > 0 
-        ){
-  
-        // 3 Reporting Period IDs
-        //    - currentReportingPeriodID         Int      : ReportingPeriodID of the current Date (SELECTED)
-        //    - currentYearReportingPeriodIDs    Array[Int] : Array of ReportingPeriodIDs' from [beginYear:now]
-        //    - currentWindowReportingPeriodIDs  Array[Int] : Array of ReportingPeriodIDs' from [now-windowSize:now]
-        const [currentReportingPeriodID, currentYearReportingPeriodIDs, currentWindowReportingPeriodIDs] = findCurrentReportingPeriods(fact[FACTS.REPORTING_PERIOD], values.year);
-        console.log("ALSSPARE:: currentReportingPeriodID:: ", currentReportingPeriodID);
-        console.log("ALSSPARE:: currentYearReportingPeriodIDs:: ", currentYearReportingPeriodIDs);
-        console.log("ALSSPARE:: currentWindowReportingPeriodIDs:: ", currentWindowReportingPeriodIDs);
-  
-        let warehouseIDFilter = (values.warehouse_id === '') ? null : [parseInt(values.warehouse_id)];
-        let itemIDFilter = (values.item_id === '') ? null : [parseInt(values.item_id)];
-        console.log("ALSSPARE:: warehouseIDFilter", warehouseIDFilter);
-  
-        // Fetch the statistic Goods monthly summary
-        fetchStatisticGoodsMonthlySummary( // Beware of Math.min() and Math.max() going to infinity and -infinity 
-          Math.min(...currentWindowReportingPeriodIDs.map(reportingPeriod => reportingPeriod.reporting_period_id)) , 
-          Math.max(...currentWindowReportingPeriodIDs.map(reportingPeriod => reportingPeriod.reporting_period_id),0 ) ,
-          warehouseIDFilter,
-          itemIDFilter ,
-        )
-        .then(  results  => {
+  // Output: array of warehouse_id's that are the "sources" (To filter for topbar scatter)
+  const warehouseIDSourcesSelector = (warehouseFact) => {
+    const WAREHOUSE_TYPE_SOURCE = [1,2,4]; //1	คลังพัสดุกลางบางซื่อ; 2	คลังอื่นๆ; 3	คลังของตอน; 4	คลังเชียงราก
+    return warehouseFact.items
+      .filter(warehouse => WAREHOUSE_TYPE_SOURCE.includes(warehouse.warehouse_type_id))
+      .map(warehouse => warehouse.warehouse_id);
+  }
 
-          // console.log("ALSSPARE:: findCurrentReportingPeriod", findCurrentReportingPeriod(fact[FACTS.REPORTING_PERIOD].items))
-          console.log("ALSSPARE:: fetchStatisticGoodsMonthlySummary", results);
-  
+  // Combine both statisticGoodsMonthlySummary and statisticGoodsOnhand
+  // Combine the results of the 2 statistics by adding the current reporting period
+  const combineStatisticGoods = (statisticGoodsMonthlySummary, statisticGoodsOnhand, currentReportingPeriodID) => {
+    var totalWindowStats = [];
+    for (var element of statisticGoodsMonthlySummary){
+      totalWindowStats.push({...element});
+    }
+    for (var element of statisticGoodsOnhand){
+      totalWindowStats.push({reporting_period_id: currentReportingPeriodID, ...element});
+    }
+    return totalWindowStats;
+  } 
+
+  useEffect (() => {
+    async function mainFetchAndUpdateData() {
+      if (!isMockup){
+        if(fact[FACTS.REPORTING_PERIOD].lastUpdated > 0 &&
+          fact[FACTS.ITEM].lastUpdated > 0 
+          ){
+    
+          // 3 Reporting Period IDs
+          //    - currentReportingPeriodID         Int      : ReportingPeriodID of the current Date (SELECTED)
+          //    - currentYearReportingPeriodIDs    Array[Int] : Array of ReportingPeriodIDs' from [beginYear:now]
+          //    - currentWindowReportingPeriodIDs  Array[Int] : Array of ReportingPeriodIDs' from [now-windowSize:now]
+          //    - isCurrentYear                    Boolean    : to show that this is the current year or not
+          const {currentReportingPeriodID, currentYearReportingPeriodIDs, currentWindowReportingPeriodIDs, isCurrentYear} = findCurrentReportingPeriods(fact[FACTS.REPORTING_PERIOD], values.year);
+          console.log("ALSSPARE:: currentReportingPeriodID:: ", currentReportingPeriodID);
+          console.log("ALSSPARE:: currentYearReportingPeriodIDs:: ", currentYearReportingPeriodIDs);
+          console.log("ALSSPARE:: currentWindowReportingPeriodIDs:: ", currentWindowReportingPeriodIDs);
+          console.log("ALSSPARE:: isCurrentYear:: ", isCurrentYear);
+    
+          let warehouseIDFilter = (values.warehouse_id === '') ? null : [parseInt(values.warehouse_id)];
+          let itemIDFilter = (values.item_id === '') ? null : [parseInt(values.item_id)];
+          console.log("ALSSPARE:: warehouseIDFilter", warehouseIDFilter);
+          
+          let itemStatusIDFilter = 1; // Always new!!!
+          let warehouseIDSourcesFilter = warehouseIDSourcesSelector(fact[FACTS.WAREHOUSES]);
+    
+          // 1. Combine the results of Goods Monthly Summary (Filter out the currentReportingPeriodID) and Goods Onhand (Only currentReportingPeriodID)
+          var totalWindowStats = [];
+        
+          if (isCurrentYear){
+            // 1.1 Fetch the statistic Goods monthly summary (WITHOUT the current Reporting ID) AND statisticGoodsOnhand (for current Reporting ID by asynchronous await)
+            let [statisticGoodsMonthlySummary, statisticGoodsOnhand] = await Promise.all([
+              fetchStatisticGoodsMonthlySummary( // Beware of Math.min() and Math.max() going to infinity and -infinity 
+                Math.min(...currentWindowReportingPeriodIDs
+                  .map(reportingPeriod => parseInt(reportingPeriod.reporting_period_id))
+                  .filter(reportingPeriodID => reportingPeriodID!==currentReportingPeriodID.reporting_period_id)) , 
+                Math.max(...currentWindowReportingPeriodIDs
+                  .map(reportingPeriod => parseInt(reportingPeriod.reporting_period_id))
+                  .filter(reportingPeriodID => reportingPeriodID!==currentReportingPeriodID.reporting_period_id),0 ) ,
+                // warehouseIDFilter,
+                null, // WAREHOUSE FILTER CANT BE USED HERE BECAUSE OF TOP bar -> need to summaiton of everything
+                itemIDFilter ,
+                itemStatusIDFilter,
+              ),
+              fetchStatisticGoodsOnhand(
+                null, // WAREHOUSE FILTER CANT BE USED HERE BECAUSE OF TOP bar -> need to summaiton of everything
+                itemIDFilter,
+                itemStatusIDFilter,
+              )
+            ]);
+            console.log("ALSSPARE:: statisticGoodsMonthlySummary", statisticGoodsMonthlySummary);
+            console.log("ALSSPARE:: statisticGoodsOnhand", statisticGoodsOnhand);
+            // 1.2 Combine the results of the 2 statistics by adding the current reporting period  if isCurrentYear
+            totalWindowStats = combineStatisticGoods(statisticGoodsMonthlySummary, statisticGoodsOnhand, currentReportingPeriodID.reporting_period_id); 
+          }else{
+            // 1.1 Fetch the statistic Goods monthly summary (WITHOUT the current Reporting ID)
+            let [statisticGoodsMonthlySummary] = await Promise.all([
+              fetchStatisticGoodsMonthlySummary( // Beware of Math.min() and Math.max() going to infinity and -infinity 
+                Math.min(...currentWindowReportingPeriodIDs
+                  .map(reportingPeriod => parseInt(reportingPeriod.reporting_period_id))
+                  .filter(reportingPeriodID => reportingPeriodID!==currentReportingPeriodID.reporting_period_id)) , 
+                Math.max(...currentWindowReportingPeriodIDs
+                  .map(reportingPeriod => parseInt(reportingPeriod.reporting_period_id))
+                  .filter(reportingPeriodID => reportingPeriodID!==currentReportingPeriodID.reporting_period_id),0 ) ,
+                // warehouseIDFilter,
+                null, // WAREHOUSE FILTER CANT BE USED HERE BECAUSE OF TOP bar -> need to summaiton of everything
+                itemIDFilter ,
+                itemStatusIDFilter,
+              )
+            ]);
+            console.log("ALSSPARE:: statisticGoodsMonthlySummary", statisticGoodsMonthlySummary);
+            // 1.2 Let the totalWindowStats be the monthly Summary
+            totalWindowStats = statisticGoodsMonthlySummary;
+          }
+          totalWindowStats = totalWindowStats.filter(element => element.warehouse_id !== 999);
+          console.log("ALSSPARE:: totalWindowStats", totalWindowStats);
+          
+          // Calculate GLOBAL Usage Annual Rate and Receive Annual Rate from the current window size (used for Inventory Month)
           // itemUsageAnnualRate, itemReceiveAnnualRate [Calculated from the current window size]
-          var [itemUsageAnnualRate, itemReceiveAnnualRate, itemEndingUnitCounts] = findItemsStats(results, reportingPeriodIDSelector(currentWindowReportingPeriodIDs), warehouseIDFilter, itemIDFilter, true);
-  
+          var [itemUsageAnnualRate, itemReceiveAnnualRate, itemEndingUnitCounts] = findItemsStats(
+            totalWindowStats, 
+            reportingPeriodIDSelector(currentWindowReportingPeriodIDs), 
+            currentReportingPeriodID.reporting_period_id,  // To check for the current reporting period if it is current year 
+            isCurrentYear, // Current year will not have ending unit count!!!
+            null, // warehouse ID filter is null, because we want to select Usage and Receive 
+            itemIDFilter, 
+            true, // Annual Average True
+          );
+
           // Finding Macro Average of the Inventory Month
           // 1. Find Inventory month of every item by QOH_current/InventoryUsageRate_item * 12
           //    (QOH_current should be found by the latest reporting period id of that particular year)
           // 2. Find Macro Average by summing all InventoryMonth_item/#Items
           console.log("ALSSPARE:: itemAnnualEndingUnitCount ", itemEndingUnitCounts)
           console.log("ALSSPARE:: itemUsageAnnualRate ", itemUsageAnnualRate)
-          let itemInventoryMonth = calculateItemInventoryMonth(itemEndingUnitCounts[currentReportingPeriodID.reporting_period_id], itemUsageAnnualRate);
+          let itemInventoryMonth = calculateItemInventoryMonth(
+            itemEndingUnitCounts[currentReportingPeriodID.reporting_period_id], 
+            itemUsageAnnualRate,
+          );
           console.log("ALSSPARE:: itemInventoryMonth ", itemInventoryMonth)
           let {macroAverageInventoryMonth, itemsInvalid} = macroAverageItems(itemInventoryMonth);
           // Set MacroAverageInventoryMonth on the UI
           setMacroAverageInventoryMonthUI(macroAverageInventoryMonth);
-          console.log("ALSSPARE:: macroAverageInventoryMonth ", macroAverageInventoryMonth)
 
           // Set MacroAverageInventoryMonth for each reporting period ID using the same itemUsageAnnualRate (this should be changed to each window size to get the same report each time, but too many queries!! -- or just use quantity [but will lose information about the relative against usage rate])
           let macroAverageInventoryMonthHistory = calculateInventoryMonthHistory(itemEndingUnitCounts, itemUsageAnnualRate);
@@ -448,26 +580,146 @@ const AlsSpareComponent = () => {
           console.log("ALSSPARE:: lineGraphData ", lineGraphData)
           setIVMonthData(lineGraphData);
 
-  
-          // Set Diverging Bar Graph Data:: For only Current Year Filter
-          var [itemUsageYear, itemReceiveYear, _] = findItemsStats(results, reportingPeriodIDSelector(currentYearReportingPeriodIDs), warehouseIDFilter, itemIDFilter, false);
-          var barDivergingGraphData = divergingBarSelector(itemUsageYear, itemReceiveYear, fact[FACTS.ITEM]);
-          setBarDivergingGraphData(barDivergingGraphData);
-  
           // Set numberItemsLower, numberItemsEqual , numberItemsHigher , scatterPlotData
-          var {numberItemsLower, numberItemsEqual , numberItemsHigher , scatterPlotData} = checkItemsQOHCompliance(itemEndingUnitCounts[currentReportingPeriodID.reporting_period_id], itemUsageAnnualRate, itemInventoryMonth, fact[FACTS.ITEM]);
+          var {numberItemsLower, numberItemsEqual , numberItemsHigher , scatterPlotData} = checkItemsQOHCompliance(
+            totalWindowStats, 
+            currentReportingPeriodID.reporting_period_id,  // To check for the current reporting period if it is current year 
+            isCurrentYear, // Current year will not have ending unit count!!!
+            itemUsageAnnualRate, 
+            itemInventoryMonth, 
+            warehouseIDSourcesFilter,
+            fact[FACTS.ITEM],
+            6,  // Goal Inventory Month
+            0.1, // Tolerance 
+            false, // showInventory Month?
+          );
           setNumberItemsLowerUI(numberItemsLower);
           setNumberItemsEqualUI(numberItemsEqual);
           setNumberItemsHigherUI(numberItemsHigher);
           setScatterPlotData(scatterPlotData);
 
-          console.log("ALSSPARE:: item stats:: ", itemUsageYear, itemReceiveYear)
-        })
-      }
-    }else{ //isMockup!!
-      mockupData();
-    }
+
+
+          // FOR LOWER PART OF THE GRAPHS
+          // Set Diverging Bar Graph Data:: For only Current Year Filter
+          var [itemUsageYear, itemReceiveYear, _] = findItemsStats(
+            totalWindowStats, 
+            reportingPeriodIDSelector(currentYearReportingPeriodIDs), 
+            currentReportingPeriodID.reporting_period_id,  // To check for the current reporting period if it is current year 
+            isCurrentYear, // Current year will not have ending unit count!!!
+            warehouseIDFilter, 
+            itemIDFilter, 
+            false,
+          );
+          var barDivergingGraphData = divergingBarSelector(itemUsageYear, itemReceiveYear, fact[FACTS.ITEM]);
+          setBarDivergingGraphData(barDivergingGraphData);
+
+
+
+
+
+
+          fetchStatisticGoodsMonthlySummary( // Beware of Math.min() and Math.max() going to infinity and -infinity 
+            Math.min(...currentWindowReportingPeriodIDs.map(reportingPeriod => reportingPeriod.reporting_period_id)) , 
+            Math.max(...currentWindowReportingPeriodIDs.map(reportingPeriod => reportingPeriod.reporting_period_id),0 ) ,
+            // warehouseIDFilter,
+            null, // WAREHOUSE FILTER CANT BE USED HERE BECAUSE OF TOP bar -> need to summaiton of everything
+            itemIDFilter ,
+            itemStatusIDFilter,
+          )
+          .then(  results  => {
+  
+            // console.log("ALSSPARE:: findCurrentReportingPeriod", findCurrentReportingPeriod(fact[FACTS.REPORTING_PERIOD].items))
+            console.log("ALSSPARE:: fetchStatisticGoodsMonthlySummary", results);
     
+            // itemUsageAnnualRate, itemReceiveAnnualRate [Calculated from the current window size]
+            // var [itemUsageAnnualRate, itemReceiveAnnualRate, itemEndingUnitCounts] = findItemsStats(results, reportingPeriodIDSelector(currentWindowReportingPeriodIDs), warehouseIDFilter, itemIDFilter, true);
+    
+            // Finding Macro Average of the Inventory Month
+            // 1. Find Inventory month of every item by QOH_current/InventoryUsageRate_item * 12
+            //    (QOH_current should be found by the latest reporting period id of that particular year)
+            // 2. Find Macro Average by summing all InventoryMonth_item/#Items
+            // console.log("ALSSPARE:: itemAnnualEndingUnitCount ", itemEndingUnitCounts)
+            // console.log("ALSSPARE:: itemUsageAnnualRate ", itemUsageAnnualRate)
+            // let itemInventoryMonth = calculateItemInventoryMonth(itemEndingUnitCounts[currentReportingPeriodID.reporting_period_id], itemUsageAnnualRate);
+            // console.log("ALSSPARE:: itemInventoryMonth ", itemInventoryMonth)
+            // let {macroAverageInventoryMonth, itemsInvalid} = macroAverageItems(itemInventoryMonth);
+            // // Set MacroAverageInventoryMonth on the UI
+            // setMacroAverageInventoryMonthUI(macroAverageInventoryMonth);
+            // console.log("ALSSPARE:: macroAverageInventoryMonth ", macroAverageInventoryMonth)
+  
+            // Set MacroAverageInventoryMonth for each reporting period ID using the same itemUsageAnnualRate (this should be changed to each window size to get the same report each time, but too many queries!! -- or just use quantity [but will lose information about the relative against usage rate])
+            // let macroAverageInventoryMonthHistory = calculateInventoryMonthHistory(itemEndingUnitCounts, itemUsageAnnualRate);
+            // macroAverageInventoryMonthHistory = macroAverageInventoryMonthHistory.map(({reportingPeriodID, itemInventoryMonth}) => {
+            //   let {macroAverageInventoryMonth, itemsInvalid} = macroAverageItems(itemInventoryMonth);
+            //   return ({
+            //     reportingPeriodID, 
+            //     reportingPeriod: currentWindowReportingPeriodIDs.find(reportingPeriod => reportingPeriod.reporting_period_id===reportingPeriodID),
+            //     macroAverageInventoryMonth 
+            //   })
+            // })
+            // console.log("ALSSPARE:: macroAverageInventoryMonthHistory ", macroAverageInventoryMonthHistory)
+            // let lineGraphData = lineGraphSelector(macroAverageInventoryMonthHistory);
+            // console.log("ALSSPARE:: lineGraphData ", lineGraphData)
+            // setIVMonthData(lineGraphData);
+  
+    
+            // Set Diverging Bar Graph Data:: For only Current Year Filter
+            // var [itemUsageYear, itemReceiveYear, _] = findItemsStats(
+            //   results, 
+            //   reportingPeriodIDSelector(currentYearReportingPeriodIDs), 
+            //   currentReportingPeriodID.reporting_period_id,  // To check for the current reporting period if it is current year 
+            //   isCurrentYear, // Current year will not have ending unit count!!!
+            //   warehouseIDFilter, 
+            //   itemIDFilter, 
+            //   false,
+            // );
+            // var barDivergingGraphData = divergingBarSelector(itemUsageYear, itemReceiveYear, fact[FACTS.ITEM]);
+            // setBarDivergingGraphData(barDivergingGraphData);
+    
+            // Set numberItemsLower, numberItemsEqual , numberItemsHigher , scatterPlotData
+            // var {numberItemsLower, numberItemsEqual , numberItemsHigher , scatterPlotData} = checkItemsQOHCompliance(itemEndingUnitCounts[currentReportingPeriodID.reporting_period_id], itemUsageAnnualRate, itemInventoryMonth, fact[FACTS.ITEM]);
+            // setNumberItemsLowerUI(numberItemsLower);
+            // setNumberItemsEqualUI(numberItemsEqual);
+            // setNumberItemsHigherUI(numberItemsHigher);
+            // setScatterPlotData(scatterPlotData);
+  
+            // const [itemSpecificIssueAccuUI, setItemSpecificIssueAccuUI] = useState(0);
+            // const [itemSpecificIssueRateUI, setItemSpecificIssueRateUI] = useState(0);
+            // const [itemSpecificReceiveAccuUI, setItemSpecificReceiveAccuUI] = useState(0);
+            // const [itemSpecificReceiveRateUI, setItemSpecificReceiveRateUI] = useState(0);
+          
+            // const [itemSpecificCurrentQOHUI, setItemSpecificCurrentQOHUI] = useState(0);
+            // const [itemSpecificGoalQOHUI, setItemSpecificGoalQOHUI] = useState(0);
+            // const [itemSpecificCurrentIVMonthUI, setItemSpecificCurrentIVMonthUI] = useState(0);
+            // const [itemSpecificGoalIVMonthUI, setItemSpecificGoalIVMonthUI] = useState(0);
+            // const [itemSpecificCurrentTORateUI, setItemSpecificCurrentTORateUI] = useState(0);
+            // const [itemSpecificGoalTORateUI, setItemSpecificGoalTORateUI] = useState(0);
+            if (values.item_id === '') {
+              setItemSpecificIssueAccuUI(sumObjectValues(itemUsageYear).toFixed(0));
+              setItemSpecificReceiveAccuUI(sumObjectValues(itemReceiveYear).toFixed(0));
+              setItemSpecificIssueRateUI(sumObjectValues(itemUsageAnnualRate).toFixed(0));
+              setItemSpecificReceiveRateUI(sumObjectValues(itemReceiveAnnualRate).toFixed(0));
+              setItemSpecificCurrentQOHUI(sumObjectValues(itemEndingUnitCounts[currentReportingPeriodID.reporting_period_id]).toFixed(0));
+              setItemSpecificGoalQOHUI("N/A");
+              setItemSpecificCurrentIVMonthUI(macroAverageInventoryMonth.toFixed(1)); 
+              setItemSpecificGoalIVMonthUI("N/A");
+              setItemSpecificCurrentTORateUI((1/macroAverageInventoryMonth*12).toFixed(2)); 
+              setItemSpecificGoalTORateUI("N/A");
+            }else{
+              setItemSpecificIssueAccuUI(itemUsageYear[values.item_id]);
+            }
+            
+  
+  
+            console.log("ALSSPARE:: item stats:: ", itemUsageYear, itemReceiveYear)
+          })
+        }
+      }else{ //isMockup!!
+        mockupData();
+      }
+    }
+    mainFetchAndUpdateData();
   }, [fact[FACTS.REPORTING_PERIOD].lastUpdated, fact[FACTS.ITEM].lastUpdated, values.year, values.warehouse_id, values.item_id, isMockup])
 
   return (
@@ -613,10 +865,20 @@ const AlsSpareComponent = () => {
                     <div className="row_bootstrap no-gutters">
                       <div className="col-12">
                         <SimpleCard2ValuesComponent
+                          name1="จำนวนนำออก"
+                          value1={`${itemSpecificIssueAccuUI}`}
+                          name2="จำนวนนำเข้า"
+                          value2={`${itemSpecificReceiveAccuUI}`}
+                        />
+                      </div>
+                    </div>
+                    <div className="row_bootstrap no-gutters">
+                      <div className="col-12">
+                        <SimpleCard2ValuesComponent
                           name1="อัตราการนำออก"
-                          value1="200/ปี"
+                          value1={`${itemSpecificIssueRateUI}/ปี`}
                           name2="อัตราการนำเข้า"
-                          value2="200/ปี"
+                          value2={`${itemSpecificReceiveRateUI}/ปี`}
                         />
                       </div>
                     </div>
@@ -624,16 +886,16 @@ const AlsSpareComponent = () => {
                       <div className="col-12">
                         <SimpleCard2ValuesComponent
                           name1="คงคลัง ปัจจุบัน"
-                          value1={125}
+                          value1={itemSpecificCurrentQOHUI}
                           name2="คงคลังเป้าหมาย"
-                          value2={110}
+                          value2={itemSpecificGoalQOHUI}
 
                         />
                         <SimpleCard2ValuesComponent
                           name1="Iv. Month ปัจจุบัน"
-                          value1={6.5}
+                          value1={itemSpecificCurrentIVMonthUI}
                           name2="Iv. Month เป้าหมาย"
-                          value2={6}
+                          value2={itemSpecificGoalIVMonthUI}
                         />
                       </div>
                     </div>
@@ -641,9 +903,9 @@ const AlsSpareComponent = () => {
                       <div className="col-12">
                         <SimpleCard2ValuesComponent
                           name1="Turnover Rate ปัจจุบัน"
-                          value1={22}
+                          value1={itemSpecificCurrentTORateUI}
                           name2="Turnover Rate เป้าหมาย"
-                          value2={2}
+                          value2={itemSpecificGoalTORateUI}
                         />
                       </div>
                     </div>
