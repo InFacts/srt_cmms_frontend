@@ -93,6 +93,7 @@ const initialRowsW1 = (n = 10) => {
     }
     return rows;
 }
+
 const EnhancedGoodsReceiptComponent = withFormik({
     mapPropsToValues: (props) => ({
         // Field ที่ให้ User กรอก

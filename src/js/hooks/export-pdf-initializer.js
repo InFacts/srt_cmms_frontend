@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useFormikContext } from 'formik';
+import { useFormikContext, connect } from 'formik';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { handleClickExportPDF, TOOLBAR_ACTIONS } from '../redux/modules/toolbar.js';
 import history from '../history';
@@ -41,7 +41,7 @@ const useExportPdfInitializer = () => {
     // console.log(routeLocation)
     if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF] && document_item) {
       if (routeLocation === '/pmt-ss-101') {
-        console.log(values)
+        console.log(">>>>>>>>>>>>", values)
         let car_type_id = "";
         let system_type_group_id = "";
         let system_type_id = "";
@@ -77,7 +77,7 @@ const useExportPdfInitializer = () => {
 
         factHardwareType.items.map((factHardwareType) => {
           if (factHardwareType.hardware_type_id === values.hardware_type_id) {
-            hardware_type_id = factHardwareType.abbreviation + "-" + factHardwareType.system_type
+            hardware_type_id = factHardwareType.abbreviation + "-" + factHardwareType.hardware_type
           }
         })
 
@@ -88,7 +88,7 @@ const useExportPdfInitializer = () => {
         })
         factInterrupt.items.map((factInterrupt) => {
           if (values.interrupt_id === factInterrupt.interrupt_id) {
-            interrupt_id = factInterrupt.interrupt_type
+            interrupt_id = factInterrupt.interrupt_id + "-" + factInterrupt.interrupt_type
           }
         })
 
@@ -123,16 +123,18 @@ const useExportPdfInitializer = () => {
         let station = "";
 
         factDistricts.items.map(function ({ district_id, name, division_id }) {
+          if (values.location_district_id == district_id) {
           District = name
+          }
         })
         factNodes.items.map(function ({ node_id, name, district_id }) {
-          if (values.location_district_id == district_id) {
+          if (values.location_node_id == node_id) {
             node = name
           }
         })
 
         factStations.items.map(function ({ station_id, name, node_id }) {
-          if (values.location_node_id == node_id) {
+          if (values.location_station_id == station_id) {
             station = name
           }
         })
@@ -177,14 +179,13 @@ const useExportPdfInitializer = () => {
         let year5 = dateParts5[2]
 
         values.loss_line_items.map(lineItem => {
-          console.log("lineItem", lineItem)
           data.push({
             "item_id": p,
-            "description": lineItem.description,
-            "internal_item_id": lineItem.document_id,
-            "unit": lineItem.uom_code,
-            "price_quantity": lineItem.price,
-            "quantity": lineItem.quantity,
+            "description": lineItem.description ? lineItem.description : "-",
+            "internal_item_id": lineItem.internal_item_id ? lineItem.internal_item_id : "-", 
+            "unit": lineItem.uom_name ? lineItem.uom_name : "-",
+            "price_quantity": lineItem.price ? lineItem.price : "-",
+            "quantity": lineItem.quantity ? lineItem.quantity : "-",
             "price": " ",
             "type": " "
           });
@@ -247,7 +248,7 @@ const useExportPdfInitializer = () => {
             "H": "",
             "I": "",
 
-            "Station": node + " " + station,
+            "Station": node + "/" + station,
 
             "HardwareType": hardware_type_id,
             "LocationDetail": values.location_detail,
@@ -268,6 +269,10 @@ const useExportPdfInitializer = () => {
             "member_3": values.member_3,
             "member_3_position_id": member_3_position_id,
             "remark": values.remark,
+            "RequestBy": values.request_by,
+            "RecvAccidentFromRecvId": values.recv_accident_from_recv_id === 1 ? "จดหมาย" : "โทรศัพท์",
+
+            "system_type_group_id": system_type_group_id
           },
           "Headers":
           {
@@ -288,14 +293,13 @@ const useExportPdfInitializer = () => {
           }
           ,
           "Images": [],
-          "Totol": ""
+          "Totol": "",
         }
 
 
 
         exportPDF(routeLocation, data_json).then(function (htmlCode) {
 
-          console.log(htmlCode)
           // const blob = pdf(htmlCode).toBlob();
           // console.log(blob)
           // MyDocument(htmlCode)
@@ -303,7 +307,7 @@ const useExportPdfInitializer = () => {
           w.document.write(htmlCode);
           setTimeout(() => {
             w.print();
-            // w.close();
+            w.close();
           }, 500);
         })
         dispatch(handleClickExportPDF())
@@ -315,7 +319,7 @@ const useExportPdfInitializer = () => {
           w.document.write(htmlCode);
           setTimeout(() => {
             w.print();
-            // w.close();
+            w.close();
           }, 500);
 
         })
@@ -500,7 +504,6 @@ const createPageS1Category = (index, category) =>
   `<div class="invoice-box" style=" justify-content:center ;align-items:center">
       <h1 style=" text-align:center ; vertical-align: middle;align-items:center;margin-top: 50%;">${index}. (${category})</h1>
   </div>`;
-
 
 
 const createHtmlS16_46 = (table) =>
@@ -1128,12 +1131,10 @@ const createHtmlS101 = (table) =>
   </html>`;
 
 const createPageS101Page1 = (date, content) =>
-  `<div class="invoice-box">
+    `<div class="invoice-box">
       <pp>แบบ สส. 101</pp>
       <h2 style=" text-align:center ; vertical-align: middle;">ฝ่ายการอาณัติสัญญาณและโทรคมนาคม การรถไฟ</h2>
-      
-
-      
+    
       <table>
           <tr>
           <td>
@@ -1145,7 +1146,7 @@ const createPageS101Page1 = (date, content) =>
       <table>
           <tr>
           <td>
-              <div class="left">รายงานการตรวจซ่อมอุปกรณ์แขวง</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label></label></div></div>
+              <div class="left">รายงานการตรวจซ่อมอุปกรณ์แขวง</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>${content.District}</label></div></div>
           </td>
           <td>
               <pr><div class="left">วันที่</div><div contenteditable="true"><div class="dotted" style="width: 200px;"><label>${date}</label></div></div></pr>
@@ -1174,7 +1175,7 @@ const createPageS101Page1 = (date, content) =>
           <td style=" text-align:center ; vertical-align: middle;">${content.RequesstOnDay}</td>
       </tr>
       <tr class="item">
-          <td style="padding-left: 15px; text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">โดยจดหมายหรือโทรเลขที่</div><div contenteditable="true"><div class="dotted" style="width: 435px;"><label></label></div></div></td>
+          <td style="padding-left: 15px; text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">โดยจดหมายหรือโทรเลขที่</div><div contenteditable="true"><div class="dotted" style="width: 435px;"><label>${content.RecvAccidentFromRecvId}</label></div></div></td>
           <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">วันเวลาที่เกิดเหตุ</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.AccidentOnTimeParts}</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.AccidentOnYear}</td>
@@ -1182,7 +1183,7 @@ const createPageS101Page1 = (date, content) =>
           <td style=" text-align:center ; vertical-align: middle;">${content.AccidentOnDay}</td>
       </tr>
       <tr class="item">
-          <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">(3) งาน</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label></label></div></div></td>
+          <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">(3) งาน</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>${content.AccidentName}</label></div></div></td>
           <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">ออกเดินทาง</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.DepartedOnTimeParts}</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.DepartedOnYear}</td>
@@ -1190,7 +1191,7 @@ const createPageS101Page1 = (date, content) =>
           <td style=" text-align:center ; vertical-align: middle;">${content.DepartedOnDay}</td>
       </tr>
       <tr class="item">
-          <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">(4) เดินทางโดย</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>${content.CarType}</label></div></div></td>
+          <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">(4) เดินทางโดย</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>-</label></div></div></td>
           <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">เดินทางถึง</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.ArrivedOnTimeParts}</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.ArrivedOnYear}</td>
@@ -1215,10 +1216,10 @@ const createPageS101Page1 = (date, content) =>
           <td style="width: 1%; text-align:left ; vertical-align: middle;">
           </td>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
-              <div class="left">ก. ระบบอาณัติสัญญาณ</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.A}</label></div></div>
+              <div class="left">ก. ระบบอาณัติสัญญาณ</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบอาณัติสัญญาณ" && content.HardwareType}</label></div></div>
           </td>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
-              <div class="left">ข. ระบบสายส่ง</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.B}</label></div></div>
+              <div class="left">ข. ระบบสายส่ง</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบสายส่ง" ? content.HardwareType : "-"}</label></div></div>
           </td>
             
         </tr>
@@ -1229,10 +1230,10 @@ const createPageS101Page1 = (date, content) =>
           <td style="width: 1%; text-align:left ; vertical-align: middle;">
           </td>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
-              <div class="left">ค. ระบบเครื่องกั้นถนน</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.C}</label></div></div>
+              <div class="left">ค. ระบบเครื่องกั้นถนน</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบเครื่องกั้นถนน" ? content.HardwareType : "-"}</label></div></div>
           </td>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
-              <div class="left">ง. ระบบเครื่องทางสะดวก</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.D}</label></div></div>
+              <div class="left">ง. ระบบเครื่องทางสะดวก</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบเครื่องทางสะดวก" ? content.HardwareType: "-"} </label></div></div>
           </td>
             
         </tr>
@@ -1242,10 +1243,10 @@ const createPageS101Page1 = (date, content) =>
         <td style="width: 1%; text-align:left ; vertical-align: middle;">
         </td>
         <td style="width: 40%; text-align:left ; vertical-align: middle;">
-            <div class="left">จ. ระบบโทรศัพท์</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.E}</label></div></div>
+            <div class="left">จ. ระบบโทรศัพท์</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบโทรศัพท์" ? content.HardwareType : "-"}</label></div></div>
         </td>
         <td style="width: 40%; text-align:left ; vertical-align: middle;">
-            <div class="left">ฉ. ระบบไฟฟ้า</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.F}</label></div></div>
+            <div class="left">ฉ. ระบบไฟฟ้า</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบไฟฟ้า" ? content.HardwareType : "-"}</label></div></div>
         </td>
           
       </tr>
@@ -1256,10 +1257,10 @@ const createPageS101Page1 = (date, content) =>
         <td style="width: 1%; text-align:left ; vertical-align: middle;">
         </td>
         <td style="width: 40%; text-align:left ; vertical-align: middle;">
-            <div class="left">ช. ระบบโทรพิมพ์</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.G}</label></div></div>
+            <div class="left">ช. ระบบโทรพิมพ์</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบโทรพิมพ์" ? content.HardwareType : "-"}</label></div></div>
         </td>
         <td style="width: 40%; text-align:left ; vertical-align: middle;">
-            <div class="left">ซ. ระบบวิทยุ</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.H}</label></div></div>
+            <div class="left">ซ. ระบบวิทยุ</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบวิทยุ" ? content.HardwareType : "-"}</label></div></div>
         </td>
           
       </tr>
@@ -1270,7 +1271,7 @@ const createPageS101Page1 = (date, content) =>
         <td style="width: 1%; text-align:left ; vertical-align: middle;">
         </td>
         <td style="width: 40%; text-align:left ; vertical-align: middle;">
-            <div class="left">ฌ. ระบบอิเลคทรอนิคส์</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.I}</label></div></div>
+            <div class="left">ฌ. ระบบอิเลคทรอนิคส์</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบอิเลคทรอนิคส์" ? content.HardwareType : "-"}</label></div></div>
         </td>
         <td style="width: 40%; text-align:left ; vertical-align: middle;">
         </td>
@@ -1288,7 +1289,7 @@ const createPageS101Page1 = (date, content) =>
       <table>
           <tr>
           <td>
-              <div class="left">(7) ซื้ออุปกรณ์ที่บำรุงรักษา</div><div contenteditable="true"><div class="dotted" style="width: 750px;"><label>${content.HardwareType}</label></div></div>
+              <div class="left">(7) ชื่ออุปกรณ์ที่บำรุงรักษา</div><div contenteditable="true"><div class="dotted" style="width: 750px;"><label>${content.HardwareType}</label></div></div>
           </td>
           </tr>
       </table>
@@ -1331,7 +1332,7 @@ const createPageS101Page1 = (date, content) =>
       <table>
           <tr>
           <td>
-              <div class="left">(11) ยังไม่ได้จัดการแก้ไขเพราะ</div><div contenteditable="true"><div class="dotted" style="width: 750px;"><label>${content.service_method_desc}</label></div></div>
+              <div class="left">(11) ยังไม่ได้จัดการแก้ไขเพราะ</div><div contenteditable="true"><div class="dotted" style="width: 750px;"><label>${content.interrupt_id}</label></div></div>
               <div class="left"></div><div class="dotted" ></div>
               <div class="left"></div><div class="dotted" ></div>
           </td>
@@ -1415,7 +1416,7 @@ const createPageS101Page2 = (table, date, content) =>
         <table style="margin-top: 1cm;">
             <tr>
             <td>
-                <div class="left">(16) รายละเอียดมีดังต่อไปนี้</div><div contenteditable="true"><div class="dotted" style="width: 750px;"><label></label></div></div>
+                <div class="left">(16) รายละเอียดมีดังต่อไปนี้</div><div contenteditable="true"><div class="dotted" style="width: 750px;"><label>${content.remark}</label></div></div>
                 <div class="left"></div><div class="dotted" ></div>
                 <div class="left"></div><div class="dotted" ></div>
                 <div class="left"></div><div class="dotted" ></div>
@@ -1444,7 +1445,7 @@ const createPageS101Page2 = (table, date, content) =>
         <table >
             <tr>
             <td>
-                <div class="left">(18) ความเห็นของนายตรวจลายหัวหน้าแขวง</div><div contenteditable="true"><div class="dotted" style="width: 750px;margin-bottom:2px;"><label>${content.remark}</label></div></div>
+                <div class="left">(18) ความเห็นของนายตรวจลายหัวหน้าแขวง</div><div contenteditable="true"><div class="dotted" style="width: 750px;margin-bottom:2px;"><label>-</label></div></div>
                 <div class="left" ></div><div class="dotted"></div>
                 <div class="left"></div><div class="dotted" ></div>
                 <div class="left"></div><div class="dotted" ></div>
@@ -1741,27 +1742,27 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
     let create_on = date + " " + mouth.mouth + " " + year;
 
     valuesContext.new_line_items_pdf.map(lineItem => {
-        data.push({
-          "item_id": p,
-          "description": lineItem.item_description,
+      data.push({
+        "item_id": p,
+        "description": lineItem.item_description,
 
-          "unit": lineItem.uom_name,
+        "unit": lineItem.uom_name,
 
-          "left_month_unit": lineItem.begin_unit_count,
-          "left_month_price": lineItem.begin_state_in_total_price,
+        "left_month_unit": lineItem.begin_unit_count,
+        "left_month_price": lineItem.begin_state_in_total_price,
 
-          "get_month_unit": lineItem.state_in_unit_count,
-          "get_month_price": lineItem.end_state_in_total_price,
+        "get_month_unit": lineItem.state_in_unit_count,
+        "get_month_price": lineItem.end_state_in_total_price,
 
-          "pay_month_unit": lineItem.state_out_unit_count,
-          "pay_month_price": lineItem.end_state_out_total_price,
+        "pay_month_unit": lineItem.state_out_unit_count,
+        "pay_month_price": lineItem.end_state_out_total_price,
 
-          "ending_unit_count": lineItem.ending_unit_count,
-          "ending_unit_count_total": "-",
-          
-          "type": lineItem.accounting_type
-        });
-        p = p + 1;
+        "ending_unit_count": lineItem.ending_unit_count,
+        "ending_unit_count_total": "-",
+
+        "type": lineItem.accounting_type
+      });
+      p = p + 1;
     })
 
     const data_json = {
@@ -1863,7 +1864,6 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
   }
   else if (routeLocation === '/pmt-ss-101') {
 
-    console.log(valuesContext)
     const data_json = valuesContext;
     let pageAll = ``;
 
@@ -1897,15 +1897,10 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
 
     for (let i = 0; i < pageSS101.length; i++) {
       const rows = pageSS101[i].map(createRowSS101).join('');
-      // console.log(rows)
       const table = createTableSS101(data_json.Headers, rows);
       const tablePage2 = createPageS101Page2(table, data_json.CreateOn, data_json.Content)
       pageAll = pageAll + tablePage2
     }
-
-
-    // const tablePage3 = createPageS101Page3(data_json.CreateOn, data_json.Content)
-    // pageAll = pageAll + tablePage3
 
     const html = createHtmlS101(pageAll);
     return resolve(html);

@@ -11,11 +11,12 @@ import { useFormikContext } from 'formik';
 const PopupModalDocument = (props) => {
     const [data, setData] = useState([]);
     const [documentID, setDocumentID] = useState("");
-    const [url, setUrl] = useState(props.documentTypeGroupID !== "document_all_type" ? `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=${props.documentTypeGroupID}&internal_document_id=${documentID}` : `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?&internal_document_id=${documentID}`)
+    const [url, setUrl] = useState(props.documentTypeGroupID !== "document_all_type" ? `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=${props.documentTypeGroupID}&internal_document_id=${documentID}&page_size=1000` : `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?&internal_document_id=${documentID}&page_size=1000`)
     const { setFieldValue } = useFormikContext();
     const [forceRefresh, setForceRefresh] = useState(false);
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
     const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
+    const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
     useEffect(() => {
         const fetchData = () => {
@@ -53,25 +54,46 @@ const PopupModalDocument = (props) => {
                             </thead>
                             <tbody>
                                 {data.map(function (document, index) {
-                                    // var created_on = new Date(document.created_on);
-                                    // created_on.setHours(created_on.getHours() + 7)
-                                    return (
-                                        <tr key={index} id={index}>
-                                            <td className="edit-padding"> {document.internal_document_id} </td>
-                                            <td className="edit-padding"> {document.created_on.split(".")[0].replace("T", " เวลา ") + " น."} </td>
-                                            <td className="edit-padding">
-                                                <select className="edit-select" value={document.document_status_id} disabled>
-                                                    <option value=''></option>
-                                                    {fact[FACTS.DOCUMENT_STATUS].items.map((status) => {
-                                                        return <option value={status.document_status_id}>{status.status}</option>
-                                                    })}
-                                                </select>
-                                            </td>
-                                            <td className="edit-padding text-center">
-                                                <button type="button" className="button-blue" onClick={() => setFieldValue(`${props.name}`, document.internal_document_id, true)} aria-label="Close active modal" aria-controls={props.id} >เลือก</button>
-                                            </td>
-                                        </tr>
-                                    )
+                                    if (document.dest_warehouse_id && document.src_warehouse_id) {
+                                        let findWarehouse = decoded_token.has_position ? decoded_token.has_position[0].warehouse_id ? decoded_token.has_position[0].warehouse_id : "no_warehouse" : null;
+                                        if (findWarehouse === document.dest_warehouse_id || findWarehouse === document.src_warehouse_id) {
+                                            console.log("findWarehouse>>>>")
+                                            return (
+                                                <tr key={index} id={index}>
+                                                    <td className="edit-padding"> {document.internal_document_id} </td>
+                                                    <td className="edit-padding"> {document.created_on.split(".")[0].replace("T", " เวลา ") + " น."} </td>
+                                                    <td className="edit-padding"> {document.document_status_en}</td>
+                                                    <td className="edit-padding text-center">
+                                                        <button type="button" className="button-blue" onClick={() => setFieldValue(`${props.name}`, document.internal_document_id, true)} aria-label="Close active modal" aria-controls={props.id} >เลือก</button>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        } else if (findWarehouse === "no_warehouse") {
+                                            console.log("no_warehouse")
+                                            return (
+                                                <tr key={index} id={index}>
+                                                    <td className="edit-padding"> {document.internal_document_id} </td>
+                                                    <td className="edit-padding"> {document.created_on.split(".")[0].replace("T", " เวลา ") + " น."} </td>
+                                                    <td className="edit-padding"> {document.document_status_en}</td>
+                                                    <td className="edit-padding text-center">
+                                                        <button type="button" className="button-blue" onClick={() => setFieldValue(`${props.name}`, document.internal_document_id, true)} aria-label="Close active modal" aria-controls={props.id} >เลือก</button>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        }
+                                    } else {
+                                        console.log("dest_warehouse and src_warehouse is null")
+                                        return (
+                                            <tr key={index} id={index}>
+                                                <td className="edit-padding"> {document.internal_document_id} </td>
+                                                <td className="edit-padding"> {document.created_on.split(".")[0].replace("T", " เวลา ") + " น."} </td>
+                                                <td className="edit-padding"> {document.document_status_en}</td>
+                                                <td className="edit-padding text-center">
+                                                    <button type="button" className="button-blue" onClick={() => setFieldValue(`${props.name}`, document.internal_document_id, true)} aria-label="Close active modal" aria-controls={props.id} >เลือก</button>
+                                                </td>
+                                            </tr>
+                                        )
+                                    }
                                 })}
                             </tbody>
                         </table>

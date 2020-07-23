@@ -93,7 +93,6 @@ const TopContent = (props) => {
         validateField("internal_document_id")
     }, [values.internal_document_id])
 
-    console.log("checkBooleanForEdit", checkBooleanForEdit)
     return (
         <div id={changeTheam() === true ? "" : "blackground-white"}>
             <div className="container_12 clearfix" style={{ marginTop: "55px" }}>
