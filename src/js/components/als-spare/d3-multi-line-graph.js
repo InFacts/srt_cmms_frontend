@@ -8,41 +8,39 @@ import AxisLeft from '../common/d3-axis-left';
 import useChartDimensions from '../../hooks/chart-dimensions-hook'
 
 const defaultChartSettings = {
-    "marginLeft": 20,
-    "marginBottom": 20,
-    "marginTop": 10,
-    "marginRight": 10,
+    marginLeft: 20,
+    marginBottom: 20,
+    marginTop: 10,
+    marginRight: 10,
 
-    "height": 200,
+    height: 200,
 }
 
 function MultiLineGraph({ data, chartSettings, title}) {
     // useChartDimensions will have a ref to the Chart_wrapper and get its own Height and Width
     // See reference of Amelia Wattenberger https://wattenberger.com/blog/react-and-d3#sizing-responsivity
     const [ref, dms] = useChartDimensions({ ...defaultChartSettings, ...chartSettings });
-
-    // Note: useState will not update on props change, use the useEffect if needed props
-    // const [timeDomain, setTimeDomain] = useState([new Date(2000, 0, 1), new Date(2000, 0, 2)]);
-    // const [inventoryMonthDomain, setInventoryMonthDomain] = useState([0, 100]);
-    // const [inventoryMonthPath, setInventoryMonthPath] = useState("");
     
     const xScale = scaleTime()
-            .domain(extent(data, d => d.date))
+            .domain(extent(data.dates))
             .range([0, dms.boundedWidth]);
 
     const yScale = scaleLinear()
-            .domain([0, max(data, d => d.inventory_month)*1.1]) // Move up by 10% of the max
+            .domain([0, max(data.series, d => max(d.values))]).nice() // Move up by 10% of the max
             .range([dms.boundedHeight, 0])
 
     const lineGenerator = line()
-        .x(d => xScale(d.date))
-        .y(d => yScale(d.inventory_month))
+        .defined(d => !isNaN(d))
+        .x((d,i) => xScale(data.dates[i]))
+        .y(d => yScale(d))
 
     return (
         <div className="Chart_wrapper" ref={ref} style={{ background: "white" }}>
             <svg width={dms.width} height={dms.height} 
                 // style={{ border: "1.5px solid gold" }} 
-            >
+                viewBox={`0 0 ${dms.width} ${dms.height}`}>
+
+                {/* Graph Boundary */}
                 <g transform={`translate(${dms.marginLeft}, ${dms.marginTop})`}>
                                         
                     {/* <rect
@@ -50,8 +48,25 @@ function MultiLineGraph({ data, chartSettings, title}) {
                         height={dms.boundedHeight}
                         fill="#FEF9E7"
                     /> */}
-                    {/* Line Path */}
-                    <path d={lineGenerator(data)} fill='none' stroke='steelblue'/>
+
+
+                    {/* Line Paths */}
+                    <g 
+                        fill="none"
+                        stroke="steelblue"
+                        strokeWidth={1.5}
+                        strokeLinejoin="round"
+                        strokeLinecap="round"
+                    >
+                        {data.series.map((d,i) => (
+                            <path 
+                                key={i}
+                                mix-blend-mode="multiply"
+                                d={lineGenerator(d.values)}
+                            />
+                        ))}
+
+                    </g>
 
 
                     {/* Graph Title */}

@@ -64,6 +64,18 @@ const AlsSpareComponent = () => {
   const [itemSpecificCurrentTORateUI, setItemSpecificCurrentTORateUI] = useState(0);
   const [itemSpecificGoalTORateUI, setItemSpecificGoalTORateUI] = useState(0);
 
+  const [itemSpecificMultiLineIssueReceiptData, setItemSpecificMultiLineIssueReceiptData] = useState({
+    dates: [],
+    series: [],
+  });
+  const [itemSpecificMultiLineIVMonthData, setItemSpecificMultiLineIVMonthData] = useState({
+    dates: [],
+    series: [],
+  });
+  const [itemSpecificMultiLineIVTORateData, setItemSpecificMultiLineIVTORateData] = useState({
+    dates: [],
+    series: [],
+  });
 
   const mockupData = () => {
     setIVMonthData(getAnnualInventoryMonthData());
@@ -265,32 +277,148 @@ const AlsSpareComponent = () => {
     return results;
   }
 
+  const calculateTORateFromIVMonth = (inventoryMonth) => {
+    return 1/inventoryMonth*12;
+  }
 
-  const itemEndingUnitCountSelector = (totalWindowStats,  currentReportingPeriodID, isCurrentYear, warehouseIDFilter=null, itemIDFilter = null, DELIMITER = "@@") => {
-    var itemEndingUnitCount = {};
-    
-    // warehouseIDFilter = (warehouseIDFilter === null) ? [] : warehouseIDFilter;
-    // itemIDFilter = (itemIDFilter === null) ? [] : itemIDFilter;
 
-    if (isCurrentYear){
+  // Selects the data for the multi line graph https://observablehq.com/@d3/multi-line-chart
+  // {
+  //    y: ylabel
+  //    series: Array[  {name: xname , values: Array(166)},  {name: xname , values: Array(166)}, ...]
+  //    dates: Array(166) [...] 
+  // }
+  const multilineGraphSelector = (totalWindowStats, itemUsageAnnualRate, currentYearReportingPeriodIDs, currentReportingPeriodID, isCurrentYear, warehouseIDFilter=null, itemIDFilter = null, DELIMITER = "@@") => {
+    let multilineIssueReceiptData = {}, multilineIVMonthData = {}, multilineIVTORateData = {};
+    multilineIssueReceiptData.y = "จำนวนอะไหล่";
+    multilineIVMonthData.y = "Inventory Month"; 
+    multilineIVTORateData.y = "Inventory Turnover Rate";
+
+    let dates = currentYearReportingPeriodIDs.map(reportingPeriod => new Date(sneakyAddUTC7ToDate(reportingPeriod.end_datetime)));
+    multilineIssueReceiptData.dates = [...dates];
+    multilineIVMonthData.dates = [...dates];
+    multilineIVTORateData.dates = [...dates];
+
+    multilineIssueReceiptData.series = [
+      {
+        name: "นำเข้า",
+        values: dates.map( (date,index) => {
+          return totalWindowStats
+            .filter(element => element.reporting_period_id === currentYearReportingPeriodIDs[index].reporting_period_id
+              && (warehouseIDFilter === null || warehouseIDFilter.includes(element.warehouse_id)) 
+              && (itemIDFilter === null || itemIDFilter.includes(element.item_id))
+            )
+            .reduce((previousValue, currentValue) => {
+              return previousValue + currentValue.receive_unit_count;
+            }, 0); 
+        })
+      },
+      {
+        name: "นำออก",
+        values: dates.map( (date,index) => {
+          return totalWindowStats
+            .filter(element => element.reporting_period_id === currentYearReportingPeriodIDs[index].reporting_period_id
+              && (warehouseIDFilter === null || warehouseIDFilter.includes(element.warehouse_id)) 
+              && (itemIDFilter === null || itemIDFilter.includes(element.item_id))
+            )
+            .reduce((previousValue, currentValue) => {
+              return previousValue + currentValue.issue_unit_count;
+            }, 0); 
+        })
+      }
+    ];
+
+
+    var QOHValues = [], IVMonthValues = [], TORateValues = [];
+
+    dates.map((date, index) => {
+      var itemEndingUnitCount = {};
+
       totalWindowStats
-        .filter(element => element.reporting_period_id === currentReportingPeriodID 
+        .filter(element => element.reporting_period_id === currentYearReportingPeriodIDs[index].reporting_period_id
           && (warehouseIDFilter === null || warehouseIDFilter.includes(element.warehouse_id)) 
           && (itemIDFilter === null || itemIDFilter.includes(element.item_id))
         )
         .map(element => {
+          if (isCurrentYear && currentYearReportingPeriodIDs[index].reporting_period_id === currentReportingPeriodID){
+            itemEndingUnitCount[`${element.warehouse_id}${DELIMITER}${element.item_id}`] = element.current_unit_count;
+          }else{
+            itemEndingUnitCount[`${element.warehouse_id}${DELIMITER}${element.item_id}`] = element.ending_unit_count;
+          }
+        }); 
+
+      QOHValues.push(sumObjectValues(itemEndingUnitCount)); 
+      
+      var itemEndingUnitCountAggItem =  aggregateItemFromItemEndingUnitCount(itemEndingUnitCount);
+      
+      var itemSpecificInventoryMonth = calculateItemInventoryMonth(
+        itemEndingUnitCountAggItem, 
+        itemUsageAnnualRate,
+      );
+
+      let {macroAverageInventoryMonth} = macroAverageItems(itemSpecificInventoryMonth);
+
+      IVMonthValues.push(macroAverageInventoryMonth);
+      TORateValues.push(calculateTORateFromIVMonth(macroAverageInventoryMonth))
+    });
+
+    multilineIVMonthData.series = [
+      {
+        name: "QOH",
+        // values: dates.map((date, index) => {
+        //   return  totalWindowStats
+        //     .filter(element => element.reporting_period_id === currentYearReportingPeriodIDs[index].reporting_period_id
+        //       && (warehouseIDFilter === null || warehouseIDFilter.includes(element.warehouse_id)) 
+        //       && (itemIDFilter === null || itemIDFilter.includes(element.item_id))
+        //     )
+        //     .reduce((previousValue, currentValue) => {
+        //       if (isCurrentYear && currentYearReportingPeriodIDs[index].reporting_period_id === currentReportingPeriodID){
+        //         return previousValue + currentValue.current_unit_count;
+        //       }else{
+        //         return previousValue + currentValue.ending_unit_count;
+        //       }
+              
+        //     }, 0) 
+        // })
+        values: QOHValues
+      },
+      {
+        name: "Inventory Month",
+        values: IVMonthValues
+      }
+    ];
+
+    multilineIVTORateData.series = [
+      {
+        name: "Inventory Turnover Rate",
+        values: TORateValues
+      }
+    ]
+    console.log("ALSSPARE:: itemMultiLineQOHValues ", QOHValues)
+    console.log("ALSSPARE:: itemMultiLine IV MONTH ", IVMonthValues)
+    console.log("ALSSPARE:: itemMultiLine ITORateValues ", TORateValues)
+
+
+    return {multilineIssueReceiptData,multilineIVMonthData,multilineIVTORateData};
+  }
+
+
+
+  const itemEndingUnitCountSelector = (totalWindowStats,  currentReportingPeriodID, isCurrentYear, warehouseIDFilter=null, itemIDFilter = null, DELIMITER = "@@") => {
+    var itemEndingUnitCount = {};
+
+    totalWindowStats
+      .filter(element => element.reporting_period_id === currentReportingPeriodID 
+        && (warehouseIDFilter === null || warehouseIDFilter.includes(element.warehouse_id)) 
+        && (itemIDFilter === null || itemIDFilter.includes(element.item_id))
+      )
+      .map(element => {
+        if (isCurrentYear){
           itemEndingUnitCount[`${element.warehouse_id}${DELIMITER}${element.item_id}`] = element.current_unit_count;
-        }); 
-    }else{
-      totalWindowStats
-        .filter(element => element.reporting_period_id === currentReportingPeriodID 
-          && (warehouseIDFilter === null || warehouseIDFilter.includes(element.warehouse_id))
-          && (itemIDFilter === null || itemIDFilter.includes(element.item_id))
-        )
-        .map(element => {
+        }else{
           itemEndingUnitCount[`${element.warehouse_id}${DELIMITER}${element.item_id}`] = element.ending_unit_count;
-        }); 
-    }
+        }
+      }); 
     return itemEndingUnitCount;
   }
 
@@ -511,6 +639,7 @@ const AlsSpareComponent = () => {
     return itemSpecificEndingUnitCountAggItem;
   }
 
+  
   useEffect (() => {
     async function mainFetchAndUpdateData() {
       if (!isMockup){
@@ -701,24 +830,13 @@ const AlsSpareComponent = () => {
           if (itemIDFilter !== null){
             var {goalQOH, upperLimitQOH, lowerLimitQOH,  goalIVMonth, goalTORate} = findItemGoalQOH(itemIDFilter, fact[FACTS.ITEM], itemUsageAnnualRate);
             itemSpecificGoalQOH= goalQOH;
-            itemSpecificGoalIVMonth = goalIVMonth.toFixed(1);
-            itemSpecificGoalTORate = goalTORate.toFixed(2);
-
-
-
+            itemSpecificGoalIVMonth = (typeof goalIVMonth ==='string') ? goalIVMonth : goalIVMonth.toFixed(1);
+            itemSpecificGoalTORate = (typeof goalTORate ==='string') ? goalTORate :goalTORate.toFixed(2);
           }else{
             itemSpecificGoalQOH =  "N/A";
             itemSpecificGoalIVMonth = "N/A";
             itemSpecificGoalTORate = "N/A";
-
-            
-
           }
-
-          
-          
-          
-
 
           setItemSpecificIssueAccuUI(itemSpecificIssueAccu);
           setItemSpecificReceiveAccuUI(itemSpecificReceiveAccu);
@@ -732,101 +850,13 @@ const AlsSpareComponent = () => {
           setItemSpecificGoalTORateUI(itemSpecificGoalTORate);
 
 
-          fetchStatisticGoodsMonthlySummary( // Beware of Math.min() and Math.max() going to infinity and -infinity 
-            Math.min(...currentWindowReportingPeriodIDs.map(reportingPeriod => reportingPeriod.reporting_period_id)) , 
-            Math.max(...currentWindowReportingPeriodIDs.map(reportingPeriod => reportingPeriod.reporting_period_id),0 ) ,
-            // warehouseIDFilter,
-            null, // WAREHOUSE FILTER CANT BE USED HERE BECAUSE OF TOP bar -> need to summaiton of everything
-            itemIDFilter ,
-            itemStatusIDFilter,
-          )
-          .then(  results  => {
-  
-            // console.log("ALSSPARE:: findCurrentReportingPeriod", findCurrentReportingPeriod(fact[FACTS.REPORTING_PERIOD].items))
-            // console.log("ALSSPARE:: fetchStatisticGoodsMonthlySummary", results);
-    
-            // itemUsageAnnualRate, itemReceiveAnnualRate [Calculated from the current window size]
-            // var [itemUsageAnnualRate, itemReceiveAnnualRate, itemEndingUnitCounts] = findItemsStats(results, reportingPeriodIDSelector(currentWindowReportingPeriodIDs), warehouseIDFilter, itemIDFilter, true);
-    
-            // Finding Macro Average of the Inventory Month
-            // 1. Find Inventory month of every item by QOH_current/InventoryUsageRate_item * 12
-            //    (QOH_current should be found by the latest reporting period id of that particular year)
-            // 2. Find Macro Average by summing all InventoryMonth_item/#Items
-            // console.log("ALSSPARE:: itemAnnualEndingUnitCount ", itemEndingUnitCounts)
-            // console.log("ALSSPARE:: itemUsageAnnualRate ", itemUsageAnnualRate)
-            // let itemInventoryMonth = calculateItemInventoryMonth(itemEndingUnitCounts[currentReportingPeriodID.reporting_period_id], itemUsageAnnualRate);
-            // console.log("ALSSPARE:: itemInventoryMonth ", itemInventoryMonth)
-            // let {macroAverageInventoryMonth, itemsInvalid} = macroAverageItems(itemInventoryMonth);
-            // // Set MacroAverageInventoryMonth on the UI
-            // setMacroAverageInventoryMonthUI(macroAverageInventoryMonth);
-            // console.log("ALSSPARE:: macroAverageInventoryMonth ", macroAverageInventoryMonth)
-  
-            // Set MacroAverageInventoryMonth for each reporting period ID using the same itemUsageAnnualRate (this should be changed to each window size to get the same report each time, but too many queries!! -- or just use quantity [but will lose information about the relative against usage rate])
-            // let macroAverageInventoryMonthHistory = calculateInventoryMonthHistory(itemEndingUnitCounts, itemUsageAnnualRate);
-            // macroAverageInventoryMonthHistory = macroAverageInventoryMonthHistory.map(({reportingPeriodID, itemInventoryMonth}) => {
-            //   let {macroAverageInventoryMonth, itemsInvalid} = macroAverageItems(itemInventoryMonth);
-            //   return ({
-            //     reportingPeriodID, 
-            //     reportingPeriod: currentWindowReportingPeriodIDs.find(reportingPeriod => reportingPeriod.reporting_period_id===reportingPeriodID),
-            //     macroAverageInventoryMonth 
-            //   })
-            // })
-            // console.log("ALSSPARE:: macroAverageInventoryMonthHistory ", macroAverageInventoryMonthHistory)
-            // let lineGraphData = lineGraphSelector(macroAverageInventoryMonthHistory);
-            // console.log("ALSSPARE:: lineGraphData ", lineGraphData)
-            // setIVMonthData(lineGraphData);
-  
-    
-            // Set Diverging Bar Graph Data:: For only Current Year Filter
-            // var [itemUsageYear, itemReceiveYear, _] = findItemsStats(
-            //   results, 
-            //   reportingPeriodIDSelector(currentYearReportingPeriodIDs), 
-            //   currentReportingPeriodID.reporting_period_id,  // To check for the current reporting period if it is current year 
-            //   isCurrentYear, // Current year will not have ending unit count!!!
-            //   warehouseIDFilter, 
-            //   itemIDFilter, 
-            //   false,
-            // );
-            // var barDivergingGraphData = divergingBarSelector(itemUsageYear, itemReceiveYear, fact[FACTS.ITEM]);
-            // setBarDivergingGraphData(barDivergingGraphData);
-    
-            // Set numberItemsLower, numberItemsEqual , numberItemsHigher , scatterPlotData
-            // var {numberItemsLower, numberItemsEqual , numberItemsHigher , scatterPlotData} = checkItemsQOHCompliance(itemEndingUnitCounts[currentReportingPeriodID.reporting_period_id], itemUsageAnnualRate, itemInventoryMonth, fact[FACTS.ITEM]);
-            // setNumberItemsLowerUI(numberItemsLower);
-            // setNumberItemsEqualUI(numberItemsEqual);
-            // setNumberItemsHigherUI(numberItemsHigher);
-            // setScatterPlotData(scatterPlotData);
-  
-            // const [itemSpecificIssueAccuUI, setItemSpecificIssueAccuUI] = useState(0);
-            // const [itemSpecificIssueRateUI, setItemSpecificIssueRateUI] = useState(0);
-            // const [itemSpecificReceiveAccuUI, setItemSpecificReceiveAccuUI] = useState(0);
-            // const [itemSpecificReceiveRateUI, setItemSpecificReceiveRateUI] = useState(0);
-          
-            // const [itemSpecificCurrentQOHUI, setItemSpecificCurrentQOHUI] = useState(0);
-            // const [itemSpecificGoalQOHUI, setItemSpecificGoalQOHUI] = useState(0);
-            // const [itemSpecificCurrentIVMonthUI, setItemSpecificCurrentIVMonthUI] = useState(0);
-            // const [itemSpecificGoalIVMonthUI, setItemSpecificGoalIVMonthUI] = useState(0);
-            // const [itemSpecificCurrentTORateUI, setItemSpecificCurrentTORateUI] = useState(0);
-            // const [itemSpecificGoalTORateUI, setItemSpecificGoalTORateUI] = useState(0);
-            // if (values.item_id === '') {
-            //   setItemSpecificIssueAccuUI(sumObjectValues(itemUsageYear).toFixed(0));
-            //   setItemSpecificReceiveAccuUI(sumObjectValues(itemReceiveYear).toFixed(0));
-            //   setItemSpecificIssueRateUI(sumObjectValues(itemUsageAnnualRate).toFixed(0));
-            //   setItemSpecificReceiveRateUI(sumObjectValues(itemReceiveAnnualRate).toFixed(0));
-            //   setItemSpecificCurrentQOHUI(sumObjectValues(itemEndingUnitCounts[currentReportingPeriodID.reporting_period_id]).toFixed(0));
-            //   setItemSpecificGoalQOHUI("N/A");
-            //   setItemSpecificCurrentIVMonthUI(macroAverageInventoryMonth.toFixed(1)); 
-            //   setItemSpecificGoalIVMonthUI("N/A");
-            //   setItemSpecificCurrentTORateUI((1/macroAverageInventoryMonth*12).toFixed(2)); 
-            //   setItemSpecificGoalTORateUI("N/A");
-            // }else{
-            //   setItemSpecificIssueAccuUI(itemUsageYear[values.item_id]);
-            // }
-            
-  
-  
-            // console.log("ALSSPARE:: item stats:: ", itemUsageYear, itemReceiveYear)
-          })
+          // 3 Lower Graphs
+          var {multilineIssueReceiptData,multilineIVMonthData,multilineIVTORateData} = multilineGraphSelector(totalWindowStats,itemUsageAnnualRate, currentYearReportingPeriodIDs, currentReportingPeriodID.reporting_period_id, isCurrentYear, warehouseIDFilter, itemIDFilter);
+          setItemSpecificMultiLineIssueReceiptData(multilineIssueReceiptData);
+          setItemSpecificMultiLineIVMonthData(multilineIVMonthData);
+          setItemSpecificMultiLineIVTORateData(multilineIVTORateData);
+
+         
         }
       }else{ //isMockup!!
         mockupData();
@@ -941,7 +971,7 @@ const AlsSpareComponent = () => {
                       <div className="col-12">
                         <MultiLineGraph
                           title="การใช้งานและการนำเข้า"
-                          data={IVMonthData}
+                          data={itemSpecificMultiLineIssueReceiptData}
                           chartSettings={{
                             marginTop: 20,
                             height: 150,
@@ -953,7 +983,7 @@ const AlsSpareComponent = () => {
                       <div className="col-12">
                         <MultiLineGraph
                           title="คงคลัง/Inventory Month"
-                          data={IVMonthData}
+                          data={itemSpecificMultiLineIVMonthData}
                           chartSettings={{
                             marginTop: 20,
                             height: 150,
@@ -965,7 +995,7 @@ const AlsSpareComponent = () => {
                       <div className="col-12">
                         <MultiLineGraph
                           title="Inventory Turnover Rate"
-                          data={IVMonthData}
+                          data={itemSpecificMultiLineIVTORateData}
                           chartSettings={{
                             marginTop: 20,
                             height: 150,
