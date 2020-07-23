@@ -265,10 +265,74 @@ const AlsSpareComponent = () => {
     return results;
   }
 
+
+  const itemEndingUnitCountSelector = (totalWindowStats,  currentReportingPeriodID, isCurrentYear, warehouseIDFilter=null, itemIDFilter = null, DELIMITER = "@@") => {
+    var itemEndingUnitCount = {};
+    
+    // warehouseIDFilter = (warehouseIDFilter === null) ? [] : warehouseIDFilter;
+    // itemIDFilter = (itemIDFilter === null) ? [] : itemIDFilter;
+
+    if (isCurrentYear){
+      totalWindowStats
+        .filter(element => element.reporting_period_id === currentReportingPeriodID 
+          && (warehouseIDFilter === null || warehouseIDFilter.includes(element.warehouse_id)) 
+          && (itemIDFilter === null || itemIDFilter.includes(element.item_id))
+        )
+        .map(element => {
+          itemEndingUnitCount[`${element.warehouse_id}${DELIMITER}${element.item_id}`] = element.current_unit_count;
+        }); 
+    }else{
+      totalWindowStats
+        .filter(element => element.reporting_period_id === currentReportingPeriodID 
+          && (warehouseIDFilter === null || warehouseIDFilter.includes(element.warehouse_id))
+          && (itemIDFilter === null || itemIDFilter.includes(element.item_id))
+        )
+        .map(element => {
+          itemEndingUnitCount[`${element.warehouse_id}${DELIMITER}${element.item_id}`] = element.ending_unit_count;
+        }); 
+    }
+    return itemEndingUnitCount;
+  }
+
   // Priorities
   // 1. If not null, Check if it complies with the itemFact's quantity_lowest(pin):null; quantity_highest(pin):null; quantity_required(pin):null
   // 2. If there is itemInventoryMonth, Check if it complies with InventoryMonth: 6 [itemUsage > 0]
   // 3. If nothing, Check if it is more than 1 QOH unit [default Goal since no itemUsage to reference]
+  // Return: goalQOH, upperLimitQOH, lowerLimitQOH
+  //         goalIVMonth,
+  //         goalTORate  
+  const findItemGoalQOH = (itemID, itemFact, itemUsageAnnualRate, goalInventoryMonth=6, tolerance=0.1) => {
+
+    let itemInfo = itemFact.items.find(item => `${item.item_id}` === `${itemID}`);
+
+    let goalQOH = 1;
+    let upperLimitQOH = goalQOH*(1+tolerance);
+    let lowerLimitQOH = goalQOH*(1-tolerance);
+    let goalIVMonth = "N/A";
+    let goalTORate = "N/A"; 
+
+    if (itemInfo.quantity_highest && itemInfo.quantity_lowest && itemInfo.quantity_required){
+      // console.log("ALSSPARE:: itemInfo", itemInfo.quantity_highest, itemInfo.quantity_lowest, itemInfo.quantity_required)
+      goalQOH = itemInfo.quantity_required;
+      upperLimitQOH = itemInfo.quantity_highest;
+      lowerLimitQOH = itemInfo.quantity_lowest;
+    }else if(itemUsageAnnualRate.hasOwnProperty(itemID) && itemUsageAnnualRate[itemID] > 0){
+      goalQOH = itemUsageAnnualRate[itemID] *goalInventoryMonth/12; // Reverse to find the itemUsageAnnualRate
+      // console.log("ALSSPARE:: Reverse to find the itemUsageAnnualRate", goalQOH)
+      upperLimitQOH = goalQOH*(1+tolerance);
+      lowerLimitQOH = goalQOH*(1-tolerance);
+    } 
+
+    if (itemUsageAnnualRate.hasOwnProperty(itemID)){
+      goalIVMonth = goalQOH/itemUsageAnnualRate[itemID] * 12;
+      goalTORate = itemUsageAnnualRate[itemID]/goalQOH; 
+    }
+
+    return {goalQOH, upperLimitQOH, lowerLimitQOH, goalIVMonth, goalTORate};
+
+  }
+
+  
   //
   // Also export data to scatter plot
   // [...Array(500)].map((e, i) => ({
@@ -285,22 +349,7 @@ const AlsSpareComponent = () => {
 
     const DELIMITER = "@@";
     // convert totalWindowStats to itemEndingUnitCount
-    var itemEndingUnitCount = {};
-    if (isCurrentYear){
-      totalWindowStats
-        .filter(element => element.reporting_period_id === currentReportingPeriodID && 
-          warehouseIDSourcesFilter.includes(element.warehouse_id))
-        .map(element => {
-          itemEndingUnitCount[`${element.warehouse_id}${DELIMITER}${element.item_id}`] = element.current_unit_count;
-        }); 
-    }else{
-      totalWindowStats
-        .filter(element => element.reporting_period_id === currentReportingPeriodID && 
-          warehouseIDSourcesFilter.includes(element.warehouse_id))
-        .map(element => {
-          itemEndingUnitCount[`${element.warehouse_id}${DELIMITER}${element.item_id}`] = element.ending_unit_count;
-        }); 
-    }
+    var itemEndingUnitCount = itemEndingUnitCountSelector(totalWindowStats, currentReportingPeriodID, isCurrentYear,warehouseIDSourcesFilter, null,  DELIMITER);
     console.log("ALSSPARE:: THIS IS ITEM ENDING UNIT COUNT itemEndingUnitCount ", itemEndingUnitCount);
 
 
@@ -309,25 +358,11 @@ const AlsSpareComponent = () => {
       Object.keys(itemEndingUnitCount).map(key => {
         var [warehouseID, itemID] = key.split(DELIMITER);
 
-        let goalQOH = 1;
-        let upperLimitQOH = goalQOH*(1+tolerance);
-        let lowerLimitQOH = goalQOH*(1-tolerance);
         let currentQOH = itemEndingUnitCount[key];
-        let itemInfo = itemFact.items.find(item => `${item.item_id}` === `${itemID}`);
         let colorState = 0; // -1 for Lower, 0 for Equal , 1 for Higher
-        
-        if (itemInfo.quantity_highest && itemInfo.quantity_lowest && itemInfo.quantity_required){
-          console.log("ALSSPARE:: itemInfo", itemInfo.quantity_highest, itemInfo.quantity_lowest, itemInfo.quantity_required)
-          goalQOH = itemInfo.quantity_required;
-          upperLimitQOH = itemInfo.quantity_highest;
-          lowerLimitQOH = itemInfo.quantity_lowest;
-        }else if(itemUsageAnnualRate.hasOwnProperty(itemID) && itemUsageAnnualRate[itemID] > 0){
-          goalQOH = itemUsageAnnualRate[itemID] *goalInventoryMonth/12; // Reverse to find the itemUsageAnnualRate
-          console.log("ALSSPARE:: Reverse to find the itemUsageAnnualRate", goalQOH)
-          upperLimitQOH = goalQOH*(1+tolerance);
-          lowerLimitQOH = goalQOH*(1-tolerance);
-        } 
-        // console.log("ALSSPARE: itemInfo", itemInfo)
+    
+        var {goalQOH, upperLimitQOH, lowerLimitQOH} = findItemGoalQOH(itemID, itemFact, itemUsageAnnualRate, goalInventoryMonth, tolerance);
+
 
         if (currentQOH <= upperLimitQOH && currentQOH >= lowerLimitQOH){
           numberItemsEqual += 1;
@@ -461,6 +496,20 @@ const AlsSpareComponent = () => {
     }
     return totalWindowStats;
   } 
+
+  const aggregateItemFromItemEndingUnitCount = (itemSpecificEndingUnitCount, DELIMITER="@@") => {
+    let itemSpecificEndingUnitCountAggItem = {}
+    for (var key in itemSpecificEndingUnitCount){
+      var [warehouseID, itemID] = key.split(DELIMITER);
+
+      if (itemSpecificEndingUnitCountAggItem.hasOwnProperty(itemID)){
+        itemSpecificEndingUnitCountAggItem[itemID] += itemSpecificEndingUnitCount[key];
+      }else{
+        itemSpecificEndingUnitCountAggItem[itemID] = itemSpecificEndingUnitCount[key];
+      }
+    }
+    return itemSpecificEndingUnitCountAggItem;
+  }
 
   useEffect (() => {
     async function mainFetchAndUpdateData() {
@@ -616,7 +665,71 @@ const AlsSpareComponent = () => {
 
 
 
+          // Finally, Set the Item Specific Information
+          // 1. IssueAccu and Receive Accu (This year)
+          var itemSpecificIssueAccu = sumObjectValues(itemUsageYear).toFixed(0); 
+          var itemSpecificReceiveAccu = sumObjectValues(itemReceiveYear).toFixed(0);
 
+          // 2. IssueRate and ReceiveRate (WindowSize)
+          var itemSpecificIssueRate = sumObjectValues(itemUsageAnnualRate).toFixed(0);
+          var itemSpecificReceiveRate = sumObjectValues(itemReceiveAnnualRate).toFixed(0);
+
+          // 3. QOH current and QOH Goal
+          // 4. Inventory Month current and Inventory Month Goal
+          // 5. Inventory Turnover Rate Current and Inventory Turnover Rate Goal
+
+          // itemSpecificEndingUnitCount -> Get unit count of the latest year where itemSpecificEndingUnitCount[{warehouseID}@@{itemID}] -> unit count
+          var itemSpecificEndingUnitCount = itemEndingUnitCountSelector(totalWindowStats,  currentReportingPeriodID.reporting_period_id, isCurrentYear, warehouseIDFilter, itemIDFilter);
+          console.log("ALSSPARE:: itemSpecificEndingUnitCount ", itemSpecificEndingUnitCount)
+
+          var itemSpecificCurrentQOH = sumObjectValues(itemSpecificEndingUnitCount).toFixed(0); 
+
+          var itemSpecificEndingUnitCountAggItem =  aggregateItemFromItemEndingUnitCount(itemSpecificEndingUnitCount);
+          console.log("ALSSPARE:: itemSpecificEndingUnitCountAggItem ", itemSpecificEndingUnitCountAggItem);
+          var itemSpecificInventoryMonth = calculateItemInventoryMonth(
+            itemSpecificEndingUnitCountAggItem, 
+            itemUsageAnnualRate,
+          );
+          console.log("ALSSPARE:: itemSpecificInventoryMonth ", itemSpecificInventoryMonth);
+          var macroAverageInventoryMonthDict = macroAverageItems(itemSpecificInventoryMonth);
+
+          var itemSpecificCurrentIVMonth = macroAverageInventoryMonthDict.macroAverageInventoryMonth.toFixed(1);
+          var itemSpecificCurrentTORate  = (1/macroAverageInventoryMonthDict.macroAverageInventoryMonth*12).toFixed(2);
+
+
+          var itemSpecificGoalQOH, itemSpecificGoalIVMonth, itemSpecificGoalTORate;
+          if (itemIDFilter !== null){
+            var {goalQOH, upperLimitQOH, lowerLimitQOH,  goalIVMonth, goalTORate} = findItemGoalQOH(itemIDFilter, fact[FACTS.ITEM], itemUsageAnnualRate);
+            itemSpecificGoalQOH= goalQOH;
+            itemSpecificGoalIVMonth = goalIVMonth.toFixed(1);
+            itemSpecificGoalTORate = goalTORate.toFixed(2);
+
+
+
+          }else{
+            itemSpecificGoalQOH =  "N/A";
+            itemSpecificGoalIVMonth = "N/A";
+            itemSpecificGoalTORate = "N/A";
+
+            
+
+          }
+
+          
+          
+          
+
+
+          setItemSpecificIssueAccuUI(itemSpecificIssueAccu);
+          setItemSpecificReceiveAccuUI(itemSpecificReceiveAccu);
+          setItemSpecificIssueRateUI(itemSpecificIssueRate);
+          setItemSpecificReceiveRateUI(itemSpecificReceiveRate);
+          setItemSpecificCurrentQOHUI(itemSpecificCurrentQOH);
+          setItemSpecificGoalQOHUI(itemSpecificGoalQOH);
+          setItemSpecificCurrentIVMonthUI(itemSpecificCurrentIVMonth); 
+          setItemSpecificGoalIVMonthUI(itemSpecificGoalIVMonth);
+          setItemSpecificCurrentTORateUI(itemSpecificCurrentTORate); 
+          setItemSpecificGoalTORateUI(itemSpecificGoalTORate);
 
 
           fetchStatisticGoodsMonthlySummary( // Beware of Math.min() and Math.max() going to infinity and -infinity 
@@ -630,7 +743,7 @@ const AlsSpareComponent = () => {
           .then(  results  => {
   
             // console.log("ALSSPARE:: findCurrentReportingPeriod", findCurrentReportingPeriod(fact[FACTS.REPORTING_PERIOD].items))
-            console.log("ALSSPARE:: fetchStatisticGoodsMonthlySummary", results);
+            // console.log("ALSSPARE:: fetchStatisticGoodsMonthlySummary", results);
     
             // itemUsageAnnualRate, itemReceiveAnnualRate [Calculated from the current window size]
             // var [itemUsageAnnualRate, itemReceiveAnnualRate, itemEndingUnitCounts] = findItemsStats(results, reportingPeriodIDSelector(currentWindowReportingPeriodIDs), warehouseIDFilter, itemIDFilter, true);
@@ -695,24 +808,24 @@ const AlsSpareComponent = () => {
             // const [itemSpecificGoalIVMonthUI, setItemSpecificGoalIVMonthUI] = useState(0);
             // const [itemSpecificCurrentTORateUI, setItemSpecificCurrentTORateUI] = useState(0);
             // const [itemSpecificGoalTORateUI, setItemSpecificGoalTORateUI] = useState(0);
-            if (values.item_id === '') {
-              setItemSpecificIssueAccuUI(sumObjectValues(itemUsageYear).toFixed(0));
-              setItemSpecificReceiveAccuUI(sumObjectValues(itemReceiveYear).toFixed(0));
-              setItemSpecificIssueRateUI(sumObjectValues(itemUsageAnnualRate).toFixed(0));
-              setItemSpecificReceiveRateUI(sumObjectValues(itemReceiveAnnualRate).toFixed(0));
-              setItemSpecificCurrentQOHUI(sumObjectValues(itemEndingUnitCounts[currentReportingPeriodID.reporting_period_id]).toFixed(0));
-              setItemSpecificGoalQOHUI("N/A");
-              setItemSpecificCurrentIVMonthUI(macroAverageInventoryMonth.toFixed(1)); 
-              setItemSpecificGoalIVMonthUI("N/A");
-              setItemSpecificCurrentTORateUI((1/macroAverageInventoryMonth*12).toFixed(2)); 
-              setItemSpecificGoalTORateUI("N/A");
-            }else{
-              setItemSpecificIssueAccuUI(itemUsageYear[values.item_id]);
-            }
+            // if (values.item_id === '') {
+            //   setItemSpecificIssueAccuUI(sumObjectValues(itemUsageYear).toFixed(0));
+            //   setItemSpecificReceiveAccuUI(sumObjectValues(itemReceiveYear).toFixed(0));
+            //   setItemSpecificIssueRateUI(sumObjectValues(itemUsageAnnualRate).toFixed(0));
+            //   setItemSpecificReceiveRateUI(sumObjectValues(itemReceiveAnnualRate).toFixed(0));
+            //   setItemSpecificCurrentQOHUI(sumObjectValues(itemEndingUnitCounts[currentReportingPeriodID.reporting_period_id]).toFixed(0));
+            //   setItemSpecificGoalQOHUI("N/A");
+            //   setItemSpecificCurrentIVMonthUI(macroAverageInventoryMonth.toFixed(1)); 
+            //   setItemSpecificGoalIVMonthUI("N/A");
+            //   setItemSpecificCurrentTORateUI((1/macroAverageInventoryMonth*12).toFixed(2)); 
+            //   setItemSpecificGoalTORateUI("N/A");
+            // }else{
+            //   setItemSpecificIssueAccuUI(itemUsageYear[values.item_id]);
+            // }
             
   
   
-            console.log("ALSSPARE:: item stats:: ", itemUsageYear, itemReceiveYear)
+            // console.log("ALSSPARE:: item stats:: ", itemUsageYear, itemReceiveYear)
           })
         }
       }else{ //isMockup!!
