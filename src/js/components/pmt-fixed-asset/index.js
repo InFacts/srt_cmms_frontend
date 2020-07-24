@@ -34,6 +34,7 @@ const GoodsReceiptComponent = (props) => {
         { id: "w2", name: "สัปดาห์ที่ 2" },
         { id: "w3", name: "สัปดาห์ที่ 3" },
         { id: "w4", name: "สัปดาห์ที่ 4" },
+        { id: "related_parties", name: "ผู้ที่เกี่ยวข้อง" },
         { id: "attachment", name: "แนบไฟล์" },
         { id: "table_status", name: "สถานะเอกสาร" }
     ]);
@@ -80,9 +81,12 @@ const GoodsReceiptComponent = (props) => {
 // Week one
 const initialLineW1 = {
     station_id: '',
+    station_th: '',
     internal_item_id: '',
     checklist_id: '',
-    x_cross_x_cross_id: ''
+    checklist_name: '',
+    x_cross_x_cross_id: '',
+    x_cross_x_cross_th: ''
 }
 const initialRowsW1 = (n = 10) => {
     let rows = [];
@@ -114,6 +118,18 @@ const EnhancedGoodsReceiptComponent = withFormik({
         w2_list: initialRowsW1(),
         w3_list: initialRowsW1(),
         w4_list: initialRowsW1(),
+
+        // Bottom Content ผู้เกี่ยวข้อง
+        member_lead: '',               //รายชื่อเพื่อนร่วมงาน 1 NVARCHAR
+        member_lead_level_id: '', //รายชื่อเพื่อนร่วมงาน 1 ตำแหน่ง FK_ID
+        member_1: '',               //รายชื่อเพื่อนร่วมงาน 1 NVARCHAR
+        member_1_level_id: '', //รายชื่อเพื่อนร่วมงาน 1 ตำแหน่ง FK_ID
+        member_2: '',              //รายชื่อเพื่อนร่วมงาน 2 NVARCHAR
+        member_2_level_id: '', //รายชื่อเพื่อนร่วมงาน 2 ตำแหน่ง FK_ID
+        member_3: '',             //รายชื่อเพื่อนร่วมงาน 3
+        member_3_level_id: '',  //รายชื่อเพื่อนร่วมงาน 3 ตำแหน่ง
+        member_4: '',             //รายชื่อเพื่อนร่วมงาน 4
+        member_4_level_id: '',  //รายชื่อเพื่อนร่วมงาน 4 ตำแหน่ง
 
         //Field ที่ไม่ได้กรอก
         files: [],

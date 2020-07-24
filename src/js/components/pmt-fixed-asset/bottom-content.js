@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom'
 
 import TableStatus from '../common/table-status';
 import Files from '../common/files2'
+import TextInput from '../common/formik-text-input';
+import SelectNoChildrenInput from '../common/formik-select-no-children';
+import Label from '../common/form-label'
 
 import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
 import { useFormikContext } from 'formik';
@@ -12,14 +15,16 @@ import { FACTS } from '../../redux/modules/api/fact.js';
 import '../../../css/table.css';
 
 import BgBlue from '../../../images/pmt/bg_blue.jpg';
-import { fetchPositionPermissionData, changeTheam, checkBooleanForEditHelper, validatedataDocumentField } from '../../helper.js'
+import { fetchPositionPermissionData, changeTheam, checkBooleanForEditCheckNodeIDHelperForWorkOrderPM, validatedataDocumentField } from '../../helper.js'
 const BottomContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
-  let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
+  const factLevel = useSelector((state) => ({ ...state.api.fact[FACTS.LEVEL] }), shallowEqual);
+
+  let checkBooleanForEdit = checkBooleanForEditCheckNodeIDHelperForWorkOrderPM(values, decoded_token, fact);
   useEffect(() => {
     checkBooleanForEdit = false
     validateField("internal_document_id")
@@ -43,42 +48,48 @@ const BottomContent = (props) => {
                     <th className="font text-center" colSpan="3" style={{ minWidth: "640px" }}>คานกั้น</th>
                   </tr>
                   <tr>
-                    <th className="font text-center" style={{ minWidth: "216px" }}>สินทรัพย์</th>
+                    <th className="font text-center" style={{ minWidth: "100px" }}>สินทรัพย์</th>
                     <th className="font text-center" style={{ minWidth: "216px" }}>แผน</th>
-                    <th className="font text-center" style={{ minWidth: "216px" }}>เลข กม.</th>
+                    <th className="font text-center" style={{ minWidth: "100px" }}>เลข กม.</th>
                   </tr>
                 </thead>
                 <tbody>
                   {values.w1_list.map((line_item, index) => {
+                    // console.log("line_item", line_item)
                     let line_number = index + 1;
                     return (
                       <tr>
                         <th className="edit-padding text-center">{line_number}</th>
                         <td className="edit-padding">
-                          {values.w1_list[index].internal_item_id ? "-" : <Link to={`pmt-all-checklist-fixed-asset?checklist_id=station`}>บางซื่อ</Link>}
+                          {values.w1_list[index].internal_item_id ? "-" :
+                            <Link to={{
+                              pathname: `pmt-all-checklist-fixed-asset`,
+                              aboutProps: {
+                                station_id: line_item.station_id,
+                                weekly_task_id: line_item.weekly_task_id,
+                                work_order_pm_has_selector_checklist_line_item: values.work_order_pm_has_selector_checklist_line_item,
+                                document_id: values.document_id,
+                                internal_document_id: values.internal_document_id
+                              }
+                            }}>{line_item.station_th}</Link>}
+                        </td>
+                        <td className="edit-padding text-center">
+                          {values.w1_list[index].station_id ? "-" : line_item.internal_item_id}
                         </td>
                         <td className="edit-padding">
-                          {values.w1_list[index].station_id ? "-" : "internal_item_id"}
+                          {values.w1_list[index].station_id ? "-" :
+                            <Link to={{
+                              pathname: `pmt-all-checklist-fixed-asset`, aboutProps: {
+                                checklist_id: line_item.checklist_id,
+                                weekly_task_id: line_item.weekly_task_id, work_order_pm_has_selector_checklist_line_item: values.work_order_pm_has_selector_checklist_line_item,
+                                document_id: values.document_id,
+                                internal_document_id: values.internal_document_id
+                              }
+                            }}>{line_item.checklist_name}</Link>}
                         </td>
-                        <td className="edit-padding">
-                          {
-                            values.w1_list[index].station_id
-                              ?
-                              "-"
-                              :
-                              <Link to={`pmt-all-checklist-fixed-asset?checklist_id=${1}`}>ก1</Link>
-                          }
+                        <td className="edit-padding text-center">
+                          {values.w1_list[index].station_id ? "-" : line_item.x_cross_x_cross_th}
                         </td>
-                        <td className="edit-padding">
-                          {
-                            values.w1_list[index].station_id
-                              ?
-                              "-"
-                              :
-                              line_item.x_cross_x_cross_th
-                          }
-                        </td>
-
                       </tr>
                     )
                   })}
@@ -98,9 +109,9 @@ const BottomContent = (props) => {
                     <th className="font text-center" colSpan="3" style={{ minWidth: "640px" }}>คานกั้น</th>
                   </tr>
                   <tr>
-                    <th className="font text-center" style={{ minWidth: "216px" }}>สินทรัพย์</th>
+                    <th className="font text-center" style={{ minWidth: "100px" }}>สินทรัพย์</th>
                     <th className="font text-center" style={{ minWidth: "216px" }}>แผน</th>
-                    <th className="font text-center" style={{ minWidth: "216px" }}>เลข กม.</th>
+                    <th className="font text-center" style={{ minWidth: "100px" }}>เลข กม.</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -110,40 +121,34 @@ const BottomContent = (props) => {
                       <tr>
                         <th className="edit-padding text-center">{line_number}</th>
                         <td className="edit-padding">
-                          {
-                            values.w2_list[index].internal_item_id
-                              ?
-                              "-"
-                              :
-                              "stations.name"
-                          }
+                          {values.w2_list[index].internal_item_id ? "-" :
+                            <Link to={{
+                              pathname: `pmt-all-checklist-fixed-asset`,
+                              aboutProps: {
+                                station_id: line_item.station_id,
+                                weekly_task_id: line_item.weekly_task_id,
+                                work_order_pm_has_selector_checklist_line_item: values.work_order_pm_has_selector_checklist_line_item,
+                                document_id: values.document_id,
+                                internal_document_id: values.internal_document_id
+                              }
+                            }}>{line_item.station_th}</Link>}
+                        </td>
+                        <td className="edit-padding text-center">
+                          {values.w2_list[index].station_id ? "-" : line_item.internal_item_id}
                         </td>
                         <td className="edit-padding">
-                          {
-                            values.w2_list[index].station_id
-                              ?
-                              "-"
-                              :
-                              "internal_item_id"
-                          }
+                          {values.w2_list[index].station_id ? "-" :
+                            <Link to={{
+                              pathname: `pmt-all-checklist-fixed-asset`, aboutProps: {
+                                checklist_id: line_item.checklist_id,
+                                weekly_task_id: line_item.weekly_task_id, work_order_pm_has_selector_checklist_line_item: values.work_order_pm_has_selector_checklist_line_item,
+                                document_id: values.document_id,
+                                internal_document_id: values.internal_document_id
+                              }
+                            }}>{line_item.checklist_name}</Link>}
                         </td>
-                        <td className="edit-padding">
-                          {
-                            values.w2_list[index].station_id
-                              ?
-                              "-"
-                              :
-                              line_item.checklist_th
-                          }
-                        </td>
-                        <td className="edit-padding">
-                          {
-                            values.w2_list[index].station_id
-                              ?
-                              "-"
-                              :
-                              line_item.x_cross_x_cross_th
-                          }
+                        <td className="edit-padding text-center">
+                          {values.w2_list[index].station_id ? "-" : line_item.x_cross_x_cross_th}
                         </td>
 
                       </tr>
@@ -165,9 +170,9 @@ const BottomContent = (props) => {
                     <th className="font text-center" colSpan="3" style={{ minWidth: "640px" }}>คานกั้น</th>
                   </tr>
                   <tr>
-                    <th className="font text-center" style={{ minWidth: "216px" }}>สินทรัพย์</th>
+                    <th className="font text-center" style={{ minWidth: "100px" }}>สินทรัพย์</th>
                     <th className="font text-center" style={{ minWidth: "216px" }}>แผน</th>
-                    <th className="font text-center" style={{ minWidth: "216px" }}>เลข กม.</th>
+                    <th className="font text-center" style={{ minWidth: "100px" }}>เลข กม.</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -177,40 +182,34 @@ const BottomContent = (props) => {
                       <tr>
                         <th className="edit-padding text-center">{line_number}</th>
                         <td className="edit-padding">
-                          {
-                            values.w3_list[index].internal_item_id
-                              ?
-                              "-"
-                              :
-                              "stations.name"
-                          }
+                          {values.w3_list[index].internal_item_id ? "-" :
+                            <Link to={{
+                              pathname: `pmt-all-checklist-fixed-asset`,
+                              aboutProps: {
+                                station_id: line_item.station_id,
+                                weekly_task_id: line_item.weekly_task_id,
+                                work_order_pm_has_selector_checklist_line_item: values.work_order_pm_has_selector_checklist_line_item,
+                                document_id: values.document_id,
+                                internal_document_id: values.internal_document_id
+                              }
+                            }}>{line_item.station_th}</Link>}
+                        </td>
+                        <td className="edit-padding text-center">
+                          {values.w3_list[index].station_id ? "-" : line_item.internal_item_id}
                         </td>
                         <td className="edit-padding">
-                          {
-                            values.w3_list[index].station_id
-                              ?
-                              "-"
-                              :
-                              "internal_item_id"
-                          }
+                          {values.w3_list[index].station_id ? "-" :
+                            <Link to={{
+                              pathname: `pmt-all-checklist-fixed-asset`, aboutProps: {
+                                checklist_id: line_item.checklist_id,
+                                weekly_task_id: line_item.weekly_task_id, work_order_pm_has_selector_checklist_line_item: values.work_order_pm_has_selector_checklist_line_item,
+                                document_id: values.document_id,
+                                internal_document_id: values.internal_document_id
+                              }
+                            }}>{line_item.checklist_name}</Link>}
                         </td>
-                        <td className="edit-padding">
-                          {
-                            values.w3_list[index].station_id
-                              ?
-                              "-"
-                              :
-                              line_item.checklist_th
-                          }
-                        </td>
-                        <td className="edit-padding">
-                          {
-                            values.w3_list[index].station_id
-                              ?
-                              "-"
-                              :
-                              line_item.x_cross_x_cross_id
-                          }
+                        <td className="edit-padding text-center">
+                          {values.w3_list[index].station_id ? "-" : line_item.x_cross_x_cross_th}
                         </td>
 
                       </tr>
@@ -232,9 +231,9 @@ const BottomContent = (props) => {
                     <th className="font text-center" colSpan="3" style={{ minWidth: "640px" }}>คานกั้น</th>
                   </tr>
                   <tr>
-                    <th className="font text-center" style={{ minWidth: "216px" }}>สินทรัพย์</th>
+                    <th className="font text-center" style={{ minWidth: "100px" }}>สินทรัพย์</th>
                     <th className="font text-center" style={{ minWidth: "216px" }}>แผน</th>
-                    <th className="font text-center" style={{ minWidth: "216px" }}>เลข กม.</th>
+                    <th className="font text-center" style={{ minWidth: "100px" }}>เลข กม.</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -244,48 +243,158 @@ const BottomContent = (props) => {
                       <tr>
                         <th className="edit-padding text-center">{line_number}</th>
                         <td className="edit-padding">
-                          {
-                            values.w4_list[index].internal_item_id
-                              ?
-                              "-"
-                              :
-                              "stations.name"
-                          }
+                          {values.w4_list[index].internal_item_id ? "-" :
+                            <Link to={{
+                              pathname: `pmt-all-checklist-fixed-asset`,
+                              aboutProps: {
+                                station_id: line_item.station_id,
+                                weekly_task_id: line_item.weekly_task_id,
+                                work_order_pm_has_selector_checklist_line_item: values.work_order_pm_has_selector_checklist_line_item,
+                                document_id: values.document_id,
+                                internal_document_id: values.internal_document_id
+                              }
+                            }}>{line_item.station_th}</Link>}
+                        </td>
+                        <td className="edit-padding text-center">
+                          {values.w4_list[index].station_id ? "-" : line_item.internal_item_id}
                         </td>
                         <td className="edit-padding">
-                          {
-                            values.w4_list[index].station_id
-                              ?
-                              "-"
-                              :
-                              "internal_item_id"
-                          }
+                          {values.w4_list[index].station_id ? "-" :
+                            <Link to={{
+                              pathname: `pmt-all-checklist-fixed-asset`, aboutProps: {
+                                checklist_id: line_item.checklist_id,
+                                weekly_task_id: line_item.weekly_task_id, work_order_pm_has_selector_checklist_line_item: values.work_order_pm_has_selector_checklist_line_item,
+                                document_id: values.document_id,
+                                internal_document_id: values.internal_document_id
+                              }
+                            }}>{line_item.checklist_name}</Link>}
                         </td>
-                        <td className="edit-padding">
-                          {
-                            values.w4_list[index].station_id
-                              ?
-                              "-"
-                              :
-                              line_item.checklist_th
-                          }
+                        <td className="edit-padding text-center">
+                          {values.w4_list[index].station_id ? "-" : line_item.x_cross_x_cross_th}
                         </td>
-                        <td className="edit-padding">
-                          {
-                            values.w4_list[index].station_id
-                              ?
-                              "-"
-                              :
-                              line_item.x_cross_x_cross_th
-                          }
-                        </td>
-
                       </tr>
                     )
                   })}
                 </tbody>
               </table>
             </div>
+          </div>
+
+          {/* === Tab related_parties_content  === */}
+          <div id="related_parties_content" className="tabcontent">
+            {/* Component Title */}
+            <h3 className="head-title-bottom mt-2">ผู้ปฎิบัติงาน</h3>
+
+            {/* === One Column   ==== */}
+            <div className="grid_12">
+              {/* auditor_name  */}
+              <div className="grid_2 alpha white-space">
+                <p className="top-text">ผู้ดำเนินการทำวาระ</p>
+              </div>
+              <div className="grid_4 alpha omega">
+                <TextInput name="member_lead" tabIndex="31"
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+              </div>
+
+              <Label>ตำแหน่ง</Label>
+              <div className="grid_4 alpha omega">
+                <SelectNoChildrenInput name="member_lead_level_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="32">
+                  <option value='' selected></option>
+                  {factLevel.items.map((position) => {
+                    if (values.member_lead_level_id === position.level_id) {
+                      return <option key={position.level_id} value={position.level_id} selected>{position.level}</option>
+                    } else return <option key={position.level_id} value={position.level_id}>{position.level}</option>
+                  })}
+                </SelectNoChildrenInput>
+              </div>
+              <div className="clear" />
+
+              {/* fixer_name  */}
+              <div className="grid_2 alpha white-space">
+                <p className="top-text">รายชื่อเพื่อนร่วมงาน</p>
+              </div>
+              <div className="grid_4 alpha omega">
+                <TextInput name="member_1" tabIndex="33"
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+              </div>
+              <Label>ตำแหน่ง</Label>
+              <div className="grid_4 alpha omega">
+                <SelectNoChildrenInput name="member_1_level_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="34">
+                  <option value='' selected></option>
+                  {factLevel.items.map((position) => {
+                    if (values.member_1_level_id === position.level_id) {
+                      return <option key={position.level_id} value={position.level_id} selected>{position.level}</option>
+                    } else return <option key={position.level_id} value={position.level_id}>{position.level}</option>
+                  })}
+                </SelectNoChildrenInput>
+              </div>
+              <div className="clear" />
+
+
+              {/* member_1  */}
+              <div className="grid_2 alpha white-space">
+                <p className="top-text">รายชื่อเพื่อนร่วมงาน</p>
+              </div>
+              <div className="grid_4 alpha omega">
+                <TextInput name="member_2" tabIndex="35"
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+              </div>
+              <Label>ตำแหน่ง</Label>
+              <div className="grid_4 alpha omega">
+                <SelectNoChildrenInput name="member_2_level_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="36">
+                  <option value='' selected></option>
+                  {factLevel.items.map((position) => {
+                    if (values.member_2_level_id === position.level_id) {
+                      return <option key={position.level_id} value={position.level_id} selected>{position.level}</option>
+                    } else return <option key={position.level_id} value={position.level_id}>{position.level}</option>
+                  })}
+                </SelectNoChildrenInput>
+              </div>
+              <div className="clear" />
+
+              {/* member_2  */}
+              <div className="grid_2 alpha white-space">
+                <p className="top-text">รายชื่อเพื่อนร่วมงาน</p>
+              </div>
+              <div className="grid_4 alpha omega">
+                <TextInput name="member_3"
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="37" />
+              </div>
+              <Label>ตำแหน่ง</Label>
+              <div className="grid_4 alpha omega">
+                <SelectNoChildrenInput name="member_3_level_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="38">
+                  <option value='' selected></option>
+                  {factLevel.items.map((position) => {
+                    if (values.member_3_level_id === position.level_id) {
+                      return <option key={position.level_id} value={position.level_id} selected>{position.level}</option>
+                    } else return <option key={position.level_id} value={position.level_id}>{position.level}</option>
+                  })}
+                </SelectNoChildrenInput>
+              </div>
+              <div className="clear" />
+
+              {/* member_3  */}
+              <div className="grid_2 alpha white-space">
+                <p className="top-text">รายชื่อเพื่อนร่วมงาน</p>
+              </div>
+              <div className="grid_4 alpha omega">
+                <TextInput name="member_4" tabIndex="39"
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+              </div>
+              <Label>ตำแหน่ง</Label>
+              <div className="grid_4 alpha omega">
+                <SelectNoChildrenInput name="member_4_level_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="40">
+                  <option value='' selected></option>
+                  {factLevel.items.map((position) => {
+                    if (values.member_4_level_id === position.level_id) {
+                      return <option key={position.level_id} value={position.level_id} selected>{position.level}</option>
+                    } else return <option key={position.level_id} value={position.level_id}>{position.level}</option>
+                  })}
+                </SelectNoChildrenInput>
+              </div>
+              <div className="clear" />
+            </div>
+
           </div>
 
           {/* Attachment Tab */}

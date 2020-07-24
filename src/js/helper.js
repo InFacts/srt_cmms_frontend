@@ -37,7 +37,8 @@ export const DOCUMENT_TYPE_ID = {
     WAREHOUSE_MASTER_DATA: 1,
     ITEM_MASTER_DATA: 2,
     EQUIPMENT_MASTER_DATA: 3,
-    CREATE_CHECKLIST_LINE_ITEM: 4
+    CREATE_CHECKLIST_LINE_ITEM: 4,
+    WORK_ORDER_CHECKLIST: 5
 
 }
 export const DOCUMENT_TYPE_NOTGROUP_ID = {
@@ -245,6 +246,19 @@ export function getUserIDFromEmployeeID(userFact, employee_id) {
     }
     return null;
 }
+
+export function getUserNodeIDFromEmployeeID(userFact, user_id) {
+    let users = userFact.items;
+    if (users && users.length > 0) {
+        let user = users.find(user => `${user.user_id}` === `${user_id}`)
+        if (user) {
+            return user.position[0].node_id;
+        }
+        return null;
+    }
+    return null;
+}
+
 export function getItemIDFromInternalItemID(itemFact, internal_item_id) {
     internal_item_id = internal_item_id.split('\\')[0]; // Escape Character USERNAME CANT HAVE ESCAPE CHARACTER!
     let items = itemFact.items;
@@ -438,6 +452,31 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         console.log("create_checklist_part", create_checklist_part)
         return create_checklist_part;
 
+    } else if (document_type_id === DOCUMENT_TYPE_ID.WORK_ORDER_CHECKLIST) {
+        console.log("I AM WORK_ORDER_CHECKLIST");
+        let work_order_pm_checklist_line_item_part = [];
+
+        values.checklist_line_item.map((line_item) => {
+            if (values.checklist_id === line_item.checklist_id && values.weekly_task_id === line_item.weekly_task_id) {
+                work_order_pm_checklist_line_item_part.push({
+                    selector_checklist_line_item_id: line_item.selector_checklist_line_item_id,
+                    is_checked: line_item.is_checked == "1" ? true : false,
+                    weekly_task_id: line_item.weekly_task_id
+                })
+            } else {
+                work_order_pm_checklist_line_item_part.push({
+                    selector_checklist_line_item_id: line_item.selector_checklist_line_item_id,
+                    is_checked: line_item.is_checked == "1" ? true : false,
+                    weekly_task_id: line_item.weekly_task_id
+                })
+            }
+        })
+
+        let work_order_pm_checklist_line_item_full_part = {
+            work_order_pm_checklist_line_item: work_order_pm_checklist_line_item_part
+        }
+
+        return work_order_pm_checklist_line_item_full_part;
     }
     let document_part = {
         ...DOCUMENT_SCHEMA,
@@ -848,7 +887,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             name: values.name,
             active: true,
             node_id: parseInt(values.node_id),
-            start_on: values.start_on + 'T23:02:00+07:00',
+            start_on: values.start_on + 'T14:51:00+07:00',
         }
 
         // checklist สำหรับ station
@@ -1013,13 +1052,32 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             document_date: values.document_date + 'T00:00:00+00:00',
         }
 
+        let work_order_pm_has_selector_checklist_line_item_part = [];
+        values.work_order_pm_has_selector_checklist_line_item.map((line_custom) => {
+            work_order_pm_has_selector_checklist_line_item_part.push({
+                selector_checklist_line_item_id: line_custom.selector_checklist_line_item_id,
+                is_checked: line_custom.is_checked == "1" ? true : false,
+                weekly_task_id: line_custom.weekly_task_id,
+            })
+        })
+
         let specific_part = {
             document_id: values.document_id,
-            wo_checklist_status_id: values.wo_checklist_status_id,
-            selector_checklist_line_item_id: values.selector_checklist_line_item_id,
-            work_order_pm_line_item: []
-        }
+            member_1: values.member_1,
+            member_1_level_id: values.member_1_level_id ? parseInt(values.member_1_level_id) : null,
+            member_2: values.member_2,
+            member_2_level_id: values.member_2_level_id ? parseInt(values.member_2_level_id) : null,
+            member_3: values.member_3,
+            member_3_level_id: values.member_3_level_id ? parseInt(values.member_3_level_id) : null,
+            member_4: values.member_4,
+            member_4_level_id: values.member_4_level_id ? parseInt(values.member_4_level_id) : null,
+            member_lead: values.member_lead,
+            member_lead_level_id: values.member_lead_level_id ? parseInt(values.member_lead_level_id) : null,
 
+            work_order_pm_line_item: [],
+            work_order_pm_checklist_line_item: work_order_pm_has_selector_checklist_line_item_part
+        }
+        console.log("specific_part", specific_part)
         return {
             document: document_part,
             specific: specific_part
@@ -1238,8 +1296,8 @@ export const editMasterData = (data, document_type_group_id) => new Promise((res
 const BASE_URL = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}`;
 
 // GET  /statistic/goods-monthly-summary
-export const fetchStatisticGoodsMonthlySummary = (beginReportingPeriodID = null, endReportingPeriodID = null, warehouseIDFilter=null, itemIDFilter=null) => new Promise((resolve, reject) => {
-    const url = `${BASE_URL}/statistic/goods-monthly-summary?${beginReportingPeriodID ? `begin_reporting_period_id=${beginReportingPeriodID}&`: ''}${endReportingPeriodID ? `end_reporting_period_id=${endReportingPeriodID}&`: ''}${warehouseIDFilter ? `warehouse_id=${warehouseIDFilter[0]}` : ''}${itemIDFilter ? `item_id=${itemIDFilter[0]}` : ''}page_size=1000`;
+export const fetchStatisticGoodsMonthlySummary = (beginReportingPeriodID = null, endReportingPeriodID = null, warehouseIDFilter = null, itemIDFilter = null) => new Promise((resolve, reject) => {
+    const url = `${BASE_URL}/statistic/goods-monthly-summary?${beginReportingPeriodID ? `begin_reporting_period_id=${beginReportingPeriodID}&` : ''}${endReportingPeriodID ? `end_reporting_period_id=${endReportingPeriodID}&` : ''}${warehouseIDFilter ? `warehouse_id=${warehouseIDFilter[0]}` : ''}${itemIDFilter ? `item_id=${itemIDFilter[0]}` : ''}page_size=1000`;
 
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
@@ -1288,34 +1346,53 @@ export const getDocumentbyInternalDocumentID = (internal_document_id) => new Pro
 
 // PUT /document/{document_id}/{document_type_group_id}
 export const editDocument = (document_id, document_type_group_id, data, files, flag_create_approval_flow) => new Promise((resolve, reject) => {
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}/${document_type_group_id}`;
-    axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-        .then((res) => {
-            console.log(" I am successful in updating contents of document_id ", document_id, "res", res)
-            if (res.status === 200) {
-                console.log("wow i putted successfully status 200 flag_create_approval_flow", flag_create_approval_flow, "files", files)
-                if (flag_create_approval_flow && files !== undefined) {
-                    if (files.length !== 0) {
-                        uploadAttachmentDocumentData(document_id, files)
-                            .then(() => {
-                                return resolve(res.data);
-                            })
-                            .catch((err) => {
-                                return reject(err);
-                            });
+    if (document_type_group_id === DOCUMENT_TYPE_ID.WORK_ORDER_CHECKLIST) {
+        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}/205-checklist`;
+        axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+            .then((res) => {
+                console.log(" I am successful in updating contents of document_id ", document_id, "res", res)
+                if (res.status === 200) {
+                    console.log("wow i putted successfully status 200 flag_create_approval_flow", flag_create_approval_flow, "files", files)
+                    return resolve(res.data);
+                } else {
+                    console.log(" i think i have some problems putting ", res.data)
+                    reject(res);
+                }
+            })
+            .catch((err) => {
+                console.log("err", err.response)
+                reject(err)
+            });
+    } else {
+        const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}/${document_type_group_id}`;
+        axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+            .then((res) => {
+                console.log(" I am successful in updating contents of document_id ", document_id, "res", res)
+                if (res.status === 200) {
+                    console.log("wow i putted successfully status 200 flag_create_approval_flow", flag_create_approval_flow, "files", files)
+                    if (flag_create_approval_flow && files !== undefined) {
+                        if (files.length !== 0) {
+                            uploadAttachmentDocumentData(document_id, files)
+                                .then(() => {
+                                    return resolve(res.data);
+                                })
+                                .catch((err) => {
+                                    return reject(err);
+                                });
+                        }
+                        else { return resolve(res.data); }
                     }
                     else { return resolve(res.data); }
+                } else {
+                    console.log(" i think i have some problems putting ", res.data)
+                    reject(res);
                 }
-                else { return resolve(res.data); }
-            } else {
-                console.log(" i think i have some problems putting ", res.data)
-                reject(res);
-            }
-        })
-        .catch((err) => {
-            console.log("err", err.response)
-            reject(err)
-        });
+            })
+            .catch((err) => {
+                console.log("err", err.response)
+                reject(err)
+            });
+    }
 });
 
 
@@ -2024,33 +2101,43 @@ const responseToFormState = (fact, data, document_type_group_id) => {
             }
         }
     } else if (document_type_group_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM) {
-        console.log("data", data)
-        // var created_on = new Date(data.document.created_on);
-        // created_on.setHours(created_on.getHours() + 7);
-        let checklists = fact[FACTS.CHECKLIST_LINE_ITEM].items;
-        let checklist = checklists.find(checklist => `${checklist.checklist_line_item}` === `${data.specific.selector_checklist_line_item[0].checklist_line_item_id}`)
+        let document_statuses = fact[FACTS.DOCUMENT_STATUS].items;
+        let document_status = document_statuses.find(document_status => `${document_status.document_status_id}` === `${data.document.document_status_id}`);
 
-        let nodes = fact.nodes.items;
-        let node = nodes.find(node => `${node.node_id}` === `${data.specific.location_node_id}`)
-
-        if (checklist || node) {
+        let nodes = fact[FACTS.NODES].items;
+        let node = nodes.find(node => `${node.node_id}` === `${data.specific.selector_pm_plan.node_id}`);
+        if (document_status) {
             return {
                 document_id: data.document.document_id,
                 internal_document_id: data.document.internal_document_id,
+                created_by_user_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_user_id) || '',
+                created_by_admin_employee_id: getEmployeeIDFromUserID(fact[FACTS.USERS], data.document.created_by_admin_id) || '',
                 created_on: data.document.created_on.split(".")[0],
                 document_date: data.document.document_date.slice(0, 10),
 
-                wo_checklist_status_id: data.specific.wo_checklist_status_id,
-                selector_checklist_line_item_id: data.specific.selector_checklist_line_item_id,
-                checklist_id: checklist.checklist_id,
-                name: data.specific.selector_checklist_line_item[0].name,
-                freq: data.specific.selector_checklist_line_item[0].freq,
-                freq_unit_id: data.specific.selector_checklist_line_item[0].freq_unit_id,
-                checklist_line_item_use_equipment: data.specific.selector_checklist_line_item[0].selector_checklist_line_item_use_equipment,
+                member_1: data.specific.member_1,
+                member_1_level_id: data.specific.member_1_level_id,
+                member_2: data.specific.member_2,
+                member_2_level_id: data.specific.member_2_level_id,
+                member_3: data.specific.member_3,
+                member_3_level_id: data.specific.member_3_level_id,
+                member_4: data.specific.member_4,
+                member_4_level_id: data.specific.member_4_level_id,
+                member_lead: data.specific.member_lead,
+                member_lead_level_id: data.specific.member_lead_level_id,
 
-                location_district_id: node.district_id,
-                location_node_id: data.specific.location_node_id,
-                location_station_id: data.specific.location_station_id,
+                name: data.specific.selector_pm_plan.name,
+                district_id: node.district_id,
+                node_id: data.specific.selector_pm_plan.node_id,
+                start_on: data.specific.selector_pm_plan.start_on.slice(0, 10),
+                status_name_th: document_status.status,
+
+                w1_list: returnArrayLineWorkOrderPM(data.specific.work_order_pm_has_selector_checklist_line_item, fact, 1),
+                w2_list: returnArrayLineWorkOrderPM(data.specific.work_order_pm_has_selector_checklist_line_item, fact, 2),
+                w3_list: returnArrayLineWorkOrderPM(data.specific.work_order_pm_has_selector_checklist_line_item, fact, 3),
+                w4_list: returnArrayLineWorkOrderPM(data.specific.work_order_pm_has_selector_checklist_line_item, fact, 4),
+
+                work_order_pm_has_selector_checklist_line_item: returnArrayHasLineWorkOrderPM(data.specific.work_order_pm_has_selector_checklist_line_item),
             }
         }
     }
@@ -2197,33 +2284,104 @@ function returnFullArrayLossLineItemNull(loss_line_items) {
 function returnArrayLineSelector(line_custom, fact, week) {
     let line_customs = [];
     line_custom.map((line_custom) => {
-        console.log("line_custom", line_custom)
+        // console.log("line_custom", line_custom)
         let internal_item_ids = fact.equipment.items;
         let internal_item_id = internal_item_ids.find(internal_item_id => `${internal_item_id.equipment_id}` === `${line_custom.weekly_task.equipment_item_id}`);
-        console.log("internal_item_id", internal_item_id)
+        // console.log("internal_item_id", internal_item_id)
         if (line_custom.weekly_task.weekly_plan_id === week)
-        if (internal_item_id) {
-            let factXCrosses = fact[FACTS.X_CROSS].items;
-            let factXCross = factXCrosses.find(factXCross => `${factXCross.x_cross_id}` === `${internal_item_id.equipment_installation[0].x_cross_x_cross_id}`); 
-      
-            line_customs.push({
-                station_id: null,
-                internal_item_id: internal_item_id.equipment_group.item.internal_item_id,
-                checklist_id: line_custom.selector_checklist[0].checklist_id,
-                x_cross_x_cross_id: internal_item_id.equipment_installation[0].x_cross_x_cross_id,
-                checklist_th: line_custom.selector_checklist[0].checklist_name,
-                x_cross_x_cross_th: factXCross.road_center
-            });
-        } else {
-            line_customs.push({
-                station_id: line_custom.weekly_task.station_id,
-                internal_item_id: null,
-                checklist_id: null,
-                x_cross_x_cross_id: null
-            });
+            if (internal_item_id) {
+                let factXCrosses = fact[FACTS.X_CROSS].items;
+                let factXCross = factXCrosses.find(factXCross => `${factXCross.x_cross_id}` === `${internal_item_id.equipment_installation[0].x_cross_x_cross_id}`);
+
+                line_customs.push({
+                    station_id: null,
+                    internal_item_id: internal_item_id.equipment_group.item.internal_item_id,
+                    equipment_id: line_custom.weekly_task.equipment_item_id,
+                    checklist_id: line_custom.selector_checklist[0].checklist_id,
+                    x_cross_x_cross_id: internal_item_id.equipment_installation[0].x_cross_x_cross_id,
+                    checklist_th: line_custom.selector_checklist[0].checklist_name,
+                    x_cross_x_cross_th: factXCross.road_center
+                });
+            } else {
+                line_customs.push({
+                    station_id: line_custom.weekly_task.station_id,
+                    internal_item_id: null,
+                    checklist_id: null,
+                    x_cross_x_cross_id: null
+                });
+            }
+    })
+    return line_customs;
+}
+
+function returnArrayLineWorkOrderPM(line_custom, fact, week) {
+    let line_customs = [];
+    let prev_equipment_id;
+    let prev_station_id;
+    let prev_weekly_task_id;
+    line_custom.map((line_custom) => {
+        // console.log("line_custom", line_custom)
+        let internal_item_ids = fact.equipment.items;
+        let internal_item_id = internal_item_ids.find(internal_item_id => `${internal_item_id.equipment_id}` === `${line_custom.equipment_item_id}`);
+        // console.log("internal_item_id", internal_item_id)
+        if (line_custom.weekly_task.weekly_plan_id === week) {
+            if (internal_item_id) {
+                let factXCrosses = fact[FACTS.X_CROSS].items;
+                let factXCross = factXCrosses.find(factXCross => `${factXCross.x_cross_id}` === `${internal_item_id.equipment_installation[0].x_cross_x_cross_id}`);
+                if (prev_equipment_id !== line_custom.equipment_item_id && prev_weekly_task_id !== line_custom.weekly_task_id) {
+                    line_customs.push({
+                        station_id: null,
+                        internal_item_id: internal_item_id.equipment_group.item.internal_item_id,
+                        checklist_name: line_custom.checklist_name,
+                        checklist_id: line_custom.checklist_id,
+                        x_cross_x_cross_th: factXCross.road_center,
+                        weekly_task_id: line_custom.weekly_task_id
+                    });
+                    prev_equipment_id = line_custom.equipment_item_id;
+                    prev_weekly_task_id = line_custom.weekly_task_id;
+                } else {
+                    prev_equipment_id = line_custom.equipment_item_id;
+                    prev_weekly_task_id = line_custom.weekly_task_id;
+                }
+            } else {
+                let factStations = fact[FACTS.STATIONS].items;
+                let factStation = factStations.find(factStation => `${factStation.station_id}` === `${line_custom.station_id}`);
+                if (prev_station_id !== line_custom.station_id && prev_weekly_task_id !== line_custom.weekly_task_id) {
+                    line_customs.push({
+                        station_id: line_custom.station_id,
+                        station_th: factStation.name,
+                        internal_item_id: null,
+                        checklist_id: line_custom.checklist_id,
+                        x_cross_x_cross_id: null,
+                        weekly_task_id: line_custom.weekly_task_id,
+                        checklist_name: line_custom.checklist_name
+                    });
+                    prev_station_id = line_custom.station_id;
+                    prev_weekly_task_id = line_custom.weekly_task_id;
+                } else {
+                    prev_station_id = line_custom.station_id;
+                    prev_weekly_task_id = line_custom.weekly_task_id;
+                }
+            }
         }
     })
     return line_customs;
+}
+
+function returnArrayHasLineWorkOrderPM(line_custom) {
+    let work_order_pm_has_selector_checklist_line_item = [];
+    line_custom.map((line_custom) => {
+        work_order_pm_has_selector_checklist_line_item.push({
+            selector_checklist_line_item_id: line_custom.selector_checklist_line_item_id,
+            is_checked: line_custom.is_checked.data[0],
+            weekly_task_id: line_custom.weekly_task_id,
+            checklist_line_item_id: line_custom.checklist_line_item_id,
+            checklist_line_item_name: line_custom.checklist_line_item.name,
+            checklist_id: line_custom.checklist_id,
+            checklist_name: line_custom.checklist_name
+        })
+    })
+    return work_order_pm_has_selector_checklist_line_item;
 }
 
 // Validation 
@@ -2231,6 +2389,9 @@ export const validateInternalDocumentIDWorfOrderPMFieldHelper = (checkBooleanFor
     // Internal Document ID
     //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
     //  ie. GR-PYO-2563/0001
+    if (checkBooleanForEdit === true && (toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)) {
+        return resolve();
+    }
     if (document_type_group_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM) {
         let error;
         getDocumentbyInternalDocumentID(internal_document_id)
@@ -3129,6 +3290,11 @@ export const checkBooleanForEditHelper = (values, decoded_token, fact) => (
 export const checkBooleanForEditCheckNodeIDHelper = (values, decoded_token, fact) => (
     values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.DRAFT)
     && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.specific.location_node_id) === decoded_token.has_position[0].node_id)
+
+export const checkBooleanForEditCheckNodeIDHelperForWorkOrderPM = (values, decoded_token, fact) => (
+    values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.DRAFT)
+    && (getUserNodeIDFromEmployeeID(fact[FACTS.USERS], decoded_token.id) === values.node_id
+)
 
 export const filterAlsEquipment = (equipmentData, formData) => {
     let tempEquipmentData = [];

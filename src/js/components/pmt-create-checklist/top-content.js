@@ -41,8 +41,7 @@ const TopContent = (props) => {
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
   const factEquipmentStatus = useSelector((state) => ({ ...state.api.fact[FACTS.EQUIPMENT_STATUS] }), shallowEqual);
-  const factChecklistCustomGroup = useSelector((state) => ({ ...state.api.fact[FACTS.CHECKLIST_CUSTOM_GROUP] }), shallowEqual);
-  const factChecklistEquipmentGroup = useSelector((state) => ({ ...state.api.fact[FACTS.CHECKLIST_EQUIPMENT_GROUP] }), shallowEqual);
+  const factChecklistGroup = useSelector((state) => ({ ...state.api.fact[FACTS.CHECKLIST_GROUP] }), shallowEqual);
   const factChecklist = useSelector((state) => ({ ...state.api.fact.checklist }), shallowEqual);
 
   // Fetch permissiton
@@ -167,11 +166,8 @@ const TopContent = (props) => {
                 <SelectNoChildrenInput name="checklist_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="3"
                   validate={validateChecklistGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} >
                   <option value=''></option>
-                  {factChecklistEquipmentGroup.items.map((factChecklistEquipmentGroup) => {
-                    return (<option value={factChecklistEquipmentGroup.checklist_group_id}>{factChecklistEquipmentGroup.name}</option>)
-                  })}
-                  {factChecklistCustomGroup.items.map((factChecklistCustomGroup) => {
-                    return (<option value={factChecklistCustomGroup.checklist_group_id}>{factChecklistCustomGroup.checklist_group_name}</option>)
+                  {factChecklistGroup.items.map((factChecklistGroup) => {
+                    return (<option value={factChecklistGroup.checklist_group_id}>{factChecklistGroup.name}</option>)
                   })}
                 </SelectNoChildrenInput>
               </div>

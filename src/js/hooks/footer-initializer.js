@@ -17,8 +17,8 @@ const spacialPage = {
     ITEM_MASTER_DATA: "/spare-item-master-data",
     WAREHOUSE: "/spare-warehouse",
     PMT_EQUIPMENT_MASTER: "/pmt-equipment-master",
-    PMT_CREATE_CHECKOUT: "/pmt-create-checklist"
-
+    PMT_CREATE_CHECKOUT: "/pmt-create-checklist",
+    PMT_ALL_CHECKLIST_FIXED_ASSET: "/pmt-all-checklist-fixed-asset"
 }
 function isEmpty(obj) {
     for (var key in obj) {
@@ -84,14 +84,26 @@ const useFooterInitializer = (document_type_id) => {
                         else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.GUARANTEE_MAINTENANCE) { dispatch(footerToModeApGuarnteeMaintenance()); }
                     }
                     else { // Everyone for Search mode
-                        dispatch(footerToModeSearch());
+                        if (document_type_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM && toolbar.mode === TOOLBAR_MODE.SEARCH && document_status === DOCUMENT_STATUS.DRAFT) {
+                            dispatch(footerToModeAddDraft());
+                        } else {
+                            dispatch(footerToModeSearch());
+                        }
                     }
                 }
                 else { // Everyone for Search mode
                     if (toolbar.mode === TOOLBAR_MODE.ADD) { dispatch(footerToModeAddDraft()); }
-                    else { dispatch(footerToModeSearch()); }
+                    else { 
+                        if (document_type_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM && toolbar.mode === TOOLBAR_MODE.SEARCH) {
+                            dispatch(footerToModeAddDraft());
+                        } else {
+                            dispatch(footerToModeSearch()); 
+                        }
+                    }
                 }
             })
+            
+            
         }
     }
 
@@ -109,8 +121,9 @@ const useFooterInitializer = (document_type_id) => {
             else if (toolbar.mode === TOOLBAR_MODE.ADD) {
                 dispatch(footerToModeSave());
             }
-        }
-        else {
+        } else if (routeLocation === spacialPage.PMT_ALL_CHECKLIST_FIXED_ASSET) {
+            dispatch(footerToModeSave());
+        } else {
             // In General
             if (document_id !== undefined) {
                 if (toolbar.mode === TOOLBAR_MODE.SEARCH && document_id !== "") { // SEARCH mode
@@ -134,7 +147,8 @@ const useFooterInitializer = (document_type_id) => {
 
     // Handle Back
     useEffect(() => {
-        if (footer.requiresHandleClick[FOOTER_ACTIONS.BACK]) { dispatch(handleClickBackToSpareMain(getRouteLocation())); }
+        console.log("values", values)
+        if (footer.requiresHandleClick[FOOTER_ACTIONS.BACK]) { dispatch(handleClickBackToSpareMain(getRouteLocation(), values.internal_document_id)); }
     }, [footer.requiresHandleClick[FOOTER_ACTIONS.BACK]]);
 
     const isObject = (obj) =>
@@ -175,6 +189,7 @@ const useFooterInitializer = (document_type_id) => {
                     if (isEmpty(err)) {
                         if (values.document_id) { // If have document_id, no need to create new doc
                             let data = packDataFromValues(fact, values, document_type_id);
+                            console.log("packDataFromValues === ", data)
                             editDocument(values.document_id, document_type_id, data, values.files)
                                 .then((document_id) => {
                                     setFieldValue('document_id', values.document_id, true);

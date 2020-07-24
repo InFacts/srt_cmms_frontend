@@ -25,10 +25,10 @@ const GoodsReceiptComponent = (props) => {
 
     const { resetForm, setFieldValue, setValues, values } = useFormikContext();
 
-    useToolbarInitializer(TOOLBAR_MODE.NONE_HOME, DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM);
+    useToolbarInitializer(TOOLBAR_MODE.NONE_HOME);
     useTokenInitializer();
     useFactInitializer();
-    useFooterInitializer(DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM);
+    useFooterInitializer(DOCUMENT_TYPE_ID.WORK_ORDER_CHECKLIST);
     const loggedIn = useSelector(state => state.token.isLoggedIn);
 
     const factChecklist = useSelector((state) => ({ ...state.api.fact[FACTS.CHECKLIST] }), shallowEqual);
@@ -36,39 +36,49 @@ const GoodsReceiptComponent = (props) => {
 
     // If Link to this url via Track Document
     useEffect(() => {
-        getUrlParamsLinkForFixedAsset()
-            .then((checklist_id) => {
-                console.log("checklist_id", checklist_id)
-                if (checklist_id === "station") { //ถ้าเป็นคลิกตัวสถานีจะ show checklist_id ทั้งหมด ยกเว้น checklost group id ของ คานกั้น
-                    let filter_item = [];
-                    let items = factChecklist.items;
-                    items.map((item) => {
-                        if (item.checklist_group_id !== 1) {
-                            filter_item.push(item)
-                        }
-                    })
-                    if (filter_item) {
-                        setFieldValue("checklist_id", checklist_id, false);
-                        setFieldValue("checklist_line_item", filter_item, false)
-                        console.log("checklist_line_item", values.checklist_line_item)
-                        return;
+        if (props.location.aboutProps) {
+            if (props.location.aboutProps.station_id) {
+                console.log("I AM STATION")
+                let checklist_line_item = [];
+                setFieldValue("document_id", props.location.aboutProps.document_id, false);
+                setFieldValue("checklist_name", props.location.aboutProps.checklist_name, false);
+                setFieldValue("checklist_id", props.location.aboutProps.checklist_id, false);
+                setFieldValue("station_id", props.location.aboutProps.station_id, false);
+                setFieldValue("weekly_task_id", props.location.aboutProps.weekly_task_id, false);
+                setFieldValue("internal_document_id", props.location.aboutProps.internal_document_id, false);
+
+                props.location.aboutProps.work_order_pm_has_selector_checklist_line_item.map((list, index) => {
+                    // console.log("list", list)
+                    if (values.weekly_task_id === list.weekly_task_id) {
+                        checklist_line_item.push({
+                            ...list,
+                        })
                     }
-                }
-                if (checklist_id !== "") {
-                    let filter_item = [];
-                    let items = factChecklistLineItem.items;
-                    items.map((item) => {
-                        if (item.checklist_id == checklist_id) {
-                            filter_item.push(item)
-                        }
-                    })
-                    setFieldValue("checklist_id", checklist_id, false);
-                    setFieldValue("checklist_line_item", filter_item, false)
-                    return;
-                }
-            })
-    }, [factChecklistLineItem.items])
-    
+                })
+                setFieldValue("checklist_line_item", props.location.aboutProps.work_order_pm_has_selector_checklist_line_item, false)
+            } else {
+                console.log("I AM EQUIPMENT")
+                let checklist_line_item = [];
+
+                setFieldValue("document_id", props.location.aboutProps.document_id, false);
+                setFieldValue("checklist_id", props.location.aboutProps.checklist_id, false);
+                setFieldValue("weekly_task_id", props.location.aboutProps.weekly_task_id, false);
+                setFieldValue("internal_document_id", props.location.aboutProps.internal_document_id, false);
+                
+                props.location.aboutProps.work_order_pm_has_selector_checklist_line_item.map((list, index) => {
+                    if (values.checklist_id === list.checklist_id && values.weekly_task_id === list.weekly_task_id) {
+                        checklist_line_item.push({
+                            ...list,
+                        })
+                    }
+                })
+                console.log("checklist_line_item", checklist_line_item)
+                setFieldValue("checklist_line_item", checklist_line_item, false)
+            }
+        }
+
+    }, [factChecklistLineItem.items, values.document_id])
+    // console.log("props>>>", props.location.aboutProps)
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
@@ -98,11 +108,14 @@ const EnhancedGoodsReceiptComponent = withFormik({
     mapPropsToValues: (props) => ({
         // Field ที่ให้ User กรอก
         // Top Content
+        document_id: '',
+        internal_document_id: '',
         checklist_id: '',
         checklist_group_id: '',
 
         // Bottom Content
         checklist_line_item: initialRowsEquipmentPlan(),
+        modeEdit: true
     })
 })(GoodsReceiptComponent);
 

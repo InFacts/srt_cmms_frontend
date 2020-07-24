@@ -16,7 +16,7 @@ import { useFormikContext, useField } from 'formik';
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
 import {
   getNumberFromEscapedString, fetchGoodsOnhandDataForItemmasterData, DOCUMENT_TYPE_ID,
-  getDocumentbyInternalDocumentID, checkBooleanForEditHelper, validateEmployeeIDField,
+  getDocumentbyInternalDocumentID, checkBooleanForEditCheckNodeIDHelperForWorkOrderPM, validateEmployeeIDField,
   validateInternalDocumentIDWorfOrderPMFieldHelper, validatedataDocumentField
 } from '../../helper';
 
@@ -34,28 +34,19 @@ const TopContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm, resetForm } = useFormikContext();
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
-  const factEquipment = useSelector((state) => ({ ...state.api.fact.equipment }), shallowEqual);
   const factDistricts = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
   const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
-  const factEquipmentStatus = useSelector((state) => ({ ...state.api.fact[FACTS.EQUIPMENT_STATUS] }), shallowEqual);
 
   // Fill Default Forms
   useFillDefaultsOnModeAdd();
   const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDWorfOrderPMFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.WORK_ORDER_PM, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
 
-  const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
-  const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
-
   const validateNameField = (...args) => validatedataDocumentField("name", setFieldValue, ...args)
   const validateDocumentDateField = (...args) => validatedataDocumentField("document_date", setFieldValue, ...args)
-  const validateStartOnField = (...args) => validatedataDocumentField("start_on", setFieldValue, ...args)
 
-  const validateDistrictIDField = (...args) => validatedataDocumentField("district_id", setFieldValue, ...args)
-  const validateNodeIDField = (...args) => validatedataDocumentField("node_id", setFieldValue, ...args)
-
-  let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
+  let checkBooleanForEdit = checkBooleanForEditCheckNodeIDHelperForWorkOrderPM(values, decoded_token, fact);
   useEffect(() => {
     checkBooleanForEdit = false
     validateField("internal_document_id")
@@ -93,7 +84,7 @@ const TopContent = (props) => {
               <div className="grid_3">
                 <TextInput name="name"
                   validate={validateNameField}
-                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  disabled
                   tabIndex="2" />
               </div>
               <div class="clear" />
@@ -104,9 +95,8 @@ const TopContent = (props) => {
               </div>
               <div className="grid_3">
                 <TextInput name="created_by_user_employee_id"
-                  validate={validateUserEmployeeIDField}
-                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                  searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalUserName"
+                  // validate={validateUserEmployeeIDField}
+                  disabled
                   tabIndex="3" />
               </div>
               <div class="clear" />
@@ -117,7 +107,7 @@ const TopContent = (props) => {
               </div>
               <div className="grid_3">
                 <TextInput name="created_by_admin_employee_id"
-                  validate={validateAdminEmployeeIDField}
+                  // validate={validateAdminEmployeeIDField}
                   disabled
                   tabIndex="4" />
               </div>
@@ -161,8 +151,7 @@ const TopContent = (props) => {
               <Label>วันเวลาที่เริ่มทำวาระ</Label>
               <div className="grid_3 alpha">
                 <DateInput name="start_on"
-                validate={validateStartOnField}
-                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  disabled
                   tabIndex="8" />
               </div>
               <div class="clear" />
@@ -171,9 +160,7 @@ const TopContent = (props) => {
               <Label>แขวง</Label>
               <div className="grid_3 alpha">
               <SelectNoChildrenInput name="district_id" tabIndex="7"
-                  validate={validateDistrictIDField}
-                  cssStyle={{ left: "-160px", top: "14px" }}
-                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                  disabled>
                   <option value=''></option>
                   {factDistricts.items.map((districts) => (
                     <option key={districts.district_id} value={districts.district_id}>{districts.name}</option>
@@ -186,9 +173,7 @@ const TopContent = (props) => {
               <Label>ตอน</Label>
               <div className="grid_3 alpha">
               <SelectNoChildrenInput name="node_id" tabIndex="7"
-                  cssStyle={{ left: "-160px", top: "14px" }}
-                  validate={validateNodeIDField}
-                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                  disabled >
                   <option value=''></option>
                   {factNodes.items.map((node) => {
                     if (values.district_id == node.district_id) {
@@ -212,8 +197,6 @@ const TopContent = (props) => {
           name="internal_document_id" //For setFieldValue 
         />
 
-        {/* PopUp ค้นหาชื่อพนักงาน MODE ADD */}
-        <PopupModalUsername />
       </div>
     </div>
   )
