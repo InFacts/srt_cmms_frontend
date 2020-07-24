@@ -2,11 +2,12 @@ export const randomHistogramData = () => {
     let results = [];
 
     results.push(0)
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < 100; i++) {
         let randomNumber = (Math.random() + Math.random() + Math.random() + Math.random()) / 4*100; 
+        // console.log("results",randomNumber)
         results.push(randomNumber);
     }
-
+    console.log("results",results)
     return results;
 }
 
@@ -29,7 +30,7 @@ export const randomGroupedBarGraphData = () => {
     results.columns = ["ระยะเวลาการทำวาระ", "MTBF - Run to Fail", "MTBF - ของผู้ผลิต"];
     results.yAxis = "MTBF - Run to Fail"
     results.xAxis = "Equipment Item"
-    let xGroups = ["เครื่องกั้นถนน", "CCTV", "PA", "เครื่องใช้ไฟฟ้า", "คอมพิวเตอร์", "ลำโพง", "วิทยุ", "Onsite", "Etc"];
+    let xGroups = ["ระบบเครื่องกั้นถนน", "ระบบเซนเซอร์", "ระบบโทรคมนาคม", "หม้อแปลงไฟฟ้า", "ระบบโทรทัศน์วงจรปิด (CCTV)", "ระบบประกาศสาธารณะ (PA)"];
 
     for (let i = 0; i < xGroups.length; i++) {
         results.push({

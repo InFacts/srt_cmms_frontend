@@ -85,10 +85,14 @@ const AlsEquipmentStatusComponent = () => {
                 }
             })
             // PieChartDataSystemType
-            for (let i = 0; i < groups.length; i++) {
-                results.push({key: groups[i], value: count_groups[i]});
+            for (let i = 0; i < groups_interrupt.length; i++) {
                 results_pieInterrupt.push({key: groups_interrupt[i], value: count_interrupt[i]});
             }
+
+            for (let i = 0; i < groups.length; i++) {
+                results.push({key: groups[i], value: count_groups[i]});
+            }
+
             setFieldValue('maintenance_system', results);
             setFieldValue('interrupt', results_pieInterrupt);
             setFieldValue('accident_color_map', {values_data: count_color_map, xLabels, yLabels});
