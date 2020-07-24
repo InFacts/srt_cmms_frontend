@@ -870,6 +870,20 @@ path.map-region:hover{
   /* fill: #000; */
 }
 
+/* Bar Diverging Effect */ 
+rect.bar-diverging:hover{
+  opacity:30%;
+  cursor: pointer;
+  /* fill: #000; */
+}
+text.bar-diverging:hover{
+  opacity:80%;
+  cursor: pointer;
+  fill: steelblue;
+  /* fill:"#fff"  !important; */
+  /* fill: #000; */
+}
+
 /* Equipment Status  */
 .equipment-status-list {
   padding: 8px;

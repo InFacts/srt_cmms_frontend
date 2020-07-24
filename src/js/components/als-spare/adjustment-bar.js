@@ -7,7 +7,7 @@ import { FACTS } from '../../redux/modules/api/fact.js';
 
 const AdjustmentBarComponent = () => {
 
-    const {values} = useFormikContext();
+    const { values } = useFormikContext();
     const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
 
     return (
@@ -29,8 +29,8 @@ const AdjustmentBarComponent = () => {
                     name="warehouse_id" >
                     <option value='' selected>ทั้งหมด</option>
                     {fact[FACTS.WAREHOUSES].items.map((warehouse) => (
-                        <option 
-                            key={warehouse.warehouse_id} 
+                        <option
+                            key={warehouse.warehouse_id}
                             value={warehouse.warehouse_id}
                         >{warehouse.name}</option>
                     ))}
@@ -43,21 +43,32 @@ const AdjustmentBarComponent = () => {
                     name="item_id" >
                     <option value='' selected>ทั้งหมด</option>
                     {fact[FACTS.ITEM].items.map((item) => (
-                        <option 
-                            key={item.item_id} 
+                        <option
+                            key={item.item_id}
                             value={item.item_id}
-                    >{`${item.internal_item_id}/${item.description}`}</option>
+                        >{`${item.internal_item_id}/${item.description}`}</option>
                     ))}
                 </SelectNoChildrenInput>
 
                 <div className="space-10px" />
 
-                <div className="adjustment-bar-inner-text">Goal Inventory Month {values.goal_inventory_month}</div>
+                <div className="adjustment-bar-inner-text">Inventory Month เป้าหมาย {values.goal_inventory_month}</div>
                 <RangeInput
                     name="goal_inventory_month"
                     min="1"
                     max="12"
                     step="1"
+                    disabled={true}
+                />
+
+                <div className="space-10px" />
+
+                <div className="adjustment-bar-inner-text">Window Size (ปี) {values.window_size}</div>
+                <RangeInput
+                    name="window_size"
+                    min="0.5"
+                    max="4"
+                    step="0.5"
                     disabled={true}
                 />
             </div>

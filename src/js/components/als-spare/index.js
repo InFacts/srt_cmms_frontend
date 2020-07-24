@@ -24,14 +24,14 @@ import { getAnnualInventoryMonthData, randomDivergingBarGraphData, randomScatter
 
 import BgGreen from '../../../images/als/bg_als.jpg';
 import { fetchPositionPermissionData, changeTheam , fetchStatisticGoodsMonthlySummary,fetchStatisticGoodsOnhand,
-  getItemInternalIDfromItemID, getItemNamefromItemID} from '../../helper.js';
+  getItemInternalIDfromItemID, getItemNamefromItemID, getItemIDFromInternalItemID} from '../../helper.js';
 import { FACTS } from '../../redux/modules/api/fact.js';
 
 const AlsSpareComponent = () => {
   const dispatch = useDispatch();
   const loggedIn = useSelector(state => state.token.isLoggedIn);
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
-  const {values} = useFormikContext();
+  const {values, setFieldValue} = useFormikContext();
 
   // Initializer: Change Toolbar to Mode None
   useToolbarChangeModeInitializer(TOOLBAR_MODE.NONE_HOME); // TODO: Needs to find where to go when we press "HOME"!!
@@ -639,6 +639,10 @@ const AlsSpareComponent = () => {
     return itemSpecificEndingUnitCountAggItem;
   }
 
+  const handleClickInternalItemID = (internalItemID) => {
+    setFieldValue("item_id", getItemIDFromInternalItemID(fact[FACTS.ITEM], internalItemID));
+  }
+
   
   useEffect (() => {
     async function mainFetchAndUpdateData() {
@@ -865,6 +869,8 @@ const AlsSpareComponent = () => {
     mainFetchAndUpdateData();
   }, [fact[FACTS.REPORTING_PERIOD].lastUpdated, fact[FACTS.ITEM].lastUpdated, values.year, values.warehouse_id, values.item_id, isMockup])
 
+
+
   return (
     <>
       {!loggedIn ? <Redirect to="/" /> : null}
@@ -954,6 +960,15 @@ const AlsSpareComponent = () => {
                 <BarDivergingGraph
                   title="การนำออกและนำเข้าอะไหล่"
                   data={BarDivergingGraphData}
+                  handleClickInternalItemID={handleClickInternalItemID}
+                  chartSettings={{
+                    marginLeft: 20,
+                    marginBottom: 10,
+                    marginTop: 40,
+                    marginRight: 10,
+
+                    height: 550,
+                  }}
                 />
               </div>
               <div className="col-5">
@@ -1069,6 +1084,7 @@ const EnhancedAlsSpareComponent = withFormik({
     warehouse_id: '',
     item_id: '',
     goal_inventory_month: 6,
+    window_size: 2,
   })
 })(AlsSpareComponent);
 

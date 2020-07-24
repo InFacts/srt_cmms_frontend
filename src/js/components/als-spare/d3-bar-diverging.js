@@ -20,7 +20,7 @@ const defaultChartSettings = {
 }
 
 // Reference: D3 Diverging Barchart https://observablehq.com/@d3/diverging-bar-chart
-function DivergingBarGraph({ data, chartSettings, title}) {
+function DivergingBarGraph({ data, chartSettings, title, handleClickInternalItemID}) {
     // useChartDimensions will have a ref to the Chart_wrapper and get its own Height and Width
     // See reference of Amelia Wattenberger https://wattenberger.com/blog/react-and-d3#sizing-responsivity
     const [ref, dms] = useChartDimensions({ ...defaultChartSettings, ...chartSettings });
@@ -62,11 +62,11 @@ function DivergingBarGraph({ data, chartSettings, title}) {
             >
                 <g transform={`translate(${dms.marginLeft}, ${dms.marginTop})`}>
                     
-                    <rect
+                    {/* <rect
                         width={dms.boundedWidth}
                         height={dms.boundedHeight}
                         fill="#FEF9E7"
-                    />
+                    /> */}
 
 
                     {data.map( ({name, value_neg, value_pos}, index) => {
@@ -78,6 +78,8 @@ function DivergingBarGraph({ data, chartSettings, title}) {
                             width={Math.abs(xScale(value_pos) - xScale(0))}
                             height={yScale.bandwidth()}
                             fill={schemeSet1[1]}
+                            class="bar-diverging"
+                            onClick={e => handleClickInternalItemID(name)}
                         />
                         {/* value_neg */}
                         <rect
@@ -86,11 +88,15 @@ function DivergingBarGraph({ data, chartSettings, title}) {
                             width={Math.abs(xScale(value_neg) - xScale(0))}
                             height={yScale.bandwidth()}
                             fill={schemeSet1[0]}
+                            class="bar-diverging"
+                            onClick={e => handleClickInternalItemID(name)}
                         />
                         <text
                             x={0-dms.marginLeft+7}
                             y={yScale(index)+ yScale.bandwidth()/2}
                             dy="0.35em"
+                            class="bar-diverging"
+                            onClick={e => handleClickInternalItemID(name)}
                         >{name}</text>
                         </>
                         )
