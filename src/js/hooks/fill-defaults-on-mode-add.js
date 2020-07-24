@@ -22,8 +22,12 @@ const useFillDefaultsOnModeAdd = (document_type_group_id) => {
             if (!values.internal_document_id && touched.internal_document_id){
                 setFieldValue('internal_document_id', `draft-${uuidv4()}`, true)
             }
+            // Both User and Admin Employee ID will be defaulted to the user logged in : Knight
+            setFieldValue("created_by_user_employee_id", getEmployeeIDFromUserID(fact.users, decoded_token.id));
             setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(fact.users, decoded_token.id));
             setFieldValue("created_on", localISOTime.slice(0, 16), false);
+            // Document Date will be Defaulted to Today: Knight
+            setFieldValue("document_date", localISOTime.slice(0, 10), false);
             console.log("decoded_token.has_position[0].warehouse_id", decoded_token.has_position[0].warehouse_id)
             // setFieldValue("src_warehouse_id", decoded_token.has_position[0].warehouse_id, true)
             // setFieldValue("dest_warehouse_id", decoded_token.has_position[0].warehouse_id, true)
