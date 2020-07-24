@@ -2,11 +2,12 @@ export const randomHistogramData = () => {
     let results = [];
 
     results.push(0)
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < 100; i++) {
         let randomNumber = (Math.random() + Math.random() + Math.random() + Math.random()) / 4*100; 
+        // console.log("results",randomNumber)
         results.push(randomNumber);
     }
-
+    console.log("results",results)
     return results;
 }
 

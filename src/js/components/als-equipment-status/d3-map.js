@@ -11,8 +11,7 @@ import ThailandTopo from './thailandWithName.json';
 import { geoPath, geoAlbers, geoMercator ,geoEqualEarth } from "d3-geo"
 import legend from './d3-color-legend';
 // import mockupEquipmentData from './mockupEquipmentData.json';
-import {ITEM_STATUS} from './index';
-import { FilterByAdjustmentBar } from '../../helper.js'
+import { FilterByAdjustmentBar, ITEM_STATUS } from '../../helper.js'
 
 const chartSettings = { //Need to be at least one since 0 is a falsy value, will be replaced by defaults
     "marginLeft": 10,

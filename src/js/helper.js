@@ -3055,6 +3055,17 @@ export const changeTheam = () => {
 // #####################################
 // ################ ALS ################
 // #####################################
+
+// Equipment
+export const ITEM_STATUS = {
+    NEW: 1, // ใหม่
+    BROKEN: 2, // เสีย
+    FIX: 3, // ซ่อมแล้ว
+    USED: 4, // มือสอง
+    SALVAGE: 5, // ซาก
+    INSTALLED: 6, // ติดตั้งแล้ว
+}
+
 // GET /document/ss101/search
 export const ALSGetDocumentSS101 = (begin_document_date, end_document_date) => new Promise((resolve, reject) => {
     let page_number = 0;
@@ -3090,3 +3101,17 @@ export const FilterByAdjustmentBarSS101 = (item, adjustmentBar) => {
     }
     return false;
 }
+
+// GET /document/search?document_type_group_id=205
+export const ALSGetDocumentPMTPlan = (begin_document_date, end_document_date) => new Promise((resolve, reject) => {
+    let page_number = 0;
+    let page_size = 25;
+    let document_type = 205
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=${document_type}&page_number=${page_number}&page_size=${page_size}&begin_document_date=${begin_document_date}&end_document_date=${end_document_date}`;
+    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then(res => {
+            resolve(res.data);
+        }).catch(function (err) {
+            reject(err)
+        })
+});

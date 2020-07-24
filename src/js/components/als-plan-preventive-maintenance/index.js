@@ -27,7 +27,7 @@ import PieChart from '../common/d3-pie-chart';
 import GroupedBarGraph from '../common/d3-grouped-bar-graph';
 
 import BgGreen from '../../../images/als/bg_als.jpg';
-import { ALSGetDocumentSS101, changeTheam } from '../../helper.js'
+import { ALSGetDocumentSS101, changeTheam, ITEM_STATUS } from '../../helper.js'
 
 const AlsPlanPreventiveMaintenanceComponent = () => {
     const dispatch = useDispatch();
@@ -45,23 +45,52 @@ const AlsPlanPreventiveMaintenanceComponent = () => {
 
     useEffect(() => {
         let backward_year = 5;
-
+        let today = new Date();
         let RunToFail_mtbf = [];
+        let ageEquipmentList = [];
         RunToFail_mtbf.columns = ["ระยะเวลาการทำวาระ", "MTBF - Run to Fail", "MTBF - ของผู้ผลิต"];
-        RunToFail_mtbf.yAxis = "MTBF - Run to Fail"
+        RunToFail_mtbf.yAxis = "MTBF - Run to Fail (เดือน)"
         RunToFail_mtbf.xAxis = "Equipment Item"
         let xGroups = ["ระบบเครื่องกั้นถนน", "ระบบเซนเซอร์", "ระบบโทรคมนาคม", "หม้อแปลงไฟฟ้า", "ระบบโทรทัศน์วงจรปิด (CCTV)", "ระบบประกาศสาธารณะ (PA)"];
+        let ageEquipmentPieGroups = ["1 ปี", "2 ปี", "3 ปี", "4-5 ปี", "5-10 ปี", "10+ ปี"];
         
+        let ageEquipmentPie = [];
+        let _ageEquipmentPie = new Array(ageEquipmentPieGroups.length).fill(0);
         let count_useful_life_group = new Array(xGroups.length).fill(0);
         let count_group = new Array(xGroups.length).fill(0);
-        factEquipment.items.map(function ({ equipment_id, item_id, useful_life, responsible_district_id, item_status_id, responsible_node_id, is_installed, equipment_group, equipment_installation }) {
+        factEquipment.items.map(function ({ equipment_id, item_id, useful_life, import_on, item_status_id, responsible_node_id, is_installed, equipment_group, equipment_installation }) {
+            // TODO: freqPlan = ConvertMount(NOW - import_on) - ConvertMount(Fail_time)
+            // TODO: spareMTBF = ConvertMount(NOW - import_on) - ConvertMount(Fail_time)
+            // TODO: ageEquipment = ConvertMount(NOW - import_on)
             count_useful_life_group[equipment_group.equipment_group_id] = count_useful_life_group[equipment_group.equipment_group_id] + useful_life;
             count_group[equipment_group.equipment_group_id]++;
+            
+            // Equpiment Status - Broken, Fix, Salvage
+            // if (item_status_id === ITEM_STATUS.NEW || item_status_id === ITEM_STATUS.BROKEN || item_status_id === ITEM_STATUS.FIX || item_status_id === ITEM_STATUS.SALVAGE) {
+            if (import_on !== null) {
+                // TODO: ageEquipment = ConvertMount(NOW - import_on)
+                let import_on_date = new Date(import_on);
+
+                // To calculate the time difference of two dates 
+                var Difference_In_Time = today.getTime() - import_on_date.getTime();
+
+                // To calculate the no. of days between two dates 
+                var Difference_In_Year = Difference_In_Time / (1000 * 3600 * 24 * 365.25);
+                ageEquipmentList.push(Difference_In_Year);
+
+                if (Difference_In_Year <= 1) { _ageEquipmentPie[0]++; }
+                else if (Difference_In_Year <= 2) { _ageEquipmentPie[1]++; }
+                else if (Difference_In_Year <= 3) { _ageEquipmentPie[2]++; }
+                else if (Difference_In_Year <= 5) { _ageEquipmentPie[3]++; }
+                else if (Difference_In_Year <= 10) { _ageEquipmentPie[4]++; }
+                else { _ageEquipmentPie[5]++; }
+
+            }
+            // }
         })
         for (let i = 0; i < count_group.length; i++) {
             count_useful_life_group[i] = count_useful_life_group[i]/count_group[i];
         }
-        // console.log("count_useful_life_group[i]", count_useful_life_group)
 
         for (let i = 0; i < xGroups.length; i++) {
             RunToFail_mtbf.push({
@@ -71,100 +100,18 @@ const AlsPlanPreventiveMaintenanceComponent = () => {
                 [RunToFail_mtbf.columns[2]]: count_useful_life_group[i],
             });
         }
+
+        for (let i = 0; i < ageEquipmentPieGroups.length; i++) {
+            // console.log("ageEquipmentPieGroups", i, ageEquipmentPieGroups[i])
+            ageEquipmentPie.push({key: ageEquipmentPieGroups[i], value: _ageEquipmentPie[i]});
+        }
+        // console.log("_ageEquipmentPie", _ageEquipmentPie)
+        // console.log("ageEquipmentPie >", ageEquipmentPie)
+        
         setFieldValue('RunToFail_mtbf', RunToFail_mtbf);
-
-
+        setFieldValue('age_equipment_list', ageEquipmentList);
+        setFieldValue('ageEquipmentPieGroups', ageEquipmentPie);
         
-        // let begin_document_date = (values.year-543-1).toString() + "-01-01";
-        // let end_document_date = (values.year-543).toString() + "-12-31";
-        let groups = ["ระบบอาณัติสัญญาณ", "ระบบสายส่ง", "ระบบทางผ่านเครื่องกั้นถนน", "ระบบเครื่องทางสะดวก", "ระบบโทรศัพท์", "ระบบไฟฟ้า", "ระบบโทรพิมพ์", "ระบบวิทยุ", "ระบบอิเล็กทรอนิกส์"]; 
-        let count_groups = new Array(9).fill(0)
-        let count_loss_ss101_now = new Array(12).fill(0)
-        let count_loss_ss101_prev = new Array(12).fill(0)
-
-        let count_accident_now = new Array(12).fill(0)
-        let count_accident_prev = new Array(12).fill(0)
-        let count_color_map = new Array(16).fill(0).map(() => new Array(12).fill(0));
-        let count_interrupt = new Array(12).fill(0);
-        let results = []
-        let results_pieInterrupt = []
-
-        // ColorMap
-        // let xLabels = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
-        // let yLabels = ["สสญ.ธบ.", "สสญ.อย.", "สสญ.ก.", "สญก.", "สญค.", "สญพ.", "สสญ.กค.", "สสญ.ลช.", "สสญ.ขอ.", "สสญ.นว.","สสญ.ลป.", "สสญ.หห.", "สสญ.ทส.", "สสญ.หใ.", "สสญ.ฉท.","สสญ.ศช."];
-        
-        // let groups_interrupt = ["รอเครื่องมือและอะไหล่", "ธรรมชาติไม่เอื้ออำนวย", "รอเวลาในการซ่อมแก้ไข", "พนักงานไม่เพียงพอ", "พาหนะไม่มี", "ระยะทางไกล", "สาเหตุอื่นๆ", "ไม่มี"];
-
-        // ALSGetDocumentSS101(begin_document_date, end_document_date).then((data) => {
-        //     let data_ss101 = data.results;
-        //     data_ss101.map((item) => { 
-        //         let d = new Date(item.document.document_date);
-        //         if (FilterByAdjustmentBarSS101(item, values)) {
-        //             // https://stackoverflow.com/questions/1968167/difference-between-dates-in-javascript
-        //             let a = new Date(item.specific.accident_on);
-        //             let b = new Date(item.specific.finished_on);
-        //             let hour = parseInt((b-a)/1000/60/60);
-        //             if (d.getFullYear() === values.year-543) {
-        //                 count_color_map[item.specific.district.district_id-1][d.getMonth()-1]++;
-        //                 count_groups[item.specific.system_type.system_type_group_id]++;
-        //                 item.specific.loss_line_item.map((sub_data) => {
-        //                     count_loss_ss101_now[d.getMonth()-1] = count_loss_ss101_now[d.getMonth()-1] + sub_data.price;
-        //                 })
-        //                 count_accident_now[d.getMonth()-1] = count_accident_now[d.getMonth()-1] + hour;
-        //                 count_interrupt[item.specific.interrupt_id-1]++;
-        //             }
-        //             else {
-        //                 item.specific.loss_line_item.map((sub_data) => {
-        //                     count_loss_ss101_prev[d.getMonth()-1] = count_loss_ss101_prev[d.getMonth()-1] + sub_data.price;
-        //                 })
-        //                 count_accident_prev[d.getMonth()-1] = count_accident_prev[d.getMonth()-1] + hour;
-        //             }
-        //         }
-        //     })
-        //     // PieChartDataSystemType
-        //     for (let i = 0; i < groups.length; i++) {
-        //         results.push({key: groups[i], value: count_groups[i]});
-        //         results_pieInterrupt.push({key: groups_interrupt[i], value: count_interrupt[i]});
-        //     }
-        //     setFieldValue('maintenance_system', results);
-        //     setFieldValue('interrupt', results_pieInterrupt);
-        //     setFieldValue('accident_color_map', {values_data: count_color_map, xLabels, yLabels});
-
-        //     let results_loss = [];
-        //     let results_accident = [];
-        //     let now_year = values.year
-        //     let prev_year = values.year - 1
-        //     results_loss.columns = [prev_year, now_year];
-        //     results_loss.yAxis = "ค่าใช้จ่ายในการขัดข้อง (บาท)"
-        //     results_loss.xAxis = "เดือน"
-
-        //     results_accident.columns = [prev_year, now_year];
-        //     results_accident.yAxis = "ระยะเวลาขัดข้อง (ชั่วโมง)";
-        //     results_accident.xAxis = "เดือน";
-    
-        //     let xGroups = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
-
-        //     for (let i = 0; i < xGroups.length; i++) {
-        //         results_loss.push({
-        //             [results_loss.xAxis]: xGroups[i],
-        //             [results_loss.columns[0]]: count_loss_ss101_prev[i],
-        //             [results_loss.columns[1]]: count_loss_ss101_now[i],
-        //         });
-
-        //         results_accident.push({
-        //             [results_accident.xAxis]: xGroups[i],
-        //             [results_accident.columns[0]]: count_accident_prev[i],
-        //             [results_accident.columns[1]]: count_accident_now[i],
-        //         });
-        //     }
-            
-        //     let results_groups_interrupt = [];
-        //     for (let i = 0; i < groups_interrupt.length; i++) {
-        //         results_groups_interrupt.push({key: groups_interrupt[i], value: count_interrupt[i]});
-        //     }
-        //     setFieldValue('loss_ss101', results_loss);
-        //     setFieldValue('accident_ss101', results_accident);
-        // })
     }, [factEquipment.items]);
 
 
@@ -184,9 +131,10 @@ const AlsPlanPreventiveMaintenanceComponent = () => {
                             <div className="col-4" >
                                 <Histogram
                                     chartSettings={{ marginLeft: 50, marginTop: 70, marginBottom: 40, height: 300 }}
-                                    data={randomHistogramData()}
+                                    // data={randomHistogramData()}
+                                    data={values.age_equipment_list}
                                     title="ระยะเวลาระหว่างการชำรุดจากอายุการใช้งาน"
-                                    xAxis="อายุการใช้งานของสินทรัพย์"
+                                    xAxis="อายุการใช้งานของสินทรัพย์ (ปี)"
                                     yAxis="จำนวนของสินทรัพย์"
                                 />
                             </div>
@@ -207,7 +155,8 @@ const AlsPlanPreventiveMaintenanceComponent = () => {
                                         marginLeft: 20, marginTop: 30, marginBottom: 40,
                                         marginRight: 20, height: 200
                                     }}
-                                    data={randomPieChartData()}
+                                    // data={randomPieChartData()}
+                                    data={values.ageEquipmentPieGroups}
                                     title="ระยะเวลาระหว่างการชำรุดจากอายุการใช้งาน"
                                 />
                             </div>
@@ -223,19 +172,19 @@ const AlsPlanPreventiveMaintenanceComponent = () => {
                                 <div className="row_bootstrap" style={{ padding: 10 }}>
                                     <div className="col-4">
                                         <SimpleGrayCardComponent
-                                            name="PM Interval << MTBF"
+                                            name="ความถี่ในการทำวาระ < MTBF"
                                             value={22}
                                         />
                                     </div>
                                     <div className="col-4">
                                         <SimpleGrayCardComponent
-                                            name="PM Interval = MTBF"
+                                            name="ความถี่ในการทำวาระ = MTBF"
                                             value={22}
                                         />
                                     </div>
                                     <div className="col-4">
                                         <SimpleGrayCardComponent
-                                            name="PM Interval > MTBF"
+                                            name="ความถี่ในการทำวาระ > MTBF"
                                             value={22}
                                         />
                                     </div>
@@ -262,6 +211,8 @@ const EnhancedAlsPlanPreventiveMaintenanceComponent = withFormik({
         district_id: '',
         node_id: '',
         RunToFail_mtbf: _loss_ss101,
+        age_equipment_list: [],
+        ageEquipmentPieGroups: [],
     })
 })(AlsPlanPreventiveMaintenanceComponent);
 

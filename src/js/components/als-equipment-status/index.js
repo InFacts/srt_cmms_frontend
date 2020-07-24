@@ -21,7 +21,7 @@ import EquipmentStatusListComponent from './equipment-status-list';
 import {randomGroupedBarGraphData} from './mockup-data'
 
 import BgGreen from '../../../images/als/bg_als.jpg';
-import { changeTheam, FilterByAdjustmentBar, ALSGetDocumentSS101, FilterByAdjustmentBarSS101 } from '../../helper.js'
+import { changeTheam, FilterByAdjustmentBar, ALSGetDocumentSS101, ITEM_STATUS } from '../../helper.js'
 // import mockupEquipmentData from './mockupEquipmentData.json';
 
 const randomHistogramData = () => {
@@ -33,16 +33,6 @@ const randomHistogramData = () => {
         results.push(randomNumber);
     }
     return results;
-}
-
-// Equipment
-export const ITEM_STATUS = {
-    NEW: 1, // ใหม่
-    BROKEN: 2, // เสีย
-    FIX: 3, // ซ่อมแล้ว
-    USED: 4, // มือสอง
-    SALVAGE: 5, // ซาก
-    INSTALLED: 6, // ติดตั้งแล้ว
 }
 
 const AlsEquipmentStatusComponent = () => {
