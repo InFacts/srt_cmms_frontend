@@ -17,7 +17,7 @@ import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/to
 import {
   getNumberFromEscapedString, fetchGoodsOnhandDataForItemmasterData, DOCUMENT_TYPE_ID,
   getDocumentbyInternalDocumentID, checkBooleanForEditHelper, validateEmployeeIDField,
-  validateInternalDocumentIDWorfOrderPMFieldHelper, validatedataDocumentField
+  validateInternalDocumentIDFieldHelper, validatedataDocumentField
 } from '../../helper';
 
 import { FACTS } from '../../redux/modules/api/fact.js';
@@ -43,7 +43,7 @@ const TopContent = (props) => {
 
   // Fill Default Forms
   useFillDefaultsOnModeAdd();
-  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDWorfOrderPMFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.WORK_ORDER_PM, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
+  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.WORK_ORDER_PM, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
 
   const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
   const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);

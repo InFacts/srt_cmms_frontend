@@ -41,6 +41,7 @@ import PmtAllChecklist from './components/pmt-all-checklist';
 import PmtScheduleCreateChecklist from './components/pmt-create-schedule-checklist';
 import PmtReport from './components/pmt-report';
 import PmtListFixedAsset from './components/pmt-list-fixed-asset';
+import PmtListFixedAssetForAllChecklist from './components/pmt-fixed-asset-for-all-checklist';
 
 // ALS Page
 import AlsSpareComponent from './components/als-spare';
@@ -102,6 +103,7 @@ const FrontEnd = () => (
         <Route exact path="/pmt-create-schedule-checklist" component={PmtScheduleCreateChecklist} />
         <Route exact path="/pmt-report" component={PmtReport} />
         <Route exact path="/pmt-list-fixed-asset" component={PmtListFixedAsset} />
+        <Route exact path="/pmt-all-checklist-fixed-asset" component={PmtListFixedAssetForAllChecklist} />
 
         <Route exact path="/track" component={Track} />
 

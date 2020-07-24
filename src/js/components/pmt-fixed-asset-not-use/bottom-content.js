@@ -22,7 +22,13 @@ const BottomContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
+  const factPosition = useSelector((state) => ({ ...state.api.fact.position }), shallowEqual);
+  const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
+  const factChecklist = useSelector((state) => ({ ...state.api.fact.checklist }), shallowEqual);
+  const factChecklistCustom = useSelector((state) => ({ ...state.api.fact[FACTS.CHECKLIST_CUSTOM_GROUP] }), shallowEqual);
+  const factUnitMaintenanceLocation = useSelector((state) => ({ ...state.api.fact[FACTS.UNIT_MAINTENANCE_LOCATION] }), shallowEqual);
   const factStations = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
+  const factXCross = useSelector((state) => ({ ...state.api.fact[FACTS.X_CROSS] }), shallowEqual);
 
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
@@ -39,27 +45,14 @@ const BottomContent = (props) => {
     if (internal_item_id === "") {
       setFieldValue(fieldName + `.checklist_id`, '', false);
       setFieldValue(fieldName + `.x_cross_x_cross_id`, '', false);
-      setFieldValue(fieldName + `.checklist_th`, '', false);
-      setFieldValue(fieldName + `.x_cross_x_cross_th`, '', false);
       return;
     }
     let items = fact.equipment.items;
     let item = items.find(item => `${item.equipment_group.item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
+    console.log(item)
     if (item) {
-      console.log(item)
-
-      let factChecklists = fact.checklist.items;
-      let factChecklist = factChecklists.find(factChecklist => `${factChecklist.checklist_id}` === `${item.equipment_group.checklist_id}`); // Returns undefined if not found
-      // console.log("factChecklist", factChecklist)
-
-      let factXCrosses = fact[FACTS.X_CROSS].items;
-      let factXCross = factXCrosses.find(factXCross => `${factXCross.x_cross_id}` === `${item.equipment_installation[0].x_cross_x_cross_id}`); // Returns undefined if not found
-      // console.log("factXCross", factXCross)
-
-      setFieldValue(fieldName + `.equipment_id`, item.equipment_id, false);
       setFieldValue(fieldName + `.checklist_id`, item.equipment_group.checklist_id, false);
-      setFieldValue(fieldName + `.checklist_th`, factChecklist.checklist_name, false);
-      setFieldValue(fieldName + `.x_cross_x_cross_th`, factXCross.road_center, false);
+      setFieldValue(fieldName + `.x_cross_x_cross_id`, item.equipment_installation[0].x_cross_x_cross_id, false);
       return;
     } else {
       return 'Invalid Number ID';
@@ -127,7 +120,7 @@ const BottomContent = (props) => {
                               <TextInput name={`w1_list[${index}].internal_item_id`}
                                 validate={internal_item_id => validateLineNumberInternalItemIDField(`w1_list[${index}]`, internal_item_id, index)}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalEquipment1"
+                                searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalEquipment"
                                 handleModalClick={() => setLineNumber1(line_number)}
                               />
                           }
@@ -138,7 +131,13 @@ const BottomContent = (props) => {
                               ?
                               "-"
                               :
-                              line_item.checklist_th
+                              <SelectNoChildrenInput name={`w1_list[${index}].checklist_id`}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                                <option value=''></option>
+                                {factChecklist.items.map((checklist) => {
+                                    return <option key={checklist.checklist_id} value={checklist.checklist_id}>{checklist.checklist_name}</option>
+                                })}
+                              </SelectNoChildrenInput>
                           }
                         </td>
                         <td className="edit-padding">
@@ -147,7 +146,13 @@ const BottomContent = (props) => {
                               ?
                               "-"
                               :
-                              line_item.x_cross_x_cross_th
+                              <SelectNoChildrenInput name={`w1_list[${index}].x_cross_x_cross_id`}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                                <option value=''></option>
+                                {factXCross.items.map((x_cross) => {
+                                        return <option key={x_cross.x_cross_id} value={x_cross.x_cross_id}>{x_cross.road_center}</option>
+                                    })}
+                              </SelectNoChildrenInput>
                           }
                         </td>
 
@@ -176,7 +181,7 @@ const BottomContent = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {values.w2_list.map((line_item, index) => {
+                {values.w2_list.map((line_item, index) => {
                     let line_number = index + 1;
                     return (
                       <tr>
@@ -205,9 +210,9 @@ const BottomContent = (props) => {
                               "-"
                               :
                               <TextInput name={`w2_list[${index}].internal_item_id`}
-                                validate={internal_item_id => validateLineNumberInternalItemIDField(`w2_list[${index}]`, internal_item_id, index)}
+                                validate={internal_item_id => validateLineNumberInternalItemIDField(`w1_list[${index}]`, internal_item_id, index)}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalEquipment2"
+                                searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalEquipment"
                                 handleModalClick={() => setLineNumber2(line_number)}
                               />
                           }
@@ -218,7 +223,13 @@ const BottomContent = (props) => {
                               ?
                               "-"
                               :
-                              line_item.checklist_th
+                              <SelectNoChildrenInput name={`w2_list[${index}].checklist_id`}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                                <option value=''></option>
+                                {factChecklist.items.map((checklist) => {
+                                    return <option key={checklist.checklist_id} value={checklist.checklist_id}>{checklist.checklist_name}</option>
+                                })}
+                              </SelectNoChildrenInput>
                           }
                         </td>
                         <td className="edit-padding">
@@ -227,7 +238,13 @@ const BottomContent = (props) => {
                               ?
                               "-"
                               :
-                              line_item.x_cross_x_cross_th
+                              <SelectNoChildrenInput name={`w2_list[${index}].x_cross_x_cross_id`}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                                <option value=''></option>
+                                {factXCross.items.map((x_cross) => {
+                                        return <option key={x_cross.x_cross_id} value={x_cross.x_cross_id}>{x_cross.road_center}</option>
+                                    })}
+                              </SelectNoChildrenInput>
                           }
                         </td>
 
@@ -256,7 +273,7 @@ const BottomContent = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {values.w3_list.map((line_item, index) => {
+                {values.w3_list.map((line_item, index) => {
                     let line_number = index + 1;
                     return (
                       <tr>
@@ -285,9 +302,9 @@ const BottomContent = (props) => {
                               "-"
                               :
                               <TextInput name={`w3_list[${index}].internal_item_id`}
-                                validate={internal_item_id => validateLineNumberInternalItemIDField(`w3_list[${index}]`, internal_item_id, index)}
+                                validate={internal_item_id => validateLineNumberInternalItemIDField(`w1_list[${index}]`, internal_item_id, index)}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalEquipment3"
+                                searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalEquipment"
                                 handleModalClick={() => setLineNumber3(line_number)}
                               />
                           }
@@ -298,7 +315,13 @@ const BottomContent = (props) => {
                               ?
                               "-"
                               :
-                              line_item.checklist_th
+                              <SelectNoChildrenInput name={`w3_list[${index}].checklist_id`}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                                <option value=''></option>
+                                {factChecklist.items.map((checklist) => {
+                                    return <option key={checklist.checklist_id} value={checklist.checklist_id}>{checklist.checklist_name}</option>
+                                })}
+                              </SelectNoChildrenInput>
                           }
                         </td>
                         <td className="edit-padding">
@@ -307,7 +330,13 @@ const BottomContent = (props) => {
                               ?
                               "-"
                               :
-                              line_item.x_cross_x_cross_id
+                              <SelectNoChildrenInput name={`w3_list[${index}].x_cross_x_cross_id`}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                                <option value=''></option>
+                                {factXCross.items.map((x_cross) => {
+                                        return <option key={x_cross.x_cross_id} value={x_cross.x_cross_id}>{x_cross.road_center}</option>
+                                    })}
+                              </SelectNoChildrenInput>
                           }
                         </td>
 
@@ -336,7 +365,7 @@ const BottomContent = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {values.w4_list.map((line_item, index) => {
+                {values.w1_list.map((line_item, index) => {
                     let line_number = index + 1;
                     return (
                       <tr>
@@ -365,9 +394,9 @@ const BottomContent = (props) => {
                               "-"
                               :
                               <TextInput name={`w4_list[${index}].internal_item_id`}
-                                validate={internal_item_id => validateLineNumberInternalItemIDField(`w4_list[${index}]`, internal_item_id, index)}
+                                validate={internal_item_id => validateLineNumberInternalItemIDField(`w1_list[${index}]`, internal_item_id, index)}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalEquipment4"
+                                searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalEquipment"
                                 handleModalClick={() => setLineNumber4(line_number)}
                               />
                           }
@@ -378,7 +407,13 @@ const BottomContent = (props) => {
                               ?
                               "-"
                               :
-                              line_item.checklist_th
+                              <SelectNoChildrenInput name={`w4_list[${index}].checklist_id`}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                                <option value=''></option>
+                                {factChecklist.items.map((checklist) => {
+                                    return <option key={checklist.checklist_id} value={checklist.checklist_id}>{checklist.checklist_name}</option>
+                                })}
+                              </SelectNoChildrenInput>
                           }
                         </td>
                         <td className="edit-padding">
@@ -387,7 +422,13 @@ const BottomContent = (props) => {
                               ?
                               "-"
                               :
-                              line_item.x_cross_x_cross_th
+                              <SelectNoChildrenInput name={`w4_list[${index}].x_cross_x_cross_id`}
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>
+                                <option value=''></option>
+                                {factXCross.items.map((x_cross) => {
+                                        return <option key={x_cross.x_cross_id} value={x_cross.x_cross_id}>{x_cross.road_center}</option>
+                                    })}
+                              </SelectNoChildrenInput>
                           }
                         </td>
 
@@ -410,10 +451,10 @@ const BottomContent = (props) => {
 
         </div>
 
-        <PopupModalEquipment keyname='w1_list' lineNumber={lineNumber1} ariaControls="modalEquipment1" />
-        <PopupModalEquipment keyname='w2_list' lineNumber={lineNumber2} ariaControls="modalEquipment2" />
-        <PopupModalEquipment keyname='w3_list' lineNumber={lineNumber3} ariaControls="modalEquipment3" />
-        <PopupModalEquipment keyname='w4_list' lineNumber={lineNumber4} ariaControls="modalEquipment4" />
+        <PopupModalEquipment keyname='w1_list' lineNumber={lineNumber1} />
+        <PopupModalEquipment keyname='w2_list' lineNumber={lineNumber2} />
+        <PopupModalEquipment keyname='w3_list' lineNumber={lineNumber3} />
+        <PopupModalEquipment keyname='w4_list' lineNumber={lineNumber4} />
 
       </div>
     </>
