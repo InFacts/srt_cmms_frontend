@@ -31,13 +31,13 @@ const FormTitle = ({ children }) => (
 const TopContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm, resetForm } = useFormikContext();
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
-  const factChecklistCustomGroup = useSelector((state) => ({ ...state.api.fact[FACTS.CHECKLIST_CUSTOM_GROUP] }), shallowEqual);
-  const factChecklistEquipmentGroup = useSelector((state) => ({ ...state.api.fact[FACTS.CHECKLIST_EQUIPMENT_GROUP] }), shallowEqual);
+  const factChecklistGroup = useSelector((state) => ({ ...state.api.fact[FACTS.CHECKLIST_GROUP] }), shallowEqual);
   const factChecklist = useSelector((state) => ({ ...state.api.fact.checklist }), shallowEqual);
   const factChecklistLineItem = useSelector((state) => ({ ...state.api.fact[FACTS.CHECKLIST_LINE_ITEM] }), shallowEqual);
 
   useEffect(() => {
     setFieldValue("checklist_line_item", factChecklistLineItem.items, false)
+    fetchChecklistLineItem();
   }, [factChecklistLineItem.items])
 
   const fetchChecklistLineItem = () => {
@@ -74,11 +74,8 @@ const TopContent = (props) => {
               <div className="grid_3 alpha omega pull_0">
                 <SelectNoChildrenInput name="checklist_group_id" tabIndex="1">
                   <option value=''></option>
-                  {factChecklistEquipmentGroup.items.map((factChecklistEquipmentGroup) => {
-                    return (<option value={factChecklistEquipmentGroup.checklist_group_id}>{factChecklistEquipmentGroup.name}</option>)
-                  })}
-                  {factChecklistCustomGroup.items.map((factChecklistCustomGroup) => {
-                    return (<option value={factChecklistCustomGroup.checklist_group_id}>{factChecklistCustomGroup.checklist_group_name}</option>)
+                  {factChecklistGroup.items.map((factChecklistGroup) => {
+                    return (<option value={factChecklistGroup.checklist_group_id}>{factChecklistGroup.name}</option>)
                   })}
                 </SelectNoChildrenInput>
               </div>

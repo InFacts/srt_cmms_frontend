@@ -916,18 +916,21 @@ const AlsSpareComponent = () => {
                 <div className="row_bootstrap no-gutters">
                   <div className="col-4">
                     <SimpleGrayCardComponent
+                      style={{color:"red"}}
                       name="อะไหล่ต่ำกว่าเกณฑ์"
                       value={numberItemsLowerUI}
                     />
                   </div>
                   <div className="col-4">
                     <SimpleGrayCardComponent
+                    style={{color:"green"}}
                       name="อะไหล่ตามเกณฑ์"
                       value={numberItemsEqualUI}
                     />
                   </div>
                   <div className="col-4">
                     <SimpleGrayCardComponent
+                    style={{color:"orange"}}
                       name="อะไหล่สูงกว่าเกณฑ์"
                       value={numberItemsHigherUI}
                     />
@@ -945,7 +948,8 @@ const AlsSpareComponent = () => {
                   chartSettings={{
                     marginTop: 40,
                     marginBottom: 30,
-                    marginLeft: 30,
+                    marginLeft: 37,
+                    marginRight: 17,
                     height: 250,
                   }}
                 />

@@ -10,12 +10,12 @@ import AxisLeft from '../common/d3-axis-left';
 import useChartDimensions from '../../hooks/chart-dimensions-hook'
 
 const defaultChartSettings = {
-    "marginLeft": 20,
-    "marginBottom": 20,
-    "marginTop": 10,
-    "marginRight": 10,
+    marginLeft: 20,
+    marginBottom: 20,
+    marginTop: 10,
+    marginRight: 10,
 
-    "height": 200,
+    height: 200,
 }
 
 function LineGraph({ data, chartSettings, title}) {
@@ -63,8 +63,22 @@ function LineGraph({ data, chartSettings, title}) {
                         height={dms.boundedHeight}
                         fill="#FEF9E7"
                     /> */}
+                    
+                    
+
                     {/* Line Path */}
                     <path d={lineGenerator(data)} fill='none' stroke='steelblue'/>
+
+                    {/* Dots */}
+                    {data.map(({date,inventory_month}) => (
+                        <circle
+                            key={`DataPoint ${date}`}
+                            cx={xScale(date)}
+                            cy={yScale(inventory_month)}
+                            r={2}
+                            fill="black"
+                        />
+                    ))}
 
 
                     {/* Graph Title */}

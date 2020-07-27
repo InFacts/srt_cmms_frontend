@@ -59,9 +59,9 @@ const EnhancedGoodsReceiptComponent = withFormik({
     mapPropsToValues: (props) => ({
         // Field ที่ให้ User กรอก
         // Top Content
-        checklist_id: '',
+        checklist_id: 1,
         checklist_line_item: '',
-        checklist_group_id: '',
+        checklist_group_id: 1,
 
         // Bottom Content
         checklist_line_item: initialRowsEquipmentPlan(),

@@ -57,7 +57,7 @@ const PopupModalDocument = (props) => {
                                     if (document.dest_warehouse_id && document.src_warehouse_id) {
                                         let findWarehouse = decoded_token.has_position ? decoded_token.has_position[0].warehouse_id ? decoded_token.has_position[0].warehouse_id : "no_warehouse" : null;
                                         if (findWarehouse === document.dest_warehouse_id || findWarehouse === document.src_warehouse_id) {
-                                            console.log("findWarehouse>>>>")
+                                            // console.log("findWarehouse>>>>")
                                             return (
                                                 <tr key={index} id={index}>
                                                     <td className="edit-padding"> {document.internal_document_id} </td>
@@ -69,7 +69,7 @@ const PopupModalDocument = (props) => {
                                                 </tr>
                                             )
                                         } else if (findWarehouse === "no_warehouse") {
-                                            console.log("no_warehouse")
+                                            // console.log("no_warehouse")
                                             return (
                                                 <tr key={index} id={index}>
                                                     <td className="edit-padding"> {document.internal_document_id} </td>
@@ -82,7 +82,7 @@ const PopupModalDocument = (props) => {
                                             )
                                         }
                                     } else {
-                                        console.log("dest_warehouse and src_warehouse is null")
+                                        // console.log("dest_warehouse and src_warehouse is null")
                                         return (
                                             <tr key={index} id={index}>
                                                 <td className="edit-padding"> {document.internal_document_id} </td>

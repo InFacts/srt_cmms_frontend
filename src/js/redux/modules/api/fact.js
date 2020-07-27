@@ -31,8 +31,7 @@ export const FACTS = {
     CHECKLIST: "checklist",
     EQUIPMENT_STATUS: "equipment-status",
     CHECKLIST_LINE_ITEM: "checklist-line-item",
-    CHECKLIST_CUSTOM_GROUP:"checklist-custom-group",
-    CHECKLIST_EQUIPMENT_GROUP:"checklist-equipment-group",
+    CHECKLIST_GROUP:"checklist-group",
     UNIT_MAINTENANCE_LOCATION: "unit-maintenance-location",
     X_CROSS: "x-cross",
 

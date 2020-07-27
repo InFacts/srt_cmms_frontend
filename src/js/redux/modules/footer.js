@@ -398,8 +398,14 @@ export const handleFooterClickVoid = makeActionCreator(HANDLE_CLICK_VOID);
 export const handleFooterClickApprovalDone = makeActionCreator(HANDLE_CLICK_APPROVAL_DONE);
 
 
-export const handleClickBackToSpareMain = (routeLocation) => {
+export const handleClickBackToSpareMain = (routeLocation, internal_document_id) => {
     console.log("routeLocation", routeLocation.search("pmt"))
+    if (routeLocation.search("pmt-all-checklist-fixed-asset") !== -1) {
+        return (dispatch) => {
+            dispatch(handleFooterClickBack());
+            history.push(`/pmt-fixed-asset?internal_document_id=${internal_document_id}`);
+        };
+    }
     if (routeLocation.search("pmt") !== -1) {
         return (dispatch) => {
             dispatch(handleFooterClickBack());

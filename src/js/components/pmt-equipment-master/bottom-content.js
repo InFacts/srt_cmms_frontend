@@ -29,7 +29,7 @@ const BottomContent = (props) => {
   const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
 
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
-  const factEquipmentGroup = useSelector((state) => ({ ...state.api.fact[FACTS.EQUIPMENT_GROUP] }), shallowEqual);
+  const factEquipmentGroup = useSelector((state) => ({ ...state.api.fact[FACTS.CHECKLIST_GROUP] }), shallowEqual);
   const factChecklist = useSelector((state) => ({ ...state.api.fact.checklist }), shallowEqual);
   const factXCross = useSelector((state) => ({ ...state.api.fact[FACTS.X_CROSS] }), shallowEqual);
 
@@ -60,7 +60,6 @@ const BottomContent = (props) => {
   const validateDepreciation = (...args) => validateItemMasterdataField("depreciation", ...args);
   const validateUsefulLife = (...args) => validateItemMasterdataField("useful_life", ...args);
   const validateResposibleDistrictID = (...args) => validateItemMasterdataField("responsible_district_id", ...args);
-  console.log("factEquipmentGroup​>>>>>>>>", factEquipmentGroup.items)
   return (
     <>
       {/* THIS MAKES THE BACKGROUND NOT GRAY!! NEEDS TO FIX */}
@@ -364,9 +363,11 @@ const BottomContent = (props) => {
               <div className="grid_3 alpha omega">
                 <SelectNoChildrenInput name="equipment_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateItemGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="17" >
                   <option value=''></option>
-                  {factEquipmentGroup.items.map((item_group) => (
-                      <option value={item_group.equipment_group_id} key={item_group.equipment_group_id}> {item_group.name} </option>
-                  ))}
+                  {factEquipmentGroup.items.map((item_group) => {
+                    if (item_group.checklist_group_id !== 1) {
+                      return <option value={item_group.checklist_group_id} key={item_group.checklist_group_id}> {item_group.name} </option>
+                    }
+                  })}
                 </SelectNoChildrenInput>
               </div>
 
