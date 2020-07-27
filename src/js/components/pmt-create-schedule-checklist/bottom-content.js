@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { connect, useSelector, shallowEqual } from 'react-redux';
+import { Link } from 'react-router-dom'
 
-import TextareaInput from '../common/formik-textarea-input';
 import TextInput from '../common/formik-text-input'
-import NumberInput from '../common/formik-number-input'
 import SelectNoChildrenInput from '../common/formik-select-no-children';
-import Label from '../common/form-label'
 import TableStatus from '../common/table-status';
 import PopupModalEquipment from '../common/popup-modal-equipment-installed';
+import PopupModalStation from '../common/popup-modal-station-checklist';
 import Files from '../common/files2'
 
 import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
@@ -66,6 +65,23 @@ const BottomContent = (props) => {
     }
   }
 
+  const HeadTable = () => {
+    return (
+      <thead>
+        <tr>
+          <th className="font text-center" rowSpan="2" style={{ minWidth: "30px" }}>#</th>
+          <th className="font text-center" rowSpan="2" style={{ minWidth: "240px" }}>สถานี</th>
+          <th className="font text-center" colSpan="3" style={{ minWidth: "640px" }}>คานกั้น</th>
+        </tr>
+        <tr>
+          <th className="font text-center" style={{ minWidth: "216px" }}>สินทรัพย์</th>
+          <th className="font text-center" style={{ minWidth: "216px" }}>แผน</th>
+          <th className="font text-center" style={{ minWidth: "216px" }}>เลข กม.</th>
+        </tr>
+
+      </thead>
+    )
+  }
   let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
   useEffect(() => {
     checkBooleanForEdit = false
@@ -83,18 +99,7 @@ const BottomContent = (props) => {
           <div id="w1_content" className="tabcontent">
             <div className="container_12 mt-3">
               <table className="table-many-column" style={{ padding: "10px" }}>
-                <thead>
-                  <tr>
-                    <th className="font text-center" rowSpan="2" style={{ minWidth: "30px" }}>#</th>
-                    <th className="font text-center" rowSpan="2" style={{ minWidth: "240px" }}>สถานี</th>
-                    <th className="font text-center" colSpan="3" style={{ minWidth: "640px" }}>คานกั้น</th>
-                  </tr>
-                  <tr>
-                    <th className="font text-center" style={{ minWidth: "216px" }}>สินทรัพย์</th>
-                    <th className="font text-center" style={{ minWidth: "216px" }}>แผน</th>
-                    <th className="font text-center" style={{ minWidth: "216px" }}>เลข กม.</th>
-                  </tr>
-                </thead>
+                <HeadTable />
                 <tbody>
                   {values.w1_list.map((line_item, index) => {
                     let line_number = index + 1;
@@ -103,53 +108,40 @@ const BottomContent = (props) => {
                         <th className="edit-padding text-center">{line_number}</th>
                         <td className="edit-padding">
                           {
-                            values.w1_list[index].internal_item_id
-                              ?
-                              "-"
-                              :
-                              <SelectNoChildrenInput name={`w1_list[${index}].station_id`}
-                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
-                                <option value=''></option>
-                                {factStations.items.map((stations) => {
-                                  if (values.node_id == stations.node_id) {
-                                    return <option key={stations.station_id} value={stations.station_id}>{stations.name}</option>
-                                  }
-                                })}
-                              </SelectNoChildrenInput>
+                            values.w1_list[index].internal_item_id ? "-" :
+                              <>
+                                <SelectNoChildrenInput name={`w1_list[${index}].station_id`}
+                                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
+                                  <option value=''></option>
+                                  {factStations.items.map((stations) => {
+                                    if (values.node_id == stations.node_id) {
+                                      return <option key={stations.station_id} value={stations.station_id}>{stations.name}</option>
+                                    }
+                                  })}
+                                </SelectNoChildrenInput>
+                                {values.w1_list[index].station_id ?
+                                  <p className="link_wo_pm">
+                                    <Link aria-controls="modalStation"
+                                      onClick={() => {
+                                        setFieldValue("whatIsWeek", "w1_list", false)
+                                        setFieldValue("lineNumberStation", index, false)
+                                        setFieldValue("nameValueStation", `w1_list[${index}].selector_checklist`, false)
+                                      }}>เพิ่มเติม</Link>
+                                  </p> : null}
+                              </>
                           }
                         </td>
                         <td className="edit-padding">
-                          {
-                            values.w1_list[index].station_id
-                              ?
-                              "-"
-                              :
-                              <TextInput name={`w1_list[${index}].internal_item_id`}
-                                validate={internal_item_id => validateLineNumberInternalItemIDField(`w1_list[${index}]`, internal_item_id, index)}
-                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalEquipment1"
-                                handleModalClick={() => setLineNumber1(line_number)}
-                              />
-                          }
+                          {values.w1_list[index].station_id ? "-" :
+                            <TextInput name={`w1_list[${index}].internal_item_id`}
+                              validate={internal_item_id => validateLineNumberInternalItemIDField(`w1_list[${index}]`, internal_item_id, index)}
+                              disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                              searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalEquipment1"
+                              handleModalClick={() => setLineNumber1(line_number)}
+                            />}
                         </td>
-                        <td className="edit-padding">
-                          {
-                            values.w1_list[index].station_id
-                              ?
-                              "-"
-                              :
-                              line_item.checklist_th
-                          }
-                        </td>
-                        <td className="edit-padding">
-                          {
-                            values.w1_list[index].station_id
-                              ?
-                              "-"
-                              :
-                              line_item.x_cross_x_cross_th
-                          }
-                        </td>
+                        <td className="edit-padding">{values.w1_list[index].station_id ? "-" : line_item.checklist_th}</td>
+                        <td className="edit-padding">{values.w1_list[index].station_id ? "-" : line_item.x_cross_x_cross_th}</td>
 
                       </tr>
                     )
@@ -163,18 +155,7 @@ const BottomContent = (props) => {
           <div id="w2_content" className="tabcontent">
             <div className="container_12 mt-3">
               <table className="table-many-column" style={{ padding: "10px" }}>
-                <thead>
-                  <tr>
-                    <th className="font text-center" rowSpan="2" style={{ minWidth: "30px" }}>#</th>
-                    <th className="font text-center" rowSpan="2" style={{ minWidth: "240px" }}>สถานี</th>
-                    <th className="font text-center" colSpan="3" style={{ minWidth: "640px" }}>คานกั้น</th>
-                  </tr>
-                  <tr>
-                    <th className="font text-center" style={{ minWidth: "216px" }}>สินทรัพย์</th>
-                    <th className="font text-center" style={{ minWidth: "216px" }}>แผน</th>
-                    <th className="font text-center" style={{ minWidth: "216px" }}>เลข กม.</th>
-                  </tr>
-                </thead>
+                <HeadTable />
                 <tbody>
                   {values.w2_list.map((line_item, index) => {
                     let line_number = index + 1;
@@ -182,11 +163,8 @@ const BottomContent = (props) => {
                       <tr>
                         <th className="edit-padding text-center">{line_number}</th>
                         <td className="edit-padding">
-                          {
-                            values.w2_list[index].internal_item_id
-                              ?
-                              "-"
-                              :
+                          {values.w2_list[index].internal_item_id ? "-" :
+                            <>
                               <SelectNoChildrenInput name={`w2_list[${index}].station_id`}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                                 <option value=''></option>
@@ -196,41 +174,30 @@ const BottomContent = (props) => {
                                   }
                                 })}
                               </SelectNoChildrenInput>
+                              {values.w2_list[index].station_id ?
+                                <p className="link_wo_pm">
+                                  <Link aria-controls="modalStation"
+                                    onClick={() => {
+                                      setFieldValue("whatIsWeek", "w2_list", false)
+                                      setFieldValue("lineNumberStation", index, false)
+                                      setFieldValue("nameValueStation", `w2_list[${index}].selector_checklist`, false)
+                                    }}>เพิ่มเติม</Link>
+                                </p> : null}
+                            </>
                           }
                         </td>
                         <td className="edit-padding">
-                          {
-                            values.w2_list[index].station_id
-                              ?
-                              "-"
-                              :
-                              <TextInput name={`w2_list[${index}].internal_item_id`}
-                                validate={internal_item_id => validateLineNumberInternalItemIDField(`w2_list[${index}]`, internal_item_id, index)}
-                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalEquipment2"
-                                handleModalClick={() => setLineNumber2(line_number)}
-                              />
+                          {values.w2_list[index].station_id ? "-" :
+                            <TextInput name={`w2_list[${index}].internal_item_id`}
+                              validate={internal_item_id => validateLineNumberInternalItemIDField(`w2_list[${index}]`, internal_item_id, index)}
+                              disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                              searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalEquipment2"
+                              handleModalClick={() => setLineNumber2(line_number)}
+                            />
                           }
                         </td>
-                        <td className="edit-padding">
-                          {
-                            values.w2_list[index].station_id
-                              ?
-                              "-"
-                              :
-                              line_item.checklist_th
-                          }
-                        </td>
-                        <td className="edit-padding">
-                          {
-                            values.w2_list[index].station_id
-                              ?
-                              "-"
-                              :
-                              line_item.x_cross_x_cross_th
-                          }
-                        </td>
-
+                        <td className="edit-padding">{values.w2_list[index].station_id ? "-" : line_item.checklist_th}</td>
+                        <td className="edit-padding">{values.w2_list[index].station_id ? "-" : line_item.x_cross_x_cross_th}</td>
                       </tr>
                     )
                   })}
@@ -243,18 +210,7 @@ const BottomContent = (props) => {
           <div id="w3_content" className="tabcontent">
             <div className="container_12 mt-3">
               <table className="table-many-column" style={{ padding: "10px" }}>
-                <thead>
-                  <tr>
-                    <th className="font text-center" rowSpan="2" style={{ minWidth: "30px" }}>#</th>
-                    <th className="font text-center" rowSpan="2" style={{ minWidth: "240px" }}>สถานี</th>
-                    <th className="font text-center" colSpan="3" style={{ minWidth: "640px" }}>คานกั้น</th>
-                  </tr>
-                  <tr>
-                    <th className="font text-center" style={{ minWidth: "216px" }}>สินทรัพย์</th>
-                    <th className="font text-center" style={{ minWidth: "216px" }}>แผน</th>
-                    <th className="font text-center" style={{ minWidth: "216px" }}>เลข กม.</th>
-                  </tr>
-                </thead>
+                <HeadTable />
                 <tbody>
                   {values.w3_list.map((line_item, index) => {
                     let line_number = index + 1;
@@ -262,11 +218,8 @@ const BottomContent = (props) => {
                       <tr>
                         <th className="edit-padding text-center">{line_number}</th>
                         <td className="edit-padding">
-                          {
-                            values.w3_list[index].internal_item_id
-                              ?
-                              "-"
-                              :
+                          {values.w3_list[index].internal_item_id ? "-" :
+                            <>
                               <SelectNoChildrenInput name={`w3_list[${index}].station_id`}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                                 <option value=''></option>
@@ -276,40 +229,29 @@ const BottomContent = (props) => {
                                   }
                                 })}
                               </SelectNoChildrenInput>
+                              {values.w3_list[index].station_id ?
+                                <p className="link_wo_pm">
+                                  <Link aria-controls="modalStation"
+                                    onClick={() => {
+                                      setFieldValue("whatIsWeek", "w3_list", false)
+                                      setFieldValue("lineNumberStation", index, false)
+                                      setFieldValue("nameValueStation", `w3_list[${index}].selector_checklist`, false)
+                                    }}>เพิ่มเติม</Link>
+                                </p> : null}
+                            </>
                           }
                         </td>
                         <td className="edit-padding">
-                          {
-                            values.w3_list[index].station_id
-                              ?
-                              "-"
-                              :
-                              <TextInput name={`w3_list[${index}].internal_item_id`}
-                                validate={internal_item_id => validateLineNumberInternalItemIDField(`w3_list[${index}]`, internal_item_id, index)}
-                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalEquipment3"
-                                handleModalClick={() => setLineNumber3(line_number)}
-                              />
-                          }
+                          {values.w3_list[index].station_id ? "-" :
+                            <TextInput name={`w3_list[${index}].internal_item_id`}
+                              validate={internal_item_id => validateLineNumberInternalItemIDField(`w3_list[${index}]`, internal_item_id, index)}
+                              disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                              searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalEquipment3"
+                              handleModalClick={() => setLineNumber3(line_number)}
+                            />}
                         </td>
-                        <td className="edit-padding">
-                          {
-                            values.w3_list[index].station_id
-                              ?
-                              "-"
-                              :
-                              line_item.checklist_th
-                          }
-                        </td>
-                        <td className="edit-padding">
-                          {
-                            values.w3_list[index].station_id
-                              ?
-                              "-"
-                              :
-                              line_item.x_cross_x_cross_id
-                          }
-                        </td>
+                        <td className="edit-padding">{values.w3_list[index].station_id ? "-" : line_item.checklist_th}</td>
+                        <td className="edit-padding">{values.w3_list[index].station_id ? "-" : line_item.x_cross_x_cross_id}</td>
 
                       </tr>
                     )
@@ -323,18 +265,7 @@ const BottomContent = (props) => {
           <div id="w4_content" className="tabcontent">
             <div className="container_12 mt-3">
               <table className="table-many-column" style={{ padding: "10px" }}>
-                <thead>
-                  <tr>
-                    <th className="font text-center" rowSpan="2" style={{ minWidth: "30px" }}>#</th>
-                    <th className="font text-center" rowSpan="2" style={{ minWidth: "240px" }}>สถานี</th>
-                    <th className="font text-center" colSpan="3" style={{ minWidth: "640px" }}>คานกั้น</th>
-                  </tr>
-                  <tr>
-                    <th className="font text-center" style={{ minWidth: "216px" }}>สินทรัพย์</th>
-                    <th className="font text-center" style={{ minWidth: "216px" }}>แผน</th>
-                    <th className="font text-center" style={{ minWidth: "216px" }}>เลข กม.</th>
-                  </tr>
-                </thead>
+                <HeadTable />
                 <tbody>
                   {values.w4_list.map((line_item, index) => {
                     let line_number = index + 1;
@@ -342,11 +273,8 @@ const BottomContent = (props) => {
                       <tr>
                         <th className="edit-padding text-center">{line_number}</th>
                         <td className="edit-padding">
-                          {
-                            values.w4_list[index].internal_item_id
-                              ?
-                              "-"
-                              :
+                          {values.w4_list[index].internal_item_id ? "-" :
+                            <>
                               <SelectNoChildrenInput name={`w4_list[${index}].station_id`}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                                 <option value=''></option>
@@ -356,40 +284,29 @@ const BottomContent = (props) => {
                                   }
                                 })}
                               </SelectNoChildrenInput>
+                              {values.w4_list[index].station_id ?
+                                <p className="link_wo_pm">
+                                  <Link aria-controls="modalStation"
+                                    onClick={() => {
+                                      setFieldValue("whatIsWeek", "w4_list", false)
+                                      setFieldValue("lineNumberStation", index, false)
+                                      setFieldValue("nameValueStation", `w4_list[${index}].selector_checklist`, false)
+                                    }}>เพิ่มเติม</Link>
+                                </p> : null}
+                            </>
                           }
                         </td>
                         <td className="edit-padding">
-                          {
-                            values.w4_list[index].station_id
-                              ?
-                              "-"
-                              :
-                              <TextInput name={`w4_list[${index}].internal_item_id`}
-                                validate={internal_item_id => validateLineNumberInternalItemIDField(`w4_list[${index}]`, internal_item_id, index)}
-                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalEquipment4"
-                                handleModalClick={() => setLineNumber4(line_number)}
-                              />
-                          }
+                          {values.w4_list[index].station_id ? "-" :
+                            <TextInput name={`w4_list[${index}].internal_item_id`}
+                              validate={internal_item_id => validateLineNumberInternalItemIDField(`w4_list[${index}]`, internal_item_id, index)}
+                              disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                              searchable={checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalEquipment4"
+                              handleModalClick={() => setLineNumber4(line_number)}
+                            />}
                         </td>
-                        <td className="edit-padding">
-                          {
-                            values.w4_list[index].station_id
-                              ?
-                              "-"
-                              :
-                              line_item.checklist_th
-                          }
-                        </td>
-                        <td className="edit-padding">
-                          {
-                            values.w4_list[index].station_id
-                              ?
-                              "-"
-                              :
-                              line_item.x_cross_x_cross_th
-                          }
-                        </td>
+                        <td className="edit-padding">{values.w4_list[index].station_id ? "-" : line_item.checklist_th}</td>
+                        <td className="edit-padding">{values.w4_list[index].station_id ? "-" : line_item.x_cross_x_cross_th}</td>
 
                       </tr>
                     )
@@ -414,6 +331,8 @@ const BottomContent = (props) => {
         <PopupModalEquipment keyname='w2_list' lineNumber={lineNumber2} ariaControls="modalEquipment2" />
         <PopupModalEquipment keyname='w3_list' lineNumber={lineNumber3} ariaControls="modalEquipment3" />
         <PopupModalEquipment keyname='w4_list' lineNumber={lineNumber4} ariaControls="modalEquipment4" />
+
+        <PopupModalStation line_station={values.lineNumberStation} name={values.nameValueStation} />
 
       </div>
     </>

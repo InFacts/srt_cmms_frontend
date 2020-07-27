@@ -460,13 +460,13 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             if (values.checklist_id === line_item.checklist_id && values.weekly_task_id === line_item.weekly_task_id) {
                 work_order_pm_checklist_line_item_part.push({
                     selector_checklist_line_item_id: line_item.selector_checklist_line_item_id,
-                    is_checked: line_item.is_checked == "1" ? true : false,
+                    is_checked: line_item.is_checked,
                     weekly_task_id: line_item.weekly_task_id
                 })
             } else {
                 work_order_pm_checklist_line_item_part.push({
                     selector_checklist_line_item_id: line_item.selector_checklist_line_item_id,
-                    is_checked: line_item.is_checked == "1" ? true : false,
+                    is_checked: line_item.is_checked,
                     weekly_task_id: line_item.weekly_task_id
                 })
             }
@@ -887,23 +887,8 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             name: values.name,
             active: true,
             node_id: parseInt(values.node_id),
-            start_on: values.start_on + 'T14:51:00+07:00',
+            start_on: values.start_on + 'T03:40:00+07:00',
         }
-
-        // checklist สำหรับ station
-        let filter_item = [];
-        let items = fact.checklist.items;
-        items.map((item) => {
-            if (item.checklist_group_id !== 1) {
-                filter_item.push({
-                    document_id: values.document_id,
-                    checklist_name: item.checklist_name,
-                    remark: "string",
-                    checklist_id: item.checklist_id,
-                    is_have: true
-                })
-            }
-        })
 
         var w1_part = [];
         let line_index = '';
@@ -929,7 +914,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                                 }
                             ]
                             :
-                            filter_item
+                            line_item.selector_checklist
 
                 });
             }
@@ -958,7 +943,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                                 }
                             ]
                             :
-                            filter_item
+                            line_item.selector_checklist
 
                 });
             }
@@ -987,7 +972,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                                 }
                             ]
                             :
-                            filter_item
+                            line_item.selector_checklist
 
                 });
             }
@@ -1016,7 +1001,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                                 }
                             ]
                             :
-                            filter_item
+                            line_item.selector_checklist
 
                 });
             }
@@ -2390,12 +2375,13 @@ function returnArrayHasLineWorkOrderPM(line_custom) {
     line_custom.map((line_custom) => {
         work_order_pm_has_selector_checklist_line_item.push({
             selector_checklist_line_item_id: line_custom.selector_checklist_line_item_id,
-            is_checked: line_custom.is_checked.data[0],
+            is_checked: line_custom.is_checked.data[0] === 1 ? true : false,
             weekly_task_id: line_custom.weekly_task_id,
             checklist_line_item_id: line_custom.checklist_line_item_id,
             checklist_line_item_name: line_custom.checklist_line_item.name,
             checklist_id: line_custom.checklist_id,
-            checklist_name: line_custom.checklist_name
+            checklist_name: line_custom.checklist_name,
+            // selector_checklist: 
         })
     })
     return work_order_pm_has_selector_checklist_line_item;

@@ -4,6 +4,7 @@ import { connect, useSelector, shallowEqual } from 'react-redux';
 import { useFormikContext } from 'formik';
 import { FACTS } from '../../redux/modules/api/fact.js';
 
+import CheckboxInput from '../common/formik-checkbox-input';
 import SelectNoChildrenInput from '../common/formik-select-no-children';
 import '../../../css/table.css';
 
@@ -15,7 +16,7 @@ const BottomContent = (props) => {
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
 
   let checklist_id;
-  console.log("checklist_id", checklist_id)
+  console.log("values.checklist_line_item[index].is_checked", values.checklist_line_item)
   return (
     <>
       {/* THIS MAKES THE BACKGROUND NOT GRAY!! NEEDS TO FIX */}
@@ -27,7 +28,7 @@ const BottomContent = (props) => {
             <thead>
               <tr>
                 <th className="font text-center" style={{ width: "30px" }}>#</th>
-                <th className="font" style={{ minWidth: "200px" }}>ACTION</th>
+                <th className="font" style={{ minWidth: "30px" }}>ACTION</th>
                 <th className="font" style={{ minWidth: "350px" }}>แผน</th>
                 <th className="font" style={{ minWidth: "350px" }}>หมายเหตุ</th>
               </tr>
@@ -41,12 +42,9 @@ const BottomContent = (props) => {
                       return (
                         <tr key={index} id={index}>
                           <td className="edit-padding text-center">{index + 1}</td>
-                          <td className="edit-padding">
-                            <SelectNoChildrenInput name={`checklist_line_item[${index}].is_checked`}>
-                              <option value='' selected></option>
-                              <option value='1'>ทำวาระ</option>
-                              <option value='2'>ไม่ทำวาระ</option>
-                            </SelectNoChildrenInput>
+                          <td className="edit-padding" style={{ padding: "5px 15px" }}>
+                            <CheckboxInput name={`checklist_line_item[${index}].is_checked`}
+                              checked={values.checklist_line_item[index].is_checked} value={true} />
                           </td>
                           <td className="edit-padding" style={{ overflow: "hidden" }}>{list.checklist_name + "\\\\" + list.checklist_line_item_name}</td>
                           <td className="edit-padding"></td>
@@ -60,12 +58,9 @@ const BottomContent = (props) => {
                       return (
                         <tr key={index} id={index}>
                           <td className="edit-padding text-center">{index + 1}</td>
-                          <td className="edit-padding">
-                            <SelectNoChildrenInput name={`checklist_line_item[${index}].is_checked`}>
-                              <option value='' selected></option>
-                              <option value='1'>ทำวาระ</option>
-                              <option value='0'>ไม่ทำวาระ</option>
-                            </SelectNoChildrenInput>
+                          <td className="edit-padding" style={{ padding: "5px 15px" }}>
+                            <CheckboxInput name={`checklist_line_item[${index}].is_checked`}
+                              checked={values.checklist_line_item[index].is_checked} value={1} />
                           </td>
                           <td className="edit-padding" style={{ overflow: "hidden" }}>{list.checklist_line_item_name}</td>
                           <td className="edit-padding"></td>
