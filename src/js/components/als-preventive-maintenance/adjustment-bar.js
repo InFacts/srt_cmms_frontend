@@ -26,16 +26,16 @@ const AdjustmentBarComponent = () => {
                     step="1"
                 />
 
-                <div className="space-10px" />
+                {/* <div className="space-10px" /> */}
 
-                <div className="adjustment-bar-inner-text">กลุ่มการทำวาระ</div  >
+                {/* <div className="adjustment-bar-inner-text">กลุ่มการทำวาระ</div  >
                 <SelectNoChildrenInput 
                     name="pmt_plan_id" >
                     <option value='ทั้งหมด'>ทั้งหมด</option>
                     <option value={"1"} key={"1"}> {"ระบบเครื่องกั้นถนน"}  </option>
                     <option value={"2"} key={"2"}> {"ระบบอาณัติสัญญาณ"}  </option>
                     <option value={"3"} key={"3"}> {"ระบบโทรมานาคม"}  </option>
-                </SelectNoChildrenInput>
+                </SelectNoChildrenInput> */}
 
                 <div className="space-10px" />
 
