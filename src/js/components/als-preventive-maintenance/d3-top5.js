@@ -5,7 +5,7 @@ import HorizontalBarGraph from './d3-horizontal-bar-graph';
 
 import { randomDonutChartBinaryData, randomHorizontalBarGraphData } from './mockup-data';
 
-const Top5Component = ({ dataDonut, chartSettings, title}) => {
+const Top5Component = ({ dataDonut, dataBarGraph, chartSettings, title}) => {
     // console.log("dataDonut", dataDonut)
     return (
         <>  
@@ -14,7 +14,7 @@ const Top5Component = ({ dataDonut, chartSettings, title}) => {
 
         
             <DonutChartBinary 
-                data={randomDonutChartBinaryData()}
+                // data={randomDonutChartBinaryData()}
                 data={dataDonut}
                 chartSettings={{
                     marginTop:1,
@@ -24,7 +24,8 @@ const Top5Component = ({ dataDonut, chartSettings, title}) => {
             />
 
             <HorizontalBarGraph 
-                data={randomHorizontalBarGraphData()}
+                data={dataBarGraph}
+                // data={randomHorizontalBarGraphData()}
             />
             </div>
         </>

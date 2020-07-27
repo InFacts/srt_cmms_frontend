@@ -68,13 +68,15 @@ const AlsEquipmentStatusComponent = () => {
                     let b = new Date(item.specific.finished_on);
                     let hour = parseInt((b-a)/1000/60/60);
                     if (d.getFullYear() === values.year-543) {
-                        count_color_map[item.specific.district.district_id-1][d.getMonth()-1]++;
-                        count_groups[item.specific.system_type.system_type_group_id]++;
-                        item.specific.loss_line_item.map((sub_data) => {
-                            count_loss_ss101_now[d.getMonth()-1] = count_loss_ss101_now[d.getMonth()-1] + sub_data.price;
-                        })
-                        count_accident_now[d.getMonth()-1] = count_accident_now[d.getMonth()-1] + hour;
-                        count_interrupt[item.specific.interrupt_id-1]++;
+                        if (item.specific.district.district_id !== undefined){
+                            count_color_map[item.specific.district.district_id-1][d.getMonth()-1]++;
+                            count_groups[item.specific.system_type.system_type_group_id]++;
+                            item.specific.loss_line_item.map((sub_data) => {
+                                count_loss_ss101_now[d.getMonth()-1] = count_loss_ss101_now[d.getMonth()-1] + sub_data.price;
+                            })
+                            count_accident_now[d.getMonth()-1] = count_accident_now[d.getMonth()-1] + hour;
+                            count_interrupt[item.specific.interrupt_id-1]++;
+                        }
                     }
                     else {
                         item.specific.loss_line_item.map((sub_data) => {
