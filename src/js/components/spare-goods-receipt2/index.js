@@ -124,6 +124,8 @@ const EnhancedGoodsReceiptComponent = withFormik({
         
         // For Step Approval
         step_approve: [],
+
+        is_auto_internal_document_id: 'auto',
     })
 })(GoodsReceiptComponent);
 

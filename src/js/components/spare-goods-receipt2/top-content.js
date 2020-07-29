@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { connect, useSelector, shallowEqual } from 'react-redux'
+import React, { useEffect } from 'react';
+import { useSelector, shallowEqual } from 'react-redux'
 
 import FormInput from '../common/form-input'
 import TextInput from '../common/formik-text-input'
 import DateTimeInput from '../common/formik-datetime-input'
 import DateInput from '../common/formik-date-input'
+import RadioAutoIncrementInput from '../common/formik-radio-input-ai'
 
-import { useFormikContext, useField } from 'formik';
+import { useFormikContext } from 'formik';
 
 import PopupModalDocument from '../common/popup-modal-document'
 import PopupModalInventory from '../common/popup-modal-inventory'
@@ -65,9 +66,21 @@ const TopContent = (props) => {
               <div className="grid_2">
                 <p className="top-text">เลขที่เอกสาร</p>
               </div>
+              {/* <div className="grid_1 pull_1">
+                <p className="top-text">asd</p>
+              </div> */}
               <div className="grid_3 pull_1">
-                <TextInput name='internal_document_id' validate={validateInternalDocumentIDField}
-                  searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalDocument" tabIndex="1" />
+                <TextInput name='internal_document_id' 
+                  validate={validateInternalDocumentIDField}
+                  disabled={values.is_auto_internal_document_id === "auto" && toolbar.mode === TOOLBAR_MODE.ADD ? true: false}
+                  searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} 
+                  ariaControls="modalDocument" tabIndex="1" />
+              </div>
+              <div className="grid_2 pull_1">
+                <RadioAutoIncrementInput 
+                  name='is_auto_internal_document_id'
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                />
               </div>
 
               {/* Document Status  */}
