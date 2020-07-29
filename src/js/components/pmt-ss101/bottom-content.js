@@ -512,12 +512,12 @@ const BottomContent = (props) => {
                     </div>
 
                     <div className="grid_12" style={{ marginTop: "10px" }}>
-                        {/* Remark */}
+                        {/* checked_remark */}
                         <div className="grid_2 alpha white-space">
                             <p className="top-text">ความเห็นสายตรวจ</p>
                         </div>
                         <div className="grid_10 alpha omega">
-                            <TextareaInput name="remark1" tabIndex="30"
+                            <TextareaInput name="checked_remark" tabIndex="30"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
                         </div>
 

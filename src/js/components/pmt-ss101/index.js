@@ -178,6 +178,7 @@ const EnhancedPmtSS101Component = withFormik({
 
 
         remark: '',
+        checked_remark: '',
         loss_line_items: initialRows(),
         line_items: initialRowsEquipment(),
 

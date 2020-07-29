@@ -69,7 +69,7 @@ const GoodsReceiptComponent = (props) => {
         // checklist สำหรับ station
         let filter_item = [];
         let items = fact.checklist.items;
-        items.map((item) => {
+        items.map((item, index) => {
             if (item.checklist_group_id !== 1) {
                 filter_item.push({
                     document_id: '',
@@ -170,6 +170,8 @@ const EnhancedGoodsReceiptComponent = withFormik({
         // For Attactment
         desrciption_files_length: '',
         desrciption_files: [],
+
+        station: []
     })
 })(GoodsReceiptComponent);
 

@@ -42,7 +42,8 @@ const TopContent = (props) => {
       description: data.description,
       item_group_id: data.item_group_id,
       item_type_id: data.item_type_id,
-      uom_group_id: data.uom_group_id,                    //UOM
+      uom_group_id: 1,                    //UOM
+      // uom_group_id: data.uom_group_id,                    //UOM
       uom_id: data.uom_id_inventory,
       uom_name: uom.name,
       minimum_order_quantity: !data.minimum_order_quantity ? 0 : data.minimum_order_quantity,  //ขั้นต่ำการสั่งซื้อ
@@ -69,7 +70,7 @@ const TopContent = (props) => {
       setFieldValue("description", "", false)
       setFieldValue("item_group_id", "", false)
       setFieldValue("item_type_id", "", false)
-      setFieldValue("uom_group_id", "", false)
+      setFieldValue("uom_group_id", 1, false)
       setFieldValue("uom_id", "", false)
       setFieldValue("uom_name", "", false)
       setFieldValue("minimum_order_quantity", "", false)
@@ -135,7 +136,7 @@ const TopContent = (props) => {
 
           <FormTitle>ข้อมูลอุปกรณ์</FormTitle>
 
-          <div id={changeTheam() === true ? "blackground-white" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "120px", paddingTop: "10px" } : {}} >
+          <div id={changeTheam() === true ? "blackground-white" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "90px", paddingTop: "10px" } : {}} >
 
             <div className="container_12">
               <FormLabel>เลขที่อุปกรณ์</FormLabel>
@@ -182,7 +183,7 @@ const TopContent = (props) => {
               </div>
             </div>
 
-            <div className="container_12">
+            {/* <div className="container_12">
               <div className="float-right">
                 <div className="grid_3 float-right">
                   <SelectNoChildrenInput name="uom_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="5">
@@ -200,7 +201,7 @@ const TopContent = (props) => {
                   <p className="top-text float-right">กลุ่มหน่วยนับ</p>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </section>
 

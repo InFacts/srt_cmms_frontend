@@ -52,7 +52,8 @@ const TopContent = (props) => {
       equipment_group_id: data.equipment_group.equipment_group_id,
       active: data.equipment_group.item.active.data[0],
       item_type_id: data.equipment_group.item.item_type_id,
-      uom_group_id: data.equipment_group.item.uom_group_id,                    //UOM
+      uom_group_id: 1,                    //UOM
+      // uom_group_id: data.equipment_group.item.uom_group_id,                    //UOM
       uom_id: data.equipment_group.item.uom_group.uom[0].uom_id,
       uom_name: data.equipment_group.item.uom_group.uom[0].name,
       remark: data.equipment_group.item.remark,
@@ -248,7 +249,7 @@ const TopContent = (props) => {
               </div>
 
               {/* === uom_group_id === */}
-              <div className="float-right">
+              {/* <div className="float-right">
                 <div className="grid_3 float-right">
                   <SelectNoChildrenInput name="uom_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="4">
                     <option value=''></option>
@@ -264,7 +265,7 @@ const TopContent = (props) => {
                 <div className="grid_2 float-right">
                   <p className="top-text float-right">กลุ่มหน่วยนับ</p>
                 </div>
-              </div>
+              </div> */}
 
             </div>
 

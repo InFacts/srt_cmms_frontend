@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux'
+import { connect, useSelector, shallowEqual } from 'react-redux';
 import { useFormikContext } from 'formik';
 import CheckboxInput from '../common/formik-checkbox-input';
+import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
 
 const PopupModalStation = (props) => {
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
+    const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
 
     //* PopUp เลขที่อะไหล่ */
     const [data, setData] = useState([]);
@@ -19,7 +21,7 @@ const PopupModalStation = (props) => {
             setData(values.w4_list[props.line_station] ? values.w4_list[props.line_station].selector_checklist : [])
         }
     }, [values.whatIsWeek, values.w1_list, values.w2_list, values.w3_list, values.w4_list, props.line_station]);
-    
+
     return (
         <div className="modal" id="modalStation" style={{ display: "none" }}>
             <div className="gray-board">
@@ -42,6 +44,7 @@ const PopupModalStation = (props) => {
                                             <td className="edit-padding text-center"> {index + 1} </td>
                                             <td className="edit-padding" style={{ padding: "7px 10px" }}>
                                                 <CheckboxInput name={`${props.name}[${index}].is_have`}
+                                                    disabled={props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                                                     checked={data.is_have} value={true} />
                                             </td>
                                             <td className="edit-padding"> {data.checklist_name}</td>

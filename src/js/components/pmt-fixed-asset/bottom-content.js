@@ -69,7 +69,9 @@ const BottomContent = (props) => {
                                 weekly_task_id: line_item.weekly_task_id,
                                 work_order_pm_has_selector_checklist_line_item: values.work_order_pm_has_selector_checklist_line_item,
                                 document_id: values.document_id,
-                                internal_document_id: values.internal_document_id
+                                internal_document_id: values.internal_document_id,
+                                checkBooleanForEdit: checkBooleanForEdit,
+                                toolbar_mode: toolbar.mode
                               }
                             }}>{line_item.station_th}</Link>}
                         </td>
@@ -83,7 +85,9 @@ const BottomContent = (props) => {
                                 checklist_id: line_item.checklist_id,
                                 weekly_task_id: line_item.weekly_task_id, work_order_pm_has_selector_checklist_line_item: values.work_order_pm_has_selector_checklist_line_item,
                                 document_id: values.document_id,
-                                internal_document_id: values.internal_document_id
+                                internal_document_id: values.internal_document_id,
+                                checkBooleanForEdit: checkBooleanForEdit,
+                                toolbar_mode: toolbar.mode
                               }
                             }}>{line_item.checklist_name}</Link>}
                         </td>
@@ -129,7 +133,9 @@ const BottomContent = (props) => {
                                 weekly_task_id: line_item.weekly_task_id,
                                 work_order_pm_has_selector_checklist_line_item: values.work_order_pm_has_selector_checklist_line_item,
                                 document_id: values.document_id,
-                                internal_document_id: values.internal_document_id
+                                internal_document_id: values.internal_document_id,
+                                checkBooleanForEdit: checkBooleanForEdit,
+                                toolbar_mode: toolbar.mode
                               }
                             }}>{line_item.station_th}</Link>}
                         </td>
@@ -143,7 +149,9 @@ const BottomContent = (props) => {
                                 checklist_id: line_item.checklist_id,
                                 weekly_task_id: line_item.weekly_task_id, work_order_pm_has_selector_checklist_line_item: values.work_order_pm_has_selector_checklist_line_item,
                                 document_id: values.document_id,
-                                internal_document_id: values.internal_document_id
+                                internal_document_id: values.internal_document_id,
+                                checkBooleanForEdit: checkBooleanForEdit,
+                                toolbar_mode: toolbar.mode
                               }
                             }}>{line_item.checklist_name}</Link>}
                         </td>
@@ -190,7 +198,9 @@ const BottomContent = (props) => {
                                 weekly_task_id: line_item.weekly_task_id,
                                 work_order_pm_has_selector_checklist_line_item: values.work_order_pm_has_selector_checklist_line_item,
                                 document_id: values.document_id,
-                                internal_document_id: values.internal_document_id
+                                internal_document_id: values.internal_document_id,
+                                checkBooleanForEdit: checkBooleanForEdit,
+                                toolbar_mode: toolbar.mode
                               }
                             }}>{line_item.station_th}</Link>}
                         </td>
@@ -204,7 +214,9 @@ const BottomContent = (props) => {
                                 checklist_id: line_item.checklist_id,
                                 weekly_task_id: line_item.weekly_task_id, work_order_pm_has_selector_checklist_line_item: values.work_order_pm_has_selector_checklist_line_item,
                                 document_id: values.document_id,
-                                internal_document_id: values.internal_document_id
+                                internal_document_id: values.internal_document_id,
+                                checkBooleanForEdit: checkBooleanForEdit,
+                                toolbar_mode: toolbar.mode
                               }
                             }}>{line_item.checklist_name}</Link>}
                         </td>
@@ -251,7 +263,9 @@ const BottomContent = (props) => {
                                 weekly_task_id: line_item.weekly_task_id,
                                 work_order_pm_has_selector_checklist_line_item: values.work_order_pm_has_selector_checklist_line_item,
                                 document_id: values.document_id,
-                                internal_document_id: values.internal_document_id
+                                internal_document_id: values.internal_document_id,
+                                checkBooleanForEdit: checkBooleanForEdit,
+                                toolbar_mode: toolbar.mode
                               }
                             }}>{line_item.station_th}</Link>}
                         </td>
@@ -265,7 +279,9 @@ const BottomContent = (props) => {
                                 checklist_id: line_item.checklist_id,
                                 weekly_task_id: line_item.weekly_task_id, work_order_pm_has_selector_checklist_line_item: values.work_order_pm_has_selector_checklist_line_item,
                                 document_id: values.document_id,
-                                internal_document_id: values.internal_document_id
+                                internal_document_id: values.internal_document_id,
+                                checkBooleanForEdit: checkBooleanForEdit,
+                                toolbar_mode: toolbar.mode
                               }
                             }}>{line_item.checklist_name}</Link>}
                         </td>

@@ -46,6 +46,8 @@ const GoodsReceiptComponent = (props) => {
                 setFieldValue("station_id", props.location.aboutProps.station_id, false);
                 setFieldValue("weekly_task_id", props.location.aboutProps.weekly_task_id, false);
                 setFieldValue("internal_document_id", props.location.aboutProps.internal_document_id, false);
+                setFieldValue("checkBooleanForEdit", props.location.aboutProps.checkBooleanForEdit, false);
+                setFieldValue("toolbar_mode", props.location.aboutProps.toolbar_mode, false);
 
                 props.location.aboutProps.work_order_pm_has_selector_checklist_line_item.map((list, index) => {
                     // console.log("list", list)
@@ -64,7 +66,9 @@ const GoodsReceiptComponent = (props) => {
                 setFieldValue("checklist_id", props.location.aboutProps.checklist_id, false);
                 setFieldValue("weekly_task_id", props.location.aboutProps.weekly_task_id, false);
                 setFieldValue("internal_document_id", props.location.aboutProps.internal_document_id, false);
-                
+                setFieldValue("checkBooleanForEdit", props.location.aboutProps.checkBooleanForEdit, false);
+                setFieldValue("toolbar_mode", props.location.aboutProps.toolbar_mode, false);
+
                 props.location.aboutProps.work_order_pm_has_selector_checklist_line_item.map((list, index) => {
                     if (values.checklist_id === list.checklist_id && values.weekly_task_id === list.weekly_task_id) {
                         checklist_line_item.push({
@@ -78,7 +82,7 @@ const GoodsReceiptComponent = (props) => {
         }
 
     }, [factChecklistLineItem.items, values.document_id])
-    // console.log("props>>>", props.location.aboutProps)
+    console.log("props>>>", props.location.aboutProps)
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
@@ -112,7 +116,8 @@ const EnhancedGoodsReceiptComponent = withFormik({
         internal_document_id: '',
         checklist_id: '',
         checklist_group_id: '',
-
+        checkBooleanForEdit: '',
+        toolbar_mode: '',
         // Bottom Content
         checklist_line_item: initialRowsEquipmentPlan(),
         modeEdit: true

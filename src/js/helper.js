@@ -183,7 +183,7 @@ export const SS101_SCHEMA = {
     service_method_id: -1, // ประเภทการซ่อม FK_ID
     service_method_desc: '', //สรุปการแก้ไขและการซ่อมแซม STRING
     interrupt_id: -1, //ยังไมไ่ด้จัดการแก้ไขเพราะเหตุนี้ FK_ID
-
+    checked_remark: '',
 
     // Bottom Content ผู้เกี่ยวข้อง
     auditor_name: '',           //ผู้ควบคุมตรวจสอบชื่อ NVARCHAR
@@ -673,7 +673,6 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             refer_to_document_id: values.refer_to_document_id,
         };
         work_order_part.line_items = removeEmptyLineItems(work_order_part.line_items);
-        console.log("1111")
         work_order_part.line_items.map((line_items, index) => {
             work_order_part.line_items[index].item_id = line_items.item_id
             work_order_part.line_items[index].item_status_id = parseInt(line_items.item_status_id)
@@ -684,21 +683,17 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             delete work_order_part.line_items[index].equipment_item_id
             delete work_order_part.line_items[index].equipment_status_id
         })
-        console.log("22222222")
         work_order_part = {
             ...work_order_part,
             accident_on: work_order_part.accident_on + ":00+00:00",
             request_on: work_order_part.request_on + ":00+00:00"
         };
-        console.log('333333333')
         let work_order_part_big = {
             work_order: work_order_part,
             line_items: work_order_part.line_items
         }
-        console.log("55555555")
 
         delete work_order_part_big.work_order.line_items
-        console.log("document_part", document_part, "work_order_part", work_order_part)
         return {
             document: document_part,
             specific: work_order_part_big,
@@ -722,7 +717,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             summary_cause_condition: values.summary_cause_condition,
             loss: values.loss,
             car_type_id: values.car_type_id ? parseInt(values.car_type_id) : null,
-            cargo_id: values.cargo_id ? parseInt(values.cargo_id) : null,
+            cargo_id: values.cargo_id,
             interrupt_id: values.interrupt_id ? parseInt(values.interrupt_id) : null,
             service_method_id: values.service_method_id ? parseInt(values.service_method_id) : null,
             service_method_desc: values.service_method_desc,
@@ -734,6 +729,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             member_2: values.member_2,
             member_3: values.member_3,
             remark: values.remark,
+            checked_remark: values.checked_remark,
             sub_maintenance_type_id: values.sub_maintenance_type_id ? parseInt(values.sub_maintenance_type_id) : null,
             request_on: values.request_on + ':00+00:00',
             request_by: values.request_by,
@@ -887,11 +883,12 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             name: values.name,
             active: true,
             node_id: parseInt(values.node_id),
-            start_on: values.start_on + 'T03:40:00+07:00',
+            start_on: values.start_on + 'T22:00:00+07:00',
         }
 
         var w1_part = [];
         let line_index = '';
+        removeEmptyLineItemsWorkOrderPM(values.w1_list);
         values.w1_list.map((line_item, index) => {
             line_index = index + 1
             if (line_item.station_id || line_item.checklist_id) {
@@ -921,6 +918,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         })
 
         var w2_part = [];
+        removeEmptyLineItemsWorkOrderPM(values.w2_list)
         values.w2_list.map((line_item, index) => {
             line_index = index + 1
             if (line_item.station_id || line_item.checklist_id) {
@@ -950,6 +948,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         })
 
         var w3_part = [];
+        removeEmptyLineItemsWorkOrderPM(values.w3_list)
         values.w3_list.map((line_item, index) => {
             line_index = index + 1
             if (line_item.station_id || line_item.checklist_id) {
@@ -979,6 +978,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
         })
 
         var w4_part = [];
+        removeEmptyLineItemsWorkOrderPM(values.w4_list)
         values.w4_list.map((line_item, index) => {
             line_index = index + 1
             if (line_item.station_id || line_item.checklist_id) {
@@ -1195,6 +1195,9 @@ function removeEmptyLineItems(line_items) {
     return line_items.filter(line_item => line_item.description != '');
 }
 
+function removeEmptyLineItemsWorkOrderPM(line_items) {
+    return line_items.filter(line_item => !line_item.equipment_item_id || !line_item.station_id);
+}
 
 
 
@@ -2305,11 +2308,22 @@ function returnArrayLineSelector(line_custom, fact, week) {
                     x_cross_x_cross_th: factXCross.road_center
                 });
             } else {
+                let selector_checklist_part = []
+                line_custom.selector_checklist.map((list) => {
+                    selector_checklist_part.push({
+                        document_id: list.document_id,
+                        checklist_name: list.checklist_name,
+                        remark: list.remark,
+                        checklist_id: list.checklist_id,
+                        is_have: list.is_have.data[0] === 1 ? true : false
+                    })
+                })
                 line_customs.push({
                     station_id: line_custom.weekly_task.station_id,
                     internal_item_id: null,
                     checklist_id: null,
-                    x_cross_x_cross_id: null
+                    x_cross_x_cross_id: null,
+                    selector_checklist: selector_checklist_part
                 });
             }
     })

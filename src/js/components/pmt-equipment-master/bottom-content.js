@@ -364,9 +364,9 @@ const BottomContent = (props) => {
                 <SelectNoChildrenInput name="equipment_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateItemGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="17" >
                   <option value=''></option>
                   {factEquipmentGroup.items.map((item_group) => {
-                    if (item_group.checklist_group_id !== 1) {
+                    // if (item_group.checklist_group_id !== 1) {
                       return <option value={item_group.checklist_group_id} key={item_group.checklist_group_id}> {item_group.name} </option>
-                    }
+                    // }
                   })}
                 </SelectNoChildrenInput>
               </div>
