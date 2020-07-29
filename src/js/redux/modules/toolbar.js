@@ -1,5 +1,5 @@
-import history from '../../history' 
-import {makeActionCreator} from './generate_action_creator'
+import history from '../../history'
+import { makeActionCreator } from './generate_action_creator'
 
 // Constants
 export const TOOLBAR_MODE = {
@@ -7,6 +7,7 @@ export const TOOLBAR_MODE = {
     NONE: "NONE",
     NONE_HOME: "NONE_HOME",
     SEARCH: "SEARCH",
+    JUST_SEARCH: "JUST_SEARCH",
     ADD: "ADD"
 }
 
@@ -28,6 +29,7 @@ const TO_MODE_INVISIBLE = "toolbar/TO_MODE_INVISIBLE";
 const TO_MODE_NONE = "toolbar/TO_MODE_NONE";
 const TO_MODE_NONE_HOME = "toolbar/TO_MODE_NONE_HOME";
 const TO_MODE_SEARCH = "toolbar/TO_MODE_SEARCH";
+const TO_MODE_JUST_SEARCH = "toolbar/TO_MODE_JUST_SEARCH";
 const TO_MODE_ADD = "toolbar/TO_MODE_ADD";
 
 const CLICK_HOME = "toolbar/CLICK_HOME";
@@ -49,7 +51,7 @@ const HANDLE_CLICK_EXPORT_PDF = "toolbar/HANDLE_CLICK_EXPORT_PDF";
 const initialState = {
     mode: TOOLBAR_MODE.NONE,
     requiresHandleClick: {
-        [TOOLBAR_ACTIONS.HOME]: false, 
+        [TOOLBAR_ACTIONS.HOME]: false,
         [TOOLBAR_ACTIONS.ADD]: false,
         [TOOLBAR_ACTIONS.SAVE]: false,
         [TOOLBAR_ACTIONS.REFRESH]: false,
@@ -60,8 +62,8 @@ const initialState = {
 }
 
 // Reducer
-export default function reducer(state = initialState, action){
-    switch(action.type){
+export default function reducer(state = initialState, action) {
+    switch (action.type) {
         // CHANGE MODE
         case TO_MODE_INVISIBLE:
             return {
@@ -83,103 +85,136 @@ export default function reducer(state = initialState, action){
                 ...state,
                 mode: TOOLBAR_MODE.SEARCH
             }
+        case TO_MODE_JUST_SEARCH:
+            return {
+                ...state,
+                mode: TOOLBAR_MODE.JUST_SEARCH
+            }
         case TO_MODE_ADD:
             return {
                 ...state,
                 mode: TOOLBAR_MODE.ADD
             }
-        
+
         // CLICK
         case CLICK_HOME:
             return {
                 ...state,
-                requiresHandleClick: {...state.requiresHandleClick, 
-                                    [TOOLBAR_ACTIONS.HOME]: true}
+                requiresHandleClick: {
+                    ...state.requiresHandleClick,
+                    [TOOLBAR_ACTIONS.HOME]: true
+                }
             }
         case CLICK_ADD:
             return {
                 ...state,
                 mode: TOOLBAR_MODE.ADD,
-                requiresHandleClick: {...state.requiresHandleClick, 
-                                    [TOOLBAR_ACTIONS.ADD]: true}
+                requiresHandleClick: {
+                    ...state.requiresHandleClick,
+                    [TOOLBAR_ACTIONS.ADD]: true
+                }
             }
         case CLICK_SAVE:
             return {
                 ...state,
-                requiresHandleClick: {...state.requiresHandleClick, 
-                                    [TOOLBAR_ACTIONS.SAVE]: true}
+                requiresHandleClick: {
+                    ...state.requiresHandleClick,
+                    [TOOLBAR_ACTIONS.SAVE]: true
+                }
             }
         case CLICK_REFRESH:
             return {
                 ...state,
-                requiresHandleClick: {...state.requiresHandleClick, 
-                                    [TOOLBAR_ACTIONS.REFRESH]: true}
+                requiresHandleClick: {
+                    ...state.requiresHandleClick,
+                    [TOOLBAR_ACTIONS.REFRESH]: true
+                }
             }
         case CLICK_BACKWARD:
             return {
                 ...state,
                 mode: TOOLBAR_MODE.SEARCH,
-                requiresHandleClick: {...state.requiresHandleClick, 
-                                    [TOOLBAR_ACTIONS.BACKWARD]: true}
+                requiresHandleClick: {
+                    ...state.requiresHandleClick,
+                    [TOOLBAR_ACTIONS.BACKWARD]: true
+                }
             }
         case CLICK_FORWARD:
             return {
                 ...state,
                 mode: TOOLBAR_MODE.SEARCH,
-                requiresHandleClick: {...state.requiresHandleClick, 
-                                    [TOOLBAR_ACTIONS.FORWARD]: true}
+                requiresHandleClick: {
+                    ...state.requiresHandleClick,
+                    [TOOLBAR_ACTIONS.FORWARD]: true
+                }
             }
         case CLICK_EXPORT_PDF:
             return {
                 ...state,
-                requiresHandleClick: {...state.requiresHandleClick, 
-                                    [TOOLBAR_ACTIONS.EXPORT_PDF]: true}
+                requiresHandleClick: {
+                    ...state.requiresHandleClick,
+                    [TOOLBAR_ACTIONS.EXPORT_PDF]: true
+                }
             }
-        
+
         // HANDLE CLICK
         case HANDLE_CLICK_HOME:
             return {
                 ...state,
-                requiresHandleClick: {...state.requiresHandleClick, 
-                                    [TOOLBAR_ACTIONS.HOME]: false}
+                requiresHandleClick: {
+                    ...state.requiresHandleClick,
+                    [TOOLBAR_ACTIONS.HOME]: false
+                }
             }
         case HANDLE_CLICK_ADD:
             return {
                 ...state,
-                requiresHandleClick: {...state.requiresHandleClick, 
-                                    [TOOLBAR_ACTIONS.ADD]: false}
+                requiresHandleClick: {
+                    ...state.requiresHandleClick,
+                    [TOOLBAR_ACTIONS.ADD]: false
+                }
             }
         case HANDLE_CLICK_SAVE:
             return {
                 ...state,
-                requiresHandleClick: {...state.requiresHandleClick, 
-                                    [TOOLBAR_ACTIONS.SAVE]: false}
+                requiresHandleClick: {
+                    ...state.requiresHandleClick,
+                    [TOOLBAR_ACTIONS.SAVE]: false
+                }
             }
         case HANDLE_CLICK_REFRESH:
             return {
                 ...state,
-                requiresHandleClick: {...state.requiresHandleClick, 
-                                    [TOOLBAR_ACTIONS.REFRESH]: false}
+                requiresHandleClick: {
+                    ...state.requiresHandleClick,
+                    [TOOLBAR_ACTIONS.REFRESH]: false
+                }
             }
         case HANDLE_CLICK_BACKWARD:
             return {
                 ...state,
-                requiresHandleClick: {...state.requiresHandleClick, 
-                                    [TOOLBAR_ACTIONS.BACKWARD]: false}
+                requiresHandleClick: {
+                    ...state.requiresHandleClick,
+                    [TOOLBAR_ACTIONS.BACKWARD]: false
+                }
             }
         case HANDLE_CLICK_FORWARD:
             return {
                 ...state,
-                requiresHandleClick: {...state.requiresHandleClick, 
-                                    [TOOLBAR_ACTIONS.FORWARD]: false}
+                requiresHandleClick: {
+                    ...state.requiresHandleClick,
+                    [TOOLBAR_ACTIONS.FORWARD]: false
+                }
             }
         case HANDLE_CLICK_EXPORT_PDF:
             return {
                 ...state,
-                requiresHandleClick: {...state.requiresHandleClick, 
-                                    [TOOLBAR_ACTIONS.EXPORT_PDF]: false}
+                requiresHandleClick: {
+                    ...state.requiresHandleClick,
+                    [TOOLBAR_ACTIONS.EXPORT_PDF]: false
+                }
             }
-        
+
         default:
             return state;
 
@@ -191,6 +226,7 @@ export const toModeInvisible = makeActionCreator(TO_MODE_INVISIBLE);
 export const toModeNone = makeActionCreator(TO_MODE_NONE);
 export const toModeNoneHome = makeActionCreator(TO_MODE_NONE_HOME);
 export const toModeSearch = makeActionCreator(TO_MODE_SEARCH);
+export const toModeJustSearch = makeActionCreator(TO_MODE_JUST_SEARCH);
 export const toModeAdd = makeActionCreator(TO_MODE_ADD);
 
 export const clickHome = makeActionCreator(CLICK_HOME);
@@ -226,5 +262,6 @@ export const MODE_TO_ACTION_CREATOR = {
     [TOOLBAR_MODE.NONE]: toModeNone,
     [TOOLBAR_MODE.NONE_HOME]: toModeNoneHome,
     [TOOLBAR_MODE.SEARCH]: toModeSearch,
+    [TOOLBAR_MODE.JUST_SEARCH]: toModeJustSearch,
     [TOOLBAR_MODE.ADD]: toModeAdd,
 }
