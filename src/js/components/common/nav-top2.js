@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import logo from '../../../images/home.svg';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux'
 
-import { setupAllSubNav, fetchPositionPermissionData } from '../../helper';
+import { fetchPositionPermissionData } from '../../helper';
 import { identifyEndpoinsHelper } from '../../helper';
 const MainModule = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }));
@@ -143,7 +143,8 @@ const MainModule = (props) => {
                                 null}
 
                             <li className={`p-navigation__item p-subnav a nav-li ${checkNav ? `is-active` : ``}`} style={{ marginRight: "0", marginLeft: "auto" }}
-                                role="menuitem" id="link-1" onClick={() => setCheckNav(true)} onBlur={() =>
+                                role="menuitem" id="link-1" onClick={() => setCheckNav(true)}
+                                onBlur={() =>
                                     document.addEventListener('click', function (e) {
                                         var currentElement = null;
                                         currentElement = e.target.id;
@@ -152,8 +153,8 @@ const MainModule = (props) => {
                                         } else {
                                             return setCheckNav(false)
                                         }
-                                    })
-                                }>
+                                    })}
+                            >
                                 <Link to="#" className="p-subnav__toggle p-navigation__link" id="dropDawnNoti" aria-controls="account-menu" style={{ padding: "10px 12px 0 0" }}
                                 >
                                     <i className="fas fa-bell" style={{ fontSize: "24px", color: "#823D35" }} id="dropDawnNoti"></i>
@@ -173,8 +174,14 @@ const MainModule = (props) => {
                                         :
                                         props.notify.notify.map(function (notify) {
                                             return (
-                                                <li key={notify.notification_id} id="dropDawnNoti">
-                                                    <Link to={identifyEndpoins(notify.document_type_id) + "?internal_document_id=" + notify.internal_document_id + "&document_id=" + notify.document_id} className="p-subnav__item sub_notify" onClick={(e) => props.readNotify(e)} style={notify.is_read.data[0] === 1 ? {} : { backgroundColor: "#edf2fa" }} onClick={() => setCheckNav(true)} id="dropDawnNoti">
+                                                <li key={notify.notification_id} id={notify.notification_id}>
+                                                    <Link className="p-subnav__item sub_notify" onClick={(e) => {
+                                                        props.readNotify(e)
+                                                        setCheckNav(true)
+                                                    }
+                                                    }
+                                                        to={identifyEndpoins(notify.document_type_id) + "?internal_document_id=" + notify.internal_document_id + "&document_id=" + notify.document_id} 
+                                                        style={notify.is_read.data[0] === 1 ? {} : { backgroundColor: "#edf2fa" }} id="dropDawnNoti">
                                                         <div id="dropDawnNoti">
                                                             <i className="fas fa-file-alt float-left" id="dropDawnNoti" style={{ fontSize: "30px", "marginTop": "16px", "marginLeft": "10px", "color": "#111" }}></i>
                                                             <p className="cancel-default_notify" id="dropDawnNoti" style={{ "color": "#111" }}>{notify.created_on.replace("T", " เวลา ").slice(0, 21) + " น."}</p>
