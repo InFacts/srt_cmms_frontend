@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import logo from '../../../images/home.svg';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux'
 
-import { setupAllSubNav, fetchPositionPermissionData } from '../../helper';
+import { fetchPositionPermissionData } from '../../helper';
 import { identifyEndpoinsHelper } from '../../helper';
 const MainModule = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }));

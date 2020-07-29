@@ -5,12 +5,12 @@ import { useSelector, shallowEqual } from 'react-redux';
 
 import TabBar from '../common/tab-bar';
 
-
 import TopContent from './top-content';
 import BottomContent from './bottom-content';
 import Footer from '../common/footer.js';
 
 import { packDataFromValues, DOCUMENT_TYPE_ID, saveDocument } from '../../helper';
+import { FACTS } from '../../redux/modules/api/fact.js'
 
 import useToolbarInitializer from '../../hooks/toolbar-initializer';
 import useFactInitializer from '../../hooks/fact-initializer';
@@ -26,6 +26,7 @@ const ReportS1Component = (props) => {
 
     const { resetForm, setFieldValue, setValues, values } = useFormikContext();
     const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
+    const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
 
     useToolbarInitializer(TOOLBAR_MODE.SEARCH);
     useTokenInitializer();
@@ -33,9 +34,13 @@ const ReportS1Component = (props) => {
     useExportPdfInitializer();
     const loggedIn = useSelector(state => state.token.isLoggedIn);
 
-    // useEffect(() => {
-    //     setFieldValue("src_warehouse_id", decoded_token.has_position && decoded_token.has_position[0].warehouse_id, true)
-    // }, [decoded_token.has_position])
+    useEffect(() => {
+        let users = fact[FACTS.USERS].items;
+        let user = users.find(user => user.user_id === decoded_token.id); // Returns undefined if not found
+        if (user) {
+            setFieldValue("district_id", user.position[0].district_id, false)
+        }
+    }, [decoded_token.has_position, fact[FACTS.USERS]])
 
     return (
         <>
@@ -69,7 +74,7 @@ var now_date = new Date();
 const EnhancedReportS1Component = withFormik({
     mapPropsToValues: (props) => ({
         // Field ที่ให้ User กรอก
-        district_id: '',
+        district_id: -1,
         line_items: [],
         year_id: now_date.getFullYear() + 543,
         mouth_id: now_date.getMonth(),
