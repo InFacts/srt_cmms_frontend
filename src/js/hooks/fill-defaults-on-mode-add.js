@@ -21,16 +21,20 @@ const useFillDefaultsOnModeAdd = (document_type_group_id) => {
 
         if (toolbar.mode === TOOLBAR_MODE.ADD) {
             var delimiter = "/";
-            var positionAbbreviation, documentTypeGroupIDSplit, fullYear, runningInternalDocumentID; 
+            var positionAbbreviation, documentTypeGroupIDSplit, fullYearBE, runningInternalDocumentID; 
             var internalDocumentID;
 
-            if (!values.internal_document_id && touched.internal_document_id){
-                setFieldValue('internal_document_id', `draft-${uuidv4()}`, true)
-            }
+            // if (!values.internal_document_id && touched.internal_document_id){
+            //     setFieldValue('internal_document_id', `draft-${uuidv4()}`, true)
+            // }
+
+
             // Both User and Admin Employee ID will be defaulted to the user logged in : Knight
             // Document Date will be Defaulted to Today: Knight
-            setFieldValue("created_by_user_employee_id", getEmployeeIDFromUserID(fact.users, decoded_token.id));
-            setFieldValue("created_by_admin_employee_id", getEmployeeIDFromUserID(fact.users, decoded_token.id));
+            var userEmployeeID = getEmployeeIDFromUserID(fact.users, decoded_token.id);
+            var adminEmployeeID = userEmployeeID;
+            setFieldValue("created_by_user_employee_id", userEmployeeID);
+            setFieldValue("created_by_admin_employee_id", adminEmployeeID);
             setFieldValue("created_on", localISOTime.slice(0, 16), false);
             setFieldValue("document_date", localISOTime.slice(0, 10), false);
 
@@ -61,7 +65,7 @@ const useFillDefaultsOnModeAdd = (document_type_group_id) => {
                 positionAbbreviation = getPositionAbbreviationFromWarehouseID(fact.position, this_warehouse_id);
             }else{ //PMT
                 
-
+                // positionAbbreviation = 
             }
 
             if (document_type_group_id === DOCUMENT_TYPE_ID.MAINTENANT_ITEM) {
@@ -74,14 +78,14 @@ const useFillDefaultsOnModeAdd = (document_type_group_id) => {
             // If auto increment
             if(values.is_auto_internal_document_id === "auto") {
                 documentTypeGroupIDSplit = `${document_type_group_id.toString()[0]}-${document_type_group_id.toString().substr(1)}`;
-                fullYear = localISOTime.slice(0, 4);
+                fullYearBE = (parseInt(localISOTime.slice(0, 4))+543).toString();
                 runningInternalDocumentID = "0000";
-                internalDocumentID = [positionAbbreviation, documentTypeGroupIDSplit, fullYear, runningInternalDocumentID].join(delimiter);
+                internalDocumentID = [positionAbbreviation, documentTypeGroupIDSplit, fullYearBE, runningInternalDocumentID].join(delimiter);
                 
                 console.log("validateInternalDocumentIDFieldHelper:: positionAbbreviation", positionAbbreviation)
                 console.log("validateInternalDocumentIDFieldHelper:: documentTypeGroupIDSplit", documentTypeGroupIDSplit)
-                console.log("validateInternalDocumentIDFieldHelper:: fullYear", fullYear)
-                console.log("validateInternalDocumentIDFieldHelper:: fullYear", runningInternalDocumentID)
+                console.log("validateInternalDocumentIDFieldHelper:: fullYearBE", fullYearBE)
+                console.log("validateInternalDocumentIDFieldHelper:: runningInternalDocumentID", runningInternalDocumentID)
                 console.log("validateInternalDocumentIDFieldHelper:: internalDocumentID", internalDocumentID)
 
                 setFieldValue('internal_document_id', internalDocumentID, false)

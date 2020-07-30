@@ -2496,7 +2496,7 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
 
                 // This is because the getting document with internal document id isn't perfect, the original way would separate between document and specific. So the physical count and the inventory adjustment isn't done yet. 
                 if (document_type_group_id === DOCUMENT_TYPE_ID.PHYSICAL_COUNT 
-                    || document_type_group_id !== DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT) {
+                    || document_type_group_id === DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT) {
                     internalDocumentID = data.document.internal_document_id;
                 }else{
                     internalDocumentID = data.internal_document_id;
@@ -2518,7 +2518,7 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
                             return resolve(null);
                         }
                         if (document_type_group_id === DOCUMENT_TYPE_ID.PHYSICAL_COUNT 
-                            || document_type_group_id !== DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT
+                            || document_type_group_id === DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT
                             ) {
                             validateField("src_warehouse_id");
                             validateField("created_by_user_employee_id");
@@ -2730,7 +2730,7 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
 
         })
         .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
-            console.log("I think I have 404 not found in doc id.")
+            console.log("I think I have 404 not found in doc id.", err)
             setFieldValue('document_id', '', false);
 
             if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
