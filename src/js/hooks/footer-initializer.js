@@ -71,7 +71,7 @@ const useFooterInitializer = (document_type_id) => {
             // Check Next Approver from postion_id
             console.log("fetchLatestStepApprovalDocumentData")
             fetchLatestStepApprovalDocumentData(document_id).then((latestApprovalInfo) => {
-                if (latestApprovalInfo !== undefined || latestApprovalInfo.length !== 0) {
+                if ((latestApprovalInfo !== undefined || latestApprovalInfo.length !== 0) && document_status === DOCUMENT_STATUS.WAIT_APPROVE) {
                     console.log("latestApprovalInfo------> ", latestApprovalInfo)
                     console.log("user------> ", latestApprovalInfo.position_id, userInfo.position_id)
                     console.log("approval_step_action_id------> ", latestApprovalInfo.approval_step_action_id, APPROVAL_STEP_ACTION.APPROVAL)
@@ -262,12 +262,12 @@ const useFooterInitializer = (document_type_id) => {
         .then(() => {
             putDocument(document_id, document_type_id, data, values.files, DOCUMENT_STATUS_ID.WAIT_APPROVE, false);
             dispatch(navBottomSuccess('[PUT]', 'Submit Approval Flow Success', ''));
-            fetchApprovalStep(document_id);
         })
         .catch((err) => {
             dispatch(navBottomError('[PUT] postDocumentApprovalFlow', 'Submit Approval Flow Failed', err));
         }).finally(() => {
             console.log(" I submitted ")
+            fetchApprovalStep(document_id);
             dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
         });
     }
@@ -285,6 +285,7 @@ const useFooterInitializer = (document_type_id) => {
             dispatch(navBottomError('[PUT] editDocumentAggregateAPI', 'Submit Failed', err));
         }).finally(() => { // Set that I already handled the Click
             dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
+            fetchApprovalStep(values.document_id);
         });
     }
 
@@ -301,6 +302,7 @@ const useFooterInitializer = (document_type_id) => {
         else {
             editDocumentAggregateAPI(document_id, document_type_id, data, files, flag_create_approval_flow)
         }
+        // setFieldValue('status_name_th', values.status_name_th, true);
     }
 
     const fetchApprovalStep = (document_id) => {
@@ -331,6 +333,7 @@ const useFooterInitializer = (document_type_id) => {
                             data.document.document_status_id = DOCUMENT_STATUS_ID.WAIT_APPROVE;
                             putDocument(values.document_id, document_type_id, data, values.files, DOCUMENT_STATUS_ID.DRAFT, true);
                         }
+                        setFieldValue('status_name_th', DOCUMENT_STATUS.WAIT_APPROVE, true);
                     } 
                     else { // Case If you never saved document, but you want to SEND document
                         data.document.document_status_id = DOCUMENT_STATUS_ID.WAIT_APPROVE;
@@ -447,7 +450,6 @@ const useFooterInitializer = (document_type_id) => {
                         cancelApproval(values.document_id, values.step_approve[0].approval_process_id).then(() => {
                             dispatch(navBottomSuccess('[PUT]', 'Canceled Success', ''));
                             putDocument(values.document_id, document_type_id, data, null, DOCUMENT_STATUS_ID.REOPEN, false);
-                            fetchApprovalStep(values.document_id);
                         })
                         .catch((err) => {
                             console.warn("Canceled Approval Process Failed ", err.response);
@@ -455,6 +457,7 @@ const useFooterInitializer = (document_type_id) => {
                         })
                         .finally(() => { // Set that I already handled the Click
                             console.log(" I submitted and i am now handling click")
+                            fetchApprovalStep(values.document_id);
                             clearFooterAction();
                         });
                     }
