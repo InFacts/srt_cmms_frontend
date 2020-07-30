@@ -39,7 +39,7 @@ const GoodsReceiptComponent = (props) => {
         { id: "table_status", name: "สถานะเอกสาร" }
     ]);
 
-    useToolbarInitializer(TOOLBAR_MODE.JUST_SEARCH, DOCUMENT_TYPE_ID.WORK_ORDER_PM);
+    useToolbarInitializer(TOOLBAR_MODE.SEARCH, DOCUMENT_TYPE_ID.WORK_ORDER_PM);
     useTokenInitializer();
     useFactInitializer();
     useDocumentSubscription();
