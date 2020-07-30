@@ -65,7 +65,10 @@ const useFooterInitializer = (document_type_id) => {
             else if (document_status === DOCUMENT_STATUS.VOID) { dispatch(footerToModeVoid()); }
             else if (document_status === DOCUMENT_STATUS.REOPEN) { dispatch(footerToModeEdit()); }
             else if (document_status === DOCUMENT_STATUS.FAST_TRACK) { dispatch(footerToModeFastTrack()); }
-            else { dispatch(footerToModeSearch()); }
+            else { 
+                if (toolbar.mode === TOOLBAR_MODE.SEARCH) {dispatch(footerToModeSearch());}
+                else {dispatch(footerToModeAddDraft());}
+            }
         }
         else {
             // Check Next Approver from postion_id
@@ -281,7 +284,7 @@ const useFooterInitializer = (document_type_id) => {
                 postDocumentApprovalFlow(document_id, data);
             }
         }).catch((err) => {
-            console.warn("Submit Failed ", err.response);
+            console.warn("Submit Failed ", err);
             dispatch(navBottomError('[PUT] editDocumentAggregateAPI', 'Submit Failed', err));
         }).finally(() => { // Set that I already handled the Click
             dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
@@ -290,7 +293,7 @@ const useFooterInitializer = (document_type_id) => {
     }
 
     const putDocument = (document_id, document_type_id, data, files, document_status_id, flag_create_approval_flow) => {
-        if (DOCUMENT_STATUS_ID.WAIT_APPROVE === document_status_id && !values.status_name_th === DOCUMENT_STATUS.REOPEN) {
+        if (DOCUMENT_STATUS_ID.WAIT_APPROVE === document_status_id && values.status_name_th !== DOCUMENT_STATUS.REOPEN) {
             // setFieldValue('status_name_th', DOCUMENT_STATUS.WAIT_APPROVE, true);
             fetchLatestStepApprovalDocumentData(document_id).then((latestApprovalInfo) => {
                 if (latestApprovalInfo.position === undefined) {
@@ -302,7 +305,6 @@ const useFooterInitializer = (document_type_id) => {
         else {
             editDocumentAggregateAPI(document_id, document_type_id, data, files, flag_create_approval_flow)
         }
-        // setFieldValue('status_name_th', values.status_name_th, true);
     }
 
     const fetchApprovalStep = (document_id) => {
@@ -355,8 +357,7 @@ const useFooterInitializer = (document_type_id) => {
                     dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
                 }
             }).catch((err) => {
-                console.log("Validate Failed ", err);
-                console.warn("Validate Failed ", err.response);
+                console.warn("Validate Failed ", err);
                 dispatch(navBottomError('[PUT]', 'Do not have document', err));
                 dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
             })
@@ -450,6 +451,7 @@ const useFooterInitializer = (document_type_id) => {
                         cancelApproval(values.document_id, values.step_approve[0].approval_process_id).then(() => {
                             dispatch(navBottomSuccess('[PUT]', 'Canceled Success', ''));
                             putDocument(values.document_id, document_type_id, data, null, DOCUMENT_STATUS_ID.REOPEN, false);
+                            setFieldValue('status_name_th', DOCUMENT_STATUS.REOPEN, true);
                         })
                         .catch((err) => {
                             console.warn("Canceled Approval Process Failed ", err.response);

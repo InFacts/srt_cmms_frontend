@@ -2,11 +2,11 @@ import { useEffect } from 'react';
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS } from '../redux/modules/toolbar.js';
 import { shallowEqual, useSelector } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid';
-import { getEmployeeIDFromUserID} from '../helper';
 
 import { useFormikContext } from 'formik';
+import {getEmployeeIDFromUserID, DOCUMENT_TYPE_ID, isICD, 
+    getPositionAbbreviationFromWarehouseID, isICDWarehouseDest, isICDWarehouseSrc, getInternalDocumentIDFromCurrentValues} from '../helper';
 
-import {DOCUMENT_TYPE_ID, isICD, getPositionAbbreviationFromWarehouseID} from '../helper';
 const useFillDefaultsOnModeAdd = (document_type_group_id) => {
 
     const fact = useSelector((state) => ({...state.api.fact}), shallowEqual);
@@ -41,24 +41,16 @@ const useFillDefaultsOnModeAdd = (document_type_group_id) => {
             if(isICD(document_type_group_id)) {
                 var this_warehouse_id, this_warehouse_id_name;
 
-                if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO 
-                    || document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RETURN 
-                    || document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX 
-                    || document_type_group_id === DOCUMENT_TYPE_ID.INVENTORY_TRANSFER
-                    || document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO) {
+                if (isICDWarehouseDest(document_type_group_id)) {
                     this_warehouse_id_name = "dest_warehouse_id";
-                    this_warehouse_id = decoded_token.has_position[0].warehouse_id;
-                }else if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_USAGE 
-                    || document_type_group_id === DOCUMENT_TYPE_ID.GOODS_FIX 
-                    || document_type_group_id === DOCUMENT_TYPE_ID.GOODS_ISSUE 
-                    || document_type_group_id === DOCUMENT_TYPE_ID.PHYSICAL_COUNT
-                    || document_type_group_id === DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT 
-                    || document_type_group_id === DOCUMENT_TYPE_ID.SALVAGE_RETURN) {
+                }else if (isICDWarehouseSrc(document_type_group_id)) {
                     this_warehouse_id_name = "src_warehouse_id";
-                    this_warehouse_id = decoded_token.has_position[0].warehouse_id;
-                }else if (document_type_group_id === DOCUMENT_TYPE_ID.SALVAGE_SOLD) {
-                    this_warehouse_id_name = "src_warehouse_id";
+                }
+
+                if(document_type_group_id === DOCUMENT_TYPE_ID.SALVAGE_SOLD){
                     this_warehouse_id = 100;
+                }else{
+                    this_warehouse_id = decoded_token.has_position[0].warehouse_id;
                 }
                 setFieldValue(this_warehouse_id_name, this_warehouse_id , true);
 
@@ -82,21 +74,44 @@ const useFillDefaultsOnModeAdd = (document_type_group_id) => {
                 runningInternalDocumentID = "0000";
                 internalDocumentID = [positionAbbreviation, documentTypeGroupIDSplit, fullYearBE, runningInternalDocumentID].join(delimiter);
                 
-                console.log("validateInternalDocumentIDFieldHelper:: positionAbbreviation", positionAbbreviation)
-                console.log("validateInternalDocumentIDFieldHelper:: documentTypeGroupIDSplit", documentTypeGroupIDSplit)
-                console.log("validateInternalDocumentIDFieldHelper:: fullYearBE", fullYearBE)
-                console.log("validateInternalDocumentIDFieldHelper:: runningInternalDocumentID", runningInternalDocumentID)
-                console.log("validateInternalDocumentIDFieldHelper:: internalDocumentID", internalDocumentID)
+                console.log("validateInternalDocumentIDFieldHelper:: positionAbbreviation", positionAbbreviation);
+                console.log("validateInternalDocumentIDFieldHelper:: documentTypeGroupIDSplit", documentTypeGroupIDSplit);
+                console.log("validateInternalDocumentIDFieldHelper:: fullYearBE", fullYearBE);
+                console.log("validateInternalDocumentIDFieldHelper:: runningInternalDocumentID", runningInternalDocumentID);
+                console.log("validateInternalDocumentIDFieldHelper:: internalDocumentID", internalDocumentID);
 
-                setFieldValue('internal_document_id', internalDocumentID, false)
+                setFieldValue('internal_document_id', internalDocumentID, false);
 
             }
-            
+        }
+        
+    }, [fact.users.lastUpdated, toolbar.mode, touched.internal_document_id, !values.internal_document_id, 
+        values.is_auto_internal_document_id,
+        toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]]) // This needs requiresHandleClick since it resetsForm AFTER the setField Value, making it not show anything
+
+    // Subscribe to internal_document_id changes
+    // Since after clicking on the popup, the setFieldValue is too delayed and doesn't cause changes in the `values` variable. 
+    // So i would like to setFieldValue without validation in here to be subscribe to the changes
+    useEffect(() => {
+        if(values.is_auto_internal_document_id === "auto" && toolbar.mode === TOOLBAR_MODE.ADD) {
+            var this_warehouse_id_name;
+            if (isICD(document_type_group_id)) { // If document type group ID is ICD
+                if (isICDWarehouseDest(document_type_group_id)) {
+                    this_warehouse_id_name = "dest_warehouse_id";
+                }else if (isICDWarehouseSrc(document_type_group_id)) {
+                    this_warehouse_id_name = "src_warehouse_id";
+                }
+                var internalDocumentID = getInternalDocumentIDFromCurrentValues(fact, values, document_type_group_id, this_warehouse_id_name);
+                setFieldValue('internal_document_id', internalDocumentID, false);
+            } else{ // If document type group ID is PMT
+
+            }
 
         }
         
-    }, [fact.users.lastUpdated, toolbar.mode, touched.internal_document_id, !values.internal_document_id, values.is_auto_internal_document_id,
-        toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]]) // This needs requiresHandleClick since it resetsForm AFTER the setField Value, making it not show anything
+    }, [values["src_warehouse_id"], values["dest_warehouse_id"], values["document_date"], document_type_group_id,
+fact.position.lastUpdated, values.is_auto_internal_document_id], toolbar.mode)
+    
     
 }
 export default useFillDefaultsOnModeAdd;
