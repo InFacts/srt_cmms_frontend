@@ -2461,6 +2461,9 @@ function returnArrayHasLineWorkOrderPM(line_custom) {
     return work_order_pm_has_selector_checklist_line_item;
 }
 
+
+
+
 // Validation 
 export const validateInternalDocumentIDWorfOrderPMFieldHelper = (checkBooleanForEdit, document_type_group_id, toolbar, footer, fact, values, setValues, setFieldValue, validateField, internal_document_id) => new Promise(resolve => {
     // Internal Document ID
@@ -2497,6 +2500,8 @@ export const validateInternalDocumentIDWorfOrderPMFieldHelper = (checkBooleanFor
             });
     }
 });
+
+
 
 // Validation 
 export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, document_type_group_id, toolbar, footer, fact, values, setValues, setFieldValue, validateField, internal_document_id) => new Promise(resolve => {
@@ -2747,22 +2752,19 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
 
                 // If auto increment
                 if(values.is_auto_internal_document_id === "auto") {
-
-                    var delimiter = "/";
-                    var positionAbbreviation, documentTypeGroupIDSplit, fullYearBE, runningInternalDocumentID; 
                     var internalDocumentID;
+                    if (isICD(document_type_group_id)) {
+                        console.log("validateInternalDocumentIDFieldHelper:: auto!!");
+                        console.log("validateInternalDocumentIDFieldHelper:: values[this_warehouse_id_name]", values[this_warehouse_id_name]);
 
-                    console.log("validateInternalDocumentIDFieldHelper:: auto!!");
-                    console.log("validateInternalDocumentIDFieldHelper:: values[this_warehouse_id_name]", values[this_warehouse_id_name]);
+                        internalDocumentID = getInternalDocumentIDFromCurrentValues(fact, values, document_type_group_id, this_warehouse_id_name);
 
-                    positionAbbreviation = getPositionAbbreviationFromWarehouseID(fact.position, values[this_warehouse_id_name]);
-                    documentTypeGroupIDSplit = `${document_type_group_id.toString()[0]}-${document_type_group_id.toString().substr(1)}`;
-                    fullYearBE = (parseInt(values["document_date"].slice(0, 4))+543).toString();
-                    runningInternalDocumentID = "0000";
-                    internalDocumentID = [positionAbbreviation, documentTypeGroupIDSplit, fullYearBE, runningInternalDocumentID].join(delimiter);
+                        console.log("validateInternalDocumentIDFieldHelper:: internalDocumentID", internalDocumentID);
+                        setFieldValue("internal_document_id", internalDocumentID, false);
+                    }else{ // PMT
 
-                    console.log("validateInternalDocumentIDFieldHelper:: internalDocumentID", internalDocumentID);
-                    setFieldValue("internal_document_id", internalDocumentID, false);
+                    }
+                    
                 }
 
             }
@@ -2771,6 +2773,21 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
             return resolve(error)
         });
 });
+
+export const getInternalDocumentIDFromCurrentValues = (fact, values, document_type_group_id, this_warehouse_id_name, delimiter = "/") => {
+
+    var positionAbbreviation, documentTypeGroupIDSplit, fullYearBE, runningInternalDocumentID; 
+    var internalDocumentID;
+
+    positionAbbreviation = getPositionAbbreviationFromWarehouseID(fact.position, values[this_warehouse_id_name]);
+    documentTypeGroupIDSplit = `${document_type_group_id.toString()[0]}-${document_type_group_id.toString().substr(1)}`;
+    fullYearBE = (parseInt(values["document_date"].slice(0, 4))+543).toString();
+    runningInternalDocumentID = "0000";
+    internalDocumentID = [positionAbbreviation, documentTypeGroupIDSplit, fullYearBE, runningInternalDocumentID].join(delimiter);
+
+    return internalDocumentID;
+
+}
 
 export const validateLineNumberInternalItemIDFieldHelper = (document_type_group_id, fact, values, setFieldValue, fieldName, internal_item_id, index) => {
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
