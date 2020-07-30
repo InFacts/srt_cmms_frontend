@@ -2,11 +2,11 @@ import { useEffect } from 'react';
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS } from '../redux/modules/toolbar.js';
 import { shallowEqual, useSelector } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid';
-import { getEmployeeIDFromUserID} from '../helper';
 
 import { useFormikContext } from 'formik';
+import {getEmployeeIDFromUserID, DOCUMENT_TYPE_ID, isICD, 
+    getPositionAbbreviationFromWarehouseID, isICDWarehouseDest, isICDWarehouseSrc} from '../helper';
 
-import {DOCUMENT_TYPE_ID, isICD, getPositionAbbreviationFromWarehouseID} from '../helper';
 const useFillDefaultsOnModeAdd = (document_type_group_id) => {
 
     const fact = useSelector((state) => ({...state.api.fact}), shallowEqual);
@@ -41,24 +41,16 @@ const useFillDefaultsOnModeAdd = (document_type_group_id) => {
             if(isICD(document_type_group_id)) {
                 var this_warehouse_id, this_warehouse_id_name;
 
-                if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO 
-                    || document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RETURN 
-                    || document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX 
-                    || document_type_group_id === DOCUMENT_TYPE_ID.INVENTORY_TRANSFER
-                    || document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO) {
+                if (isICDWarehouseDest(document_type_group_id)) {
                     this_warehouse_id_name = "dest_warehouse_id";
-                    this_warehouse_id = decoded_token.has_position[0].warehouse_id;
-                }else if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_USAGE 
-                    || document_type_group_id === DOCUMENT_TYPE_ID.GOODS_FIX 
-                    || document_type_group_id === DOCUMENT_TYPE_ID.GOODS_ISSUE 
-                    || document_type_group_id === DOCUMENT_TYPE_ID.PHYSICAL_COUNT
-                    || document_type_group_id === DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT 
-                    || document_type_group_id === DOCUMENT_TYPE_ID.SALVAGE_RETURN) {
+                }else if (isICDWarehouseSrc(document_type_group_id)) {
                     this_warehouse_id_name = "src_warehouse_id";
-                    this_warehouse_id = decoded_token.has_position[0].warehouse_id;
-                }else if (document_type_group_id === DOCUMENT_TYPE_ID.SALVAGE_SOLD) {
-                    this_warehouse_id_name = "src_warehouse_id";
+                }
+                
+                if(document_type_group_id === DOCUMENT_TYPE_ID.SALVAGE_SOLD){
                     this_warehouse_id = 100;
+                }else{
+                    this_warehouse_id = decoded_token.has_position[0].warehouse_id;
                 }
                 setFieldValue(this_warehouse_id_name, this_warehouse_id , true);
 
