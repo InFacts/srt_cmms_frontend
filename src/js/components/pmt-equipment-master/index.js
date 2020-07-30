@@ -113,7 +113,7 @@ const EnhancedGoodsReceiptComponent = withFormik({
         // Field ที่ให้ User กรอก
         // Top Content
         internal_item_id: '',
-        item_type_id: '',
+        item_type_id: 2,
         description: '',
         uom_group_id: '',
         active: '',

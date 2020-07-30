@@ -97,7 +97,7 @@ const TopContent = (props) => {
           // setValues({ ...values, ...responseToFormState(res.data) }, false); //Setvalues and don't validate
           setFieldValue("line_items", setLineItem(res.data), false)
           setFieldValue("refer_to_document_id", res.data.document_id, false)
-          setFieldValue("dest_warehouse_id", res.data.dest_warehouse_id, true)
+          setFieldValue("src_warehouse_id", res.data.src_warehouse_id, true)
           // setFieldValue("line_items", setLineItem(res.data), false)
           return resolve(null);
           // } else { //If Mode add, need to error duplicate Document ID

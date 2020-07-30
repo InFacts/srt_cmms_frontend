@@ -5,7 +5,6 @@ import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
 import { API_URL_DATABASE } from '../../config_url.js';
 
-import FormInput from '../common/form-input'
 import TextInput from '../common/formik-text-input'
 import NumberInput from '../common/formik-number-input';
 import SelectNoChildrenInput from '../common/formik-select-no-children';
@@ -14,21 +13,13 @@ import PopupModalChecklist from '../common/popup-modal-checklist'
 import { useFormikContext, useField } from 'formik';
 
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
-import {
-  getNumberFromEscapedString, fetchGoodsOnhandDataForItemmasterData, DOCUMENT_TYPE_ID,
-  getDocumentbyInternalDocumentID, validatedataDocumentField
-} from '../../helper';
+import { validatedataDocumentField, changeTheam } from '../../helper';
 
 import { FACTS } from '../../redux/modules/api/fact.js';
 import useFetchPernissionUser from '../../hooks/fetch-permission-user';
 
 import BgBlue from '../../../images/pmt/bg_blue.jpg';
-import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
-const FormLabel = ({ children }) => (
-  <div className={`grid_2`}>
-    <p className="top-text">{children}</p>
-  </div>
-);
+
 const FormTitle = ({ children }) => (
   <h4 className="head-title">{children}</h4>
 );
@@ -36,11 +27,6 @@ const FormTitle = ({ children }) => (
 const TopContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm, resetForm } = useFormikContext();
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
-  const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
-  const factEquipment = useSelector((state) => ({ ...state.api.fact.equipment }), shallowEqual);
-  const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
-  const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
-  const factEquipmentStatus = useSelector((state) => ({ ...state.api.fact[FACTS.EQUIPMENT_STATUS] }), shallowEqual);
   const factChecklistGroup = useSelector((state) => ({ ...state.api.fact[FACTS.CHECKLIST_GROUP] }), shallowEqual);
   const factChecklist = useSelector((state) => ({ ...state.api.fact.checklist }), shallowEqual);
 
@@ -69,7 +55,6 @@ const TopContent = (props) => {
               setFieldValue("freq", res.data.checklist_line_item.freq, false)
               setFieldValue("freq_unit_id", res.data.checklist_line_item.freq_unit_id, false)
               setFieldValue("checklist_group_id", res.data.checklist_line_item.checklist.checklist_group_id, false)
-              setFieldValue("checklist_id", res.data.checklist_line_item.checklist.checklist_id, false)
               setFieldValue("modeEdit", values.line_position_permission[0].module_admin === true ? true : false, false)
 
               for (var i = 0; i < res.data.checklist_line_item.checklist_line_item_use_equipment.length; i++) {

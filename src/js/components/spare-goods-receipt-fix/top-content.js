@@ -100,7 +100,7 @@ const TopContent = (props) => {
       .then((res) => {
         console.log("res.data", res.data)
         if (res.data.document.internal_document_id === refer_to_document_internal_document_id) { // If input document ID exists
-          setFieldValue("line_items", setLineItem(res.data.specific), false)
+          // setFieldValue("line_items", setLineItem(res.data.specific), false)
           setFieldValue("refer_to_document_id", res.data.document.document_id, false)
           return resolve(null);
         } else { // If input Document ID doesn't exists

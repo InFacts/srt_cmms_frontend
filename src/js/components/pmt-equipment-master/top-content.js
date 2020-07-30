@@ -5,7 +5,6 @@ import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
 import { API_URL_DATABASE } from '../../config_url.js';
 
-import FormInput from '../common/form-input'
 import TextInput from '../common/formik-text-input'
 import SelectNoChildrenInput from '../common/formik-select-no-children';
 import PopupModalEquipmentNoChildren from '../common/popup-modal-equipment-no-children'
@@ -13,15 +12,10 @@ import PopupModalEquipmentNoChildren from '../common/popup-modal-equipment-no-ch
 import { useFormikContext, useField } from 'formik';
 
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
-import {
-  getNumberFromEscapedString, fetchGoodsOnhandDataForItemmasterData, DOCUMENT_TYPE_ID,
-  getDocumentbyInternalDocumentID, changeTheam
-} from '../../helper';
+import { changeTheam } from '../../helper';
 import useFetchPernissionUser from '../../hooks/fetch-permission-user';
 
 import { FACTS } from '../../redux/modules/api/fact.js';
-
-import BgBlue from '../../../images/pmt/bg_blue.jpg';
 
 const FormLabel = ({ children }) => (
   <div className={`grid_2`}>
@@ -52,8 +46,7 @@ const TopContent = (props) => {
       equipment_group_id: data.equipment_group.equipment_group_id,
       active: data.equipment_group.item.active.data[0],
       item_type_id: data.equipment_group.item.item_type_id,
-      uom_group_id: 1,                    //UOM
-      // uom_group_id: data.equipment_group.item.uom_group_id,                    //UOM
+      uom_group_id: 1,                   
       uom_id: data.equipment_group.item.uom_group.uom[0].uom_id,
       uom_name: data.equipment_group.item.uom_group.uom[0].name,
       remark: data.equipment_group.item.remark,
@@ -87,29 +80,6 @@ const TopContent = (props) => {
   const validateInternalItemIDField = internal_item_id => {
 
     if (!internal_item_id) {
-      // setFieldValue("internal_item_id", "", false)
-      // setFieldValue("description", "", false)
-      // setFieldValue("item_group_id", "", false)
-      // setFieldValue("checklist_id", "", false)
-      // setFieldValue("equipment_group_id", "", false)
-      // setFieldValue("active", "", false)
-      // setFieldValue("item_type_id", "", false)
-      // setFieldValue("uom_group_id", "", false)
-      // setFieldValue("uom_id", "", false)
-      // setFieldValue("uom_name", "", false)
-      // setFieldValue("remark", "", false)
-      // setFieldValue("minimum_order_quantity", "", false)
-      // setFieldValue("tolerance_time", "", false)
-      // setFieldValue("lead_time", "", false)
-      // setFieldValue("accounting_type", "", false)
-      // setFieldValue("item_status_id", "", false)
-      // setFieldValue("price_import", "", false)
-      // setFieldValue("price_currently", "", false)
-      // setFieldValue("depreciation", "", false)
-      // setFieldValue("useful_life", "", false)
-      // setFieldValue("responsible_district_id", "", false)
-      // setFieldValue("responsible_node_id", "", false)
-      // setFieldValue("modeEdit", false, false)
       return 'Required';
     }
     if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
@@ -117,8 +87,7 @@ const TopContent = (props) => {
       if (internal_item_id !== values.internal_item_id) {
         var item_match_equipments = factEquipment.items;
         let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.equipment_group.item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
-        console.log("item_match_equipment", item_match_equipment)
-
+        // console.log("item_match_equipment", item_match_equipment)
         if (item_match_equipment) {
           setValues({ ...values, ...responseToFormState(item_match_equipment) }, false); //Setvalues and don't validate
 
@@ -131,7 +100,7 @@ const TopContent = (props) => {
             });
 
         } else {
-          console.log("values.modeEdit", values.modeEdit)
+          // console.log("values.modeEdit", values.modeEdit)
           if (values.modeEdit) {
             return;
           } else {
@@ -145,9 +114,9 @@ const TopContent = (props) => {
         console.log("internal_item_id", internal_item_id)
         var item_match_equipments = factEquipment.items;
         let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.equipment_group.item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
-        console.log("item_match_equipment", item_match_equipment)
+        // console.log("item_match_equipment", item_match_equipment)
         if (item_match_equipment) { // Check Dulplication
-          console.log("Dulplication")
+          // console.log("Dulplication")
           return 'Dulplication Internal item';
         } else {
           setFieldValue("internal_item_id", internal_item_id, false);

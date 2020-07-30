@@ -12,7 +12,7 @@
     font-family: THSarabunNew;
   }
 
-  input[type="text"][disabled],input[type="date"][disabled],input[type="datetime-local"],input[type="number"][disabled],select[disabled] {
+  input[type="text"][disabled],input[type="date"][disabled],input[type="datetime-local"][disabled],input[type="number"][disabled],select[disabled] {
     color: Blue;
  }
 

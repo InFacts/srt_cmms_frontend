@@ -30,10 +30,10 @@ const BottomContent = (props) => {
                   {/* <th className="font" style={{ minWidth: "150px" }}>TEST</th> */}
                     <th className="font" style={{ minWidth: "150px" }}>วันเวลาสร้าง</th>
                     <th className="font" style={{ minWidth: "150px" }}>เลขที่เอกสาร</th>
-                    <th className="font" style={{ minWidth: "500px" }}>ประเภทเอกสาร</th>
+                    <th className="font" style={{ minWidth: "350px" }}>ประเภทเอกสาร</th>
                     {/* <th className="font" style={{ minWidth: "150px" }}>ชื่องาน</th> */}
                     <th className="font" style={{ minWidth: "150px" }}>ผู้นำเข้าระบบ</th>
-                    {/* <th className="font" style={{ minWidth: "150px" }}>สถานะ</th> */}
+                    <th className="font" style={{ minWidth: "150px" }}>สถานะ</th>
                     {/* <th className="font" style={{ minWidth: "150px" }}>รายละเอียด</th> */}
                   </tr>
                 </thead>
@@ -54,9 +54,7 @@ const BottomContent = (props) => {
                             track_document_show.created_by_user_id === 0 && listUsers[0].username !== undefined ? "Server" :
                             Object.values(listUsers).find(user => user.user_id === track_document_show.created_by_user_id).username
                           }</td>
-                          {/* <td className="edit-padding">{
-                            Object.values(listDocumentStatus).find(status => status.document_status_id === track_document_show.document_status_id).status
-                          }</td> */}
+                          <td className="edit-padding">{track_document_show.document_status_en}</td>
                           {/* <td className="edit-padding">
                             <Link to={identifyEndpoins(track_document_show.document_type_id) + "?internal_document_id=" + track_document_show.internal_document_id + "&document_id=" + track_document_show.document_id}>รายละเอียด</Link>
                           </td> */}

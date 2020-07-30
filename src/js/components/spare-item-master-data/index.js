@@ -82,7 +82,7 @@ const EnhancedItemMasterDataComponent = withFormik({
         internal_item_id: '',
         description: '',
 
-        item_type_id: '',
+        item_type_id: 1,
         item_group_id: '',
         uom_group_id: '',
         uom_id: '',           //UOM 

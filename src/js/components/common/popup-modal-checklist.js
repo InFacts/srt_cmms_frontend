@@ -28,9 +28,9 @@ const PopupModalNoPart = (props) => {
         <div className="modal" id="modalChecklistLineItem" style={{ display: "none" }}>
             <div className="gray-board">
                 <p className="head-title-modal edit">ค้นหาเลขที่อะไหล่</p>
-                <div className="container_12 edit-padding">
+                <div className="grid_12 edit-padding">
 
-                    <div className="container_12">
+                    <div className="grid_12">
                         <div className="grid_2"><p className="cancel-default">ค้นหาอะไหล่</p></div>
                         <div className="grid_8 pull_0">
                             <input type="text" className="cancel-default grid_3" value={queryString} onChange={(e) => setQueryString(e.target.value)} />
@@ -38,7 +38,7 @@ const PopupModalNoPart = (props) => {
                         </div>
                     </div>
 
-                    <div className="container_12">
+                    <div className="grid_12">
                         <table className="table-many-column mt-3" style={{height: "270px"}}>
                             <thead>
                                 <tr>
@@ -52,7 +52,7 @@ const PopupModalNoPart = (props) => {
                                     return (
                                         <tr key={index} id={index}>
                                             <td className="edit-padding text-center"> {index+1} </td>
-                                            <td className="edit-padding" style={{ minWidth: "300px" }}> {checklist.name} </td>
+                                            <td className="edit-padding" style={{ maxWidth: "730px" }}> {checklist.name} </td>
                                             <td className="edit-padding text-center">
                                                 <button type="button" className="button-blue" 
                                                 onClick={() => setFieldValue('name', checklist.name, true)} 
