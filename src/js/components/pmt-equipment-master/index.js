@@ -58,7 +58,7 @@ const GoodsReceiptComponent = (props) => {
         }
     }, [decoded_token.has_position]);
     
-    useToolbarInitializer(checkPermission.length >= 1 && checkPermission[0].module_admin ? TOOLBAR_MODE.SEARCH : TOOLBAR_MODE.JUST_SEARCH, DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA);
+    useToolbarInitializer(checkPermission.length >= 1 && checkPermission[0].module_admin ? TOOLBAR_MODE.SEARCH : TOOLBAR_MODE.SEARCH, DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA);
     useTokenInitializer();
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA);

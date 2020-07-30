@@ -56,7 +56,7 @@ const ItemMasterDataComponent = (props) => {
         }
     }, [decoded_token.has_position]);
 
-    useToolbarInitializer(checkPermission.length >= 1 && checkPermission[0].module_admin ? TOOLBAR_MODE.SEARCH : TOOLBAR_MODE.JUST_SEARCH);
+    useToolbarInitializer(checkPermission.length >= 1 && checkPermission[0].module_admin ? TOOLBAR_MODE.SEARCH : TOOLBAR_MODE.SEARCH);
     useTokenInitializer();
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.ITEM_MASTER_DATA);
