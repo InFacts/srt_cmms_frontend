@@ -510,6 +510,29 @@
     height:250px
 }
 
+
+.radioInternalID{
+  float: left;
+  clear: none;
+  width: auto;
+}
+.radioInternalID>label{
+  float: left;
+  clear: none;
+  display: block;
+  padding: 0px 8px 0px 0px;
+  margin: 0px;
+
+  cursor: pointer;
+}
+.radioInternalID>label>input[type=radio]{
+  cursor: pointer;
+  float: left;
+  clear: none;
+  margin: 2px 3px 0px 2px;
+}
+
+
 .card {
     background: #fff;
     display: inline-block;
