@@ -2774,7 +2774,7 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
         });
 });
 
-export const getInternalDocumentIDFromCurrentValues = (fact, values, document_type_group_id, this_warehouse_id_name, delimiter = "/") => {
+export const getInternalDocumentIDFromCurrentValues = (fact, values, document_type_group_id, this_warehouse_id_name, runningInternalDocumentIDInitial= null, delimiter = "/") => {
 
     var positionAbbreviation, documentTypeGroupIDSplit, fullYearBE, runningInternalDocumentID; 
     var internalDocumentID;
@@ -2782,7 +2782,7 @@ export const getInternalDocumentIDFromCurrentValues = (fact, values, document_ty
     positionAbbreviation = getPositionAbbreviationFromWarehouseID(fact.position, values[this_warehouse_id_name]);
     documentTypeGroupIDSplit = `${document_type_group_id.toString()[0]}-${document_type_group_id.toString().substr(1)}`;
     fullYearBE = (parseInt(values["document_date"].slice(0, 4))+543).toString();
-    runningInternalDocumentID = "0000";
+    runningInternalDocumentID = (runningInternalDocumentIDInitial !== null) ? runningInternalDocumentIDInitial : "0000";
     internalDocumentID = [positionAbbreviation, documentTypeGroupIDSplit, fullYearBE, runningInternalDocumentID].join(delimiter);
 
     return internalDocumentID;
