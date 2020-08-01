@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { useFormikContext } from 'formik';
 import {getEmployeeIDFromUserID, DOCUMENT_TYPE_ID, isICD, 
-    getPositionAbbreviationFromWarehouseID, isICDWarehouseDest, isICDWarehouseSrc, getInternalDocumentIDFromCurrentValues} from '../helper';
+    getPositionAbbreviationFromWarehouseID, isICDWarehouseDest, isICDWarehouseSrc, getInternalDocumentIDFromCurrentValues, getInternalDocumentIDFromCurrentValuesPMT} from '../helper';
 
 const useFillDefaultsOnModeAdd = (document_type_group_id) => {
 
@@ -56,8 +56,8 @@ const useFillDefaultsOnModeAdd = (document_type_group_id) => {
 
                 positionAbbreviation = getPositionAbbreviationFromWarehouseID(fact.position, this_warehouse_id);
             }else{ //PMT
-                
-                // positionAbbreviation = 
+                // fact.position.items
+                positionAbbreviation = decoded_token.has_position[0].abbreviation;
             }
 
             if (document_type_group_id === DOCUMENT_TYPE_ID.MAINTENANT_ITEM) {
@@ -93,6 +93,7 @@ const useFillDefaultsOnModeAdd = (document_type_group_id) => {
     // Since after clicking on the popup, the setFieldValue is too delayed and doesn't cause changes in the `values` variable. 
     // So i would like to setFieldValue without validation in here to be subscribe to the changes
     useEffect(() => {
+        console.log("useEffect AUTO #1", values.is_auto_internal_document_id)
         if(values.is_auto_internal_document_id === "auto" && toolbar.mode === TOOLBAR_MODE.ADD) {
             var this_warehouse_id_name;
             if (isICD(document_type_group_id)) { // If document type group ID is ICD
@@ -104,7 +105,10 @@ const useFillDefaultsOnModeAdd = (document_type_group_id) => {
                 var internalDocumentID = getInternalDocumentIDFromCurrentValues(fact, values, document_type_group_id, this_warehouse_id_name);
                 setFieldValue('internal_document_id', internalDocumentID, false);
             } else{ // If document type group ID is PMT
-
+                console.log("useEffect AUTO #2")
+                let positionAbbreviation = decoded_token.has_position[0].abbreviation;
+                var internalDocumentID = getInternalDocumentIDFromCurrentValuesPMT(fact, values, document_type_group_id, positionAbbreviation);
+                setFieldValue('internal_document_id', internalDocumentID, false);
             }
 
         }

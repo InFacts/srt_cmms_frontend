@@ -2789,6 +2789,21 @@ export const getInternalDocumentIDFromCurrentValues = (fact, values, document_ty
 
 }
 
+export const getInternalDocumentIDFromCurrentValuesPMT = (fact, values, document_type_group_id, positionAbbreviation, runningInternalDocumentIDInitial= null, delimiter = "/") => {
+
+    var positionAbbreviation, documentTypeGroupIDSplit, fullYearBE, runningInternalDocumentID; 
+    var internalDocumentID;
+
+    documentTypeGroupIDSplit = `${document_type_group_id.toString()[0]}-${document_type_group_id.toString().substr(1)}`;
+    fullYearBE = (parseInt(values["document_date"].slice(0, 4))+543).toString();
+    runningInternalDocumentID = (runningInternalDocumentIDInitial !== null) ? runningInternalDocumentIDInitial : "0000";
+    internalDocumentID = [positionAbbreviation, documentTypeGroupIDSplit, fullYearBE, runningInternalDocumentID].join(delimiter);
+    console.log("internalDocumentID >>", internalDocumentID)
+
+    return internalDocumentID;
+
+}
+
 export const validateLineNumberInternalItemIDFieldHelper = (document_type_group_id, fact, values, setFieldValue, fieldName, internal_item_id, index) => {
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
     if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO) {
