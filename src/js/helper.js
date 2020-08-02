@@ -1105,6 +1105,8 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                 selector_checklist_line_item_id: line_custom.selector_checklist_line_item_id,
                 is_checked: line_custom.is_checked == "1" ? true : false,
                 weekly_task_id: line_custom.weekly_task_id,
+                cost: line_custom.cost,
+                remark: line_custom.remark,
             })
         })
 
@@ -1124,7 +1126,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             work_order_pm_line_item: [],
             work_order_pm_checklist_line_item: work_order_pm_has_selector_checklist_line_item_part
         }
-        console.log("specific_part", specific_part)
+        // console.log("specific_part", specific_part)
         return {
             document: document_part,
             specific: specific_part

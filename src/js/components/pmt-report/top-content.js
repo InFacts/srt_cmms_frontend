@@ -24,17 +24,26 @@ const TopContent = (props) => {
 
   const searchGoodsOnHand = () => new Promise(resolve => {
     // check ว่าเดือน ปี ที่เข้ามาเป็นของ ปัจจุบันหรือไหม
-    var new_date = new Date();
-    var year_now = new_date.getFullYear();
-    var mouth_now = new_date.getMonth() + 1;
-    var start_date = values.year_id - 543 + "-" + values.mouth_id + "-1";
+    if (values.mouth_id.toString().search("10") === 0 || values.mouth_id.toString().search("11") === 0 || values.mouth_id.toString().search("12") === 0) {
+      var start_date = values.year_id - 543 + "-" + values.mouth_id + "-01";
+    } else {
+      var start_date = values.year_id - 543 + "-" + "0" + values.mouth_id.toString() + "-01";
+    }
     var end_date
     if (values.mouth_id === "12") {
-      end_date = values.year_id - 543 + 1 + "-1-1";
+      end_date = values.year_id - 543 + 1 + "-01-01";
     }
     else {
-      end_date = values.year_id - 543 + "-" + `${parseInt(values.mouth_id) + 1}` + "-1";
+      // console.log("(parseInt(values.mouth_id) + 1)", (parseInt(values.mouth_id) + 1))
+      // end_date = values.year_id - 543 + "-" + `${parseInt(values.mouth_id) + 1}` + "-01";
+      if ((parseInt(values.mouth_id) + 1).toString().search("10") === 0 || (parseInt(values.mouth_id) + 1).toString().search("11") === 0 || (parseInt(values.mouth_id) + 1).toString().search("12") === 0) {
+        end_date = values.year_id - 543 + "-" + (parseInt(values.mouth_id) + 1) + "-01";
+      } else {
+        end_date = values.year_id - 543 + "-" + "0" + (parseInt(values.mouth_id) + 1).toString() + "-01";
+      }
     }
+    console.log("start_date", start_date)
+    console.log("end_date", end_date)
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/pmt/district-checklist?district_id=${values.district_id}&begin_start_on=${start_date}&end_start_on=${end_date}`;
     // &begin_start_on=${start_date}&end_start_on=${end_date}
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })

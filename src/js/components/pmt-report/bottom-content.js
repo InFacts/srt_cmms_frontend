@@ -9,6 +9,24 @@ const BottomContent = (props) => {
 
   const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
+  const onlyUnique = (value, index, self) => {
+    return self.indexOf(value) === index;
+  }
+
+  useEffect(() => {
+    let headTable = [];
+    let checkListNameNotUnique = [];
+    values.line_items.map((first_list) => {
+      headTable.push({ node_th: first_list.node_th });
+      first_list.selector_checklist.map((secondary_list) => {
+        checkListNameNotUnique.push({ checklist_name: secondary_list.checklist_name })
+      })
+    })
+    let checkListNameUnique = checkListNameNotUnique.filter(onlyUnique)
+    setFieldValue("head_table", headTable, false)
+    setFieldValue("checklist_name_unique", checkListNameUnique, false)
+  }, [values.line_items])
+
   return (
     <div id={changeTheam() === true ? "" : "blackground-gray"}>
       <div className="container_12 clearfix" id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>
@@ -28,8 +46,8 @@ const BottomContent = (props) => {
 
               </tr>
               <tr>
-                {values.line_items.map((node) => (
-                  <th className="font text-center" colSpan="2" style={{ minWidth: "80px" }}>{node.node_id}</th>
+                {values.head_table.map(({ node_th }) => (
+                  <th className="font text-center" colSpan="2" style={{ minWidth: "80px" }}>{node_th}</th>
                 ))}
 
                 <th className="font text-center" colSpan="2" style={{ minWidth: "80px", verticalAlign: 'middle' }}>แขวง</th>
@@ -46,33 +64,23 @@ const BottomContent = (props) => {
               </tr>
             </thead>
             <tbody>
-              {/* <tr>
-                <th className="edit-padding text-center">1</th>
-                <td className="edit-padding">งานบำรุงรักษาตามวาระที่สถานี(จำนวนสถานีที่รับผิดชอบ)</td>
-                <td className="edit-padding text-center">สถานี</td>
+              {values.checklist_name_unique.map(({ checklist_name }, index) => {
+                return (
+                  <tr>
+                    <th className="edit-padding text-center">{index + 1}</th>
+                    <td className="edit-padding">{checklist_name}</td>
+                    <td className="edit-padding text-center">สถานี</td>
 
-                <td className="edit-padding text-center">11</td>
-                <td className="edit-padding text-center">11</td>
+                    <td className="edit-padding text-center">11</td>
+                    <td className="edit-padding text-center">11</td>
 
-                <td className="edit-padding text-center">11</td>
-                <td className="edit-padding text-center">11</td>
+                    <td className="edit-padding text-center">49</td>
+                    <td className="edit-padding text-center">49</td>
 
-                <td className="edit-padding text-center">9</td>
-                <td className="edit-padding text-center">9</td>
-
-                <td className="edit-padding text-center">9</td>
-
-                <td className="edit-padding text-center">9</td>
-
-                <td className="edit-padding text-center">9</td>
-
-                <td className="edit-padding text-center">9</td>
-                <td className="edit-padding text-center">49</td>
-
-                <td className="edit-padding text-center">49</td>
-
-                <td className="edit-padding text-center"></td>
-              </tr> */}
+                    <td className="edit-padding text-center"></td>
+                  </tr>
+                )
+              })}
             </tbody>
           </table>
         </div>
