@@ -44,9 +44,7 @@ const BottomContent = (props) => {
   const sumTotal = (list_show) => sumTotalHelper(list_show);
 
   const validateLineNumberInternalItemIDField = (...args) => validateLineNumberInternalItemIDFieldHelper(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO, fact, values, setFieldValue, ...args);
-
   const validateLineNumberQuatityItemIDField = (...args) => validateLineNumberQuatityItemIDFieldHelper(setFieldValue, ...args)
-
   const validateLineNumberPerUnitPriceItemIDField = (...args) => validateLineNumberPerUnitPriceItemIDFieldHelper(setFieldValue, ...args)
 
 

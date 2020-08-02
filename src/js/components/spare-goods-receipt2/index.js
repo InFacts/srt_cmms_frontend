@@ -57,6 +57,8 @@ const GoodsReceiptComponent = (props) => {
             }
         })
     }, [])
+
+    // console.log(">>>>>values.remaek_approval", values.remark_approval)
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
@@ -65,7 +67,7 @@ const GoodsReceiptComponent = (props) => {
                 <TabBar tabNames={tabNames} initialTabID="listItem">
                     <BottomContent />
                 </TabBar>
-                <Footer />
+                <Footer setFieldValue={setFieldValue}/>
             </form>
         </>
     )
@@ -124,7 +126,8 @@ const EnhancedGoodsReceiptComponent = withFormik({
         
         // For Step Approval
         step_approve: [],
-
+        remark_approval: "",
+        
         is_auto_internal_document_id: 'auto',
     })
 })(GoodsReceiptComponent);

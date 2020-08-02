@@ -52,7 +52,6 @@ const setLineItem = (data) => {
   return data.line_items;
 }
 
-
 const TopContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
@@ -71,10 +70,9 @@ const TopContent = (props) => {
   const validateDestWarehouseIDField = (...args) => validateWarehouseIDField("dest_warehouse_id", props.fact, setFieldValue, ...args);
 
   const validateInternalDocumentSS1646ID = refer_to_document_internal_id => new Promise(resolve => {
-    // Internal Document ID
-    //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
-    //  ie. GR-PYO-2563/0001
-    // console.log("I am validating document id")
+    if (refer_to_document_internal_id === values.refer_to_document_internal_id) {
+      return resolve();
+    }
     let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS)-[A-Z]{3}-\d{4}\/\d{4}$/g
     let draftInternalDocumentIDRegex = /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
     // let draftInternalDocumentIDRegex = /^heh/g
@@ -84,26 +82,15 @@ const TopContent = (props) => {
       return resolve('Invalid Document ID Format\nBe sure to use the format ie. S1646-PYO-2563/0001')
     }
 
-    // if (!refer_to_document_internal_id) {
-    //   return resolve(); // Resolve doesn't return
-    // }
     let error;
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/internal_document_id/${encodeURIComponent(refer_to_document_internal_id)}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
       .then((res) => {
         if (res.data.internal_document_id === refer_to_document_internal_id) { // If input document ID exists
-          // if (props.toolbar.mode === TOOLBAR_MODE.SEARCH && !props.toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
-          // console.log(" I AM STILL IN MODE ADD AND SET VALUE")
-          // setValues({ ...values, ...responseToFormState(res.data) }, false); //Setvalues and don't validate
           setFieldValue("line_items", setLineItem(res.data), false)
           setFieldValue("refer_to_document_id", res.data.document_id, false)
-          setFieldValue("src_warehouse_id", res.data.src_warehouse_id, true)
-          // setFieldValue("line_items", setLineItem(res.data), false)
+          setFieldValue("src_warehouse_id", 999, false)
           return resolve(null);
-          // } else { //If Mode add, need to error duplicate Document ID
-          //   console.log("I AM DUPLICATE")
-          //   error = 'Duplicate Document ID';
-          // }
         } else { // If input Document ID doesn't exists
           // console.log("I KNOW IT'sINVALID")
           error = 'Invalid Document ID';
@@ -132,7 +119,8 @@ const TopContent = (props) => {
         <section className="container_12 ">
           <h4 className="head-title">นำอะไหล่เข้า</h4>
 
-          <div id={changeTheam() === true ? "blackground-white" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "150px", paddingTop: "10px" } : {}} >
+          <div id={changeTheam() === true ? "blackground-white" : ""} 
+            style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "150px", paddingTop: "10px" } : {}} >
 
             <div className="container_12">
 

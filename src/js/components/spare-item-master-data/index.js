@@ -70,7 +70,7 @@ const ItemMasterDataComponent = (props) => {
                 <TabBar tabNames={tabNames} initialTabID="general">
                     <BottomContent />
                 </TabBar>
-                <Footer />
+                <Footer setFieldValue={setFieldValue}/>
             </form>
         </>
     )
@@ -115,6 +115,8 @@ const EnhancedItemMasterDataComponent = withFormik({
         // FOR CHECK USER_ID ADMIN FOR EDIT
         modeEdit: false,
         line_position_permission: [],
+
+        remark_approval: "",
     })
 })(ItemMasterDataComponent);
 

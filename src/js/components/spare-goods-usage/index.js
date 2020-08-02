@@ -58,7 +58,7 @@ const GoodsUsageComponent = (props) => {
                 <TabBar tabNames={tabNames} initialTabID="listItem">
                     <BottomContent />
                 </TabBar>
-                <Footer />
+                <Footer setFieldValue={setFieldValue}/>
             </form>
         </>
     )
@@ -116,6 +116,7 @@ const EnhancedGoodsUsageComponent = withFormik({
 
         // For Step Approval
         step_approve: [],
+        remark_approval: "",
     })
 })(GoodsUsageComponent);
 

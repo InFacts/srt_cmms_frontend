@@ -19,7 +19,7 @@ const PopupModalDocument = (props) => {
         const fetchData = () => {
             axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
                 .then((res) => {
-                    console.log("url", url, res)
+                    // console.log("url", url, res)
                     setData(res.data.results);
                 })
         };
@@ -54,12 +54,12 @@ const PopupModalDocument = (props) => {
                             </thead>
                             <tbody>
                                 {data.map(function (document, index) {
-                                    var created_on = new Date(document.created_on);
-                                    created_on.setHours(created_on.getHours() + 7)
+                                    // var created_on = new Date(document.created_on);
+                                    // created_on.setHours(created_on.getHours() + 7)
                                     return (
                                         <tr key={index} id={index}>
                                             <td className="edit-padding" style={{ minWidth: "150px" }}> {document.internal_document_id} </td>
-                                            <td className="edit-padding" style={{ minWidth: "300px" }}> {created_on.toISOString().split(".")[0].replace("T", " เวลา ") + " น."} </td>
+                                            <td className="edit-padding" style={{ minWidth: "300px" }}> {document.created_on.split(".")[0].replace("T", " เวลา ") + " น."} </td>
                                             <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
                                                 <button type="button" className="button-blue" onClick={() => setFieldValue(`${props.name}`, document.internal_document_id, true)} aria-label="Close active modal" aria-controls={props.id} >เลือก</button>
                                             </td>

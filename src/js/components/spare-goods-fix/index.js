@@ -66,7 +66,7 @@ const GoodsFixComponent = (props) => {
             <TabBar tabNames={tabNames} initialTabID="listItem">
                 <BottomContent />
             </TabBar>
-            <Footer />
+            <Footer setFieldValue={setFieldValue}/>
         </form>
         </>
     )
@@ -123,6 +123,7 @@ const EnhancedGoodsFixComponent = withFormik({
 
         // For Step Approval
         step_approve: [],
+        remark_approval: "",
     })
 })(GoodsFixComponent);
 

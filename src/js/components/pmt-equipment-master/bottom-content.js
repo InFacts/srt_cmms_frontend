@@ -22,7 +22,7 @@ const BottomContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
-  const factPosition = useSelector((state) => ({ ...state.api.fact.position }), shallowEqual);
+  const factEquipmentStatus = useSelector((state) => ({ ...state.api.fact[FACTS.EQUIPMENT_STATUS] }), shallowEqual);
 
   const factDistict = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
   const factStations = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
@@ -443,18 +443,23 @@ const BottomContent = (props) => {
                   </tr>
                 </thead>
                 <tbody>
+                  {console.log("values.ref_document", values.ref_document)}
                   {values.ref_document.map((document, index) => {
+                    let statuses = factEquipmentStatus.items;
+                    let status = statuses.find(status => `${status.equipment_status_id}` === `${document.equipment_status_id}`); // Returns undefined if not found
+                    if (status) {
                     return (
                       <tr>
                         <td className="edit-padding text-center">{index + 1}</td>
                         <td className="edit-padding">{document.timestamp && document.timestamp.split("T")[0]}</td>
                         <td className="edit-padding">{document.internal_document_id}</td>
                         <td className="edit-padding">{document.document_type_name}</td>
-                        <td className="edit-padding">{document.equipment_status_id}</td>
+                        <td className="edit-padding">{status.status_th}</td>
                         {/* <td className="edit-padding"></td>
                         <td className="edit-padding"></td> */}
                       </tr>
                     )
+                      }
                   })}
                 </tbody>
               </table>

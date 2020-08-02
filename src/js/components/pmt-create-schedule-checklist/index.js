@@ -106,7 +106,7 @@ const GoodsReceiptComponent = (props) => {
                 <TabBar tabNames={tabNames} initialTabID="w1">
                     <BottomContent />
                 </TabBar>
-                <Footer />
+                <Footer setFieldValue={setFieldValue}/>
             </form>
         </>
     )
@@ -171,7 +171,9 @@ const EnhancedGoodsReceiptComponent = withFormik({
         desrciption_files_length: '',
         desrciption_files: [],
 
-        station: []
+        station: [],
+
+        remark_approval: "",
     })
 })(GoodsReceiptComponent);
 

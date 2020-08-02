@@ -89,7 +89,7 @@ const GoodsReceiptComponent = (props) => {
             <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "130vh" } : {}}>
                 <TopContent />
                 <BottomContent />
-                <Footer />
+                <Footer setFieldValue={setFieldValue}/>
             </form>
         </>
     )
@@ -120,6 +120,7 @@ const EnhancedGoodsReceiptComponent = withFormik({
         toolbar_mode: '',
         // Bottom Content
         checklist_line_item: initialRowsEquipmentPlan(),
+        remark_approval: "",
         modeEdit: true
     })
 })(GoodsReceiptComponent);

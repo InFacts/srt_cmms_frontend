@@ -72,7 +72,7 @@ const GoodsReceiptComponent = (props) => {
                 <TabBar tabNames={tabNames} initialTabID="general">
                     <BottomContent />
                 </TabBar>
-                <Footer />
+                <Footer setFieldValue={setFieldValue}/>
             </form>
         </>
     )

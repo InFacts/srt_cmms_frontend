@@ -94,7 +94,7 @@ const useFooterInitializer = (document_type_id) => {
                         }
                     }
                 }
-                else { // Everyone for Search mode
+                else { // Just Work order PM
                     if (toolbar.mode === TOOLBAR_MODE.ADD) { dispatch(footerToModeAddDraft()); }
                     else { 
                         if (document_type_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM && toolbar.mode === TOOLBAR_MODE.SEARCH) {
@@ -392,8 +392,9 @@ const useFooterInitializer = (document_type_id) => {
                         data.document.document_status_id = DOCUMENT_STATUS_ID.WAIT_APPROVE;
                         approval_status = APPROVAL_STATUS.APPROVED;
                     }
-                    if (values.document_id) { // Case If you ever saved document and then you SEND document. (If have document_id, no need to create new doc)
-                        let remark = "demo body";
+                    if (values.document_id) { // Case If you ever saved document and then you SEND document. (If have document_id, no need to create new doc)]
+                        console.log("valies.remark_approval", values.remark_approval)
+                        let remark = values.remark_approval;
                         approveDocument(values.document_id, approval_status, user_id, remark).then(() => {
                             dispatch(navBottomSuccess('[PUT]', 'Submit Success', ''));
                             putDocument(values.document_id, document_type_id, data, null, data.document.document_status_id, false);

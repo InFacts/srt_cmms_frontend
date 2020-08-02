@@ -35,6 +35,7 @@ const GoodsReceiptComponent = (props) => {
         { id: "w3", name: "สัปดาห์ที่ 3" },
         { id: "w4", name: "สัปดาห์ที่ 4" },
         { id: "related_parties", name: "ผู้ที่เกี่ยวข้อง" },
+        { id: "item", name: "อุปกรณ์ที่ต้องนำไป" },
         { id: "attachment", name: "แนบไฟล์" },
         { id: "table_status", name: "สถานะเอกสาร" }
     ]);
@@ -72,7 +73,7 @@ const GoodsReceiptComponent = (props) => {
                 <TabBar tabNames={tabNames} initialTabID="w1">
                     <BottomContent />
                 </TabBar>
-                <Footer />
+                <Footer setFieldValue={setFieldValue}/>
             </form>
         </>
     )
@@ -136,6 +137,8 @@ const EnhancedGoodsReceiptComponent = withFormik({
         
         // NOT USE FOR FOOTER
         step_approve: [],
+        remark_approval: "",
+        
         created_by_admin_employee_id: '',
 
         //Field ที่ไม่ได้ display

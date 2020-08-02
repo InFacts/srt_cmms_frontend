@@ -54,6 +54,7 @@ const TopContent = (props) => {
         let warehouse = warehouses.find(warehouse => `${warehouse.warehouse_id}` === `${warehouse_id}`); // Returns undefined if not found
         console.log("warehouse", warehouse)
         if (warehouse) {
+          console.log(">>>>>", values.line_position_permission)
           // IF Check user If User is Admin -> return true Else -> return false
           if (values.line_position_permission[0].module_admin === true) { //{/* TODO USER_ID FOR ADMIN */}
             console.log(" YES I AM ADMIN ")

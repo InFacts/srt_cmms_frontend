@@ -50,7 +50,7 @@ const ReportS1Component = (props) => {
             <TabBar tabNames={tabNames} initialTabID="listItem">
                 <BottomContent />
             </TabBar>
-            <Footer />
+            <Footer setFieldValue={setFieldValue}/>
             </form>
         </>
     )

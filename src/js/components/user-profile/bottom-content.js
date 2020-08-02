@@ -192,14 +192,7 @@ const BottomContent = (props) => {
                                                         <td className="edit-padding">{item.internal_document_id} </td>
                                                         <td className="edit-padding">{item.document_type_name} </td>
                                                         <td className="edit-padding">{formatDate(item.created_on)} </td>
-                                                        <td className="edit-padding">
-                                                            <select className="edit-select" value={item.document_status_id} disabled>
-                                                                <option value=''></option>
-                                                                {fact[FACTS.DOCUMENT_STATUS].items.map((status) => {
-                                                                    return <option value={status.document_status_id}>{status.status}</option>
-                                                                })}
-                                                            </select>
-                                                        </td>
+                                                        <td className="edit-padding"> {item.document_status_en}</td>
                                                     </tr>
                                                 )
                                             }
@@ -227,14 +220,7 @@ const BottomContent = (props) => {
                                                         <td className="edit-padding">{item.internal_document_id} </td>
                                                         <td className="edit-padding">{item.document_type_name} </td>
                                                         <td className="edit-padding">{formatDate(item.created_on)} </td>
-                                                        <td className="edit-padding">
-                                                            <select className="edit-select" value={item.document_status_id} disabled>
-                                                                <option value=''></option>
-                                                                {fact[FACTS.DOCUMENT_STATUS].items.map((status) => {
-                                                                    return <option value={status.document_status_id}>{status.status}</option>
-                                                                })}
-                                                            </select>
-                                                        </td>
+                                                        <td className="edit-padding">{item.document_status_en}</td>
                                                     </tr>
                                                 )
                                             }

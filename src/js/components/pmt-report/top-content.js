@@ -35,7 +35,7 @@ const TopContent = (props) => {
     else {
       end_date = values.year_id - 543 + "-" + `${parseInt(values.mouth_id) + 1}` + "-1";
     }
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/pmt/district-checklist?district_id=${values.district_id}`;
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/pmt/district-checklist?district_id=${values.district_id}&begin_start_on=${start_date}&end_start_on=${end_date}`;
     // &begin_start_on=${start_date}&end_start_on=${end_date}
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
       .then((res) => {

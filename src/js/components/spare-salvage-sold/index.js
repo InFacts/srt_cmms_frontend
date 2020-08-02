@@ -62,7 +62,7 @@ const SalvageSoldComponent = (props) => {
             <TabBar tabNames={tabNames} initialTabID="listItem">
                 <BottomContent />
             </TabBar>
-            <Footer />
+            <Footer setFieldValue={setFieldValue}/>
         </form>
         </>
     )
@@ -119,6 +119,7 @@ const EnhancedSalvageSoldComponent = withFormik({
 
         // For Step Approval
         step_approve: [],
+        remark_approval: "",
     }),
     validate: (values, props) => {
         const errors = {};

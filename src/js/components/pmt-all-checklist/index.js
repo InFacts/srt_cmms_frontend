@@ -27,16 +27,15 @@ const GoodsReceiptComponent = (props) => {
     useToolbarInitializer(TOOLBAR_MODE.NONE_HOME, DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM);
     useTokenInitializer();
     useFactInitializer();
-    useFooterInitializer(DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM);
     const loggedIn = useSelector(state => state.token.isLoggedIn);
 
     return (
         <>
-            {/* {!loggedIn ? <Redirect to="/" /> : null} */}
+            {!loggedIn ? <Redirect to="/" /> : null}
             <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "130vh" } : {}}>
                 <TopContent />
                 <BottomContent />
-                <Footer />
+                <Footer setFieldValue={setFieldValue}/>
             </form>
         </>
     )

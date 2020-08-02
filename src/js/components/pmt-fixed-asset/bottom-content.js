@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { connect, useSelector, shallowEqual } from 'react-redux';
 import { Link } from 'react-router-dom'
 
+import axios from "axios";
+import { API_PORT_DATABASE } from '../../config_port.js';
+import { API_URL_DATABASE } from '../../config_url.js';
+
 import TableStatus from '../common/table-status';
 import Files from '../common/files2'
 import TextInput from '../common/formik-text-input';
@@ -21,14 +25,50 @@ const BottomContent = (props) => {
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
-
   const factLevel = useSelector((state) => ({ ...state.api.fact[FACTS.LEVEL] }), shallowEqual);
+
+  const [rowItem, setRowItem] = useState([]);
 
   let checkBooleanForEdit = checkBooleanForEditCheckNodeIDHelperForWorkOrderPM(values, decoded_token, fact);
   useEffect(() => {
     checkBooleanForEdit = false
     validateField("internal_document_id")
   }, [values.internal_document_id])
+
+  const onlyUnique = (value, index, self) => {
+    return self.indexOf(value) === index;
+  }
+
+  useEffect(() => {
+    let item = [];
+    let item_show_not_unique = [];
+    values.work_order_pm_has_selector_checklist_line_item && values.work_order_pm_has_selector_checklist_line_item.map((clecklist) => {
+      if (clecklist.is_checked) {
+        item.push(`${clecklist.checklist_line_item_id}`)
+      }
+    })
+    var unique = item.filter(onlyUnique);
+    // console.log("unique", unique)
+    unique.map((id) => {
+      const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/checklist-line-item/${id}`;
+      axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((res) => {
+          // console.log("res", res.data.checklist_line_item.checklist_line_item_use_equipment)
+          if (res.data.checklist_line_item.checklist_line_item_use_equipment.length >= 1) {
+            res.data.checklist_line_item.checklist_line_item_use_equipment.map((checklist_line_item) => {
+              // console.log("checklist_line_item", checklist_line_item)
+
+              item_show_not_unique.push(checklist_line_item)
+              // console.log("item_show_not_unique", item_show_not_unique)
+              
+              var item_show_unique = item_show_not_unique.filter(onlyUnique);
+              setRowItem(item_show_unique);
+              // console.log("item_show_unique", item_show_unique)
+            })
+          }
+        })
+    })
+  }, [values.work_order_pm_has_selector_checklist_line_item])
 
   return (
     <>
@@ -411,6 +451,36 @@ const BottomContent = (props) => {
               <div className="clear" />
             </div>
 
+          </div>
+
+          {/* w4_content Tab */}
+          <div id="item_content" className="tabcontent">
+            <div className="container_12 mt-3">
+              <table className="table-many-column" style={{ padding: "10px" }}>
+                <thead>
+                  <tr>
+                    <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
+                    <th className="font" style={{ minWidth: "200px" }}>เลขที่อะไหล่</th>
+                    <th className="font" style={{ minWidth: "600px" }}>รายละเอียด</th>
+                    <th className="font" style={{ minWidth: "100px" }}>หน่วย</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rowItem.map((line_item, index) => {
+                    console.log("line_item", line_item)
+                    let line_number = index + 1;
+                    return (
+                      <tr>
+                        <th className="edit-padding text-center">{line_number}</th>
+                        <td className="edit-padding">{line_item.item.internal_item_id}</td>
+                        <td className="edit-padding">{line_item.item.description}</td>
+                        <td className="edit-padding">{line_item.item.uom_group.name}</td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
 
           {/* Attachment Tab */}

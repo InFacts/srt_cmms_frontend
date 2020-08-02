@@ -44,12 +44,13 @@ const TableStatus = (props) => {
           <table className="table-many-column mt-2">
             <thead>
               <tr>
-                <th className="font" style={{ width: "50px" }}></th>
-                <th className="font" style={{ width: "200px" }}>ตำแหน่ง</th>
-                <th className="font" style={{ width: "200px" }}>หน่วยงาน</th>
-                <th className="font" style={{ width: "250px" }}>ชื่อผู้ลงนาม</th>
-                <th className="font" style={{ width: "150px" }}>วันที่ลงนาม</th>
-                <th className="font" style={{ width: "150px" }}>สถานะ</th>
+                <th className="font" style={{ minWidth: "50px" }}></th>
+                <th className="font" style={{ minWidth: "150px" }}>ตำแหน่ง</th>
+                <th className="font" style={{ minWidth: "200px" }}>หน่วยงาน</th>
+                <th className="font" style={{ minWidth: "250px" }}>ชื่อผู้ลงนาม</th>
+                <th className="font" style={{ minWidth: "100px" }}>วันที่ลงนาม</th>
+                <th className="font" style={{ minWidth: "100px" }}>สถานะ</th>
+                <th className="font" style={{ minWidth: "300px" }}>หมายเหตุ</th>
               </tr>
             </thead>
             <tbody>
@@ -65,6 +66,7 @@ const TableStatus = (props) => {
                     <td className="edit-padding">{resApprove.approval_by.length === 0 || resApprove.position_group.name === "SERVER" ? "-" : resApprove.approval_by[0].user.firstname_th + " " + resApprove.approval_by[0].user.lastname_th}</td>
                     <td className="edit-padding">{resApprove.approval_by.length === 0 ? "-" : resApprove.approval_by[0].approved_on.slice(0, 10)}</td>
                     <td className="edit-padding">{resApprove.approval_by.length === 0 ? APPROVAL_STATUS_TH.UNCOMPLETE : status(resApprove.approval_by[0].approval_status_id, false)}</td>
+                    <td className="edit-padding">{resApprove.approval_by.length === 0 ? "-" : resApprove.approval_by[0].remark}</td>
                   </tr>
               )
               })}

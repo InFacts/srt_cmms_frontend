@@ -71,7 +71,7 @@ const WorkOrderComponent = (props) => {
             <TabBar tabNames={tabNames} initialTabID="broken">
                 <BottomContent />
             </TabBar>
-            <Footer />
+            <Footer setFieldValue={setFieldValue}/>
         </form>
         </>
     )
@@ -133,6 +133,7 @@ const EnhancedWorkOrderComponent = withFormik({
         //Field ที่ไม่ได้กรอก
         document_status_id: '', // ?
         step_approve: [],               // (Field ที่ไม่ได้กรอก)
+        remark_approval: "",
 
         //Field ที่ไม่ได้ display
         document_id: '', // changes when document is displayed (internal_document_id field validation)

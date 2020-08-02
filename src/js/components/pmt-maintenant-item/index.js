@@ -66,7 +66,7 @@ const MaintenantItemComponent = () => {
                 <TabBar tabNames={tabNames} initialTabID="broken">
                     <BottomContent />
                 </TabBar>
-                <Footer />
+                <Footer setFieldValue={setFieldValue}/>
             </form>
         </>
     )
@@ -126,7 +126,9 @@ const EnhancedMaintenantItemComponent = withFormik({
 
         division_id: '',
         district_id: '',
-        node_id: ''
+        node_id: '',
+
+        remark_approval: "",
     })
 })(MaintenantItemComponent);
 
