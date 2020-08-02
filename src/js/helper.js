@@ -523,13 +523,17 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                 work_order_pm_checklist_line_item_part.push({
                     selector_checklist_line_item_id: line_item.selector_checklist_line_item_id,
                     is_checked: line_item.is_checked,
-                    weekly_task_id: line_item.weekly_task_id
+                    weekly_task_id: line_item.weekly_task_id,
+                    cost: line_item.cost,
+                    remark: line_item.remark
                 })
             } else {
                 work_order_pm_checklist_line_item_part.push({
                     selector_checklist_line_item_id: line_item.selector_checklist_line_item_id,
                     is_checked: line_item.is_checked,
-                    weekly_task_id: line_item.weekly_task_id
+                    weekly_task_id: line_item.weekly_task_id,
+                    cost: line_item.cost,
+                    remark: line_item.remark
                 })
             }
         })
@@ -2445,7 +2449,9 @@ function returnArrayLineWorkOrderPM(line_custom, fact, week) {
                         checklist_name: line_custom.checklist_name,
                         checklist_id: line_custom.checklist_id,
                         x_cross_x_cross_th: factXCross.road_center,
-                        weekly_task_id: line_custom.weekly_task_id
+                        weekly_task_id: line_custom.weekly_task_id,
+                        cost: line_custom.cost,
+                        remark: line_custom.remark
                     });
                     prev_equipment_id = line_custom.equipment_item_id;
                     prev_weekly_task_id = line_custom.weekly_task_id;
@@ -2464,7 +2470,9 @@ function returnArrayLineWorkOrderPM(line_custom, fact, week) {
                         checklist_id: line_custom.checklist_id,
                         x_cross_x_cross_id: null,
                         weekly_task_id: line_custom.weekly_task_id,
-                        checklist_name: line_custom.checklist_name
+                        checklist_name: line_custom.checklist_name,
+                        cost: line_custom.cost,
+                        remark: line_custom.remark
                     });
                     prev_station_id = line_custom.station_id;
                     prev_weekly_task_id = line_custom.weekly_task_id;
@@ -2489,6 +2497,8 @@ function returnArrayHasLineWorkOrderPM(line_custom) {
             checklist_line_item_name: line_custom.checklist_line_item.name,
             checklist_id: line_custom.checklist_id,
             checklist_name: line_custom.checklist_name,
+            cost: line_custom.cost,
+            remark: line_custom.remark
             // selector_checklist: 
         })
     })
