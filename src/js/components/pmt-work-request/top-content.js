@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux'
 import PopupModalDocument from '../common/popup-modal-document'
 import PopupModalUsername from '../common/popup-modal-username'
+import RadioAutoIncrementInput from '../common/formik-radio-input-ai'
 
 import TextInput from '../common/formik-text-input'
 import DateTimeInput from '../common/formik-datetime-input'
@@ -29,7 +30,7 @@ const TopContent = (props) => {
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
     // Fill Default Forms
-    useFillDefaultsOnModeAdd();
+    useFillDefaultsOnModeAdd(DOCUMENT_TYPE_ID.WORK_REQUEST);
 
 
     const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.WORK_REQUEST, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
@@ -54,7 +55,7 @@ const TopContent = (props) => {
                 <div id={changeTheam() === true ? "blackground-white" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "130px", paddingTop: "10px" } : {}} >
 
                     {/* === Left Column === */}
-                    <div className={changeTheam() === true ? "grid_5" : "grid_6"} style={{ paddingLeft: "10px" }}>
+                    <div className={changeTheam() === true ? "grid_7" : "grid_6"} style={{ paddingLeft: "10px" }}>
 
                         {/* Document ID */}
                         <div className="grid_1 alpha white-space">
@@ -63,9 +64,15 @@ const TopContent = (props) => {
                         <div className="grid_3">
                             <TextInput name='internal_document_id'
                                 validate={validateInternalDocumentIDField}
+                                disabled={values.is_auto_internal_document_id === "auto" && toolbar.mode === TOOLBAR_MODE.ADD ? true: false}
                                 searchable={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                ariaControls="modalDocument"
-                                tabIndex="1" />
+                                ariaControls="modalDocument" tabIndex="1" />
+                        </div>
+                        <div className="grid_2">
+                            <RadioAutoIncrementInput 
+                            name='is_auto_internal_document_id'
+                            disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                            />
                         </div>
                         <div class="clear" />
 
@@ -98,7 +105,7 @@ const TopContent = (props) => {
 
 
                     {/* === Right Column === */}
-                    <div className="grid_6 prefix_2">
+                    <div className="grid_4">
 
                         {/* Document Status  */}
                         <Label>สถานะ</Label>

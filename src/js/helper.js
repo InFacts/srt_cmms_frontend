@@ -2,12 +2,14 @@
 import axios from "axios";
 import { API_PORT_DATABASE } from './config_port.js';
 import { API_URL_DATABASE } from './config_url.js';
-import { fetchFactIfNeeded, FACTS } from './redux/modules/api/fact';
-import { isEmptyChildren } from "formik";
+import { FACTS } from './redux/modules/api/fact';
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS } from './redux/modules/toolbar'
 import { FOOTER_ACTIONS } from './redux/modules/footer'
 
 // import { useFormikContext } from 'formik';
+
+const BASE_URL = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}`;
+const PAGE_SIZE = 100000;
 
 // Constants
 export const DOCUMENT_TYPE_ID = {
@@ -305,7 +307,7 @@ export function getPositionAbbreviationFromWarehouseID(positionFact, warehouseID
         let position = positions.find(position => `${position.warehouse_id}` === `${warehouseID}` 
             && (position.position_group_id === 3 || position.position_group_id === 5));
         if (position) {
-            return position.abbreviation;
+            return position;
         }
         return null;
     }
@@ -1263,7 +1265,7 @@ function removeEmptyLineItemsWorkOrderPM(line_items) {
 
 // Document API
 const fetchDocumentData = (document_id) => new Promise((resolve, reject) => {
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}`;
+    const url = `${BASE_URL}/document/${document_id}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             resolve(res.data);
@@ -1276,7 +1278,7 @@ const fetchDocumentData = (document_id) => new Promise((resolve, reject) => {
 // Reserve a row in `document` table and return `document_id` and `internal_document_id`
 // POST /document/new/0
 export const createDocumentEmptyRow = () => new Promise((resolve, reject) => {
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/new/0`;
+    const url = `${BASE_URL}/document/new/0`;
     axios.post(url, null, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             console.log(" I am successful in creating empty document with document_id ", res.data.document_id)
@@ -1294,16 +1296,16 @@ export const createDocumentEmptyRow = () => new Promise((resolve, reject) => {
 // POST 
 export const createMasterData = (data, document_type_group_id) => new Promise((resolve, reject) => {
     if (document_type_group_id === DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA) {
-        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/warehouses`;
+        var url = `${BASE_URL}/fact/warehouses`;
     }
     if (document_type_group_id === DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
-        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items`;
+        var url = `${BASE_URL}/fact/items`;
     }
     if (document_type_group_id === DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA) {
-        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/equipment`;
+        var url = `${BASE_URL}/fact/equipment`;
     }
     if (document_type_group_id === DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM) {
-        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/checklist-line-item`;
+        var url = `${BASE_URL}/fact/checklist-line-item`;
     }
     console.log("data", data, "url", url)
     axios.post(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
@@ -1318,16 +1320,16 @@ export const createMasterData = (data, document_type_group_id) => new Promise((r
 // PUT
 export const editMasterData = (data, document_type_group_id) => new Promise((resolve, reject) => {
     if (document_type_group_id === DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA) {
-        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/warehouses/${data.warehouse_id}`;
+        var url = `${BASE_URL}/fact/warehouses/${data.warehouse_id}`;
     }
     if (document_type_group_id === DOCUMENT_TYPE_ID.ITEM_MASTER_DATA) {
-        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/items/${data.item_id}`;
+        var url = `${BASE_URL}/fact/items/${data.item_id}`;
     }
     if (document_type_group_id === DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA) {
-        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/equipment/${data.equipment.equipment_id}`;
+        var url = `${BASE_URL}/fact/equipment/${data.equipment.equipment_id}`;
     }
     if (document_type_group_id === DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM) {
-        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/checklist-line-item/${data.checklist_line_item}`;
+        var url = `${BASE_URL}/fact/checklist-line-item/${data.checklist_line_item}`;
     }
     console.log("url", url, "data", data)
     axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
@@ -1341,8 +1343,7 @@ export const editMasterData = (data, document_type_group_id) => new Promise((res
         });
 });
 
-const BASE_URL = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}`;
-const PAGE_SIZE = 100000;
+
 
 // GET  /statistic/goods-monthly-summary
 export const fetchStatisticGoodsMonthlySummary = (beginReportingPeriodID = null, endReportingPeriodID = null, warehouseIDFilter=null, itemIDFilter=null, itemStatusIDFilter=1) => new Promise((resolve, reject) => {
@@ -1375,9 +1376,9 @@ export const fetchStatisticGoodsOnhand = ( warehouseIDFilter=null, itemIDFilter=
 
 
 
-
+// GET latest internal document ID from /document/search?document_type_group_id=${document_type_group_id}
 export const fetchLastestInternalDocumentID = (document_type_group_id) => new Promise((resolve, reject) => {
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=${document_type_group_id}`
+    const url = `${BASE_URL}/document/search?document_type_group_id=${document_type_group_id}`
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             let results = res.data.results;
@@ -1389,9 +1390,40 @@ export const fetchLastestInternalDocumentID = (document_type_group_id) => new Pr
         })
 });
 
+
+// GET /document/latest/24/299/2563
+// From https://github.com/cl21484952/srt_backend/issues/273
+
+// ...of the URL /document/latest/{หน่วยงาน}/{document_type_group_id}/{year}
+
+// url part {หน่วยงาน} to be position.position_id
+// url part {document_type_group_id} to be document_type.document_type_group_id
+// url part {year} will be taken AS IS no additional operation will be performed
+// url part {year} is in Gregorian Calender format
+// ...of the format AAA.BBB.-CCC./N-MM/YYYY/DDDD
+
+// format part YYYY then -543 WILL always be the same year as the creation date of the document
+// 4.1) Example สสญ.ธบ./9-99/2563/12345 was created in the year 2020 and not 2019-12-31 or 2021-01-01
+export const fetchLastestRunningInternalDocumentID = (positionID, documentTypeGroupID, yearBE) => new Promise((resolve, reject) => {
+    const url = `${BASE_URL}/document/latest/${positionID}/${documentTypeGroupID}/${yearBE}`
+    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((res) => {
+            let results = res.data.results;
+            if (results[0]) {
+                resolve(results[0].internal_document_id);
+            } else {
+                reject('No Results in fetchLastestRunningInternalDocumentID');
+            }
+        })
+        .catch((err) => {
+            console.warn(err.response);
+            reject(err)
+        });
+});
+
 // GET /document/internal_document_id/{internal_document_id}
 export const getDocumentbyInternalDocumentID = (internal_document_id) => new Promise((resolve, reject) => {
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/internal_document_id/${encodeURIComponent(internal_document_id)}`;
+    const url = `${BASE_URL}/document/internal_document_id/${encodeURIComponent(internal_document_id)}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             console.log(" I am successful in GETTING contents of internal_document_id ", internal_document_id)
@@ -1412,7 +1444,7 @@ export const getDocumentbyInternalDocumentID = (internal_document_id) => new Pro
 // PUT /document/{document_id}/{document_type_group_id}
 export const editDocument = (document_id, document_type_group_id, data, files, flag_create_approval_flow) => new Promise((resolve, reject) => {
     if (document_type_group_id === DOCUMENT_TYPE_ID.WORK_ORDER_CHECKLIST) {
-        var url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}/205-checklist`;
+        var url = `${BASE_URL}/document/${document_id}/205-checklist`;
         axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
             .then((res) => {
                 console.log(" I am successful in updating contents of document_id ", document_id, "res", res)
@@ -1429,7 +1461,7 @@ export const editDocument = (document_id, document_type_group_id, data, files, f
                 reject(err)
             });
     } else {
-        const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/${document_id}/${document_type_group_id}`;
+        const url = `${BASE_URL}/document/${document_id}/${document_type_group_id}`;
         axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
             .then((res) => {
                 console.log(" I am successful in updating contents of document_id ", document_id, "res", res)
@@ -1586,7 +1618,7 @@ export const editMasterDataHelper = (document_type_group_id, data, image) => new
 // POST /approval/{document_id}/new
 export const startDocumentApprovalFlow = (document_id) => new Promise((resolve, reject) => {
     console.log("startDocumentApprovalFlow");
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/new`;
+    const url = `${BASE_URL}/approval/${document_id}/new`;
     axios.post(url, null, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             console.log("startDocumentApprovalFlow res", res);
@@ -1606,7 +1638,7 @@ export const startDocumentApprovalFlow = (document_id) => new Promise((resolve, 
 
 // Get Step Approval After Search Document (document_id changes)
 export const fetchStepApprovalDocumentData = (document_id) => new Promise((resolve, reject) => {
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/latest/plus`;
+    const url = `${BASE_URL}/approval/${document_id}/latest/plus`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((step_approve) => {
             // console.log("Fetfch Appoval", step_approve.data)
@@ -1619,7 +1651,7 @@ export const fetchStepApprovalDocumentData = (document_id) => new Promise((resol
 
 // Get Attachment after search Document (document_id changes)
 export const fetchAttachmentDocumentData = (document_id) => new Promise((resolve, reject) => {
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${document_id}`;
+    const url = `${BASE_URL}/attachment/${document_id}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             resolve(res);
@@ -1640,7 +1672,7 @@ export const uploadAttachmentDocumentData = (document_id, files) => new Promise(
     })
     if (tempFiles.length !== 0) {
         tempFiles.map((file) => { formData.append('file', file); })
-        let url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${document_id}`
+        let url = `${BASE_URL}/attachment/${document_id}`
         axios.post(url, formData,
             { headers: { "x-access-token": localStorage.getItem('token_auth') } })
             .then((res) => {
@@ -1655,7 +1687,7 @@ export const uploadAttachmentDocumentData = (document_id, files) => new Promise(
 // Download Attachment
 // important -> responseType: 'blob'
 export const downloadAttachmentDocumentData = (document_id, attachment_id) => new Promise((resolve, reject) => {
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/attachment/${document_id}/download/${attachment_id}`;
+    const url = `${BASE_URL}/attachment/${document_id}/download/${attachment_id}`;
     axios.get(url, { responseType: 'blob', headers: { "x-access-token": localStorage.getItem('token_auth') } })
         // 1. Convert the data into 'blob'    
         .then((response) => {
@@ -1677,7 +1709,7 @@ export const downloadAttachmentDocumentData = (document_id, attachment_id) => ne
 
 // Get Latest Step Approval After Track Docuemnt
 export const fetchLatestStepApprovalDocumentData = (document_id) => new Promise((resolve, reject) => {
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/latest/step`;
+    const url = `${BASE_URL}/approval/${document_id}/latest/step`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((latest_step_approve) => {
             resolve(latest_step_approve.data);
@@ -1689,7 +1721,7 @@ export const fetchLatestStepApprovalDocumentData = (document_id) => new Promise(
 
 // Get Latest Step Approval After Track Docuemnt
 export const fetchSearchDocumentData = (document_id) => new Promise((resolve, reject) => {
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?${document_id}`;
+    const url = `${BASE_URL}/document/search?${document_id}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((document) => {
             resolve(document.data);
@@ -1701,7 +1733,7 @@ export const fetchSearchDocumentData = (document_id) => new Promise((resolve, re
 
 // Get Goods Onhand After Select Warehoues ID and No part ID
 export const fetchGoodsOnhandData = (warehouse_id, item_id) => new Promise((resolve, reject) => {
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-onhand/plus?warehouse_id=${warehouse_id}&item_id=${item_id}`;
+    const url = `${BASE_URL}/statistic/goods-onhand/plus?warehouse_id=${warehouse_id}&item_id=${item_id}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             resolve(res.data.results);
@@ -1713,7 +1745,7 @@ export const fetchGoodsOnhandData = (warehouse_id, item_id) => new Promise((reso
 
 // Get Goods Onhand After Select Warehoues ID and No part ID
 export const fetchGoodsOnhandDataForItemmasterData = (item_id) => new Promise((resolve, reject) => {
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-onhand/plus?item_id=${item_id}`;
+    const url = `${BASE_URL}/statistic/goods-onhand/plus?item_id=${item_id}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             resolve(res.data.results);
@@ -1725,7 +1757,7 @@ export const fetchGoodsOnhandDataForItemmasterData = (item_id) => new Promise((r
 
 // Get Position Permission For Admin
 export const fetchPositionPermissionData = (position_id) => new Promise((resolve, reject) => {
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/admin/position-permission?${position_id ? `position_id=${position_id}` : null}`;
+    const url = `${BASE_URL}/admin/position-permission?${position_id ? `position_id=${position_id}` : null}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             // console.log("res", res)
@@ -1738,7 +1770,7 @@ export const fetchPositionPermissionData = (position_id) => new Promise((resolve
 
 // Get Position Permission For Admin
 export const fetchPositionPermissionDataSearchPositionName = (position_name) => new Promise((resolve, reject) => {
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/admin/position-permission?position_name=${position_name}`;
+    const url = `${BASE_URL}/admin/position-permission?position_name=${position_name}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
             // console.log("res", res)
@@ -2504,7 +2536,7 @@ export const validateInternalDocumentIDWorfOrderPMFieldHelper = (checkBooleanFor
 
 
 // Validation 
-export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, document_type_group_id, toolbar, footer, fact, values, setValues, setFieldValue, validateField, internal_document_id) => new Promise(resolve => {
+export const validateInternalDocumentIDFieldHelper = (decoded_token, checkBooleanForEdit, document_type_group_id, toolbar, footer, fact, values, setValues, setFieldValue, validateField, internal_document_id) => new Promise( async (resolve) => {
     // Internal Document ID
     //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
     //  ie. GR-PYO-2563/0001
@@ -2737,7 +2769,7 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
                 console.error("validateInternalDocumentIDFieldHelper:: Unhandled Document Type Group ID.", document_type_group_id)
             }
         })
-        .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
+        .catch(async (err) => { // 404 NOT FOUND  If input Document ID doesn't exists
             console.log("validateInternalDocumentIDFieldHelper:: I think I have 404 not found in doc id.", err)
 
             //Reset Document ID to Empty String
@@ -2753,19 +2785,68 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
                 // If auto increment
                 if(values.is_auto_internal_document_id === "auto") {
                     var internalDocumentID;
-                    if (isICD(document_type_group_id)) {
-                        console.log("validateInternalDocumentIDFieldHelper:: auto!!");
+                    // if (isICD(document_type_group_id)) {
+                    //     console.log("validateInternalDocumentIDFieldHelper:: auto!!");
+                    //     console.log("validateInternalDocumentIDFieldHelper:: values[this_warehouse_id_name]", values[this_warehouse_id_name]);
+
+                    //     internalDocumentID = getInternalDocumentIDFromCurrentValues(fact, values, document_type_group_id, this_warehouse_id_name);
+
+                    //     console.log("validateInternalDocumentIDFieldHelper:: internalDocumentID", internalDocumentID);
+                    //     setFieldValue("internal_document_id", internalDocumentID, false);
+                    // }else{ // PMT
+
+                    // }
+
+                    var delimiter = "/";
+                    var positionAbbreviation, positionID, documentTypeGroupIDSplit, fullYearBE, runningInternalDocumentID; 
+                    var internalDocumentID;
+                    if (isICD(document_type_group_id)) { // If document type group ID is ICD
+                        var this_warehouse_id_name;
+                        if (isICDWarehouseDest(document_type_group_id)) {
+                            this_warehouse_id_name = "dest_warehouse_id";
+                        }else if (isICDWarehouseSrc(document_type_group_id)) {
+                            this_warehouse_id_name = "src_warehouse_id";
+                        }
                         console.log("validateInternalDocumentIDFieldHelper:: values[this_warehouse_id_name]", values[this_warehouse_id_name]);
+                        let position = getPositionAbbreviationFromWarehouseID(fact.position, values[this_warehouse_id_name]);
+                        positionAbbreviation = position.abbreviation;
+                        positionID = position.position_id;
 
-                        internalDocumentID = getInternalDocumentIDFromCurrentValues(fact, values, document_type_group_id, this_warehouse_id_name);
 
-                        console.log("validateInternalDocumentIDFieldHelper:: internalDocumentID", internalDocumentID);
-                        setFieldValue("internal_document_id", internalDocumentID, false);
-                    }else{ // PMT
-
+                        // runningInternalDocumentID = await fetchLastestRunningInternalDocumentID(positionID, document_type_group_id, fullYearBE);
+                        // internalDocumentID = getInternalDocumentIDFromCurrentValues(fact, values, document_type_group_id, this_warehouse_id_name, runningInternalDocumentID);
+                    } else{ // If document type group ID is PMT
+                        positionAbbreviation = decoded_token.has_position[0].abbreviation;
+                        positionID = decoded_token.has_position[0].position_id;
+                        // internalDocumentID = getInternalDocumentIDFromCurrentValuesPMT(fact, values, document_type_group_id, positionAbbreviation, runningInternalDocumentID);
+                        
                     }
+                    console.log("validateInternalDocumentIDFieldHelper:: positionAbbreviation",positionAbbreviation)
+                    documentTypeGroupIDSplit = `${document_type_group_id.toString()[0]}-${document_type_group_id.toString().substr(1)}`;
+                    fullYearBE = (parseInt(values["document_date"].slice(0, 4))+543).toString();
+                    try{
+                        let fullYearBEForAPI = (parseInt(fullYearBE)-543).toString();
+                        runningInternalDocumentID = await fetchLastestRunningInternalDocumentID(positionID, document_type_group_id, fullYearBEForAPI);
+                        let splitRunningInternalDocumentID =  runningInternalDocumentID.split(delimiter);
+                        runningInternalDocumentID = (parseInt(splitRunningInternalDocumentID[splitRunningInternalDocumentID.length-1]) + 1).toString().padStart(4, '0');
+                    }catch(err){
+                        if (err === 'No Results in fetchLastestRunningInternalDocumentID'){
+                            console.log("validateInternalDocumentIDFieldHelper:: No Results in fetchLastestRunningInternalDocumentID")
+                            runningInternalDocumentID = "0001";
+                        }else{
+                            throw "validateInternalDocumentIDFieldHelper:: try catch values.is_auto_internal_document_id === auto";
+                        }
+                    }
+                    internalDocumentID = [positionAbbreviation, documentTypeGroupIDSplit, fullYearBE, runningInternalDocumentID].join(delimiter);
+
+                    console.log("validateInternalDocumentIDFieldHelper:: internalDocumentID",internalDocumentID)
+
+                    // setFieldTouched('internal_document_id');
+                    await setFieldValue('internal_document_id', internalDocumentID, false);
                     
                 }
+
+                
 
             }
         })
@@ -2774,20 +2855,36 @@ export const validateInternalDocumentIDFieldHelper = (checkBooleanForEdit, docum
         });
 });
 
-export const getInternalDocumentIDFromCurrentValues = (fact, values, document_type_group_id, this_warehouse_id_name, delimiter = "/") => {
+// export const getInternalDocumentIDFromCurrentValues = (fact, values, document_type_group_id, this_warehouse_id_name, runningInternalDocumentIDInitial= null, delimiter = "/") => {
 
-    var positionAbbreviation, documentTypeGroupIDSplit, fullYearBE, runningInternalDocumentID; 
-    var internalDocumentID;
+//     var positionAbbreviation, documentTypeGroupIDSplit, fullYearBE, runningInternalDocumentID; 
+//     var internalDocumentID;
 
-    positionAbbreviation = getPositionAbbreviationFromWarehouseID(fact.position, values[this_warehouse_id_name]);
-    documentTypeGroupIDSplit = `${document_type_group_id.toString()[0]}-${document_type_group_id.toString().substr(1)}`;
-    fullYearBE = (parseInt(values["document_date"].slice(0, 4))+543).toString();
-    runningInternalDocumentID = "0000";
-    internalDocumentID = [positionAbbreviation, documentTypeGroupIDSplit, fullYearBE, runningInternalDocumentID].join(delimiter);
+//     let position = getPositionAbbreviationFromWarehouseID(fact.position, values[this_warehouse_id_name]);
+//     positionAbbreviation = position.abbreviation;
+//     documentTypeGroupIDSplit = `${document_type_group_id.toString()[0]}-${document_type_group_id.toString().substr(1)}`;
+//     fullYearBE = (parseInt(values["document_date"].slice(0, 4))+543).toString();
+//     runningInternalDocumentID = (runningInternalDocumentIDInitial) ? runningInternalDocumentIDInitial : "0000";
+//     internalDocumentID = [positionAbbreviation, documentTypeGroupIDSplit, fullYearBE, runningInternalDocumentID].join(delimiter);
 
-    return internalDocumentID;
+//     return internalDocumentID;
 
-}
+// }
+
+// export const getInternalDocumentIDFromCurrentValuesPMT = (fact, values, document_type_group_id, positionAbbreviation, runningInternalDocumentIDInitial= null, delimiter = "/") => {
+
+//     var positionAbbreviation, documentTypeGroupIDSplit, fullYearBE, runningInternalDocumentID; 
+//     var internalDocumentID;
+
+//     documentTypeGroupIDSplit = `${document_type_group_id.toString()[0]}-${document_type_group_id.toString().substr(1)}`;
+//     fullYearBE = (parseInt(values["document_date"].slice(0, 4))+543).toString();
+//     runningInternalDocumentID = (runningInternalDocumentIDInitial) ? runningInternalDocumentIDInitial : "0000";
+//     internalDocumentID = [positionAbbreviation, documentTypeGroupIDSplit, fullYearBE, runningInternalDocumentID].join(delimiter);
+//     console.log("internalDocumentID >>", internalDocumentID)
+
+//     return internalDocumentID;
+
+// }
 
 export const validateLineNumberInternalItemIDFieldHelper = (document_type_group_id, fact, values, setFieldValue, fieldName, internal_item_id, index) => {
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
@@ -3056,7 +3153,7 @@ export const approveDocument = (document_id, approval_step_action_id, userInfo, 
 // Get latest approval step
 // GET /approval/{document_id}/latest/step
 export const getLatestApprovalStep = (document_id, approval_step_action_id, userInfo, remark) => new Promise((resolve, reject) => {
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/latest/step`;
+    const url = `${BASE_URL}/approval/${document_id}/latest/step`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then(res => {
             console.log(" I am successful in get latest approval_step ", res.data);
@@ -3077,7 +3174,7 @@ export const getLatestApprovalStep = (document_id, approval_step_action_id, user
 // Cancel Approval Process ID
 // POST /approval/{document_id}/{approval_process_id}/cancel
 export const cancelApproval = (document_id, approval_process_id) => new Promise((resolve, reject) => {
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/${approval_process_id}/cancel`;
+    const url = `${BASE_URL}/approval/${document_id}/${approval_process_id}/cancel`;
     axios.post(url, '', { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then(res => {
             console.log(" I am successful in get latest approval_step ", res.data);
@@ -3091,7 +3188,7 @@ export const cancelApproval = (document_id, approval_process_id) => new Promise(
 // POST /approval/{document_id}/approval_process_id/approve
 export const approveDocuement = (document_id, obj_body) => new Promise((resolve, reject) => {
     console.log("approveDocuement obj_body ------>", obj_body);
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/approval/${document_id}/${obj_body.approval_process_id}/approve`;
+    const url = `${BASE_URL}/approval/${document_id}/${obj_body.approval_process_id}/approve`;
     axios.post(url, obj_body, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then(res => {
             console.log(" I am successful in creating approval to document with document_id ", res);
@@ -3105,7 +3202,7 @@ export const approveDocuement = (document_id, obj_body) => new Promise((resolve,
 // Validate Token: 200 if token is valid and not expired, 400 otherwise. + requestBody {'refresh_token': true} 201 and token is refreshed [if not expired]
 // POST /auth/token-validation
 export const validateToken = (willRefreshToken) => new Promise((resolve, reject) => {
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/auth/token-validation`;
+    const url = `${BASE_URL}/auth/token-validation`;
     const requestBody = willRefreshToken ? { 'refresh_token': true } : null;
     axios.post(url, requestBody, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then(res => {
@@ -3423,7 +3520,7 @@ export const ALSGetDocumentSS101 = (begin_document_date, end_document_date) => n
     let page_size = 100000;
     // let begin_document_date = "2020-07-16";
     // let end_document_date = "2020-07-16";
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/ss101/search?page_number=${page_number}&page_size=${page_size}&begin_document_date=${begin_document_date}&end_document_date=${end_document_date}`;
+    const url = `${BASE_URL}/document/ss101/search?page_number=${page_number}&page_size=${page_size}&begin_document_date=${begin_document_date}&end_document_date=${end_document_date}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then(res => {
             resolve(res.data);
@@ -3458,7 +3555,7 @@ export const ALSGetDocumentPMTPlan = (begin_document_date, end_document_date) =>
     let page_number = 0;
     let page_size = 100000;
     let document_type = 205
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=${document_type}&page_number=${page_number}&page_size=${page_size}&begin_document_date=${begin_document_date}&end_document_date=${end_document_date}`;
+    const url = `${BASE_URL}/document/search?document_type_group_id=${document_type}&page_number=${page_number}&page_size=${page_size}&begin_document_date=${begin_document_date}&end_document_date=${end_document_date}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then(res => {
             resolve(res.data);
@@ -3471,7 +3568,7 @@ export const ALSGetDocumentPMTPlan = (begin_document_date, end_document_date) =>
 export const ALSGetEquipmentGroupMTBF = (begin_document_date, end_document_date, equipment_group_id) => new Promise((resolve, reject) => {
     let page_number = 0;
     let page_size = 100000;
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/equipment_group/${equipment_group_id}/history?&page_number=${page_number}&page_size=${page_size}&begin_document_date=${begin_document_date}&end_document_date=${end_document_date}`;
+    const url = `${BASE_URL}/fact/equipment_group/${equipment_group_id}/history?&page_number=${page_number}&page_size=${page_size}&begin_document_date=${begin_document_date}&end_document_date=${end_document_date}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then(res => {
             resolve(res.data);
