@@ -123,7 +123,7 @@ const TopContent = (props) => {
                 <h4 className="head-title">ดำเนินการซ่อมบำรุง</h4>
                 <div id={changeTheam() === true ? "blackground-white" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "150px", paddingTop: "10px" } : {}} >
                     {/* === Left Column === */}
-                    <div className={changeTheam() === true ? "grid_5" : "grid_6"}>
+                    <div className={changeTheam() === true ? "grid_7" : "grid_6"}>
 
                         {/* Document ID */}
                         <div className="grid_1 alpha white-space">
@@ -187,7 +187,7 @@ const TopContent = (props) => {
 
 
                     {/* === Right Column === */}
-                    <div className="grid_6 prefix_2">
+                    <div className="grid_4">
 
                         {/* Document Status  */}
                         <Label>สถานะ</Label>

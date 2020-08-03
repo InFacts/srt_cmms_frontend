@@ -83,7 +83,7 @@ const TopContent = (props) => {
 
                 <div id={changeTheam() === true ? "blackground-white" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "200px", paddingTop: "10px" } : {}} >
                     {/* === Left Column === */}
-                    <div className={changeTheam() === true ? "grid_5" : "grid_6"} style={{ paddingLeft: "10px" }}>
+                    <div className={changeTheam() === true ? "grid_7" : "grid_6"} style={{ paddingLeft: "10px" }}>
 
                         {/* Document ID */}
                         <div className="grid_1 alpha white-space">
@@ -149,7 +149,7 @@ const TopContent = (props) => {
                     </div>
 
                     {/* === Right Column === */}
-                    <div className="grid_6 prefix_2">
+                    <div className="grid_4">
 
                         {/* Created On */}
                         <Label>สถานะ</Label>
