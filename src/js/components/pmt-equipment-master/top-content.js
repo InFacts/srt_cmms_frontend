@@ -36,7 +36,6 @@ const TopContent = (props) => {
   const factItemStatus = useSelector((state) => ({ ...state.api.fact[FACTS.ITEM_STATUS] }), shallowEqual);
 
   const responseToFormState = (data) => {
-    console.log("data>>>>", data)
     return {
       item_id: data.item_id,
       internal_item_id: data.equipment_group.item.internal_item_id,
@@ -82,7 +81,7 @@ const TopContent = (props) => {
     if (!internal_item_id) {
       return 'Required';
     }
-    if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
+    if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
       && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) {
       if (internal_item_id !== values.internal_item_id) {
         var item_match_equipments = factEquipment.items;
@@ -153,13 +152,13 @@ const TopContent = (props) => {
               <div className="grid_3 pull_1">
                 <TextInput name='internal_item_id'
                   validate={validateInternalItemIDField}
-                  searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart" tabIndex="1" />
+                  searchable={toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} ariaControls="modalNoPart" tabIndex="1" />
               </div>
 
               {/* === item_type_id === */}
               <div className="float-right">
                 <div className="grid_3 float-right">
-                  <SelectNoChildrenInput name="item_type_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="2"
+                  <SelectNoChildrenInput name="item_type_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} tabIndex="2"
                     validate={validateItemTypeIDField} cssStyle={{ left: "-160px", top: "10px" }}>
                     <option value=''></option>
                     {values.item_type_id === 1 ? <option value='2' selected>asset</option> : <option value='2'>asset</option>}
@@ -176,12 +175,12 @@ const TopContent = (props) => {
               {/* === description === */}
               <FormLabel>รายละเอียด</FormLabel>
               <div className="grid_3 pull_1">
-                <TextInput name="description" validate={validateItemDescriptionField} disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="3" />
+                <TextInput name="description" validate={validateItemDescriptionField} disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} tabIndex="3" />
               </div>
 
               <div className="float-right">
                 <div className="grid_3 float-right">
-                  <SelectNoChildrenInput name="item_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateItemGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="4">
+                  <SelectNoChildrenInput name="item_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} validate={validateItemGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="4">
                     <option value=''></option>
                     {fact[FACTS.ITEM_GROUP].items.map((item_group) => (
                       values.item_group_id === item_group.item_group_id
@@ -204,7 +203,7 @@ const TopContent = (props) => {
               {/* === equipment_status_id_th === */}
               <FormLabel>สถานะการใช้งาน</FormLabel>
               <div className="grid_3 pull_0">
-                <SelectNoChildrenInput name="item_status_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="5"
+                <SelectNoChildrenInput name="item_status_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} tabIndex="5"
                   validate={validateItemStatusIDField} cssStyle={{ left: "-160px", top: "10px" }}>
                   <option value=''></option>
                   {factItemStatus.items.map((item_status) => {

@@ -61,7 +61,7 @@ const BottomContent = () => {
                 <p className="cancel-default">ชื่อย่อหน่วยนับ </p>
               </div>
               <div className="grid_3 pull_1">
-                <SelectNoChildrenInput name="uom_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomIDField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="6">
+                <SelectNoChildrenInput name="uom_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} validate={validateUomIDField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="6">
                   <option value=''></option>
                   {fact['unit-of-measures'].items.map((list_uoms) => (
                     list_uoms.uom_id === values.uom_id
@@ -80,7 +80,7 @@ const BottomContent = () => {
                 <div className="grid_2">
                   <NumberInput step={0.01} name="minimum_order_quantity" tabIndex="7" cssStyle={{ left: "60px", top: "-5px" }}
                     validate={validateMinimumOrderQuantityField}
-                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH}
                   />
                 </div>
                 <div className="grid_1 ml-0 pull_0">
@@ -103,7 +103,7 @@ const BottomContent = () => {
                 </div>
                 <div className="grid_2">
                   <NumberInput step={1} name="lead_time" tabIndex="8" validate={validateLeadTimeField} cssStyle={{ left: "60px", top: "-5px" }}
-                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH}
                   />
                 </div>
                 <div className="grid_1">
@@ -120,7 +120,7 @@ const BottomContent = () => {
                 <div className="grid_2">
                   <NumberInput step={1} name="tolerance_time" tabIndex="9"
                     validate={validateToleranceTimeField} cssStyle={{ left: "60px", top: "-5px" }}
-                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH}
                   />
                 </div>
                 <div className="grid_1">
@@ -134,7 +134,7 @@ const BottomContent = () => {
                 <p className="cancel-default">สถานะอะไหล่ </p>
               </div>
               <div className="grid_3 pull_1">
-                <SelectNoChildrenInput name="active" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                <SelectNoChildrenInput name="active" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH}
                   validate={validateActiveField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="10">
                   <option value=''></option>
                   {values.active === 0
@@ -157,7 +157,7 @@ const BottomContent = () => {
                 </div>
                 <div className="grid_2">
                   <TextInput name="accounting_type"
-                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="11" />
+                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} tabIndex="11" />
                 </div>
                 <div className="grid_1">
                   <p className="cancel-default"></p>
@@ -169,7 +169,7 @@ const BottomContent = () => {
               <div className="grid_1"><p className="cancel-default">หมายเหตุ</p></div>
               <div className="grid_11">
                 <TextareaInput name="remark" tabIndex="12"
-                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH}
                 />
               </div>
             </div>
@@ -192,7 +192,7 @@ const BottomContent = () => {
               <div className="grid_2 pull_0">
                 <NumberInput step={0.01} name="quantity_required" tabIndex="13"
                   validate={validateQuantityRequiredField} cssStyle={{ left: "60px", top: "-5px" }}
-                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH}
                 />
               </div>
               <div className="grid_1 ml-0 pull_0"></div>
@@ -205,7 +205,7 @@ const BottomContent = () => {
               <div className="grid_2 pull_0">
                 <NumberInput step={0.01} name="quantity_lowest" tabIndex="14"
                   validate={validateQuantityLowestField} cssStyle={{ left: "60px", top: "-5px" }}
-                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH}
                 />
               </div>
               <div className="grid_1 ml-0 pull_0">
@@ -219,7 +219,7 @@ const BottomContent = () => {
               <div className="grid_2 pull_0">
                 <NumberInput step={0.01} name="quantity_highest" tabIndex="15"
                   validate={validateQuantityHighestField} cssStyle={{ left: "60px", top: "-5px" }}
-                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH}
                 />
               </div>
               <div className="grid_3 float-right">

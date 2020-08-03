@@ -8,7 +8,8 @@ export const TOOLBAR_MODE = {
     NONE_HOME: "NONE_HOME",
     SEARCH: "SEARCH",
     JUST_SEARCH: "JUST_SEARCH",
-    ADD: "ADD"
+    ADD: "ADD",
+    REPORT: "REPORT"
 }
 
 export const TOOLBAR_ACTIONS = {
@@ -31,6 +32,7 @@ const TO_MODE_NONE_HOME = "toolbar/TO_MODE_NONE_HOME";
 const TO_MODE_SEARCH = "toolbar/TO_MODE_SEARCH";
 const TO_MODE_JUST_SEARCH = "toolbar/TO_MODE_JUST_SEARCH";
 const TO_MODE_ADD = "toolbar/TO_MODE_ADD";
+const TO_MODE_REPORT = "toolbar/TO_MODE_REPORT";
 
 const CLICK_HOME = "toolbar/CLICK_HOME";
 const CLICK_ADD = "toolbar/CLICK_ADD";
@@ -94,6 +96,11 @@ export default function reducer(state = initialState, action) {
             return {
                 ...state,
                 mode: TOOLBAR_MODE.ADD
+            }
+            case TO_MODE_REPORT:
+            return {
+                ...state,
+                mode: TOOLBAR_MODE.REPORT
             }
 
         // CLICK
@@ -228,6 +235,7 @@ export const toModeNoneHome = makeActionCreator(TO_MODE_NONE_HOME);
 export const toModeSearch = makeActionCreator(TO_MODE_SEARCH);
 export const toModeJustSearch = makeActionCreator(TO_MODE_JUST_SEARCH);
 export const toModeAdd = makeActionCreator(TO_MODE_ADD);
+export const toModeReport = makeActionCreator(TO_MODE_REPORT);
 
 export const clickHome = makeActionCreator(CLICK_HOME);
 export const clickAdd = makeActionCreator(CLICK_ADD);
@@ -264,4 +272,5 @@ export const MODE_TO_ACTION_CREATOR = {
     [TOOLBAR_MODE.SEARCH]: toModeSearch,
     [TOOLBAR_MODE.JUST_SEARCH]: toModeJustSearch,
     [TOOLBAR_MODE.ADD]: toModeAdd,
+    [TOOLBAR_MODE.REPORT]: toModeReport,
 }

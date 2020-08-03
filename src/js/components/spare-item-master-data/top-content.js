@@ -87,7 +87,7 @@ const TopContent = (props) => {
       return 'Required';
     }
 
-    if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
+    if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
       && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) {
       if (internal_item_id !== values.internal_item_id) {
         let items = fact.items.items;
@@ -143,12 +143,12 @@ const TopContent = (props) => {
               <div className="grid_3 pull_1">
                 <TextInput name='internal_item_id'
                   validate={validateInternalItemIDField}
-                  searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart" tabIndex="1" />
+                  searchable={toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} ariaControls="modalNoPart" tabIndex="1" />
               </div>
               <div className="float-right">
                 <div className="grid_3 float-right">
                   <SelectNoChildrenInput name="item_type_id" validate={validateItemTypeIDField} cssStyle={{ left: "-160px", top: "10px" }}
-                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="2">
+                    disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} tabIndex="2">
                     <option value=''></option>
                     <option value='1'>item</option>
                   </SelectNoChildrenInput>
@@ -162,11 +162,11 @@ const TopContent = (props) => {
             <div className="container_12">
               <FormLabel>รายละเอียด</FormLabel>
               <div className="grid_3 pull_1">
-                <TextInput name="description" validate={validateItemDescriptionField} disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="3" />
+                <TextInput name="description" validate={validateItemDescriptionField} disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} tabIndex="3" />
               </div>
               <div className="float-right">
                 <div className="grid_3 float-right">
-                  <SelectNoChildrenInput name="item_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateItemGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="4">
+                  <SelectNoChildrenInput name="item_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} validate={validateItemGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="4">
                     <option value=''></option>
                     {fact[FACTS.ITEM_GROUP].items.map((item_group) => (
                       values.item_group_id === item_group.item_group_id

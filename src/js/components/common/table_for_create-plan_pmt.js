@@ -35,8 +35,8 @@ const Table = (props) => {
                 <TextInput name={`checklist_line_item_use_equipment[${index}].internal_item_id`}
                   validate={internal_item_id => props.validateLineNumberInternalItemIDField(`checklist_line_item_use_equipment[${index}]`, internal_item_id, index)} 
                   tabIndex={props.tabIndex + line_number}
-                  disabled={props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                  searchable={props.checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH} ariaControls="modalNoPart"
+                  disabled={props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH}
+                  searchable={props.checkBooleanForEdit === true ? true : toolbar.mode !== TOOLBAR_MODE.SEARCH || toolbar.mode !== TOOLBAR_MODE.JUST_SEARCH} ariaControls="modalNoPart"
                   handleModalClick={() => props.setLineNumber(index + 1)}
                   redBorderForError="error-in-table"
                 />
@@ -45,7 +45,7 @@ const Table = (props) => {
               <td className="edit-padding text-center">
                 {/* {list.quantity && list.quantity} */}
                 <NumberInput step={1} name={`checklist_line_item_use_equipment[${index}].quantity`} tabIndex={props.tabIndex + line_number}
-                  disabled={props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  disabled={props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH}
                   redBorderForError="error-in-table" />
               </td>
               {/* <td className="edit-padding text-center">
@@ -53,7 +53,7 @@ const Table = (props) => {
               </td> */}
               <td className="edit-padding text-center">
                 {/* {list.item && list.item.uom_group.uom[0].name} */}
-                <SelectNoChildrenInput name={`checklist_line_item_use_equipment[${index}].uom_id`} disabled={props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex={props.tabIndex + line_number}>
+                <SelectNoChildrenInput name={`checklist_line_item_use_equipment[${index}].uom_id`} disabled={props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} tabIndex={props.tabIndex + line_number}>
                   <option value=''></option>
                   {factUnit.items.map((factUnit) => {
                     if (props.checklist_line_item_use_equipment[index].uom_group_id === factUnit.uom_group_id)

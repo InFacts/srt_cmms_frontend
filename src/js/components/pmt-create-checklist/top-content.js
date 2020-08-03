@@ -45,7 +45,7 @@ const TopContent = (props) => {
       .then((res) => {
         console.log("I Got data", res.data)
         if (res.data.checklist_line_item.name === name) { // If input document ID exists
-          if (toolbar.mode === TOOLBAR_MODE.SEARCH && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value
+          if (toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value
             if (name !== values.name) {
 
               // setFieldValue("active", 2, false) // demo
@@ -89,7 +89,7 @@ const TopContent = (props) => {
         }
       })
       .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
-        if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
+        if (toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH) { //If Mode Search, invalid Document ID
           error = 'Invalid Document ID';
           console.log("err", err.response)
         }//If mode add, ok
@@ -120,7 +120,7 @@ const TopContent = (props) => {
               </div>
               <div className="grid_3 alpha omega pull_0">
                 <TextInput name='name' validate={validateNameChecklist}
-                  searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalChecklistLineItem" tabIndex="1" />
+                  searchable={toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} ariaControls="modalChecklistLineItem" tabIndex="1" />
               </div>
 
             </div>
@@ -148,7 +148,7 @@ const TopContent = (props) => {
                 <p className="top-text">กลุ่มการทำวาระ</p>
               </div>
               <div className="grid_3 alpha omega pull_0">
-                <SelectNoChildrenInput name="checklist_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="3"
+                <SelectNoChildrenInput name="checklist_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} tabIndex="3"
                   validate={validateChecklistGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} >
                   <option value=''></option>
                   {factChecklistGroup.items.map((factChecklistGroup) => {
@@ -166,7 +166,7 @@ const TopContent = (props) => {
                 <p className="top-text">ชนิดการทำวาระ</p>
               </div>
               <div className="grid_3 alpha omega pull_0">
-                <SelectNoChildrenInput name="checklist_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="4"
+                <SelectNoChildrenInput name="checklist_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} tabIndex="4"
                   validate={validateChecklistIDField} cssStyle={{ left: "-160px", top: "10px" }}>
                   <option value=''></option>
                   {factChecklist.items.map((factChecklist) => {
@@ -186,13 +186,13 @@ const TopContent = (props) => {
               </div>
               <div className="grid_3 alpha omega pull_0">
                 <NumberInput name="freq" step={1} tabIndex="5" validate={validateFrepField}
-                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} cssStyle={{ left: "60px", top: "-5px" }} />
+                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} cssStyle={{ left: "60px", top: "-5px" }} />
               </div>
               <div className="grid_1 omega pull_0">
                 <p className="top-text">ครั้งต่อ</p>
               </div>
               <div className="grid_2 alpha omega pull_0">
-                <SelectNoChildrenInput name="freq_unit_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="6"
+                <SelectNoChildrenInput name="freq_unit_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} tabIndex="6"
                   validate={validateFrepUnitIDField} cssStyle={{ left: "-80px", top: "10px" }}>
                   <option value=''></option>
                   <option value='1'>วัน</option>

@@ -32,7 +32,7 @@ const ReportS1Component = (props) => {
         {id:"listItem", name:"รายการ"},
     ]);
 
-    useToolbarInitializer(TOOLBAR_MODE.SEARCH);
+    useToolbarInitializer(TOOLBAR_MODE.REPORT);
     useTokenInitializer();
     useFactInitializer();
     useExportPdfInitializer();

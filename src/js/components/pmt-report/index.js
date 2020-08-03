@@ -28,7 +28,7 @@ const ReportS1Component = (props) => {
     const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
     const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
 
-    useToolbarInitializer(TOOLBAR_MODE.SEARCH);
+    useToolbarInitializer(TOOLBAR_MODE.REPORT);
     useTokenInitializer();
     useFactInitializer();
     useExportPdfInitializer();
