@@ -22,6 +22,7 @@ import {
 
 import { FACTS } from '../../redux/modules/api/fact.js';
 import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
+import RadioAutoIncrementInput from '../common/formik-radio-input-ai'
 
 import BgBlue from '../../../images/pmt/bg_blue.jpg';
 import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
@@ -40,7 +41,7 @@ const TopContent = (props) => {
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
   // Fill Default Forms
-  useFillDefaultsOnModeAdd();
+  // useFillDefaultsOnModeAdd(DOCUMENT_TYPE_ID.WORK_ORDER_PM);
   const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDWorfOrderPMFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.WORK_ORDER_PM, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
 
   const validateNameField = (...args) => validatedataDocumentField("name", setFieldValue, ...args)

@@ -5,6 +5,7 @@ import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
 import { API_URL_DATABASE } from '../../config_url.js';
 import { v4 as uuidv4 } from 'uuid';
+import RadioAutoIncrementInput from '../common/formik-radio-input-ai'
 
 import FormInput from '../common/form-input'
 import TextInput from '../common/formik-text-input'
@@ -36,7 +37,7 @@ const TopContent = (props) => {
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
     // Fill Default Forms
-    useFillDefaultsOnModeAdd();
+    useFillDefaultsOnModeAdd(DOCUMENT_TYPE_ID.WORK_ORDER);
 
     const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.WORK_ORDER, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
 
@@ -103,9 +104,15 @@ const TopContent = (props) => {
                         <div className="grid_3 alpha">
                             <TextInput name='internal_document_id'
                                 validate={validateInternalDocumentIDField}
+                                disabled={values.is_auto_internal_document_id === "auto" && toolbar.mode === TOOLBAR_MODE.ADD ? true: false}
                                 searchable={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                ariaControls="modalDocument"
-                                tabIndex="1" />
+                                ariaControls="modalDocument" tabIndex="1" />
+                        </div>
+                        <div className="grid_2">
+                            <RadioAutoIncrementInput 
+                            name='is_auto_internal_document_id'
+                            disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                            />
                         </div>
                         <div class="clear" />
 

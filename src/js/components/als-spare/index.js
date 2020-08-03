@@ -1084,7 +1084,7 @@ const AlsSpareComponent = () => {
 
 const EnhancedAlsSpareComponent = withFormik({
   mapPropsToValues: () => ({
-    year: 2020,
+    year: 2563,
     warehouse_id: '',
     item_id: '',
     goal_inventory_month: 6,

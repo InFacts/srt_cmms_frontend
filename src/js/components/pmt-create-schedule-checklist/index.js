@@ -174,6 +174,7 @@ const EnhancedGoodsReceiptComponent = withFormik({
         station: [],
 
         remark_approval: "",
+        is_auto_internal_document_id: 'auto',
     })
 })(GoodsReceiptComponent);
 

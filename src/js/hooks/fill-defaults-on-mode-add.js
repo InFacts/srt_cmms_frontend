@@ -78,6 +78,7 @@ const useFillDefaultsOnModeAdd = (document_type_group_id) => {
 
                 // If auto increment
                 if(values.is_auto_internal_document_id === "auto") {
+                    console.log("document_type_group_id",document_type_group_id)
                     documentTypeGroupIDSplit = `${document_type_group_id.toString()[0]}-${document_type_group_id.toString().substr(1)}`;
                     fullYearBE = (parseInt(localISOTime.slice(0, 4))+543).toString();
 

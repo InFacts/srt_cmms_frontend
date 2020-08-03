@@ -20,6 +20,7 @@ import {
     checkBooleanForEditHelper
 } from '../../helper';
 import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
+import RadioAutoIncrementInput from '../common/formik-radio-input-ai'
 
 import { useFormikContext, useField } from 'formik';
 
@@ -134,6 +135,12 @@ const TopContent = (props) => {
                                 searchable={toolbar.mode === TOOLBAR_MODE.SEARCH}
                                 ariaControls="modalDocument"
                                 tabIndex="1" />
+                        </div>
+                        <div className="grid_2">
+                            <RadioAutoIncrementInput 
+                            name='is_auto_internal_document_id'
+                            disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                            />
                         </div>
                         <div className="clear" />
 

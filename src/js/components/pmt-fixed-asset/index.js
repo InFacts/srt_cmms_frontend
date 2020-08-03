@@ -149,6 +149,7 @@ const EnhancedGoodsReceiptComponent = withFormik({
         // For Attactment
         desrciption_files_length: '',
         desrciption_files: [],
+        is_auto_internal_document_id: 'auto',
     })
 })(GoodsReceiptComponent);
 
