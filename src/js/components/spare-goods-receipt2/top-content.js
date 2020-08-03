@@ -5,7 +5,7 @@ import FormInput from '../common/form-input'
 import TextInput from '../common/formik-text-input'
 import DateTimeInput from '../common/formik-datetime-input'
 import DateInput from '../common/formik-date-input'
-import RadioAutoIncrementInput from '../common/formik-radio-input-ai'
+import RadioAutoIncrementInput from '../common/formik-radio-input-ai';
 
 import { useFormikContext } from 'formik';
 
@@ -24,7 +24,7 @@ import {
 } from '../../helper';
 import { FACTS } from '../../redux/modules/api/fact.js';
 import { FOOTER_MODE, FOOTER_ACTIONS } from '../../redux/modules/footer.js';
-import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
+import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add';
 
 import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const TopContent = (props) => {
