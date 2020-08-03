@@ -971,7 +971,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
                                 {
                                     document_id: values.document_id,
                                     checklist_name: line_item.checklist_th,
-                                    remark: "string",
+                                    remark: "",
                                     checklist_id: parseInt(line_item.checklist_id),
                                     is_have: true
                                 }
@@ -2513,7 +2513,7 @@ export const validateInternalDocumentIDWorfOrderPMFieldHelper = (decoded_token, 
     // Internal Document ID
     //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
     //  ie. GR-PYO-2563/0001
-    if (checkBooleanForEdit === true && (toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)) {
+    if (checkBooleanForEdit === true && (toolbar.mode === TOOLBAR_MODE.REPORT || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)) {
         return resolve();
     }
     if (document_type_group_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM) {
@@ -2521,7 +2521,7 @@ export const validateInternalDocumentIDWorfOrderPMFieldHelper = (decoded_token, 
         getDocumentbyInternalDocumentID(internal_document_id)
             .then((data) => {
                 console.log(" i got data", data);
-                if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
+                if ((toolbar.mode === TOOLBAR_MODE.REPORT || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
                     && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
                     console.log("validateInternalDocumentIDField:: I got document ID ")
                     setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
@@ -2532,7 +2532,7 @@ export const validateInternalDocumentIDWorfOrderPMFieldHelper = (decoded_token, 
                 console.log("I think I have 404 not found in doc id.")
                 setFieldValue('document_id', '', false);
 
-                if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
+                if (toolbar.mode === TOOLBAR_MODE.REPORT) { //If Mode Search, invalid Document ID
                     error = 'Document ID not Found in System';
                 } else {//If mode add, ok
                     console.log("document ID doesn't exist but I am in mode add")

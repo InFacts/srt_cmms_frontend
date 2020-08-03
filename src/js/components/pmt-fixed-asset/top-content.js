@@ -72,7 +72,7 @@ const TopContent = (props) => {
               <div className="grid_3">
                 <TextInput name='internal_document_id'
                   validate={validateInternalDocumentIDField}
-                  searchable={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  searchable={toolbar.mode === TOOLBAR_MODE.REPORT}
                   ariaControls="modalDocument"
                   tabIndex="1" />
               </div>
@@ -143,7 +143,7 @@ const TopContent = (props) => {
               <div className="grid_3 alpha">
                 <DateInput name="document_date"
                   validate={validateDocumentDateField}
-                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.REPORT}
                   tabIndex="7" />
               </div>
               <div class="clear" />

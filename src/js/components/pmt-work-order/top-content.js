@@ -50,12 +50,15 @@ const TopContent = (props) => {
         // Internal Document ID
         //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
         //  ie. GR-PYO-2563/0001
-        let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS|WR)-[A-Z]{3}-\d{4}\/\d{4}$/g
+        let internalOldDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS|WR)-[A-Z]{3}-\d{4}\/\d{4}$/g
+        let internalDocumentIDRegex = /^[\u0E00-\u0E7F()]+.[\u0E00-\u0E7F()\d]*.?-?[\u0E00-\u0E7F()]*.?\d?\/[1-3]-\d{2}\/\d{4}\/\d{4}$/g;
         let draftInternalDocumentIDRegex = /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
         // let draftInternalDocumentIDRegex = /^heh/g
         if (!refer_to_document_internal_id) {
             return resolve('Required');
-        } else if (!internalDocumentIDRegex.test(refer_to_document_internal_id) && !draftInternalDocumentIDRegex.test(refer_to_document_internal_id)) { //
+        } else if (!internalDocumentIDRegex.test(refer_to_document_internal_id)
+            && !internalOldDocumentIDRegex.test(refer_to_document_internal_id)
+            && !draftInternalDocumentIDRegex.test(refer_to_document_internal_id)) { //
             return resolve('Invalid Document ID Format\nBe sure to use the format ie. S1646-PYO-2563/0001')
         }
 
@@ -82,12 +85,12 @@ const TopContent = (props) => {
             });
     });
 
-  let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
-  useEffect(() => {
-    checkBooleanForEdit = false
-    validateField("internal_document_id")
-  }, [values.internal_document_id])
-  
+    let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
+    useEffect(() => {
+        checkBooleanForEdit = false
+        validateField("internal_document_id")
+    }, [values.internal_document_id])
+
     return (
         <div id={changeTheam() === true ? "" : "blackground-white"}>
             <div className="container_12 clearfix" style={{ marginTop: "55px" }}>
@@ -104,14 +107,14 @@ const TopContent = (props) => {
                         <div className="grid_3 alpha">
                             <TextInput name='internal_document_id'
                                 validate={validateInternalDocumentIDField}
-                                disabled={values.is_auto_internal_document_id === "auto" && toolbar.mode === TOOLBAR_MODE.ADD ? true: false}
+                                disabled={values.is_auto_internal_document_id === "auto" && toolbar.mode === TOOLBAR_MODE.ADD ? true : false}
                                 searchable={toolbar.mode === TOOLBAR_MODE.SEARCH}
                                 ariaControls="modalDocument" tabIndex="1" />
                         </div>
                         <div className="grid_2">
-                            <RadioAutoIncrementInput 
-                            name='is_auto_internal_document_id'
-                            disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                            <RadioAutoIncrementInput
+                                name='is_auto_internal_document_id'
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                             />
                         </div>
                         <div class="clear" />

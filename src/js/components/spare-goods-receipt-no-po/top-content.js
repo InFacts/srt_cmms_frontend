@@ -74,12 +74,15 @@ const TopContent = (props) => {
     if (refer_to_document_internal_id === values.refer_to_document_internal_id) {
       return resolve();
     }
-    let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS)-[A-Z]{3}-\d{4}\/\d{4}$/g
+    let internalOldDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS)-[A-Z]{3}-\d{4}\/\d{4}$/g
+    let internalDocumentIDRegex = /^[\u0E00-\u0E7F()]+.[\u0E00-\u0E7F()\d]*.?-?[\u0E00-\u0E7F()]*.?\d?\/[1-3]-\d{2}\/\d{4}\/\d{4}$/g;
     let draftInternalDocumentIDRegex = /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
     // let draftInternalDocumentIDRegex = /^heh/g
     if (!refer_to_document_internal_id) {
       return resolve('Required');
-    } else if (!internalDocumentIDRegex.test(refer_to_document_internal_id) && !draftInternalDocumentIDRegex.test(refer_to_document_internal_id)) { //
+    } else if (!internalDocumentIDRegex.test(refer_to_document_internal_id)
+      && !internalOldDocumentIDRegex.test(refer_to_document_internal_id)
+      && !draftInternalDocumentIDRegex.test(refer_to_document_internal_id)) { //
       return resolve('Invalid Document ID Format\nBe sure to use the format ie. S1646-PYO-2563/0001')
     }
 
@@ -120,7 +123,7 @@ const TopContent = (props) => {
         <section className="container_12 ">
           <h4 className="head-title">นำอะไหล่เข้า</h4>
 
-          <div id={changeTheam() === true ? "blackground-white" : ""} 
+          <div id={changeTheam() === true ? "blackground-white" : ""}
             style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "150px", paddingTop: "10px" } : {}} >
 
             <div className="container_12">
@@ -130,14 +133,14 @@ const TopContent = (props) => {
                 <p className="top-text">เลขที่เอกสาร</p>
               </div>
               <div className="grid_3 pull_1">
-                <TextInput name='internal_document_id' 
+                <TextInput name='internal_document_id'
                   validate={validateInternalDocumentIDField}
-                  disabled={values.is_auto_internal_document_id === "auto" && toolbar.mode === TOOLBAR_MODE.ADD ? true: false}
-                  searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} 
+                  disabled={values.is_auto_internal_document_id === "auto" && toolbar.mode === TOOLBAR_MODE.ADD ? true : false}
+                  searchable={toolbar.mode === TOOLBAR_MODE.SEARCH}
                   ariaControls="modalDocument" tabIndex="1" />
               </div>
               <div className="grid_2 pull_1">
-                <RadioAutoIncrementInput 
+                <RadioAutoIncrementInput
                   name='is_auto_internal_document_id'
                   disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                 />

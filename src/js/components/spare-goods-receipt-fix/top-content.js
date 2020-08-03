@@ -72,29 +72,18 @@ const TopContent = (props) => {
 
   const validateInternalDocumentSS101ID = refer_to_document_internal_document_id => new Promise(resolve => {
     // Internal Document ID
-    //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
-    //  ie. GR-PYO-2563/0001
-    // console.log("I am validating document id")
-    let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS|MI)-[A-Z]{3}-\d{4}\/\d{4}$/g
+    let internalOldDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS|MI)-[A-Z]{3}-\d{4}\/\d{4}$/g
     let draftInternalDocumentIDRegex = /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
-    // let draftInternalDocumentIDRegex = /^heh/g
-    // if (!refer_to_document_internal_document_id) {
-    //   return resolve('Required');
-    // } else if (!internalDocumentIDRegex.test(refer_to_document_internal_document_id) && !draftInternalDocumentIDRegex.test(refer_to_document_internal_document_id)) { //
-    //   return resolve('Invalid Document ID Format\nBe sure to use the format ie. S1646-PYO-2563/0001')
-    // }
+    let internalDocumentIDRegex = /^[\u0E00-\u0E7F()]+.[\u0E00-\u0E7F()\d]*.?-?[\u0E00-\u0E7F()]*.?\d?\/[1-3]-\d{2}\/\d{4}\/\d{4}$/g;
 
     if (refer_to_document_internal_document_id) {
-      if (!internalDocumentIDRegex.test(refer_to_document_internal_document_id) && !draftInternalDocumentIDRegex.test(refer_to_document_internal_document_id)) { //
+      if (!internalDocumentIDRegex.test(refer_to_document_internal_document_id) && !draftInternalDocumentIDRegex.test(refer_to_document_internal_document_id)&& !internalOldDocumentIDRegex.test(refer_to_document_internal_document_id)) { //
         return resolve('Invalid Document ID Format\nBe sure to use the format ie. S1646-PYO-2563/0001')
       }
     }
     if (values.refer_to_document_internal_document_id === refer_to_document_internal_document_id) {
       return resolve(null);
     }
-    // if (!refer_to_document_internal_document_id) {
-    //   return resolve(); // Resolve doesn't return
-    // }
     let error;
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/internal_document_id/${encodeURIComponent(refer_to_document_internal_document_id)}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
