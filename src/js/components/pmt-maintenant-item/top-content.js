@@ -36,7 +36,7 @@ const TopContent = (props) => {
 
     // Fill Default Forms
     useFillDefaultsOnModeAdd(DOCUMENT_TYPE_ID.MAINTENANT_ITEM);
-    const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.MAINTENANT_ITEM, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
+    const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(decoded_token, checkBooleanForEdit, DOCUMENT_TYPE_ID.MAINTENANT_ITEM, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
 
     const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
     const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);

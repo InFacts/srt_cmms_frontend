@@ -6,7 +6,8 @@ import { FACTS } from '../../redux/modules/api/fact.js';
 import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
 
 import CheckboxInput from '../common/formik-checkbox-input';
-import SelectNoChildrenInput from '../common/formik-select-no-children';
+import NumberInput from '../common/formik-number-input';
+import TextInput from '../common/formik-text-input';
 import '../../../css/table.css';
 
 import BgBlue from '../../../images/pmt/bg_blue.jpg';
@@ -29,6 +30,7 @@ const BottomContent = (props) => {
               <tr>
                 <th className="font text-center" style={{ width: "30px" }}>#</th>
                 <th className="font" style={{ minWidth: "30px" }}>ACTION</th>
+                <th className="font" style={{ minWidth: "100px" }}>ค่าใช้จ่าย</th>
                 <th className="font" style={{ minWidth: "350px" }}>แผน</th>
                 <th className="font" style={{ minWidth: "350px" }}>หมายเหตุ</th>
               </tr>
@@ -47,8 +49,15 @@ const BottomContent = (props) => {
                               disabled={values.checkBooleanForEdit === true ? false : values.toolbar_mode === TOOLBAR_MODE.SEARCH}
                               checked={values.checklist_line_item[index].is_checked} value={true} />
                           </td>
-                          <td className="edit-padding" style={{ overflow: "hidden" }}>{list.checklist_name + "\\\\" + list.checklist_line_item_name}</td>
-                          <td className="edit-padding"></td>
+                          <td className="edit-padding">
+                            <NumberInput name={`checklist_line_item[${index}].cost`}
+                              disabled={values.checkBooleanForEdit === true ? false : values.toolbar_mode === TOOLBAR_MODE.SEARCH} />
+                          </td>
+                          <td className="edit-padding" style={{ overflow: "hidden", maxWidth: "600px" }}>{list.checklist_name + "\\\\" + list.checklist_line_item_name}</td>
+                          <td className="edit-padding">
+                            <TextInput name={`checklist_line_item[${index}].remark`}
+                              disabled={values.checkBooleanForEdit === true ? false : values.toolbar_mode === TOOLBAR_MODE.SEARCH} />
+                          </td>
                         </tr>
                       )
                     }
@@ -64,8 +73,15 @@ const BottomContent = (props) => {
                               disabled={values.checkBooleanForEdit === true ? false : values.toolbar_mode === TOOLBAR_MODE.SEARCH}
                               checked={values.checklist_line_item[index].is_checked} value={1} />
                           </td>
-                          <td className="edit-padding" style={{ overflow: "hidden" }}>{list.checklist_line_item_name}</td>
-                          <td className="edit-padding"></td>
+                          <td className="edit-padding">
+                            <NumberInput name={`checklist_line_item[${index}].cost`}
+                              disabled={values.checkBooleanForEdit === true ? false : values.toolbar_mode === TOOLBAR_MODE.SEARCH} />
+                          </td>
+                          <td className="edit-padding" style={{ overflow: "hidden", maxWidth: "600px" }}>{list.checklist_line_item_name}</td>
+                          <td className="edit-padding">
+                            <TextInput name={`checklist_line_item[${index}].remark`}
+                              disabled={values.checkBooleanForEdit === true ? false : values.toolbar_mode === TOOLBAR_MODE.SEARCH} />
+                          </td>
                         </tr>
                       )
                     }

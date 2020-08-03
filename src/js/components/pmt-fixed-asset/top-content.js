@@ -41,8 +41,8 @@ const TopContent = (props) => {
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
   // Fill Default Forms
-  // useFillDefaultsOnModeAdd(DOCUMENT_TYPE_ID.WORK_ORDER_PM);
-  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDWorfOrderPMFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.WORK_ORDER_PM, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
+  useFillDefaultsOnModeAdd();
+  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDWorfOrderPMFieldHelper(decoded_token, checkBooleanForEdit, DOCUMENT_TYPE_ID.WORK_ORDER_PM, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
 
   const validateNameField = (...args) => validatedataDocumentField("name", setFieldValue, ...args)
   const validateDocumentDateField = (...args) => validatedataDocumentField("document_date", setFieldValue, ...args)

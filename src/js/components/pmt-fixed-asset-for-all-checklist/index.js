@@ -82,7 +82,7 @@ const GoodsReceiptComponent = (props) => {
         }
 
     }, [factChecklistLineItem.items, values.document_id])
-    console.log("props>>>", props.location.aboutProps)
+    // console.log("props>>>", props.location.aboutProps)
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
