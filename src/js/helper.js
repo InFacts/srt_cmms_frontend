@@ -2509,7 +2509,7 @@ function returnArrayHasLineWorkOrderPM(line_custom) {
 
 
 // Validation 
-export const validateInternalDocumentIDWorfOrderPMFieldHelper = (checkBooleanForEdit, document_type_group_id, toolbar, footer, fact, values, setValues, setFieldValue, validateField, internal_document_id) => new Promise(resolve => {
+export const validateInternalDocumentIDWorfOrderPMFieldHelper = (decoded_token, checkBooleanForEdit, document_type_group_id, toolbar, footer, fact, values, setValues, setFieldValue, validateField, internal_document_id) => new Promise(resolve => {
     // Internal Document ID
     //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
     //  ie. GR-PYO-2563/0001
