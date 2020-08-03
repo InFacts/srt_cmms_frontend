@@ -2559,6 +2559,7 @@ export const validateInternalDocumentIDFieldHelper = (decoded_token, checkBoolea
     // Basic Form Checks of the Internal Document ID
     // 1. If it is empty
     // 2. If it is in the valid Form
+    console.log("internal_document_id..", internal_document_id)
     if (!internal_document_id) {
         console.log("validateInternalDocumentIDFieldHelper:: I dont have any internal doc id")
         console.log("validateInternalDocumentIDFieldHelper:: warehouseid", values.dest_warehouse_id)

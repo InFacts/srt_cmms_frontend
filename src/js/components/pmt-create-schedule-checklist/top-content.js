@@ -22,6 +22,7 @@ import {
 
 import { FACTS } from '../../redux/modules/api/fact.js';
 import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
+import RadioAutoIncrementInput from '../common/formik-radio-input-ai'
 
 import BgBlue from '../../../images/pmt/bg_blue.jpg';
 import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
@@ -42,8 +43,8 @@ const TopContent = (props) => {
   const factEquipmentStatus = useSelector((state) => ({ ...state.api.fact[FACTS.EQUIPMENT_STATUS] }), shallowEqual);
 
   // Fill Default Forms
-  useFillDefaultsOnModeAdd();
-  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(decoded_token, checkBooleanForEdit, DOCUMENT_TYPE_ID.SELECTOR, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
+  useFillDefaultsOnModeAdd(DOCUMENT_TYPE_ID.SELECTOR);
+  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.SELECTOR, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
 
   const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
   const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
@@ -80,9 +81,15 @@ const TopContent = (props) => {
               <div className="grid_3">
                 <TextInput name='internal_document_id'
                   validate={validateInternalDocumentIDField}
+                  disabled={values.is_auto_internal_document_id === "auto" && toolbar.mode === TOOLBAR_MODE.ADD ? true: false}
                   searchable={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                  ariaControls="modalDocument"
-                  tabIndex="1" />
+                  ariaControls="modalDocument" tabIndex="1" />  
+              </div>
+              <div className="grid_2">
+                  <RadioAutoIncrementInput 
+                  name='is_auto_internal_document_id'
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  />
               </div>
               <div class="clear" />
 

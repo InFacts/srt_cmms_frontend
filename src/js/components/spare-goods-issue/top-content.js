@@ -28,7 +28,8 @@ import {
 } from '../../helper';
 
 import { FOOTER_MODE, FOOTER_ACTIONS } from '../../redux/modules/footer.js';
-import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
+import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add';
+import RadioAutoIncrementInput from '../common/formik-radio-input-ai';
 
 import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const TopContent = (props) => {
@@ -72,8 +73,17 @@ const TopContent = (props) => {
                 <p className="top-text">เลขที่เอกสาร</p>
               </div>
               <div className="grid_3 pull_1">
-                <TextInput name='internal_document_id' validate={validateInternalDocumentIDField}
-                  searchable={props.toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalDocument" tabIndex="1" />
+              <TextInput name='internal_document_id' 
+                  validate={validateInternalDocumentIDField}
+                  disabled={values.is_auto_internal_document_id === "auto" && toolbar.mode === TOOLBAR_MODE.ADD ? true: false}
+                  searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} 
+                  ariaControls="modalDocument" tabIndex="1" />
+              </div>
+              <div className="grid_2 pull_1">
+                <RadioAutoIncrementInput 
+                  name='is_auto_internal_document_id'
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                />
               </div>
 
               {/* Document Status  */}

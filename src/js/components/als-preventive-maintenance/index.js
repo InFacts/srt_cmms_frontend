@@ -24,6 +24,70 @@ const AlsPreventiveMaintenanaceComponent = () => {
     const loggedIn = useSelector(state => state.token.isLoggedIn);
     const {values, setFieldValue} = useFormikContext();
     const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
+    const node_abbreviation = {
+        "ธนบุรี":	"ธบ.",
+        "ตลิ่งชัน":	"ตช.",
+        "นครปฐม":	"คฐ.",
+        "กาญจนบุรี":	"กญ.",
+        "บ้านโป่ง":	"โป.",
+        "กรุงเทพ":	"กท.",
+        "จิตรลดา":	"จล.",
+        "บางซื่อ":	"บซ.",
+        "อยุธยา":	"อย.",
+        "บ้านภาชี":	"ภช.",
+        "บ้านหมอ":	"มอ.",
+        "ลพบุรี":	"ลบ.",
+        "มักกะสัน":	"มส.",
+        "รังสิต":	"รต.",
+        "แก่งคอย":	"กค.",
+        "ปากช่อง":	"ปช.",
+        "นครราชสีมา":	"รส.",
+        "จิระที่ราชสีมา":	"จร.",
+        "จิระที่ลำปลายมาศ":	"ลำ.",
+        "ลำชี":	"ลช.",
+        "ตอนลำชีที่อุบลราชธานี":	"อน.",
+        "ลำนารายณ์":	"ลา.",
+        "ลำนารายณ์ที่จตุรัส":	"จต.",
+        "ลำนารายณ์ที่บัวใหญ่":	"วญ.",
+        "ขอนแก่น":	"ขอ.",
+        "ขอนแก่นที่อุดรธานี":	"รด.",
+        "ขอนแก่นที่หนองคาย":	"นค.",
+        "ช่องแค":	"ชค.",
+        "นครสวรรค์":	"นว.",
+        "นครสวรรค์ที่ตะพานหิน":	"ตห.",
+        "พิษณุโลก":	"พล.",
+        "พิษณุโลกที่บ้านดารา":	"ดร.",
+        "ลำปาง":	"ลป.",
+        "ลำปางที่บ้านปิน":	"บป.",
+        "ลำปางที่เชียงใหม่":	"ชม.",
+        "ศิลาอาสน์":	"ศล.",
+        "ศิลาอาสน์ที่เด่นชัย":	"ดช.",
+        "เพชรบุรี":	"พบ.",
+        "หัวหินที่ประจวบฯ":	"จข.",
+        "ชุมพรที่บางสะพานใหญ่":	"พญ.",
+        "ชุมพร":	"ชพ.",
+        "ทุ่งสง":	"ทส.1",
+        "ทุ่งสงที่สุราษฏร์ธานี":	"ทส.2",
+        "สุราษฏร์ธานี":	"ชพ.",
+        "สุราษฏร์ธานีที่หลังสวน":	"รท.",
+        "สุราษฏร์ธานีที่ท่าชนะ":	"งส.",
+        "เขาชุมทองที่ทุ่งสง":	"นะ.",
+        "หาดใหญ่":	"หใ.",
+        "หาดใหญ่ที่พัทลุง":	"พท.",
+        "รือเสาะที่ยะลา":	"ยล.",
+        "ยะลาที่สุไหงโกลก":	"โล.",
+        "ฉะเชิงเทรา":	"ฉท.",
+        "ปราจีนบุรี":	"ปจ.",
+        "ปราจีนบุรีที่อรัญประเทศ":	"อร.",
+        "องครักษ์":	"อษ.",
+        "องครักษ์ที่คลองสืเก้า":	"สเ.",
+        "ศรีราชาที่ชลบุรี":	"ชบ.",
+        "ศรีราชา":	"ศช.",
+        "พลูตาหลวงที่บางละมุง":	"มุ",
+        "พลูตาหลวง":	"พต.",
+        "หัวหิน":	"หห.",
+        "สุราษฏร์ธานีที่ชุมพร":	"ชท."
+    }
 
     // Initializer: Change Toolbar to Mode None
     useToolbarChangeModeInitializer(TOOLBAR_MODE.NONE_HOME); // TODO: Needs to find where to go when we press "HOME"!!
@@ -104,11 +168,11 @@ const AlsPreventiveMaintenanaceComponent = () => {
             let _list_node_name = [];
             factNodes.items.map(function ({ node_id, name, district_id }) {
                 if (values.district_id == district_id) { 
-                    _list_node_name.push({"node_name": name});
+                    _list_node_name.push({"node_name": node_abbreviation[name]}); 
                     _list_node_id.push(node_id);
                 }
                 else if (values.district_id === "ทั้งหมด") {
-                    _list_node_name.push({"node_name": name}) 
+                    _list_node_name.push({"node_name": node_abbreviation[name]}) //node_abbreviation[name]
                     _list_node_id.push(node_id);
                 }
             })
@@ -211,33 +275,49 @@ const AlsPreventiveMaintenanaceComponent = () => {
     
             mapOrder(countTopNode_uncomplete, _list_node_name, 'node_name').then((output) => {
                 if (output._order[output._array.length-1] !== undefined && output._order.length !== 0) {
-                    _dataBarGraphUncomplete.push({key: output._order[output._array.length-1]['node_name'], value: output._array[output._array.length-1]});
-                    _dataBarGraphUncomplete.push({key: output._order[output._array.length-2]['node_name'], value: output._array[output._array.length-2]});
-                    _dataBarGraphUncomplete.push({key: output._order[output._array.length-3]['node_name'], value: output._array[output._array.length-3]});
-                    _dataBarGraphUncomplete.push({key: output._order[output._array.length-4]['node_name'], value: output._array[output._array.length-4]});
-                    _dataBarGraphUncomplete.push({key: output._order[output._array.length-5]['node_name'], value: output._array[output._array.length-5]});
+                    console.log("output._array.length", output._array.length)
+                    let max_node = output._array.length;
+                    if (max_node > 5) {max_node = 5}
+                    for (let i=1; i<=max_node; i++) {
+                        _dataBarGraphUncomplete.push({key: output._order[output._array.length-i]['node_name'], value: output._array[output._array.length-i]});
+                    }
+                    // _dataBarGraphUncomplete.push({key: output._order[output._array.length-1]['node_name'], value: output._array[output._array.length-1]});
+                    // _dataBarGraphUncomplete.push({key: output._order[output._array.length-2]['node_name'], value: output._array[output._array.length-2]});
+                    // _dataBarGraphUncomplete.push({key: output._order[output._array.length-3]['node_name'], value: output._array[output._array.length-3]});
+                    // _dataBarGraphUncomplete.push({key: output._order[output._array.length-4]['node_name'], value: output._array[output._array.length-4]});
+                    // _dataBarGraphUncomplete.push({key: output._order[output._array.length-5]['node_name'], value: output._array[output._array.length-5]});
                     setFieldValue('dataBarGraphUncomplete', _dataBarGraphUncomplete); 
                 }  
             });
 
             mapOrder(countTopNode_complete, _list_node_name, 'node_name').then((output) => {
                 if (output._order[output._array.length-1] !== undefined && output._order.length !== 0) {
-                    _dataBarGraphComplete.push({key: output._order[output._array.length-1]['node_name'], value: output._array[output._array.length-1]});
-                    _dataBarGraphComplete.push({key: output._order[output._array.length-2]['node_name'], value: output._array[output._array.length-2]});
-                    _dataBarGraphComplete.push({key: output._order[output._array.length-3]['node_name'], value: output._array[output._array.length-3]});
-                    _dataBarGraphComplete.push({key: output._order[output._array.length-4]['node_name'], value: output._array[output._array.length-4]});
-                    _dataBarGraphComplete.push({key: output._order[output._array.length-5]['node_name'], value: output._array[output._array.length-5]});
+                    let max_node = output._array.length;
+                    if (max_node > 5) {max_node = 5}
+                    for (let i=1; i<=max_node; i++) {
+                        _dataBarGraphComplete.push({key: output._order[output._array.length-i]['node_name'], value: output._array[output._array.length-i]});
+                    }
+                    // _dataBarGraphComplete.push({key: output._order[output._array.length-1]['node_name'], value: output._array[output._array.length-1]});
+                    // _dataBarGraphComplete.push({key: output._order[output._array.length-2]['node_name'], value: output._array[output._array.length-2]});
+                    // _dataBarGraphComplete.push({key: output._order[output._array.length-3]['node_name'], value: output._array[output._array.length-3]});
+                    // _dataBarGraphComplete.push({key: output._order[output._array.length-4]['node_name'], value: output._array[output._array.length-4]});
+                    // _dataBarGraphComplete.push({key: output._order[output._array.length-5]['node_name'], value: output._array[output._array.length-5]});
                     setFieldValue('dataBarGraphComplete', _dataBarGraphComplete); 
                 }  
             });
 
             mapOrder(countTopNode_delay, _list_node_name, 'node_name').then((output) => {
                 if (output._order[output._array.length-1] !== undefined && output._order.length !== 0) {
-                    _dataBarGraphDelay.push({key: output._order[output._array.length-1]['node_name'], value: output._array[output._array.length-1]});
-                    _dataBarGraphDelay.push({key: output._order[output._array.length-2]['node_name'], value: output._array[output._array.length-2]});
-                    _dataBarGraphDelay.push({key: output._order[output._array.length-3]['node_name'], value: output._array[output._array.length-3]});
-                    _dataBarGraphDelay.push({key: output._order[output._array.length-4]['node_name'], value: output._array[output._array.length-4]});
-                    _dataBarGraphDelay.push({key: output._order[output._array.length-5]['node_name'], value: output._array[output._array.length-5]});
+                    let max_node = output._array.length;
+                    if (max_node > 5) {max_node = 5}
+                    for (let i=1; i<=max_node; i++) {
+                        _dataBarGraphDelay.push({key: output._order[output._array.length-i]['node_name'], value: output._array[output._array.length-i]});
+                    }
+                    // _dataBarGraphDelay.push({key: output._order[output._array.length-1]['node_name'], value: output._array[output._array.length-1]});
+                    // _dataBarGraphDelay.push({key: output._order[output._array.length-2]['node_name'], value: output._array[output._array.length-2]});
+                    // _dataBarGraphDelay.push({key: output._order[output._array.length-3]['node_name'], value: output._array[output._array.length-3]});
+                    // _dataBarGraphDelay.push({key: output._order[output._array.length-4]['node_name'], value: output._array[output._array.length-4]});
+                    // _dataBarGraphDelay.push({key: output._order[output._array.length-5]['node_name'], value: output._array[output._array.length-5]});
                     setFieldValue('dataBarGraphDelay', _dataBarGraphDelay);  
                 }  
             });

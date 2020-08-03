@@ -22,6 +22,7 @@ import {
 
 import { FACTS } from '../../redux/modules/api/fact.js';
 import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
+import RadioAutoIncrementInput from '../common/formik-radio-input-ai'
 
 import BgBlue from '../../../images/pmt/bg_blue.jpg';
 import { fetchPositionPermissionData, changeTheam } from '../../helper.js'

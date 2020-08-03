@@ -129,6 +129,7 @@ const EnhancedMaintenantItemComponent = withFormik({
         node_id: '',
 
         remark_approval: "",
+        is_auto_internal_document_id: 'auto',
     })
 })(MaintenantItemComponent);
 

@@ -18,7 +18,7 @@ const SimpleCard2ValuesComponent = ({ name1, value1, name2, value2 }) => {
                         {name1}
                     </h5>
                     <div className="white-background simple-card-inner"
-                        style={{height:50, 
+                        style={{height:50, "font-size": "25px",
                             color: "#FC4237",
                             // border:"1px solid red"
                         }}
@@ -33,7 +33,7 @@ const SimpleCard2ValuesComponent = ({ name1, value1, name2, value2 }) => {
                         }}
                     >{name2}</h5>
                     <div className="white-background simple-card-inner"
-                        style={{height:50, 
+                        style={{height:50, "font-size": "25px",
                             color: "#34657F",
                             // border:"1px solid red"
                         }}

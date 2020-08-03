@@ -34,8 +34,9 @@ const TopContent = (props) => {
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
   const factItemStatus = useSelector((state) => ({ ...state.api.fact[FACTS.ITEM_STATUS] }), shallowEqual);
-
+  
   const responseToFormState = (data) => {
+    // console.log("data>>>>", data)
     return {
       item_id: data.item_id,
       internal_item_id: data.equipment_group.item.internal_item_id,

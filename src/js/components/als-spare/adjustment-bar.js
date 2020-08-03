@@ -9,7 +9,8 @@ const AdjustmentBarComponent = () => {
 
     const { values } = useFormikContext();
     const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
-
+    let thisYear = new Date().getFullYear() + 543
+    
     return (
         <div className="gray-background adjustment-bar">
             <h5 className="adjustment-bar-name">ปรับแต่งข้อมูลของภาพรวม</h5>
@@ -17,8 +18,8 @@ const AdjustmentBarComponent = () => {
                 <div className="adjustment-bar-inner-text">รายงานประจำปี {values.year}</div>
                 <RangeInput
                     name="year"
-                    min="2018"
-                    max="2020"
+                    min="2563"
+                    max={thisYear}
                     step="1"
                 />
 

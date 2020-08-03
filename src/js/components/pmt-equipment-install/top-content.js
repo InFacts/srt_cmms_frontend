@@ -18,6 +18,7 @@ import {
 } from '../../helper';
 import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
 import PopupModalEquipmentNoChildren from '../common/popup-modal-equipment-no-children'
+import RadioAutoIncrementInput from '../common/formik-radio-input-ai'
 
 import { useFormikContext, useField } from 'formik';
 
@@ -33,7 +34,7 @@ const TopContent = (props) => {
     const { values, errors, touched, setFieldValue, setTouched, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
     // Fill Default Forms
-    useFillDefaultsOnModeAdd();
+    useFillDefaultsOnModeAdd(DOCUMENT_TYPE_ID.EQUIPMENT_INSTALLATION);
 
     const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(decoded_token, checkBooleanForEdit, DOCUMENT_TYPE_ID.EQUIPMENT_INSTALLATION, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args)
 
@@ -89,10 +90,17 @@ const TopContent = (props) => {
                             <p className="top-text">เลขที่เอกสาร</p>
                         </div>
                         <div className="grid_3">
-                            <TextInput name="internal_document_id"
+                            <TextInput name='internal_document_id'
                                 validate={validateInternalDocumentIDField}
-                                searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalDocument"
-                                tabIndex="1" />
+                                disabled={values.is_auto_internal_document_id === "auto" && toolbar.mode === TOOLBAR_MODE.ADD ? true: false}
+                                searchable={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                ariaControls="modalDocument" tabIndex="1" />
+                        </div>
+                        <div className="grid_2">
+                            <RadioAutoIncrementInput 
+                            name='is_auto_internal_document_id'
+                            disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                            />
                         </div>
                         <div className="clear" />
 

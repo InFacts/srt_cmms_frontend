@@ -191,6 +191,7 @@ const EnhancedPmtSS101Component = withFormik({
 
         //Field ที่ไม่ได้ display
         document_id: '', // changes when document is displayed (internal_document_id field validation)
+        is_auto_internal_document_id: 'auto',
     }),
     validate: (values, props) => {
         const errors = {};

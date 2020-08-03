@@ -116,6 +116,7 @@ const EnhancedSalvageReturnComponent = withFormik({
         // For Step Approval
         step_approve: [],
         remark_approval: "",
+        is_auto_internal_document_id: 'auto',
     }),
     validate: (values, props) => {
         const errors = {};
