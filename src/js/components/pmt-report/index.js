@@ -75,6 +75,7 @@ const EnhancedReportS1Component = withFormik({
     mapPropsToValues: (props) => ({
         head_table: [],
         checklist_name_unique: [],
+        work_order_pm: [],
         // Field ที่ให้ User กรอก
         district_id: -1,
         line_items: [],
