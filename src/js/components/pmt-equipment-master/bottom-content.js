@@ -54,7 +54,7 @@ const BottomContent = (props) => {
   const validateLeadTimeField = (...args) => validateItemMasterdataField("lead_time", ...args);
   const validateToleranceTimeField = (...args) => validateItemMasterdataField("tolerance_time", ...args);
   const validateActiveField = (...args) => validateItemMasterdataField("active", ...args);
-  const validateItemGroupIDField = (...args) => validateItemMasterdataField("equipment_group_id", ...args);
+  const validateItemGroupIDField = (...args) => validateItemMasterdataField("checklist_group_id", ...args);
 
   const validatePriceCurrently = (...args) => validateItemMasterdataField("price_currently", ...args);
   const validateDepreciation = (...args) => validateItemMasterdataField("depreciation", ...args);
@@ -361,7 +361,7 @@ const BottomContent = (props) => {
                 <p className="top-text">กลุ่มของการบำรุงรักษา</p>
               </div>
               <div className="grid_3 alpha omega">
-                <SelectNoChildrenInput name="equipment_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} validate={validateItemGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="17" >
+                <SelectNoChildrenInput name="checklist_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} validate={validateItemGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="17" >
                   <option value=''></option>
                   {factEquipmentGroup.items.map((item_group) => {
                     // if (item_group.checklist_group_id !== 1) {
@@ -383,7 +383,7 @@ const BottomContent = (props) => {
                   cssStyle={{ left: "-160px", top: "10px" }} tabIndex="18" >
                   <option value=''></option>
                   {factChecklist.items.map((factChecklist) => {
-                    if (values.equipment_group_id == factChecklist.checklist_group_id) {
+                    if (values.checklist_group_id == factChecklist.checklist_group_id) {
                       return (<option value={factChecklist.checklist_id}>{factChecklist.checklist_name}</option>)
                     }
                   })}
@@ -443,7 +443,7 @@ const BottomContent = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {console.log("values.ref_document", values.ref_document)}
+                  {/* {console.log("values.ref_document", values.ref_document)} */}
                   {values.ref_document.map((document, index) => {
                     let statuses = factEquipmentStatus.items;
                     let status = statuses.find(status => `${status.equipment_status_id}` === `${document.equipment_status_id}`); // Returns undefined if not found

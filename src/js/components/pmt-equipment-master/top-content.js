@@ -6,6 +6,7 @@ import { API_PORT_DATABASE } from '../../config_port.js';
 import { API_URL_DATABASE } from '../../config_url.js';
 
 import TextInput from '../common/formik-text-input'
+import DateInput from '../common/formik-date-input'
 import SelectNoChildrenInput from '../common/formik-select-no-children';
 import PopupModalEquipmentNoChildren from '../common/popup-modal-equipment-no-children'
 
@@ -34,14 +35,19 @@ const TopContent = (props) => {
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
   const factItemStatus = useSelector((state) => ({ ...state.api.fact[FACTS.ITEM_STATUS] }), shallowEqual);
-  
+  const factChecklist = useSelector((state) => ({ ...state.api.fact.checklist }), shallowEqual);
+
   const responseToFormState = (data) => {
-    // console.log("data>>>>", data)
+    console.log("data>>>>", data)
+    let fact_checklists = factChecklist.items;
+    let fact_checklist = fact_checklists.find(factChecklist => `${factChecklist.checklist_id}` === `${data.equipment_group.checklist_id}`); // Returns undefined if not found
+    if (fact_checklist) {
     return {
       item_id: data.item_id,
       internal_item_id: data.equipment_group.item.internal_item_id,
       description: data.equipment_group.item.description,
       item_group_id: data.equipment_group.item.item_group_id,
+      checklist_group_id: fact_checklist.checklist_group_id,
       checklist_id: data.equipment_group.checklist_id,
       equipment_group_id: data.equipment_group.equipment_group_id,
       active: data.equipment_group.item.active.data[0],
@@ -61,6 +67,7 @@ const TopContent = (props) => {
       useful_life: data.useful_life,
       responsible_district_id: data.responsible_district_id,
       responsible_node_id: data.responsible_node_id,
+      import_on: data.import_on.split("T")[0],
 
       location_district_id: data.equipment_installation.length > 0 ? data.equipment_installation[0].location_district_id : null,
       location_node_id: data.equipment_installation.length > 0 ? data.equipment_installation[0].location_node_id : null,
@@ -72,6 +79,7 @@ const TopContent = (props) => {
       modeEdit: values.line_position_permission[0].module_admin === true ? true : false     // IF Check user If User is Admin -> return true Else -> return false
 
     }
+  }
   }
 
   // Fetch permissiton
@@ -109,9 +117,9 @@ const TopContent = (props) => {
         }
       }
     } else {//If mode add, ok
-      console.log("document ID doesn't exist but I am in mode add")
+      // console.log("document ID doesn't exist but I am in mode add")
       if (internal_item_id) {
-        console.log("internal_item_id", internal_item_id)
+        // console.log("internal_item_id", internal_item_id)
         var item_match_equipments = factEquipment.items;
         let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.equipment_group.item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
         // console.log("item_match_equipment", item_match_equipment)
@@ -133,7 +141,7 @@ const TopContent = (props) => {
     return;
   };
 
-  const validateUomGroupIDField = (...args) => validateItemMasterdataField("uom_group_id", ...args);
+  const validateImportOnField = (...args) => validateItemMasterdataField("import_on", ...args);
   const validateItemDescriptionField = (...args) => validateItemMasterdataField("description", ...args);
   const validateItemTypeIDField = (...args) => validateItemMasterdataField("item_type_id", ...args);
   const validateItemStatusIDField = (...args) => validateItemMasterdataField("item_status_id", ...args);
@@ -181,14 +189,14 @@ const TopContent = (props) => {
 
               <div className="float-right">
                 <div className="grid_3 float-right">
-                  <SelectNoChildrenInput name="item_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} validate={validateItemGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="4">
+                  <SelectNoChildrenInput name="equipment_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} validate={validateItemGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="4">
                     <option value=''></option>
-                    {fact[FACTS.ITEM_GROUP].items.map((item_group) => (
-                      values.item_group_id === item_group.item_group_id
+                    {fact[FACTS.EQUIPMENT_GROUP].items.map((item_group) => (
+                      values.equipment_group_id === item_group.equipment_group_id
                         ?
-                        <option value={item_group.item_group_id} key={item_group.item_group_id} selected> {item_group.abbreviation} </option>
+                        <option value={item_group.equipment_group_id} key={item_group.equipment_group_id} selected> {item_group.name} </option>
                         :
-                        <option value={item_group.item_group_id} key={item_group.item_group_id}> {item_group.abbreviation} </option>
+                        <option value={item_group.equipment_group_id} key={item_group.equipment_group_id}> {item_group.name} </option>
                     ))}
                   </SelectNoChildrenInput>
                 </div>
@@ -217,24 +225,16 @@ const TopContent = (props) => {
                 </SelectNoChildrenInput>
               </div>
 
-              {/* === uom_group_id === */}
-              {/* <div className="float-right">
+              {/* === import_on === */}
+              <div className="float-right">
                 <div className="grid_3 float-right">
-                  <SelectNoChildrenInput name="uom_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateUomGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="4">
-                    <option value=''></option>
-                    {fact[FACTS.UNIT_OF_MEASURE_GROUPS].items.map((uom) => (
-                      values.uom_group_id === uom.uom_group_id
-                        ?
-                        <option value={uom.uom_group_id} key={uom.uom_group_id} selected> {uom.name} </option>
-                        :
-                        <option value={uom.uom_group_id} key={uom.uom_group_id}> {uom.name} </option>
-                    ))}
-                  </SelectNoChildrenInput>
+                  <DateInput name="import_on" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} 
+                  validate={validateImportOnField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="5" />
                 </div>
                 <div className="grid_2 float-right">
-                  <p className="top-text float-right">กลุ่มหน่วยนับ</p>
+                  <p className="top-text float-right">วันที่นำเข้า</p>
                 </div>
-              </div> */}
+              </div>
 
             </div>
 

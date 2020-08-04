@@ -102,10 +102,12 @@ const EnhancedGoodsReceiptComponent = withFormik({
         // Top Content
         internal_item_id: '',
         item_type_id: 2,
+        item_group_id: 1,
         description: '',
         uom_group_id: '',
         active: '',
-        
+        import_on: '',
+
         // Bottom Content
         // General Content
         uom_id: '',
@@ -123,6 +125,7 @@ const EnhancedGoodsReceiptComponent = withFormik({
         useful_life: '',
         // Equipment Plane Content
         equipment_group_id: '',
+        checklist_group_id: '',
         checklist_id: '',
         checklist_line_item: initialRowsEquipmentPlan(),
         // history_content

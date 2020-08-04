@@ -440,6 +440,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             useful_life: values.useful_life,
             item_status_id: parseInt(values.item_status_id),
             responsible_district_id: parseInt(values.responsible_district_id),
+            import_on: values.import_on + 'T00:00:00+00:00'
         }
 
         let equipment_item_part = {
@@ -453,7 +454,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             internal_item_id: values.internal_item_id,
             description: values.description,
             item_type_id: parseInt(values.item_type_id),
-            item_group_id: parseInt(values.item_group_id),
+            item_group_id: 1,
             uom_group_id: 1,
             active: values.active == "1" ? true : false,
             remark: values.remark,
@@ -1180,11 +1181,12 @@ export const packDataFromValuesMasterDataForEdit = (fact, values, document_type_
             useful_life: values.useful_life,
             item_status_id: parseInt(values.item_status_id),
             responsible_district_id: parseInt(values.responsible_district_id),
+            import_on: values.import_on + 'T00:00:00+00:00'
         }
 
         let equipment_item_part = {
             item_id: values.item_id,
-            equipment_group_id: parseInt(values.equipment_group_id),
+            equipment_group_id: parseInt(values.equipment_group_id),  
             checklist_id: parseInt(values.checklist_id)
         }
 
@@ -1193,7 +1195,7 @@ export const packDataFromValuesMasterDataForEdit = (fact, values, document_type_
             internal_item_id: values.internal_item_id,
             description: values.description,
             item_type_id: parseInt(values.item_type_id),
-            item_group_id: parseInt(values.item_group_id),
+            item_group_id: 1,
             uom_group_id: 1,
             active: values.active == "1" ? true : false,
             remark: values.remark,
