@@ -467,7 +467,6 @@ const BottomContent = (props) => {
                 </thead>
                 <tbody>
                   {rowItem.map((line_item, index) => {
-                    console.log("line_item", line_item)
                     let line_number = index + 1;
                     return (
                       <tr>

@@ -83,7 +83,7 @@ const EnhancedReportS1Component = withFormik({
         document_date: '', 
         line_items: [],
         year_id: now_date.getFullYear() + 543,
-        mouth_id: now_date.getMonth() + 1,
+        mouth_id: now_date.getMonth(),
         new_line_items: [],
         new_line_items_pdf: [],
 

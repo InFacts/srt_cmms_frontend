@@ -41,10 +41,10 @@ const BottomContent = (props) => {
           "ราคาเดือนก่อน": line_item.begin_state_in_total_price,
 
           "จำนวนรับเดือนนี้": line_item.state_in_unit_count,
-          "ราคารับเดือนนี้": line_item.end_state_in_total_price,
+          "ราคารับเดือนนี้": line_item.state_in_total_price,
 
           "จำนวนจ่ายเดือนนี้": line_item.state_out_unit_count,
-          "ราคาจ่ายเดือนนี้": line_item.end_state_out_total_price,
+          "ราคาจ่ายเดือนนี้": line_item.state_out_total_price,
 
           "จำนวนคงเหลือ": line_item.ending_unit_count,
           "ราคาคงเหลือ": "-",
@@ -63,10 +63,10 @@ const BottomContent = (props) => {
           "begin_state_in_total_price": line_item.begin_state_in_total_price,
 
           "state_in_unit_count": line_item.state_in_unit_count,
-          "end_state_in_total_price": line_item.end_state_in_total_price,
+          "end_state_in_total_price": line_item.state_in_total_price,
 
           "state_out_unit_count": line_item.state_out_unit_count,
-          "end_state_out_total_price": line_item.end_state_out_total_price,
+          "end_state_out_total_price": line_item.state_out_total_price,
 
           "ending_unit_count": line_item.ending_unit_count,
           "ending_unit_count_total": "-",
@@ -144,10 +144,10 @@ const BottomContent = (props) => {
                         <td className="edit-padding text-center">{line_items.begin_state_in_total_price}</td>
 
                         <td className="edit-padding text-center">{line_items.state_in_unit_count}</td> {/* รับเดือนนี้ */}
-                        <td className="edit-padding text-center">{line_items.end_state_in_total_price}</td>
+                        <td className="edit-padding text-center">{line_items.state_in_total_price}</td>
 
                         <td className="edit-padding text-center">{line_items.state_out_unit_count}</td> {/* จ่ายเดือนนี้ */}
-                        <td className="edit-padding text-center">{line_items.end_state_out_total_price}</td>
+                        <td className="edit-padding text-center">{line_items.state_out_total_price}</td>
 
                         <td className="edit-padding text-center">{line_items.ending_unit_count}</td> {/* คงเหลือ */}
                         <td className="edit-padding text-center">-</td>

@@ -15,6 +15,8 @@ import useToolbarInitializer from '../../hooks/toolbar-initializer';
 import useFactInitializer from '../../hooks/fact-initializer';
 import useTokenInitializer from '../../hooks/token-initializer';
 import useFooterInitializer from '../../hooks/footer-initializer';
+import useExportPdfInitializer from '../../hooks/export-pdf-initializer';
+
 import { FACTS } from '../../redux/modules/api/fact.js';
 
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
@@ -25,9 +27,10 @@ const GoodsReceiptComponent = (props) => {
 
     const { resetForm, setFieldValue, setValues, values } = useFormikContext();
 
-    useToolbarInitializer(TOOLBAR_MODE.NONE_HOME);
+    useToolbarInitializer(TOOLBAR_MODE.REPORT);
     useTokenInitializer();
     useFactInitializer();
+    useExportPdfInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.WORK_ORDER_CHECKLIST);
     const loggedIn = useSelector(state => state.token.isLoggedIn);
 

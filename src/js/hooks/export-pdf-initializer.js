@@ -124,7 +124,7 @@ const useExportPdfInitializer = () => {
 
         factDistricts.items.map(function ({ district_id, name, division_id }) {
           if (values.location_district_id == district_id) {
-          District = name
+            District = name
           }
         })
         factNodes.items.map(function ({ node_id, name, district_id }) {
@@ -182,7 +182,7 @@ const useExportPdfInitializer = () => {
           data.push({
             "item_id": p,
             "description": lineItem.description ? lineItem.description : "-",
-            "internal_item_id": lineItem.internal_item_id ? lineItem.internal_item_id : "-", 
+            "internal_item_id": lineItem.internal_item_id ? lineItem.internal_item_id : "-",
             "unit": lineItem.uom_name ? lineItem.uom_name : "-",
             "price_quantity": lineItem.price ? lineItem.price : "-",
             "quantity": lineItem.quantity ? lineItem.quantity : "-",
@@ -337,6 +337,16 @@ const useExportPdfInitializer = () => {
       dispatch(handleClickExportPDF())
     } else if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF] && document_item_list && document_item_list.length > 0 && routeLocation === "/spare-report-b22") {
       exportPDF(routeLocation, values).then(function (htmlCode) {
+        var w = window.open();
+        w.document.write(htmlCode);
+        setTimeout(() => {
+          w.print();
+          w.close();
+        }, 500);
+      })
+      dispatch(handleClickExportPDF())
+    } else if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF] && document_item_list && document_item_list.length > 0 && routeLocation === "/pmt-all-checklist-fixed-asset") {
+      exportPDF(routeLocation, values, fact).then(function (htmlCode) {
         var w = window.open();
         w.document.write(htmlCode);
         setTimeout(() => {
@@ -1131,7 +1141,7 @@ const createHtmlS101 = (table) =>
   </html>`;
 
 const createPageS101Page1 = (date, content) =>
-    `<div class="invoice-box">
+  `<div class="invoice-box">
       <pp>แบบ สส. 101</pp>
       <h2 style=" text-align:center ; vertical-align: middle;">ฝ่ายการอาณัติสัญญาณและโทรคมนาคม การรถไฟ</h2>
     
@@ -1233,7 +1243,7 @@ const createPageS101Page1 = (date, content) =>
               <div class="left">ค. ระบบเครื่องกั้นถนน</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบเครื่องกั้นถนน" ? content.HardwareType : "-"}</label></div></div>
           </td>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
-              <div class="left">ง. ระบบเครื่องทางสะดวก</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบเครื่องทางสะดวก" ? content.HardwareType: "-"} </label></div></div>
+              <div class="left">ง. ระบบเครื่องทางสะดวก</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบเครื่องทางสะดวก" ? content.HardwareType : "-"} </label></div></div>
           </td>
             
         </tr>
@@ -1503,7 +1513,7 @@ const createRowSS101 = (item) =>
       <td style=" text-align:right ; vertical-align: middle;">${item.type}</td>
   </tr>`;
 
-export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve, reject) => {
+export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((resolve, reject) => {
 
   if (routeLocation === '/spare-report-s-1') {
     let newDate = new Date()
@@ -1618,8 +1628,7 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
     })
     const html = createHtmlS1(pageAll);
     return resolve(html);
-  }
-  else if (routeLocation === '/spare-inventory-transfer') {
+  } else if (routeLocation === '/spare-inventory-transfer') {
 
     console.log(valuesContext)
     let data = [];
@@ -1722,8 +1731,7 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
 
     const html = createHtmlS16_46(pageAll);
     return resolve(html);
-  }
-  else if (routeLocation === '/spare-report-b22') {
+  } else if (routeLocation === '/spare-report-b22') {
     // console.log("valuesContext", valuesContext)
     let data = [];
     let p = 1
@@ -1861,8 +1869,7 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
     })
     const html = createHtmlB22(pageAll);
     return resolve(html);
-  }
-  else if (routeLocation === '/pmt-ss-101') {
+  } else if (routeLocation === '/pmt-ss-101') {
 
     const data_json = valuesContext;
     let pageAll = ``;
@@ -1907,6 +1914,21 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
 
 
 
+  } else if (routeLocation === '/pmt-all-checklist-fixed-asset') {
+    // console.log("valuesContext", valuesContext)
+    let info_this_page = {
+      "internal_document_id": valuesContext.internal_document_id,
+      "station_name": ''
+    }
+    let list_body_table = valuesContext.checklist_line_item;
+    console.log("fact", fact)
+    // let stations = fact.stations.items;
+    // let station = stations.find(station => `${station.station_id}` === `${valuesContext.station_id}`);
+    // if (station) {
+    //   info_this_page.station_name = station.name
+    // }
+    console.log("info_this_page", info_this_page)
+    console.log("list_body_table", list_body_table)
   }
 
 })
