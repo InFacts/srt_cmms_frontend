@@ -17,6 +17,7 @@ import useTokenInitializer from '../../hooks/token-initializer';
 import useFooterInitializer from '../../hooks/footer-initializer';
 import useDocumentSubscription from '../../hooks/document-subscription';
 import useNavBottomStatusInitializer from '../../hooks/nav-bottom-status-initializer';
+import useExportPdfInitializer from '../../hooks/export-pdf-initializer';
 
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
@@ -45,6 +46,7 @@ const GoodsReceiptComponent = (props) => {
     useFactInitializer();
     useDocumentSubscription();
     useNavBottomStatusInitializer();
+    useExportPdfInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.WORK_ORDER_PM);
 
     const loggedIn = useSelector(state => state.token.isLoggedIn);

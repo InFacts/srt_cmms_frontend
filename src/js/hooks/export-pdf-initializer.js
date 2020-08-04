@@ -39,6 +39,8 @@ const useExportPdfInitializer = () => {
     // console.log(values)
     let routeLocation = getRouteLocation();
     // console.log(routeLocation)
+
+    //<<<======== FOR Document ========>>>>>>
     if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF] && document_item) {
       if (routeLocation === '/pmt-ss-101') {
         console.log(">>>>>>>>>>>>", values)
@@ -311,9 +313,28 @@ const useExportPdfInitializer = () => {
           }, 500);
         })
         dispatch(handleClickExportPDF())
+      } else if (routeLocation === "/pmt-all-checklist-fixed-asset") {
+        exportPDF(routeLocation, values, fact).then(function (htmlCode) {
+          var w = window.open();
+          w.document.write(htmlCode);
+          setTimeout(() => {
+            w.print();
+            w.close();
+          }, 500);
+        })
+        dispatch(handleClickExportPDF())
+      } else if (routeLocation === "/pmt-fixed-asset") {
+        exportPDF(routeLocation, values, fact).then(function (htmlCode) {
+          var w = window.open();
+          w.document.write(htmlCode);
+          setTimeout(() => {
+            // w.print();
+            // w.close();
+          }, 500);
+        })
+        dispatch(handleClickExportPDF())
       } else {
         exportPDF(routeLocation, values).then(function (htmlCode) {
-
 
           var w = window.open();
           w.document.write(htmlCode);
@@ -345,16 +366,6 @@ const useExportPdfInitializer = () => {
         }, 500);
       })
       dispatch(handleClickExportPDF())
-    } else if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF] && document_item_list && document_item_list.length > 0 && routeLocation === "/pmt-all-checklist-fixed-asset") {
-      exportPDF(routeLocation, values, fact).then(function (htmlCode) {
-        var w = window.open();
-        w.document.write(htmlCode);
-        setTimeout(() => {
-          w.print();
-          w.close();
-        }, 500);
-      })
-      dispatch(handleClickExportPDF())
     } else {
       dispatch(handleClickExportPDF())
     }
@@ -370,7 +381,7 @@ const createRowS1 = (item) =>
     <td style=" text-align:center ; vertical-align: middle;">${item.internal_item_id}</td>
     <td style=" text-align:center ; vertical-align: middle;">${item.unit}</td>
     <td style=" text-align:center ; vertical-align: middle;">${item.quantity}</td>
-    <td style=" text-align:right ; vertical-align: middle;">${item.uom_group_id}</td>
+    <td style=" text-align:right ; vertical-align: middle;">${item.total}</td>
     <td style=" text-align:right ; vertical-align: middle;">${item.per_unit_price}</td>
   </tr>`;
 
@@ -382,7 +393,7 @@ const createTableS1 = (head, rows) =>
           <td  style="width: 10%; text-align:center ; vertical-align: middle;">${head.internal_item_id}</td>
           <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.unit}</td>
           <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.quantity}</td>
-          <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.uom_group_id}</td>
+          <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.total}</td>
           <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.per_unit_price}</td>
       </tr>
       ${rows}
@@ -1513,9 +1524,344 @@ const createRowSS101 = (item) =>
       <td style=" text-align:right ; vertical-align: middle;">${item.type}</td>
   </tr>`;
 
+
+const createHtmlChecklistLineItem = (info_this_page, row_table_checklist_line_item) => `
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @page {
+    size: A4;
+    margin:0 ;
+  }
+  .invoice-box {
+      width: 210mm;
+      height: 29.7cm;
+      margin: 0 auto;
+      margin-bottom: 0.5cm;
+      border: 0.1px solid #eee;
+      font-size: 16px;
+      font-family: 'AngsanaUPC', 'MS Sans Serif';   
+  }
+  .invoice-box table {
+      width: 95%;
+      margin: auto;
+      border: 0px solid #eee;
+  }
+  .invoice-box table td {
+      vertical-align: top;
+  }
+  .invoice-box table tr.heading td {
+      background: #eee;
+      border: 1px solid #ddd;
+      font-weight: bold;
+  }
+  .invoice-box table tr.item td {
+      border: 1px solid #eee;
+  }
+  .invoice-box table tr.item2 td {
+      border-bottom: 0px solid #eee;
+  }
+  .invoice-box p {
+      width: 95%;
+  }
+  .invoice-box h2 {
+      margin-top: 1cm;
+      margin-right: 0;
+      margin-left:0;
+      margin-bottom: 0;
+  }
+  .invoice-box h3 {
+      margin: 0;
+  }
+  @media print {
+    html, body {
+      width: 210mm;
+      height: 297mm;  
+      margin-bottom: 0;
+      margin-left: 0;
+      margin-right: 0;
+      margin-top: 0;
+    }
+  }
+  .invoice-box pr {
+    float: right;
+    margin-right: 2.5%;
+  }
+  .invoice-box pl {
+    float: left;
+    margin-left: 2.5%;
+  }
+  .invoice-box pc {
+    float: center;
+  }
+  .invoice-box table tr.top table td.title {
+      line-height: 45px;
+      color: #333;
+  }
+  .invoice-box pp {
+    margin: 0.5cm 0.5cm;
+    float: right;
+  }
+  .invoice-box table tr.information table td {
+      padding-bottom: 40px;
+  }
+  .left,.right{
+    padding:1px 0.1em;
+    background:#fff;
+    float:right;
+  }
+  .left{
+      float:left;
+      clear:both;
+  }
+  div{
+      height:1.22em;
+  }
+  .dotted{
+    border-bottom: 1px dotted grey;
+    margin-bottom:2px;
+  }
+  .paddingFivePX {
+    padding: 5px;
+  }
+</style>
+</head>
+  <body>
+    <div class="invoice-box">
+      <pp>เลขที่เอกสารที่: ${info_this_page.internal_document_id}</pp>
+      <p style=" text-align:center ; vertical-align: middle;">รายการซ่อมบำรุงของสถานี: ${info_this_page.station_name}</p>
+      <table>
+        <thead>
+          <tr class="heading">
+            <td class="paddingFivePX" style="min-width: 10mm; text-align:center ; vertical-align: middle;">#</td>
+            <td class="paddingFivePX" style="min-width: 30mm; text-align:center ; vertical-align: middle;">ACTION</td>
+            <td class="paddingFivePX" style="min-width: 30mm; text-align:center ; vertical-align: middle;">ค่าใช้จ่าย</td>
+            <td class="paddingFivePX" style="min-width: 80mm; vertical-align: middle;">แผน</td>
+            <td class="paddingFivePX" style="min-width: 40mm; vertical-align: middle;">หมายเหตุ</td> 
+          </tr>
+        </thead>
+        <tbody>
+          ${row_table_checklist_line_item}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
+`;
+
+const createRowChecklistLineItem = (row_table_checklist_line_item, index) => (
+  `<tr class="item">
+      <td class="paddingFivePX" style=" text-align:center ; vertical-align: middle;">${index + 1}</td>
+      <td class="paddingFivePX" style=" text-align:left ; vertical-align: middle;"></td>
+      <td class="paddingFivePX" style=" text-align:center ; vertical-align: middle;"></td>
+      <td class="paddingFivePX" style=" vertical-align: middle; max-width: 80mm;">${row_table_checklist_line_item.checklist_name} \\ ${row_table_checklist_line_item.checklist_line_item_name}</td>
+      <td class="paddingFivePX" style=" vertical-align: middle;"></td>
+    </tr>`);
+
+const createHtmlWorkOrderPM = (info_this_page, row_table_checklist_week_1, row_table_checklist_week_2, row_table_checklist_week_3, row_table_checklist_week_4) => `
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @page {
+    size: A4;
+    margin:0 ;
+  }
+  .invoice-box {
+      width: 210mm;
+      height: 29.7cm;
+      margin: 0 auto;
+      margin-bottom: 0.5cm;
+      border: 0.1px solid #eee;
+      font-size: 16px;
+      font-family: 'AngsanaUPC', 'MS Sans Serif';   
+  }
+  .invoice-box table {
+      width: 95%;
+      margin: auto;
+      border: 0px solid #eee;
+  }
+  .invoice-box table td {
+      vertical-align: top;
+  }
+  .invoice-box table tr.heading td {
+      background: #eee;
+      border: 1px solid #ddd;
+      font-weight: bold;
+  }
+  .invoice-box table tr.item td {
+      border: 1px solid #eee;
+  }
+  .invoice-box table tr.item2 td {
+      border-bottom: 0px solid #eee;
+  }
+  .invoice-box p {
+      width: 95%;
+  }
+  .invoice-box h2 {
+      margin-top: 1cm;
+      margin-right: 0;
+      margin-left:0;
+      margin-bottom: 0;
+  }
+  .invoice-box h3 {
+      margin: 0;
+  }
+  @media print {
+    html, body {
+      width: 210mm;
+      height: 297mm;  
+      margin-bottom: 0;
+      margin-left: 0;
+      margin-right: 0;
+      margin-top: 0;
+    }
+  }
+  .invoice-box pr {
+    float: right;
+    margin-right: 2.5%;
+  }
+  .invoice-box pl {
+    float: left;
+    margin-left: 2.5%;
+  }
+  .invoice-box pc {
+    float: center;
+  }
+  .invoice-box table tr.top table td.title {
+      line-height: 45px;
+      color: #333;
+  }
+  .invoice-box pp {
+    margin: 0.5cm 0.5cm;
+    float: right;
+  }
+  .invoice-box table tr.information table td {
+      padding-bottom: 40px;
+  }
+  .left,.right{
+    padding:1px 0.1em;
+    background:#fff;
+    float:right;
+  }
+  .left{
+      float:left;
+      clear:both;
+  }
+  div{
+      height:1.22em;
+  }
+  .dotted{
+    border-bottom: 1px dotted grey;
+    margin-bottom:2px;
+  }
+  .paddingFivePX {
+    padding: 5px;
+  }
+</style>
+</head>
+  <body>
+    <div class="invoice-box">
+      <pp>เลขที่เอกสารที่: ${info_this_page.internal_document_id}</pp>
+      <p style=" text-align:center ; vertical-align: middle;">แผนการซ่อมบำรุงประจำแขวง: ${info_this_page.district_name}</p>
+      <p style=" text-align:center ; margin: 5px 0px; vertical-align: middle;">แผนการซ่อมบำรุงประจำตอน: ${info_this_page.node_name}</p>
+      <p style=" text-align:center ; margin: 5px 0px; vertical-align: middle;">ชื่อแผนการซ่อมบำรุงประจำตอน: ${info_this_page.name}</p>
+      <p style=" text-align:center ; margin: 5px 0px; vertical-align: middle;">แผนการซ่อมบำรุงประจำตอนวันที่: ${info_this_page.created_on.split(".")[0].replace("T", " เวลา ") + " น."}</p>
+
+      <p style=" text-align:center ; margin: 5px 0px; vertical-align: middle;">ประจำสัปดาห์ที่ 1</p>
+      <table>
+        <thead>
+          <tr class="heading">
+            <td class="paddingFivePX" style="min-width: 10mm; text-align:center ; vertical-align: middle;" rowSpan="2">#</td>
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;" rowSpan="2">สถานี</td>
+            <td class="paddingFivePX" style="min-width: 135mm; text-align:center ; vertical-align: middle;" colSpan="3">เครื่องกั้น</td>
+          </tr>
+          <tr class="heading">
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;">สินทรัพย์</td>
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;">แผน</td>
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;">เลข กม.</td>
+          </tr>
+        </thead>
+        <tbody>
+          ${row_table_checklist_week_1 ? row_table_checklist_week_1 : ""}
+        </tbody>
+      </table>
+
+      <p style=" text-align:center ; margin: 50px 0px 5px; vertical-align: middle;">ประจำสัปดาห์ที่ 2</p>
+      <table>
+        <thead>
+          <tr class="heading">
+            <td class="paddingFivePX" style="min-width: 10mm; text-align:center ; vertical-align: middle;" rowSpan="2">#</td>
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;" rowSpan="2">สถานี</td>
+            <td class="paddingFivePX" style="min-width: 135mm; text-align:center ; vertical-align: middle;" colSpan="3">เครื่องกั้น</td>
+          </tr>
+          <tr class="heading">
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;">สินทรัพย์</td>
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;">แผน</td>
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;">เลข กม.</td>
+          </tr>
+        </thead>
+        <tbody>
+          ${row_table_checklist_week_2 ? row_table_checklist_week_2 : ""}
+        </tbody>
+      </table>
+
+      <p style=" text-align:center ; margin: 50px 0px 5px; vertical-align: middle;">ประจำสัปดาห์ที่ 3</p>
+      <table>
+        <thead>
+          <tr class="heading">
+            <td class="paddingFivePX" style="min-width: 10mm; text-align:center ; vertical-align: middle;" rowSpan="2">#</td>
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;" rowSpan="2">สถานี</td>
+            <td class="paddingFivePX" style="min-width: 135mm; text-align:center ; vertical-align: middle;" colSpan="3">เครื่องกั้น</td>
+          </tr>
+          <tr class="heading">
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;">สินทรัพย์</td>
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;">แผน</td>
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;">เลข กม.</td>
+          </tr>
+        </thead>
+        <tbody>
+          ${row_table_checklist_week_3 ? row_table_checklist_week_3 : ""}
+        </tbody>
+      </table>
+
+      <p style=" text-align:center ; margin: 50px 0px 5PX; vertical-align: middle;">ประจำสัปดาห์ที่ 4</p>
+      <table>
+        <thead>
+          <tr class="heading">
+            <td class="paddingFivePX" style="min-width: 10mm; text-align:center ; vertical-align: middle;" rowSpan="2">#</td>
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;" rowSpan="2">สถานี</td>
+            <td class="paddingFivePX" style="min-width: 135mm; text-align:center ; vertical-align: middle;" colSpan="3">เครื่องกั้น</td>
+          </tr>
+          <tr class="heading">
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;">สินทรัพย์</td>
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;">แผน</td>
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;">เลข กม.</td>
+          </tr>
+        </thead>
+        <tbody>
+          ${row_table_checklist_week_4 ? row_table_checklist_week_4 : ""}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
+`;
+
+const createRowWorkOrderPM = (w_list, index) => (
+  `<tr class="item">
+      <td class="paddingFivePX" style=" text-align:center; vertical-align: middle;">${index + 1}</td>
+      <td class="paddingFivePX" style=" vertical-align: middle; max-width: 80mm;">${w_list.internal_item_id ? "-" : w_list.station_th}</td>
+      <td class="paddingFivePX" style=" vertical-align: middle;">${w_list.station_th ? "-" : w_list.internal_item_id}</td>
+      <td class="paddingFivePX" style=" vertical-align: middle; max-width: 80mm;">${w_list.station_th ? "-" : w_list.checklist_name}</td>
+      <td class="paddingFivePX" style=" vertical-align: middle;">${w_list.station_th ? "-" : w_list.x_cross_x_cross_th}</td>
+    </tr>`);
+
 export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((resolve, reject) => {
 
   if (routeLocation === '/spare-report-s-1') {
+    // console.log("valuesContext", valuesContext)
     let newDate = new Date()
     let date = newDate.getDate();
     let mouth = newDate.getMonth() + 1;
@@ -1559,22 +1905,23 @@ export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((re
       var line_number = 1
       var total = 0;
       var keyss = group_type[i];
-      filterResult_type.map((item) => {
+      // console.log("filterResult_type", filterResult_type)
+      valuesContext.line_item_shows.map((item) => {
         var myObj = {
           "item_id": line_number,
-          "description": item.item_description_th,
+          "description": item.item_description,
           "internal_item_id": item.internal_item_id,
           "unit": item.uom_name,
-          "quantity": item.current_unit_count ? item.current_unit_count.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : item.ending_unit_count,
-          "uom_group_id": item.pricing !== undefined ? (item.pricing.average_price && item.pricing.average_price.toFixed(4) * ((item.current_unit_count - item.committed_unit_count) && (item.current_unit_count - item.committed_unit_count)).toFixed(2)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : item.end_state_in_total_price,
-          "per_unit_price": item.pricing !== undefined ? item.pricing.average_price.toFixed(4) : item.end_state_in_total_price / item.current_ending_unit_count ? item.end_state_in_total_price / item.current_ending_unit_count : 0
+          "quantity": item.quantity,
+          "total": item.total,
+          "per_unit_price": item.per_unit_price
         };
         line_number = line_number + 1;
-        total = total + item.committed_unit_count
+        total = total + parseInt(item.total)
         line_items.push(myObj)
       })
       r[keyss] = {
-        "Totol": total,
+        "Totol": total.toFixed(2),
         "Item": line_items
       }
     }
@@ -1589,7 +1936,7 @@ export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((re
         "internal_item_id": "เลขที่สิ่งของคงคลัง",
         "unit": "หน่วย",
         "quantity": "จำนวนเหลือ ณ วันนี้",
-        "uom_group_id": "รวมเป็นเงิน",
+        "total": "รวมเป็นเงิน",
         "per_unit_price": "ราคา ต่อหน่วย"
       },
       "ItemInWarehouse": r
@@ -1921,14 +2268,83 @@ export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((re
       "station_name": ''
     }
     let list_body_table = valuesContext.checklist_line_item;
-    console.log("fact", fact)
-    // let stations = fact.stations.items;
-    // let station = stations.find(station => `${station.station_id}` === `${valuesContext.station_id}`);
-    // if (station) {
-    //   info_this_page.station_name = station.name
-    // }
-    console.log("info_this_page", info_this_page)
-    console.log("list_body_table", list_body_table)
+
+    let stations = fact.stations.items;
+    let station = stations.find(station => `${station.station_id}` === `${valuesContext.station_id}`);
+    if (station) {
+      info_this_page.station_name = station.name
+    }
+
+    let row;
+    list_body_table.map((list_body_table, index) => {
+      if (row) {
+        row = row + createRowChecklistLineItem(list_body_table, index)
+      } else {
+        row = createRowChecklistLineItem(list_body_table, index)
+      }
+    })
+    const html = createHtmlChecklistLineItem(info_this_page, row);
+    return resolve(html);
+
+  } else if (routeLocation === '/pmt-fixed-asset') {
+    console.log("valuesContext", valuesContext)
+    let info_this_page = {
+      "internal_document_id": valuesContext.internal_document_id,
+      "created_on": valuesContext.created_on,
+      "name": valuesContext.name,
+      "district_name": '',
+      "node_name": ''
+    }
+
+    let districts = fact.districts.items;
+    let district = districts.find(district => `${district.district_id}` === `${valuesContext.district_id}`);
+
+    let nodes = fact.nodes.items;
+    let node = nodes.find(node => `${node.node_id}` === `${valuesContext.node_id}`);
+
+    if (district && node) {
+      info_this_page.district_name = district.name
+      info_this_page.node_name = node.name
+    }
+
+    let row_week1;
+    valuesContext.w1_list.map((w1_list, index) => {
+      if (row_week1) {
+        row_week1 = row_week1 + createRowWorkOrderPM(w1_list, index)
+      } else {
+        row_week1 = createRowWorkOrderPM(w1_list, index)
+      }
+    })
+
+    let row_week2;
+    valuesContext.w2_list.map((w2_list, index) => {
+      if (row_week2) {
+        row_week2 = row_week2 + createRowWorkOrderPM(w2_list, index)
+      } else {
+        row_week2 = createRowWorkOrderPM(w2_list, index)
+      }
+    })
+
+    let row_week3;
+    valuesContext.w3_list.map((w3_list, index) => {
+      if (row_week3) {
+        row_week3 = row_week3 + createRowWorkOrderPM(w3_list, index)
+      } else {
+        row_week3 = createRowWorkOrderPM(w3_list, index)
+      }
+    })
+
+    let row_week4;
+    valuesContext.w4_list.map((w4_list, index) => {
+      if (row_week4) {
+        row_week4 = row_week4 + createRowWorkOrderPM(w4_list, index)
+      } else {
+        row_week4 = createRowWorkOrderPM(w4_list, index)
+      }
+    })
+
+    const html = createHtmlWorkOrderPM(info_this_page, row_week1, row_week2, row_week3, row_week4);
+    return resolve(html);
   }
 
 })

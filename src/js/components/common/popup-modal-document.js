@@ -68,7 +68,7 @@ const PopupModalDocument = (props) => {
                                                 decoded_token.has_position[0].warehouse_id :
                                                 "no_warehouse" : null;
                                         if (findWarehouse === document.dest_warehouse_id || findWarehouse === document.src_warehouse_id) {
-                                            console.log("findWarehouse>>>>")
+                                            // console.log("findWarehouse>>>>")
                                             return (
                                                 <tr key={index} id={index}>
                                                     <td className="edit-padding"> {document.internal_document_id} </td>
@@ -82,7 +82,7 @@ const PopupModalDocument = (props) => {
                                                 </tr>
                                             )
                                         } else if (findWarehouse === "no_warehouse") {
-                                            console.log("no_warehouse")
+                                            // console.log("no_warehouse")
                                             return (
                                                 <tr key={index} id={index}>
                                                     <td className="edit-padding"> {document.internal_document_id} </td>
@@ -96,7 +96,7 @@ const PopupModalDocument = (props) => {
                                                 </tr>
                                             )
                                         } else if (findWarehouse === document.physical_count_warehouse_id || findWarehouse === document.inventory_adjustment_warehouse_id) {
-                                            console.log("physical_count_warehouse_id or inventory_adjustment_warehouse_id")
+                                            // console.log("physical_count_warehouse_id or inventory_adjustment_warehouse_id")
                                             return (
                                                 <tr key={index} id={index}>
                                                     <td className="edit-padding"> {document.internal_document_id} </td>
@@ -119,7 +119,7 @@ const PopupModalDocument = (props) => {
 
                                         if (user) {
                                             if (document.work_request_district_id && document.work_request_district_id === user.position[0].district_id) {
-                                                console.log("THis is Work Request")
+                                                // console.log("THis is Work Request")
                                                 return (
                                                     <tr key={index} id={index}>
                                                         <td className="edit-padding"> {document.internal_document_id} </td>
@@ -134,7 +134,7 @@ const PopupModalDocument = (props) => {
                                                 )
                                             } else if ((document.work_order_district_id && document.work_order_district_id === user.position[0].district_id)
                                                 || document.work_order_node_id && document.work_order_node_id === user.position[0].node_id) {
-                                                console.log("THis is Work Order")
+                                                // console.log("THis is Work Order")
                                                 return (
                                                     <tr key={index} id={index}>
                                                         <td className="edit-padding"> {document.internal_document_id} </td>
@@ -149,7 +149,7 @@ const PopupModalDocument = (props) => {
                                                 )
                                             } else if ((document.ss101_district_id && document.ss101_district_id === user.position[0].district_id)
                                                 || document.ss101_node_id && document.ss101_node_id === user.position[0].node_id) {
-                                                console.log("THis is SS101")
+                                                // console.log("THis is SS101")
                                                 return (
                                                     <tr key={index} id={index}>
                                                         <td className="edit-padding"> {document.internal_document_id} </td>
@@ -164,7 +164,7 @@ const PopupModalDocument = (props) => {
                                                 )
                                             } else if ((document.equipment_installation_district_id && document.equipment_installation_district_id === user.position[0].district_id)
                                                 || document.equipment_installation_node_id && document.equipment_installation_node_id === user.position[0].node_id) {
-                                                console.log("THis is Equipment Installation")
+                                                // console.log("THis is Equipment Installation")
                                                 return (
                                                     <tr key={index} id={index}>
                                                         <td className="edit-padding"> {document.internal_document_id} </td>
@@ -179,7 +179,7 @@ const PopupModalDocument = (props) => {
                                                 )
                                             } else if ((document.selector_pm_plan_district_id && document.selector_pm_plan_district_id === user.position[0].district_id)
                                                 || document.selector_pm_plan_node_id && document.selector_pm_plan_node_id === user.position[0].node_id) {
-                                                console.log("THis is Selecter PM Plan")
+                                                // console.log("THis is Selecter PM Plan")
                                                 return (
                                                     <tr key={index} id={index}>
                                                         <td className="edit-padding"> {document.internal_document_id} </td>
@@ -193,7 +193,7 @@ const PopupModalDocument = (props) => {
                                                     </tr>
                                                 )
                                             } else if (document.node_id && document.node_id === user.position[0].node_id) {
-                                                console.log("THis is WOrk Order PM")
+                                                // console.log("THis is WOrk Order PM")
                                                 return (
                                                     <tr key={index} id={index}>
                                                         <td className="edit-padding"> {document.internal_document_id} </td>
@@ -207,7 +207,7 @@ const PopupModalDocument = (props) => {
                                                     </tr>
                                                 )
                                             } else if (document.document_type_id === 2071) {
-                                                console.log("THis is Maintenance")
+                                                // console.log("THis is Maintenance")
                                                 return (
                                                     <tr key={index} id={index}>
                                                         <td className="edit-padding"> {document.internal_document_id} </td>

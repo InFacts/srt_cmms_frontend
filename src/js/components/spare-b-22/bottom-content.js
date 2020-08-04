@@ -37,17 +37,17 @@ const BottomContent = (props) => {
           "item_description": line_item.item_description,
           "item_status_description_th": line_item.item_status_description_th,
           "หน่วย": line_item.uom_name,
-          "จำนวนเหลือเดือนก่อน": line_item.begin_unit_count,
-          "ราคาเดือนก่อน": line_item.begin_state_in_total_price,
+          "จำนวนเหลือเดือนก่อน": line_item.begin_unit_count ? line_item.begin_unit_count : "0",
+          "ราคาเดือนก่อน": line_item.begin_total_price ? line_item.begin_total_price : "0",
 
-          "จำนวนรับเดือนนี้": line_item.state_in_unit_count,
-          "ราคารับเดือนนี้": line_item.state_in_total_price,
+          "จำนวนรับเดือนนี้": line_item.state_in_unit_count ? line_item.state_in_unit_count : "0",
+          "ราคารับเดือนนี้": line_item.state_in_total_price ? line_item.state_in_total_price : "0",
 
-          "จำนวนจ่ายเดือนนี้": line_item.state_out_unit_count,
-          "ราคาจ่ายเดือนนี้": line_item.state_out_total_price,
+          "จำนวนจ่ายเดือนนี้": line_item.state_out_unit_count ? line_item.state_out_unit_count : "0",
+          "ราคาจ่ายเดือนนี้": line_item.state_out_total_price ? line_item.state_out_total_price : "0",
 
-          "จำนวนคงเหลือ": line_item.ending_unit_count,
-          "ราคาคงเหลือ": "-",
+          "จำนวนคงเหลือ": line_item.end_unit_count ? line_item.end_unit_count : "0",
+          "ราคาคงเหลือ": line_item.end_total_price ? line_item.end_total_price : "0",
 
           "ประเภทบัญชี": item.accounting_type
         })
@@ -59,17 +59,17 @@ const BottomContent = (props) => {
           "item_status_description_th": line_item.item_status_description_th,
 
           "uom_name": line_item.uom_name,
-          "begin_unit_count": line_item.begin_unit_count,
-          "begin_state_in_total_price": line_item.begin_state_in_total_price,
+          "begin_unit_count": line_item.begin_unit_count ? line_item.begin_unit_count : "0",
+          "begin_state_in_total_price": line_item.begin_total_price ? line_item.begin_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0",
 
-          "state_in_unit_count": line_item.state_in_unit_count,
-          "end_state_in_total_price": line_item.state_in_total_price,
+          "state_in_unit_count": line_item.state_in_unit_count ? line_item.state_in_unit_count : "0",
+          "end_state_in_total_price": line_item.state_in_total_price ? line_item.state_in_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0",
 
-          "state_out_unit_count": line_item.state_out_unit_count,
-          "end_state_out_total_price": line_item.state_out_total_price,
+          "state_out_unit_count": line_item.state_out_unit_count ? line_item.state_out_unit_count : "0",
+          "end_state_out_total_price": line_item.state_out_total_price ? line_item.state_out_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0",
 
-          "ending_unit_count": line_item.ending_unit_count,
-          "ending_unit_count_total": "-",
+          "ending_unit_count": line_item.end_unit_count ? line_item.end_unit_count : "0",
+          "ending_unit_count_total": line_item.end_total_price ? line_item.end_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0",
 
           "accounting_type": item.accounting_type
         })
@@ -140,17 +140,17 @@ const BottomContent = (props) => {
                         <td className="edit-padding">{line_items.internal_item_id} - {line_items.item_description}</td>
                         <td className="edit-padding text-center">{line_items.uom_name}</td>
 
-                        <td className="edit-padding text-center">{line_items.begin_unit_count}</td> {/* เหลือเดือนก่อน */}
-                        <td className="edit-padding text-center">{line_items.begin_state_in_total_price}</td>
+                        <td className="edit-padding text-center">{line_items.begin_unit_count ? line_items.begin_unit_count : "0"}</td> {/* เหลือเดือนก่อน */}
+                        <td className="edit-padding text-center">{line_items.begin_total_price ? line_items.begin_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0"}</td>
 
-                        <td className="edit-padding text-center">{line_items.state_in_unit_count}</td> {/* รับเดือนนี้ */}
-                        <td className="edit-padding text-center">{line_items.state_in_total_price}</td>
+                        <td className="edit-padding text-center">{line_items.state_in_unit_count ? line_items.state_in_unit_count : "0"}</td> {/* รับเดือนนี้ */}
+                        <td className="edit-padding text-center">{line_items.state_in_total_price ? line_items.state_in_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0"}</td>
 
-                        <td className="edit-padding text-center">{line_items.state_out_unit_count}</td> {/* จ่ายเดือนนี้ */}
-                        <td className="edit-padding text-center">{line_items.state_out_total_price}</td>
+                        <td className="edit-padding text-center">{line_items.state_out_unit_count ? line_items.state_out_unit_count : "0"}</td> {/* จ่ายเดือนนี้ */}
+                        <td className="edit-padding text-center">{line_items.state_out_total_price ? line_items.state_out_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0"}</td>
 
-                        <td className="edit-padding text-center">{line_items.ending_unit_count}</td> {/* คงเหลือ */}
-                        <td className="edit-padding text-center">-</td>
+                        <td className="edit-padding text-center">{line_items.end_unit_count ? line_items.end_unit_count : "0"}</td> {/* คงเหลือ */}
+                        <td className="edit-padding text-center">{line_items.end_total_price ? line_items.end_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0"}</td>
 
                         {/* <td className="edit-padding text-center">-</td> */}
                         <td className="edit-padding text-center">{item.accounting_type}</td>
