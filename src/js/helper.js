@@ -2522,22 +2522,22 @@ export const validateInternalDocumentIDWorfOrderPMFieldHelper = (decoded_token, 
         let error;
         getDocumentbyInternalDocumentID(internal_document_id)
             .then((data) => {
-                console.log(" i got data", data);
+                // console.log(" i got data", data);
                 if ((toolbar.mode === TOOLBAR_MODE.REPORT || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
                     && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
-                    console.log("validateInternalDocumentIDField:: I got document ID ")
+                    // console.log("validateInternalDocumentIDField:: I got document ID ")
                     setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
                     return resolve(null);
                 }
             })
             .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
-                console.log("I think I have 404 not found in doc id.")
+                // console.log("I think I have 404 not found in doc id.")
                 setFieldValue('document_id', '', false);
 
                 if (toolbar.mode === TOOLBAR_MODE.REPORT) { //If Mode Search, invalid Document ID
                     error = 'Document ID not Found in System';
                 } else {//If mode add, ok
-                    console.log("document ID doesn't exist but I am in mode add")
+                    // console.log("document ID doesn't exist but I am in mode add")
                     error = ''
                 }
             })
@@ -3241,45 +3241,36 @@ export const weightedAverage = (lots) => {
 }
 
 export const getLotFromQty = (fifo, quantity) => {
-    var stopFprEach = false;
     var fifoCopy = fifo.slice(); // make a copy
     // console.log("fifoCopy", fifoCopy)
     var quantityLeft = quantity;
     // console.log("quantityLeft", quantityLeft)
     var lotsFrom = [];
-    console.log("lotsFrom fifo ", fifo)
+    // console.log("lotsFrom fifo ", fifo)
     for (var currentLot of fifo) {
-        // fifo.forEach((currentLot) => {
-        console.log("lotsFrom currentLot ", currentLot)
-        // if (stopFprEach === true){
-        //     // console.log("break")
-        //     return;
-        // }
+        // console.log("lotsFrom currentLot ", currentLot)
         if (quantityLeft >= currentLot.quantity) { // if Quantity Left >= Current Lot Quantity, shift and push
-            // console.log("if")
             lotsFrom.push(fifoCopy.shift());
             quantityLeft -= currentLot.quantity;
-            // console.log("quantityLeft IF", quantityLeft)
-            // if (quantityLeft === 0) {
-            //     stopFprEach = true
-            // }
         } else { // if Quantity Left < Current Lot Quantity, shift and push only required # of lot
-            // console.log("else")
             if (quantityLeft == 0) {
                 break;
             }
             lotsFrom.push({ ...fifoCopy.shift(), quantity: quantityLeft });
             quantityLeft = 0;
-
-            // console.log("quantityLeft ELSE", quantityLeft)
         }
     }
     // Artificial Lots if QTY leftover
     if (quantityLeft > 0) {
         lotsFrom.push({ quantity: quantityLeft, per_unit_price: weightedAverage(lotsFrom) });
     }
-    console.log("lotsFrom", lotsFrom)
+    // console.log("lotsFrom", lotsFrom)
     return lotsFrom;
+};
+
+export const checkRawFifoQty = (fifo) => {
+    console.log("fifo", fifo)
+    return fifo;
 };
 
 // Get Params from URL

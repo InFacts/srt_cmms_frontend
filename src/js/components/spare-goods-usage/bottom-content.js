@@ -20,7 +20,7 @@ import PopupModalNoPart from '../common/popup-modal-nopart'
 import '../../../css/table.css';
 
 import {
-  fetchGoodsOnhandData, getNumberFromEscapedString, getLotFromQty, weightedAverage,
+  fetchGoodsOnhandData, getNumberFromEscapedString, getLotFromQty, weightedAverage, checkRawFifoQty, 
   sumTotalLineItemHelper, sumTotalHelper, DOCUMENT_STATUS, getUserIDFromEmployeeID, checkBooleanForEditHelper
 } from '../../helper';
 
@@ -85,7 +85,7 @@ const BottomContent = (props) => {
           console.log("at_source", at_source)
           if (at_source) {
             setFieldValue(`line_items[${index}].at_source`, [at_source], false);
-            setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(at_source.pricing.fifo, values.line_items[index].quantity)), false);
+            setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(checkRawFifoQty(at_source.pricing.fifo), values.line_items[index].quantity)), false);
             return resolve();
           }
           else {
@@ -125,7 +125,7 @@ const BottomContent = (props) => {
       .then((at_source) => {
         var at_sources = at_source;
         var at_source = at_sources.find(at_source => `${at_source.item_status_id}` === `${item_status_id}`); // Returns undefined if not found
-        console.log("at_source", at_source)
+        // console.log("at_source", at_source)
         if (at_source) {
           setFieldValue(`line_items[${index}].at_source`, [at_source], false);
           setFieldValue(`line_items[${index}].item_status_id`, item_status_id, false);

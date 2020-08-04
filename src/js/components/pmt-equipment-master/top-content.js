@@ -41,13 +41,13 @@ const TopContent = (props) => {
     console.log("data>>>>", data)
     let fact_checklists = factChecklist.items;
     let fact_checklist = fact_checklists.find(factChecklist => `${factChecklist.checklist_id}` === `${data.equipment_group.checklist_id}`); // Returns undefined if not found
-    if (fact_checklist) {
+    // if (fact_checklist) {
     return {
       item_id: data.item_id,
       internal_item_id: data.equipment_group.item.internal_item_id,
       description: data.equipment_group.item.description,
       item_group_id: data.equipment_group.item.item_group_id,
-      checklist_group_id: fact_checklist.checklist_group_id,
+      checklist_group_id: fact_checklist ? fact_checklist.checklist_group_id : "",
       checklist_id: data.equipment_group.checklist_id,
       equipment_group_id: data.equipment_group.equipment_group_id,
       active: data.equipment_group.item.active.data[0],
@@ -78,7 +78,7 @@ const TopContent = (props) => {
       equipment_id: data.equipment_id,
       modeEdit: values.line_position_permission[0].module_admin === true ? true : false     // IF Check user If User is Admin -> return true Else -> return false
 
-    }
+    // }
   }
   }
 
@@ -228,7 +228,7 @@ const TopContent = (props) => {
               {/* === import_on === */}
               <div className="float-right">
                 <div className="grid_3 float-right">
-                  <DateInput name="import_on" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} 
+                  <DateInput name="import_on" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} 
                   validate={validateImportOnField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="5" />
                 </div>
                 <div className="grid_2 float-right">
