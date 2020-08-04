@@ -1647,9 +1647,10 @@ export const startDocumentApprovalFlow = (document_id) => new Promise((resolve, 
 // Get Step Approval After Search Document (document_id changes)
 export const fetchStepApprovalDocumentData = (document_id) => new Promise((resolve, reject) => {
     const url = `${BASE_URL}/approval/${document_id}/latest/plus`;
+    console.log("fetchStepApprovalDocumentData -> url", url)
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((step_approve) => {
-            // console.log("Fetfch Appoval", step_approve.data)
+            console.log("Fetfch Appoval", step_approve)
             resolve(step_approve.data);
         })
         .catch((err) => {

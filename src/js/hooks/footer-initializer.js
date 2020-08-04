@@ -95,7 +95,7 @@ const useFooterInitializer = (document_type_id) => {
                     }
                 }
                 else { // Just Work order PM
-                    if (toolbar.mode === TOOLBAR_MODE.ADD) { dispatch(footerToModeAddDraft()); }
+                    if (toolbar.mode === TOOLBAR_MODE.ADD && values.status_name_th === "") { dispatch(footerToModeAddDraft()); }
                     else {
                         if (document_type_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM && toolbar.mode === TOOLBAR_MODE.SEARCH) {
                             dispatch(footerToModeAddDraft());
@@ -113,7 +113,7 @@ const useFooterInitializer = (document_type_id) => {
     // Handle Toolbar Mode
     useEffect(() => {
         let document_id = values.document_id;
-        console.log("document_id", document_id)
+        console.log("document_id -->", document_id, values)
         let routeLocation = getRouteLocation();
         if (routeLocation === spacialPage.ITEM_MASTER_DATA || routeLocation === spacialPage.WAREHOUSE || routeLocation === spacialPage.PMT_EQUIPMENT_MASTER || routeLocation === spacialPage.PMT_CREATE_CHECKOUT) {
             if (toolbar.mode === TOOLBAR_MODE.SEARCH) {
@@ -293,6 +293,7 @@ const useFooterInitializer = (document_type_id) => {
     }
 
     const putDocument = (document_id, document_type_id, data, files, document_status_id, flag_create_approval_flow) => {
+        console.log("putDocument -> values.status_name_th", values.status_name_th)
         if (DOCUMENT_STATUS_ID.WAIT_APPROVE === document_status_id && values.status_name_th !== DOCUMENT_STATUS.REOPEN) {
             // setFieldValue('status_name_th', DOCUMENT_STATUS.WAIT_APPROVE, true);
             fetchLatestStepApprovalDocumentData(document_id).then((latestApprovalInfo) => {
@@ -308,8 +309,14 @@ const useFooterInitializer = (document_type_id) => {
     }
 
     const fetchApprovalStep = (document_id) => {
+        console.log("fetchStepApprovalDocumentData -> document_id", document_id, values)
         fetchStepApprovalDocumentData(document_id).then((result) => {
+            console.log("fetchStepApprovalDocumentData -> result", result, result.approval_step.length, toolbar.mode)
             setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
+            if (result.approval_step.length !== 0 && toolbar.mode === TOOLBAR_MODE.ADD) {
+                console.log("fetchStepApprovalDocumentData -> WAIT_APPROVE")
+                setFieldValue('status_name_th', DOCUMENT_STATUS.WAIT_APPROVE, true);
+            }
             if (result.is_canceled) {
                 setFieldValue("document_is_canceled", result.is_canceled.data, false);
             }
@@ -329,19 +336,22 @@ const useFooterInitializer = (document_type_id) => {
                     if (values.document_id) { // Case If you ever saved document and then you SEND document. (If have document_id, no need to create new doc)
                         if (values.status_name_th === DOCUMENT_STATUS.REOPEN) {
                             data.document.document_status_id = DOCUMENT_STATUS_ID.WAIT_APPROVE;
+                            setFieldValue('status_name_th', DOCUMENT_STATUS.WAIT_APPROVE, true);
+                            console.log("Click Send -> values.status_name_th", values.status_name_th)
                             putDocument(values.document_id, document_type_id, data, values.files, data.document.document_status_id, true);
                         }
                         else {
                             data.document.document_status_id = DOCUMENT_STATUS_ID.WAIT_APPROVE;
+                            setFieldValue('status_name_th', DOCUMENT_STATUS.WAIT_APPROVE, true);
                             putDocument(values.document_id, document_type_id, data, values.files, DOCUMENT_STATUS_ID.DRAFT, true);
                         }
-                        setFieldValue('status_name_th', DOCUMENT_STATUS.WAIT_APPROVE, true);
                     }
                     else { // Case If you never saved document, but you want to SEND document
                         data.document.document_status_id = DOCUMENT_STATUS_ID.WAIT_APPROVE;
                         saveDocument(document_type_id, data, values.files, true)
                             .then((document_id) => {
                                 setFieldValue('document_id', document_id, true);
+                                setFieldValue('status_name_th', DOCUMENT_STATUS.WAIT_APPROVE, true);
                                 dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
                                 postDocumentApprovalFlow(document_id, data);
                             }).catch((err) => {
