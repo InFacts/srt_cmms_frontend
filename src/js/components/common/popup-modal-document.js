@@ -113,117 +113,128 @@ const PopupModalDocument = (props) => {
                                     } else {  // <<<<<<======= DOCUMENT PMT ===========>>>>>>>>>
                                         // console.log("dest_warehouse and src_warehouse is null")
 
-                                        let users = fact.users.items;
-                                        let user = users.find(user => `${user.user_id}` === `${decoded_token.id}`);
-                                        // user.position[0].district_id user.position[0].node_id
-
-                                        if (user) {
-                                            if (document.work_request_district_id && document.work_request_district_id === user.position[0].district_id) {
-                                                // console.log("THis is Work Request")
-                                                return (
-                                                    <tr key={index} id={index}>
-                                                        <td className="edit-padding"> {document.internal_document_id} </td>
-                                                        <td className="edit-padding"> {document.created_on.split(".")[0].replace("T", " เวลา ") + " น."} </td>
-                                                        <td className="edit-padding"> {document.document_status_en}</td>
-                                                        <td className="edit-padding text-center">
-                                                            <button type="button" className="button-blue"
-                                                                onClick={() => setFieldValue(`${props.name}`, document.internal_document_id, true)}
-                                                                aria-label="Close active modal" aria-controls={props.id} >เลือก</button>
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            } else if ((document.work_order_district_id && document.work_order_district_id === user.position[0].district_id)
-                                                || document.work_order_node_id && document.work_order_node_id === user.position[0].node_id) {
-                                                // console.log("THis is Work Order")
-                                                return (
-                                                    <tr key={index} id={index}>
-                                                        <td className="edit-padding"> {document.internal_document_id} </td>
-                                                        <td className="edit-padding"> {document.created_on.split(".")[0].replace("T", " เวลา ") + " น."} </td>
-                                                        <td className="edit-padding"> {document.document_status_en}</td>
-                                                        <td className="edit-padding text-center">
-                                                            <button type="button" className="button-blue"
-                                                                onClick={() => setFieldValue(`${props.name}`, document.internal_document_id, true)}
-                                                                aria-label="Close active modal" aria-controls={props.id} >เลือก</button>
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            } else if ((document.ss101_district_id && document.ss101_district_id === user.position[0].district_id)
-                                                || document.ss101_node_id && document.ss101_node_id === user.position[0].node_id) {
-                                                // console.log("THis is SS101")
-                                                return (
-                                                    <tr key={index} id={index}>
-                                                        <td className="edit-padding"> {document.internal_document_id} </td>
-                                                        <td className="edit-padding"> {document.created_on.split(".")[0].replace("T", " เวลา ") + " น."} </td>
-                                                        <td className="edit-padding"> {document.document_status_en}</td>
-                                                        <td className="edit-padding text-center">
-                                                            <button type="button" className="button-blue"
-                                                                onClick={() => setFieldValue(`${props.name}`, document.internal_document_id, true)}
-                                                                aria-label="Close active modal" aria-controls={props.id} >เลือก</button>
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            } else if ((document.equipment_installation_district_id && document.equipment_installation_district_id === user.position[0].district_id)
-                                                || document.equipment_installation_node_id && document.equipment_installation_node_id === user.position[0].node_id) {
-                                                // console.log("THis is Equipment Installation")
-                                                return (
-                                                    <tr key={index} id={index}>
-                                                        <td className="edit-padding"> {document.internal_document_id} </td>
-                                                        <td className="edit-padding"> {document.created_on.split(".")[0].replace("T", " เวลา ") + " น."} </td>
-                                                        <td className="edit-padding"> {document.document_status_en}</td>
-                                                        <td className="edit-padding text-center">
-                                                            <button type="button" className="button-blue"
-                                                                onClick={() => setFieldValue(`${props.name}`, document.internal_document_id, true)}
-                                                                aria-label="Close active modal" aria-controls={props.id} >เลือก</button>
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            } else if ((document.selector_pm_plan_district_id && document.selector_pm_plan_district_id === user.position[0].district_id)
-                                                || document.selector_pm_plan_node_id && document.selector_pm_plan_node_id === user.position[0].node_id) {
-                                                // console.log("THis is Selecter PM Plan")
-                                                return (
-                                                    <tr key={index} id={index}>
-                                                        <td className="edit-padding"> {document.internal_document_id} </td>
-                                                        <td className="edit-padding"> {document.created_on.split(".")[0].replace("T", " เวลา ") + " น."} </td>
-                                                        <td className="edit-padding"> {document.document_status_en}</td>
-                                                        <td className="edit-padding text-center">
-                                                            <button type="button" className="button-blue"
-                                                                onClick={() => setFieldValue(`${props.name}`, document.internal_document_id, true)}
-                                                                aria-label="Close active modal" aria-controls={props.id} >เลือก</button>
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            } else if (document.node_id && document.node_id === user.position[0].node_id) {
-                                                // console.log("THis is WOrk Order PM")
-                                                return (
-                                                    <tr key={index} id={index}>
-                                                        <td className="edit-padding"> {document.internal_document_id} </td>
-                                                        <td className="edit-padding"> {document.created_on.split(".")[0].replace("T", " เวลา ") + " น."} </td>
-                                                        <td className="edit-padding"> {document.document_status_en}</td>
-                                                        <td className="edit-padding text-center">
-                                                            <button type="button" className="button-blue"
-                                                                onClick={() => setFieldValue(`${props.name}`, document.internal_document_id, true)}
-                                                                aria-label="Close active modal" aria-controls={props.id} >เลือก</button>
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            } else if (document.document_type_id === 2071) {
-                                                // console.log("THis is Maintenance")
-                                                return (
-                                                    <tr key={index} id={index}>
-                                                        <td className="edit-padding"> {document.internal_document_id} </td>
-                                                        <td className="edit-padding"> {document.created_on.split(".")[0].replace("T", " เวลา ") + " น."} </td>
-                                                        <td className="edit-padding"> {document.document_status_en}</td>
-                                                        <td className="edit-padding text-center">
-                                                            <button type="button" className="button-blue"
-                                                                onClick={() => setFieldValue(`${props.name}`, document.internal_document_id, true)}
-                                                                aria-label="Close active modal" aria-controls={props.id} >เลือก</button>
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            }
-
-
-                                        }
+                                        return (
+                                            <tr key={index} id={index}>
+                                                <td className="edit-padding"> {document.internal_document_id} </td>
+                                                <td className="edit-padding"> {document.created_on.split(".")[0].replace("T", " เวลา ") + " น."} </td>
+                                                <td className="edit-padding"> {document.document_status_en}</td>
+                                                <td className="edit-padding text-center">
+                                                    <button type="button" className="button-blue"
+                                                        onClick={() => setFieldValue(`${props.name}`, document.internal_document_id, true)}
+                                                        aria-label="Close active modal" aria-controls={props.id} >เลือก</button>
+                                                </td>
+                                            </tr>
+                                        )
+                                        
+                                        // let users = fact.users.items;
+                                        // let user = users.find(user => `${user.user_id}` === `${decoded_token.id}`);
+                                        // // user.position[0].district_id user.position[0].node_id
+                                        // // console.log("user>>>", user)
+                                        // if (user) {
+                                        //     if (document.document_type_id === 2011) {
+                                        //         // console.log("THis is Work Request")
+                                        //         return (
+                                        //             <tr key={index} id={index}>
+                                        //                 <td className="edit-padding"> {document.internal_document_id} </td>
+                                        //                 <td className="edit-padding"> {document.created_on.split(".")[0].replace("T", " เวลา ") + " น."} </td>
+                                        //                 <td className="edit-padding"> {document.document_status_en}</td>
+                                        //                 <td className="edit-padding text-center">
+                                        //                     <button type="button" className="button-blue"
+                                        //                         onClick={() => setFieldValue(`${props.name}`, document.internal_document_id, true)}
+                                        //                         aria-label="Close active modal" aria-controls={props.id} >เลือก</button>
+                                        //                 </td>
+                                        //             </tr>
+                                        //         )
+                                        //     } else if ((document.work_order_district_id && document.work_order_district_id === user.position[0].district_id)
+                                        //         || document.work_order_node_id && document.work_order_node_id === user.position[0].node_id) {
+                                        //         // console.log("THis is Work Order")
+                                        //         return (
+                                        //             <tr key={index} id={index}>
+                                        //                 <td className="edit-padding"> {document.internal_document_id} </td>
+                                        //                 <td className="edit-padding"> {document.created_on.split(".")[0].replace("T", " เวลา ") + " น."} </td>
+                                        //                 <td className="edit-padding"> {document.document_status_en}</td>
+                                        //                 <td className="edit-padding text-center">
+                                        //                     <button type="button" className="button-blue"
+                                        //                         onClick={() => setFieldValue(`${props.name}`, document.internal_document_id, true)}
+                                        //                         aria-label="Close active modal" aria-controls={props.id} >เลือก</button>
+                                        //                 </td>
+                                        //             </tr>
+                                        //         )
+                                        //     } else if ((document.ss101_district_id && document.ss101_district_id === user.position[0].district_id)
+                                        //         || document.ss101_node_id && document.ss101_node_id === user.position[0].node_id) {
+                                        //         // console.log("THis is SS101")
+                                        //         return (
+                                        //             <tr key={index} id={index}>
+                                        //                 <td className="edit-padding"> {document.internal_document_id} </td>
+                                        //                 <td className="edit-padding"> {document.created_on.split(".")[0].replace("T", " เวลา ") + " น."} </td>
+                                        //                 <td className="edit-padding"> {document.document_status_en}</td>
+                                        //                 <td className="edit-padding text-center">
+                                        //                     <button type="button" className="button-blue"
+                                        //                         onClick={() => setFieldValue(`${props.name}`, document.internal_document_id, true)}
+                                        //                         aria-label="Close active modal" aria-controls={props.id} >เลือก</button>
+                                        //                 </td>
+                                        //             </tr>
+                                        //         )
+                                        //     } else if ((document.equipment_installation_district_id && document.equipment_installation_district_id === user.position[0].district_id)
+                                        //         || document.equipment_installation_node_id && document.equipment_installation_node_id === user.position[0].node_id) {
+                                        //         // console.log("THis is Equipment Installation")
+                                        //         return (
+                                        //             <tr key={index} id={index}>
+                                        //                 <td className="edit-padding"> {document.internal_document_id} </td>
+                                        //                 <td className="edit-padding"> {document.created_on.split(".")[0].replace("T", " เวลา ") + " น."} </td>
+                                        //                 <td className="edit-padding"> {document.document_status_en}</td>
+                                        //                 <td className="edit-padding text-center">
+                                        //                     <button type="button" className="button-blue"
+                                        //                         onClick={() => setFieldValue(`${props.name}`, document.internal_document_id, true)}
+                                        //                         aria-label="Close active modal" aria-controls={props.id} >เลือก</button>
+                                        //                 </td>
+                                        //             </tr>
+                                        //         )
+                                        //     } else if ((document.selector_pm_plan_district_id && document.selector_pm_plan_district_id === user.position[0].district_id)
+                                        //         || document.selector_pm_plan_node_id && document.selector_pm_plan_node_id === user.position[0].node_id) {
+                                        //         // console.log("THis is Selecter PM Plan")
+                                        //         return (
+                                        //             <tr key={index} id={index}>
+                                        //                 <td className="edit-padding"> {document.internal_document_id} </td>
+                                        //                 <td className="edit-padding"> {document.created_on.split(".")[0].replace("T", " เวลา ") + " น."} </td>
+                                        //                 <td className="edit-padding"> {document.document_status_en}</td>
+                                        //                 <td className="edit-padding text-center">
+                                        //                     <button type="button" className="button-blue"
+                                        //                         onClick={() => setFieldValue(`${props.name}`, document.internal_document_id, true)}
+                                        //                         aria-label="Close active modal" aria-controls={props.id} >เลือก</button>
+                                        //                 </td>
+                                        //             </tr>
+                                        //         )
+                                        //     } else if (document.node_id && document.node_id === user.position[0].node_id) {
+                                        //         // console.log("THis is WOrk Order PM")
+                                        //         return (
+                                        //             <tr key={index} id={index}>
+                                        //                 <td className="edit-padding"> {document.internal_document_id} </td>
+                                        //                 <td className="edit-padding"> {document.created_on.split(".")[0].replace("T", " เวลา ") + " น."} </td>
+                                        //                 <td className="edit-padding"> {document.document_status_en}</td>
+                                        //                 <td className="edit-padding text-center">
+                                        //                     <button type="button" className="button-blue"
+                                        //                         onClick={() => setFieldValue(`${props.name}`, document.internal_document_id, true)}
+                                        //                         aria-label="Close active modal" aria-controls={props.id} >เลือก</button>
+                                        //                 </td>
+                                        //             </tr>
+                                        //         )
+                                        //     } else if (document.document_type_id === 2071) {
+                                        //         // console.log("THis is Maintenance")
+                                        //         return (
+                                        //             <tr key={index} id={index}>
+                                        //                 <td className="edit-padding"> {document.internal_document_id} </td>
+                                        //                 <td className="edit-padding"> {document.created_on.split(".")[0].replace("T", " เวลา ") + " น."} </td>
+                                        //                 <td className="edit-padding"> {document.document_status_en}</td>
+                                        //                 <td className="edit-padding text-center">
+                                        //                     <button type="button" className="button-blue"
+                                        //                         onClick={() => setFieldValue(`${props.name}`, document.internal_document_id, true)}
+                                        //                         aria-label="Close active modal" aria-controls={props.id} >เลือก</button>
+                                        //                 </td>
+                                        //             </tr>
+                                        //         )
+                                        //     }
+                                        // }
                                     }
                                 })}
                             </tbody>

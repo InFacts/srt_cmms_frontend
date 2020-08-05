@@ -154,9 +154,9 @@ const BottomContent = (props) => {
               </div>
               <div className="grid_3 pull_1">
                 <SelectNoChildrenInput name="active" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} tabIndex="10" >
-                  <option value=''></option>
-                  <option value='0'>ปิดการใช้งาน</option>
+                  {/* <option value=''></option> */}
                   <option value='1'>เปิดการใช้งาน</option>
+                  <option value='0'>ปิดการใช้งาน</option>
                 </SelectNoChildrenInput>
               </div>
 

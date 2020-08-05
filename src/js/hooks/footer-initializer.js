@@ -311,14 +311,16 @@ const useFooterInitializer = (document_type_id) => {
     const fetchApprovalStep = (document_id) => {
         console.log("fetchStepApprovalDocumentData -> document_id", document_id, values)
         fetchStepApprovalDocumentData(document_id).then((result) => {
-            console.log("fetchStepApprovalDocumentData -> result", result, result.approval_step.length, toolbar.mode)
+            console.log("fetchStepApprovalDocumentData -> result", result, result.approval_step, toolbar.mode)
             setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
-            if (result.approval_step.length !== 0 && toolbar.mode === TOOLBAR_MODE.ADD) {
-                console.log("fetchStepApprovalDocumentData -> WAIT_APPROVE")
-                setFieldValue('status_name_th', DOCUMENT_STATUS.WAIT_APPROVE, true);
-            }
-            if (result.is_canceled) {
-                setFieldValue("document_is_canceled", result.is_canceled.data, false);
+            if (result.approval_step) {
+                if (result.approval_step.length !== 0 && toolbar.mode === TOOLBAR_MODE.ADD) {
+                    console.log("fetchStepApprovalDocumentData -> WAIT_APPROVE")
+                    setFieldValue('status_name_th', DOCUMENT_STATUS.WAIT_APPROVE, true);
+                }
+                if (result.is_canceled) {
+                    setFieldValue("document_is_canceled", result.is_canceled.data, false);
+                }
             }
         });
     }

@@ -167,7 +167,7 @@ const TopContent = (props) => {
               {/* Document date */}
               <Label>วันเวลาที่เริ่มทำวาระ</Label>
               <div className="grid_3 alpha">
-                <DateInput name="start_on"
+                <DateTimeInput name="start_on"
                 validate={validateStartOnField}
                   disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                   tabIndex="8" />

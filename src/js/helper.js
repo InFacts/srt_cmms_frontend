@@ -954,7 +954,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             name: values.name,
             active: true,
             node_id: parseInt(values.node_id),
-            start_on: values.start_on + 'T22:00:00+07:00',
+            start_on: values.start_on + ':00+07:00',
         }
 
         var w1_part = [];
@@ -2201,7 +2201,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                 district_id: data.specific.selector_pm_plan.node.district_id,
                 node_id: data.specific.selector_pm_plan.node_id,
                 station_id: data.specific.selector_pm_plan.station_id,
-                start_on: data.specific.selector_pm_plan.start_on.slice(0, 10),
+                start_on: data.specific.selector_pm_plan.start_on.split(".")[0],
                 status_name_th: document_status.status,
 
                 w1_list: returnArrayLineSelector(data.specific.selector_pm_plan.selector_checklist_group, fact, 1),
@@ -2520,7 +2520,7 @@ export const validateInternalDocumentIDWorfOrderPMFieldHelper = (decoded_token, 
     // Internal Document ID
     //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
     //  ie. GR-PYO-2563/0001
-    if (checkBooleanForEdit === true && (toolbar.mode === TOOLBAR_MODE.REPORT || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)) {
+    if (checkBooleanForEdit === true && (toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)) {
         return resolve();
     }
     if (document_type_group_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM) {
@@ -2528,7 +2528,7 @@ export const validateInternalDocumentIDWorfOrderPMFieldHelper = (decoded_token, 
         getDocumentbyInternalDocumentID(internal_document_id)
             .then((data) => {
                 // console.log(" i got data", data);
-                if ((toolbar.mode === TOOLBAR_MODE.REPORT || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
+                if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
                     && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value 
                     // console.log("validateInternalDocumentIDField:: I got document ID ")
                     setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
@@ -2539,7 +2539,7 @@ export const validateInternalDocumentIDWorfOrderPMFieldHelper = (decoded_token, 
                 // console.log("I think I have 404 not found in doc id.")
                 setFieldValue('document_id', '', false);
 
-                if (toolbar.mode === TOOLBAR_MODE.REPORT) { //If Mode Search, invalid Document ID
+                if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
                     error = 'Document ID not Found in System';
                 } else {//If mode add, ok
                     // console.log("document ID doesn't exist but I am in mode add")
@@ -3215,6 +3215,7 @@ export const approveDocuement = (document_id, obj_body) => new Promise((resolve,
             console.log(" I am successful in creating approval to document with document_id ", res);
             resolve(res);
         }).catch(function (err) {
+            console.log("err", err.response)
             reject(err);
         })
 });
