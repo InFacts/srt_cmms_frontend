@@ -24,63 +24,65 @@ const BottomContent = (props) => {
   const factItems = useSelector((state) => ({ ...state.api.fact.items }), shallowEqual);
 
   const setValuesForCSV = (line_items) => {
-    values.new_line_items = [];
-    values.new_line_items_pdf = [];
-    
+    let new_line_items = [];
+    let new_line_items_pdf = [];
+    console.log("line_items", line_items)
     line_items.map((line_item) => {
       let items = factItems.items;
       let item = items.find(item => `${item.item_id}` === `${line_item.item_id}`)
       if (item) {
-        values.new_line_items.push({
+        new_line_items.push({
           "warehouse_name": line_item.warehouse_name,
           "internal_item_id": line_item.internal_item_id,
           "item_description": line_item.item_description,
           "item_status_description_th": line_item.item_status_description_th,
           "หน่วย": line_item.uom_name,
-          "จำนวนเหลือเดือนก่อน": line_item.begin_unit_count ? line_item.begin_unit_count : "0",
-          "ราคาเดือนก่อน": line_item.begin_total_price ? line_item.begin_total_price : "0",
+          "จำนวนเหลือเดือนก่อน": line_item.begin_unit_count ? line_item.begin_unit_count : "0.00",
+          "ราคาเดือนก่อน": line_item.begin_total_price ? line_item.begin_total_price : "0.00",
 
-          "จำนวนรับเดือนนี้": line_item.state_in_unit_count ? line_item.state_in_unit_count : "0",
-          "ราคารับเดือนนี้": line_item.state_in_total_price ? line_item.state_in_total_price : "0",
+          "จำนวนรับเดือนนี้": line_item.state_in_unit_count ? line_item.state_in_unit_count : "0.00",
+          "ราคารับเดือนนี้": line_item.state_in_total_price ? line_item.state_in_total_price : "0.00",
 
-          "จำนวนจ่ายเดือนนี้": line_item.state_out_unit_count ? line_item.state_out_unit_count : "0",
-          "ราคาจ่ายเดือนนี้": line_item.state_out_total_price ? line_item.state_out_total_price : "0",
+          "จำนวนจ่ายเดือนนี้": line_item.state_out_unit_count ? line_item.state_out_unit_count : "0.00",
+          "ราคาจ่ายเดือนนี้": line_item.state_out_total_price ? line_item.state_out_total_price : "0.00",
 
-          "จำนวนคงเหลือ": line_item.end_unit_count ? line_item.end_unit_count : "0",
-          "ราคาคงเหลือ": line_item.end_total_price ? line_item.end_total_price : "0",
+          "จำนวนคงเหลือ": line_item.end_unit_count ? line_item.end_unit_count : "0.00",
+          "ราคาคงเหลือ": line_item.end_total_price ? line_item.end_total_price : "0.00",
 
           "ประเภทบัญชี": item.accounting_type
         })
 
-        values.new_line_items_pdf.push({
+        new_line_items_pdf.push({
           "warehouse_name": line_item.warehouse_name,
           "internal_item_id": line_item.internal_item_id,
           "item_description": line_item.item_description,
           "item_status_description_th": line_item.item_status_description_th,
 
           "uom_name": line_item.uom_name,
-          "begin_unit_count": line_item.begin_unit_count ? line_item.begin_unit_count : "0",
-          "begin_state_in_total_price": line_item.begin_total_price ? line_item.begin_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0",
+          "begin_unit_count": line_item.begin_unit_count ? line_item.begin_unit_count.toFixed(2) : "0.00",
+          "begin_state_in_total_price": line_item.begin_total_price ? line_item.begin_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00",
 
-          "state_in_unit_count": line_item.state_in_unit_count ? line_item.state_in_unit_count : "0",
-          "end_state_in_total_price": line_item.state_in_total_price ? line_item.state_in_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0",
+          "state_in_unit_count": line_item.state_in_unit_count ? line_item.state_in_unit_count.toFixed(2) : "0.00",
+          "end_state_in_total_price": line_item.state_in_total_price ? line_item.state_in_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00",
 
-          "state_out_unit_count": line_item.state_out_unit_count ? line_item.state_out_unit_count : "0",
-          "end_state_out_total_price": line_item.state_out_total_price ? line_item.state_out_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0",
+          "state_out_unit_count": line_item.state_out_unit_count ? line_item.state_out_unit_count.toFixed(2) : "0.00",
+          "end_state_out_total_price": line_item.state_out_total_price ? line_item.state_out_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00",
 
-          "ending_unit_count": line_item.end_unit_count ? line_item.end_unit_count : "0",
-          "ending_unit_count_total": line_item.end_total_price ? line_item.end_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0",
+          "ending_unit_count": line_item.end_unit_count ? line_item.end_unit_count.toFixed(2) : "0.00",
+          "ending_unit_count_total": line_item.end_total_price ? line_item.end_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00",
 
           "accounting_type": item.accounting_type
         })
       }
     });
+    setFieldValue("new_line_items", new_line_items, false);
+    setFieldValue("new_line_items_pdf", new_line_items_pdf, false);
   }
 
 
   useEffect(() => {
     setValuesForCSV(values.line_items)
-  }, [values.line_items, factItems])
+  }, [values.line_items, factItems.items])
 
   return (
     <div id={changeTheam() === true ? "" : "blackground-gray"}>
@@ -140,19 +142,19 @@ const BottomContent = (props) => {
                         <td className="edit-padding">{line_items.internal_item_id} - {line_items.item_description}</td>
                         <td className="edit-padding text-center">{line_items.uom_name}</td>
 
-                        <td className="edit-padding text-center">{line_items.begin_unit_count ? line_items.begin_unit_count : "0"}</td> {/* เหลือเดือนก่อน */}
-                        <td className="edit-padding text-center">{line_items.begin_total_price ? line_items.begin_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0"}</td>
+                        <td className="edit-padding text-right">{line_items.begin_unit_count ? line_items.begin_unit_count.toFixed(2) : "0.00"}</td> {/* เหลือเดือนก่อน */}
+                        <td className="edit-padding text-right">{line_items.begin_total_price ? line_items.begin_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}</td>
 
-                        <td className="edit-padding text-center">{line_items.state_in_unit_count ? line_items.state_in_unit_count : "0"}</td> {/* รับเดือนนี้ */}
-                        <td className="edit-padding text-center">{line_items.state_in_total_price ? line_items.state_in_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0"}</td>
+                        <td className="edit-padding text-right">{line_items.state_in_unit_count ? line_items.state_in_unit_count.toFixed(2) : "0.00"}</td> {/* รับเดือนนี้ */}
+                        <td className="edit-padding text-right">{line_items.state_in_total_price ? line_items.state_in_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}</td>
 
-                        <td className="edit-padding text-center">{line_items.state_out_unit_count ? line_items.state_out_unit_count : "0"}</td> {/* จ่ายเดือนนี้ */}
-                        <td className="edit-padding text-center">{line_items.state_out_total_price ? line_items.state_out_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0"}</td>
+                        <td className="edit-padding text-right">{line_items.state_out_unit_count ? line_items.state_out_unit_count.toFixed(2) : "0.00"}</td> {/* จ่ายเดือนนี้ */}
+                        <td className="edit-padding text-right">{line_items.state_out_total_price ? line_items.state_out_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}</td>
 
-                        <td className="edit-padding text-center">{line_items.end_unit_count ? line_items.end_unit_count : "0"}</td> {/* คงเหลือ */}
-                        <td className="edit-padding text-center">{line_items.end_total_price ? line_items.end_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0"}</td>
+                        <td className="edit-padding text-right">{line_items.end_unit_count ? line_items.end_unit_count.toFixed(2) : "0.00"}</td> {/* คงเหลือ */}
+                        <td className="edit-padding text-right">{line_items.end_total_price ? line_items.end_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}</td>
 
-                        {/* <td className="edit-padding text-center">-</td> */}
+                        {/* <td className="edit-padding text-right">-</td> */}
                         <td className="edit-padding text-center">{item.accounting_type}</td>
                       </tr>
                     )

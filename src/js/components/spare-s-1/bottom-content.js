@@ -25,11 +25,11 @@ const BottomContent = (props) => {
 
   const returnUnitCount = (quantity, item) => {
     if (quantity < item.quantity_lowest) {
-      return <td className="edit-padding" style={{ color: "DarkRed" }}>{quantity}</td>
+      return <td className="edit-padding text-right" style={{ color: "DarkRed" }}>{quantity}</td>
     } else if (quantity > item.quantity_highest) {
-      return <td className="edit-padding" style={{ color: "DarkBlue" }}>{quantity}</td>
+      return <td className="edit-padding text-right" style={{ color: "DarkBlue" }}>{quantity}</td>
     } else {
-      return <td className="edit-padding" style={{ color: "DarkGreen" }}>{quantity}</td>
+      return <td className="edit-padding text-right" style={{ color: "DarkGreen" }}>{quantity}</td>
     }
   }
   return (
@@ -64,11 +64,11 @@ const BottomContent = (props) => {
                         <td className="edit-padding">{line_items.item_status_description_th}</td>
                         <td className="edit-padding text-center">{line_items.uom_name}</td>
 
-                        <td className="edit-padding text-center">{line_items.quantity}</td>
+                        <td className="edit-padding text-right">{line_items.quantity}</td>
 
-                        <td className="edit-padding">{line_items.total}</td>
+                        <td className="edit-padding text-right">{line_items.total}</td>
 
-                        <td className="edit-padding">{line_items.per_unit_price}</td>
+                        <td className="edit-padding text-right">{line_items.per_unit_price}</td>
                       </tr>
                     )
                   } else { //ถ้าไม่เป็นคลังของตอน
@@ -85,9 +85,9 @@ const BottomContent = (props) => {
 
                           {returnUnitCount(line_items.quantity, item)}
 
-                          <td className="edit-padding">{line_items.total}</td>
+                          <td className="edit-padding text-right">{line_items.total}</td>
 
-                          <td className="edit-padding">{line_items.per_unit_price}</td>
+                          <td className="edit-padding text-right">{line_items.per_unit_price}</td>
                         </tr>
                       )
                     }

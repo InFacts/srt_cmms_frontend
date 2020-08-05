@@ -5,7 +5,7 @@ table.table-many-column{
   overflow-x: auto;
   overflow-y: auto;
   white-space: nowrap;
-  /* height: 270px; */
+  /* height: 330px; */
 }
 
 table.cancel-border{

@@ -918,7 +918,9 @@ const createHtmlB22 = (table) => `
         }
       }
     
-     
+     .text-right {
+        text-align: right;
+     }
 
      .invoice-box {
         width:29.7cm;
@@ -990,15 +992,15 @@ const createRowB22Page1 = (item) =>
 <td style=" text-align:center ; vertical-align: middle;">${item.item_id}</td>
 <td style=" text-align:left ; vertical-align: middle;">${item.description}</td>
 <td style=" text-align:center ; vertical-align: middle;">${item.unit}</td>
-<td style=" text-align:center ; vertical-align: middle;">${item.left_month_unit}</td>
-<td style=" text-align:center ; vertical-align: middle;">${item.left_month_price}</td>
-<td style=" text-align:center ; vertical-align: middle;">${item.get_month_unit}</td>
-<td style=" text-align:center ; vertical-align: middle;">${item.get_month_price}</td>
-<td style=" text-align:center ; vertical-align: middle;">${item.pay_month_unit}</td>
-<td style=" text-align:center ; vertical-align: middle;">${item.pay_month_price}</td>
+<td style=" text-align:right ; vertical-align: middle;">${item.left_month_unit}</td>
+<td style=" text-align:right ; vertical-align: middle;">${item.left_month_price}</td>
+<td style=" text-align:right ; vertical-align: middle;">${item.get_month_unit}</td>
+<td style=" text-align:right ; vertical-align: middle;">${item.get_month_price}</td>
+<td style=" text-align:right ; vertical-align: middle;">${item.pay_month_unit}</td>
+<td style=" text-align:right ; vertical-align: middle;">${item.pay_month_price}</td>
 
-<td style=" text-align:center ; vertical-align: middle;">${item.ending_unit_count}</td>
-<td style=" text-align:center ; vertical-align: middle;">${item.ending_unit_count_total}</td>
+<td style=" text-align:right ; vertical-align: middle;">${item.ending_unit_count}</td>
+<td style=" text-align:right ; vertical-align: middle;">${item.ending_unit_count_total}</td>
 
 <td style=" text-align:center ; vertical-align: middle;">${item.type}</td>
 </tr>`
@@ -2113,7 +2115,7 @@ export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((re
         "pay_month_price": lineItem.end_state_out_total_price,
 
         "ending_unit_count": lineItem.ending_unit_count,
-        "ending_unit_count_total": "-",
+        "ending_unit_count_total": lineItem.ending_unit_count_total,
 
         "type": lineItem.accounting_type
       });
