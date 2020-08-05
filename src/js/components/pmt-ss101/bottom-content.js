@@ -518,7 +518,7 @@ const BottomContent = (props) => {
                         </div>
                         <div className="grid_10 alpha omega">
                             <TextareaInput name="checked_remark" tabIndex="30"
-                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                                disabled />
                         </div>
 
                         <div className="clear" />

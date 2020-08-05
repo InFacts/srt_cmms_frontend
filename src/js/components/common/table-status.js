@@ -35,7 +35,7 @@ const TableStatus = (props) => {
       return APPROVAL_STATUS_TH.ESCALATED;
     }
   } 
-  console.log("props.bodyTableStatus", props.bodyTableStatus)
+
   return (
     <>
       {[0].map((newTable,j) => (

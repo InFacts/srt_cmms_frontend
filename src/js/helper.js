@@ -3275,11 +3275,6 @@ export const getLotFromQty = (fifo, quantity) => {
     return lotsFrom;
 };
 
-export const checkRawFifoQty = (fifo) => {
-    console.log("fifo", fifo)
-    return fifo;
-};
-
 // Get Params from URL
 export const getUrlParamsLink = () => new Promise((resolve, reject) => {
     let url = window.location.search;

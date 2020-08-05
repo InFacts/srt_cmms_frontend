@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom'
+
 import {
     toModeSearch, handleClickAdd, handleClickHomeToSpareMain,
     handleClickForward, handleClickBackward, handleClickRefresh, TOOLBAR_MODE, TOOLBAR_ACTIONS
 } from '../redux/modules/toolbar.js';
 import { FOOTER_MODE, FOOTER_ACTIONS, handleClickBackToSpareMain, ACTION_TO_HANDLE_CLICK, footerToModeInvisible, footerToModeNone, footerToModeSearch, footerToModeEdit, footerToModeOwnDocument, footerToModeAddDraft, footerToModeApApproval, footerToModeApCheckApproval, footerToModeApGotIt, footerToModeApCheckOrder, footerToModeApCheckMaintenance, footerToModeApGuarnteeMaintenance, footerToModeVoid, footerToModeFastTrack, footerToModeApApprovalDone, footerToModeSave } from '../redux/modules/footer.js';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import useTokenInitializer from '../hooks/token-initializer';
 import { useFormikContext } from 'formik';
 import { cancelApproval, startDocumentApprovalFlow, APPROVAL_STATUS, DOCUMENT_TYPE_ID, saveDocument, editDocument, packDataFromValuesMasterDataForEdit, packDataFromValues, fetchLatestStepApprovalDocumentData, getUserIDFromEmployeeID, DOCUMENT_STATUS, DOCUMENT_STATUS_ID, APPROVAL_STEP_ACTION, checkDocumentStatus, approveDocument, fetchStepApprovalDocumentData, saveMasterData, editMasterDataHelper } from '../helper';
@@ -40,6 +41,7 @@ const useFooterInitializer = (document_type_id) => {
     const footer = useSelector((state) => ({ ...state.footer }));
     const fact = useSelector((state) => ({ ...state.api.fact }));
     const nav_bottom_status = useSelector((state) => ({ ...state.nav_bottom_status }));
+    const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
     const { values, touched, setFieldTouched, setTouched, resetForm, validateForm, setFieldValue, setErrors } = useFormikContext();
     useTokenInitializer();
@@ -396,6 +398,9 @@ const useFooterInitializer = (document_type_id) => {
                 dispatch(navBottomSending('[API]', 'Sending ...', ''));
                 setErrors(err);
                 if (isEmpty(err)) {
+                    // if (document_type_id === DOCUMENT_TYPE_ID.SS101 && decoded_token.has_position[0].position_group_id === 5) {
+                    //     setFieldValue("checked_remark", values.remark_approval, false) // For ss101 นายตรวจสาย
+                    // }
                     let data = packDataFromValues(fact, values, document_type_id);
                     let approval_status = APPROVAL_STATUS.APPROVED;
                     if (footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]) {
