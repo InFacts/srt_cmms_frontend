@@ -389,8 +389,10 @@ const useFooterInitializer = (document_type_id) => {
                     if (footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]) {
                         data.document.document_status_id = DOCUMENT_STATUS_ID.REOPEN;
                         approval_status = APPROVAL_STATUS.REJECTED;
-                    }
-                    else {
+                    } else if (footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK]) {
+                        data.document.document_status_id = DOCUMENT_STATUS_ID.FAST_TRACK;
+                        approval_status = APPROVAL_STATUS.FAST_TRACKED;
+                    } else {
                         data.document.document_status_id = DOCUMENT_STATUS_ID.WAIT_APPROVE;
                         approval_status = APPROVAL_STATUS.APPROVED;
                     }

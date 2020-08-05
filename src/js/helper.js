@@ -348,6 +348,10 @@ export const isValidInternalDocumentIDFormat = (internal_document_id) => {
     const internalDocumentIDRegex = /^[\u0E00-\u0E7F()]+.[\u0E00-\u0E7F()\d]*.?-?[\u0E00-\u0E7F()]*.?\d?\/[1-3]-\d{2}\/\d{4}\/\d{4}$/g;
     return internalDocumentIDRegex.test(internal_document_id);
 }
+export const isValidInternalDocumentIDFastTrackFormat = (internal_document_id) => {
+    const internalDocumentIDRegex = /^[\u0E00-\u0E7F()]+.[\u0E00-\u0E7F()\d]*.?-?[\u0E00-\u0E7F()]*.?\d?\/[1-3]-\d{2}\/\d{4}\/\d{4}-([A-Z])\w+/g;
+    return internalDocumentIDRegex.test(internal_document_id);
+} 
 export const isValidOldInternalDocumentIDFormat = (internal_document_id) => {
     const internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SD|WR|WO|WP|SS|MI|EI|PM)-[A-Z]{3}-\d{4}\/\d{4}$/g;
     return internalDocumentIDRegex.test(internal_document_id);
@@ -2568,6 +2572,7 @@ export const validateInternalDocumentIDFieldHelper = (decoded_token, checkBoolea
         return resolve('Required');
     } else if (!isValidInternalDocumentIDFormat(internal_document_id) 
                 && !isValidOldInternalDocumentIDFormat(internal_document_id)
+                && !isValidInternalDocumentIDFastTrackFormat(internal_document_id)
                 && !isValidInternalDocumentIDDraftFormat(internal_document_id)) {
         console.log("Invalid Document ID Format Be sure to use the format ie. สสญ.ธบ.-ธบ./2-4/2563/0001")
         return resolve('Invalid Document ID Format Be sure to use the format ie. สสญ.ธบ.-ธบ./2-4/2563/0001')
