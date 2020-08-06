@@ -102,6 +102,7 @@ const initialState = {
     requiresHandleClick: {
         [FOOTER_ACTIONS.APPROVAL]: false, 
         [FOOTER_ACTIONS.SEND]: false,
+        [FOOTER_ACTIONS.SAVE]: false,
         [FOOTER_ACTIONS.REJECT]: false,
         [FOOTER_ACTIONS.BACK]: false,
         [FOOTER_ACTIONS.CHECK_APPROVAL]: false,

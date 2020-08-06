@@ -68,7 +68,7 @@ const FooterItemComponent = (props) => {
         <>
           <button type="button" title={keyFooter} className={buttonType == "Button-Blue" ? "button-blue edit float-right mr-2" : "p-button--base edit float-right"}
             aria-controls="modalRemarkAppovalFooter" onClick={() => setTitleName(keyFooter)}>{buttonName}</button>
-          <PopupModalRemarkApproval handleClick={handleClick} title={titleName} setFieldValue={props.setFieldValue} disabled={true} />
+          <PopupModalRemarkApproval handleClick={handleClick} title={titleName} setFieldValue={props.setFieldValue} setTitleName={setTitleName} disabled={true} />
         </>
       )
     }
@@ -78,7 +78,6 @@ const FooterItemComponent = (props) => {
 
 const PopupModalRemarkApproval = (props) => {
   if (props.title) {
-    console.log("props.title", props.title)
     return (
       <div className="modal" id="modalRemarkAppovalFooter" style={{ display: "none" }}>
         <div className="gray-board">
@@ -98,7 +97,11 @@ const PopupModalRemarkApproval = (props) => {
             <div className="grid_11 mt-2">
               <button className="button-blue float-right grid_1" type="button" aria-label="Close active modal" aria-controls="modalRemarkAppovalFooter" id="closeModalNoPart">กลับ</button>
 
-              <button className="button-blue float-right grid_1" style={{ padding: "0px" }} type="button" aria-label="Close active modal" aria-controls="modalRemarkAppovalFooter" id="closeModalNoPart" onClick={props.handleClick} title={props.title}>ยืนยัน</button>
+              <button className="button-blue float-right grid_1" style={{ padding: "0px" }} type="button" aria-label="Close active modal" aria-controls="modalRemarkAppovalFooter" id="closeModalNoPart" 
+              onClick={(e) => { 
+                props.handleClick(e); 
+                props.setTitleName('');
+              }} title={props.title}>ยืนยัน</button>
             </div>
           </div>
         </div>
@@ -198,7 +201,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   handleClick: (e) => {
-    console.log("e.target", e.target)
+    // console.log("e.target", e.target)
     let footerAction = e.target.title;
     console.log("footerAction", footerAction)
     return dispatch(FOOTER_ACTIONS_TO_ACTION_CREATOR[footerAction]());

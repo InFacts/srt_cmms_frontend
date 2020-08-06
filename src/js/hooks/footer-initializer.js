@@ -9,7 +9,7 @@ import { FOOTER_MODE, FOOTER_ACTIONS, handleClickBackToSpareMain, ACTION_TO_HAND
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import useTokenInitializer from '../hooks/token-initializer';
 import { useFormikContext } from 'formik';
-import { cancelApproval, startDocumentApprovalFlow, APPROVAL_STATUS, DOCUMENT_TYPE_ID, saveDocument, editDocument, packDataFromValuesMasterDataForEdit, packDataFromValues, fetchLatestStepApprovalDocumentData, getUserIDFromEmployeeID, DOCUMENT_STATUS, DOCUMENT_STATUS_ID, APPROVAL_STEP_ACTION, checkDocumentStatus, approveDocument, fetchStepApprovalDocumentData, saveMasterData, editMasterDataHelper } from '../helper';
+import { cancelApproval, startDocumentApprovalFlow, APPROVAL_STATUS, DOCUMENT_TYPE_ID, saveDocument, editDocument, packDataFromValuesMasterDataForEdit, packDataFromValues, fetchLatestStepApprovalDocumentData, getUserIDFromEmployeeID, DOCUMENT_STATUS, DOCUMENT_STATUS_ID, APPROVAL_STEP_ACTION, checkDocumentStatus, approveDocument, fetchStepApprovalDocumentData, saveMasterData, editMasterDataHelper, APPROVAL_STATUS_TH } from '../helper';
 import { FACTS } from '../redux/modules/api/fact';
 import { navBottomOnReady, navBottomError, navBottomSuccess, navBottomSending } from '../redux/modules/nav-bottom'
 import history from '../history';
@@ -74,8 +74,9 @@ const useFooterInitializer = (document_type_id) => {
         }
         else {
             // Check Next Approver from postion_id
-            console.log("fetchLatestStepApprovalDocumentData")
+            console.log("fetchLatestStepApprovalDocumentData", document_id)
             fetchLatestStepApprovalDocumentData(document_id).then((latestApprovalInfo) => {
+                console.log("latestApprovalInfo", latestApprovalInfo)
                 if ((latestApprovalInfo !== undefined || latestApprovalInfo.length !== 0) && document_status === DOCUMENT_STATUS.WAIT_APPROVE) {
                     console.log("latestApprovalInfo------> ", latestApprovalInfo)
                     console.log("user------> ", latestApprovalInfo.position_id, userInfo.position_id)
@@ -97,13 +98,15 @@ const useFooterInitializer = (document_type_id) => {
                     }
                 }
                 else { // Just Work order PM
+                    // console.log("Just Work order PM", values.document_id, values.status_name_th, APPROVAL_STATUS_TH.APPROVED)
                     if (toolbar.mode === TOOLBAR_MODE.ADD && values.status_name_th === "") { dispatch(footerToModeAddDraft()); }
                     else {
-                        if (document_type_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM && toolbar.mode === TOOLBAR_MODE.SEARCH) {
+                        if (document_type_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM && toolbar.mode === TOOLBAR_MODE.SEARCH && values.status_name_th !== "อนุมัติเรียบร้อยแล้ว") { //APPROVAL_STATUS_TH.APPROVED
                             dispatch(footerToModeAddDraft());
                         } else {
                             dispatch(footerToModeSearch());
                         }
+                        fetchApprovalStep(values.document_id);
                     }
                 }
             })
@@ -133,12 +136,12 @@ const useFooterInitializer = (document_type_id) => {
             if (document_id !== undefined) {
                 if (toolbar.mode === TOOLBAR_MODE.SEARCH && document_id !== "") { // SEARCH mode
                     dispatch(footerToModeSearch());
+                    console.log("DONIT TEST")
                     hadleDocumentStatusWithFooter(document_id);
                 }
                 else if (toolbar.mode === TOOLBAR_MODE.ADD) { // ADD_DRAFT mode
                     dispatch(footerToModeAddDraft());
                     hadleDocumentStatusWithFooter(document_id);
-
                 }
                 else { dispatch(footerToModeSearch()); }
             }
@@ -148,7 +151,7 @@ const useFooterInitializer = (document_type_id) => {
             }
 
         }
-    }, [toolbar.mode, values.warehouse_id, values.active, values.modeEdit, values.status_name_th, nav_bottom_status.mode]);
+    }, [toolbar.mode, values.warehouse_id, values.active, values.modeEdit, values.status_name_th, nav_bottom_status.mode, values.approval_step]);
 
     // Handle Back
     useEffect(() => {
@@ -311,14 +314,18 @@ const useFooterInitializer = (document_type_id) => {
     }
 
     const fetchApprovalStep = (document_id) => {
-        console.log("fetchStepApprovalDocumentData -> document_id", document_id, values)
+        // console.log("fetchStepApprovalDocumentData -> document_id", document_id, values)
         fetchStepApprovalDocumentData(document_id).then((result) => {
-            console.log("fetchStepApprovalDocumentData -> result", result, result.approval_step, toolbar.mode)
+            // console.log("fetchStepApprovalDocumentData -> result", result, result.approval_step, toolbar.mode)
             setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
             if (result.approval_step) {
                 if (result.approval_step.length !== 0 && toolbar.mode === TOOLBAR_MODE.ADD) {
-                    console.log("fetchStepApprovalDocumentData -> WAIT_APPROVE")
+                    // console.log("fetchStepApprovalDocumentData -> WAIT_APPROVE TOOLBAR_MODE.ADD")
                     setFieldValue('status_name_th', DOCUMENT_STATUS.WAIT_APPROVE, true);
+                }
+                else if (result.approval_step.length !== 0 && toolbar.mode === TOOLBAR_MODE.SEARCH) {
+                    // console.log("fetchStepApprovalDocumentData -> WAIT_APPROVE TOOLBAR_MODE.SEARCH", result.approval_step)
+                    setFieldValue("step_approve", result.approval_step, true);
                 }
                 if (result.is_canceled) {
                     setFieldValue("document_is_canceled", result.is_canceled.data, false);
