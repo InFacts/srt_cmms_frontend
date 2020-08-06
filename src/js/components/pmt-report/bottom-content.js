@@ -33,29 +33,36 @@ const BottomContent = (props) => {
       })
       // console.log("checkListNameUnique", checkListNameUnique)
       let workOrderPmChild = [];
-      first_list.work_order_pm[0].checklist.map((thrice) => {
-        workOrderPmChild.push(thrice)
-      })
+      if (first_list.work_order_pm.length !== 0) {
+        first_list.work_order_pm[0].checklist.map((thrice) => {
+          workOrderPmChild.push(thrice)
+        })
+      }
       workOrderPmParent.push(workOrderPmChild)
-      console.log("workOrderPmParent", workOrderPmParent)
+      // console.log("workOrderPmParent", workOrderPmParent)
     })
 
     checkListNameUnique.map((four, indexCheckListNameUnique) => {
       workOrderPmParent.map((parent, indexParent) => {
+        let checkNoteMathNameChecklist = false;
         // console.log("parent", parent)
         parent.map((child, indexChild) => {
           // console.log("child", child)
           if (child.checklist_name === four.checklist_name) {
+            checkNoteMathNameChecklist = true;
             checkListNameUnique[indexCheckListNameUnique][indexParent] = child
             // console.log("checkListNameUnique[indexCheckListNameUnique][indexParent]", checkListNameUnique[indexCheckListNameUnique][indexParent])
           } else {
             // checkListNameUnique[indexCheckListNameUnique][indexParent] = { checklist_count: 0, completed_count: 0 }
           }
         })
+        if (checkNoteMathNameChecklist === false) {
+          checkListNameUnique[indexCheckListNameUnique][indexParent] = { checklist_count: 0, completed_count: 0 }
+        }
       })
     })
 
-    console.log("checkListNameUnique", checkListNameUnique)
+    // console.log("checkListNameUnique", checkListNameUnique)
 
     setFieldValue("head_table", headTable, false);
     setFieldValue("checklist_name_unique", checkListNameUnique, false);
@@ -64,10 +71,16 @@ const BottomContent = (props) => {
 
   const ListChecklist = (props) => {
     var codeBlock
+    var total = 0;
+    var total_checked = 0;
     for (let number = 0; number < props.numNode; number++) {
+      total += props.checklist_name[number] ? props.checklist_name[number].checklist_count : 0;
+      total_checked += props.checklist_name[number] ? props.checklist_name[number].completed_count : 0;
       codeBlock = <>{codeBlock} <td className="edit-padding text-center">{props.checklist_name[number] ? props.checklist_name[number].checklist_count : 0}</td>
-      <td className="edit-padding text-center">{props.checklist_name[number] ? props.checklist_name[number].completed_count : 0}</td></>
+        <td className="edit-padding text-center">{props.checklist_name[number] ? props.checklist_name[number].completed_count : 0}</td></>
     }
+    codeBlock = <>{codeBlock} <td className="edit-padding text-center">{total}</td>
+      <td className="edit-padding text-center">{total_checked}</td></>
     return codeBlock;
   }
   return (
@@ -116,12 +129,7 @@ const BottomContent = (props) => {
                     <td className="edit-padding">{checklist_name.checklist_name}</td>
                     <td className="edit-padding text-center">สถานี</td>
 
-                    {/* <td className="edit-padding text-center">{checklist_name[0] ? checklist_name[0].checklist_count : 0}</td>
-                    <td className="edit-padding text-center">{checklist_name[0] ? checklist_name[0].completed_count : 0}</td> */}
-                    <ListChecklist checklist_name={checklist_name} numNode={values.line_items.length}/>
-
-                    <td className="edit-padding text-center">49</td>
-                    <td className="edit-padding text-center">49</td>
+                    <ListChecklist checklist_name={checklist_name} numNode={values.line_items.length} />
 
                     <td className="edit-padding text-center"></td>
                   </tr>

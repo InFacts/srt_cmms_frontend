@@ -328,8 +328,8 @@ const useExportPdfInitializer = () => {
           var w = window.open();
           w.document.write(htmlCode);
           setTimeout(() => {
-            // w.print();
-            // w.close();
+            w.print();
+            w.close();
           }, 500);
         })
         dispatch(handleClickExportPDF())
@@ -366,6 +366,16 @@ const useExportPdfInitializer = () => {
         }, 500);
       })
       dispatch(handleClickExportPDF())
+    } else if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF] && document_item_list && document_item_list.length > 0 && routeLocation === "/pmt-report") {
+      exportPDF(routeLocation, values, fact).then(function (htmlCode) {
+        var w = window.open();
+        w.document.write(htmlCode);
+        setTimeout(() => {
+          // w.print();
+          // w.close();
+        }, 500);
+      })
+      dispatch(handleClickExportPDF())
     } else {
       dispatch(handleClickExportPDF())
     }
@@ -380,7 +390,7 @@ const createRowS1 = (item) =>
     <td style=" text-align:left ; vertical-align: middle;">${item.description}</td>
     <td style=" text-align:center ; vertical-align: middle;">${item.internal_item_id}</td>
     <td style=" text-align:center ; vertical-align: middle;">${item.unit}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.quantity}</td>
+    <td style=" text-align:right ; vertical-align: middle;">${item.quantity}</td>
     <td style=" text-align:right ; vertical-align: middle;">${item.total}</td>
     <td style=" text-align:right ; vertical-align: middle;">${item.per_unit_price}</td>
   </tr>`;
@@ -1304,7 +1314,7 @@ const createPageS101Page1 = (date, content) =>
       <table>
           <tr>
           <td>
-              <div class="left">(6) ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม (สถานี/ตำแหน่งที่ตั้ง)</div><div contenteditable="true"><div class="dotted" style="width: 750px;"><label>${content.Station}</label></div></div>
+              <div class="left">(6) ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม (สถานี/ตำแหน่งที่ต��้ง)</div><div contenteditable="true"><div class="dotted" style="width: 750px;"><label>${content.Station}</label></div></div>
           </td>
           </tr>
       </table>
@@ -1860,6 +1870,149 @@ const createRowWorkOrderPM = (w_list, index) => (
       <td class="paddingFivePX" style=" vertical-align: middle;">${w_list.station_th ? "-" : w_list.x_cross_x_cross_th}</td>
     </tr>`);
 
+const createHtmlReportPMT = (info_page, htmlTable) => `
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+    @page {
+        size: landscape;
+        margin:0 ;
+      }
+    @media print {
+        html, body {
+            width:29.7cm;
+            height: 210mm ; 
+          margin-bottom: 0;
+          margin-left: 0;
+          margin-right: 0;
+          margin-top: 0;
+        }
+      }
+    
+     .text-right {
+        text-align: right;
+     }
+
+     .invoice-box {
+        width:29.7cm;
+        height: 210mm ;
+           margin: 0 auto;
+           margin-bottom: 0.5cm;
+           border: 0.1px solid #ffffff;
+           font-size: 16px;
+           font-family: 'AngsanaUPC', 'MS Sans Serif';  
+      }
+      .invoice-box table {
+          width: 95%;
+          margin: auto;
+          border: 0px solid #eee;
+      }
+      .invoice-box table td {
+           vertical-align: top;
+      }
+      .invoice-box table tr.heading td {
+           background: #eee;
+           border: 1px solid #ddd;
+           font-weight: bold;
+      }
+      .invoice-box table tr.item td {
+           border: 1px solid #eee;
+      }
+      .invoice-box table tr.item2 td {
+           border-bottom: 0px solid #eee;
+      }
+      .invoice-box p {
+           width: 95%;
+      }
+      .invoice-box h3 {
+           margin-top: 1cm;
+           margin-right: 0;
+           margin-left:0;
+           margin-bottom: 0;
+      }
+      .invoice-box table tr.top table td.title {
+        line-height: 45px;
+        color: #333;
+      }
+
+     .invoice-box pp {
+        margin-top: 0.5cm;
+        float: right;
+        margin: 0;
+        width: 10%;
+     }
+
+     .invoice-box table tr.information table td {
+        padding-bottom: 40px;
+     }
+    </style>
+
+  </head>
+  <body>
+    <div class="invoice-box">
+      <h4  style=" text-align:center ; vertical-align: middle;">สรุปปฏิบัติการทำวาระประจำเดือน ${info_page.mouth_th} พ.ศ.${info_page.year_id}   ${info_page.district_th}</h4>
+      ${htmlTable}
+    </div>
+  </body>
+</html>
+`;
+
+const rowHeadTableNodePMT = (node_th) => `
+  <td style="text-align:center; vertical-align: middle;" colSpan="2">${node_th}</td>
+`
+
+const rowHeadTablePlanPMT = () => `
+  <td style="text-align:center; vertical-align: middle;">แผน</td>
+  <td style="text-align:center; vertical-align: middle;">ผลงาน</td>
+`
+
+const createRowReportPMT = (item, index, plan_checked, total_plan, total_checked) =>
+  `<tr class="item">
+    <td style="text-align:center; vertical-align: middle;">${index}</td>
+    <td style="vertical-align: middle;">${item.checklist_name}</td>
+    <td style="text-align:center; vertical-align: middle;">สถานี</td>
+    ${plan_checked}
+    <td style="text-align:center; vertical-align: middle;">${total_plan}</td>
+    <td style="text-align:center; vertical-align: middle;">${total_checked}</td>
+    <td style="text-align:center; vertical-align: middle;"></td>
+  </tr>`;
+
+  const createRowPlanCheckedReportPMT = (plan_checked) =>
+  `
+    <td style="text-align:center; vertical-align: middle;">${plan_checked.checklist_count}</td>
+    <td style="text-align:center; vertical-align: middle;">${plan_checked.completed_count}</td>
+  `;
+
+const createTableReportPMT = (head, list_head, list_plan, row_body) => `
+  <table cellpadding="0" cellspacing="0" >
+    <thead>
+      <tr class="heading">
+        <td style="width: 2%; text-align:center ; vertical-align: middle;"  rowspan="3">ลำดับ</td>
+        <td style="text-align:center ; vertical-align: middle;" rowspan="3">รายละเอียด</td>
+        <td style="text-align:center ; vertical-align: middle;" rowspan="3">หน่วย</td>
+
+        <td style="text-align:center; vertical-align: middle;" colSpan=${head.length * 2}>การดำเนินการ</td>
+        <td style="text-align:center; vertical-align: middle;" colSpan="2">สรุปรวม</td> 
+        
+        <td style="text-align:center; vertical-align: middle;" rowspan="3">หมายเหตุ</td>
+      </tr>
+      <tr class="heading">
+          ${list_head}
+          <td style="text-align:center; vertical-align: middle;" colSpan="2">แขวง</td>
+      </tr>
+      <tr class="heading">
+          ${list_plan}
+          <td style="text-align:center; vertical-align: middle;">แผน</td>
+          <td style="text-align:center; vertical-align: middle;">ผลงาน</td>
+      </tr>
+    </thead>
+    <tbody>
+      ${row_body}
+    </tbody>
+  </table>
+`;
+
 export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((resolve, reject) => {
 
   if (routeLocation === '/spare-report-s-1') {
@@ -1875,8 +2028,9 @@ export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((re
     mouth = valuesContext.mouth.find((element) => {
       return element.id === mouth;
     })
+    // console.log("valuesContext.line_items", valuesContext.line_items)
     let create_on = date + " " + mouth.mouth + " " + year;
-    let filterResult = valuesContext.line_items.sort(function (a, b) {
+    let filterResult = valuesContext.line_item_shows.sort(function (a, b) {
       return parseInt(a.internal_item_id) - parseInt(b.internal_item_id);
     })
     let group_type = []
@@ -1908,7 +2062,7 @@ export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((re
       var total = 0;
       var keyss = group_type[i];
       // console.log("filterResult_type", filterResult_type)
-      valuesContext.line_item_shows.map((item) => {
+      filterResult_type.map((item) => {
         var myObj = {
           "item_id": line_number,
           "description": item.item_description,
@@ -1919,11 +2073,11 @@ export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((re
           "per_unit_price": item.per_unit_price
         };
         line_number = line_number + 1;
-        total = total + parseInt(item.total)
+        total = total + parseFloat(item.total.replace(/,/g, ''))
         line_items.push(myObj)
       })
       r[keyss] = {
-        "Totol": total.toFixed(2),
+        "Totol": total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
         "Item": line_items
       }
     }
@@ -2346,6 +2500,74 @@ export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((re
     })
 
     const html = createHtmlWorkOrderPM(info_this_page, row_week1, row_week2, row_week3, row_week4);
+    return resolve(html);
+  } else if (routeLocation === '/pmt-report') {
+    // console.log("valuesContext", valuesContext)
+    let districts = fact.districts.items;
+    let district = districts.find(district => `${district.district_id}` === `${valuesContext.district_id}`);
+
+    let mouths = valuesContext.mouth;
+    let mouthLet = mouths.find(mouth => `${mouth.id}` === `${valuesContext.mouth_id}`);
+
+    let info_page
+    if (mouthLet && district) {
+      info_page = {
+        "district_th": district.name,
+        "mouth_th": mouthLet.mouth,
+        "year_id": valuesContext.year_id
+      }
+    }
+    let list_head_tablereport_pmt = valuesContext.head_table
+    let list_body_table_report_pmt = valuesContext.checklist_name_unique
+
+    let list_head;
+    let list_plan;
+    list_head_tablereport_pmt.map((list_head_tablereport_pmt, index) => {
+      if (list_head && list_plan) {
+        list_head = list_head + rowHeadTableNodePMT(list_head_tablereport_pmt.node_th, index)
+        list_plan = list_plan + rowHeadTablePlanPMT()
+      } else {
+        list_head = rowHeadTableNodePMT(list_head_tablereport_pmt.node_th, index)
+        list_plan = rowHeadTablePlanPMT()
+      }
+    })
+
+    let row_body;
+    list_body_table_report_pmt.map((list, index) => {
+      // console.log("list", list)
+      let indexPlus = index + 1;
+      let plan_checked;
+      if (row_body) {
+        let total_plan = 0;
+        let total_checked = 0;
+        for (var i = 0; i < list_head_tablereport_pmt.length; i++) {
+          total_plan = total_plan + list[i].checklist_count;
+          total_checked = total_checked + list[i].completed_count;
+          if (plan_checked) {
+            plan_checked = plan_checked + createRowPlanCheckedReportPMT(list[i])
+          } else {
+            plan_checked = createRowPlanCheckedReportPMT(list[i])
+          }
+        }
+        row_body = row_body + createRowReportPMT(list, indexPlus, plan_checked, total_plan, total_checked)
+      } else {
+        let total_plan = 0;
+        let total_checked = 0;
+        for (var i = 0; i < list_head_tablereport_pmt.length; i++) {
+          total_plan = total_plan + list[i].checklist_count;
+          total_checked = total_checked + list[i].completed_count;
+          if (plan_checked) {
+            plan_checked = plan_checked + createRowPlanCheckedReportPMT(list[i])
+          } else {
+            plan_checked = createRowPlanCheckedReportPMT(list[i])
+          }
+        }
+        row_body = createRowReportPMT(list, indexPlus, plan_checked, total_plan, total_checked)
+      }
+    })
+
+    let htmlTable = createTableReportPMT(list_head_tablereport_pmt, list_head, list_plan, row_body)
+    const html = createHtmlReportPMT(info_page, htmlTable);
     return resolve(html);
   }
 

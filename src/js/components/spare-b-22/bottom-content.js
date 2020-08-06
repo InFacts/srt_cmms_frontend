@@ -59,16 +59,16 @@ const BottomContent = (props) => {
           "item_status_description_th": line_item.item_status_description_th,
 
           "uom_name": line_item.uom_name,
-          "begin_unit_count": line_item.begin_unit_count ? line_item.begin_unit_count.toFixed(2) : "0.00",
+          "begin_unit_count": line_item.begin_unit_count ? line_item.begin_unit_count.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00",
           "begin_state_in_total_price": line_item.begin_total_price ? line_item.begin_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00",
 
-          "state_in_unit_count": line_item.state_in_unit_count ? line_item.state_in_unit_count.toFixed(2) : "0.00",
+          "state_in_unit_count": line_item.state_in_unit_count ? line_item.state_in_unit_count.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00",
           "end_state_in_total_price": line_item.state_in_total_price ? line_item.state_in_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00",
 
-          "state_out_unit_count": line_item.state_out_unit_count ? line_item.state_out_unit_count.toFixed(2) : "0.00",
+          "state_out_unit_count": line_item.state_out_unit_count ? line_item.state_out_unit_count.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00",
           "end_state_out_total_price": line_item.state_out_total_price ? line_item.state_out_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00",
 
-          "ending_unit_count": line_item.end_unit_count ? line_item.end_unit_count.toFixed(2) : "0.00",
+          "ending_unit_count": line_item.end_unit_count ? line_item.end_unit_count.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00",
           "ending_unit_count_total": line_item.end_total_price ? line_item.end_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00",
 
           "accounting_type": item.accounting_type
@@ -142,16 +142,16 @@ const BottomContent = (props) => {
                         <td className="edit-padding">{line_items.internal_item_id} - {line_items.item_description}</td>
                         <td className="edit-padding text-center">{line_items.uom_name}</td>
 
-                        <td className="edit-padding text-right">{line_items.begin_unit_count ? line_items.begin_unit_count.toFixed(2) : "0.00"}</td> {/* เหลือเดือนก่อน */}
+                        <td className="edit-padding text-right">{line_items.begin_unit_count ? line_items.begin_unit_count.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}</td> {/* เหลือเดือนก่อน */}
                         <td className="edit-padding text-right">{line_items.begin_total_price ? line_items.begin_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}</td>
 
-                        <td className="edit-padding text-right">{line_items.state_in_unit_count ? line_items.state_in_unit_count.toFixed(2) : "0.00"}</td> {/* รับเดือนนี้ */}
+                        <td className="edit-padding text-right">{line_items.state_in_unit_count ? line_items.state_in_unit_count.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}</td> {/* รับเดือนนี้ */}
                         <td className="edit-padding text-right">{line_items.state_in_total_price ? line_items.state_in_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}</td>
 
-                        <td className="edit-padding text-right">{line_items.state_out_unit_count ? line_items.state_out_unit_count.toFixed(2) : "0.00"}</td> {/* จ่ายเดือนนี้ */}
+                        <td className="edit-padding text-right">{line_items.state_out_unit_count ? line_items.state_out_unit_count.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}</td> {/* จ่ายเดือนนี้ */}
                         <td className="edit-padding text-right">{line_items.state_out_total_price ? line_items.state_out_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}</td>
 
-                        <td className="edit-padding text-right">{line_items.end_unit_count ? line_items.end_unit_count.toFixed(2) : "0.00"}</td> {/* คงเหลือ */}
+                        <td className="edit-padding text-right">{line_items.end_unit_count ? line_items.end_unit_count.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}</td> {/* คงเหลือ */}
                         <td className="edit-padding text-right">{line_items.end_total_price ? line_items.end_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}</td>
 
                         {/* <td className="edit-padding text-right">-</td> */}
