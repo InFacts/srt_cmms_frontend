@@ -3275,6 +3275,51 @@ export const getLotFromQty = (fifo, quantity) => {
     return lotsFrom;
 };
 
+export const rawLotFromQty = (raw_fifo, quantity) => {
+    return raw_fifo;
+    // console.log("raw_fifo?>>>>", raw_fifo)
+    // // var fifoCopyRaw = raw_fifo.slice(); // make a copy
+    // var compose_fifo = [];
+    // var quantityLeft = 0;
+    // for (var currentLot of raw_fifo) {
+    //     // console.log("lotsFrom currentLot ", currentLot)
+    //     if (quantityLeft){
+    //         compose_fifo.push(currentLot)
+    //         if (quantityLeft >= compose_fifo[0].quantity) {
+    //             compose_fifo.shift();
+    //             quantityLeft -= compose_fifo[0].quantity;
+    //         } else {
+    //             if (quantityLeft == 0) {
+    //                 break;
+    //             }
+    //             compose_fifo[0].quantity = compose_fifo[0].quantity - quantityLeft;
+    //             quantityLeft = 0;
+    //         }
+    //     } else if (currentLot.quantity >= 0){
+    //         compose_fifo.push(currentLot)
+    //     } else {
+    //         quantityLeft = quantityLeft + Math.abs(currentLot.quantity)
+    //         if (quantityLeft >= compose_fifo[0].quantity) {
+    //             compose_fifo.shift();
+    //             quantityLeft -= compose_fifo[0].quantity;
+    //         } else {
+    //             if (quantityLeft == 0) {
+    //                 break;
+    //             }
+    //             compose_fifo[0].quantity = compose_fifo[0].quantity - quantityLeft;
+    //             quantityLeft = 0;
+    //         }
+    //     }
+    // }
+    // console.log("quantityLeft>>>>>>", quantityLeft)
+    // let total = 0;
+    // for (var composeLotFifo of compose_fifo) {
+    //     total = total + composeLotFifo.quantity
+    // }
+    // console.log("compose_fifo", compose_fifo, "total", total)
+    // return compose_fifo;
+};
+
 // Get Params from URL
 export const getUrlParamsLink = () => new Promise((resolve, reject) => {
     let url = window.location.search;

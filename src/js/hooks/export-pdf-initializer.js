@@ -328,8 +328,8 @@ const useExportPdfInitializer = () => {
           var w = window.open();
           w.document.write(htmlCode);
           setTimeout(() => {
-            // w.print();
-            // w.close();
+            w.print();
+            w.close();
           }, 500);
         })
         dispatch(handleClickExportPDF())
@@ -380,7 +380,7 @@ const createRowS1 = (item) =>
     <td style=" text-align:left ; vertical-align: middle;">${item.description}</td>
     <td style=" text-align:center ; vertical-align: middle;">${item.internal_item_id}</td>
     <td style=" text-align:center ; vertical-align: middle;">${item.unit}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.quantity}</td>
+    <td style=" text-align:right ; vertical-align: middle;">${item.quantity}</td>
     <td style=" text-align:right ; vertical-align: middle;">${item.total}</td>
     <td style=" text-align:right ; vertical-align: middle;">${item.per_unit_price}</td>
   </tr>`;
@@ -1875,8 +1875,9 @@ export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((re
     mouth = valuesContext.mouth.find((element) => {
       return element.id === mouth;
     })
+    // console.log("valuesContext.line_items", valuesContext.line_items)
     let create_on = date + " " + mouth.mouth + " " + year;
-    let filterResult = valuesContext.line_items.sort(function (a, b) {
+    let filterResult = valuesContext.line_item_shows.sort(function (a, b) {
       return parseInt(a.internal_item_id) - parseInt(b.internal_item_id);
     })
     let group_type = []
@@ -1908,7 +1909,7 @@ export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((re
       var total = 0;
       var keyss = group_type[i];
       // console.log("filterResult_type", filterResult_type)
-      valuesContext.line_item_shows.map((item) => {
+      filterResult_type.map((item) => {
         var myObj = {
           "item_id": line_number,
           "description": item.item_description,
@@ -1919,11 +1920,11 @@ export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((re
           "per_unit_price": item.per_unit_price
         };
         line_number = line_number + 1;
-        total = total + parseInt(item.total)
+        total = total + parseFloat(item.total.replace(/,/g, ''))
         line_items.push(myObj)
       })
       r[keyss] = {
-        "Totol": total.toFixed(2),
+        "Totol": total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
         "Item": line_items
       }
     }

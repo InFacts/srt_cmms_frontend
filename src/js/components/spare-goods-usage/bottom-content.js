@@ -20,7 +20,7 @@ import PopupModalNoPart from '../common/popup-modal-nopart'
 import '../../../css/table.css';
 
 import {
-  fetchGoodsOnhandData, getNumberFromEscapedString, getLotFromQty, weightedAverage, 
+  fetchGoodsOnhandData, getNumberFromEscapedString, getLotFromQty, weightedAverage, rawLotFromQty,
   sumTotalLineItemHelper, sumTotalHelper, DOCUMENT_STATUS, getUserIDFromEmployeeID, checkBooleanForEditHelper
 } from '../../helper';
 
@@ -67,17 +67,6 @@ const BottomContent = (props) => {
         setFieldValue(fieldName + `.item_id`, item.item_id, false);
         setFieldValue(fieldName + `.at_source`, [], false);
       } 
-      // else {
-      //   setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
-      //   setFieldValue(fieldName + `.description`, `${item.description}`, false);
-      //   setFieldValue(fieldName + `.quantity`, 1, false);
-      //   setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
-      //   setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
-      //   setFieldValue(fieldName + `.line_number`, index + 1, false);
-      //   setFieldValue(fieldName + `.item_id`, item.item_id, false);
-      //   setFieldValue(fieldName + `.item_status_id`, 1, false);
-      //   setFieldValue(fieldName + `.at_source`, [], false);
-      // }
       fetchGoodsOnhandData(getNumberFromEscapedString(values.src_warehouse_id), item.item_id)
         .then((at_source) => {
           var at_sources = at_source;
@@ -85,7 +74,7 @@ const BottomContent = (props) => {
           console.log("at_source", at_source)
           if (at_source) {
             setFieldValue(`line_items[${index}].at_source`, [at_source], false);
-            setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(at_source.pricing.fifo, values.line_items[index].quantity)), false);
+            setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(rawLotFromQty(at_source.pricing.fifo, values.line_items[index].current_unit_count), values.line_items[index].quantity)), false);
             return resolve();
           }
           else {
@@ -110,7 +99,7 @@ const BottomContent = (props) => {
     }
     if (quantity !== 0) {
       setFieldValue(fieldName, quantity, false);
-      setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(values.line_items[index].at_source[0].pricing.fifo, quantity)), false);
+      setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(rawLotFromQty(values.line_items[index].at_source[0].pricing.fifo, values.line_items[index].current_unit_count), quantity)), false);
       return;
     } else {
       return 'Invalid Quantity Line Item';
@@ -129,7 +118,7 @@ const BottomContent = (props) => {
         if (at_source) {
           setFieldValue(`line_items[${index}].at_source`, [at_source], false);
           setFieldValue(`line_items[${index}].item_status_id`, item_status_id, false);
-          setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(at_source.pricing.fifo, values.line_items[index].quantity)), false);
+          setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(rawLotFromQty(at_source.pricing.fifo, values.line_items[index].current_unit_count), values.line_items[index].quantity)), false);
         }
         else {
           console.log(" NOT FOUND AT SOURCES FOR CALCULATE FIFO")

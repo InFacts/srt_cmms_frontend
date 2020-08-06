@@ -61,8 +61,10 @@ const useFillDefaultsOnModeAdd = (document_type_group_id) => {
                     setFieldValue(this_warehouse_id_name, this_warehouse_id , true);
 
                     let position = getPositionAbbreviationFromWarehouseID(fact.position, this_warehouse_id);
+                    if (position) {
                     positionAbbreviation = position.abbreviation;
                     positionID = position.position_id;
+                    }
                 }else{ //PMT
                     // fact.position.items
                     positionAbbreviation = decoded_token.has_position[0].abbreviation;
@@ -170,9 +172,10 @@ const useFillDefaultsOnModeAdd = (document_type_group_id) => {
                     console.log("subscribeInternalDocumentIDChanges:: values[this_warehouse_id_name]", values[this_warehouse_id_name]);
                     let position = getPositionAbbreviationFromWarehouseID(fact.position, values[this_warehouse_id_name]);
                     console.log("subscribeInternalDocumentIDChanges:: position",position);
+                    if (position) {
                     positionAbbreviation = position.abbreviation;
                     positionID = position.position_id;
-
+                    }
 
                     // runningInternalDocumentID = await fetchLastestRunningInternalDocumentID(positionID, document_type_group_id, fullYearBE);
                     // internalDocumentID = getInternalDocumentIDFromCurrentValues(fact, values, document_type_group_id, this_warehouse_id_name, runningInternalDocumentID);
