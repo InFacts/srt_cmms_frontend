@@ -39,25 +39,30 @@ const BottomContent = (props) => {
         })
       }
       workOrderPmParent.push(workOrderPmChild)
-      console.log("workOrderPmParent", workOrderPmParent)
+      // console.log("workOrderPmParent", workOrderPmParent)
     })
 
     checkListNameUnique.map((four, indexCheckListNameUnique) => {
       workOrderPmParent.map((parent, indexParent) => {
+        let checkNoteMathNameChecklist = false;
         // console.log("parent", parent)
         parent.map((child, indexChild) => {
           // console.log("child", child)
           if (child.checklist_name === four.checklist_name) {
+            checkNoteMathNameChecklist = true;
             checkListNameUnique[indexCheckListNameUnique][indexParent] = child
             // console.log("checkListNameUnique[indexCheckListNameUnique][indexParent]", checkListNameUnique[indexCheckListNameUnique][indexParent])
           } else {
             // checkListNameUnique[indexCheckListNameUnique][indexParent] = { checklist_count: 0, completed_count: 0 }
           }
         })
+        if (checkNoteMathNameChecklist === false) {
+          checkListNameUnique[indexCheckListNameUnique][indexParent] = { checklist_count: 0, completed_count: 0 }
+        }
       })
     })
 
-    console.log("checkListNameUnique", checkListNameUnique)
+    // console.log("checkListNameUnique", checkListNameUnique)
 
     setFieldValue("head_table", headTable, false);
     setFieldValue("checklist_name_unique", checkListNameUnique, false);
