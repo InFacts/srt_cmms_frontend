@@ -38,7 +38,7 @@ const BottomContent = (props) => {
 
   const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => new Promise(resolve => {
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
-
+    internal_item_id = internal_item_id.toUpperCase()
     if (values.line_items[index].internal_item_id === internal_item_id) {
       return resolve();
     }
@@ -56,6 +56,7 @@ const BottomContent = (props) => {
     // console.log(item)
     if (item) {
       if (item.item_type_id === 1) {
+        setFieldValue(fieldName + `.internal_item_id`, `${internal_item_id}`, false);
         setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
         setFieldValue(fieldName + `.description`, `${item.description}`, false);
         setFieldValue(fieldName + `.quantity`, 0, false);

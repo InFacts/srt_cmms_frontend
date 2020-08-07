@@ -40,6 +40,7 @@ const BottomContent = (props) => {
 
   const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => new Promise(resolve => {
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
+    internal_item_id = internal_item_id.toUpperCase()
     if (values.line_items[index].internal_item_id === internal_item_id) {
       return resolve();
     }
@@ -57,6 +58,7 @@ const BottomContent = (props) => {
 
     if (item) {
       if (item.item_type_id === 1) {
+        setFieldValue(fieldName + `.internal_item_id`, `${internal_item_id}`, false);
         setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
         setFieldValue(fieldName + `.description`, `${item.description}`, false);
         setFieldValue(fieldName + `.quantity`, 0, false);
@@ -67,17 +69,6 @@ const BottomContent = (props) => {
         setFieldValue(fieldName + `.item_id`, item.item_id, false);
         setFieldValue(fieldName + `.at_source`, [], false);
       } 
-      // else {
-      //   setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
-      //   setFieldValue(fieldName + `.description`, `${item.description}`, false);
-      //   setFieldValue(fieldName + `.quantity`, 1, false);
-      //   setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
-      //   setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
-      //   setFieldValue(fieldName + `.line_number`, index + 1, false);
-      //   setFieldValue(fieldName + `.item_status_id`, 1, false);
-      //   setFieldValue(fieldName + `.item_id`, item.item_id, false);
-      //   setFieldValue(fieldName + `.at_source`, [], false);
-      // }
       fetchGoodsOnhandData(getNumberFromEscapedString(values.src_warehouse_id), item.item_id)
         .then((at_source) => {
           var at_sources = at_source;

@@ -66,6 +66,9 @@ const TopContent = (props) => {
   useFetchPernissionUser();
 
   const validateInternalItemIDField = internal_item_id => {
+    internal_item_id = internal_item_id.toUpperCase()
+
+    console.log("internal_item_id", internal_item_id)
     if (!internal_item_id) {
       setFieldValue("description", "", false)
       setFieldValue("item_group_id", "", false)
@@ -92,6 +95,7 @@ const TopContent = (props) => {
       if (internal_item_id !== values.internal_item_id) {
         let items = fact.items.items;
         let item = items.find(item => `${item.internal_item_id}` === `${internal_item_id}` && `${item.item_type_id}` === `${1}`); // Returns undefined if not found
+        console.log("item>>", item)
         if (item) {
           setValues({ ...values, ...responseToFormState(item) }, false);
 

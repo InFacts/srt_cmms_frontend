@@ -9,7 +9,7 @@ import { FOOTER_MODE, FOOTER_ACTIONS, handleClickBackToSpareMain, ACTION_TO_HAND
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import useTokenInitializer from '../hooks/token-initializer';
 import { useFormikContext } from 'formik';
-import { cancelApproval, startDocumentApprovalFlow, APPROVAL_STATUS, DOCUMENT_TYPE_ID, saveDocument, editDocument, packDataFromValuesMasterDataForEdit, packDataFromValues, fetchLatestStepApprovalDocumentData, getUserIDFromEmployeeID, DOCUMENT_STATUS, DOCUMENT_STATUS_ID, APPROVAL_STEP_ACTION, checkDocumentStatus, approveDocument, fetchStepApprovalDocumentData, saveMasterData, editMasterDataHelper, APPROVAL_STATUS_TH } from '../helper';
+import { cancelApproval, startDocumentApprovalFlow, APPROVAL_STATUS, DOCUMENT_TYPE_ID, saveDocument, editDocument, packDataFromValuesMasterDataForEdit, packDataFromValues, fetchLatestStepApprovalDocumentData, getUserIDFromEmployeeID, DOCUMENT_STATUS, DOCUMENT_STATUS_ID, APPROVAL_STEP_ACTION, checkDocumentStatus, approveDocument, fetchStepApprovalDocumentData, saveMasterData, editMasterDataHelper, APPROVAL_STATUS_TH, getNumberFromEscapedString } from '../helper';
 import { FACTS } from '../redux/modules/api/fact';
 import { navBottomOnReady, navBottomError, navBottomSuccess, navBottomSending } from '../redux/modules/nav-bottom'
 import history from '../history';
@@ -59,59 +59,62 @@ const useFooterInitializer = (document_type_id) => {
         let created_by_admin_employee_id = getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id); // TEST: values.created_by_admin_employee_id;
 
         // Check That user who create document?
-        if (userInfo.id === created_by_admin_employee_id) {
-            console.log("hadleDocumentStatusWithFooter", document_status)
-            if (document_status === DOCUMENT_STATUS.DRAFT) { dispatch(footerToModeAddDraft()); }
-            else if (document_status === DOCUMENT_STATUS.WAIT_APPROVE) { dispatch(footerToModeOwnDocument()); }
-            else if (document_status === DOCUMENT_STATUS.APPROVE_DONE) { dispatch(footerToModeApApprovalDone()); }
-            else if (document_status === DOCUMENT_STATUS.VOID) { dispatch(footerToModeVoid()); }
-            else if (document_status === DOCUMENT_STATUS.REOPEN) { dispatch(footerToModeEdit()); }
-            else if (document_status === DOCUMENT_STATUS.FAST_TRACK) { dispatch(footerToModeFastTrack()); }
-            else {
-                if (toolbar.mode === TOOLBAR_MODE.SEARCH) { dispatch(footerToModeSearch()); }
-                else { dispatch(footerToModeAddDraft()); }
+        if (values.internal_document_id) {
+            if (userInfo.id === created_by_admin_employee_id
+                || values.internal_document_id.indexOf("-FastTrack") !== -1 && (getNumberFromEscapedString(values.src_warehouse_id) === decoded_token.has_position[0].warehouse_id)
+            ) {
+                console.log("hadleDocumentStatusWithFooter", document_status)
+                if (document_status === DOCUMENT_STATUS.DRAFT) { dispatch(footerToModeAddDraft()); }
+                else if (document_status === DOCUMENT_STATUS.WAIT_APPROVE) { dispatch(footerToModeOwnDocument()); }
+                else if (document_status === DOCUMENT_STATUS.APPROVE_DONE) { dispatch(footerToModeApApprovalDone()); }
+                else if (document_status === DOCUMENT_STATUS.VOID) { dispatch(footerToModeVoid()); }
+                else if (document_status === DOCUMENT_STATUS.REOPEN) { dispatch(footerToModeEdit()); }
+                else if (document_status === DOCUMENT_STATUS.FAST_TRACK) { dispatch(footerToModeFastTrack()); }
+                else {
+                    if (toolbar.mode === TOOLBAR_MODE.SEARCH) { dispatch(footerToModeSearch()); }
+                    else { dispatch(footerToModeAddDraft()); }
+                }
+            } else {
+                // Check Next Approver from postion_id
+                console.log("fetchLatestStepApprovalDocumentData", document_id)
+                fetchLatestStepApprovalDocumentData(document_id).then((latestApprovalInfo) => {
+                    console.log("latestApprovalInfo", latestApprovalInfo)
+                    if ((latestApprovalInfo !== undefined || latestApprovalInfo.length !== 0) && document_status === DOCUMENT_STATUS.WAIT_APPROVE) {
+                        console.log("latestApprovalInfo------> ", latestApprovalInfo)
+                        console.log("user------> ", latestApprovalInfo.position_id, userInfo.position_id)
+                        console.log("approval_step_action_id------> ", latestApprovalInfo.approval_step_action_id, APPROVAL_STEP_ACTION.APPROVAL)
+                        if (latestApprovalInfo.position_id === userInfo.position_id) {
+                            if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_APPROVAL) { dispatch(footerToModeApApproval()); }
+                            else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.APPROVAL) { dispatch(footerToModeApCheckApproval()); }
+                            else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.GOT_IT) { dispatch(footerToModeApGotIt()); }
+                            else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_ORDER) { dispatch(footerToModeApCheckOrder()); }
+                            else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_MAINTENANCE) { dispatch(footerToModeApCheckMaintenance()); }
+                            else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.GUARANTEE_MAINTENANCE) { dispatch(footerToModeApGuarnteeMaintenance()); }
+                        }
+                        else { // Everyone for Search mode
+                            if (document_type_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM && toolbar.mode === TOOLBAR_MODE.SEARCH && document_status === DOCUMENT_STATUS.DRAFT) {
+                                dispatch(footerToModeAddDraft());
+                            } else {
+                                dispatch(footerToModeSearch());
+                            }
+                        }
+                    }
+                    else { // Just Work order PM
+                        // console.log("Just Work order PM", values.document_id, values.status_name_th, APPROVAL_STATUS_TH.APPROVED)
+                        if (toolbar.mode === TOOLBAR_MODE.ADD && values.status_name_th === "") { dispatch(footerToModeAddDraft()); }
+                        else {
+                            if (document_type_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM && toolbar.mode === TOOLBAR_MODE.SEARCH && values.status_name_th !== "อนุมัติเรียบร้อยแล้ว") { //APPROVAL_STATUS_TH.APPROVED
+                                dispatch(footerToModeAddDraft());
+                            } else {
+                                dispatch(footerToModeSearch());
+                            }
+                            fetchApprovalStep(values.document_id);
+                        }
+                    }
+                })
+
+
             }
-        }
-        else {
-            // Check Next Approver from postion_id
-            console.log("fetchLatestStepApprovalDocumentData", document_id)
-            fetchLatestStepApprovalDocumentData(document_id).then((latestApprovalInfo) => {
-                console.log("latestApprovalInfo", latestApprovalInfo)
-                if ((latestApprovalInfo !== undefined || latestApprovalInfo.length !== 0) && document_status === DOCUMENT_STATUS.WAIT_APPROVE) {
-                    console.log("latestApprovalInfo------> ", latestApprovalInfo)
-                    console.log("user------> ", latestApprovalInfo.position_id, userInfo.position_id)
-                    console.log("approval_step_action_id------> ", latestApprovalInfo.approval_step_action_id, APPROVAL_STEP_ACTION.APPROVAL)
-                    if (latestApprovalInfo.position_id === userInfo.position_id) {
-                        if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_APPROVAL) { dispatch(footerToModeApApproval()); }
-                        else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.APPROVAL) { dispatch(footerToModeApCheckApproval()); }
-                        else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.GOT_IT) { dispatch(footerToModeApGotIt()); }
-                        else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_ORDER) { dispatch(footerToModeApCheckOrder()); }
-                        else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_MAINTENANCE) { dispatch(footerToModeApCheckMaintenance()); }
-                        else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.GUARANTEE_MAINTENANCE) { dispatch(footerToModeApGuarnteeMaintenance()); }
-                    }
-                    else { // Everyone for Search mode
-                        if (document_type_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM && toolbar.mode === TOOLBAR_MODE.SEARCH && document_status === DOCUMENT_STATUS.DRAFT) {
-                            dispatch(footerToModeAddDraft());
-                        } else {
-                            dispatch(footerToModeSearch());
-                        }
-                    }
-                }
-                else { // Just Work order PM
-                    // console.log("Just Work order PM", values.document_id, values.status_name_th, APPROVAL_STATUS_TH.APPROVED)
-                    if (toolbar.mode === TOOLBAR_MODE.ADD && values.status_name_th === "") { dispatch(footerToModeAddDraft()); }
-                    else {
-                        if (document_type_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM && toolbar.mode === TOOLBAR_MODE.SEARCH && values.status_name_th !== "อนุมัติเรียบร้อยแล้ว") { //APPROVAL_STATUS_TH.APPROVED
-                            dispatch(footerToModeAddDraft());
-                        } else {
-                            dispatch(footerToModeSearch());
-                        }
-                        fetchApprovalStep(values.document_id);
-                    }
-                }
-            })
-
-
         }
     }
 

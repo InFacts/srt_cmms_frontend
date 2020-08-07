@@ -53,7 +53,7 @@ const FooterItemComponent = (props) => {
         <>
           <button type="button" title={keyFooter} className={buttonType == "Button-Blue" ? "button-blue edit float-right mr-2" : "p-button--base edit float-right"}
             aria-controls="modalRemarkAppovalFooter" onClick={() => setTitleName(keyFooter)}>{buttonName}</button>
-          <PopupModalRemarkApproval handleClick={handleClick} title={titleName} setFieldValue={props.setFieldValue} disabled={false}/>
+          <PopupModalRemarkApproval handleClick={handleClick} title={titleName} setFieldValue={props.setFieldValue} setTitleName={setTitleName} disabled={false}/>
         </>
       )
     } else if (FOOTER_ACTIONS_TEXT.BACK === buttonName) { //ปุ่มย้อนกลับ

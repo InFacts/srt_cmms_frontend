@@ -2832,8 +2832,8 @@ export const validateInternalDocumentIDFieldHelper = (decoded_token, checkBoolea
                         console.log("validateInternalDocumentIDFieldHelper:: values[this_warehouse_id_name]", values[this_warehouse_id_name]);
                         let position = getPositionAbbreviationFromWarehouseID(fact.position, values[this_warehouse_id_name]);
                         if (position) {
-                        positionAbbreviation = position.abbreviation;
-                        positionID = position.position_id;
+                            positionAbbreviation = position.abbreviation;
+                            positionID = position.position_id;
                         }
 
                         // runningInternalDocumentID = await fetchLastestRunningInternalDocumentID(positionID, document_type_group_id, fullYearBE);
@@ -2911,6 +2911,7 @@ export const validateInternalDocumentIDFieldHelper = (decoded_token, checkBoolea
 
 export const validateLineNumberInternalItemIDFieldHelper = (document_type_group_id, fact, values, setFieldValue, fieldName, internal_item_id, index) => {
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
+    internal_item_id = internal_item_id.toUpperCase()
     if (document_type_group_id === DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO) {
         if (values.line_items[index].internal_item_id === internal_item_id) {
             return;
@@ -2928,6 +2929,7 @@ export const validateLineNumberInternalItemIDFieldHelper = (document_type_group_
         console.log(item)
         if (item) {
             if (item.item_type_id === 1) {
+                setFieldValue(fieldName + `.internal_item_id`, `${internal_item_id}`, false);
                 setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
                 setFieldValue(fieldName + `.description`, `${item.description}`, false);
                 setFieldValue(fieldName + `.quantity`, 0, false);
@@ -2937,16 +2939,6 @@ export const validateLineNumberInternalItemIDFieldHelper = (document_type_group_
                 setFieldValue(fieldName + `.item_status_id`, 1, false);
                 setFieldValue(fieldName + `.per_unit_price`, 0, false);
             }
-            // else {
-            //     setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
-            //     setFieldValue(fieldName + `.description`, `${item.description}`, false);
-            //     setFieldValue(fieldName + `.quantity`, 1, false);
-            //     setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
-            //     setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
-            //     setFieldValue(fieldName + `.line_number`, index + 1, false);
-            //     setFieldValue(fieldName + `.item_status_id`, 1, false);
-            //     setFieldValue(fieldName + `.per_unit_price`, 0, false);
-            // }
             return;
         } else {
             return 'Invalid Number ID';
@@ -2968,6 +2960,7 @@ export const validateLineNumberInternalItemIDFieldHelper = (document_type_group_
         // console.log(item)
         if (item) {
             if (item.item_type_id === 1) {
+                setFieldValue(fieldName + `.internal_item_id`, `${internal_item_id}`, false);
                 setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
                 setFieldValue(fieldName + `.description`, `${item.description}`, false);
                 setFieldValue(fieldName + `.quantity`, 0, false);
@@ -2977,16 +2970,6 @@ export const validateLineNumberInternalItemIDFieldHelper = (document_type_group_
                 setFieldValue(fieldName + `.item_status_id`, 1, false);
                 setFieldValue(fieldName + `.per_unit_price`, 0, false);
             }
-            // else {
-            //   setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
-            //   setFieldValue(fieldName + `.description`, `${item.description}`, false);
-            //   setFieldValue(fieldName + `.quantity`, 1, false);
-            //   setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
-            //   setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
-            //   setFieldValue(fieldName + `.line_number`, index + 1, false);
-            //   setFieldValue(fieldName + `.item_status_id`, 2, false);
-            //   setFieldValue(fieldName + `.per_unit_price`, 0, false);
-            // }
             return;
         } else {
             return 'Invalid Number ID';
@@ -3008,6 +2991,7 @@ export const validateLineNumberInternalItemIDFieldHelper = (document_type_group_
         // console.log(item)
         if (item) {
             if (item.item_type_id === 1) {
+                setFieldValue(fieldName + `.internal_item_id`, `${internal_item_id}`, false);
                 setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
                 setFieldValue(fieldName + `.description`, `${item.description}`, false);
                 setFieldValue(fieldName + `.quantity`, 0, false);
@@ -3017,16 +3001,6 @@ export const validateLineNumberInternalItemIDFieldHelper = (document_type_group_
                 setFieldValue(fieldName + `.item_status_id`, 4, false);
                 setFieldValue(fieldName + `.per_unit_price`, 0, false);
             }
-            // else {
-            //   setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
-            //   setFieldValue(fieldName + `.description`, `${item.description}`, false);
-            //   setFieldValue(fieldName + `.quantity`, 1, false);
-            //   setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
-            //   setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
-            //   setFieldValue(fieldName + `.line_number`, index + 1, false);
-            //   setFieldValue(fieldName + `.item_status_id`, 4, false);
-            //   setFieldValue(fieldName + `.per_unit_price`, 0, false);
-            // }
             return;
         } else {
             return 'Invalid Number ID';
@@ -3048,6 +3022,7 @@ export const validateLineNumberInternalItemIDFieldHelper = (document_type_group_
         // console.log(item)
         if (item) {
             if (item.item_type_id === 1) {
+                setFieldValue(fieldName + `.internal_item_id`, `${internal_item_id}`, false);
                 setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
                 setFieldValue(fieldName + `.description`, `${item.description}`, false);
                 setFieldValue(fieldName + `.quantity`, 0, false);
@@ -3055,14 +3030,6 @@ export const validateLineNumberInternalItemIDFieldHelper = (document_type_group_
                 setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
                 setFieldValue(fieldName + `.per_unit_price`, 0, false);
             }
-            // else {
-            //   setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
-            //   setFieldValue(fieldName + `.description`, `${item.description}`, false);
-            //   setFieldValue(fieldName + `.quantity`, 1, false);
-            //   setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
-            //   setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
-            //   setFieldValue(fieldName + `.per_unit_price`, 0, false);
-            // }
             return;
         } else {
             return 'Invalid Number ID';
@@ -3597,6 +3564,24 @@ export const checkBooleanForEditCheckNodeIDHelperForWorkOrderPM = (values, decod
     values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.DRAFT)
     && (getUserNodeIDFromEmployeeID(fact[FACTS.USERS], decoded_token.id) === values.node_id
     )
+
+export const checkBooleanForEditInventoryTranferHelper = (values, decoded_token, fact) => {
+    if (values.internal_document_id) {
+        if (values.internal_document_id.indexOf("-FastTrack") === -1) {
+            return (
+                values.status_name_th === DOCUMENT_STATUS.REOPEN
+                || values.status_name_th === DOCUMENT_STATUS.DRAFT
+                && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
+            )
+        } else {
+            return (
+                values.status_name_th === DOCUMENT_STATUS.REOPEN
+                || values.status_name_th === DOCUMENT_STATUS.DRAFT
+                && (getNumberFromEscapedString(values.src_warehouse_id) === decoded_token.has_position[0].warehouse_id)
+            )
+        }
+    }
+}
 
 export const filterAlsEquipment = (equipmentData, formData) => {
     let tempEquipmentData = [];

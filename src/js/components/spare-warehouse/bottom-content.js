@@ -55,13 +55,13 @@ const BottomContent = (props) => {
                   {values.active === 1
                     ?
                     <>
-                      {/* <option value=''></option> */}
+                      <option value=''></option>
                       <option value='1' selected>เปิดการใช้งาน</option>
                       <option value='0'>ปิดการใช้งาน</option>
                     </>
                     :
                     <>
-                      {/* <option value=''></option> */}
+                      <option value=''></option>
                       <option value='1'>เปิดการใช้งาน</option>
                       <option value='0' selected>ปิดการใช้งาน</option>
                     </>}

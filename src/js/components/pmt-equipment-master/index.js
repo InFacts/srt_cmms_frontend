@@ -105,7 +105,7 @@ const EnhancedGoodsReceiptComponent = withFormik({
         item_group_id: 1,
         description: '',
         uom_group_id: '',
-        active: '',
+        active: 1,
         import_on: '',
 
         // Bottom Content

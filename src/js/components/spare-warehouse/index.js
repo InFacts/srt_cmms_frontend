@@ -69,7 +69,7 @@ const EnhancedWarehouseMasterDataComponent = withFormik({
         warehouse_id: '',
         name: '',
         abbreviation: '',
-        active: '',
+        active: 1,
         location: '',
         warehouse_type_id: '',
         use_central: '',

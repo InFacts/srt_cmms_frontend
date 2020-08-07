@@ -136,7 +136,7 @@ const BottomContent = () => {
                 <div className="grid_3 pull_1">
                   <SelectNoChildrenInput name="active" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH}
                     validate={validateActiveField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="10">
-                    {/* <option value=''></option> */}
+                    <option value=''></option>
                     {values.active === 0
                       ?
                       <>
