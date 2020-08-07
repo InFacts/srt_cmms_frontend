@@ -20,7 +20,7 @@ const Files = () => {
     const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
 
     const fileExtension = (file) => {
-        console.log("file>>>>", file)
+        // console.log("file>>>>", file)
         if (file.name !== undefined) {
             let extensionSplit = file.name.split('.')
             if (extensionSplit.length > 1) {
@@ -66,15 +66,17 @@ const Files = () => {
     const convertFormFileToAPI = (e) => {
         let filesAdded = [];
         let files = [];
+        console.log("e.target...", e.target.files);
         for (let i = 0; i < e.target.files.length; i++) {
             filesAdded.push(e.target.files[i]);
         }
         for (let i = 0; i < values.files.length; i++) {
-            console.log("values.files[i]", values.files[i])
+            // console.log("values.files[i]", values.files[i])
             filesAdded.push(values.files[i]);
         }
         filesAdded.map((newFile, index) => {
             newFile.id = 'files-' + index;
+            // if (newFile.name !== undefined) { newFile.filename = Math.random().toString() + newFile.name; }
             if (newFile.name !== undefined) { newFile.filename = newFile.name; }
             newFile.extension = fileExtension(newFile);
             newFile.sizeReadable = fileSizeReadable(newFile.size);
@@ -89,11 +91,14 @@ const Files = () => {
             }
         })
         setFieldValue("files", files);
+        console.log("convertFormFileToAPI values.files", values.files);
     }
 
     const deleteFileInState = (e) => {
+        console.log("delete e.target...", e.target.files);
         let index = e.target.parentNode.parentNode.parentNode.id;
         values.files.splice(index, 1);
+        console.log("delete values.files", values.files);
         setFieldValue("files", values.files);
     }
 
@@ -109,7 +114,7 @@ const Files = () => {
                     <div className="upload-btn-wrapper">
                         {/* TODO: Add FILES */}
                         <button type="button" className="btn" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH ? true : false }>เพิ่มไฟล์</button>
-                        <input id="file" name="file" type="file" onChange={convertFormFileToAPI} multiple disabled={toolbar.mode === TOOLBAR_MODE.SEARCH ? true :false}/>
+                        <input id="file" name="file" type="file" onChange={convertFormFileToAPI} onClick={(e)=> {e.target.value = null}} multiple disabled={toolbar.mode === TOOLBAR_MODE.SEARCH ? true :false}/>
                         {/* <button type="button" className="btn" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>เพิ่มไฟล์</button> */}
                         {/* <input id="file" name="file" type="file" onChange={convertFormFileToAPI} multiple disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}/> */}
                     </div>
