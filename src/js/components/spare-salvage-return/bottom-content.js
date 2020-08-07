@@ -15,8 +15,10 @@ import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
 import { useFormikContext } from 'formik';
 import { FACTS } from '../../redux/modules/api/fact.js';
 
-import { fetchGoodsOnhandData, getNumberFromEscapedString, getLotFromQty, weightedAverage, 
-  sumTotalLineItemHelper, sumTotalHelper,DOCUMENT_STATUS, getUserIDFromEmployeeID, checkBooleanForEditHelper  } from '../../helper';
+import {
+  fetchGoodsOnhandData, getNumberFromEscapedString, getLotFromQty, weightedAverage, rawLotFromQty,
+  sumTotalLineItemHelper, sumTotalHelper, DOCUMENT_STATUS, getUserIDFromEmployeeID, checkBooleanForEditHelper
+} from '../../helper';
 
 import PopupModalNoPart from '../common/popup-modal-nopart'
 
@@ -27,7 +29,7 @@ const BottomContent = (props) => {
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
   const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
-  const decoded_token = useSelector((state) => ({...state.token.decoded_token}), shallowEqual);
+  const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
   const [lineNumber, setLineNumber] = useState('');
 
   const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
@@ -56,35 +58,24 @@ const BottomContent = (props) => {
     if (item) {
       if (item.item_type_id === 1) {
         setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
-      setFieldValue(fieldName + `.description`, `${item.description}`, false);
-      setFieldValue(fieldName + `.quantity`, 0, false);
-      setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
-      setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
-      setFieldValue(fieldName + `.line_number`, index+1, false);
-      setFieldValue(fieldName + `.item_status_id`, 5, false);
-      setFieldValue(fieldName + `.item_id`, item.item_id, false);
-      setFieldValue(fieldName + `.at_source`, [], false);
-      } 
-      // else {
-      //   setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
-      //   setFieldValue(fieldName + `.description`, `${item.description}`, false);
-      //   setFieldValue(fieldName + `.quantity`, 1, false);
-      //   setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
-      //   setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
-      //   setFieldValue(fieldName + `.line_number`, index + 1, false);
-      //   setFieldValue(fieldName + `.item_status_id`, 5, false);
-      //   setFieldValue(fieldName + `.item_id`, item.item_id, false);
-      //   setFieldValue(fieldName + `.at_source`, [], false);
-      // }
-      
+        setFieldValue(fieldName + `.description`, `${item.description}`, false);
+        setFieldValue(fieldName + `.quantity`, 0, false);
+        setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
+        setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
+        setFieldValue(fieldName + `.line_number`, index + 1, false);
+        setFieldValue(fieldName + `.item_status_id`, 5, false);
+        setFieldValue(fieldName + `.item_id`, item.item_id, false);
+        setFieldValue(fieldName + `.at_source`, [], false);
+      }
+
       fetchGoodsOnhandData(getNumberFromEscapedString(values.src_warehouse_id), item.item_id)
-       .then((at_source) => {
+        .then((at_source) => {
           var at_sources = at_source;
           var at_source = at_sources.find(at_source => `${at_source.item_status_id}` === `5`); // Returns undefined if not found
           console.log("at_source", at_source)
           if (at_source) {
             setFieldValue(`line_items[${index}].at_source`, [at_source], false);
-            setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(at_source.pricing.fifo, values.line_items[index].quantity)), false);
+            setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(rawLotFromQty(at_source.pricing.fifo, at_source.current_unit_count), values.line_items[index].quantity)), false);
             return resolve();
           }
           else {
@@ -103,15 +94,13 @@ const BottomContent = (props) => {
   const validateLineNumberQuatityItemIDField = (fieldName, quantity, index) => {
     // internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
-    // if (values.line_items[index].quantity === quantity) {
-    //   return;
-    // }
     if (quantity === "") {
       return;
     }
 
     if (quantity !== 0) {
       setFieldValue(fieldName, quantity, false);
+      setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(rawLotFromQty(values.line_items[index].at_source[0].pricing.fifo, values.line_items[index].at_source[0].current_unit_count), quantity)), false);
       return;
     } else {
       return 'Invalid Quantity Line Item';
@@ -121,9 +110,6 @@ const BottomContent = (props) => {
   const validateLineNumberPerUnitPriceItemIDField = (fieldName, per_unit_price, index) => {
     // internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
-    // if (values.line_items[index].per_unit_price === per_unit_price) {
-    //   return;
-    // }
     if (per_unit_price === "") {
       return;
     }
@@ -148,11 +134,11 @@ const BottomContent = (props) => {
         if (at_source) {
           setFieldValue(`line_items[${index}].at_source`, [at_source], false);
           setFieldValue(`line_items[${index}].item_status_id`, item_status_id, false);
-          setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(at_source.pricing.fifo, values.line_items[index].quantity)), false);
+          setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(rawLotFromQty(at_source.pricing.fifo, at_source.current_unit_count), values.line_items[index].quantity)), false);
         }
         else {
           console.log(" NOT FOUND AT SOURCES FOR CALCULATE FIFO")
-          setFieldValue(`line_items[${index}].at_source`, [{"current_unit_count": 0, "committed_unit_count": 0}], false);
+          setFieldValue(`line_items[${index}].at_source`, [{ "current_unit_count": 0, "committed_unit_count": 0 }], false);
           setFieldValue(`line_items[${index}].item_status_id`, item_status_id, false);
           setFieldValue(`line_items[${index}].per_unit_price`, 0, false);
         }
@@ -178,7 +164,7 @@ const BottomContent = (props) => {
                 validateLineNumberInternalItemIDField={validateLineNumberInternalItemIDField}
                 validateLineNumberQuatityItemIDField={validateLineNumberQuatityItemIDField}
                 validateLineNumberPerUnitPriceItemIDField={validateLineNumberPerUnitPriceItemIDField}
-                validateLineNumberItemStatusIDField= {validateLineNumberItemStatusIDField}
+                validateLineNumberItemStatusIDField={validateLineNumberItemStatusIDField}
                 setLineNumber={setLineNumber}
                 checkBooleanForEdit={checkBooleanForEdit}
                 tabIndex={6}

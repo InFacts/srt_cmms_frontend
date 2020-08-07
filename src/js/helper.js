@@ -298,13 +298,13 @@ export function getItemIDFromInternalItemID(itemFact, internal_item_id) {
 }
 
 export function getPositionAbbreviationFromWarehouseID(positionFact, warehouseID) {
-    if (typeof warehouseID === 'string' || warehouseID instanceof String){
+    if (typeof warehouseID === 'string' || warehouseID instanceof String) {
         warehouseID = warehouseID.split('\\')[0]; // Escape Character USERNAME CANT HAVE ESCAPE CHARACTER!
     }
     let positions = positionFact.items;
     if (positions && positions.length > 0) {
         // Find position with that warehouse and position group id 3 หัวหน้าแขวง/คลัง or 5	หัวหน้าตอน (นสต. นายตรวจสายตอน)
-        let position = positions.find(position => `${position.warehouse_id}` === `${warehouseID}` 
+        let position = positions.find(position => `${position.warehouse_id}` === `${warehouseID}`
             && (position.position_group_id === 3 || position.position_group_id === 5));
         if (position) {
             return position;
@@ -1190,7 +1190,7 @@ export const packDataFromValuesMasterDataForEdit = (fact, values, document_type_
 
         let equipment_item_part = {
             item_id: values.item_id,
-            equipment_group_id: parseInt(values.equipment_group_id),  
+            equipment_group_id: parseInt(values.equipment_group_id),
             checklist_id: parseInt(values.checklist_id)
         }
 
@@ -1358,8 +1358,8 @@ export const editMasterData = (data, document_type_group_id) => new Promise((res
 
 
 // GET  /statistic/goods-monthly-summary
-export const fetchStatisticGoodsMonthlySummary = (beginReportingPeriodID = null, endReportingPeriodID = null, warehouseIDFilter=null, itemIDFilter=null, itemStatusIDFilter=1) => new Promise((resolve, reject) => {
-    const url = `${BASE_URL}/statistic/goods-monthly-summary?${beginReportingPeriodID ? `begin_reporting_period_id=${beginReportingPeriodID}&`: ''}${endReportingPeriodID ? `end_reporting_period_id=${endReportingPeriodID}&`: ''}${warehouseIDFilter ? `warehouse_id=${warehouseIDFilter[0]}&` : ''}${itemIDFilter ? `item_id=${itemIDFilter[0]}&` : ''}${itemStatusIDFilter ? `item_status_id=${itemStatusIDFilter}&` : ''}page_size=${PAGE_SIZE}`;
+export const fetchStatisticGoodsMonthlySummary = (beginReportingPeriodID = null, endReportingPeriodID = null, warehouseIDFilter = null, itemIDFilter = null, itemStatusIDFilter = 1) => new Promise((resolve, reject) => {
+    const url = `${BASE_URL}/statistic/goods-monthly-summary?${beginReportingPeriodID ? `begin_reporting_period_id=${beginReportingPeriodID}&` : ''}${endReportingPeriodID ? `end_reporting_period_id=${endReportingPeriodID}&` : ''}${warehouseIDFilter ? `warehouse_id=${warehouseIDFilter[0]}&` : ''}${itemIDFilter ? `item_id=${itemIDFilter[0]}&` : ''}${itemStatusIDFilter ? `item_status_id=${itemStatusIDFilter}&` : ''}page_size=${PAGE_SIZE}`;
 
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
@@ -1372,7 +1372,7 @@ export const fetchStatisticGoodsMonthlySummary = (beginReportingPeriodID = null,
         })
 });
 // GET  /statistic/goods-onhand
-export const fetchStatisticGoodsOnhand = ( warehouseIDFilter=null, itemIDFilter=null, itemStatusIDFilter=1) => new Promise((resolve, reject) => {
+export const fetchStatisticGoodsOnhand = (warehouseIDFilter = null, itemIDFilter = null, itemStatusIDFilter = 1) => new Promise((resolve, reject) => {
     const url = `${BASE_URL}/statistic/goods-onhand?${warehouseIDFilter ? `warehouse_id=${warehouseIDFilter[0]}&` : ''}${itemIDFilter ? `item_id=${itemIDFilter[0]}&` : ''}${itemStatusIDFilter ? `item_status_id=${itemStatusIDFilter}&` : ''}page_size=${PAGE_SIZE}`;
 
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
@@ -1749,6 +1749,7 @@ export const fetchGoodsOnhandData = (warehouse_id, item_id) => new Promise((reso
     const url = `${BASE_URL}/statistic/goods-onhand/plus?warehouse_id=${warehouse_id}&item_id=${item_id}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
+            console.log("res", res)
             resolve(res.data.results);
         })
         .catch((err) => {
@@ -2555,7 +2556,7 @@ export const validateInternalDocumentIDWorfOrderPMFieldHelper = (decoded_token, 
 
 
 // Validation 
-export const validateInternalDocumentIDFieldHelper = (decoded_token, checkBooleanForEdit, document_type_group_id, toolbar, footer, fact, values, setValues, setFieldValue, validateField, internal_document_id) => new Promise( async (resolve) => {
+export const validateInternalDocumentIDFieldHelper = (decoded_token, checkBooleanForEdit, document_type_group_id, toolbar, footer, fact, values, setValues, setFieldValue, validateField, internal_document_id) => new Promise(async (resolve) => {
     // Internal Document ID
     //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
     //  ie. GR-PYO-2563/0001
@@ -2571,10 +2572,10 @@ export const validateInternalDocumentIDFieldHelper = (decoded_token, checkBoolea
         console.log("validateInternalDocumentIDFieldHelper:: I dont have any internal doc id")
         console.log("validateInternalDocumentIDFieldHelper:: warehouseid", values.dest_warehouse_id)
         return resolve('Required');
-    } else if (!isValidInternalDocumentIDFormat(internal_document_id) 
-                && !isValidOldInternalDocumentIDFormat(internal_document_id)
-                // && !isValidInternalDocumentIDFastTrackFormat(internal_document_id)
-                && !isValidInternalDocumentIDDraftFormat(internal_document_id)) {
+    } else if (!isValidInternalDocumentIDFormat(internal_document_id)
+        && !isValidOldInternalDocumentIDFormat(internal_document_id)
+        // && !isValidInternalDocumentIDFastTrackFormat(internal_document_id)
+        && !isValidInternalDocumentIDDraftFormat(internal_document_id)) {
         console.log("Invalid Document ID Format Be sure to use the format ie. สสญ.ธบ.-ธบ./2-4/2563/0001")
         return resolve('Invalid Document ID Format Be sure to use the format ie. สสญ.ธบ.-ธบ./2-4/2563/0001')
     }
@@ -2585,7 +2586,7 @@ export const validateInternalDocumentIDFieldHelper = (decoded_token, checkBoolea
     if (isICD(document_type_group_id)) { // If document type group ID is ICD
         if (isICDWarehouseDest(document_type_group_id)) {
             this_warehouse_id_name = "dest_warehouse_id";
-        }else if (isICDWarehouseSrc(document_type_group_id)) {
+        } else if (isICDWarehouseSrc(document_type_group_id)) {
             this_warehouse_id_name = "src_warehouse_id";
         }
     }
@@ -2598,13 +2599,13 @@ export const validateInternalDocumentIDFieldHelper = (decoded_token, checkBoolea
         .then((data) => {
             console.log(" i got data", data);
             if (isICD(document_type_group_id)) { // If document type group ID is ICD
-                var internalDocumentID; 
+                var internalDocumentID;
 
                 // This is because the getting document with internal document id isn't perfect, the original way would separate between document and specific. So the physical count and the inventory adjustment isn't done yet. 
-                if (document_type_group_id === DOCUMENT_TYPE_ID.PHYSICAL_COUNT 
+                if (document_type_group_id === DOCUMENT_TYPE_ID.PHYSICAL_COUNT
                     || document_type_group_id === DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT) {
                     internalDocumentID = data.document.internal_document_id;
-                }else{
+                } else {
                     internalDocumentID = data.internal_document_id;
                 }
 
@@ -2614,13 +2615,13 @@ export const validateInternalDocumentIDFieldHelper = (decoded_token, checkBoolea
                 //       SEE CATCH BELOW!! 
 
                 //If Mode Search, needs to set value 
-                if ((toolbar.mode === TOOLBAR_MODE.SEARCH 
-                    || toolbar.mode === TOOLBAR_MODE.NONE 
+                if ((toolbar.mode === TOOLBAR_MODE.SEARCH
+                    || toolbar.mode === TOOLBAR_MODE.NONE
                     || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
-                    && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { 
+                    && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) {
                     console.log("validateInternalDocumentIDField:: I got document ID ", internalDocumentID)
                     setValues({ ...values, ...responseToFormState(fact, data, document_type_group_id) }, false); //Setvalues and don't validate
-                    
+
                     // If it is inventory Transfer, this_warehouse_id will be dest, so need to validate Source too!
                     if (document_type_group_id === DOCUMENT_TYPE_ID.INVENTORY_TRANSFER) {
                         validateField("src_warehouse_id");
@@ -2633,7 +2634,7 @@ export const validateInternalDocumentIDFieldHelper = (decoded_token, checkBoolea
                 } else { //If Mode add, need to error duplicate Document ID
                     // setFieldValue('document_id', '', false); 
                     if (values.document_id || footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) { // I think this is when I'm in Mode Add, doing the Save action but I cann't approve 
-                    //TODO - need to check whether it needs to be approved - Donut
+                        //TODO - need to check whether it needs to be approved - Donut
                         console.log("i am in mode add, saved and wanting to approve")
                         error = '';
                     } else {
@@ -2642,7 +2643,7 @@ export const validateInternalDocumentIDFieldHelper = (decoded_token, checkBoolea
                     }
 
                 }
-                
+
 
             } else if (document_type_group_id === DOCUMENT_TYPE_ID.WORK_REQUEST) {
                 console.log("i know i am in workrequest!!")
@@ -2671,7 +2672,7 @@ export const validateInternalDocumentIDFieldHelper = (decoded_token, checkBoolea
                     }
 
                 }
-                
+
             } else if (document_type_group_id === DOCUMENT_TYPE_ID.WORK_ORDER) {
                 console.log("i know i am in workorder!!")
 
@@ -2700,7 +2701,7 @@ export const validateInternalDocumentIDFieldHelper = (decoded_token, checkBoolea
                     }
 
                 }
-                
+
             } else if (document_type_group_id === DOCUMENT_TYPE_ID.SS101) {
                 console.log("i know i am in ss101!!")
                 if ((toolbar.mode === TOOLBAR_MODE.SEARCH ||
@@ -2797,14 +2798,14 @@ export const validateInternalDocumentIDFieldHelper = (decoded_token, checkBoolea
             setFieldValue('document_id', '', false);
 
             //If Mode Search, invalid Document ID:: Document ID not found in System
-            if (toolbar.mode === TOOLBAR_MODE.SEARCH) { 
+            if (toolbar.mode === TOOLBAR_MODE.SEARCH) {
                 error = 'Document ID not found in System';
             } else {//If Mode Add, ok
                 console.log("validateInternalDocumentIDFieldHelper:: document ID doesn't exist but I am in mode add")
                 error = ''
 
                 // If auto increment
-                if(values.is_auto_internal_document_id === "auto") {
+                if (values.is_auto_internal_document_id === "auto") {
                     var internalDocumentID;
                     // if (isICD(document_type_group_id)) {
                     //     console.log("validateInternalDocumentIDFieldHelper:: auto!!");
@@ -2819,55 +2820,56 @@ export const validateInternalDocumentIDFieldHelper = (decoded_token, checkBoolea
                     // }
 
                     var delimiter = "/";
-                    var positionAbbreviation, positionID, documentTypeGroupIDSplit, fullYearBE, runningInternalDocumentID; 
+                    var positionAbbreviation, positionID, documentTypeGroupIDSplit, fullYearBE, runningInternalDocumentID;
                     var internalDocumentID;
                     if (isICD(document_type_group_id)) { // If document type group ID is ICD
                         var this_warehouse_id_name;
                         if (isICDWarehouseDest(document_type_group_id)) {
                             this_warehouse_id_name = "dest_warehouse_id";
-                        }else if (isICDWarehouseSrc(document_type_group_id)) {
+                        } else if (isICDWarehouseSrc(document_type_group_id)) {
                             this_warehouse_id_name = "src_warehouse_id";
                         }
                         console.log("validateInternalDocumentIDFieldHelper:: values[this_warehouse_id_name]", values[this_warehouse_id_name]);
                         let position = getPositionAbbreviationFromWarehouseID(fact.position, values[this_warehouse_id_name]);
+                        if (position) {
                         positionAbbreviation = position.abbreviation;
                         positionID = position.position_id;
-
+                        }
 
                         // runningInternalDocumentID = await fetchLastestRunningInternalDocumentID(positionID, document_type_group_id, fullYearBE);
                         // internalDocumentID = getInternalDocumentIDFromCurrentValues(fact, values, document_type_group_id, this_warehouse_id_name, runningInternalDocumentID);
-                    } else{ // If document type group ID is PMT
+                    } else { // If document type group ID is PMT
                         positionAbbreviation = decoded_token.has_position[0].abbreviation;
                         positionID = decoded_token.has_position[0].position_id;
                         // internalDocumentID = getInternalDocumentIDFromCurrentValuesPMT(fact, values, document_type_group_id, positionAbbreviation, runningInternalDocumentID);
-                        
+
                     }
-                    console.log("validateInternalDocumentIDFieldHelper:: positionAbbreviation",positionAbbreviation)
+                    console.log("validateInternalDocumentIDFieldHelper:: positionAbbreviation", positionAbbreviation)
                     documentTypeGroupIDSplit = `${document_type_group_id.toString()[0]}-${document_type_group_id.toString().substr(1)}`;
-                    fullYearBE = (parseInt(values["document_date"].slice(0, 4))+543).toString();
-                    try{
-                        let fullYearBEForAPI = (parseInt(fullYearBE)-543).toString();
+                    fullYearBE = (parseInt(values["document_date"].slice(0, 4)) + 543).toString();
+                    try {
+                        let fullYearBEForAPI = (parseInt(fullYearBE) - 543).toString();
                         runningInternalDocumentID = await fetchLastestRunningInternalDocumentID(positionID, document_type_group_id, fullYearBEForAPI);
-                        let splitRunningInternalDocumentID =  runningInternalDocumentID.split(delimiter);
-                        runningInternalDocumentID = (parseInt(splitRunningInternalDocumentID[splitRunningInternalDocumentID.length-1]) + 1).toString().padStart(4, '0');
-                    }catch(err){
-                        if (err === 'No Results in fetchLastestRunningInternalDocumentID'){
+                        let splitRunningInternalDocumentID = runningInternalDocumentID.split(delimiter);
+                        runningInternalDocumentID = (parseInt(splitRunningInternalDocumentID[splitRunningInternalDocumentID.length - 1]) + 1).toString().padStart(4, '0');
+                    } catch (err) {
+                        if (err === 'No Results in fetchLastestRunningInternalDocumentID') {
                             console.log("validateInternalDocumentIDFieldHelper:: No Results in fetchLastestRunningInternalDocumentID")
                             runningInternalDocumentID = "0001";
-                        }else{
+                        } else {
                             throw "validateInternalDocumentIDFieldHelper:: try catch values.is_auto_internal_document_id === auto";
                         }
                     }
                     internalDocumentID = [positionAbbreviation, documentTypeGroupIDSplit, fullYearBE, runningInternalDocumentID].join(delimiter);
 
-                    console.log("validateInternalDocumentIDFieldHelper:: internalDocumentID",internalDocumentID)
+                    console.log("validateInternalDocumentIDFieldHelper:: internalDocumentID", internalDocumentID)
 
                     // setFieldTouched('internal_document_id');
                     await setFieldValue('internal_document_id', internalDocumentID, false);
-                    
+
                 }
 
-                
+
 
             }
         })
@@ -3275,48 +3277,117 @@ export const getLotFromQty = (fifo, quantity) => {
     return lotsFrom;
 };
 
+
+var fifoCopyRaw = [];
+var compose_fifo2;
 export const rawLotFromQty = (raw_fifo, quantity) => {
-    console.log("raw_fifo?>>>>", raw_fifo)
-    // var fifoCopyRaw = raw_fifo.slice(); // make a copy
-    var compose_fifo = [];
-    var quantityLeft = 0;
-    for (var currentLot of raw_fifo) {
-        // console.log("lotsFrom currentLot ", currentLot)
-        if (quantityLeft){
-            compose_fifo.push(currentLot)
-            if (quantityLeft >= compose_fifo[0].quantity) {
-                compose_fifo.shift();
-                quantityLeft -= compose_fifo[0].quantity;
+    console.log("raw_fifo?>>>>", raw_fifo, "fifoCopyRaw", fifoCopyRaw)
+    if (fifoCopyRaw.length === 0) {
+        console.log("IN PROCESS")
+        // var fifoCopyRaw = Object.assign([], raw_fifo)
+        fifoCopyRaw = [...raw_fifo]; // make a copy
+        var compose_fifo = [];
+        var quantityLeft = 0;
+
+        // หา lot ที่ไม่ติดลบ และ เก็บ lot ที่ติดลบไว้ใน var quantityLeft
+        for (var currentLot of fifoCopyRaw) {
+            // console.log("compose_fifo ", compose_fifo)
+            if (currentLot.quantity > 0) {
+                compose_fifo.push(currentLot)
             } else {
-                if (quantityLeft == 0) {
-                    break;
-                }
-                compose_fifo[0].quantity = compose_fifo[0].quantity - quantityLeft;
-                quantityLeft = 0;
-            }
-        } else if (currentLot.quantity >= 0){
-            compose_fifo.push(currentLot)
-        } else {
-            quantityLeft = quantityLeft + Math.abs(currentLot.quantity)
-            if (quantityLeft >= compose_fifo[0].quantity) {
-                compose_fifo.shift();
-                quantityLeft -= compose_fifo[0].quantity;
-            } else {
-                if (quantityLeft == 0) {
-                    break;
-                }
-                compose_fifo[0].quantity = compose_fifo[0].quantity - quantityLeft;
-                quantityLeft = 0;
+                quantityLeft = quantityLeft + Math.abs(currentLot.quantity)
             }
         }
+        // ลบของออกจาก lot
+        compose_fifo2 = [...compose_fifo]; // make a copy
+
+        // console.log("compose_fifo2", compose_fifo2)
+        // console.log("quantityLeft", quantityLeft)
+
+        for (var afterDesimalLot of fifoCopyRaw) {
+            // console.log("quantityLeft>>>>>>", quantityLeft)
+            if (quantityLeft > compose_fifo2[0].quantity) {
+                quantityLeft = quantityLeft - compose_fifo2[0].quantity;
+                compose_fifo2.shift();
+            } else {
+                if (quantityLeft == 0) {
+                    break;
+                } else {
+                    compose_fifo2[0].quantity = compose_fifo2[0].quantity - quantityLeft;
+                    quantityLeft = 0;
+                }
+            }
+        }
+        console.log("quantityLeft>>>>>>", quantityLeft)
+        let total = 0;
+        for (var composeLotFifo of compose_fifo2) {
+            total = total + composeLotFifo.quantity
+        }
+        // console.log("total", total, "quantity", quantity)
+        if (total === quantity) {
+            console.log("total === quantity", "=>", "compose_fifo", compose_fifo2)
+            return compose_fifo2;
+        } else {
+            console.log("total !== quantity", "=>", "compose_fifo", compose_fifo2)
+            return compose_fifo2;
+        }
+    } else if (`${fifoCopyRaw[0].item_id}` !== `${raw_fifo[0].item_id}`
+        || `${fifoCopyRaw[0].item_status_id}` !== `${raw_fifo[0].item_status_id}`
+        || `${fifoCopyRaw[0].warehouse_id}` !== `${raw_fifo[0].warehouse_id}`) {
+        console.log("IN PROCESS ELSE IF")
+        // var fifoCopyRaw = Object.assign([], raw_fifo)
+        fifoCopyRaw = [...raw_fifo]; // make a copy
+        var compose_fifo = [];
+        var quantityLeft = 0;
+
+        // หา lot ที่ไม่ติดลบ และ เก็บ lot ที่ติดลบไว้ใน var quantityLeft
+        for (var currentLot of fifoCopyRaw) {
+            // console.log("compose_fifo ", compose_fifo)
+            if (currentLot.quantity > 0) {
+                compose_fifo.push(currentLot)
+            } else {
+                quantityLeft = quantityLeft + Math.abs(currentLot.quantity)
+            }
+        }
+        // ลบของออกจาก lot
+        compose_fifo2 = [...compose_fifo]; // make a copy
+
+        // console.log("compose_fifo2", compose_fifo2)
+
+        for (var afterDesimalLot of fifoCopyRaw) {
+            // console.log("quantityLeft>>>>>>", quantityLeft)
+            if (quantityLeft > compose_fifo2[0].quantity) {
+                quantityLeft = quantityLeft - compose_fifo2[0].quantity;
+                compose_fifo2.shift();
+                // console.log("compose_fifo ===>>>> IF", compose_fifo2)
+            } else {
+                // console.log("compose_fifo ===>>>> ELSE")
+                if (quantityLeft == 0) {
+                    // console.log("compose_fifo ===>>>> BREAK")
+                    break;
+                } else {
+                    compose_fifo2[0].quantity = compose_fifo2[0].quantity - quantityLeft;
+                    quantityLeft = 0;
+                }
+            }
+        }
+        // console.log("quantityLeft>>>>>>", quantityLeft)
+        let total = 0;
+        for (var composeLotFifo of compose_fifo2) {
+            total = total + composeLotFifo.quantity
+        }
+        // console.log("total", total, "quantity", quantity)
+        if (total === quantity) {
+            console.log("total === quantity", "=>", "compose_fifo", compose_fifo2)
+            return compose_fifo2;
+        } else {
+            console.log("total !== quantity", "=>", "compose_fifo", compose_fifo2)
+            return compose_fifo2;
+        }
+    } else {
+        console.log("OUT PROCESS", compose_fifo2)
+        return compose_fifo2
     }
-    console.log("quantityLeft>>>>>>", quantityLeft)
-    let total = 0;
-    for (var composeLotFifo of compose_fifo) {
-        total = total + composeLotFifo.quantity
-    }
-    console.log("compose_fifo", compose_fifo, "total", total, "quantity", quantity)
-    return compose_fifo;
 };
 
 // Get Params from URL
@@ -3525,7 +3596,7 @@ export const checkBooleanForEditCheckNodeIDHelper = (values, decoded_token, fact
 export const checkBooleanForEditCheckNodeIDHelperForWorkOrderPM = (values, decoded_token, fact) => (
     values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.DRAFT)
     && (getUserNodeIDFromEmployeeID(fact[FACTS.USERS], decoded_token.id) === values.node_id
-)
+    )
 
 export const filterAlsEquipment = (equipmentData, formData) => {
     let tempEquipmentData = [];
