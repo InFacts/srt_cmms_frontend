@@ -377,6 +377,7 @@ const useFooterInitializer = (document_type_id) => {
                     }
                 }
                 else {
+                    console.warn("Validate Failed ", err);
                     dispatch(navBottomError('[PUT] validateForm', 'Submit Failed', err));
                     dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
                 }
@@ -405,6 +406,7 @@ const useFooterInitializer = (document_type_id) => {
             || footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK] || footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]) {
             // console.log("I AM Handle APPROVAL", values);
             validateForm().then((err) => {
+                console.log("err>>", err)
                 dispatch(navBottomSending('[API]', 'Sending ...', ''));
                 setErrors(err);
                 if (isEmpty(err)) {
