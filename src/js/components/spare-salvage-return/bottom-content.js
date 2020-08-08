@@ -95,6 +95,9 @@ const BottomContent = (props) => {
   const validateLineNumberQuatityItemIDField = (fieldName, quantity, index) => {
     // internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
+    if (values.line_items[index].quantity === quantity) {
+      return;
+    }
     if (quantity === "") {
       return;
     }

@@ -98,6 +98,7 @@ const useFooterInitializer = (document_type_id) => {
                                 dispatch(footerToModeSearch());
                             }
                         }
+                        fetchApprovalStep(values.document_id);
                     }
                     else { // Just Work order PM
                         // console.log("Just Work order PM", values.document_id, values.status_name_th, APPROVAL_STATUS_TH.APPROVED)
