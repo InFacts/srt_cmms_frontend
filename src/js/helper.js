@@ -1476,16 +1476,19 @@ export const editDocument = (document_id, document_type_group_id, data, files, f
         const url = `${BASE_URL}/document/${document_id}/${document_type_group_id}`;
         axios.put(url, data, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
             .then((res) => {
-                console.log(" I am successful in updating contents of document_id ", document_id, "res", res)
+                console.log("ELSE I am successful in updating contents of document_id ", document_id, "res", res)
                 if (res.status === 200) {
                     console.log("wow i putted successfully status 200 flag_create_approval_flow", flag_create_approval_flow, "files", files)
                     if (flag_create_approval_flow && files !== undefined) {
                         if (files.length !== 0) {
+                            console.log("__uploadAttachmentDocumentData");
                             uploadAttachmentDocumentData(document_id, files)
                                 .then(() => {
+                                    console.log("__uploadAttachmentDocumentData Res", res);
                                     return resolve(res.data);
                                 })
                                 .catch((err) => {
+                                    console.log("__uploadAttachmentDocumentData Err", err);
                                     return reject(err);
                                 });
                         }

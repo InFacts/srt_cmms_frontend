@@ -202,7 +202,7 @@ const useFooterInitializer = (document_type_id) => {
                         if (values.document_id) { // If have document_id, no need to create new doc
                             let data = packDataFromValues(fact, values, document_type_id);
                             console.log("packDataFromValues === ", data)
-                            editDocument(values.document_id, document_type_id, data, values.files)
+                            editDocument(values.document_id, document_type_id, data, values.files, true)
                                 .then((document_id) => {
                                     setFieldValue('document_id', values.document_id, true);
                                     dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
@@ -219,7 +219,7 @@ const useFooterInitializer = (document_type_id) => {
                             let data = packDataFromValues(fact, values, document_type_id);
                             if (document_type_id !== DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA && document_type_id !== DOCUMENT_TYPE_ID.ITEM_MASTER_DATA
                                 && document_type_id !== DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA && document_type_id !== DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM) {
-                                saveDocument(document_type_id, data, values.files)
+                                saveDocument(document_type_id, data, values.files, true)
                                     .then((document_id) => {
                                         setFieldValue('document_id', document_id, true);
                                         dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
