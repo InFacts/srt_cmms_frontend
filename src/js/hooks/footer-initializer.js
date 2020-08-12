@@ -122,7 +122,6 @@ const useFooterInitializer = (document_type_id) => {
     // Handle Toolbar Mode
     useEffect(() => {
         let document_id = values.document_id;
-        console.log("document_id -->", document_id, values)
         let routeLocation = getRouteLocation();
         if (routeLocation === spacialPage.ITEM_MASTER_DATA || routeLocation === spacialPage.WAREHOUSE || routeLocation === spacialPage.PMT_EQUIPMENT_MASTER || routeLocation === spacialPage.PMT_CREATE_CHECKOUT) {
             if (toolbar.mode === TOOLBAR_MODE.SEARCH) {
@@ -140,7 +139,6 @@ const useFooterInitializer = (document_type_id) => {
             if (document_id !== undefined) {
                 if (toolbar.mode === TOOLBAR_MODE.SEARCH && document_id !== "") { // SEARCH mode
                     dispatch(footerToModeSearch());
-                    console.log("DONIT TEST")
                     hadleDocumentStatusWithFooter(document_id);
                 }
                 else if (toolbar.mode === TOOLBAR_MODE.ADD) { // ADD_DRAFT mode
