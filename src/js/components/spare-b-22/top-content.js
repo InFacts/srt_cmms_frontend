@@ -106,7 +106,7 @@ const TopContent = (props) => {
               end_date = values.year_id - 543 + "-" + `${parseInt(values.mouth_id) + 1}` + "-1";
               console.log("start_date", start_date, "end_date", end_date)
             }
-            const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-monthly-summary/plus?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&item_internal_item_id=${values.internal_item_id}&start_date=${start_date}&end_date=${end_date}&item_status_id=${values.item_status_id}`;
+            const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-monthly-summary/plus?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&item_internal_item_id=${values.internal_item_id}&start_date=${start_date}&end_date=${end_date}&item_status_id=${values.item_status_id}&item_internal_item_id=${values.internal_item_id}`;
             axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
               .then((res) => {
                 console.log("res", res)
@@ -131,10 +131,10 @@ const TopContent = (props) => {
               end_date = values.year_id - 543 + "-" + `${parseInt(values.mouth_id) + 1}` + "-1";
               console.log("start_date", start_date, "end_date", end_date)
             }
-            const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-monthly-summary/plus?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&item_internal_item_id=${values.internal_item_id}&start_date=${start_date}&end_date=${end_date}&item_status_id=${values.item_status_id}`;
+            const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-monthly-summary/plus?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&item_internal_item_id=${values.internal_item_id}&start_date=${start_date}&end_date=${end_date}&item_status_id=${values.item_status_id}&internal_item_id=${values.internal_item_id}`;
             axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
               .then((res) => {
-                console.log("res", res)
+                // console.log("res", res.data.results)
                 setFieldValue("line_items", res.data.results, false);
               })
               .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
@@ -191,8 +191,8 @@ const TopContent = (props) => {
                 <div className="grid_3 pull_1">
                   <TextInput name='internal_item_id'
                     // validate={validateInternalDocumentIDField}
-                    searchable={props.actionMode !== TOOLBAR_MODE.SEARCH}
-                    ariaControls="modalNoPart"
+                    // searchable={props.actionMode !== TOOLBAR_MODE.SEARCH}
+                    // ariaControls="modalNoPart"
                     tabIndex="1"
                   />
                 </div>
@@ -245,7 +245,7 @@ const TopContent = (props) => {
                 name="src_warehouse_id"
               />
               {/* PopUp ค้นหาอะไหล่ */}
-              <PopupModalNoPartNoChildren />
+              {/* <PopupModalNoPartNoChildren /> */}
 
             </div>
           </section>
