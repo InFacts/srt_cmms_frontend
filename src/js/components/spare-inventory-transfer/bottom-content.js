@@ -21,7 +21,7 @@ import '../../../css/table.css';
 
 import {
   fetchGoodsOnhandData, getNumberFromEscapedString, getLotFromQty, weightedAverage, rawLotFromQty,
-  sumTotalLineItemHelper, sumTotalHelper, DOCUMENT_STATUS, getUserIDFromEmployeeID, checkBooleanForEditInventoryTranferHelper
+  sumTotalLineItemHelper, sumTotalHelper, DOCUMENT_STATUS, getUserIDFromEmployeeID, checkBooleanForEditHelper
 } from '../../helper';
 
 import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
@@ -132,7 +132,7 @@ const BottomContent = (props) => {
       })
   }
 
-  let checkBooleanForEdit = checkBooleanForEditInventoryTranferHelper(values, decoded_token, fact);
+  let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
   useEffect(() => {
     checkBooleanForEdit = false
     validateField("internal_document_id")

@@ -3568,24 +3568,6 @@ export const checkBooleanForEditCheckNodeIDHelperForWorkOrderPM = (values, decod
     && (getUserNodeIDFromEmployeeID(fact[FACTS.USERS], decoded_token.id) === values.node_id
     )
 
-export const checkBooleanForEditInventoryTranferHelper = (values, decoded_token, fact) => {
-    if (values.internal_document_id) {
-        if (values.internal_document_id.indexOf("-FastTrack") === -1) {
-            return (
-                values.status_name_th === DOCUMENT_STATUS.REOPEN
-                || values.status_name_th === DOCUMENT_STATUS.DRAFT
-                && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
-            )
-        } else {
-            return (
-                values.status_name_th === DOCUMENT_STATUS.REOPEN
-                || values.status_name_th === DOCUMENT_STATUS.DRAFT
-                && (getNumberFromEscapedString(values.src_warehouse_id) === decoded_token.has_position[0].warehouse_id)
-            )
-        }
-    }
-}
-
 export const filterAlsEquipment = (equipmentData, formData) => {
     let tempEquipmentData = [];
     equipmentData.map((mockup, i) => {
