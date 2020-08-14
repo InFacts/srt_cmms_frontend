@@ -91,7 +91,7 @@ const BottomContent = (props) => {
         <div className="grid_12 ">
           <div id="listItem_content" className="tabcontent">
 
-            <table className="table-many-column mt-1" style={{ padding: "10px" }}>
+            <table className="table-many-column mt-1" style={{ height: "auto", padding: "0 10px" }}>
               <thead>
                 <tr>
                   <th className="font text-center" rowspan="2" style={{ minWidth: "30px", verticalAlign: 'middle' }}>ลำดับ</th>

@@ -88,7 +88,7 @@ const BottomContent = (props) => {
       <div className="container_12 clearfix" id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>
 
         <div className="grid_12 ">
-          <table className="table-many-column mt-1" style={{ padding: "10px" }}>
+          <table className="table-many-column mt-1" style={{ height: "auto", padding: "10px" }}>
             <thead>
               <tr>
                 <th className="font text-center" rowspan="3" style={{ minWidth: "30px", verticalAlign: 'middle' }}>ลำดับ</th>

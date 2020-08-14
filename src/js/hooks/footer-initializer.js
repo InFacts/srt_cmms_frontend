@@ -410,6 +410,7 @@ const useFooterInitializer = (document_type_id) => {
                 setErrors(err);
                 if (isEmpty(err)) {
                     // if (document_type_id === DOCUMENT_TYPE_ID.SS101 && decoded_token.has_position[0].position_group_id === 5) {
+                    //     console.log(">>>>>>>checked_remark")
                     //     setFieldValue("checked_remark", values.remark_approval, false) // For ss101 นายตรวจสาย
                     // }
                     let data = packDataFromValues(fact, values, document_type_id);

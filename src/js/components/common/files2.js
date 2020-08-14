@@ -133,16 +133,14 @@ const Files = () => {
                                     <img className="media-object" src={file.preview_url} width={150} height={100}/>
                                 </div>
                                 <div className="media-body">
-                                    <h4 className="media-heading grid_5" style={{ fontWeight: 'bold' }}>{file.filename}</h4>
-                                    <h4 className="media-heading grid_2">ขนาดไฟล์ : {file.isNew ? file.sizeReadable : fileSizeReadable(file.sizeReadable)}</h4>
-                                    <div className="float-right">
+                                    <h4 className="media-heading" style={{ fontWeight: 'bold', display: 'block' }}>{file.filename}</h4>
+                                    <h4 className="media-heading">ขนาดไฟล์ : {file.isNew ? file.sizeReadable : fileSizeReadable(file.sizeReadable)}</h4>
                                         {toolbar.mode === TOOLBAR_MODE.SEARCH &&
-                                            <button type="button" className="btn media-heading grid_1" style={{ color: "blue", padding: "4px" }} onClick={ () => downloadAttachmentDocumentData(values.document_id, file.id) }>ดาวน์โหลด</button>
+                                            <button type="button" className="btn media-heading" style={{ color: "blue", padding: "4px", display: 'block' }} onClick={ () => downloadAttachmentDocumentData(values.document_id, file.id) }>ดาวน์โหลด</button>
                                         }
                                         {toolbar.mode !== TOOLBAR_MODE.SEARCH &&
-                                            <button type="button" className="btn media-heading grid_1" style={{ color: "blue", padding: "4px" }} onClick={ (e) => deleteFileInState(e) }>ลบ</button>
+                                            <button type="button" className="btn media-heading" style={{ color: "blue", padding: "4px" , display: 'block'}} onClick={ (e) => deleteFileInState(e) }>ลบ</button>
                                         }
-                                    </div>
                                 </div>
                                 </>
                                 :

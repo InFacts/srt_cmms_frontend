@@ -165,7 +165,7 @@ const PopupModalDocument = (props) => {
                                         // console.log("dest_warehouse and src_warehouse is null")
                                         // document.work_order_district_id && document.work_order_district_id === valueDistrictID
                                         if (valueNodeID ? valueNodeID === document.work_order_node_id : valueDistrictID === document.work_order_district_id) {
-                                            console.log("work_order")
+                                            // console.log("work_order")
                                             return (
                                                 <tr key={index} id={index}>
                                                     <td className="edit-padding"> {document.internal_document_id} </td>
@@ -179,7 +179,7 @@ const PopupModalDocument = (props) => {
                                                 </tr>
                                             )
                                         } else if (valueNodeID ? valueNodeID === document.ss101_node_id : valueDistrictID === document.ss101_district_id) {
-                                            console.log("ss101")
+                                            // console.log("ss101")
                                             return (
                                                 <tr key={index} id={index}>
                                                     <td className="edit-padding"> {document.internal_document_id} </td>
@@ -193,7 +193,7 @@ const PopupModalDocument = (props) => {
                                                 </tr>
                                             )
                                         } else if (valueNodeID ? valueNodeID === document.equipment_installation_node_id : valueDistrictID === document.equipment_installation_district_id) {
-                                            console.log("equipment_installation")
+                                            // console.log("equipment_installation")
                                             return (
                                                 <tr key={index} id={index}>
                                                     <td className="edit-padding"> {document.internal_document_id} </td>
@@ -207,7 +207,7 @@ const PopupModalDocument = (props) => {
                                                 </tr>
                                             )
                                         } else if (valueNodeID ? valueNodeID === document.selector_pm_plan_node_id : valueDistrictID === document.selector_pm_plan_district_id) {
-                                            console.log("selector_pm_plan")
+                                            // console.log("selector_pm_plan")
                                             return (
                                                 <tr key={index} id={index}>
                                                     <td className="edit-padding"> {document.internal_document_id} </td>
@@ -221,7 +221,7 @@ const PopupModalDocument = (props) => {
                                                 </tr>
                                             )
                                         } else if (valueNodeID === document.node_id) {
-                                            console.log("work_order_pmt")
+                                            // console.log("work_order_pmt")
                                             return (
                                                 <tr key={index} id={index}>
                                                     <td className="edit-padding"> {document.internal_document_id} </td>
@@ -256,7 +256,7 @@ const PopupModalDocument = (props) => {
                                             let equipment_installation_division = valueDivisionID.find(division => `${division.district_id}` === `${document.equipment_installation_district_id}`);
                                             let selector_pm_plan_division = valueDivisionID.find(division => `${division.district_id}` === `${document.selector_pm_plan_district_id}`);
                                             if (document.work_order_node_id && work_order_division) {
-                                                console.log("DIVISION")
+                                                // console.log("DIVISION")
                                                 return (
                                                     <tr key={index} id={index}>
                                                         <td className="edit-padding"> {document.internal_document_id} </td>
@@ -270,7 +270,7 @@ const PopupModalDocument = (props) => {
                                                     </tr>
                                                 )
                                             } else if (document.ss101_node_id && ss101_division) {
-                                                console.log("DIVISION")
+                                                // console.log("DIVISION")
                                                 return (
                                                     <tr key={index} id={index}>
                                                         <td className="edit-padding"> {document.internal_document_id} </td>
@@ -284,7 +284,7 @@ const PopupModalDocument = (props) => {
                                                     </tr>
                                                 )
                                             } else if (document.equipment_installation_district_id && equipment_installation_division) {
-                                                console.log("DIVISION")
+                                                // console.log("DIVISION")
                                                 return (
                                                     <tr key={index} id={index}>
                                                         <td className="edit-padding"> {document.internal_document_id} </td>
@@ -298,7 +298,7 @@ const PopupModalDocument = (props) => {
                                                     </tr>
                                                 )
                                             } else if (document.selector_pm_plan_district_id && selector_pm_plan_division) {
-                                                console.log("DIVISION")
+                                                // console.log("DIVISION")
                                                 return (
                                                     <tr key={index} id={index}>
                                                         <td className="edit-padding"> {document.internal_document_id} </td>
@@ -312,7 +312,7 @@ const PopupModalDocument = (props) => {
                                                     </tr>
                                                 )
                                             } else if (document.selector_pm_plan_district_id && selector_pm_plan_division) {
-                                                console.log("DIVISION")
+                                                // console.log("DIVISION")
                                                 return (
                                                     <tr key={index} id={index}>
                                                         <td className="edit-padding"> {document.internal_document_id} </td>
@@ -343,7 +343,7 @@ const PopupModalDocument = (props) => {
                                                 }
                                             } 
                                         } else if (valueNodeIDWorkOrderPM.length !== 0 && document.node_id) {
-                                            console.log(">>>>>")
+                                            // console.log(">>>>>")
                                             let work_order_pmt_node_id = valueNodeIDWorkOrderPM.find(node_id => `${node_id.node_id}` === `${document.node_id}`);
                                             if (work_order_pmt_node_id) {
                                                 return (

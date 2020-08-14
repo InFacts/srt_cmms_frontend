@@ -69,17 +69,6 @@ const BottomContent = (props) => {
         setFieldValue(fieldName + `.item_id`, item.item_id, false);
         setFieldValue(fieldName + `.at_source`, [], false);
       } 
-      // else {
-      //   setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
-      //   setFieldValue(fieldName + `.description`, `${item.description}`, false);
-      //   setFieldValue(fieldName + `.quantity`, 1, false);
-      //   setFieldValue(fieldName + `.list_uoms`, item.list_uoms, false);
-      //   setFieldValue(fieldName + `.uom_id`, item.list_uoms[0].uom_id, false);
-      //   setFieldValue(fieldName + `.line_number`, index + 1, false);
-      //   setFieldValue(fieldName + `.item_status_id`, 1, false);
-      //   setFieldValue(fieldName + `.item_id`, item.item_id, false);
-      //   setFieldValue(fieldName + `.at_source`, [], false);
-      // }
 
       fetchGoodsOnhandData(getNumberFromEscapedString(values.src_warehouse_id), item.item_id)
         .then((at_source) => {
@@ -168,7 +157,7 @@ const BottomContent = (props) => {
               />
             </div>
 
-            <div className="container_12 mt-3">
+            <div className="container_12">
               <div className="grid_1 float-right"><p className="cancel-default float-right">บาท.</p></div>
               <div className="grid_3 float-right push_0">
                 <input type="text" className="cancel-default" value={sumTotal(values.line_items)} disabled="disabled"></input>

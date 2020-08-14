@@ -97,7 +97,7 @@ const BottomContent = (props) => {
           {/* w1_content Tab */}
           <div id="w1_content" className="tabcontent">
             <div className="container_12 mt-3">
-              <table className="table-many-column" style={{ padding: "10px" }}>
+              <table className="table-many-column" style={{ height: "auto", padding: "0 10px" }}>
                 <HeadTable />
                 <tbody>
                   {values.w1_list.map((line_item, index) => {
