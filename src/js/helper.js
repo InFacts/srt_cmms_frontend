@@ -379,7 +379,7 @@ export function isICDWarehouseSrc(document_type_group_id) {
 
 
 
-export const packDataFromValues = (fact, values, document_type_id) => {
+export const packDataFromValues = (fact, values, document_type_id, checked_remark) => {
     if (document_type_id === DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA) {
         return {
             warehouse_id: values.warehouse_id,
@@ -800,7 +800,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             member_2: values.member_2,
             member_3: values.member_3,
             remark: values.remark,
-            checked_remark: values.checked_remark,
+            checked_remark: checked_remark,
             sub_maintenance_type_id: values.sub_maintenance_type_id ? parseInt(values.sub_maintenance_type_id) : null,
             request_on: values.request_on + ':00+00:00',
             request_by: values.request_by,
