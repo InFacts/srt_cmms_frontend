@@ -379,7 +379,7 @@ export function isICDWarehouseSrc(document_type_group_id) {
 
 
 
-export const packDataFromValues = (fact, values, document_type_id) => {
+export const packDataFromValues = (fact, values, document_type_id, checked_remark) => {
     if (document_type_id === DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA) {
         return {
             warehouse_id: values.warehouse_id,
@@ -800,7 +800,7 @@ export const packDataFromValues = (fact, values, document_type_id) => {
             member_2: values.member_2,
             member_3: values.member_3,
             remark: values.remark,
-            checked_remark: values.checked_remark,
+            checked_remark: checked_remark,
             sub_maintenance_type_id: values.sub_maintenance_type_id ? parseInt(values.sub_maintenance_type_id) : null,
             request_on: values.request_on + ':00+00:00',
             request_by: values.request_by,
@@ -1774,10 +1774,10 @@ export const fetchGoodsOnhandDataForItemmasterData = (item_id) => new Promise((r
 
 // Get Position Permission For Admin
 export const fetchPositionPermissionData = (position_id) => new Promise((resolve, reject) => {
-    const url = `${BASE_URL}/admin/position-permission?${position_id ? `position_id=${position_id}` : null}`;
+    const url = `${BASE_URL}/admin/position-permission?${position_id ? `position_id=${position_id}` : `&page_size=${PAGE_SIZE}`}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
-            // console.log("res", res)
+            console.log("res", res)
             resolve(res.data.results);
         })
         .catch((err) => {
@@ -3567,24 +3567,6 @@ export const checkBooleanForEditCheckNodeIDHelperForWorkOrderPM = (values, decod
     values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.DRAFT)
     && (getUserNodeIDFromEmployeeID(fact[FACTS.USERS], decoded_token.id) === values.node_id
     )
-
-export const checkBooleanForEditInventoryTranferHelper = (values, decoded_token, fact) => {
-    if (values.internal_document_id) {
-        if (values.internal_document_id.indexOf("-FastTrack") === -1) {
-            return (
-                values.status_name_th === DOCUMENT_STATUS.REOPEN
-                || values.status_name_th === DOCUMENT_STATUS.DRAFT
-                && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
-            )
-        } else {
-            return (
-                values.status_name_th === DOCUMENT_STATUS.REOPEN
-                || values.status_name_th === DOCUMENT_STATUS.DRAFT
-                && (getNumberFromEscapedString(values.src_warehouse_id) === decoded_token.has_position[0].warehouse_id)
-            )
-        }
-    }
-}
 
 export const filterAlsEquipment = (equipmentData, formData) => {
     let tempEquipmentData = [];

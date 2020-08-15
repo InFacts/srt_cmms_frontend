@@ -409,10 +409,12 @@ const useFooterInitializer = (document_type_id) => {
                 dispatch(navBottomSending('[API]', 'Sending ...', ''));
                 setErrors(err);
                 if (isEmpty(err)) {
-                    // if (document_type_id === DOCUMENT_TYPE_ID.SS101 && decoded_token.has_position[0].position_group_id === 5) {
-                    //     setFieldValue("checked_remark", values.remark_approval, false) // For ss101 นายตรวจสาย
-                    // }
-                    let data = packDataFromValues(fact, values, document_type_id);
+                    let checked_remark = values.checked_remark;
+                    if (document_type_id === DOCUMENT_TYPE_ID.SS101 && decoded_token.has_position[0].position_group_id === 5) {
+                        console.log(">>>>>>> set check",values.remark_approval)
+                        checked_remark = values.remark_approval// For ss101 นายตรวจสาย
+                    }
+                    let data = packDataFromValues(fact, values, document_type_id, checked_remark);
                     let approval_status = APPROVAL_STATUS.APPROVED;
                     if (footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]) {
                         data.document.document_status_id = DOCUMENT_STATUS_ID.REOPEN;
@@ -425,7 +427,6 @@ const useFooterInitializer = (document_type_id) => {
                         approval_status = APPROVAL_STATUS.APPROVED;
                     }
                     if (values.document_id) { // Case If you ever saved document and then you SEND document. (If have document_id, no need to create new doc)]
-                        console.log("valies.remark_approval", values.remark_approval)
                         let remark = values.remark_approval;
                         approveDocument(values.document_id, approval_status, user_id, remark).then(() => {
                             dispatch(navBottomSuccess('[PUT]', 'Submit Success', ''));

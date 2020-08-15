@@ -39,7 +39,7 @@ const BottomContent = (props) => {
         <div className="container_12 ">
           <div id="listItem_content" className="tabcontent">
 
-            <table className="table-many-column" style={{ padding: "10px" }}>
+            <table className="table-many-column mt-1" style={{ height: "280px", padding: "0 10px" }}>
               <thead>
                 <tr>
                   <th className="font text-center" style={{ minWidth: "30px" }}>ลำดับที่</th>

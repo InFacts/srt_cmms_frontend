@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect, useSelector, shallowEqual } from 'react-redux'
 
 import axios from "axios";
@@ -13,10 +13,41 @@ import { changeTheam } from '../../helper.js'
 const TopContent = (props) => {
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
+  const factUsers = useSelector((state) => ({ ...state.api.fact.users }), shallowEqual);
   const factDistricts = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
-
+  const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues,
     validateField, validateForm, setTouched, setErrors } = useFormikContext();
+
+  const [key, setKey] = useState('');
+  const [value, setValue] = useState('');
+
+  useEffect(() => {
+    let users = factUsers.items;
+    let user = users.find(user => `${user.user_id}` === `${decoded_token.id}`);
+    console.log("user", user)
+    if (user) {
+      if (!user.position[0].district_id && !user.position[0].division_id) { //สำหรับ User ที่เป็น node
+        let nodes = factNodes.items;
+        let node = nodes.find(node => `${node.node_id}` === `${user.position[0].node_id}`);
+        // console.log("node", node)
+        if (node) {
+          console.log("node.district_id>>>", node.district_id)
+          setKey("district_id");
+          setValue(node.district_id)
+        }
+      } else if (!user.position[0].node_id && !user.position[0].division_id) { //สำหรับ User ที่เป็น district
+        setKey("only_one_district_id");
+      } else if (!user.position[0].node_id && !user.position[0].district_id) { //สำหรับ User ที่เป็น division
+        let districts = factDistricts.items;
+        let district = districts.find(district => `${district.division_id}` === `${user.position[0].division_id}`);
+        if (district) {
+          setKey("division_id");
+          setValue(district.division_id)
+        }
+      }
+    }
+  }, [decoded_token.id, factUsers.items, factUsers.items, factDistricts.items, factNodes.items])
 
   useEffect(() => {
     searchGoodsOnHand();
@@ -59,6 +90,9 @@ const TopContent = (props) => {
       });
   });
 
+  // console.log("key>>>", key)
+  //         console.log("value>>>", value)
+
   return (
     <>
       <div id={changeTheam() === true ? "" : "blackground-white"}>
@@ -77,7 +111,13 @@ const TopContent = (props) => {
                   <SelectNoChildrenInput name="district_id" tabIndex="20">
                     <option value=''></option>
                     {factDistricts.items.map(function ({ district_id, name, division_id }) {
-                      return <option value={district_id} key={district_id} selected> {name} </option>
+                      if (key === "district_id" && district_id === value) {
+                        return <option value={district_id} key={district_id}> {name} </option>
+                      } else if (key === "only_one_district_id" && district_id === values.district_id) {
+                        return <option value={district_id} key={district_id}> {name} </option>
+                      } else if (key === "division_id" && division_id === value) {
+                        return <option value={district_id} key={district_id}> {name} </option>
+                      }
                     })}
                   </SelectNoChildrenInput>
                 </div>

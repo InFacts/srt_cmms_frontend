@@ -154,29 +154,20 @@ const ActivityLog = (props) => {
                                 <th className="font text-center" style={{ width: "350px" }}>วันเวลา</th>
                                 <th className="font text-center" style={{ width: "350px" }}>Username</th>
                                 <th className="font text-center" style={{ width: "350px" }}>ประเภทของเอกสาร</th>
-                                {/* TODO รอคุยกับพี่นัท */}
-                                {/* <th className="font text-center" style={{ width: "350px" }}>ประเภทของ Actions</th>
-                            <th className="font text-center" style={{ width: "350px" }}>ข้อมูลที่เปลี่ยนแปลง</th> */}
+                                <th className="font text-center" style={{ width: "150px" }}>สถานะเอกสาร</th>
                                 <th className="font text-center" style={{ width: "350px" }}>เลขที่เอกสาร</th>
                                 <th className="font text-center" style={{ width: "300px" }}>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             {values.item_list.map(function (item, index) {
-                                // console.log("item", item)
+                                console.log("item", item)
                                 return (
                                     <tr key={index} id={index}>
                                         <td className="edit-padding" > {formatDate(item.created_on)}</td>
                                         <td className="edit-padding" >{coverntUserIDToName(item.created_by_user_id)}</td>
                                         <td className="edit-padding" > {item.document_type_name}</td>
-                                        {/* <td className="edit-padding" >
-                                        {factDocumentStatus.items.map(function ({document_status_id,status}) {
-                                            if(item.document_action_type_id === document_status_id){
-                                                return status   
-                                            }
-                                        })}
-                                    </td>
-                                    <td className="edit-padding" > {formatDate(item.created_on)}</td> */}
+                                        <td className="edit-padding" > {item.document_status_en}</td>
                                         <td className="edit-padding" > {item.internal_document_id}</td>
                                         <td className="edit-padding text-center" >
                                             <Link className="button-yellow" to={identifyEndpoins(item.document_type_id) + "?internal_document_id=" + item.internal_document_id + "&document_id=" + item.document_id}><button type="button" className="button-yellow">รายละเอียด</button></Link>

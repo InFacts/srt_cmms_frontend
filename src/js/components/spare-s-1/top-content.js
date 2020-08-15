@@ -215,8 +215,8 @@ const TopContent = (props) => {
                 <div className="grid_3 pull_1">
                   <TextInput name='internal_item_id'
                     // validate={validateInternalDocumentIDField}
-                    searchable={props.actionMode !== TOOLBAR_MODE.SEARCH}
-                    ariaControls="modalNoPart"
+                    // searchable={props.actionMode !== TOOLBAR_MODE.SEARCH}
+                    // ariaControls="modalNoPart"
                     tabIndex="1"
                   />
                 </div>
@@ -269,7 +269,7 @@ const TopContent = (props) => {
                 name="src_warehouse_id"
               />
               {/* PopUp ค้นหาอะไหล่ */}
-              <PopupModalNoPartNoChildren />
+              {/* <PopupModalNoPartNoChildren /> */}
 
             </div>
           </section>

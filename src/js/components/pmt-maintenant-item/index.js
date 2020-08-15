@@ -61,7 +61,7 @@ const MaintenantItemComponent = () => {
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
-            <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "130vh" } : {}}>
+            <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "110vh" } : {}}>
                 <TopContent />
                 <TabBar tabNames={tabNames} initialTabID="broken">
                     <BottomContent />

@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect, useSelector, shallowEqual } from 'react-redux';
 
-import axios from "axios";
-import { API_PORT_DATABASE } from '../../config_port.js';
-import { API_URL_DATABASE } from '../../config_url.js';
-
 import TextareaInput from '../common/formik-textarea-input';
 import TableStatus from '../common/table-status';
 import Table from '../common/table';
@@ -73,7 +69,7 @@ const BottomContent = (props) => {
               />
             </div>
 
-            <div className="container_12 mt-3">
+            <div className="container_12">
               <div className="grid_1 float-right"><p className="cancel-default float-right">บาท.</p></div>
               <div className="grid_3 float-right push_0">
                 <input type="text" className="cancel-default" value={sumTotal(values.line_items)} disabled="disabled"></input>
@@ -95,7 +91,6 @@ const BottomContent = (props) => {
           </div>
 
           <div id="table_status_content" className="tabcontent">
-            {/* {console.log("values.step_approve", values.step_approve)} */}
             <TableStatus bodyTableStatus={values.step_approve} />
           </div>
 

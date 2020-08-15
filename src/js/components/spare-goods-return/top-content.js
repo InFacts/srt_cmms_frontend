@@ -1,11 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect, useSelector, shallowEqual } from 'react-redux'
 
-import axios from "axios";
-import { API_PORT_DATABASE } from '../../config_port.js';
-import { API_URL_DATABASE } from '../../config_url.js';
-import { v4 as uuidv4 } from 'uuid';
-
 import FormInput from '../common/form-input'
 import TextInput from '../common/formik-text-input'
 import DateTimeInput from '../common/formik-datetime-input'
