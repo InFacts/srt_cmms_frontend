@@ -32,7 +32,7 @@ const ReportS1Component = (props) => {
         {id:"listItem", name:"รายการ"},
     ]);
 
-    useToolbarInitializer(TOOLBAR_MODE.SEARCH);
+    useToolbarInitializer(TOOLBAR_MODE.REPORT);
     useTokenInitializer();
     useFactInitializer();
     useExportPdfInitializer();
@@ -50,7 +50,7 @@ const ReportS1Component = (props) => {
             <TabBar tabNames={tabNames} initialTabID="listItem">
                 <BottomContent />
             </TabBar>
-            <Footer />
+            <Footer setFieldValue={setFieldValue}/>
             </form>
         </>
     )
@@ -83,7 +83,7 @@ const EnhancedReportS1Component = withFormik({
         document_date: '', 
         line_items: [],
         year_id: now_date.getFullYear() + 543,
-        mouth_id: now_date.getMonth() + 1,
+        mouth_id: now_date.getMonth(),
         new_line_items: [],
         new_line_items_pdf: [],
 

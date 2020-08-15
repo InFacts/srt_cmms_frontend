@@ -20,7 +20,7 @@ const Files = () => {
     const checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact)
 
     const fileExtension = (file) => {
-        console.log("file>>>>", file)
+        // console.log("file>>>>", file)
         if (file.name !== undefined) {
             let extensionSplit = file.name.split('.')
             if (extensionSplit.length > 1) {
@@ -66,34 +66,41 @@ const Files = () => {
     const convertFormFileToAPI = (e) => {
         let filesAdded = [];
         let files = [];
+        // console.log("e.target...", e.target.files);
         for (let i = 0; i < e.target.files.length; i++) {
             filesAdded.push(e.target.files[i]);
         }
         for (let i = 0; i < values.files.length; i++) {
-            console.log("values.files[i]", values.files[i])
+            // console.log("values.files[i]", values.files[i])
             filesAdded.push(values.files[i]);
         }
         filesAdded.map((newFile, index) => {
             newFile.id = 'files-' + index;
+            // if (newFile.name !== undefined) { newFile.filename = Math.random().toString() + newFile.name; }
             if (newFile.name !== undefined) { newFile.filename = newFile.name; }
             newFile.extension = fileExtension(newFile);
             newFile.sizeReadable = fileSizeReadable(newFile.size);
             newFile.isNew = true;
             if (newFile.type && mimeTypeLeft(newFile.type) === 'image') {
-                newFile.preview = { type: 'image', url: window.URL.createObjectURL(newFile) };
+                // newFile.preview = { type: 'image', url: window.URL.createObjectURL(newFile) };
+                newFile["Content-Type"] = "image";
+                newFile["preview_url"] = window.URL.createObjectURL(newFile);
             } else {
-                newFile.preview = { type: 'file' };
+                newFile["Content-Type"] = { type: 'file' };
             }
             if (fileSizeAcceptable(newFile)) {
                 files.push(newFile);
             }
         })
         setFieldValue("files", files);
+        // console.log("convertFormFileToAPI values.files", files);
     }
 
     const deleteFileInState = (e) => {
+        // console.log("delete e.target...", e.target.files);
         let index = e.target.parentNode.parentNode.parentNode.id;
         values.files.splice(index, 1);
+        // console.log("delete values.files", values.files);
         setFieldValue("files", values.files);
     }
 
@@ -109,28 +116,49 @@ const Files = () => {
                     <div className="upload-btn-wrapper">
                         {/* TODO: Add FILES */}
                         <button type="button" className="btn" disabled={toolbar.mode === TOOLBAR_MODE.SEARCH ? true : false }>เพิ่มไฟล์</button>
-                        <input id="file" name="file" type="file" onChange={convertFormFileToAPI} multiple disabled={toolbar.mode === TOOLBAR_MODE.SEARCH ? true :false}/>
+                        <input id="file" name="file" type="file" onChange={convertFormFileToAPI} onClick={(e)=> {e.target.value = null}} multiple disabled={toolbar.mode === TOOLBAR_MODE.SEARCH ? true :false}/>
                         {/* <button type="button" className="btn" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}>เพิ่มไฟล์</button> */}
                         {/* <input id="file" name="file" type="file" onChange={convertFormFileToAPI} multiple disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}/> */}
                     </div>
                 </div>
             </div>
+            {/* {console.log("values.files", values.files)} */}
             {values.files.length !== 0 && values.files !== undefined ?
                 <div className="dropZone-list">
                     {values.files.map((file, index) => (
-                        <li className="list-group-item" key={index} id={index}>
-                            <div className="media-body">
-                                <h4 className="media-heading grid_5" style={{ fontWeight: 'bold' }}>{file.filename}</h4>
-                                <h4 className="media-heading grid_2">ขนาดไฟล์ : {file.isNew ? file.sizeReadable : fileSizeReadable(file.sizeReadable)}</h4>
-                                <div className="float-right">
-                                    {toolbar.mode === TOOLBAR_MODE.SEARCH &&
-                                        <button type="button" className="btn media-heading grid_1" style={{ color: "blue", padding: "4px" }} onClick={ () => downloadAttachmentDocumentData(values.document_id, file.id) }>ดาวน์โหลด</button>
-                                    }
-                                    {toolbar.mode !== TOOLBAR_MODE.SEARCH &&
-                                        <button type="button" className="btn media-heading grid_1" style={{ color: "blue", padding: "4px" }} onClick={ (e) => deleteFileInState(e) }>ลบ</button>
-                                    }
+                        <li className="list-group-item" key={file.id}>
+                            {(file.preview_url !== undefined && (file.extension.replace(".", "") === "jpg" || file.extension.replace(".", "") === "png" || file.extension.replace(".", "") === "jpeg" || file.extension.replace(".", "") === "bmp")) ? 
+                                <>
+                                <div className="media-body media-left">
+                                    <img className="media-object" src={file.preview_url} width={150} height={100}/>
                                 </div>
-                            </div>
+                                <div className="media-body">
+                                    <h4 className="media-heading" style={{ fontWeight: 'bold', display: 'block' }}>{file.filename}</h4>
+                                    <h4 className="media-heading">ขนาดไฟล์ : {file.isNew ? file.sizeReadable : fileSizeReadable(file.sizeReadable)}</h4>
+                                        {toolbar.mode === TOOLBAR_MODE.SEARCH &&
+                                            <button type="button" className="btn media-heading" style={{ color: "blue", padding: "4px", display: 'block' }} onClick={ () => downloadAttachmentDocumentData(values.document_id, file.id) }>ดาวน์โหลด</button>
+                                        }
+                                        {toolbar.mode !== TOOLBAR_MODE.SEARCH &&
+                                            <button type="button" className="btn media-heading" style={{ color: "blue", padding: "4px" , display: 'block'}} onClick={ (e) => deleteFileInState(e) }>ลบ</button>
+                                        }
+                                </div>
+                                </>
+                                :
+                                <>
+                                <div className="media-body">
+                                    <h4 className="media-heading grid_5" style={{ fontWeight: 'bold' }}>{file.filename}</h4>
+                                    <h4 className="media-heading grid_2">ขนาดไฟล์ : {file.isNew ? file.sizeReadable : fileSizeReadable(file.sizeReadable)}</h4>
+                                    <div className="float-right">
+                                        {toolbar.mode === TOOLBAR_MODE.SEARCH &&
+                                            <button type="button" className="btn media-heading grid_1" style={{ color: "blue", padding: "4px" }} onClick={ () => downloadAttachmentDocumentData(values.document_id, file.id) }>ดาวน์โหลด</button>
+                                        }
+                                        {toolbar.mode !== TOOLBAR_MODE.SEARCH &&
+                                            <button type="button" className="btn media-heading grid_1" style={{ color: "blue", padding: "4px" }} onClick={ (e) => deleteFileInState(e) }>ลบ</button>
+                                        }
+                                    </div>
+                                </div>
+                                </>
+                            }
                         </li>
                     ))}
                 </div>

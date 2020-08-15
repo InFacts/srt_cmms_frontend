@@ -5,6 +5,7 @@ import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
 import { API_URL_DATABASE } from '../../config_url.js';
 import { v4 as uuidv4 } from 'uuid';
+import RadioAutoIncrementInput from '../common/formik-radio-input-ai'
 
 import FormInput from '../common/form-input'
 import TextInput from '../common/formik-text-input'
@@ -36,9 +37,9 @@ const TopContent = (props) => {
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
     // Fill Default Forms
-    useFillDefaultsOnModeAdd();
+    useFillDefaultsOnModeAdd(DOCUMENT_TYPE_ID.WORK_ORDER);
 
-    const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.WORK_ORDER, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
+    const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(decoded_token, checkBooleanForEdit, DOCUMENT_TYPE_ID.WORK_ORDER, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
 
     const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
     const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
@@ -49,12 +50,15 @@ const TopContent = (props) => {
         // Internal Document ID
         //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
         //  ie. GR-PYO-2563/0001
-        let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS|WR)-[A-Z]{3}-\d{4}\/\d{4}$/g
+        let internalOldDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS|WR)-[A-Z]{3}-\d{4}\/\d{4}$/g
+        let internalDocumentIDRegex = /^[\u0E00-\u0E7F()]+.[\u0E00-\u0E7F()\d]*.?-?[\u0E00-\u0E7F()]*.?\d?\/[1-3]-\d{2}\/\d{4}\/\d{4}$/g;
         let draftInternalDocumentIDRegex = /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
         // let draftInternalDocumentIDRegex = /^heh/g
         if (!refer_to_document_internal_id) {
             return resolve('Required');
-        } else if (!internalDocumentIDRegex.test(refer_to_document_internal_id) && !draftInternalDocumentIDRegex.test(refer_to_document_internal_id)) { //
+        } else if (!internalDocumentIDRegex.test(refer_to_document_internal_id)
+            && !internalOldDocumentIDRegex.test(refer_to_document_internal_id)
+            && !draftInternalDocumentIDRegex.test(refer_to_document_internal_id)) { //
             return resolve('Invalid Document ID Format\nBe sure to use the format ie. S1646-PYO-2563/0001')
         }
 
@@ -81,12 +85,12 @@ const TopContent = (props) => {
             });
     });
 
-  let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
-  useEffect(() => {
-    checkBooleanForEdit = false
-    validateField("internal_document_id")
-  }, [values.internal_document_id])
-  
+    let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
+    useEffect(() => {
+        checkBooleanForEdit = false
+        validateField("internal_document_id")
+    }, [values.internal_document_id])
+
     return (
         <div id={changeTheam() === true ? "" : "blackground-white"}>
             <div className="container_12 clearfix" style={{ marginTop: "55px" }}>
@@ -95,7 +99,7 @@ const TopContent = (props) => {
 
                 <div id={changeTheam() === true ? "blackground-white" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "150px", paddingTop: "10px" } : {}} >
                     {/* === Left Column === */}
-                    <div className={changeTheam() === true ? "grid_5" : "grid_6"} style={{ paddingLeft: "10px" }}>
+                    <div className={changeTheam() === true ? "grid_7" : "grid_6"} style={{ paddingLeft: "10px" }}>
                         {/* Document ID */}
                         <div className="grid_1 alpha white-space">
                             <p className="top-text">เลขที่เอกสาร</p>
@@ -103,9 +107,15 @@ const TopContent = (props) => {
                         <div className="grid_3 alpha">
                             <TextInput name='internal_document_id'
                                 validate={validateInternalDocumentIDField}
+                                disabled={values.is_auto_internal_document_id === "auto" && toolbar.mode === TOOLBAR_MODE.ADD ? true : false}
                                 searchable={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                ariaControls="modalDocument"
-                                tabIndex="1" />
+                                ariaControls="modalDocument" tabIndex="1" />
+                        </div>
+                        <div className="grid_2">
+                            <RadioAutoIncrementInput
+                                name='is_auto_internal_document_id'
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                            />
                         </div>
                         <div class="clear" />
 
@@ -152,7 +162,7 @@ const TopContent = (props) => {
                     </div>
 
                     {/* === Right Column === */}
-                    <div className="grid_6 prefix_2">
+                    <div className="grid_4">
                         {/* Document Status  */}
                         <Label>สถานะ</Label>
                         <div className="grid_3 alpha">

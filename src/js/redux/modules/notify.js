@@ -37,7 +37,6 @@ export const loadNotify = (e) => {
         return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/notification/plus`,
             { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
                 console.log("TEST")
-                console.log(res.headers)
                 dispatch(
                     {
                         type: "LOAD NOTIFY",
@@ -52,6 +51,7 @@ export const readNotify = (e) => {
         "notification_id": e.target.parentNode.parentNode.parentNode.id,
         "is_read": true
     }
+    console.log(">>>>>>>>>>", data)
     return (dispatch, getState) => {
         return axios.patch(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/user/notifications`, data, 
             { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {

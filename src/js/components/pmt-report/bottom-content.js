@@ -1,192 +1,140 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux'
-
-import axios from "axios";
-import { API_PORT_DATABASE } from '../../config_port.js';
-import { API_URL_DATABASE } from '../../config_url.js';
-
-import TextareaInput from '../common/formik-textarea-input';
-import TableStatus from '../common/table-status';
-import TableHaveStock from '../common/table-have-stock';
-
-import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
+import { connect } from 'react-redux';
 import { useFormikContext } from 'formik';
+import { changeTheam } from '../../helper.js';
 
 import '../../../css/table.css';
 
-import { fetchGoodsOnhandData, getNumberFromEscapedString } from '../../helper';
-
-import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const BottomContent = (props) => {
 
   const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
-  console.log("values.line_items", values.line_items)
+  const onlyUnique = (value, index, self) => {
+    return self.indexOf(value) === index;
+  }
+
+  useEffect(() => {
+    let headTable = [];
+    let checkListNameUnique = [];
+    let workOrderPmParent = [];
+    values.line_items.map((first_list) => {
+      headTable.push({ node_th: first_list.node_th });
+      first_list.selector_checklist.map((secondary_list) => {
+        let checkUnique = checkListNameUnique.find(checkListNameUnique => `${checkListNameUnique.checklist_name}` === `${secondary_list.checklist_name}`)
+        // console.log("checkUnique", checkUnique)
+        if (checkUnique) {
+          console.log("Dulplicate")
+        } else {
+          checkListNameUnique.push({
+            checklist_name: secondary_list.checklist_name,
+            group_checklist: []
+          })
+        }
+      })
+      // console.log("checkListNameUnique", checkListNameUnique)
+      let workOrderPmChild = [];
+      if (first_list.work_order_pm.length !== 0) {
+        first_list.work_order_pm[0].checklist.map((thrice) => {
+          workOrderPmChild.push(thrice)
+        })
+      }
+      workOrderPmParent.push(workOrderPmChild)
+      // console.log("workOrderPmParent", workOrderPmParent)
+    })
+
+    checkListNameUnique.map((four, indexCheckListNameUnique) => {
+      workOrderPmParent.map((parent, indexParent) => {
+        let checkNoteMathNameChecklist = false;
+        // console.log("parent", parent)
+        parent.map((child, indexChild) => {
+          // console.log("child", child)
+          if (child.checklist_name === four.checklist_name) {
+            checkNoteMathNameChecklist = true;
+            checkListNameUnique[indexCheckListNameUnique][indexParent] = child
+            // console.log("checkListNameUnique[indexCheckListNameUnique][indexParent]", checkListNameUnique[indexCheckListNameUnique][indexParent])
+          } else {
+            // checkListNameUnique[indexCheckListNameUnique][indexParent] = { checklist_count: 0, completed_count: 0 }
+          }
+        })
+        if (checkNoteMathNameChecklist === false) {
+          checkListNameUnique[indexCheckListNameUnique][indexParent] = { checklist_count: 0, completed_count: 0 }
+        }
+      })
+    })
+
+    // console.log("checkListNameUnique", checkListNameUnique)
+
+    setFieldValue("head_table", headTable, false);
+    setFieldValue("checklist_name_unique", checkListNameUnique, false);
+    setFieldValue("work_order_pm", workOrderPmParent, false);
+  }, [values.line_items])
+
+  const ListChecklist = (props) => {
+    var codeBlock
+    var total = 0;
+    var total_checked = 0;
+    for (let number = 0; number < props.numNode; number++) {
+      total += props.checklist_name[number] ? props.checklist_name[number].checklist_count : 0;
+      total_checked += props.checklist_name[number] ? props.checklist_name[number].completed_count : 0;
+      codeBlock = <>{codeBlock} <td className="edit-padding text-center">{props.checklist_name[number] ? props.checklist_name[number].checklist_count : 0}</td>
+        <td className="edit-padding text-center">{props.checklist_name[number] ? props.checklist_name[number].completed_count : 0}</td></>
+    }
+    codeBlock = <>{codeBlock} <td className="edit-padding text-center">{total}</td>
+      <td className="edit-padding text-center">{total_checked}</td></>
+    return codeBlock;
+  }
   return (
     <div id={changeTheam() === true ? "" : "blackground-gray"}>
       <div className="container_12 clearfix" id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>
 
         <div className="grid_12 ">
-          <table className="table-many-column mt-1" style={{ padding: "10px" }}>
+          <table className="table-many-column mt-1" style={{ height: "auto", padding: "10px" }}>
             <thead>
               <tr>
                 <th className="font text-center" rowspan="3" style={{ minWidth: "30px", verticalAlign: 'middle' }}>ลำดับ</th>
                 <th className="font text-center" rowspan="3" style={{ minWidth: "300px", verticalAlign: 'middle' }}>รายละเอียด</th>
                 <th className="font text-center" rowspan="3" style={{ minWidth: "80px", verticalAlign: 'middle' }}>หน่วย</th>
 
-                <th className="font text-center" colSpan="10" style={{ minWidth: "80px" }}>การดำเนินการ</th>
+                <th className="font text-center" colSpan={values.line_items.length * 2}>การดำเนินการ</th>
                 <th className="font text-center" colSpan="2" style={{ minWidth: "80px" }}>สรุปรวม</th>
 
                 <th className="font text-center" rowspan="3" style={{ minWidth: "300px", verticalAlign: 'middle' }}>หมายเหตุ</th>
 
               </tr>
               <tr>
-                <th className="font text-center" colSpan="2" style={{ minWidth: "80px" }}>ตอน นตส.พบ.</th>
-
-                <th className="font text-center" colSpan="2" style={{ minWidth: "80px" }}>ตอน นตส.หห.</th>
-
-                <th className="font text-center" colSpan="2" style={{ minWidth: "80px" }}>ตอน นตส.จข.</th>
-
-                <th className="font text-center" colSpan="2" style={{ minWidth: "80px" }}>ตอน นตส.พญ.</th>
-
-                <th className="font text-center" colSpan="2" style={{ minWidth: "80px" }}>ตอน นตส.ชพ.</th>
+                {values.head_table.map(({ node_th }) => (
+                  <th className="font text-center" colSpan="2" style={{ minWidth: "80px" }}>{node_th}</th>
+                ))}
 
                 <th className="font text-center" colSpan="2" style={{ minWidth: "80px", verticalAlign: 'middle' }}>แขวง</th>
               </tr>
               <tr>
+                {values.line_items.map((node) => (
+                  <>
+                    <th className="font text-center" style={{ minWidth: "40px" }}>แผน</th>
+                    <th className="font text-center" style={{ minWidth: "40px" }}>ผลงาน</th>
+                  </>
+                ))}
                 <th className="font text-center" style={{ minWidth: "40px" }}>แผน</th>
                 <th className="font text-center" style={{ minWidth: "40px" }}>ผลงาน</th>
-
-                <th className="font text-center" style={{ minWidth: "40px" }}>แผน</th>
-                <th className="font text-center" style={{ minWidth: "40px" }}>ผลงาน</th>
-
-                <th className="font text-center" style={{ minWidth: "40px" }}>แผน</th>
-                <th className="font text-center" style={{ minWidth: "40px" }}>ผลงาน</th>
-
-                <th className="font text-center" style={{ minWidth: "40px" }}>แผน</th>
-                <th className="font text-center" style={{ minWidth: "40px" }}>ผลงาน</th>
-
-                <th className="font text-center" style={{ minWidth: "40px" }}>แผน</th>
-                <th className="font text-center" style={{ minWidth: "40px" }}>ผลงาน</th>
-
-                <th className="font text-center" style={{ minWidth: "40px" }}>แผน</th>
-                <th className="font text-center" style={{ minWidth: "40px" }}>ผลงาน</th>
-
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th className="edit-padding text-center">1</th>
-                <td className="edit-padding">งานบำรุงรักษาตามวาระที่สถานี(จำนวนสถานีที่รับผิดชอบ)</td>
-                <td className="edit-padding text-center">สถานี</td>
+              {values.checklist_name_unique.map((checklist_name, index) => {
+                // console.log("checklist_name", checklist_name)
 
-                <td className="edit-padding text-center">11</td>
-                <td className="edit-padding text-center">11</td>
+                return (
+                  <tr>
+                    <th className="edit-padding text-center">{index + 1}</th>
+                    <td className="edit-padding">{checklist_name.checklist_name}</td>
+                    <td className="edit-padding text-center">สถานี</td>
 
-                <td className="edit-padding text-center">11</td>
-                <td className="edit-padding text-center">11</td>
+                    <ListChecklist checklist_name={checklist_name} numNode={values.line_items.length} />
 
-                <td className="edit-padding text-center">9</td>
-                <td className="edit-padding text-center">9</td>
-
-                <td className="edit-padding text-center">9</td>
-
-                <td className="edit-padding text-center">9</td>
-
-                <td className="edit-padding text-center">9</td>
-
-                <td className="edit-padding text-center">9</td>
-                <td className="edit-padding text-center">49</td>
-
-                <td className="edit-padding text-center">49</td>
-
-                <td className="edit-padding text-center"></td>
-              </tr>
-              <tr>
-                <th className="edit-padding text-center">1.1</th>
-                <td className="edit-padding">ห้องรีเลย์ไฟสี ARI/ไฟสีสายลวด</td>
-                <td className="edit-padding text-center">แห่ง</td>
-
-                <td className="edit-padding text-center">11</td>
-                <td className="edit-padding text-center">11</td>
-
-                <td className="edit-padding text-center">6</td>
-                <td className="edit-padding text-center">6</td>
-
-                <td className="edit-padding text-center">5</td>
-                <td className="edit-padding text-center">5</td>
-
-                <td className="edit-padding text-center">9</td>
-
-                <td className="edit-padding text-center">9</td>
-
-                <td className="edit-padding text-center">9</td>
-
-                <td className="edit-padding text-center">9</td>
-                <td className="edit-padding text-center">40</td>
-
-                <td className="edit-padding text-center">40</td>
-
-                <td className="edit-padding text-center"></td>
-              </tr>
-
-              <tr>
-                <th className="edit-padding text-center">1.2</th>
-                <td className="edit-padding">ห้องรีเลย์ CTC Service (CTS/ PABX/ SDH/ PDH)</td>
-                <td className="edit-padding text-center">แห่ง</td>
-
-                <td className="edit-padding text-center">-</td>
-                <td className="edit-padding text-center">-</td>
-
-                <td className="edit-padding text-center">-</td>
-                <td className="edit-padding text-center">-</td>
-
-                <td className="edit-padding text-center">-</td>
-                <td className="edit-padding text-center">-</td>
-
-                <td className="edit-padding text-center">-</td>
-
-                <td className="edit-padding text-center">-</td>
-
-                <td className="edit-padding text-center">-</td>
-
-                <td className="edit-padding text-center">-</td>
-                <td className="edit-padding text-center">-</td>
-
-                <td className="edit-padding text-center">-</td>
-
-                <td className="edit-padding text-center"></td>
-              </tr>
-
-              <tr>
-                <th className="edit-padding text-center">1.3</th>
-                <td className="edit-padding">ห้องรีเลย์ CBI/ MDF</td>
-                <td className="edit-padding text-center">แห่ง</td>
-
-                <td className="edit-padding text-center">-</td>
-                <td className="edit-padding text-center">-</td>
-
-                <td className="edit-padding text-center">-</td>
-                <td className="edit-padding text-center">-</td>
-
-                <td className="edit-padding text-center">-</td>
-                <td className="edit-padding text-center">-</td>
-
-                <td className="edit-padding text-center">-</td>
-
-                <td className="edit-padding text-center">-</td>
-
-                <td className="edit-padding text-center">-</td>
-
-                <td className="edit-padding text-center">-</td>
-                <td className="edit-padding text-center">-</td>
-
-                <td className="edit-padding text-center">-</td>
-
-                <td className="edit-padding text-center"></td>
-              </tr>
-
-
+                    <td className="edit-padding text-center"></td>
+                  </tr>
+                )
+              })}
             </tbody>
           </table>
         </div>

@@ -61,12 +61,12 @@ const MaintenantItemComponent = () => {
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
-            <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "130vh" } : {}}>
+            <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "110vh" } : {}}>
                 <TopContent />
                 <TabBar tabNames={tabNames} initialTabID="broken">
                     <BottomContent />
                 </TabBar>
-                <Footer />
+                <Footer setFieldValue={setFieldValue}/>
             </form>
         </>
     )
@@ -126,7 +126,10 @@ const EnhancedMaintenantItemComponent = withFormik({
 
         division_id: '',
         district_id: '',
-        node_id: ''
+        node_id: '',
+
+        remark_approval: "",
+        is_auto_internal_document_id: 'auto',
     })
 })(MaintenantItemComponent);
 

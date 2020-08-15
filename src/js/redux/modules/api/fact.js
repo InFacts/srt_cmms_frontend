@@ -18,6 +18,7 @@ export const FACTS = {
     ITEM: "items",
     ITEM_STATUS: "item-status",
     ITEM_GROUP: "item-group",
+    EQUIPMENT_GROUP: "equipment-group",
     UNIT_OF_MEASURE_GROUPS: "unit-of-measure-groups",
     UNIT_OF_MEASURE: "unit-of-measures",
     ITEM_TYPE: "item-type",
@@ -31,8 +32,7 @@ export const FACTS = {
     CHECKLIST: "checklist",
     EQUIPMENT_STATUS: "equipment-status",
     CHECKLIST_LINE_ITEM: "checklist-line-item",
-    CHECKLIST_CUSTOM_GROUP:"checklist-custom-group",
-    CHECKLIST_EQUIPMENT_GROUP:"checklist-equipment-group",
+    CHECKLIST_GROUP:"checklist-group",
     UNIT_MAINTENANCE_LOCATION: "unit-maintenance-location",
     X_CROSS: "x-cross",
 
@@ -136,7 +136,7 @@ function shouldFetchFact(state, factName){
 export function fetchFact(factName){
     return (dispatch) => {
         dispatch(requestFact(factName));
-        return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/${factName}?page_size=1000`, 
+        return axios.get(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/${factName}?page_size=100000`, 
         { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
             // console.log(res)
             if(res.status === 200){

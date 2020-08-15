@@ -1,100 +1,97 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect, useSelector, shallowEqual } from 'react-redux'
 
 import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
 import { API_URL_DATABASE } from '../../config_url.js';
-import { v4 as uuidv4 } from 'uuid';
 
-import TextInput from '../common/formik-text-input'
 import SelectNoChildrenInput from '../common/formik-select-no-children';
 
-import { useFormikContext, useField } from 'formik';
+import { useFormikContext } from 'formik';
 
-import PopupModalInventory from '../common/popup-modal-inventory'
-import PopupModalNoPartNoChildren from '../common/popup-modal-nopart-no-children'
-
-import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
-import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, getNumberFromEscapedString, validatedataDocumentField } from '../../helper';
-import { FACTS } from '../../redux/modules/api/fact.js';
-
-import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
+import { changeTheam } from '../../helper.js'
 const TopContent = (props) => {
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
+  const factUsers = useSelector((state) => ({ ...state.api.fact.users }), shallowEqual);
   const factDistricts = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
+  const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
+  const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues,
+    validateField, validateForm, setTouched, setErrors } = useFormikContext();
 
-  const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm, setTouched, setErrors } = useFormikContext();
+  const [key, setKey] = useState('');
+  const [value, setValue] = useState('');
 
-  // useEffect(() => {
-  //   validateField("src_warehouse_id")
-  //   searchGoodsOnHand();
-  // }, [decoded_token.has_position, fact.warehouses.items])
+  useEffect(() => {
+    let users = factUsers.items;
+    let user = users.find(user => `${user.user_id}` === `${decoded_token.id}`);
+    console.log("user", user)
+    if (user) {
+      if (!user.position[0].district_id && !user.position[0].division_id) { //สำหรับ User ที่เป็น node
+        let nodes = factNodes.items;
+        let node = nodes.find(node => `${node.node_id}` === `${user.position[0].node_id}`);
+        // console.log("node", node)
+        if (node) {
+          console.log("node.district_id>>>", node.district_id)
+          setKey("district_id");
+          setValue(node.district_id)
+        }
+      } else if (!user.position[0].node_id && !user.position[0].division_id) { //สำหรับ User ที่เป็น district
+        setKey("only_one_district_id");
+      } else if (!user.position[0].node_id && !user.position[0].district_id) { //สำหรับ User ที่เป็น division
+        let districts = factDistricts.items;
+        let district = districts.find(district => `${district.division_id}` === `${user.position[0].division_id}`);
+        if (district) {
+          setKey("division_id");
+          setValue(district.division_id)
+        }
+      }
+    }
+  }, [decoded_token.id, factUsers.items, factUsers.items, factDistricts.items, factNodes.items])
 
-  // const searchGoodsOnHand = () => new Promise(resolve => {
-  //   validateForm()
-  //     .then((err) => {
-  //       console.log("THIS IS ErR I GET ", err, " i dont think it is touched ", touched)
-  //       setTouched(setNestedObjectValues(values, true))
-  //       setErrors(err);
-  //       if (isEmpty1(err)) {
-  //         // check ว่าเดือน ปี ที่เข้ามาเป็นของ ปัจจุบันหรือไหม
-  //         var new_date = new Date();
-  //         var year_now = new_date.getFullYear();
-  //         var mouth_now = new_date.getMonth() + 1;
-  //         var start_date = values.year_id - 543 + "-" + values.mouth_id + "-1";
-  //         var end_date
-  //         if (values.year_id - 543 === year_now && parseInt(values.mouth_id) === mouth_now) {
-  //           if (values.mouth_id === "12") {
-  //             end_date = values.year_id - 543 + 1 + "-1-1";
-  //             console.log(">>>start_date", start_date, "end_date", end_date)
-  //           }
-  //           else {
-  //             end_date = values.year_id - 543 + "-" + `${parseInt(values.mouth_id) + 1}` + "-1";
-  //             console.log("start_date", start_date, "end_date", end_date)
-  //           }
-  //           const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-monthly-summary/push?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&item_internal_item_id=${values.internal_item_id}&start_date=${start_date}&end_date=${end_date}&item_status_id=${values.item_status_id}`;
-  //           axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-  //             .then((res) => {
-  //               console.log("res", res)
-  //               setFieldValue("line_items", res.data.results, false);
-  //             })
-  //             .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
-  //               if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
-  //                 error = 'Invalid Document ID';
-  //               }//If mode add, ok
-  //             })
-  //             .finally(() => {
-  //               return resolve(error)
-  //             });
-  //         }
-  //         else {
-  //           if (values.mouth_id === "12") {
-  //             end_date = values.year_id - 543 + 1 + "-1-1";
-  //             console.log(">>>start_date", start_date, "end_date", end_date)
-  //           }
-  //           else {
-  //             end_date = values.year_id - 543 + "-" + `${parseInt(values.mouth_id) + 1}` + "-1";
-  //             console.log("start_date", start_date, "end_date", end_date)
-  //           }
-  //           const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-monthly-summary/plus?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&item_internal_item_id=${values.internal_item_id}&start_date=${start_date}&end_date=${end_date}&item_status_id=${values.item_status_id}`;
-  //           axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
-  //             .then((res) => {
-  //               console.log("res", res)
-  //               setFieldValue("line_items", res.data.results, false);
-  //             })
-  //             .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
-  //               if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
-  //                 error = 'Invalid Document ID';
-  //               }//If mode add, ok
-  //             })
-  //             .finally(() => {
-  //               return resolve(error)
-  //             });
-  //         }
-  //       }
-  //     })
-  // });
+  useEffect(() => {
+    searchGoodsOnHand();
+  }, [values.district_id])
+
+  const searchGoodsOnHand = () => new Promise(resolve => {
+    // check ว่าเดือน ปี ที่เข้ามาเป็นของ ปัจจุบันหรือไหม
+    if (values.mouth_id.toString().search("10") === 0 || values.mouth_id.toString().search("11") === 0 || values.mouth_id.toString().search("12") === 0) {
+      var start_date = values.year_id - 543 + "-" + values.mouth_id + "-01";
+    } else {
+      var start_date = values.year_id - 543 + "-" + "0" + values.mouth_id.toString() + "-01";
+    }
+    var end_date
+    if (values.mouth_id === "12") {
+      end_date = values.year_id - 543 + 1 + "-01-01";
+    }
+    else {
+      // console.log("(parseInt(values.mouth_id) + 1)", (parseInt(values.mouth_id) + 1))
+      // end_date = values.year_id - 543 + "-" + `${parseInt(values.mouth_id) + 1}` + "-01";
+      if ((parseInt(values.mouth_id) + 1).toString().search("10") === 0 || (parseInt(values.mouth_id) + 1).toString().search("11") === 0 || (parseInt(values.mouth_id) + 1).toString().search("12") === 0) {
+        end_date = values.year_id - 543 + "-" + (parseInt(values.mouth_id) + 1) + "-01";
+      } else {
+        end_date = values.year_id - 543 + "-" + "0" + (parseInt(values.mouth_id) + 1).toString() + "-01";
+      }
+    }
+    console.log("start_date", start_date)
+    console.log("end_date", end_date)
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/pmt/district-checklist?district_id=${values.district_id}&begin_start_on=${start_date}&end_start_on=${end_date}`;
+    // &begin_start_on=${start_date}&end_start_on=${end_date}
+    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+      .then((res) => {
+        console.log("res>>>>>", res)
+        setFieldValue("line_items", res.data.results, false);
+      })
+      .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
+        console.log("err.response", err.response)
+      })
+      .finally(() => {
+        return resolve()
+      });
+  });
+
+  // console.log("key>>>", key)
+  //         console.log("value>>>", value)
 
   return (
     <>
@@ -103,19 +100,24 @@ const TopContent = (props) => {
           <section className="container_12 ">
             <h4 className="head-title">รายงานแผนงานซ่อมบำรุง</h4>
 
-            <div id={changeTheam() === true ? "blackground-white" : ""} 
-            style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "130px", paddingTop: "10px" } : {}} >
+            <div id={changeTheam() === true ? "blackground-white" : ""}
+              style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "130px", paddingTop: "10px" } : {}} >
 
               <div className="container_12">
                 <div className="grid_2">
                   <p className="top-text">สถานที่ แขวง</p>
                 </div>
                 <div className="grid_3 pull_1">
-                  <SelectNoChildrenInput name="district_id"
-                    cssStyle={{ left: "-240px", top: "10px" }} tabIndex="20">
+                  <SelectNoChildrenInput name="district_id" tabIndex="20">
                     <option value=''></option>
                     {factDistricts.items.map(function ({ district_id, name, division_id }) {
-                      return <option value={district_id} key={district_id} selected> {name} </option>
+                      if (key === "district_id" && district_id === value) {
+                        return <option value={district_id} key={district_id}> {name} </option>
+                      } else if (key === "only_one_district_id" && district_id === values.district_id) {
+                        return <option value={district_id} key={district_id}> {name} </option>
+                      } else if (key === "division_id" && division_id === value) {
+                        return <option value={district_id} key={district_id}> {name} </option>
+                      }
                     })}
                   </SelectNoChildrenInput>
                 </div>
@@ -161,7 +163,7 @@ const TopContent = (props) => {
 
                 <div className="grid_1 pull_1">
                   <button type="button" className="button-blue"
-                  //  onClick={searchGoodsOnHand}
+                    onClick={searchGoodsOnHand}
                   >ค้นหา</button>
                 </div>
 

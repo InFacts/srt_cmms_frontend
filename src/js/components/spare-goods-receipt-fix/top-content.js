@@ -29,7 +29,8 @@ import {
 import { FACTS } from '../../redux/modules/api/fact.js';
 
 import { FOOTER_MODE, FOOTER_ACTIONS } from '../../redux/modules/footer.js';
-import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
+import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add';
+import RadioAutoIncrementInput from '../common/formik-radio-input-ai';
 
 import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 // For Search S16/46
@@ -62,7 +63,7 @@ const TopContent = (props) => {
   // Fill Default Forms
   useFillDefaultsOnModeAdd(DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX);
 
-  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
+  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(decoded_token, checkBooleanForEdit, DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
 
   const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
   const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
@@ -71,36 +72,25 @@ const TopContent = (props) => {
 
   const validateInternalDocumentSS101ID = refer_to_document_internal_document_id => new Promise(resolve => {
     // Internal Document ID
-    //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
-    //  ie. GR-PYO-2563/0001
-    // console.log("I am validating document id")
-    let internalDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS|MI)-[A-Z]{3}-\d{4}\/\d{4}$/g
+    let internalOldDocumentIDRegex = /^(GP|GT|GR|GU|GI|IT|GX|GF|PC|IA|SR|SS|MI)-[A-Z]{3}-\d{4}\/\d{4}$/g
     let draftInternalDocumentIDRegex = /^draft-\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/g
-    // let draftInternalDocumentIDRegex = /^heh/g
-    // if (!refer_to_document_internal_document_id) {
-    //   return resolve('Required');
-    // } else if (!internalDocumentIDRegex.test(refer_to_document_internal_document_id) && !draftInternalDocumentIDRegex.test(refer_to_document_internal_document_id)) { //
-    //   return resolve('Invalid Document ID Format\nBe sure to use the format ie. S1646-PYO-2563/0001')
-    // }
+    let internalDocumentIDRegex = /^[\u0E00-\u0E7F()]+.[\u0E00-\u0E7F()\d]*.?-?[\u0E00-\u0E7F()]*.?\d?\/[1-3]-\d{2}\/\d{4}\/\d{4}$/g;
 
     if (refer_to_document_internal_document_id) {
-      if (!internalDocumentIDRegex.test(refer_to_document_internal_document_id) && !draftInternalDocumentIDRegex.test(refer_to_document_internal_document_id)) { //
+      if (!internalDocumentIDRegex.test(refer_to_document_internal_document_id) && !draftInternalDocumentIDRegex.test(refer_to_document_internal_document_id)&& !internalOldDocumentIDRegex.test(refer_to_document_internal_document_id)) { //
         return resolve('Invalid Document ID Format\nBe sure to use the format ie. S1646-PYO-2563/0001')
       }
     }
     if (values.refer_to_document_internal_document_id === refer_to_document_internal_document_id) {
       return resolve(null);
     }
-    // if (!refer_to_document_internal_document_id) {
-    //   return resolve(); // Resolve doesn't return
-    // }
     let error;
     const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/internal_document_id/${encodeURIComponent(refer_to_document_internal_document_id)}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
       .then((res) => {
         console.log("res.data", res.data)
         if (res.data.document.internal_document_id === refer_to_document_internal_document_id) { // If input document ID exists
-          setFieldValue("line_items", setLineItem(res.data.specific), false)
+          // setFieldValue("line_items", setLineItem(res.data.specific), false)
           setFieldValue("refer_to_document_id", res.data.document.document_id, false)
           return resolve(null);
         } else { // If input Document ID doesn't exists
@@ -139,8 +129,17 @@ const TopContent = (props) => {
                 <p className="top-text">เลขที่เอกสาร</p>
               </div>
               <div className="grid_3 pull_1">
-                <TextInput name='internal_document_id' validate={validateInternalDocumentIDField}
-                  searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalDocument" tabIndex="1" />
+                <TextInput name='internal_document_id' 
+                  validate={validateInternalDocumentIDField}
+                  disabled={values.is_auto_internal_document_id === "auto" && toolbar.mode === TOOLBAR_MODE.ADD ? true: false}
+                  searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} 
+                  ariaControls="modalDocument" tabIndex="1" />
+              </div>
+              <div className="grid_2 pull_1">
+                <RadioAutoIncrementInput 
+                  name='is_auto_internal_document_id'
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                />
               </div>
 
               {/* Document Status  */}

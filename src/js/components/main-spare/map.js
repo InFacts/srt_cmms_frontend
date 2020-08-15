@@ -103,7 +103,6 @@ const setupContextualMenu = (menuToggle) => {
 }
 
 const setupAllContextualMenus = (contextualMenuToggleSelector) => {
-    console.log("SET UP DROP DAWN")
     var toggles = document.querySelectorAll(contextualMenuToggleSelector);
     for (var i = 0, l = toggles.length; i < l; i++) {
         // console.log(toggles[i])

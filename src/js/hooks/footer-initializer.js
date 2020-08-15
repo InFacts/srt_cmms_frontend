@@ -1,14 +1,15 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom'
+
 import {
     toModeSearch, handleClickAdd, handleClickHomeToSpareMain,
     handleClickForward, handleClickBackward, handleClickRefresh, TOOLBAR_MODE, TOOLBAR_ACTIONS
 } from '../redux/modules/toolbar.js';
 import { FOOTER_MODE, FOOTER_ACTIONS, handleClickBackToSpareMain, ACTION_TO_HANDLE_CLICK, footerToModeInvisible, footerToModeNone, footerToModeSearch, footerToModeEdit, footerToModeOwnDocument, footerToModeAddDraft, footerToModeApApproval, footerToModeApCheckApproval, footerToModeApGotIt, footerToModeApCheckOrder, footerToModeApCheckMaintenance, footerToModeApGuarnteeMaintenance, footerToModeVoid, footerToModeFastTrack, footerToModeApApprovalDone, footerToModeSave } from '../redux/modules/footer.js';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import useTokenInitializer from '../hooks/token-initializer';
 import { useFormikContext } from 'formik';
-import { cancelApproval, startDocumentApprovalFlow, APPROVAL_STATUS, DOCUMENT_TYPE_ID, saveDocument, editDocument, packDataFromValuesMasterDataForEdit, packDataFromValues, fetchLatestStepApprovalDocumentData, getUserIDFromEmployeeID, DOCUMENT_STATUS, DOCUMENT_STATUS_ID, APPROVAL_STEP_ACTION, checkDocumentStatus, approveDocument, fetchStepApprovalDocumentData, saveMasterData, editMasterDataHelper } from '../helper';
+import { cancelApproval, startDocumentApprovalFlow, APPROVAL_STATUS, DOCUMENT_TYPE_ID, saveDocument, editDocument, packDataFromValuesMasterDataForEdit, packDataFromValues, fetchLatestStepApprovalDocumentData, getUserIDFromEmployeeID, DOCUMENT_STATUS, DOCUMENT_STATUS_ID, APPROVAL_STEP_ACTION, checkDocumentStatus, approveDocument, fetchStepApprovalDocumentData, saveMasterData, editMasterDataHelper, APPROVAL_STATUS_TH, getNumberFromEscapedString } from '../helper';
 import { FACTS } from '../redux/modules/api/fact';
 import { navBottomOnReady, navBottomError, navBottomSuccess, navBottomSending } from '../redux/modules/nav-bottom'
 import history from '../history';
@@ -17,8 +18,8 @@ const spacialPage = {
     ITEM_MASTER_DATA: "/spare-item-master-data",
     WAREHOUSE: "/spare-warehouse",
     PMT_EQUIPMENT_MASTER: "/pmt-equipment-master",
-    PMT_CREATE_CHECKOUT: "/pmt-create-checklist"
-
+    PMT_CREATE_CHECKOUT: "/pmt-create-checklist",
+    PMT_ALL_CHECKLIST_FIXED_ASSET: "/pmt-all-checklist-fixed-asset"
 }
 function isEmpty(obj) {
     for (var key in obj) {
@@ -40,6 +41,7 @@ const useFooterInitializer = (document_type_id) => {
     const footer = useSelector((state) => ({ ...state.footer }));
     const fact = useSelector((state) => ({ ...state.api.fact }));
     const nav_bottom_status = useSelector((state) => ({ ...state.nav_bottom_status }));
+    const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
     const { values, touched, setFieldTouched, setTouched, resetForm, validateForm, setFieldValue, setErrors } = useFormikContext();
     useTokenInitializer();
@@ -57,48 +59,69 @@ const useFooterInitializer = (document_type_id) => {
         let created_by_admin_employee_id = getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id); // TEST: values.created_by_admin_employee_id;
 
         // Check That user who create document?
-        if (userInfo.id === created_by_admin_employee_id) {
-            console.log("hadleDocumentStatusWithFooter", document_status)
-            if (document_status === DOCUMENT_STATUS.DRAFT) { dispatch(footerToModeAddDraft()); }
-            else if (document_status === DOCUMENT_STATUS.WAIT_APPROVE) { dispatch(footerToModeOwnDocument()); }
-            else if (document_status === DOCUMENT_STATUS.APPROVE_DONE) { dispatch(footerToModeApApprovalDone()); }
-            else if (document_status === DOCUMENT_STATUS.VOID) { dispatch(footerToModeVoid()); }
-            else if (document_status === DOCUMENT_STATUS.REOPEN) { dispatch(footerToModeEdit()); }
-            else if (document_status === DOCUMENT_STATUS.FAST_TRACK) { dispatch(footerToModeFastTrack()); }
-            else { dispatch(footerToModeSearch()); }
-        }
-        else {
-            // Check Next Approver from postion_id
-            console.log("fetchLatestStepApprovalDocumentData")
-            fetchLatestStepApprovalDocumentData(document_id).then((latestApprovalInfo) => {
-                if (latestApprovalInfo !== undefined || latestApprovalInfo.length !== 0) {
-                    console.log("latestApprovalInfo------> ", latestApprovalInfo)
-                    console.log("user------> ", latestApprovalInfo.position_id, userInfo.position_id)
-                    console.log("approval_step_action_id------> ", latestApprovalInfo.approval_step_action_id, APPROVAL_STEP_ACTION.APPROVAL)
-                    if (latestApprovalInfo.position_id === userInfo.position_id) {
-                        if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_APPROVAL) { dispatch(footerToModeApApproval()); }
-                        else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.APPROVAL) { dispatch(footerToModeApCheckApproval()); }
-                        else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.GOT_IT) { dispatch(footerToModeApGotIt()); }
-                        else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_ORDER) { dispatch(footerToModeApCheckOrder()); }
-                        else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_MAINTENANCE) { dispatch(footerToModeApCheckMaintenance()); }
-                        else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.GUARANTEE_MAINTENANCE) { dispatch(footerToModeApGuarnteeMaintenance()); }
-                    }
-                    else { // Everyone for Search mode
-                        dispatch(footerToModeSearch());
-                    }
+        if (values.internal_document_id) {
+            if (userInfo.id === created_by_admin_employee_id
+                || values.internal_document_id.indexOf("-FastTrack") !== -1 && (getNumberFromEscapedString(values.src_warehouse_id) === decoded_token.has_position[0].warehouse_id)
+            ) {
+                console.log("hadleDocumentStatusWithFooter", document_status)
+                if (document_status === DOCUMENT_STATUS.DRAFT) { dispatch(footerToModeAddDraft()); }
+                else if (document_status === DOCUMENT_STATUS.WAIT_APPROVE) { dispatch(footerToModeOwnDocument()); }
+                else if (document_status === DOCUMENT_STATUS.APPROVE_DONE) { dispatch(footerToModeApApprovalDone()); }
+                else if (document_status === DOCUMENT_STATUS.VOID) { dispatch(footerToModeVoid()); }
+                else if (document_status === DOCUMENT_STATUS.REOPEN) { dispatch(footerToModeEdit()); }
+                else if (document_status === DOCUMENT_STATUS.FAST_TRACK) { dispatch(footerToModeFastTrack()); }
+                else {
+                    if (toolbar.mode === TOOLBAR_MODE.SEARCH) { dispatch(footerToModeSearch()); }
+                    else { dispatch(footerToModeAddDraft()); }
                 }
-                else { // Everyone for Search mode
-                    if (toolbar.mode === TOOLBAR_MODE.ADD) { dispatch(footerToModeAddDraft()); }
-                    else { dispatch(footerToModeSearch()); }
-                }
-            })
+            } else {
+                // Check Next Approver from postion_id
+                console.log("fetchLatestStepApprovalDocumentData", document_id)
+                fetchLatestStepApprovalDocumentData(document_id).then((latestApprovalInfo) => {
+                    console.log("latestApprovalInfo", latestApprovalInfo)
+                    if ((latestApprovalInfo !== undefined || latestApprovalInfo.length !== 0) && document_status === DOCUMENT_STATUS.WAIT_APPROVE) {
+                        console.log("latestApprovalInfo------> ", latestApprovalInfo)
+                        console.log("user------> ", latestApprovalInfo.position_id, userInfo.position_id)
+                        console.log("approval_step_action_id------> ", latestApprovalInfo.approval_step_action_id, APPROVAL_STEP_ACTION.APPROVAL)
+                        if (latestApprovalInfo.position_id === userInfo.position_id) {
+                            if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_APPROVAL) { dispatch(footerToModeApApproval()); }
+                            else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.APPROVAL) { dispatch(footerToModeApCheckApproval()); }
+                            else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.GOT_IT) { dispatch(footerToModeApGotIt()); }
+                            else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_ORDER) { dispatch(footerToModeApCheckOrder()); }
+                            else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_MAINTENANCE) { dispatch(footerToModeApCheckMaintenance()); }
+                            else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.GUARANTEE_MAINTENANCE) { dispatch(footerToModeApGuarnteeMaintenance()); }
+                        }
+                        else { // Everyone for Search mode
+                            if (document_type_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM && toolbar.mode === TOOLBAR_MODE.SEARCH && document_status === DOCUMENT_STATUS.DRAFT) {
+                                dispatch(footerToModeAddDraft());
+                            } else {
+                                dispatch(footerToModeSearch());
+                            }
+                        }
+                        fetchApprovalStep(values.document_id);
+                    }
+                    else { // Just Work order PM
+                        // console.log("Just Work order PM", values.document_id, values.status_name_th, APPROVAL_STATUS_TH.APPROVED)
+                        if (toolbar.mode === TOOLBAR_MODE.ADD && values.status_name_th === "") { dispatch(footerToModeAddDraft()); }
+                        else {
+                            if (document_type_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM && toolbar.mode === TOOLBAR_MODE.SEARCH && values.status_name_th !== "อนุมัติเรียบร้อยแล้ว") { //APPROVAL_STATUS_TH.APPROVED
+                                dispatch(footerToModeAddDraft());
+                            } else {
+                                dispatch(footerToModeSearch());
+                            }
+                            fetchApprovalStep(values.document_id);
+                        }
+                    }
+                })
+
+
+            }
         }
     }
 
     // Handle Toolbar Mode
     useEffect(() => {
         let document_id = values.document_id;
-        console.log("document_id", document_id)
         let routeLocation = getRouteLocation();
         if (routeLocation === spacialPage.ITEM_MASTER_DATA || routeLocation === spacialPage.WAREHOUSE || routeLocation === spacialPage.PMT_EQUIPMENT_MASTER || routeLocation === spacialPage.PMT_CREATE_CHECKOUT) {
             if (toolbar.mode === TOOLBAR_MODE.SEARCH) {
@@ -109,8 +132,9 @@ const useFooterInitializer = (document_type_id) => {
             else if (toolbar.mode === TOOLBAR_MODE.ADD) {
                 dispatch(footerToModeSave());
             }
-        }
-        else {
+        } else if (routeLocation === spacialPage.PMT_ALL_CHECKLIST_FIXED_ASSET) {
+            dispatch(footerToModeSave());
+        } else {
             // In General
             if (document_id !== undefined) {
                 if (toolbar.mode === TOOLBAR_MODE.SEARCH && document_id !== "") { // SEARCH mode
@@ -120,7 +144,6 @@ const useFooterInitializer = (document_type_id) => {
                 else if (toolbar.mode === TOOLBAR_MODE.ADD) { // ADD_DRAFT mode
                     dispatch(footerToModeAddDraft());
                     hadleDocumentStatusWithFooter(document_id);
-                    
                 }
                 else { dispatch(footerToModeSearch()); }
             }
@@ -128,13 +151,14 @@ const useFooterInitializer = (document_type_id) => {
                 if (toolbar.mode !== TOOLBAR_MODE.SEARCH) { dispatch(footerToModeAddDraft()); }
                 else { dispatch(footerToModeSearch()); }
             }
-            
+
         }
-    }, [toolbar.mode, values.warehouse_id, values.active, values.modeEdit, values.status_name_th, nav_bottom_status.mode]);
+    }, [toolbar.mode, values.warehouse_id, values.active, values.modeEdit, values.status_name_th, nav_bottom_status.mode, values.approval_step]);
 
     // Handle Back
     useEffect(() => {
-        if (footer.requiresHandleClick[FOOTER_ACTIONS.BACK]) { dispatch(handleClickBackToSpareMain(getRouteLocation())); }
+        // console.log("values", values)
+        if (footer.requiresHandleClick[FOOTER_ACTIONS.BACK]) { dispatch(handleClickBackToSpareMain(getRouteLocation(), values.internal_document_id)); }
     }, [footer.requiresHandleClick[FOOTER_ACTIONS.BACK]]);
 
     const isObject = (obj) =>
@@ -175,7 +199,8 @@ const useFooterInitializer = (document_type_id) => {
                     if (isEmpty(err)) {
                         if (values.document_id) { // If have document_id, no need to create new doc
                             let data = packDataFromValues(fact, values, document_type_id);
-                            editDocument(values.document_id, document_type_id, data, values.files)
+                            console.log("packDataFromValues === ", data)
+                            editDocument(values.document_id, document_type_id, data, values.files, true)
                                 .then((document_id) => {
                                     setFieldValue('document_id', values.document_id, true);
                                     dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
@@ -192,7 +217,7 @@ const useFooterInitializer = (document_type_id) => {
                             let data = packDataFromValues(fact, values, document_type_id);
                             if (document_type_id !== DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA && document_type_id !== DOCUMENT_TYPE_ID.ITEM_MASTER_DATA
                                 && document_type_id !== DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA && document_type_id !== DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM) {
-                                saveDocument(document_type_id, data, values.files)
+                                saveDocument(document_type_id, data, values.files, true)
                                     .then((document_id) => {
                                         setFieldValue('document_id', document_id, true);
                                         dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
@@ -244,44 +269,46 @@ const useFooterInitializer = (document_type_id) => {
 
     const postDocumentApprovalFlow = (document_id, data) => {
         startDocumentApprovalFlow(document_id)
-        .then(() => {
-            putDocument(document_id, document_type_id, data, values.files, DOCUMENT_STATUS_ID.WAIT_APPROVE, false);
-            dispatch(navBottomSuccess('[PUT]', 'Submit Approval Flow Success', ''));
-            fetchApprovalStep(document_id);
-        })
-        .catch((err) => {
-            dispatch(navBottomError('[PUT] postDocumentApprovalFlow', 'Submit Approval Flow Failed', err));
-        }).finally(() => {
-            console.log(" I submitted ")
-            dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
-        });
+            .then(() => {
+                putDocument(document_id, document_type_id, data, values.files, DOCUMENT_STATUS_ID.WAIT_APPROVE, false);
+                dispatch(navBottomSuccess('[PUT]', 'Submit Approval Flow Success', ''));
+            })
+            .catch((err) => {
+                dispatch(navBottomError('[PUT] postDocumentApprovalFlow', 'Submit Approval Flow Failed', err));
+            }).finally(() => {
+                console.log(" I submitted ")
+                fetchApprovalStep(document_id);
+                dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
+            });
     }
 
     const editDocumentAggregateAPI = (document_id, document_type_id, data, files, flag_create_approval_flow) => {
         editDocument(document_id, document_type_id, data, files, flag_create_approval_flow)
-        .then(() => {
-            setFieldValue('document_id', document_id, true);
-            if (flag_create_approval_flow) {
-                postDocumentApprovalFlow(document_id, data);
-            }
-        }).catch((err) => {
-            console.warn("Submit Failed ", err.response);
-            dispatch(navBottomError('[PUT] editDocumentAggregateAPI', 'Submit Failed', err));
-        }).finally(() => { // Set that I already handled the Click
-            dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
-        });
+            .then(() => {
+                setFieldValue('document_id', document_id, true);
+                if (flag_create_approval_flow) {
+                    console.log("postDocumentApprovalFlow ...")
+                    postDocumentApprovalFlow(document_id, data);
+                }
+            }).catch((err) => {
+                console.warn("Submit Failed ", err);
+                dispatch(navBottomError('[PUT] editDocumentAggregateAPI', 'Submit Failed', err));
+            }).finally(() => { // Set that I already handled the Click
+                dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
+                fetchApprovalStep(values.document_id);
+            });
     }
 
     const putDocument = (document_id, document_type_id, data, files, document_status_id, flag_create_approval_flow) => {
-        if (DOCUMENT_STATUS_ID.WAIT_APPROVE === document_status_id) {
-            console.log("putDocument WAIT_APPROVE",document_status_id )
-            setFieldValue('status_name_th', DOCUMENT_STATUS.WAIT_APPROVE, true);
+        console.log("putDocument -> values.status_name_th", values.status_name_th)
+        if (DOCUMENT_STATUS_ID.WAIT_APPROVE === document_status_id && values.status_name_th !== DOCUMENT_STATUS.REOPEN) {
+            // setFieldValue('status_name_th', DOCUMENT_STATUS.WAIT_APPROVE, true);
             fetchLatestStepApprovalDocumentData(document_id).then((latestApprovalInfo) => {
                 if (latestApprovalInfo.position === undefined) {
                     data.document.document_status_id = DOCUMENT_STATUS_ID.APPROVE_DONE;
                 }
                 editDocumentAggregateAPI(document_id, document_type_id, data, files, flag_create_approval_flow)
-            });         
+            });
         }
         else {
             editDocumentAggregateAPI(document_id, document_type_id, data, files, flag_create_approval_flow)
@@ -289,14 +316,26 @@ const useFooterInitializer = (document_type_id) => {
     }
 
     const fetchApprovalStep = (document_id) => {
+        // console.log("fetchStepApprovalDocumentData -> document_id", document_id, values)
         fetchStepApprovalDocumentData(document_id).then((result) => {
+            // console.log("fetchStepApprovalDocumentData -> result", result, result.approval_step, toolbar.mode)
             setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
-            if(result.is_canceled) {
-                setFieldValue("document_is_canceled", result.is_canceled.data, false);
+            if (result.approval_step) {
+                if (result.approval_step.length !== 0 && toolbar.mode === TOOLBAR_MODE.ADD) {
+                    // console.log("fetchStepApprovalDocumentData -> WAIT_APPROVE TOOLBAR_MODE.ADD")
+                    setFieldValue('status_name_th', DOCUMENT_STATUS.WAIT_APPROVE, true);
+                }
+                else if (result.approval_step.length !== 0 && toolbar.mode === TOOLBAR_MODE.SEARCH) {
+                    // console.log("fetchStepApprovalDocumentData -> WAIT_APPROVE TOOLBAR_MODE.SEARCH", result.approval_step)
+                    setFieldValue("step_approve", result.approval_step, true);
+                }
+                if (result.is_canceled) {
+                    setFieldValue("document_is_canceled", result.is_canceled.data, false);
+                }
             }
         });
     }
- 
+
     // Handle Click Send Document & Create Approval Process
     useEffect(() => {
         if (footer.requiresHandleClick[FOOTER_ACTIONS.SEND]) {
@@ -306,15 +345,26 @@ const useFooterInitializer = (document_type_id) => {
                 dispatch(navBottomSending('[API]', 'Sending ...', ''));
                 setErrors(err);
                 let data = packDataFromValues(fact, values, document_type_id);
-                data.document.document_status_id = DOCUMENT_STATUS_ID.WAIT_APPROVE;
-                if (isEmpty(err)) { 
+                if (isEmpty(err)) {
                     if (values.document_id) { // Case If you ever saved document and then you SEND document. (If have document_id, no need to create new doc)
-                        putDocument(values.document_id, document_type_id, data, values.files, DOCUMENT_STATUS_ID.DRAFT, true);
-                    } 
+                        if (values.status_name_th === DOCUMENT_STATUS.REOPEN) {
+                            data.document.document_status_id = DOCUMENT_STATUS_ID.WAIT_APPROVE;
+                            setFieldValue('status_name_th', DOCUMENT_STATUS.WAIT_APPROVE, true);
+                            console.log("Click Send -> values.status_name_th", values.status_name_th)
+                            putDocument(values.document_id, document_type_id, data, values.files, data.document.document_status_id, true);
+                        }
+                        else {
+                            data.document.document_status_id = DOCUMENT_STATUS_ID.WAIT_APPROVE;
+                            setFieldValue('status_name_th', DOCUMENT_STATUS.WAIT_APPROVE, true);
+                            putDocument(values.document_id, document_type_id, data, values.files, DOCUMENT_STATUS_ID.DRAFT, true);
+                        }
+                    }
                     else { // Case If you never saved document, but you want to SEND document
+                        data.document.document_status_id = DOCUMENT_STATUS_ID.WAIT_APPROVE;
                         saveDocument(document_type_id, data, values.files, true)
                             .then((document_id) => {
                                 setFieldValue('document_id', document_id, true);
+                                setFieldValue('status_name_th', DOCUMENT_STATUS.WAIT_APPROVE, true);
                                 dispatch(navBottomSuccess('[PUT]', 'Save Document Success', ''));
                                 postDocumentApprovalFlow(document_id, data);
                             }).catch((err) => {
@@ -326,11 +376,12 @@ const useFooterInitializer = (document_type_id) => {
                     }
                 }
                 else {
+                    console.warn("Validate Failed ", err);
                     dispatch(navBottomError('[PUT] validateForm', 'Submit Failed', err));
                     dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
                 }
             }).catch((err) => {
-                console.warn("Validate Failed ", err.response);
+                console.warn("Validate Failed ", err);
                 dispatch(navBottomError('[PUT]', 'Do not have document', err));
                 dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SEND]());
             })
@@ -338,41 +389,58 @@ const useFooterInitializer = (document_type_id) => {
     }, [footer.requiresHandleClick[FOOTER_ACTIONS.SEND]]);
 
     const clearFooterAction = () => {
-        if (footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL]) {dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.APPROVAL]());}
-        else if (footer.requiresHandleClick[FOOTER_ACTIONS.CHECK_APPROVAL]) {dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.CHECK_APPROVAL]());}
-        else if (footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL_ORDER]) {dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.APPROVAL_ORDER]());}
-        else if (footer.requiresHandleClick[FOOTER_ACTIONS.GOT_IT]) {dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.GOT_IT]());}
-        else if (footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK]) {dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.FAST_TRACK]());}
-        else if (footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]) {dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.REJECT]());}
-        else if (footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]) {dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]());}
+        if (footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL]) { dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.APPROVAL]()); }
+        else if (footer.requiresHandleClick[FOOTER_ACTIONS.CHECK_APPROVAL]) { dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.CHECK_APPROVAL]()); }
+        else if (footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL_ORDER]) { dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.APPROVAL_ORDER]()); }
+        else if (footer.requiresHandleClick[FOOTER_ACTIONS.GOT_IT]) { dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.GOT_IT]()); }
+        else if (footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK]) { dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.FAST_TRACK]()); }
+        else if (footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]) { dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.REJECT]()); }
+        else if (footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]) { dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]()); }
     }
 
     // Handle Click Approval
     useEffect(() => {
-        console.log(">> Handle Click Approval <<", footer.requiresHandleClick[FOOTER_ACTIONS.CHECK_APPROVAL])
-        if (footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL] || footer.requiresHandleClick[FOOTER_ACTIONS.CHECK_APPROVAL] || footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL_ORDER] || footer.requiresHandleClick[FOOTER_ACTIONS.GOT_IT] || footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK] || footer.requiresHandleClick[FOOTER_ACTIONS.REJECT] || footer.requiresHandleClick[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]) {
+        if (footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL] || footer.requiresHandleClick[FOOTER_ACTIONS.CHECK_APPROVAL]
+            || footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL_ORDER] || footer.requiresHandleClick[FOOTER_ACTIONS.GOT_IT]
+            || footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK] || footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]) {
             // console.log("I AM Handle APPROVAL", values);
             validateForm().then((err) => {
+                console.log("err>>", err)
                 dispatch(navBottomSending('[API]', 'Sending ...', ''));
                 setErrors(err);
                 if (isEmpty(err)) {
-                    let data = packDataFromValues(fact, values, document_type_id);
-                    data.document.document_status_id = DOCUMENT_STATUS_ID.WAIT_APPROVE;
-                    if (values.document_id) { // Case If you ever saved document and then you SEND document. (If have document_id, no need to create new doc)
-                        let remark = "demo body";
-                        approveDocument(values.document_id, APPROVAL_STATUS.APPROVED, user_id, remark).then(() => {
+                    let checked_remark = values.checked_remark;
+                    if (document_type_id === DOCUMENT_TYPE_ID.SS101 && decoded_token.has_position[0].position_group_id === 5) {
+                        console.log(">>>>>>> set check",values.remark_approval)
+                        checked_remark = values.remark_approval// For ss101 นายตรวจสาย
+                    }
+                    let data = packDataFromValues(fact, values, document_type_id, checked_remark);
+                    let approval_status = APPROVAL_STATUS.APPROVED;
+                    if (footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]) {
+                        data.document.document_status_id = DOCUMENT_STATUS_ID.REOPEN;
+                        approval_status = APPROVAL_STATUS.REJECTED;
+                    } else if (footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK]) {
+                        data.document.document_status_id = DOCUMENT_STATUS_ID.FAST_TRACK;
+                        approval_status = APPROVAL_STATUS.FAST_TRACKED;
+                    } else {
+                        data.document.document_status_id = DOCUMENT_STATUS_ID.WAIT_APPROVE;
+                        approval_status = APPROVAL_STATUS.APPROVED;
+                    }
+                    if (values.document_id) { // Case If you ever saved document and then you SEND document. (If have document_id, no need to create new doc)]
+                        let remark = values.remark_approval;
+                        approveDocument(values.document_id, approval_status, user_id, remark).then(() => {
                             dispatch(navBottomSuccess('[PUT]', 'Submit Success', ''));
-                            putDocument(values.document_id, document_type_id, data, null, DOCUMENT_STATUS_ID.WAIT_APPROVE, false);
+                            putDocument(values.document_id, document_type_id, data, null, data.document.document_status_id, false);
                             fetchApprovalStep(values.document_id);
                         })
-                        .catch((err) => {
-                            console.warn("Approve Document Failed ", err.response);
-                            dispatch(navBottomError('[PUT] approveDocument', 'Approve Document Failed', err));
-                        })
-                        .finally(() => { // Set that I already handled the Click
-                            console.log(" I submitted and i am now handling click")
-                            clearFooterAction();
-                        });
+                            .catch((err) => {
+                                console.warn("Approve Document Failed ", err.response);
+                                dispatch(navBottomError('[PUT] approveDocument', 'Approve Document Failed', err));
+                            })
+                            .finally(() => { // Set that I already handled the Click
+                                console.log(" I submitted and i am now handling click")
+                                clearFooterAction();
+                            });
                     }
                     else { // Case If you never saved document, but you want to SEND document
                         dispatch(navBottomError('[PUT ]values.document_id', 'Do not have document', err));
@@ -381,23 +449,80 @@ const useFooterInitializer = (document_type_id) => {
                 }
                 else {
                     console.warn("err", err);
-                    console.warn("toolbar.mode", toolbar.mode, "TOOLBAR_MODE.SEARCH", TOOLBAR_MODE.SEARCH);
                     if (toolbar.mode !== TOOLBAR_MODE.SEARCH && toolbar.mode !== TOOLBAR_MODE.NONE) { dispatch(navBottomError('[PUT] isEmpty', 'Error Validate Form', err)); }
-                    else { 
-                        dispatch(navBottomOnReady('', '', '')); 
+                    else {
+                        dispatch(navBottomOnReady('', '', ''));
                     }
                     clearFooterAction();
                 }
             })
-            .catch((err) => {
-                console.warn("Submit Failed ", err.response);
-                if (toolbar.mode !== TOOLBAR_MODE.SEARCH && toolbar.mode !== TOOLBAR_MODE.NONE) { dispatch(navBottomError('[PUT] validateForm', 'Error Validate Form', err)); }
-                clearFooterAction();
-            })
+                .catch((err) => {
+                    console.warn("Submit Failed ", err);
+                    if (toolbar.mode !== TOOLBAR_MODE.SEARCH && toolbar.mode !== TOOLBAR_MODE.NONE) {
+                        dispatch(navBottomError('[PUT] validateForm', 'Error Validate Form', err));
+                    }
+                    else if (toolbar.mode === TOOLBAR_MODE.SEARCH && (values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.WAIT_APPROVE)) {
+                        dispatch(navBottomError('[PUT] validateForm', 'Error Validate Form', err));
+                    }
+                    clearFooterAction();
+                })
         }
-    }, [ footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL], footer.requiresHandleClick[FOOTER_ACTIONS.CHECK_APPROVAL],
+    }, [footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL], footer.requiresHandleClick[FOOTER_ACTIONS.CHECK_APPROVAL],
     footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL_ORDER], footer.requiresHandleClick[FOOTER_ACTIONS.GOT_IT],
-    footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK], footer.requiresHandleClick[FOOTER_ACTIONS.REJECT], footer.requiresHandleClick[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS],]);
+    footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK], footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]]);
+
+    // Handle Click CANCEL_APPROVAL_PROCESS
+    useEffect(() => {
+        if (footer.requiresHandleClick[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]) {
+            console.log("CANCEL_APPROVAL_PROCESS")
+            validateForm().then((err) => {
+                dispatch(navBottomSending('[API]', 'Sending ...', ''));
+                setErrors(err);
+                if (isEmpty(err)) {
+                    let data = packDataFromValues(fact, values, document_type_id);
+                    data.document.document_status_id = DOCUMENT_STATUS_ID.REOPEN;
+                    if (values.document_id) { // Case If you ever saved document and then you SEND document. (If have document_id, no need to create new doc)
+                        cancelApproval(values.document_id, values.step_approve[0].approval_process_id).then(() => {
+                            dispatch(navBottomSuccess('[PUT]', 'Canceled Success', ''));
+                            putDocument(values.document_id, document_type_id, data, null, DOCUMENT_STATUS_ID.REOPEN, false);
+                            setFieldValue('status_name_th', DOCUMENT_STATUS.REOPEN, true);
+                        })
+                            .catch((err) => {
+                                console.warn("Canceled Approval Process Failed ", err.response);
+                                dispatch(navBottomError('[PUT]', 'Canceled Document Failed', err));
+                            })
+                            .finally(() => { // Set that I already handled the Click
+                                console.log(" I submitted and i am now handling click")
+                                fetchApprovalStep(values.document_id);
+                                clearFooterAction();
+                            });
+                    }
+                    else { // Case If you never saved document, but you want to SEND document
+                        dispatch(navBottomError('[PUT ]values.document_id', 'Do not have document', err));
+                        clearFooterAction();
+                    }
+                }
+                else {
+                    console.warn("err", err);
+                    if (toolbar.mode !== TOOLBAR_MODE.SEARCH && toolbar.mode !== TOOLBAR_MODE.NONE) { dispatch(navBottomError('[PUT] isEmpty', 'Error Validate Form', err)); }
+                    else {
+                        dispatch(navBottomOnReady('', '', ''));
+                    }
+                    clearFooterAction();
+                }
+            })
+                .catch((err) => {
+                    console.warn("Submit Failed ", err);
+                    if (toolbar.mode !== TOOLBAR_MODE.SEARCH && toolbar.mode !== TOOLBAR_MODE.NONE) {
+                        dispatch(navBottomError('[PUT] validateForm', 'Error Validate Form', err));
+                    }
+                    else if (toolbar.mode === TOOLBAR_MODE.SEARCH && (values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.WAIT_APPROVE)) {
+                        dispatch(navBottomError('[PUT] validateForm', 'Error Validate Form', err));
+                    }
+                    clearFooterAction();
+                })
+        }
+    }, [footer.requiresHandleClick[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS],]);
 
 
     return;

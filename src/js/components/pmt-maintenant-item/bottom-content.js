@@ -41,7 +41,7 @@ const BottomContent = (props) => {
                         tabIndex={8}
                         checkBooleanForEdit={checkBooleanForEdit} />
 
-                    <div className="grid_12" style={{ marginTop: "10px" }}>
+                    <div className="grid_12 mt-1">
                         {/* Remark */}
                         <Label>หมายเหตุ</Label>
                         <div className="grid_11 alpha omega">

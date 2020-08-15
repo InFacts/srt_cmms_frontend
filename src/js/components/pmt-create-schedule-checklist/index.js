@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useFormik, withFormik, useFormikContext } from 'formik';
 import { Redirect } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import TabBar from '../common/tab-bar';
 
@@ -27,6 +27,7 @@ import { changeTheam, getUrlParamsLink } from '../../helper.js'
 const GoodsReceiptComponent = (props) => {
     const { resetForm, setFieldValue, setValues, values } = useFormikContext();
     const dispatch = useDispatch();
+    const toolbar = useSelector((state) => ({...state.toolbar}), shallowEqual);
 
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
@@ -46,32 +47,66 @@ const GoodsReceiptComponent = (props) => {
     useFooterInitializer(DOCUMENT_TYPE_ID.SELECTOR);
 
     const loggedIn = useSelector(state => state.token.isLoggedIn);
+    const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
 
     useEffect(() => {
         dispatch(footerToModeSearch());
     }, []);
 
-        // If Link to this url via Track Document
-        useEffect(() => {
-            getUrlParamsLink()
-                .then((internal_document_id) => {
+    // If Link to this url via Track Document
+    useEffect(() => {
+        getUrlParamsLink()
+            .then((internal_document_id) => {
                 if (internal_document_id !== "") {
                     // action_approval
                     setFieldValue("status_name_th", "", true);
                     setFieldValue("internal_document_id", internal_document_id, true);
                 }
             })
-        }, [])
-        
+    }, [])
+
+    const initialRowsChecklist = () => {
+        // checklist สำหรับ station
+        let filter_item = [];
+        let items = fact.checklist.items;
+        items.map((item, index) => {
+            if (item.checklist_group_id !== 1) {
+                filter_item.push({
+                    document_id: '',
+                    checklist_name: item.checklist_name,
+                    remark: "string",
+                    checklist_id: item.checklist_id,
+                    is_have: false
+                })
+            }
+        })
+        return filter_item;
+    }
+
+    useEffect(() => {
+        values.w1_list.map((list, index) => {
+            setFieldValue(`w1_list[${index}].selector_checklist`, initialRowsChecklist(), true);
+        });
+        values.w2_list.map((list, index) => {
+            setFieldValue(`w2_list[${index}].selector_checklist`, initialRowsChecklist(), true);
+        });
+        values.w3_list.map((list, index) => {
+            setFieldValue(`w3_list[${index}].selector_checklist`, initialRowsChecklist(), true);
+        });
+        values.w4_list.map((list, index) => {
+            setFieldValue(`w4_list[${index}].selector_checklist`, initialRowsChecklist(), true);
+        });
+    }, [toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD], fact.checklist])
+
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
-            <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "130vh" } : {}}>
+            <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "120vh" } : {}}>
                 <TopContent />
                 <TabBar tabNames={tabNames} initialTabID="w1">
                     <BottomContent />
                 </TabBar>
-                <Footer />
+                <Footer setFieldValue={setFieldValue}/>
             </form>
         </>
     )
@@ -80,7 +115,10 @@ const GoodsReceiptComponent = (props) => {
 // Week one
 const initialLineW1 = {
     station_id: '',
+    internal_item_id: '',
     checklist_id: '',
+    x_cross_x_cross_id: '',
+    selector_checklist: []
 }
 const initialRowsW1 = (n = 10) => {
     let rows = [];
@@ -92,53 +130,11 @@ const initialRowsW1 = (n = 10) => {
     return rows;
 }
 
-// Week two
-const initialLineW2 = {
-    station_id: '',
-    checklist_id: '',
-}
-const initialRowsW2 = (n = 10) => {
-    let rows = [];
-    for (var i = 1; i <= n; i++) {
-        rows.push({
-            ...initialLineW2,
-        });
-    }
-    return rows;
-}
-
-// Week three
-const initialLineW3 = {
-    station_id: '',
-    checklist_id: '',
-}
-const initialRowsW3 = (n = 10) => {
-    let rows = [];
-    for (var i = 1; i <= n; i++) {
-        rows.push({
-            ...initialLineW3,
-        });
-    }
-    return rows;
-}
-
-// Week four
-const initialLineW4 = {
-    station_id: '',
-    checklist_id: '',
-}
-const initialRowsW4 = (n = 10) => {
-    let rows = [];
-    for (var i = 1; i <= n; i++) {
-        rows.push({
-            ...initialLineW4,
-        });
-    }
-    return rows;
-}
-
 const EnhancedGoodsReceiptComponent = withFormik({
     mapPropsToValues: (props) => ({
+        whatIsWeek: '',
+        nameValueStation: '',
+        lineNumberStation: [],
         // Field ที่ให้ User กรอก
         // Top Content
         internal_document_id: '',       // เลขที่เอกสาร
@@ -154,14 +150,14 @@ const EnhancedGoodsReceiptComponent = withFormik({
         station_id: '',
 
         // Bottom
-        w1_list: initialRowsW1(),
-        w2_list: initialRowsW2(),
-        w3_list: initialRowsW3(),
-        w4_list: initialRowsW4(),
+        w1_list: [...initialRowsW1()],
+        w2_list: [...initialRowsW1()],
+        w3_list: [...initialRowsW1()],
+        w4_list: [...initialRowsW1()],
 
         //Field ที่ไม่ได้กรอก
         files: [],
-        
+
         // NOT USE FOR FOOTER
         step_approve: [],
         created_by_admin_employee_id: '',
@@ -174,6 +170,11 @@ const EnhancedGoodsReceiptComponent = withFormik({
         // For Attactment
         desrciption_files_length: '',
         desrciption_files: [],
+
+        station: [],
+
+        remark_approval: "",
+        is_auto_internal_document_id: 'auto',
     })
 })(GoodsReceiptComponent);
 

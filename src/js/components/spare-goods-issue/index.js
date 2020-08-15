@@ -55,12 +55,12 @@ const GoodsIssueComponent = (props) => {
     return (
         <>
         {!loggedIn ? <Redirect to="/" /> : null}
-        <form style={changeTheam() === true ? { backgroundImage: `url(${BgRed})`, width: "100vw", height: "140vh" } : {}}>
+        <form style={changeTheam() === true ? { backgroundImage: `url(${BgRed})`, width: "100vw", height: "120vh" } : {}}>
             <TopContent />
             <TabBar tabNames={tabNames} initialTabID="listItem">
                 <BottomContent />
             </TabBar>
-            <Footer />
+            <Footer setFieldValue={setFieldValue}/>
         </form>
         </>
     )
@@ -116,6 +116,8 @@ const EnhancedGoodsIssueComponent = withFormik({
 
         // For Step Approval
         step_approve: [],
+        remark_approval: "",
+        is_auto_internal_document_id: 'auto',
     }),
     validate: (values, props) => {
         const errors = {};

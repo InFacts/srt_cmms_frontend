@@ -4,10 +4,10 @@ function numberWithCommas(x) {
     return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 }
 
-const SimpleGrayCardComponent = ({name, value}) => {
+const SimpleGrayCardComponent = ({name, value, style}) => {
 
     return (
-    <div className="gray-background simple-card">
+    <div className="gray-background simple-card" style={style}>
         <h5 className="simple-card-name">{name}</h5>
         <div className="white-background simple-card-inner">
             {numberWithCommas(value)}

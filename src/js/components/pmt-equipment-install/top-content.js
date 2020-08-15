@@ -18,6 +18,7 @@ import {
 } from '../../helper';
 import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
 import PopupModalEquipmentNoChildren from '../common/popup-modal-equipment-no-children'
+import RadioAutoIncrementInput from '../common/formik-radio-input-ai'
 
 import { useFormikContext, useField } from 'formik';
 
@@ -33,9 +34,9 @@ const TopContent = (props) => {
     const { values, errors, touched, setFieldValue, setTouched, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
     // Fill Default Forms
-    useFillDefaultsOnModeAdd();
+    useFillDefaultsOnModeAdd(DOCUMENT_TYPE_ID.EQUIPMENT_INSTALLATION);
 
-    const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.EQUIPMENT_INSTALLATION, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args)
+    const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(decoded_token, checkBooleanForEdit, DOCUMENT_TYPE_ID.EQUIPMENT_INSTALLATION, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args)
 
     const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
     const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
@@ -82,17 +83,24 @@ const TopContent = (props) => {
 
                 <div id={changeTheam() === true ? "blackground-white" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "200px", paddingTop: "10px" } : {}} >
                     {/* === Left Column === */}
-                    <div className={changeTheam() === true ? "grid_5" : "grid_6"} style={{ paddingLeft: "10px" }}>
+                    <div className={changeTheam() === true ? "grid_7" : "grid_6"} style={{ paddingLeft: "10px" }}>
 
                         {/* Document ID */}
                         <div className="grid_1 alpha white-space">
                             <p className="top-text">เลขที่เอกสาร</p>
                         </div>
                         <div className="grid_3">
-                            <TextInput name="internal_document_id"
+                            <TextInput name='internal_document_id'
                                 validate={validateInternalDocumentIDField}
-                                searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalDocument"
-                                tabIndex="1" />
+                                disabled={values.is_auto_internal_document_id === "auto" && toolbar.mode === TOOLBAR_MODE.ADD ? true: false}
+                                searchable={toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                ariaControls="modalDocument" tabIndex="1" />
+                        </div>
+                        <div className="grid_2">
+                            <RadioAutoIncrementInput 
+                            name='is_auto_internal_document_id'
+                            disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                            />
                         </div>
                         <div className="clear" />
 
@@ -141,7 +149,7 @@ const TopContent = (props) => {
                     </div>
 
                     {/* === Right Column === */}
-                    <div className="grid_6 prefix_2">
+                    <div className="grid_4">
 
                         {/* Created On */}
                         <Label>สถานะ</Label>

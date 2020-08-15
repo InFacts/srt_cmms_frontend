@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useFormik, withFormik, useFormikContext } from 'formik';
 import { Redirect } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, shallowEqual } from 'react-redux';
 
 import TabBar from '../common/tab-bar';
 
@@ -23,6 +23,7 @@ import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const ItemMasterDataComponent = (props) => {
 
     const { resetForm, setFieldValue, setValues, values } = useFormikContext();
+    const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
@@ -31,7 +32,19 @@ const ItemMasterDataComponent = (props) => {
         // { id: "attachment", name: "แนบไฟล์" },
     ]);
 
-    useToolbarInitializer(TOOLBAR_MODE.SEARCH);
+    const [toolbarMode, setToolBarMode] = useState(TOOLBAR_MODE.SEARCH);
+
+    useEffect(() => {
+        if (values.line_position_permission.length >= 1) {
+            if (values.line_position_permission[0].module_admin) {
+                setToolBarMode(TOOLBAR_MODE.SEARCH)
+            } else {
+                setToolBarMode(TOOLBAR_MODE.JUST_SEARCH)
+            }
+        }
+    }, [decoded_token]);
+
+    useToolbarInitializer(toolbarMode);
     useTokenInitializer();
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.ITEM_MASTER_DATA);
@@ -40,12 +53,12 @@ const ItemMasterDataComponent = (props) => {
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
-            <form style={changeTheam() === true ? { backgroundImage: `url(${BgRed})`, width: "100vw", height: "140vh" } : {}}>
+            <form style={changeTheam() === true ? { backgroundImage: `url(${BgRed})`, width: "100vw", height: "100vh" } : {}}>
                 <TopContent />
                 <TabBar tabNames={tabNames} initialTabID="general">
                     <BottomContent />
                 </TabBar>
-                <Footer />
+                <Footer setFieldValue={setFieldValue}/>
             </form>
         </>
     )
@@ -57,7 +70,7 @@ const EnhancedItemMasterDataComponent = withFormik({
         internal_item_id: '',
         description: '',
 
-        item_type_id: '',
+        item_type_id: 1,
         item_group_id: '',
         uom_group_id: '',
         uom_id: '',           //UOM 
@@ -71,7 +84,7 @@ const EnhancedItemMasterDataComponent = withFormik({
         quantity_lowest: '',    //ขั้นต่ำ
         quantity_highest: '',   //ขั้นสูง
         remark: '',
-        active: '',            //สถานะอะไหล่ ปิด เปิด
+        active: 1,            //สถานะอะไหล่ ปิด เปิด
         accounting_type: '',    // ประเภทเอกบัญชี
 
         //Field ที่ไม่ได้กรอก
@@ -90,6 +103,8 @@ const EnhancedItemMasterDataComponent = withFormik({
         // FOR CHECK USER_ID ADMIN FOR EDIT
         modeEdit: false,
         line_position_permission: [],
+
+        remark_approval: "",
     })
 })(ItemMasterDataComponent);
 

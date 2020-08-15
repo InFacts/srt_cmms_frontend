@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useFormikContext } from 'formik';
+import { useFormikContext, connect } from 'formik';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { handleClickExportPDF, TOOLBAR_ACTIONS } from '../redux/modules/toolbar.js';
 import history from '../history';
@@ -39,9 +39,11 @@ const useExportPdfInitializer = () => {
     // console.log(values)
     let routeLocation = getRouteLocation();
     // console.log(routeLocation)
+
+    //<<<======== FOR Document ========>>>>>>
     if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF] && document_item) {
       if (routeLocation === '/pmt-ss-101') {
-        console.log(values)
+        console.log(">>>>>>>>>>>>", values)
         let car_type_id = "";
         let system_type_group_id = "";
         let system_type_id = "";
@@ -77,7 +79,7 @@ const useExportPdfInitializer = () => {
 
         factHardwareType.items.map((factHardwareType) => {
           if (factHardwareType.hardware_type_id === values.hardware_type_id) {
-            hardware_type_id = factHardwareType.abbreviation + "-" + factHardwareType.system_type
+            hardware_type_id = factHardwareType.abbreviation + "-" + factHardwareType.hardware_type
           }
         })
 
@@ -88,7 +90,7 @@ const useExportPdfInitializer = () => {
         })
         factInterrupt.items.map((factInterrupt) => {
           if (values.interrupt_id === factInterrupt.interrupt_id) {
-            interrupt_id = factInterrupt.interrupt_type
+            interrupt_id = factInterrupt.interrupt_id + "-" + factInterrupt.interrupt_type
           }
         })
 
@@ -123,16 +125,18 @@ const useExportPdfInitializer = () => {
         let station = "";
 
         factDistricts.items.map(function ({ district_id, name, division_id }) {
-          District = name
+          if (values.location_district_id == district_id) {
+            District = name
+          }
         })
         factNodes.items.map(function ({ node_id, name, district_id }) {
-          if (values.location_district_id == district_id) {
+          if (values.location_node_id == node_id) {
             node = name
           }
         })
 
         factStations.items.map(function ({ station_id, name, node_id }) {
-          if (values.location_node_id == node_id) {
+          if (values.location_station_id == station_id) {
             station = name
           }
         })
@@ -177,14 +181,13 @@ const useExportPdfInitializer = () => {
         let year5 = dateParts5[2]
 
         values.loss_line_items.map(lineItem => {
-          console.log("lineItem", lineItem)
           data.push({
             "item_id": p,
-            "description": lineItem.description,
-            "internal_item_id": lineItem.document_id,
-            "unit": lineItem.uom_code,
-            "price_quantity": lineItem.price,
-            "quantity": lineItem.quantity,
+            "description": lineItem.description ? lineItem.description : "-",
+            "internal_item_id": lineItem.internal_item_id ? lineItem.internal_item_id : "-",
+            "unit": lineItem.uom_name ? lineItem.uom_name : "-",
+            "price_quantity": lineItem.price ? lineItem.price : "-",
+            "quantity": lineItem.quantity ? lineItem.quantity : "-",
             "price": " ",
             "type": " "
           });
@@ -247,7 +250,7 @@ const useExportPdfInitializer = () => {
             "H": "",
             "I": "",
 
-            "Station": node + " " + station,
+            "Station": node + "/" + station,
 
             "HardwareType": hardware_type_id,
             "LocationDetail": values.location_detail,
@@ -268,6 +271,10 @@ const useExportPdfInitializer = () => {
             "member_3": values.member_3,
             "member_3_position_id": member_3_position_id,
             "remark": values.remark,
+            "RequestBy": values.request_by,
+            "RecvAccidentFromRecvId": values.recv_accident_from_recv_id === 1 ? "จดหมาย" : "โทรศัพท์",
+
+            "system_type_group_id": system_type_group_id
           },
           "Headers":
           {
@@ -288,14 +295,13 @@ const useExportPdfInitializer = () => {
           }
           ,
           "Images": [],
-          "Totol": ""
+          "Totol": "",
         }
 
 
 
         exportPDF(routeLocation, data_json).then(function (htmlCode) {
 
-          console.log(htmlCode)
           // const blob = pdf(htmlCode).toBlob();
           // console.log(blob)
           // MyDocument(htmlCode)
@@ -303,19 +309,38 @@ const useExportPdfInitializer = () => {
           w.document.write(htmlCode);
           setTimeout(() => {
             w.print();
-            // w.close();
+            w.close();
+          }, 500);
+        })
+        dispatch(handleClickExportPDF())
+      } else if (routeLocation === "/pmt-all-checklist-fixed-asset") {
+        exportPDF(routeLocation, values, fact).then(function (htmlCode) {
+          var w = window.open();
+          w.document.write(htmlCode);
+          setTimeout(() => {
+            w.print();
+            w.close();
+          }, 500);
+        })
+        dispatch(handleClickExportPDF())
+      } else if (routeLocation === "/pmt-fixed-asset") {
+        exportPDF(routeLocation, values, fact).then(function (htmlCode) {
+          var w = window.open();
+          w.document.write(htmlCode);
+          setTimeout(() => {
+            w.print();
+            w.close();
           }, 500);
         })
         dispatch(handleClickExportPDF())
       } else {
         exportPDF(routeLocation, values).then(function (htmlCode) {
 
-
           var w = window.open();
           w.document.write(htmlCode);
           setTimeout(() => {
             w.print();
-            // w.close();
+            w.close();
           }, 500);
 
         })
@@ -341,6 +366,16 @@ const useExportPdfInitializer = () => {
         }, 500);
       })
       dispatch(handleClickExportPDF())
+    } else if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF] && document_item_list && document_item_list.length > 0 && routeLocation === "/pmt-report") {
+      exportPDF(routeLocation, values, fact).then(function (htmlCode) {
+        var w = window.open();
+        w.document.write(htmlCode);
+        setTimeout(() => {
+          w.print();
+          w.close();
+        }, 500);
+      })
+      dispatch(handleClickExportPDF())
     } else {
       dispatch(handleClickExportPDF())
     }
@@ -355,8 +390,8 @@ const createRowS1 = (item) =>
     <td style=" text-align:left ; vertical-align: middle;">${item.description}</td>
     <td style=" text-align:center ; vertical-align: middle;">${item.internal_item_id}</td>
     <td style=" text-align:center ; vertical-align: middle;">${item.unit}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.quantity}</td>
-    <td style=" text-align:right ; vertical-align: middle;">${item.uom_group_id}</td>
+    <td style=" text-align:right ; vertical-align: middle;">${item.quantity}</td>
+    <td style=" text-align:right ; vertical-align: middle;">${item.total}</td>
     <td style=" text-align:right ; vertical-align: middle;">${item.per_unit_price}</td>
   </tr>`;
 
@@ -368,7 +403,7 @@ const createTableS1 = (head, rows) =>
           <td  style="width: 10%; text-align:center ; vertical-align: middle;">${head.internal_item_id}</td>
           <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.unit}</td>
           <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.quantity}</td>
-          <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.uom_group_id}</td>
+          <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.total}</td>
           <td  style="width: 10%; text-align:center; vertical-align: middle;">${head.per_unit_price}</td>
       </tr>
       ${rows}
@@ -500,7 +535,6 @@ const createPageS1Category = (index, category) =>
   `<div class="invoice-box" style=" justify-content:center ;align-items:center">
       <h1 style=" text-align:center ; vertical-align: middle;align-items:center;margin-top: 50%;">${index}. (${category})</h1>
   </div>`;
-
 
 
 const createHtmlS16_46 = (table) =>
@@ -894,7 +928,9 @@ const createHtmlB22 = (table) => `
         }
       }
     
-     
+     .text-right {
+        text-align: right;
+     }
 
      .invoice-box {
         width:29.7cm;
@@ -966,15 +1002,15 @@ const createRowB22Page1 = (item) =>
 <td style=" text-align:center ; vertical-align: middle;">${item.item_id}</td>
 <td style=" text-align:left ; vertical-align: middle;">${item.description}</td>
 <td style=" text-align:center ; vertical-align: middle;">${item.unit}</td>
-<td style=" text-align:center ; vertical-align: middle;">${item.left_month_unit}</td>
-<td style=" text-align:center ; vertical-align: middle;">${item.left_month_price}</td>
-<td style=" text-align:center ; vertical-align: middle;">${item.get_month_unit}</td>
-<td style=" text-align:center ; vertical-align: middle;">${item.get_month_price}</td>
-<td style=" text-align:center ; vertical-align: middle;">${item.pay_month_unit}</td>
-<td style=" text-align:center ; vertical-align: middle;">${item.pay_month_price}</td>
+<td style=" text-align:right ; vertical-align: middle;">${item.left_month_unit}</td>
+<td style=" text-align:right ; vertical-align: middle;">${item.left_month_price}</td>
+<td style=" text-align:right ; vertical-align: middle;">${item.get_month_unit}</td>
+<td style=" text-align:right ; vertical-align: middle;">${item.get_month_price}</td>
+<td style=" text-align:right ; vertical-align: middle;">${item.pay_month_unit}</td>
+<td style=" text-align:right ; vertical-align: middle;">${item.pay_month_price}</td>
 
-<td style=" text-align:center ; vertical-align: middle;">${item.ending_unit_count}</td>
-<td style=" text-align:center ; vertical-align: middle;">${item.ending_unit_count_total}</td>
+<td style=" text-align:right ; vertical-align: middle;">${item.ending_unit_count}</td>
+<td style=" text-align:right ; vertical-align: middle;">${item.ending_unit_count_total}</td>
 
 <td style=" text-align:center ; vertical-align: middle;">${item.type}</td>
 </tr>`
@@ -1131,9 +1167,7 @@ const createPageS101Page1 = (date, content) =>
   `<div class="invoice-box">
       <pp>แบบ สส. 101</pp>
       <h2 style=" text-align:center ; vertical-align: middle;">ฝ่ายการอาณัติสัญญาณและโทรคมนาคม การรถไฟ</h2>
-      
-
-      
+    
       <table>
           <tr>
           <td>
@@ -1145,7 +1179,7 @@ const createPageS101Page1 = (date, content) =>
       <table>
           <tr>
           <td>
-              <div class="left">รายงานการตรวจซ่อมอุปกรณ์แขวง</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label></label></div></div>
+              <div class="left">รายงานการตรวจซ่อมอุปกรณ์แขวง</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>${content.District}</label></div></div>
           </td>
           <td>
               <pr><div class="left">วันที่</div><div contenteditable="true"><div class="dotted" style="width: 200px;"><label>${date}</label></div></div></pr>
@@ -1174,7 +1208,7 @@ const createPageS101Page1 = (date, content) =>
           <td style=" text-align:center ; vertical-align: middle;">${content.RequesstOnDay}</td>
       </tr>
       <tr class="item">
-          <td style="padding-left: 15px; text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">โดยจดหมายหรือโทรเลขที่</div><div contenteditable="true"><div class="dotted" style="width: 435px;"><label></label></div></div></td>
+          <td style="padding-left: 15px; text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">โดยจดหมายหรือโทรเลขที่</div><div contenteditable="true"><div class="dotted" style="width: 435px;"><label>${content.RecvAccidentFromRecvId}</label></div></div></td>
           <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">วันเวลาที่เกิดเหตุ</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.AccidentOnTimeParts}</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.AccidentOnYear}</td>
@@ -1182,7 +1216,7 @@ const createPageS101Page1 = (date, content) =>
           <td style=" text-align:center ; vertical-align: middle;">${content.AccidentOnDay}</td>
       </tr>
       <tr class="item">
-          <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">(3) งาน</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label></label></div></div></td>
+          <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">(3) งาน</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>${content.AccidentName}</label></div></div></td>
           <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">ออกเดินทาง</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.DepartedOnTimeParts}</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.DepartedOnYear}</td>
@@ -1190,7 +1224,7 @@ const createPageS101Page1 = (date, content) =>
           <td style=" text-align:center ; vertical-align: middle;">${content.DepartedOnDay}</td>
       </tr>
       <tr class="item">
-          <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">(4) เดินทางโดย</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>${content.CarType}</label></div></div></td>
+          <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">(4) เดินทางโดย</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>-</label></div></div></td>
           <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">เดินทางถึง</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.ArrivedOnTimeParts}</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.ArrivedOnYear}</td>
@@ -1215,10 +1249,10 @@ const createPageS101Page1 = (date, content) =>
           <td style="width: 1%; text-align:left ; vertical-align: middle;">
           </td>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
-              <div class="left">ก. ระบบอาณัติสัญญาณ</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.A}</label></div></div>
+              <div class="left">ก. ระบบอาณัติสัญญาณ</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบอาณัติสัญญาณ" && content.HardwareType}</label></div></div>
           </td>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
-              <div class="left">ข. ระบบสายส่ง</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.B}</label></div></div>
+              <div class="left">ข. ระบบสายส่ง</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบสายส่ง" ? content.HardwareType : "-"}</label></div></div>
           </td>
             
         </tr>
@@ -1229,10 +1263,10 @@ const createPageS101Page1 = (date, content) =>
           <td style="width: 1%; text-align:left ; vertical-align: middle;">
           </td>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
-              <div class="left">ค. ระบบเครื่องกั้นถนน</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.C}</label></div></div>
+              <div class="left">ค. ระบบเครื่องกั้นถนน</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบเครื่องกั้นถนน" ? content.HardwareType : "-"}</label></div></div>
           </td>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
-              <div class="left">ง. ระบบเครื่องทางสะดวก</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.D}</label></div></div>
+              <div class="left">ง. ระบบเครื่องทางสะดวก</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบเครื่องทางสะดวก" ? content.HardwareType : "-"} </label></div></div>
           </td>
             
         </tr>
@@ -1242,10 +1276,10 @@ const createPageS101Page1 = (date, content) =>
         <td style="width: 1%; text-align:left ; vertical-align: middle;">
         </td>
         <td style="width: 40%; text-align:left ; vertical-align: middle;">
-            <div class="left">จ. ระบบโทรศัพท์</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.E}</label></div></div>
+            <div class="left">จ. ระบบโทรศัพท์</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบโทรศัพท์" ? content.HardwareType : "-"}</label></div></div>
         </td>
         <td style="width: 40%; text-align:left ; vertical-align: middle;">
-            <div class="left">ฉ. ระบบไฟฟ้า</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.F}</label></div></div>
+            <div class="left">ฉ. ระบบไฟฟ้า</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบไฟฟ้า" ? content.HardwareType : "-"}</label></div></div>
         </td>
           
       </tr>
@@ -1256,10 +1290,10 @@ const createPageS101Page1 = (date, content) =>
         <td style="width: 1%; text-align:left ; vertical-align: middle;">
         </td>
         <td style="width: 40%; text-align:left ; vertical-align: middle;">
-            <div class="left">ช. ระบบโทรพิมพ์</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.G}</label></div></div>
+            <div class="left">ช. ระบบโทรพิมพ์</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบโทรพิมพ์" ? content.HardwareType : "-"}</label></div></div>
         </td>
         <td style="width: 40%; text-align:left ; vertical-align: middle;">
-            <div class="left">ซ. ระบบวิทยุ</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.H}</label></div></div>
+            <div class="left">ซ. ระบบวิทยุ</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบวิทยุ" ? content.HardwareType : "-"}</label></div></div>
         </td>
           
       </tr>
@@ -1270,7 +1304,7 @@ const createPageS101Page1 = (date, content) =>
         <td style="width: 1%; text-align:left ; vertical-align: middle;">
         </td>
         <td style="width: 40%; text-align:left ; vertical-align: middle;">
-            <div class="left">ฌ. ระบบอิเลคทรอนิคส์</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.I}</label></div></div>
+            <div class="left">ฌ. ระบบอิเลคทรอนิคส์</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบอิเลคทรอนิคส์" ? content.HardwareType : "-"}</label></div></div>
         </td>
         <td style="width: 40%; text-align:left ; vertical-align: middle;">
         </td>
@@ -1280,7 +1314,7 @@ const createPageS101Page1 = (date, content) =>
       <table>
           <tr>
           <td>
-              <div class="left">(6) ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม (สถานี/ตำแหน่งที่ตั้ง)</div><div contenteditable="true"><div class="dotted" style="width: 750px;"><label>${content.Station}</label></div></div>
+              <div class="left">(6) ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม (สถานี/ตำแหน่งที่ต��้ง)</div><div contenteditable="true"><div class="dotted" style="width: 750px;"><label>${content.Station}</label></div></div>
           </td>
           </tr>
       </table>
@@ -1288,7 +1322,7 @@ const createPageS101Page1 = (date, content) =>
       <table>
           <tr>
           <td>
-              <div class="left">(7) ซื้ออุปกรณ์ที่บำรุงรักษา</div><div contenteditable="true"><div class="dotted" style="width: 750px;"><label>${content.HardwareType}</label></div></div>
+              <div class="left">(7) ชื่ออุปกรณ์ที่บำรุงรักษา</div><div contenteditable="true"><div class="dotted" style="width: 750px;"><label>${content.HardwareType}</label></div></div>
           </td>
           </tr>
       </table>
@@ -1331,7 +1365,7 @@ const createPageS101Page1 = (date, content) =>
       <table>
           <tr>
           <td>
-              <div class="left">(11) ยังไม่ได้จัดการแก้ไขเพราะ</div><div contenteditable="true"><div class="dotted" style="width: 750px;"><label>${content.service_method_desc}</label></div></div>
+              <div class="left">(11) ยังไม่ได้จัดการแก้ไขเพราะ</div><div contenteditable="true"><div class="dotted" style="width: 750px;"><label>${content.interrupt_id}</label></div></div>
               <div class="left"></div><div class="dotted" ></div>
               <div class="left"></div><div class="dotted" ></div>
           </td>
@@ -1415,7 +1449,7 @@ const createPageS101Page2 = (table, date, content) =>
         <table style="margin-top: 1cm;">
             <tr>
             <td>
-                <div class="left">(16) รายละเอียดมีดังต่อไปนี้</div><div contenteditable="true"><div class="dotted" style="width: 750px;"><label></label></div></div>
+                <div class="left">(16) รายละเอียดมีดังต่อไปนี้</div><div contenteditable="true"><div class="dotted" style="width: 750px;"><label>${content.remark}</label></div></div>
                 <div class="left"></div><div class="dotted" ></div>
                 <div class="left"></div><div class="dotted" ></div>
                 <div class="left"></div><div class="dotted" ></div>
@@ -1444,7 +1478,7 @@ const createPageS101Page2 = (table, date, content) =>
         <table >
             <tr>
             <td>
-                <div class="left">(18) ความเห็นของนายตรวจลายหัวหน้าแขวง</div><div contenteditable="true"><div class="dotted" style="width: 750px;margin-bottom:2px;"><label>${content.remark}</label></div></div>
+                <div class="left">(18) ความเห็นของนายตรวจลายหัวหน้าแขวง</div><div contenteditable="true"><div class="dotted" style="width: 750px;margin-bottom:2px;"><label>-</label></div></div>
                 <div class="left" ></div><div class="dotted"></div>
                 <div class="left"></div><div class="dotted" ></div>
                 <div class="left"></div><div class="dotted" ></div>
@@ -1502,9 +1536,487 @@ const createRowSS101 = (item) =>
       <td style=" text-align:right ; vertical-align: middle;">${item.type}</td>
   </tr>`;
 
-export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve, reject) => {
+
+const createHtmlChecklistLineItem = (info_this_page, row_table_checklist_line_item) => `
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @page {
+    size: A4;
+    margin:0 ;
+  }
+  .invoice-box {
+      width: 210mm;
+      height: 29.7cm;
+      margin: 0 auto;
+      margin-bottom: 0.5cm;
+      border: 0.1px solid #eee;
+      font-size: 16px;
+      font-family: 'AngsanaUPC', 'MS Sans Serif';   
+  }
+  .invoice-box table {
+      width: 95%;
+      margin: auto;
+      border: 0px solid #eee;
+  }
+  .invoice-box table td {
+      vertical-align: top;
+  }
+  .invoice-box table tr.heading td {
+      background: #eee;
+      border: 1px solid #ddd;
+      font-weight: bold;
+  }
+  .invoice-box table tr.item td {
+      border: 1px solid #eee;
+  }
+  .invoice-box table tr.item2 td {
+      border-bottom: 0px solid #eee;
+  }
+  .invoice-box p {
+      width: 95%;
+  }
+  .invoice-box h2 {
+      margin-top: 1cm;
+      margin-right: 0;
+      margin-left:0;
+      margin-bottom: 0;
+  }
+  .invoice-box h3 {
+      margin: 0;
+  }
+  @media print {
+    html, body {
+      width: 210mm;
+      height: 297mm;  
+      margin-bottom: 0;
+      margin-left: 0;
+      margin-right: 0;
+      margin-top: 0;
+    }
+  }
+  .invoice-box pr {
+    float: right;
+    margin-right: 2.5%;
+  }
+  .invoice-box pl {
+    float: left;
+    margin-left: 2.5%;
+  }
+  .invoice-box pc {
+    float: center;
+  }
+  .invoice-box table tr.top table td.title {
+      line-height: 45px;
+      color: #333;
+  }
+  .invoice-box pp {
+    margin: 0.5cm 0.5cm;
+    float: right;
+  }
+  .invoice-box table tr.information table td {
+      padding-bottom: 40px;
+  }
+  .left,.right{
+    padding:1px 0.1em;
+    background:#fff;
+    float:right;
+  }
+  .left{
+      float:left;
+      clear:both;
+  }
+  div{
+      height:1.22em;
+  }
+  .dotted{
+    border-bottom: 1px dotted grey;
+    margin-bottom:2px;
+  }
+  .paddingFivePX {
+    padding: 5px;
+  }
+</style>
+</head>
+  <body>
+    <div class="invoice-box">
+      <pp>เลขที่เอกสารที่: ${info_this_page.internal_document_id}</pp>
+      <p style=" text-align:center ; vertical-align: middle;">รายการซ่อมบำรุงของสถานี: ${info_this_page.station_name}</p>
+      <table>
+        <thead>
+          <tr class="heading">
+            <td class="paddingFivePX" style="min-width: 10mm; text-align:center ; vertical-align: middle;">#</td>
+            <td class="paddingFivePX" style="min-width: 30mm; text-align:center ; vertical-align: middle;">ACTION</td>
+            <td class="paddingFivePX" style="min-width: 30mm; text-align:center ; vertical-align: middle;">ค่าใช้จ่าย</td>
+            <td class="paddingFivePX" style="min-width: 80mm; vertical-align: middle;">แผน</td>
+            <td class="paddingFivePX" style="min-width: 40mm; vertical-align: middle;">หมายเหตุ</td> 
+          </tr>
+        </thead>
+        <tbody>
+          ${row_table_checklist_line_item}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
+`;
+
+const createRowChecklistLineItem = (row_table_checklist_line_item, index) => (
+  `<tr class="item">
+      <td class="paddingFivePX" style=" text-align:center ; vertical-align: middle;">${index + 1}</td>
+      <td class="paddingFivePX" style=" text-align:left ; vertical-align: middle;"></td>
+      <td class="paddingFivePX" style=" text-align:center ; vertical-align: middle;"></td>
+      <td class="paddingFivePX" style=" vertical-align: middle; max-width: 80mm;">${row_table_checklist_line_item.checklist_name} \\ ${row_table_checklist_line_item.checklist_line_item_name}</td>
+      <td class="paddingFivePX" style=" vertical-align: middle;"></td>
+    </tr>`);
+
+const createHtmlWorkOrderPM = (info_this_page, row_table_checklist_week_1, row_table_checklist_week_2, row_table_checklist_week_3, row_table_checklist_week_4) => `
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @page {
+    size: A4;
+    margin:0 ;
+  }
+  .invoice-box {
+      width: 210mm;
+      height: 29.7cm;
+      margin: 0 auto;
+      margin-bottom: 0.5cm;
+      border: 0.1px solid #eee;
+      font-size: 16px;
+      font-family: 'AngsanaUPC', 'MS Sans Serif';   
+  }
+  .invoice-box table {
+      width: 95%;
+      margin: auto;
+      border: 0px solid #eee;
+  }
+  .invoice-box table td {
+      vertical-align: top;
+  }
+  .invoice-box table tr.heading td {
+      background: #eee;
+      border: 1px solid #ddd;
+      font-weight: bold;
+  }
+  .invoice-box table tr.item td {
+      border: 1px solid #eee;
+  }
+  .invoice-box table tr.item2 td {
+      border-bottom: 0px solid #eee;
+  }
+  .invoice-box p {
+      width: 95%;
+  }
+  .invoice-box h2 {
+      margin-top: 1cm;
+      margin-right: 0;
+      margin-left:0;
+      margin-bottom: 0;
+  }
+  .invoice-box h3 {
+      margin: 0;
+  }
+  @media print {
+    html, body {
+      width: 210mm;
+      height: 297mm;  
+      margin-bottom: 0;
+      margin-left: 0;
+      margin-right: 0;
+      margin-top: 0;
+    }
+  }
+  .invoice-box pr {
+    float: right;
+    margin-right: 2.5%;
+  }
+  .invoice-box pl {
+    float: left;
+    margin-left: 2.5%;
+  }
+  .invoice-box pc {
+    float: center;
+  }
+  .invoice-box table tr.top table td.title {
+      line-height: 45px;
+      color: #333;
+  }
+  .invoice-box pp {
+    margin: 0.5cm 0.5cm;
+    float: right;
+  }
+  .invoice-box table tr.information table td {
+      padding-bottom: 40px;
+  }
+  .left,.right{
+    padding:1px 0.1em;
+    background:#fff;
+    float:right;
+  }
+  .left{
+      float:left;
+      clear:both;
+  }
+  div{
+      height:1.22em;
+  }
+  .dotted{
+    border-bottom: 1px dotted grey;
+    margin-bottom:2px;
+  }
+  .paddingFivePX {
+    padding: 5px;
+  }
+</style>
+</head>
+  <body>
+    <div class="invoice-box">
+      <pp>เลขที่เอกสารที่: ${info_this_page.internal_document_id}</pp>
+      <p style=" text-align:center ; vertical-align: middle;">แผนการซ่อมบำรุงประจำแขวง: ${info_this_page.district_name}</p>
+      <p style=" text-align:center ; margin: 5px 0px; vertical-align: middle;">แผนการซ่อมบำรุงประจำตอน: ${info_this_page.node_name}</p>
+      <p style=" text-align:center ; margin: 5px 0px; vertical-align: middle;">ชื่อแผนการซ่อมบำรุงประจำตอน: ${info_this_page.name}</p>
+      <p style=" text-align:center ; margin: 5px 0px; vertical-align: middle;">แผนการซ่อมบำรุงประจำตอนวันที่: ${info_this_page.created_on.split(".")[0].replace("T", " เวลา ") + " น."}</p>
+
+      <p style=" text-align:center ; margin: 5px 0px; vertical-align: middle;">ประจำสัปดาห์ที่ 1</p>
+      <table>
+        <thead>
+          <tr class="heading">
+            <td class="paddingFivePX" style="min-width: 10mm; text-align:center ; vertical-align: middle;" rowSpan="2">#</td>
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;" rowSpan="2">สถานี</td>
+            <td class="paddingFivePX" style="min-width: 135mm; text-align:center ; vertical-align: middle;" colSpan="3">เครื่องกั้น</td>
+          </tr>
+          <tr class="heading">
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;">สินทรัพย์</td>
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;">แผน</td>
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;">เลข กม.</td>
+          </tr>
+        </thead>
+        <tbody>
+          ${row_table_checklist_week_1 ? row_table_checklist_week_1 : ""}
+        </tbody>
+      </table>
+
+      <p style=" text-align:center ; margin: 50px 0px 5px; vertical-align: middle;">ประจำสัปดาห์ที่ 2</p>
+      <table>
+        <thead>
+          <tr class="heading">
+            <td class="paddingFivePX" style="min-width: 10mm; text-align:center ; vertical-align: middle;" rowSpan="2">#</td>
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;" rowSpan="2">สถานี</td>
+            <td class="paddingFivePX" style="min-width: 135mm; text-align:center ; vertical-align: middle;" colSpan="3">เครื่องกั้น</td>
+          </tr>
+          <tr class="heading">
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;">สินทรัพย์</td>
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;">แผน</td>
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;">เลข กม.</td>
+          </tr>
+        </thead>
+        <tbody>
+          ${row_table_checklist_week_2 ? row_table_checklist_week_2 : ""}
+        </tbody>
+      </table>
+
+      <p style=" text-align:center ; margin: 50px 0px 5px; vertical-align: middle;">ประจำสัปดาห์ที่ 3</p>
+      <table>
+        <thead>
+          <tr class="heading">
+            <td class="paddingFivePX" style="min-width: 10mm; text-align:center ; vertical-align: middle;" rowSpan="2">#</td>
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;" rowSpan="2">สถานี</td>
+            <td class="paddingFivePX" style="min-width: 135mm; text-align:center ; vertical-align: middle;" colSpan="3">เครื่องกั้น</td>
+          </tr>
+          <tr class="heading">
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;">สินทรัพย์</td>
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;">แผน</td>
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;">เลข กม.</td>
+          </tr>
+        </thead>
+        <tbody>
+          ${row_table_checklist_week_3 ? row_table_checklist_week_3 : ""}
+        </tbody>
+      </table>
+
+      <p style=" text-align:center ; margin: 50px 0px 5PX; vertical-align: middle;">ประจำสัปดาห์ที่ 4</p>
+      <table>
+        <thead>
+          <tr class="heading">
+            <td class="paddingFivePX" style="min-width: 10mm; text-align:center ; vertical-align: middle;" rowSpan="2">#</td>
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;" rowSpan="2">สถานี</td>
+            <td class="paddingFivePX" style="min-width: 135mm; text-align:center ; vertical-align: middle;" colSpan="3">เครื่องกั้น</td>
+          </tr>
+          <tr class="heading">
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;">สินทรัพย์</td>
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;">แผน</td>
+            <td class="paddingFivePX" style="min-width: 45mm; text-align:center ; vertical-align: middle;">เลข กม.</td>
+          </tr>
+        </thead>
+        <tbody>
+          ${row_table_checklist_week_4 ? row_table_checklist_week_4 : ""}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
+`;
+
+const createRowWorkOrderPM = (w_list, index) => (
+  `<tr class="item">
+      <td class="paddingFivePX" style=" text-align:center; vertical-align: middle;">${index + 1}</td>
+      <td class="paddingFivePX" style=" vertical-align: middle; max-width: 80mm;">${w_list.internal_item_id ? "-" : w_list.station_th}</td>
+      <td class="paddingFivePX" style=" vertical-align: middle;">${w_list.station_th ? "-" : w_list.internal_item_id}</td>
+      <td class="paddingFivePX" style=" vertical-align: middle; max-width: 80mm;">${w_list.station_th ? "-" : w_list.checklist_name}</td>
+      <td class="paddingFivePX" style=" vertical-align: middle;">${w_list.station_th ? "-" : w_list.x_cross_x_cross_th}</td>
+    </tr>`);
+
+const createHtmlReportPMT = (info_page, htmlTable) => `
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+    @page {
+        size: landscape;
+        margin:0 ;
+      }
+    @media print {
+        html, body {
+            width:29.7cm;
+            height: 210mm ; 
+          margin-bottom: 0;
+          margin-left: 0;
+          margin-right: 0;
+          margin-top: 0;
+        }
+      }
+    
+     .text-right {
+        text-align: right;
+     }
+
+     .invoice-box {
+        width:29.7cm;
+        height: 210mm ;
+           margin: 0 auto;
+           margin-bottom: 0.5cm;
+           border: 0.1px solid #ffffff;
+           font-size: 16px;
+           font-family: 'AngsanaUPC', 'MS Sans Serif';  
+      }
+      .invoice-box table {
+          width: 95%;
+          margin: auto;
+          border: 0px solid #eee;
+      }
+      .invoice-box table td {
+           vertical-align: top;
+      }
+      .invoice-box table tr.heading td {
+           background: #eee;
+           border: 1px solid #ddd;
+           font-weight: bold;
+      }
+      .invoice-box table tr.item td {
+           border: 1px solid #eee;
+      }
+      .invoice-box table tr.item2 td {
+           border-bottom: 0px solid #eee;
+      }
+      .invoice-box p {
+           width: 95%;
+      }
+      .invoice-box h3 {
+           margin-top: 1cm;
+           margin-right: 0;
+           margin-left:0;
+           margin-bottom: 0;
+      }
+      .invoice-box table tr.top table td.title {
+        line-height: 45px;
+        color: #333;
+      }
+
+     .invoice-box pp {
+        margin-top: 0.5cm;
+        float: right;
+        margin: 0;
+        width: 10%;
+     }
+
+     .invoice-box table tr.information table td {
+        padding-bottom: 40px;
+     }
+    </style>
+
+  </head>
+  <body>
+    <div class="invoice-box">
+      <h4  style=" text-align:center ; vertical-align: middle;">สรุปปฏิบัติการทำวาระประจำเดือน ${info_page.mouth_th} พ.ศ.${info_page.year_id}   ${info_page.district_th}</h4>
+      ${htmlTable}
+    </div>
+  </body>
+</html>
+`;
+
+const rowHeadTableNodePMT = (node_th) => `
+  <td style="text-align:center; vertical-align: middle;" colSpan="2">${node_th}</td>
+`
+
+const rowHeadTablePlanPMT = () => `
+  <td style="text-align:center; vertical-align: middle;">แผน</td>
+  <td style="text-align:center; vertical-align: middle;">ผลงาน</td>
+`
+
+const createRowReportPMT = (item, index, plan_checked, total_plan, total_checked) =>
+  `<tr class="item">
+    <td style="text-align:center; vertical-align: middle;">${index}</td>
+    <td style="vertical-align: middle;">${item.checklist_name}</td>
+    <td style="text-align:center; vertical-align: middle;">สถานี</td>
+    ${plan_checked}
+    <td style="text-align:center; vertical-align: middle;">${total_plan}</td>
+    <td style="text-align:center; vertical-align: middle;">${total_checked}</td>
+    <td style="text-align:center; vertical-align: middle;"></td>
+  </tr>`;
+
+  const createRowPlanCheckedReportPMT = (plan_checked) =>
+  `
+    <td style="text-align:center; vertical-align: middle;">${plan_checked.checklist_count}</td>
+    <td style="text-align:center; vertical-align: middle;">${plan_checked.completed_count}</td>
+  `;
+
+const createTableReportPMT = (head, list_head, list_plan, row_body) => `
+  <table cellpadding="0" cellspacing="0" >
+    <thead>
+      <tr class="heading">
+        <td style="width: 2%; text-align:center ; vertical-align: middle;"  rowspan="3">ลำดับ</td>
+        <td style="text-align:center ; vertical-align: middle;" rowspan="3">รายละเอียด</td>
+        <td style="text-align:center ; vertical-align: middle;" rowspan="3">หน่วย</td>
+
+        <td style="text-align:center; vertical-align: middle;" colSpan=${head.length * 2}>การดำเนินการ</td>
+        <td style="text-align:center; vertical-align: middle;" colSpan="2">สรุปรวม</td> 
+        
+        <td style="text-align:center; vertical-align: middle;" rowspan="3">หมายเหตุ</td>
+      </tr>
+      <tr class="heading">
+          ${list_head}
+          <td style="text-align:center; vertical-align: middle;" colSpan="2">แขวง</td>
+      </tr>
+      <tr class="heading">
+          ${list_plan}
+          <td style="text-align:center; vertical-align: middle;">แผน</td>
+          <td style="text-align:center; vertical-align: middle;">ผลงาน</td>
+      </tr>
+    </thead>
+    <tbody>
+      ${row_body}
+    </tbody>
+  </table>
+`;
+
+export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((resolve, reject) => {
 
   if (routeLocation === '/spare-report-s-1') {
+    // console.log("valuesContext", valuesContext)
     let newDate = new Date()
     let date = newDate.getDate();
     let mouth = newDate.getMonth() + 1;
@@ -1516,8 +2028,9 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
     mouth = valuesContext.mouth.find((element) => {
       return element.id === mouth;
     })
+    // console.log("valuesContext.line_items", valuesContext.line_items)
     let create_on = date + " " + mouth.mouth + " " + year;
-    let filterResult = valuesContext.line_items.sort(function (a, b) {
+    let filterResult = valuesContext.line_item_shows.sort(function (a, b) {
       return parseInt(a.internal_item_id) - parseInt(b.internal_item_id);
     })
     let group_type = []
@@ -1548,22 +2061,23 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
       var line_number = 1
       var total = 0;
       var keyss = group_type[i];
+      // console.log("filterResult_type", filterResult_type)
       filterResult_type.map((item) => {
         var myObj = {
           "item_id": line_number,
-          "description": item.item_description_th,
+          "description": item.item_description,
           "internal_item_id": item.internal_item_id,
           "unit": item.uom_name,
-          "quantity": item.current_unit_count ? item.current_unit_count.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : item.ending_unit_count,
-          "uom_group_id": item.pricing !== undefined ? (item.pricing.average_price && item.pricing.average_price.toFixed(4) * ((item.current_unit_count - item.committed_unit_count) && (item.current_unit_count - item.committed_unit_count)).toFixed(2)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : item.end_state_in_total_price,
-          "per_unit_price": item.pricing !== undefined ? item.pricing.average_price.toFixed(4) : item.end_state_in_total_price / item.current_ending_unit_count ? item.end_state_in_total_price / item.current_ending_unit_count : 0
+          "quantity": item.quantity,
+          "total": item.total,
+          "per_unit_price": item.per_unit_price
         };
         line_number = line_number + 1;
-        total = total + item.committed_unit_count
+        total = total + parseFloat(item.total.replace(/,/g, ''))
         line_items.push(myObj)
       })
       r[keyss] = {
-        "Totol": total,
+        "Totol": total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
         "Item": line_items
       }
     }
@@ -1578,7 +2092,7 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
         "internal_item_id": "เลขที่สิ่งของคงคลัง",
         "unit": "หน่วย",
         "quantity": "จำนวนเหลือ ณ วันนี้",
-        "uom_group_id": "รวมเป็นเงิน",
+        "total": "รวมเป็นเงิน",
         "per_unit_price": "ราคา ต่อหน่วย"
       },
       "ItemInWarehouse": r
@@ -1617,8 +2131,7 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
     })
     const html = createHtmlS1(pageAll);
     return resolve(html);
-  }
-  else if (routeLocation === '/spare-inventory-transfer') {
+  } else if (routeLocation === '/spare-inventory-transfer') {
 
     console.log(valuesContext)
     let data = [];
@@ -1721,8 +2234,7 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
 
     const html = createHtmlS16_46(pageAll);
     return resolve(html);
-  }
-  else if (routeLocation === '/spare-report-b22') {
+  } else if (routeLocation === '/spare-report-b22') {
     // console.log("valuesContext", valuesContext)
     let data = [];
     let p = 1
@@ -1741,27 +2253,27 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
     let create_on = date + " " + mouth.mouth + " " + year;
 
     valuesContext.new_line_items_pdf.map(lineItem => {
-        data.push({
-          "item_id": p,
-          "description": lineItem.item_description,
+      data.push({
+        "item_id": p,
+        "description": lineItem.item_description,
 
-          "unit": lineItem.uom_name,
+        "unit": lineItem.uom_name,
 
-          "left_month_unit": lineItem.begin_unit_count,
-          "left_month_price": lineItem.begin_state_in_total_price,
+        "left_month_unit": lineItem.begin_unit_count,
+        "left_month_price": lineItem.begin_state_in_total_price,
 
-          "get_month_unit": lineItem.state_in_unit_count,
-          "get_month_price": lineItem.end_state_in_total_price,
+        "get_month_unit": lineItem.state_in_unit_count,
+        "get_month_price": lineItem.end_state_in_total_price,
 
-          "pay_month_unit": lineItem.state_out_unit_count,
-          "pay_month_price": lineItem.end_state_out_total_price,
+        "pay_month_unit": lineItem.state_out_unit_count,
+        "pay_month_price": lineItem.end_state_out_total_price,
 
-          "ending_unit_count": lineItem.ending_unit_count,
-          "ending_unit_count_total": "-",
-          
-          "type": lineItem.accounting_type
-        });
-        p = p + 1;
+        "ending_unit_count": lineItem.ending_unit_count,
+        "ending_unit_count_total": lineItem.ending_unit_count_total,
+
+        "type": lineItem.accounting_type
+      });
+      p = p + 1;
     })
 
     const data_json = {
@@ -1860,10 +2372,8 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
     })
     const html = createHtmlB22(pageAll);
     return resolve(html);
-  }
-  else if (routeLocation === '/pmt-ss-101') {
+  } else if (routeLocation === '/pmt-ss-101') {
 
-    console.log(valuesContext)
     const data_json = valuesContext;
     let pageAll = ``;
 
@@ -1897,21 +2407,168 @@ export const exportPDF = (routeLocation, valuesContext) => new Promise((resolve,
 
     for (let i = 0; i < pageSS101.length; i++) {
       const rows = pageSS101[i].map(createRowSS101).join('');
-      // console.log(rows)
       const table = createTableSS101(data_json.Headers, rows);
       const tablePage2 = createPageS101Page2(table, data_json.CreateOn, data_json.Content)
       pageAll = pageAll + tablePage2
     }
-
-
-    // const tablePage3 = createPageS101Page3(data_json.CreateOn, data_json.Content)
-    // pageAll = pageAll + tablePage3
 
     const html = createHtmlS101(pageAll);
     return resolve(html);
 
 
 
+  } else if (routeLocation === '/pmt-all-checklist-fixed-asset') {
+    // console.log("valuesContext", valuesContext)
+    let info_this_page = {
+      "internal_document_id": valuesContext.internal_document_id,
+      "station_name": ''
+    }
+    let list_body_table = valuesContext.checklist_line_item;
+
+    let stations = fact.stations.items;
+    let station = stations.find(station => `${station.station_id}` === `${valuesContext.station_id}`);
+    if (station) {
+      info_this_page.station_name = station.name
+    }
+
+    let row;
+    list_body_table.map((list_body_table, index) => {
+      if (row) {
+        row = row + createRowChecklistLineItem(list_body_table, index)
+      } else {
+        row = createRowChecklistLineItem(list_body_table, index)
+      }
+    })
+    const html = createHtmlChecklistLineItem(info_this_page, row);
+    return resolve(html);
+
+  } else if (routeLocation === '/pmt-fixed-asset') {
+    console.log("valuesContext", valuesContext)
+    let info_this_page = {
+      "internal_document_id": valuesContext.internal_document_id,
+      "created_on": valuesContext.created_on,
+      "name": valuesContext.name,
+      "district_name": '',
+      "node_name": ''
+    }
+
+    let districts = fact.districts.items;
+    let district = districts.find(district => `${district.district_id}` === `${valuesContext.district_id}`);
+
+    let nodes = fact.nodes.items;
+    let node = nodes.find(node => `${node.node_id}` === `${valuesContext.node_id}`);
+
+    if (district && node) {
+      info_this_page.district_name = district.name
+      info_this_page.node_name = node.name
+    }
+
+    let row_week1;
+    valuesContext.w1_list.map((w1_list, index) => {
+      if (row_week1) {
+        row_week1 = row_week1 + createRowWorkOrderPM(w1_list, index)
+      } else {
+        row_week1 = createRowWorkOrderPM(w1_list, index)
+      }
+    })
+
+    let row_week2;
+    valuesContext.w2_list.map((w2_list, index) => {
+      if (row_week2) {
+        row_week2 = row_week2 + createRowWorkOrderPM(w2_list, index)
+      } else {
+        row_week2 = createRowWorkOrderPM(w2_list, index)
+      }
+    })
+
+    let row_week3;
+    valuesContext.w3_list.map((w3_list, index) => {
+      if (row_week3) {
+        row_week3 = row_week3 + createRowWorkOrderPM(w3_list, index)
+      } else {
+        row_week3 = createRowWorkOrderPM(w3_list, index)
+      }
+    })
+
+    let row_week4;
+    valuesContext.w4_list.map((w4_list, index) => {
+      if (row_week4) {
+        row_week4 = row_week4 + createRowWorkOrderPM(w4_list, index)
+      } else {
+        row_week4 = createRowWorkOrderPM(w4_list, index)
+      }
+    })
+
+    const html = createHtmlWorkOrderPM(info_this_page, row_week1, row_week2, row_week3, row_week4);
+    return resolve(html);
+  } else if (routeLocation === '/pmt-report') {
+    // console.log("valuesContext", valuesContext)
+    let districts = fact.districts.items;
+    let district = districts.find(district => `${district.district_id}` === `${valuesContext.district_id}`);
+
+    let mouths = valuesContext.mouth;
+    let mouthLet = mouths.find(mouth => `${mouth.id}` === `${valuesContext.mouth_id}`);
+
+    let info_page
+    if (mouthLet && district) {
+      info_page = {
+        "district_th": district.name,
+        "mouth_th": mouthLet.mouth,
+        "year_id": valuesContext.year_id
+      }
+    }
+    let list_head_tablereport_pmt = valuesContext.head_table
+    let list_body_table_report_pmt = valuesContext.checklist_name_unique
+
+    let list_head;
+    let list_plan;
+    list_head_tablereport_pmt.map((list_head_tablereport_pmt, index) => {
+      if (list_head && list_plan) {
+        list_head = list_head + rowHeadTableNodePMT(list_head_tablereport_pmt.node_th, index)
+        list_plan = list_plan + rowHeadTablePlanPMT()
+      } else {
+        list_head = rowHeadTableNodePMT(list_head_tablereport_pmt.node_th, index)
+        list_plan = rowHeadTablePlanPMT()
+      }
+    })
+
+    let row_body;
+    list_body_table_report_pmt.map((list, index) => {
+      // console.log("list", list)
+      let indexPlus = index + 1;
+      let plan_checked;
+      if (row_body) {
+        let total_plan = 0;
+        let total_checked = 0;
+        for (var i = 0; i < list_head_tablereport_pmt.length; i++) {
+          total_plan = total_plan + list[i].checklist_count;
+          total_checked = total_checked + list[i].completed_count;
+          if (plan_checked) {
+            plan_checked = plan_checked + createRowPlanCheckedReportPMT(list[i])
+          } else {
+            plan_checked = createRowPlanCheckedReportPMT(list[i])
+          }
+        }
+        row_body = row_body + createRowReportPMT(list, indexPlus, plan_checked, total_plan, total_checked)
+      } else {
+        let total_plan = 0;
+        let total_checked = 0;
+        for (var i = 0; i < list_head_tablereport_pmt.length; i++) {
+          total_plan = total_plan + list[i].checklist_count;
+          total_checked = total_checked + list[i].completed_count;
+          if (plan_checked) {
+            plan_checked = plan_checked + createRowPlanCheckedReportPMT(list[i])
+          } else {
+            plan_checked = createRowPlanCheckedReportPMT(list[i])
+          }
+        }
+        row_body = createRowReportPMT(list, indexPlus, plan_checked, total_plan, total_checked)
+      }
+    })
+
+    let htmlTable = createTableReportPMT(list_head_tablereport_pmt, list_head, list_plan, row_body)
+    const html = createHtmlReportPMT(info_page, htmlTable);
+    return resolve(html);
   }
 
 })

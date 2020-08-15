@@ -27,16 +27,15 @@ const GoodsReceiptComponent = (props) => {
     useToolbarInitializer(TOOLBAR_MODE.NONE_HOME, DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM);
     useTokenInitializer();
     useFactInitializer();
-    useFooterInitializer(DOCUMENT_TYPE_ID.CREATE_CHECKLIST_LINE_ITEM);
     const loggedIn = useSelector(state => state.token.isLoggedIn);
 
     return (
         <>
-            {/* {!loggedIn ? <Redirect to="/" /> : null} */}
-            <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "130vh" } : {}}>
+            {!loggedIn ? <Redirect to="/" /> : null}
+            <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "100vh" } : {}}>
                 <TopContent />
                 <BottomContent />
-                <Footer />
+                <Footer setFieldValue={setFieldValue}/>
             </form>
         </>
     )
@@ -59,9 +58,9 @@ const EnhancedGoodsReceiptComponent = withFormik({
     mapPropsToValues: (props) => ({
         // Field ที่ให้ User กรอก
         // Top Content
-        checklist_id: '',
+        checklist_id: 1,
         checklist_line_item: '',
-        checklist_group_id: '',
+        checklist_group_id: 1,
 
         // Bottom Content
         checklist_line_item: initialRowsEquipmentPlan(),

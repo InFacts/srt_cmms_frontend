@@ -5,7 +5,6 @@ import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
 import { API_URL_DATABASE } from '../../config_url.js';
 
-import FormInput from '../common/form-input'
 import TextInput from '../common/formik-text-input'
 import NumberInput from '../common/formik-number-input';
 import SelectNoChildrenInput from '../common/formik-select-no-children';
@@ -14,21 +13,13 @@ import PopupModalChecklist from '../common/popup-modal-checklist'
 import { useFormikContext, useField } from 'formik';
 
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
-import {
-  getNumberFromEscapedString, fetchGoodsOnhandDataForItemmasterData, DOCUMENT_TYPE_ID,
-  getDocumentbyInternalDocumentID, validatedataDocumentField
-} from '../../helper';
+import { validatedataDocumentField, changeTheam } from '../../helper';
 
 import { FACTS } from '../../redux/modules/api/fact.js';
 import useFetchPernissionUser from '../../hooks/fetch-permission-user';
 
 import BgBlue from '../../../images/pmt/bg_blue.jpg';
-import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
-const FormLabel = ({ children }) => (
-  <div className={`grid_2`}>
-    <p className="top-text">{children}</p>
-  </div>
-);
+
 const FormTitle = ({ children }) => (
   <h4 className="head-title">{children}</h4>
 );
@@ -36,13 +27,7 @@ const FormTitle = ({ children }) => (
 const TopContent = (props) => {
   const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm, resetForm } = useFormikContext();
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
-  const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
-  const factEquipment = useSelector((state) => ({ ...state.api.fact.equipment }), shallowEqual);
-  const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
-  const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
-  const factEquipmentStatus = useSelector((state) => ({ ...state.api.fact[FACTS.EQUIPMENT_STATUS] }), shallowEqual);
-  const factChecklistCustomGroup = useSelector((state) => ({ ...state.api.fact[FACTS.CHECKLIST_CUSTOM_GROUP] }), shallowEqual);
-  const factChecklistEquipmentGroup = useSelector((state) => ({ ...state.api.fact[FACTS.CHECKLIST_EQUIPMENT_GROUP] }), shallowEqual);
+  const factChecklistGroup = useSelector((state) => ({ ...state.api.fact[FACTS.CHECKLIST_GROUP] }), shallowEqual);
   const factChecklist = useSelector((state) => ({ ...state.api.fact.checklist }), shallowEqual);
 
   // Fetch permissiton
@@ -60,7 +45,7 @@ const TopContent = (props) => {
       .then((res) => {
         console.log("I Got data", res.data)
         if (res.data.checklist_line_item.name === name) { // If input document ID exists
-          if (toolbar.mode === TOOLBAR_MODE.SEARCH && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value
+          if (toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) { //If Mode Search, needs to set value
             if (name !== values.name) {
 
               // setFieldValue("active", 2, false) // demo
@@ -70,7 +55,6 @@ const TopContent = (props) => {
               setFieldValue("freq", res.data.checklist_line_item.freq, false)
               setFieldValue("freq_unit_id", res.data.checklist_line_item.freq_unit_id, false)
               setFieldValue("checklist_group_id", res.data.checklist_line_item.checklist.checklist_group_id, false)
-              setFieldValue("checklist_id", res.data.checklist_line_item.checklist.checklist_id, false)
               setFieldValue("modeEdit", values.line_position_permission[0].module_admin === true ? true : false, false)
 
               for (var i = 0; i < res.data.checklist_line_item.checklist_line_item_use_equipment.length; i++) {
@@ -105,7 +89,7 @@ const TopContent = (props) => {
         }
       })
       .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
-        if (toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
+        if (toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH) { //If Mode Search, invalid Document ID
           error = 'Invalid Document ID';
           console.log("err", err.response)
         }//If mode add, ok
@@ -136,7 +120,7 @@ const TopContent = (props) => {
               </div>
               <div className="grid_3 alpha omega pull_0">
                 <TextInput name='name' validate={validateNameChecklist}
-                  searchable={toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalChecklistLineItem" tabIndex="1" />
+                  searchable={toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} ariaControls="modalChecklistLineItem" tabIndex="1" />
               </div>
 
             </div>
@@ -164,14 +148,11 @@ const TopContent = (props) => {
                 <p className="top-text">กลุ่มการทำวาระ</p>
               </div>
               <div className="grid_3 alpha omega pull_0">
-                <SelectNoChildrenInput name="checklist_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="3"
+                <SelectNoChildrenInput name="checklist_group_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} tabIndex="3"
                   validate={validateChecklistGroupIDField} cssStyle={{ left: "-160px", top: "10px" }} >
                   <option value=''></option>
-                  {factChecklistEquipmentGroup.items.map((factChecklistEquipmentGroup) => {
-                    return (<option value={factChecklistEquipmentGroup.checklist_group_id}>{factChecklistEquipmentGroup.name}</option>)
-                  })}
-                  {factChecklistCustomGroup.items.map((factChecklistCustomGroup) => {
-                    return (<option value={factChecklistCustomGroup.checklist_group_id}>{factChecklistCustomGroup.checklist_group_name}</option>)
+                  {factChecklistGroup.items.map((factChecklistGroup) => {
+                    return (<option value={factChecklistGroup.checklist_group_id}>{factChecklistGroup.name}</option>)
                   })}
                 </SelectNoChildrenInput>
               </div>
@@ -185,7 +166,7 @@ const TopContent = (props) => {
                 <p className="top-text">ชนิดการทำวาระ</p>
               </div>
               <div className="grid_3 alpha omega pull_0">
-                <SelectNoChildrenInput name="checklist_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="4"
+                <SelectNoChildrenInput name="checklist_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} tabIndex="4"
                   validate={validateChecklistIDField} cssStyle={{ left: "-160px", top: "10px" }}>
                   <option value=''></option>
                   {factChecklist.items.map((factChecklist) => {
@@ -205,13 +186,13 @@ const TopContent = (props) => {
               </div>
               <div className="grid_3 alpha omega pull_0">
                 <NumberInput name="freq" step={1} tabIndex="5" validate={validateFrepField}
-                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} cssStyle={{ left: "60px", top: "-5px" }} />
+                  disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} cssStyle={{ left: "60px", top: "-5px" }} />
               </div>
               <div className="grid_1 omega pull_0">
                 <p className="top-text">ครั้งต่อ</p>
               </div>
               <div className="grid_2 alpha omega pull_0">
-                <SelectNoChildrenInput name="freq_unit_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="6"
+                <SelectNoChildrenInput name="freq_unit_id" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} tabIndex="6"
                   validate={validateFrepUnitIDField} cssStyle={{ left: "-80px", top: "10px" }}>
                   <option value=''></option>
                   <option value='1'>วัน</option>

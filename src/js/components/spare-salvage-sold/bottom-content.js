@@ -16,7 +16,7 @@ import { useFormikContext } from 'formik';
 import { FACTS } from '../../redux/modules/api/fact.js';
 
 import {
-  fetchGoodsOnhandData, getNumberFromEscapedString, getLotFromQty, weightedAverage,
+  fetchGoodsOnhandData, getNumberFromEscapedString, getLotFromQty, weightedAverage, rawLotFromQty,
   sumTotalLineItemHelper, sumTotalHelper, DOCUMENT_STATUS, getUserIDFromEmployeeID, checkBooleanForEditHelper
 } from '../../helper';
 import PopupModalNoPart from '../common/popup-modal-nopart'
@@ -38,7 +38,7 @@ const BottomContent = (props) => {
 
   const validateLineNumberInternalItemIDField = (fieldName, internal_item_id, index) => new Promise(resolve => {
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
-
+    internal_item_id = internal_item_id.toUpperCase()
     if (values.line_items[index].internal_item_id === internal_item_id) {
       return resolve();
     }
@@ -56,6 +56,7 @@ const BottomContent = (props) => {
     // console.log(item)
     if (item) {
       if (item.item_type_id === 1) {
+        setFieldValue(fieldName + `.internal_item_id`, `${internal_item_id}`, false);
         setFieldValue(fieldName + `.item_type_id`, `${item.item_type_id}`, false);
         setFieldValue(fieldName + `.description`, `${item.description}`, false);
         setFieldValue(fieldName + `.quantity`, 0, false);
@@ -86,7 +87,7 @@ const BottomContent = (props) => {
           console.log("at_source", at_source)
           if (at_source) {
             setFieldValue(`line_items[${index}].at_source`, [at_source], false);
-            setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(at_source.pricing.fifo, values.line_items[index].quantity)), false);
+            setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(rawLotFromQty(at_source.pricing.fifo, at_source.current_unit_count), values.line_items[index].quantity)), false);
             return resolve();
           }
           else {
@@ -105,15 +106,16 @@ const BottomContent = (props) => {
   const validateLineNumberQuatityItemIDField = (fieldName, quantity, index) => {
     // internal_item_id = `${internal_item_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
     //     By default Trigger every line_item, so need to check if the internal_item_id changes ourselves
-    // if (values.line_items[index].quantity === quantity) {
-    //   return;
-    // }
+    if (values.line_items[index].quantity === quantity) {
+      return;
+    }
     if (quantity === "") {
       return;
     }
 
     if (quantity !== 0) {
       setFieldValue(fieldName, quantity, false);
+      setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(rawLotFromQty(values.line_items[index].at_source[0].pricing.fifo, values.line_items[index].at_source[0].current_unit_count), quantity)), false);
       return;
     } else {
       return 'Invalid Quantity Line Item';
@@ -150,7 +152,7 @@ const BottomContent = (props) => {
         if (at_source) {
           setFieldValue(`line_items[${index}].at_source`, [at_source], false);
           setFieldValue(`line_items[${index}].item_status_id`, item_status_id, false);
-          setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(at_source.pricing.fifo, values.line_items[index].quantity)), false);
+          setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(rawLotFromQty(at_source.pricing.fifo, at_source.current_unit_count), values.line_items[index].quantity)), false);
         }
         else {
           console.log(" NOT FOUND AT SOURCES FOR CALCULATE FIFO")
@@ -188,7 +190,7 @@ const BottomContent = (props) => {
               />
             </div>
 
-            <div className="container_12 mt-3">
+            <div className="container_12">
               <div className="grid_1 float-right"><p className="cancel-default float-right">บาท.</p></div>
               <div className="grid_3 float-right push_0">
                 <input type="text" className="cancel-default" value={sumTotal(values.line_items)} disabled="disabled"></input>

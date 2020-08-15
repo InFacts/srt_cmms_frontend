@@ -9,6 +9,7 @@ import { FACTS } from '../../redux/modules/api/fact.js'
 import { useSelector, shallowEqual } from 'react-redux';
 import SelectNoChildrenInput from '../common/formik-select-no-children';
 import TextInput from '../common/formik-text-input'
+import EmailInput from '../common/formik-email-input'
 
 import '../../../vender/fontawesome-free/css/all.css';
 import '../../../css/style-register.css';
@@ -32,15 +33,14 @@ const Register = (props) => {
         {
             "create_account": true,
             "data": {
-                "user_id": parseInt(last_user_id + 1), 
                 "employee_id": values.employee_id,
                 "username": values.username,
                 "email": values.email,
                 "firstname_th": values.firstname,
                 "lastname_th": values.lastname,
                 "password": values.password,
-                "position_id": values.position_id
-            }
+            },
+            "position": [parseInt(values.position_id)]
         }
         console.log("Register", register)
         axios.post(`http://${API_URL_DATABASE}:${API_PORT_DATABASE}/auth/create-account`, register, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
@@ -48,15 +48,14 @@ const Register = (props) => {
                 console.log(res);
                 setAlertMessage(true)
             }).catch(function (err) {
+                console.log("err", err.response)
                 setAlertMessage(false)
             })
     }
 
     const validateFirstnameField = (...args) => validatedataDocumentField("firstname", setFieldValue, ...args)
     const validateLastnameField = (...args) => validatedataDocumentField("lastname", setFieldValue, ...args)
-    const validateEmailField = (...args) => validatedataDocumentField("email", setFieldValue, ...args)
     const validatePositionField = (...args) => validatedataDocumentField("position_id", setFieldValue, ...args)
-    const validatePasswordField = (...args) => validatedataDocumentField("password", setFieldValue, ...args)
 
     const validateEmployeeIDField = (employee_id) => {
         if (!values.employee_id) {
@@ -86,6 +85,28 @@ const Register = (props) => {
         }
     }
 
+    const validateEmailField = (email) => {
+        if (!email) {
+            return 'Require';
+        }
+        if (email.search("@") !== -1) {
+            return;
+        } else {
+            return 'กรุณากรอก Email ให้ถูกต้อง';
+        }
+    }
+
+    const validatePasswordField = (password) => {
+        if (!password) {
+            return 'Require';
+        }
+        if (password.length >= 6) {
+            return;
+        } else {
+            return 'ตัวอักษรอย่างน้อย 6 ตัว';
+        }
+    }
+
     const validateConfirmpasswordField = (confirmpassword) => {
         if (!values.confirmpassword) {
             return 'Require';
@@ -104,116 +125,116 @@ const Register = (props) => {
                     <div className="container_12 from-register">
                         <h4 className="head-register">สร้างผู้ใช้งานภายในระบบ</h4>
 
-                        <div id={changeTheam() === true ? "blackground-white" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "350px", paddingTop: "10px" } : {}} >
+                        <div id={changeTheam() === true ? "blackground-white" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "410px", paddingTop: "10px" } : {}} >
 
-                        <div className="grid_5">
-                            <div className="card-profile">
-                                <div className="card-profile-header">ข้อมูลส่วนตัว</div>
-                                <div className="card-profile-main" style={{ height: "300px" }}>
+                            <div className="grid_5">
+                                <div className="card-profile">
+                                    <div className="card-profile-header">ข้อมูลส่วนตัว</div>
+                                    <div className="card-profile-main" style={{ height: "270px" }}>
 
-                                    <div className="container_12">
-                                        <div className="container_12"><p className="cancel-default">รหัสพนักงาน</p></div>
-                                        <div className="grid_4 alpha omega">
-                                            <TextInput name='employee_id'
-                                                validate={validateEmployeeIDField}
-                                                tabIndex="1" />
+                                        <div className="container_12">
+                                            <div className="container_12"><p className="cancel-default">รหัสพนักงาน</p></div>
+                                            <div className="grid_4 alpha omega">
+                                                <TextInput name='employee_id'
+                                                    validate={validateEmployeeIDField}
+                                                    tabIndex="1" />
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div className="container_12">
-                                        <div className="container_12"><p className="cancel-default">Username</p></div>
-                                        <div className="grid_4 alpha omega">
-                                            <TextInput name='username'
-                                                validate={validateUsernameField}
-                                                tabIndex="1" />
+                                        <div className="container_12">
+                                            <div className="container_12"><p className="cancel-default">Username</p></div>
+                                            <div className="grid_4 alpha omega">
+                                                <TextInput name='username'
+                                                    validate={validateUsernameField}
+                                                    tabIndex="1" />
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div className="container_12">
-                                        <div className="container_12"><p className="cancel-default">รหัสผ่าน</p></div>
-                                        <div className="grid_4 alpha omega">
-                                            <TextInput name='password'
-                                                type="password"
-                                                validate={validatePasswordField}
-                                                tabIndex="1" />
+                                        <div className="container_12">
+                                            <div className="container_12"><p className="cancel-default">รหัสผ่าน</p></div>
+                                            <div className="grid_4 alpha omega">
+                                                <TextInput name='password'
+                                                    type="password"
+                                                    validate={validatePasswordField}
+                                                    tabIndex="1" />
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div className="container_12">
-                                        <div className="container_12"><p className="cancel-default">ยืนยันรหัสผ่าน</p></div>
-                                        <div className="grid_4 alpha omega">
-                                            <TextInput name='confirmpassword'
-                                                type="password"
-                                                validate={validateConfirmpasswordField}
-                                                tabIndex="1" />
+                                        <div className="container_12">
+                                            <div className="container_12"><p className="cancel-default">ยืนยันรหัสผ่าน</p></div>
+                                            <div className="grid_4 alpha omega">
+                                                <TextInput name='confirmpassword'
+                                                    type="password"
+                                                    validate={validateConfirmpasswordField}
+                                                    tabIndex="1" />
+                                            </div>
                                         </div>
-                                    </div>
 
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div className="grid_5 float-right">
-                            <div className="card-profile">
-                                <div className="card-profile-header">ตำแหน่งงาน</div>
-                                <div className="card-profile-main" style={{ height: "300px" }}>
+                            <div className="grid_5 float-right">
+                                <div className="card-profile">
+                                    <div className="card-profile-header">ตำแหน่งงาน</div>
+                                    <div className="card-profile-main" style={{ height: "270px" }}>
 
-                                    <div className="container_12">
-                                        <div className="container_12"><p className="cancel-default">ชื่อ</p></div>
-                                        <div className="grid_4 alpha omega">
-                                            <TextInput name='firstname'
-                                                validate={validateFirstnameField}
-                                                tabIndex="1" />
+                                        <div className="container_12">
+                                            <div className="container_12"><p className="cancel-default">ชื่อ</p></div>
+                                            <div className="grid_4 alpha omega">
+                                                <TextInput name='firstname'
+                                                    validate={validateFirstnameField}
+                                                    tabIndex="1" />
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div className="container_12">
-                                        <div className="container_12"><p className="cancel-default">นามสกุล</p></div>
-                                        <div className="grid_4 alpha omega">
-                                            <TextInput name='lastname'
-                                                validate={validateLastnameField}
-                                                tabIndex="1" />
+                                        <div className="container_12">
+                                            <div className="container_12"><p className="cancel-default">นามสกุล</p></div>
+                                            <div className="grid_4 alpha omega">
+                                                <TextInput name='lastname'
+                                                    validate={validateLastnameField}
+                                                    tabIndex="1" />
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div className="container_12">
-                                        <div className="container_12"><p className="cancel-default">Email</p></div>
-                                        <div className="grid_4 alpha omega">
-                                            <TextInput name='email'
-                                                type="email"
-                                                validate={validateEmailField}
-                                                tabIndex="1" />
+                                        <div className="container_12">
+                                            <div className="container_12"><p className="cancel-default">Email</p></div>
+                                            <div className="grid_4 alpha omega">
+                                                <EmailInput name='email'
+                                                    validate={validateEmailField}
+                                                    tabIndex="1" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="container_12">
-                                        <div className="container_12"><p className="cancel-default">หน่วยงาน</p></div>
-                                        <div className="grid_4 alpha omega ">
-                                            <SelectNoChildrenInput name="position_id" validate={validatePositionField} cssStyle={{ left: "-240px", top: "14px" }}>
-                                                <option value=''></option>
-                                                {factPosition.items.map(function ({ position_id, name }) {
-                                                    return <option value={position_id} key={position_id}> {name} </option>
-                                                })}
-                                            </SelectNoChildrenInput>
+                                        <div className="container_12">
+                                            <div className="container_12"><p className="cancel-default">หน่วยงาน</p></div>
+                                            <div className="grid_4 alpha omega ">
+                                                <SelectNoChildrenInput name="position_id" validate={validatePositionField} cssStyle={{ left: "-240px", top: "14px" }}>
+                                                    <option value=''></option>
+                                                    {factPosition.items.map(function ({ position_id, name }) {
+                                                        if (name !== "SERVER") {
+                                                            return <option value={position_id} key={position_id}> {name} </option>
+                                                        }
+                                                    })}
+                                                </SelectNoChildrenInput>
+                                            </div>
                                         </div>
-                                    </div>
 
+                                    </div>
                                 </div>
                             </div>
+
+                            {alertMessage === true || alertMessage === false ?
+                                <div className={`grid_10 alert ${alertMessage === false ? `red` : ''}`} style={{ width: "835px" }}>
+                                    <span className="closebtn" onClick={() => setAlertMessage("1")}>&times;</span>
+                                    {alertMessage === false ? "ล้มเหลว! สร้างผู้ใช้งานไม่สำเร็จ กรุณาเช็คข้อมูลให้ถูกต้อง" : "สร้างผู้ใช้งานสำเร็จ"}
+                                </div> : null}
+
+                            <div className="grid_10 " style={{ "text-align": "center" }}>
+                                <button className="button-red from-register-button" style={{ "width": "300px" }} type="submit">สร้างผู้ใช้งาน</button>
+                            </div>
+
                         </div>
 
-                    </div>
-                    {
-                        alertMessage === true || alertMessage === false
-                            ?
-                            <div className={`alert ${alertMessage === false ? `red` : ''} mt-1`}>
-                                <span className="closebtn" onClick={() => setAlertMessage("1")}>&times;</span>
-                            Success! Indicates a successful or positive action.</div>
-                            :
-                            null
-                    }
-                    <div className="grid_10 " style={{ "text-align": "center" }}>
-                        <button className="button-red from-register-button" style={{ "width": "300px" }} type="submit">สร้างผู้ใช้งาน</button>
-                    </div>
                     </div>
                 </form>
             </div>

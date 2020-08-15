@@ -156,21 +156,22 @@ const TopContent = (props) => {
   });
   
   useEffect(() => {
-    values.line_item_shows = [];
+    let line_item_shows = [];
     values.line_items.map((line_item) => {
-      values.line_item_shows.push({
+      line_item_shows.push({
         "warehouse_name": line_item.warehouse_name,
         "item_id": line_item.item_id,
         "internal_item_id": line_item.internal_item_id,
         "item_description": line_item.item_description,
         "uom_name": line_item.uom_name,
         "item_status_description_th": line_item.item_status_description_th,
-        "quantity": line_item.pricing !== undefined ? line_item.current_unit_count - line_item.committed_unit_count : line_item.ending_unit_count,
-        "total": line_item.pricing !== undefined ? (line_item.pricing.average_price * (line_item.current_unit_count - line_item.committed_unit_count)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : line_item.end_state_in_total_price,
-        "per_unit_price": line_item.pricing !== undefined ? line_item.pricing.average_price ? line_item.pricing.average_price.toFixed(4) : 0 : line_item.end_state_in_total_price / line_item.current_ending_unit_count ? line_item.end_state_in_total_price / line_item.current_ending_unit_count : 0
+        "quantity": line_item.pricing !== undefined ? (line_item.current_unit_count - line_item.committed_unit_count).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : line_item.end_unit_count.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
+        "total": line_item.pricing !== undefined ? (line_item.pricing.average_price * (line_item.current_unit_count - line_item.committed_unit_count)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : line_item.end_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
+        "per_unit_price": line_item.pricing !== undefined ? line_item.pricing.average_price ? line_item.pricing.average_price.toFixed(4).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.0000" : (line_item.end_state_in_total_price / line_item.current_ending_unit_count).toFixed(4).replace(/\d(?=(\d{3})+\.)/g, '$&,') ? (line_item.end_total_price / line_item.end_unit_count).toFixed(4).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.0000"
       })
     })
     setFieldValue("checkClick", false, false)
+    setFieldValue("line_item_shows", line_item_shows, false)
   }, [values.line_items, values.checkClick])
 
   return (
@@ -214,8 +215,8 @@ const TopContent = (props) => {
                 <div className="grid_3 pull_1">
                   <TextInput name='internal_item_id'
                     // validate={validateInternalDocumentIDField}
-                    searchable={props.actionMode !== TOOLBAR_MODE.SEARCH}
-                    ariaControls="modalNoPart"
+                    // searchable={props.actionMode !== TOOLBAR_MODE.SEARCH}
+                    // ariaControls="modalNoPart"
                     tabIndex="1"
                   />
                 </div>
@@ -268,7 +269,7 @@ const TopContent = (props) => {
                 name="src_warehouse_id"
               />
               {/* PopUp ค้นหาอะไหล่ */}
-              <PopupModalNoPartNoChildren />
+              {/* <PopupModalNoPartNoChildren /> */}
 
             </div>
           </section>

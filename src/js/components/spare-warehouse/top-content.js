@@ -46,7 +46,7 @@ const TopContent = (props) => {
     }
 
     // console.log("I am validating warehouse id")
-    if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
+    if ((toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)
       && !toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]) {
       if (warehouse_id !== values.warehouse_id) {
         warehouse_id = `${warehouse_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
@@ -54,6 +54,7 @@ const TopContent = (props) => {
         let warehouse = warehouses.find(warehouse => `${warehouse.warehouse_id}` === `${warehouse_id}`); // Returns undefined if not found
         console.log("warehouse", warehouse)
         if (warehouse) {
+          console.log(">>>>>", values.line_position_permission)
           // IF Check user If User is Admin -> return true Else -> return false
           if (values.line_position_permission[0].module_admin === true) { //{/* TODO USER_ID FOR ADMIN */}
             console.log(" YES I AM ADMIN ")
@@ -109,13 +110,13 @@ const TopContent = (props) => {
               <div className="grid_4">
                 <TextInput name="warehouse_id"
                   validate={validateSrcWarehouseIDField}
-                  searchable={props.toolbar.mode === TOOLBAR_MODE.SEARCH} ariaControls="modalInventory" tabIndex="1" />
+                  searchable={props.toolbar.mode === TOOLBAR_MODE.SEARCH || props.toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} ariaControls="modalInventory" tabIndex="1" />
               </div>
 
               <div className="grid_4 float-right">
                 <TextInput name="name"
                   validate={validateNameWarehouseIDField}
-                  disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="2" />
+                  disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH || props.toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} tabIndex="2" />
               </div>
               <div className="grid_1 float-right"><p className="top-text float-right">ชื่อคลัง</p></div>
             </div>
@@ -125,7 +126,7 @@ const TopContent = (props) => {
               <div className="grid_4 float-right">
                 <TextInput name="abbreviation"
                   validate={validateAbbreviationWarehouseIDField}
-                  disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="3" />
+                  disabled={values.modeEdit ? false : props.toolbar.mode === TOOLBAR_MODE.SEARCH || props.toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} tabIndex="3" />
               </div>
               <div className="grid_1 float-right"><p className="top-text float-right">ชื่อย่อคลัง</p></div>
             </div>

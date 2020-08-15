@@ -1,6 +1,8 @@
 const initialState = {
     username: "",
     password: "",
+    employee_id: "",
+    email: "",
 
     new_password: "",
     alert: "",
@@ -13,6 +15,17 @@ export default (state = initialState, action) => {
                 ...state,
                 username: action.value,
             }
+        case "ON_CHANGE_EMPLOYEE_ID":
+            return {
+                ...state,
+                employee_id: action.value,
+            }
+        case "ON_CHANGE_EMAIL":
+            return {
+                ...state,
+                email: action.value,
+            }
+
         case "ON_CHANGE_PASSWORD":
             return {
                 ...state,
@@ -27,7 +40,7 @@ export default (state = initialState, action) => {
         case "NO ID":
             return {
                 ...state,
-                alert: "ไม่มีรหัสพนักงานในระบบ"
+                alert: action.value
             }
 
         default:

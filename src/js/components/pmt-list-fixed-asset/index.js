@@ -36,7 +36,7 @@ const GoodsReceiptComponent = (props) => {
             <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "130vh" } : {}}>
                 <TopContent />
                 <BottomContent />
-                <Footer />
+                <Footer setFieldValue={setFieldValue}/>
             </form>
         </>
     )

@@ -136,6 +136,12 @@ const mapStateToProps = (state) => {
         case TOOLBAR_MODE.ADD:
             return getPropSelectAndEnabled(TOOLBAR_ACTIONS.ADD,
                 [TOOLBAR_ACTIONS.HOME, TOOLBAR_ACTIONS.SEARCH, TOOLBAR_ACTIONS.SAVE, TOOLBAR_ACTIONS.REFRESH, TOOLBAR_ACTIONS.BACKWARD, TOOLBAR_ACTIONS.FORWARD]);
+        case TOOLBAR_MODE.JUST_SEARCH:
+            return getPropSelectAndEnabled(TOOLBAR_ACTIONS.SEARCH,
+                [TOOLBAR_ACTIONS.HOME, TOOLBAR_ACTIONS.SAVE]);
+                case TOOLBAR_MODE.REPORT:
+            return getPropSelectAndEnabled(TOOLBAR_ACTIONS.SEARCH,
+                [TOOLBAR_ACTIONS.HOME, TOOLBAR_ACTIONS.SAVE, TOOLBAR_ACTIONS.EXPORT_PDF]);
         default:
             return { ...ALL_DISABLED_PROP };
     }

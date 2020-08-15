@@ -102,6 +102,7 @@ const initialState = {
     requiresHandleClick: {
         [FOOTER_ACTIONS.APPROVAL]: false, 
         [FOOTER_ACTIONS.SEND]: false,
+        [FOOTER_ACTIONS.SAVE]: false,
         [FOOTER_ACTIONS.REJECT]: false,
         [FOOTER_ACTIONS.BACK]: false,
         [FOOTER_ACTIONS.CHECK_APPROVAL]: false,
@@ -398,8 +399,14 @@ export const handleFooterClickVoid = makeActionCreator(HANDLE_CLICK_VOID);
 export const handleFooterClickApprovalDone = makeActionCreator(HANDLE_CLICK_APPROVAL_DONE);
 
 
-export const handleClickBackToSpareMain = (routeLocation) => {
+export const handleClickBackToSpareMain = (routeLocation, internal_document_id) => {
     console.log("routeLocation", routeLocation.search("pmt"))
+    if (routeLocation.search("pmt-all-checklist-fixed-asset") !== -1) {
+        return (dispatch) => {
+            dispatch(handleFooterClickBack());
+            history.push(`/pmt-fixed-asset?internal_document_id=${internal_document_id}`);
+        };
+    }
     if (routeLocation.search("pmt") !== -1) {
         return (dispatch) => {
             dispatch(handleFooterClickBack());

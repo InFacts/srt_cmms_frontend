@@ -12,6 +12,10 @@
     font-family: THSarabunNew;
   }
 
+  input[type="text"][disabled],input[type="date"][disabled],input[type="datetime-local"][disabled],input[type="number"][disabled],select[disabled], textarea[disabled] {
+    color: Blue;
+ }
+
   .display-none{
     display: none;
   }
@@ -200,7 +204,7 @@
   #blackground-gray{
     background: #F7F7F7;
     height: 100%;
-    padding-bottom: 4rem;
+    padding-bottom: 2rem;
     position: relative;
   }
   
@@ -505,6 +509,29 @@
     text-align: center;
     height:250px
 }
+
+
+.radioInternalID{
+  float: left;
+  clear: none;
+  width: auto;
+}
+.radioInternalID>label{
+  float: left;
+  clear: none;
+  display: block;
+  padding: 0px 8px 0px 0px;
+  margin: 0px;
+
+  cursor: pointer;
+}
+.radioInternalID>label>input[type=radio]{
+  cursor: pointer;
+  float: left;
+  clear: none;
+  margin: 2px 3px 0px 2px;
+}
+
 
 .card {
     background: #fff;
@@ -870,6 +897,20 @@ path.map-region:hover{
   /* fill: #000; */
 }
 
+/* Bar Diverging Effect */ 
+rect.bar-diverging:hover{
+  opacity:30%;
+  cursor: pointer;
+  /* fill: #000; */
+}
+text.bar-diverging:hover{
+  opacity:80%;
+  cursor: pointer;
+  fill: steelblue;
+  /* fill:"#fff"  !important; */
+  /* fill: #000; */
+}
+
 /* Equipment Status  */
 .equipment-status-list {
   padding: 8px;
@@ -929,4 +970,11 @@ path.map-region:hover{
 
 .p-tooltip--btm-center.edit {
   position: unset;
+}
+
+p.link_wo_pm {
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+  float: right;
 }

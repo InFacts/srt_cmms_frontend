@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useFormik, withFormik, useFormikContext } from 'formik';
 import { Redirect } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, shallowEqual } from 'react-redux';
 
 import TabBar from '../common/tab-bar';
 
@@ -19,10 +19,12 @@ import useFooterInitializer from '../../hooks/footer-initializer';
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS } from '../../redux/modules/toolbar.js';
 
 import BgBlue from '../../../images/pmt/bg_blue.jpg';
-import { changeTheam } from '../../helper.js'
+import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
 const GoodsReceiptComponent = (props) => {
 
     const { resetForm, setFieldValue, setValues, values } = useFormikContext();
+    const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
+    const [checkPermission, setCheckPermission] = useState([]);
 
     // Initial tabbar & set default active
     const [tabNames, setTabNames] = useState([
@@ -32,8 +34,19 @@ const GoodsReceiptComponent = (props) => {
         { id: "history", name: "ประวัติการใช้" },
         { id: "attachment", name: "แนบไฟล์" },
     ]);
+    const [toolbarMode, setToolBarMode] = useState(TOOLBAR_MODE.SEARCH);
 
-    useToolbarInitializer(TOOLBAR_MODE.SEARCH, DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA);
+    useEffect(() => {
+        if (values.line_position_permission.length >= 1) {
+            if (values.line_position_permission[0].module_admin) {
+                setToolBarMode(TOOLBAR_MODE.SEARCH)
+            } else {
+                setToolBarMode(TOOLBAR_MODE.JUST_SEARCH)
+            }
+        }
+    }, [decoded_token]);
+
+    useToolbarInitializer(toolbarMode);
     useTokenInitializer();
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.EQUIPMENT_MASTER_DATA);
@@ -42,12 +55,12 @@ const GoodsReceiptComponent = (props) => {
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
-            <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "130vh" } : {}}>
+            <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "110vh" } : {}}>
                 <TopContent />
                 <TabBar tabNames={tabNames} initialTabID="general">
                     <BottomContent />
                 </TabBar>
-                <Footer />
+                <Footer setFieldValue={setFieldValue}/>
             </form>
         </>
     )
@@ -88,11 +101,13 @@ const EnhancedGoodsReceiptComponent = withFormik({
         // Field ที่ให้ User กรอก
         // Top Content
         internal_item_id: '',
-        item_type_id: '',
+        item_type_id: 2,
+        item_group_id: 1,
         description: '',
         uom_group_id: '',
-        active: '',
-        
+        active: 1,
+        import_on: '',
+
         // Bottom Content
         // General Content
         uom_id: '',
@@ -110,6 +125,7 @@ const EnhancedGoodsReceiptComponent = withFormik({
         useful_life: '',
         // Equipment Plane Content
         equipment_group_id: '',
+        checklist_group_id: '',
         checklist_id: '',
         checklist_line_item: initialRowsEquipmentPlan(),
         // history_content

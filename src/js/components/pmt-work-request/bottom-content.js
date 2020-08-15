@@ -143,7 +143,7 @@ const BottomContent = (props) => {
 
                     </div>
 
-                    <div className="grid_12" style={{ marginTop: "100px" }}>
+                    <div className="grid_12 mt-3">
                         {/* Remark */}
                         <Label>หมายเหตุ</Label>
                         <div className="grid_11 alpha omega">

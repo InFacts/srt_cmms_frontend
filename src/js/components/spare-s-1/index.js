@@ -31,7 +31,7 @@ const ReportS1Component = (props) => {
         { id: "listItem", name: "รายการ" },
     ]);
 
-    useToolbarInitializer(TOOLBAR_MODE.SEARCH);
+    useToolbarInitializer(TOOLBAR_MODE.REPORT);
     useTokenInitializer();
     useFactInitializer();
     useExportPdfInitializer();
@@ -44,12 +44,12 @@ const ReportS1Component = (props) => {
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
-            <form style={changeTheam() === true ? { backgroundImage: `url(${BgRed})`, width: "100vw", height: "140vh" } : {}}>
+            <form style={changeTheam() === true ? { backgroundImage: `url(${BgRed})`, width: "100vw", height: "110vh" } : {}}>
                 <TopContent />
                 <TabBar tabNames={tabNames} initialTabID="listItem">
                     <BottomContent />
                 </TabBar>
-                <Footer />
+                <Footer setFieldValue={setFieldValue}/>
             </form>
         </>
     )

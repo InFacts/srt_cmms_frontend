@@ -178,12 +178,12 @@ class Map extends React.Component {
                             </Link>
 
                             <Link to="/pmt-create-schedule-checklist">
-                            <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
-                                <img alt='some value' src={changeTheam() === true ? TwothreeNew : Twothree}
-                                className={changeTheam() === true ? "Ptwo-three-new" : "Ptwo-three"} style={changeTheam() === true ? { width: "55px" } : {}} />
-                                <span className="p-tooltip__message edit_p_tooltip__message Ptooltip8" role="tooltip" id="btm-cntr">PMT 6</span>
+                                <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
+                                    <img alt='some value' src={changeTheam() === true ? TwothreeNew : Twothree}
+                                        className={changeTheam() === true ? "Ptwo-three-new" : "Ptwo-three"} style={changeTheam() === true ? { width: "55px" } : {}} />
+                                    <span className="p-tooltip__message edit_p_tooltip__message Ptooltip8" role="tooltip" id="btm-cntr">PMT 6</span>
                                 </div>
-                                </Link>
+                            </Link>
 
                             <img alt='some value' src={Text4} className="Ptext4" />
                             <img alt='some value' src={Text5} className="Ptext5" />
@@ -224,12 +224,12 @@ class Map extends React.Component {
                             <img alt='some value' src={Text9} className="Ptext9" />
 
                             <Link to="/pmt-report">
-                            <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
-                                <img alt='some value' src={changeTheam() === true ? FiveoneNew : Fiveone}
-                                className={changeTheam() === true ? "Pfive-one-new" : "Pfive-one"} style={changeTheam() === true ? { width: "70px" } : {}} />
-                                <span className="p-tooltip__message edit_p_tooltip__message Ptooltip9" role="tooltip" id="btm-cntr">PMT 10</span>
+                                <div className="p-tooltip--btm-center edit" aria-describedby="btm-cntr" >
+                                    <img alt='some value' src={changeTheam() === true ? FiveoneNew : Fiveone}
+                                        className={changeTheam() === true ? "Pfive-one-new" : "Pfive-one"} style={changeTheam() === true ? { width: "70px" } : {}} />
+                                    <span className="p-tooltip__message edit_p_tooltip__message Ptooltip9" role="tooltip" id="btm-cntr">PMT 10</span>
                                 </div>
-                                </Link>
+                            </Link>
 
                             <img alt='some value' src={Text10} className="Ptext10" />
 
@@ -244,7 +244,7 @@ class Map extends React.Component {
                                 </span>
                             </span>
 
-                            <span className="p-contextual-menu--left Pdrop-dawn2">
+                            {/* <span className="p-contextual-menu--left Pdrop-dawn2">
                                     <button className="p-contextual-menu__toggle" style={{ border: "none", padding: "0" }} aria-controls="menu-2" aria-expanded="false" aria-haspopup="true"><img alt='some value' src={Dropdown} /></button>
                                     <span className="p-contextual-menu__dropdown" id="menu-2" aria-hidden="true" aria-label="submenu">
                                         <span className="p-contextual-menu__group">
@@ -252,7 +252,7 @@ class Map extends React.Component {
                                             <Link to="/pmt-list-fixed-asset" className="p-contextual-menu__link" style={{ fontSize: "20px" }}>รายการทำวาระ</Link>
                                         </span>
                                     </span>
-                                </span>
+                                </span> */}
 
                         </div>
                     </section>

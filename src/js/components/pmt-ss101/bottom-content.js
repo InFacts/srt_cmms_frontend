@@ -500,10 +500,25 @@ const BottomContent = (props) => {
 
                     <div className="grid_12" style={{ marginTop: "10px" }}>
                         {/* Remark */}
-                        <Label>หมายเหตุ</Label>
-                        <div className="grid_11 alpha omega">
+                        <div className="grid_2 alpha white-space">
+                            <p className="top-text">รายละเอียดการซ่อม</p>
+                        </div>
+                        <div className="grid_10 alpha omega">
                             <TextareaInput name="remark" tabIndex="30"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                        </div>
+
+                        <div className="clear" />
+                    </div>
+
+                    <div className="grid_12" style={{ marginTop: "10px" }}>
+                        {/* checked_remark */}
+                        <div className="grid_2 alpha white-space">
+                            <p className="top-text">ความเห็นสายตรวจ</p>
+                        </div>
+                        <div className="grid_10 alpha omega">
+                            <TextareaInput name="checked_remark" tabIndex="30"
+                                disabled />
                         </div>
 
                         <div className="clear" />

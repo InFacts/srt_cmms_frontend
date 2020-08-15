@@ -22,6 +22,7 @@ import {
 
 import { FACTS } from '../../redux/modules/api/fact.js';
 import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
+import RadioAutoIncrementInput from '../common/formik-radio-input-ai'
 
 import BgBlue from '../../../images/pmt/bg_blue.jpg';
 import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
@@ -42,8 +43,8 @@ const TopContent = (props) => {
   const factEquipmentStatus = useSelector((state) => ({ ...state.api.fact[FACTS.EQUIPMENT_STATUS] }), shallowEqual);
 
   // Fill Default Forms
-  useFillDefaultsOnModeAdd();
-  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(checkBooleanForEdit, DOCUMENT_TYPE_ID.SELECTOR, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
+  useFillDefaultsOnModeAdd(DOCUMENT_TYPE_ID.SELECTOR);
+  const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDFieldHelper(decoded_token, checkBooleanForEdit, DOCUMENT_TYPE_ID.SELECTOR, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
 
   const validateUserEmployeeIDField = (...args) => validateEmployeeIDField("created_by_user_employee_id", fact, setFieldValue, ...args);
   const validateAdminEmployeeIDField = (...args) => validateEmployeeIDField("created_by_admin_employee_id", fact, setFieldValue, ...args);
@@ -71,7 +72,7 @@ const TopContent = (props) => {
             style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray", height: "210px", paddingTop: "10px" } : {}}>
 
             {/* === Left Column === */}
-            <div className={changeTheam() === true ? "grid_5" : "grid_6"} style={{ paddingLeft: "10px" }}>
+            <div className={changeTheam() === true ? "grid_7" : "grid_6"} style={{ paddingLeft: "10px" }}>
 
               {/* Document ID */}
               <div className="grid_1 alpha white-space">
@@ -80,9 +81,15 @@ const TopContent = (props) => {
               <div className="grid_3">
                 <TextInput name='internal_document_id'
                   validate={validateInternalDocumentIDField}
+                  disabled={values.is_auto_internal_document_id === "auto" && toolbar.mode === TOOLBAR_MODE.ADD ? true: false}
                   searchable={toolbar.mode === TOOLBAR_MODE.SEARCH}
-                  ariaControls="modalDocument"
-                  tabIndex="1" />
+                  ariaControls="modalDocument" tabIndex="1" />  
+              </div>
+              <div className="grid_2">
+                  <RadioAutoIncrementInput 
+                  name='is_auto_internal_document_id'
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                  />
               </div>
               <div class="clear" />
 
@@ -127,7 +134,7 @@ const TopContent = (props) => {
 
 
             {/* === Right Column === */}
-            <div className="grid_6 prefix_2">
+            <div className="grid_4">
 
               {/* Document Status  */}
               <Label>สถานะ</Label>
@@ -160,7 +167,7 @@ const TopContent = (props) => {
               {/* Document date */}
               <Label>วันเวลาที่เริ่มทำวาระ</Label>
               <div className="grid_3 alpha">
-                <DateInput name="start_on"
+                <DateTimeInput name="start_on"
                 validate={validateStartOnField}
                   disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
                   tabIndex="8" />
