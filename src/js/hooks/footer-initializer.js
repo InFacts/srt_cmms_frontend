@@ -61,7 +61,8 @@ const useFooterInitializer = (document_type_id) => {
         // Check That user who create document?
         if (values.internal_document_id) {
             if (userInfo.id === created_by_admin_employee_id
-                || values.internal_document_id.indexOf("-FastTrack") !== -1 && (getNumberFromEscapedString(values.src_warehouse_id) === decoded_token.has_position[0].warehouse_id)
+                // || values.internal_document_id.indexOf("-FastTrack") !== -1
+                // && (getNumberFromEscapedString(values.src_warehouse_id) === decoded_token.has_position[0].warehouse_id)
             ) {
                 console.log("hadleDocumentStatusWithFooter", document_status)
                 if (document_status === DOCUMENT_STATUS.DRAFT) { dispatch(footerToModeAddDraft()); }
