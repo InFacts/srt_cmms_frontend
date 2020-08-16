@@ -67,7 +67,7 @@ const PmtSS101Componant = (props) => {
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
-            <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "145vh" } : {}}>
+            <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "155vh" } : {}}>
                 <TopContent />
                 <TabBar tabNames={tabNames} initialTabID="breakdown">
                     <BottomContent />
