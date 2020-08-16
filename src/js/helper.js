@@ -2205,7 +2205,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                 district_id: data.specific.selector_pm_plan.node.district_id,
                 node_id: data.specific.selector_pm_plan.node_id,
                 station_id: data.specific.selector_pm_plan.station_id,
-                start_on: data.specific.selector_pm_plan.start_on.split(".")[0],
+                start_on: data.specific.selector_pm_plan.start_on.slice(0, 16),
                 status_name_th: document_status.status,
 
                 w1_list: returnArrayLineSelector(data.specific.selector_pm_plan.selector_checklist_group, fact, 1),
