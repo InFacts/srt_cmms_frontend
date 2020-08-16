@@ -25,7 +25,7 @@ const BottomContent = (props) => {
         {/* <div className="container_12 clearfix"> */}
         <div className="container_12 " id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>
 
-          <table className="table-many-column mt-2" style={{ padding: "10px" }}>
+          <table className="table-many-column mt-2" style={{ padding: "0 10px" }}>
             <thead>
               <tr>
                 <th className="font text-center" style={{ width: "30px" }}>#</th>
