@@ -86,7 +86,7 @@ const BottomContent = (props) => {
     checkBooleanForEdit = false
     validateField("internal_document_id")
   }, [values.internal_document_id])
-  console.log("values>>>", values.start_on)
+
   return (
     <>
       {/* THIS MAKES THE BACKGROUND NOT GRAY!! NEEDS TO FIX */}
