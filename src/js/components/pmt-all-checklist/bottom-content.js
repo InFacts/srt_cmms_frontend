@@ -24,12 +24,12 @@ const BottomContent = (props) => {
           <table className="table-many-column mt-2" style={{ padding: "0 10px" }}>
             <thead>
               <tr>
-                <th className="font text-center" style={{ width: "30px" }}>#</th>
-                <th className="font" style={{ width: "300px" }}>แผน</th>
-                <th className="font text-center" style={{ width: "150px" }}>ความถี่</th>
-                <th className="font text-center" style={{ width: "150px" }}>หน่วย</th>
+                <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
+                <th className="font" style={{ minWidth: "300px" }}>แผน</th>
+                <th className="font text-center" style={{ minWidth: "150px" }}>ความถี่</th>
+                <th className="font text-center" style={{ minWidth: "150px" }}>หน่วย</th>
                 {/* <th className="font text-center" style={{ width: "100px" }}>Active</th> */}
-                <th className="font" style={{ width: "300px" }}>หมายเหตุ</th>
+                <th className="font" style={{ minWidth: "300px" }}>หมายเหตุ</th>
               </tr>
             </thead>
             <tbody>

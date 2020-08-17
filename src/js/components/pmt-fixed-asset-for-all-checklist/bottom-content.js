@@ -46,17 +46,17 @@ const BottomContent = (props) => {
                           <td className="edit-padding text-center">{index + 1}</td>
                           <td className="edit-padding" style={{ padding: "5px 15px" }}>
                             <CheckboxInput name={`checklist_line_item[${index}].is_checked`}
-                              disabled={values.checkBooleanForEdit === true ? false : values.toolbar_mode === TOOLBAR_MODE.REPORT}
+                              disabled={values.checkBooleanForEdit === true ? false : values.toolbar_mode === TOOLBAR_MODE.SEARCH}
                               checked={values.checklist_line_item[index].is_checked} value={true} />
                           </td>
                           <td className="edit-padding">
                             <NumberInput name={`checklist_line_item[${index}].cost`}
-                              disabled={values.checkBooleanForEdit === true ? false : values.toolbar_mode === TOOLBAR_MODE.REPORT} />
+                              disabled={values.checkBooleanForEdit === true ? false : values.toolbar_mode === TOOLBAR_MODE.SEARCH} />
                           </td>
                           <td className="edit-padding" style={{ overflow: "hidden", maxWidth: "600px" }}>{list.checklist_name + "\\\\" + list.checklist_line_item_name}</td>
                           <td className="edit-padding">
                             <TextInput name={`checklist_line_item[${index}].remark`}
-                              disabled={values.checkBooleanForEdit === true ? false : values.toolbar_mode === TOOLBAR_MODE.REPORT} />
+                              disabled={values.checkBooleanForEdit === true ? false : values.toolbar_mode === TOOLBAR_MODE.SEARCH} />
                           </td>
                         </tr>
                       )
@@ -70,17 +70,17 @@ const BottomContent = (props) => {
                           <td className="edit-padding text-center">{index + 1}</td>
                           <td className="edit-padding" style={{ padding: "5px 15px" }}>
                             <CheckboxInput name={`checklist_line_item[${index}].is_checked`}
-                              disabled={values.checkBooleanForEdit === true ? false : values.toolbar_mode === TOOLBAR_MODE.REPORT}
+                              disabled={values.checkBooleanForEdit === true ? false : values.toolbar_mode === TOOLBAR_MODE.SEARCH}
                               checked={values.checklist_line_item[index].is_checked} value={1} />
                           </td>
                           <td className="edit-padding">
                             <NumberInput name={`checklist_line_item[${index}].cost`}
-                              disabled={values.checkBooleanForEdit === true ? false : values.toolbar_mode === TOOLBAR_MODE.REPORT} />
+                              disabled={values.checkBooleanForEdit === true ? false : values.toolbar_mode === TOOLBAR_MODE.SEARCH} />
                           </td>
                           <td className="edit-padding" style={{ overflow: "hidden", maxWidth: "600px" }}>{list.checklist_line_item_name}</td>
                           <td className="edit-padding">
                             <TextInput name={`checklist_line_item[${index}].remark`}
-                              disabled={values.checkBooleanForEdit === true ? false : values.toolbar_mode === TOOLBAR_MODE.REPORT} />
+                              disabled={values.checkBooleanForEdit === true ? false : values.toolbar_mode === TOOLBAR_MODE.SEARCH} />
                           </td>
                         </tr>
                       )
