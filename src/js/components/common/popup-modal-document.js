@@ -236,7 +236,7 @@ const PopupModalDocument = (props) => {
                                             )
                                         } else if (document.document_type_id === 2011 || document.document_type_id === 2071) {
                                             // Work Request // Maintenant Item ต้องเห็นทุกเอกสาร 
-                                            console.log("Work Request // Maintenant Item")
+                                            // console.log("Work Request // Maintenant Item")
                                             return (
                                                 <tr key={index} id={index}>
                                                     <td className="edit-padding"> {document.internal_document_id} </td>

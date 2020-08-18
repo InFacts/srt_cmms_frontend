@@ -33,7 +33,8 @@ export const FOOTER_ACTIONS = {
     FAST_TRACK: "FAST_TRACK", 
     SEND: "SEND",
     APPROVAL: "APPROVAL", 
-    APPROVAL_DONE: "APPROVAL_DONE"
+    APPROVAL_DONE: "APPROVAL_DONE",
+    ESCALATED: "ESCALATED"
 }
 
 export const FOOTER_ACTIONS_TEXT = {
@@ -48,7 +49,8 @@ export const FOOTER_ACTIONS_TEXT = {
     FAST_TRACK: "เอกสาร Fast Track", 
     SEND: "ส่งเอกสาร",
     APPROVAL: "ลงนาม", 
-    APPROVAL_DONE: "ลงนามเรียบร้อยแล้ว"
+    APPROVAL_DONE: "ลงนามเรียบร้อยแล้ว",
+    ESCALATED: "ส่งต่อการซ่อม"
 }
 
 
@@ -70,6 +72,7 @@ const TO_MODE_AP_CHECK_ORDER = "footer/TO_MODE_AP_CHECK_ORDER";
 const TO_MODE_AP_CHECK_MAINTENANCE = "footer/TO_MODE_AP_CHECK_MAINTENANCE";
 const TO_MODE_AP_GUARANTEE_MAINTENANCE = "footer/TO_MODE_AP_GUARANTEE_MAINTENANCE";
 const TO_MODE_AP_APPROVAL_DONE = "footer/TO_MODE_AP_APPROVAL_DONE";
+// const TO_MODE_ESCALATED = "footer/TO_MODE_ESCALATED";
 
 const CLICK_APPROVAL = "footer/CLICK_APPROVAL";
 const CLICK_SEND = "footer/CLICK_SEND";
@@ -83,6 +86,7 @@ const CLICK_FAST_TRACK = "footer/CLICK_FAST_TRACK";
 const CLICK_CANCEL_APPROVAL_PROCESS = "footer/CLICK_CANCEL_APPROVAL_PROCESS";
 const CLICK_VOID = "footer/CLICK_VOID";
 const CLICK_APPROVAL_DONE = "footer/CLICK_APPROVAL_DONE";
+const CLICK_ESCALATED = "footer/CLICK_ESCALATED";
 
 const HANDLE_CLICK_APPROVAL = "footer/HANDLE_CLICK_APPROVAL";
 const HANDLE_CLICK_SEND = "footer/HANDLE_CLICK_SEND";
@@ -96,6 +100,7 @@ const HANDLE_CLICK_FAST_TRACK = "footer/HANDLE_CLICK_FAST_TRACK";
 const HANDLE_CLICK_CANCEL_APPROVAL_PROCESS = "footer/HANDLE_CLICK_CANCEL_APPROVAL_PROCESS";
 const HANDLE_CLICK_VOID = "footer/HANDLE_CLICK_VOID";
 const HANDLE_CLICK_APPROVAL_DONE = "footer/HANDLE_CLICK_APPROVAL_DONE";
+const HANDLE_CLICK_ESCALATED = "footer/HANDLE_CLICK_ESCALATED";
 
 const initialState = {
     mode: FOOTER_MODE.SEARCH,
@@ -110,7 +115,8 @@ const initialState = {
         [FOOTER_ACTIONS.FAST_TRACK]: false,
         [FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]: false,
         [FOOTER_ACTIONS.VOID]: false,
-        [FOOTER_ACTIONS.APPROVAL_DONE]: false
+        [FOOTER_ACTIONS.APPROVAL_DONE]: false,
+        [FOOTER_ACTIONS.ESCALATED]: false
     }
 }
 
@@ -272,6 +278,12 @@ export default function reducer(state = initialState, action){
                 requiresHandleClick: {...state.requiresHandleClick, 
                                     [FOOTER_ACTIONS.APPROVAL_DONE]: true}
             }
+        case CLICK_ESCALATED:
+            return {
+                ...state,
+                requiresHandleClick: {...state.requiresHandleClick, 
+                                    [FOOTER_ACTIONS.ESCALATED]: true}
+            }
 
         // HANDLE CLICK
         case HANDLE_CLICK_APPROVAL:
@@ -346,6 +358,12 @@ export default function reducer(state = initialState, action){
                 requiresHandleClick: {...state.requiresHandleClick, 
                                     [FOOTER_ACTIONS.APPROVAL_DONE]: false}
             }
+        case HANDLE_CLICK_ESCALATED:
+            return {
+                ...state,
+                requiresHandleClick: {...state.requiresHandleClick, 
+                                    [FOOTER_ACTIONS.ESCALATED]: false}
+            }
         
         default:
             return state;
@@ -384,6 +402,7 @@ export const clickCancleApprovalProcess = makeActionCreator(CLICK_CANCEL_APPROVA
 export const clickVoid = makeActionCreator(CLICK_VOID);
 export const clickApprovalDone = makeActionCreator(CLICK_APPROVAL_DONE);
 export const clickGotIt = makeActionCreator(CLICK_GOT_IT);
+export const clickEscalated = makeActionCreator(CLICK_ESCALATED);
 
 export const handleFooterClickApproval = makeActionCreator(HANDLE_CLICK_APPROVAL);
 export const handleFooterClickSend = makeActionCreator(HANDLE_CLICK_SEND);
@@ -397,6 +416,7 @@ export const handleFooterClickFastTrack = makeActionCreator(HANDLE_CLICK_FAST_TR
 export const handleFooterClickApprovalProcess = makeActionCreator(HANDLE_CLICK_CANCEL_APPROVAL_PROCESS);
 export const handleFooterClickVoid = makeActionCreator(HANDLE_CLICK_VOID);
 export const handleFooterClickApprovalDone = makeActionCreator(HANDLE_CLICK_APPROVAL_DONE);
+export const handleFooterClickEscalated = makeActionCreator(HANDLE_CLICK_ESCALATED);
 
 
 export const handleClickBackToSpareMain = (routeLocation, internal_document_id) => {
@@ -428,4 +448,5 @@ export const ACTION_TO_HANDLE_CLICK = {
     [FOOTER_ACTIONS.GOT_IT]: handleFooterClickGotIt,
     [FOOTER_ACTIONS.FAST_TRACK]: handleFooterClickFastTrack,
     [FOOTER_ACTIONS.REJECT]: handleFooterClickReject,
+    [FOOTER_ACTIONS.ESCALATED]: handleFooterClickEscalated,
 }

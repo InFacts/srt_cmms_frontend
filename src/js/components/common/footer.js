@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 
-import { FOOTER_MODE, FOOTER_ACTIONS, FOOTER_ACTIONS_TEXT, clickApproval, clickSend, clickSave, clickReject, clickBack, clickCheckApproval, clickApprovalOrder, clickFastTrack, clickCancleApprovalProcess, clickVoid, clickApprovalDone, clickGotIt } from '../../redux/modules/footer.js';
+import { FOOTER_MODE, FOOTER_ACTIONS, FOOTER_ACTIONS_TEXT, clickApproval, clickSend, clickSave, clickReject, clickBack, clickCheckApproval, clickApprovalOrder, clickFastTrack, clickCancleApprovalProcess, clickVoid, clickApprovalDone, clickGotIt, clickEscalated } from '../../redux/modules/footer.js';
 import { useDispatch, useSelector } from 'react-redux'
 import { useFormikContext } from 'formik';
 
@@ -17,7 +17,8 @@ const FOOTER_ACTIONS_TO_ACTION_CREATOR = {
   [FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]: clickCancleApprovalProcess,
   [FOOTER_ACTIONS.VOID]: clickVoid,
   [FOOTER_ACTIONS.APPROVAL_DONE]: clickApprovalDone,
-  [FOOTER_ACTIONS.GOT_IT]: clickGotIt
+  [FOOTER_ACTIONS.GOT_IT]: clickGotIt,
+  [FOOTER_ACTIONS.ESCALATED]: clickEscalated,
 }
 
 const ALL_DISABLED_PROP = {}
@@ -187,7 +188,7 @@ const mapStateToProps = (state) => {
       return getPropButtonVisible(FOOTER_ACTIONS.APPROVAL_ORDER, [FOOTER_ACTIONS.APPROVAL_ORDER, FOOTER_ACTIONS.FAST_TRACK, FOOTER_ACTIONS.BACK]);
     case FOOTER_MODE.AP_CHECK_MAINTENANCE:
       // console.log(">>>>> AP_CHECK_MAINTENANCE")
-      return getPropButtonVisible(FOOTER_ACTIONS.CHECK_APPROVAL, [FOOTER_ACTIONS.CHECK_APPROVAL, FOOTER_ACTIONS.REJECT, FOOTER_ACTIONS.BACK]);
+      return getPropButtonVisible(FOOTER_ACTIONS.CHECK_APPROVAL, [FOOTER_ACTIONS.ESCALATED, FOOTER_ACTIONS.CHECK_APPROVAL, FOOTER_ACTIONS.REJECT, FOOTER_ACTIONS.BACK]);
     case FOOTER_MODE.AP_GUARANTEE_MAINTENANCE:
       // console.log(">>>>> AP_GUARANTEE_MAINTENANCE")
       return getPropButtonVisible(FOOTER_ACTIONS.CHECK_APPROVAL, [FOOTER_ACTIONS.CHECK_APPROVAL, FOOTER_ACTIONS.REJECT, FOOTER_ACTIONS.BACK]);
