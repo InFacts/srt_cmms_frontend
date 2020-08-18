@@ -102,10 +102,12 @@ const TopContent = (props) => {
           const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/equipment/${item_match_equipment.equipment_id}/history`;
           axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
             .then((res) => {
-              // console.log(res.data);
+              console.log("history", res.data);
               setFieldValue("ref_document", res.data.results, false);
               return;
-            });
+            }).catch((err) => {
+              console.log("history", err.response);
+          });
 
         } else {
           // console.log("values.modeEdit", values.modeEdit)

@@ -92,8 +92,8 @@ const PopupModalDocument = (props) => {
                         <div className="grid_8 pull_0">
                             <input type="text" className="cancel-default grid_3" value={documentID} onChange={e => setDocumentID(e.target.value)} />
                             <button className="button-blue edit grid_1 mr-5" type="button" onClick={() => setUrl(props.documentTypeGroupID !== "document_all_type" ?
-                                `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=${props.documentTypeGroupID}&internal_document_id=${documentID}` :
-                                `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?&internal_document_id=${documentID}`)}>ค้นหา</button>
+                                `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?document_type_group_id=${props.documentTypeGroupID}&internal_document_id=${documentID}&page_size=1000` :
+                                `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?&internal_document_id=${documentID}&page_size=1000`)}>ค้นหา</button>
                         </div>
                     </div>
 
@@ -118,6 +118,7 @@ const PopupModalDocument = (props) => {
                                             decoded_token.has_position[0].warehouse_id ?
                                                 decoded_token.has_position[0].warehouse_id :
                                                 "no_warehouse" : null;
+                                        // console.log("findWarehouse", findWarehouse)
                                         if (findWarehouse === document.dest_warehouse_id || findWarehouse === document.src_warehouse_id) {
                                             // console.log("findWarehouse>>>>")
                                             return (
@@ -341,7 +342,7 @@ const PopupModalDocument = (props) => {
                                                         </tr>
                                                     )
                                                 }
-                                            } 
+                                            }
                                         } else if (valueNodeIDWorkOrderPM.length !== 0 && document.node_id) {
                                             // console.log(">>>>>")
                                             let work_order_pmt_node_id = valueNodeIDWorkOrderPM.find(node_id => `${node_id.node_id}` === `${document.node_id}`);
