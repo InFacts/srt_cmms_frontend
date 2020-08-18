@@ -153,7 +153,6 @@ const BottomContent = (props) => {
                 setLineNumber={setLineNumber}
                 checkBooleanForEdit={checkBooleanForEdit}
                 tabIndex={6}
-                src_warehouse_id={values.src_warehouse_id}
               />
             </div>
 

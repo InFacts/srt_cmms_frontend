@@ -9,11 +9,6 @@ import SelectInput from '../common/formik-select-input';
 
 const Table = (props) => {
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
-  const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
-
-  let warehouse_id = `${props.src_warehouse_id}`.split('\\')[0]; // Escape Character WAREHOUSE_ID CANT HAVE ESCAPE CHARACTER!
-    let warehouses = fact[FACTS.WAREHOUSES].items;
-    let warehouse = warehouses.find(warehouse => `${warehouse.warehouse_id}` === `${warehouse_id}`); // Returns undefined if not found
 
   return (
     <table className="table-many-column" style={{ paddingRight: "10px", paddingLeft: "10px" }}>
@@ -42,7 +37,6 @@ const Table = (props) => {
             <tr key={index}>
               <th className="edit-padding text-center">{line_number}</th>
               <td className="edit-padding">
-                {warehouse &&
                   <TextInput name={`line_items[${index}].internal_item_id`}
                     validate={internal_item_id => props.validateLineNumberInternalItemIDField(`line_items[${index}]`, internal_item_id, index)} tabIndex={props.tabIndex + line_number}
                     disabled={props.disabledBothMode !== true ? props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true}
@@ -50,7 +44,6 @@ const Table = (props) => {
                     handleModalClick={() => props.setLineNumber(line_number)}
                     redBorderForError="error-in-table"
                   />
-                }
               </td>
               <td className="edit-padding">{list.description}</td>
 
