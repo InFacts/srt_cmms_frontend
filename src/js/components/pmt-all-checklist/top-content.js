@@ -48,12 +48,12 @@ const TopContent = (props) => {
         filter_item.push(item)
       }
     })
-    console.log("filter_item", filter_item)
-    if(filter_item.length !== 0) {
+    // console.log("filter_item", filter_item)
+    // if(filter_item.length !== 0) {
       setFieldValue("checklist_line_item", filter_item, false)
-    } else {
-      setFieldValue("checklist_line_item", factChecklistLineItem.items, false)
-    }
+    // } else {
+    //   setFieldValue("checklist_line_item", factChecklistLineItem.items, false)
+    // }
   };
   console.log("factChecklistLineItem.items", factChecklistLineItem.items)
   return (
