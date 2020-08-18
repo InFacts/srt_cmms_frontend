@@ -97,7 +97,7 @@ const Files = () => {
     }
 
     const deleteFileInState = (e) => {
-        // console.log("delete e.target...", e.target.files);
+        // console.log("delete e.target...", e.target.parentNode.parentNode.parentNode);
         let index = e.target.parentNode.parentNode.parentNode.id;
         values.files.splice(index, 1);
         // console.log("delete values.files", values.files);
@@ -122,11 +122,11 @@ const Files = () => {
                     </div>
                 </div>
             </div>
-            {/* {console.log("values.files", values.files)} */}
+            {console.log("values.files", values.files)}
             {values.files.length !== 0 && values.files !== undefined ?
                 <div className="dropZone-list">
                     {values.files.map((file, index) => (
-                        <li className="list-group-item" key={file.id}>
+                        <li className="list-group-item" key={file.id} id={index}>
                             {(file.preview_url !== undefined && (file.extension.replace(".", "") === "jpg" || file.extension.replace(".", "") === "png" || file.extension.replace(".", "") === "jpeg" || file.extension.replace(".", "") === "bmp")) ? 
                                 <>
                                 <div className="media-body media-left">
@@ -135,12 +135,14 @@ const Files = () => {
                                 <div className="media-body">
                                     <h4 className="media-heading" style={{ fontWeight: 'bold', display: 'block' }}>{file.filename}</h4>
                                     <h4 className="media-heading">ขนาดไฟล์ : {file.isNew ? file.sizeReadable : fileSizeReadable(file.sizeReadable)}</h4>
+                                    <div>
                                         {toolbar.mode === TOOLBAR_MODE.SEARCH &&
                                             <button type="button" className="btn media-heading" style={{ color: "blue", padding: "4px", display: 'block' }} onClick={ () => downloadAttachmentDocumentData(values.document_id, file.id) }>ดาวน์โหลด</button>
                                         }
                                         {toolbar.mode !== TOOLBAR_MODE.SEARCH &&
                                             <button type="button" className="btn media-heading" style={{ color: "blue", padding: "4px" , display: 'block'}} onClick={ (e) => deleteFileInState(e) }>ลบ</button>
                                         }
+                                    </div>
                                 </div>
                                 </>
                                 :
