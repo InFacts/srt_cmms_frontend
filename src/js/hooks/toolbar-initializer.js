@@ -5,7 +5,7 @@ import {   handleClickAdd, handleClickHomeToSpareMain,
 import {useFormikContext } from 'formik';
 import { useDispatch, useSelector ,shallowEqual } from 'react-redux'
 import {fetchLastestInternalDocumentID, isICDWarehouseDest, isICDWarehouseSrc, getInternalDocumentIDFromCurrentValues, DOCUMENT_TYPE_ID, isICD, getPositionAbbreviationFromWarehouseID} from '../helper'
-import { navBottomOnReady, navBottomError, navBottomSuccess } from '../redux/modules/nav-bottom'
+import { navBottomOnReady, navBottomError, navBottomSuccess, navBottomSending } from '../redux/modules/nav-bottom';
 
 export const useToolbarChangeModeInitializer = (initial_mode) => {
     const dispatch = useDispatch();
@@ -60,7 +60,8 @@ const useToolbarInitializer = (initial_mode, documentTypeGroupID) => {
     useEffect(()=> {
         if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]){
             resetForm();
-            dispatch(handleClickAdd()); // make handle click False 
+            dispatch(handleClickAdd()); // make handle click False
+            dispatch(navBottomOnReady('', '', '')); // RESET NAV BOTTOM 
         }
     }, [toolbar.requiresHandleClick[TOOLBAR_ACTIONS.ADD]]);
 

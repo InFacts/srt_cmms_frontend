@@ -11,7 +11,7 @@ import useTokenInitializer from '../hooks/token-initializer';
 import { useFormikContext } from 'formik';
 import { cancelApproval, startDocumentApprovalFlow, APPROVAL_STATUS, DOCUMENT_TYPE_ID, saveDocument, editDocument, packDataFromValuesMasterDataForEdit, packDataFromValues, fetchLatestStepApprovalDocumentData, getUserIDFromEmployeeID, DOCUMENT_STATUS, DOCUMENT_STATUS_ID, APPROVAL_STEP_ACTION, checkDocumentStatus, approveDocument, fetchStepApprovalDocumentData, saveMasterData, editMasterDataHelper, APPROVAL_STATUS_TH, getNumberFromEscapedString } from '../helper';
 import { FACTS } from '../redux/modules/api/fact';
-import { navBottomOnReady, navBottomError, navBottomSuccess, navBottomSending } from '../redux/modules/nav-bottom'
+import { navBottomOnReady, navBottomError, navBottomSuccess, navBottomSending } from '../redux/modules/nav-bottom';
 import history from '../history';
 
 const spacialPage = {
@@ -191,6 +191,7 @@ const useFooterInitializer = (document_type_id) => {
     // Handle Click Save
     useEffect(() => {
         if (footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]) {
+            dispatch(navBottomSending('[API]', 'Sending ...', ''));
             validateForm()
                 .then((err) => {
                     setTouched(setNestedObjectValues(values, true))
@@ -242,6 +243,7 @@ const useFooterInitializer = (document_type_id) => {
                                             dispatch(navBottomError('[PUT]', 'Submit Failed', err));
                                         })
                                         .finally(() => { // Set that I already handled the Click
+                                            dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
                                             console.log(" I submitted and i am now handling click")
                                         });
                                 } else {// For POST MASTER DATA
@@ -254,14 +256,21 @@ const useFooterInitializer = (document_type_id) => {
                                             dispatch(navBottomError('[PUT]', 'Submit Failed', err));
                                         })
                                         .finally(() => { // Set that I already handled the Click
+                                            dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
                                             console.log(" I submitted and i am now handling click")
                                         });
                                 }
                             }
                         }
                     }
+                    else {
+                        dispatch(navBottomError('[PUT]', 'Submit Failed', err));
+                        dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
+                    }
                 })
                 .catch((err) => {
+                    dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.SAVE]());
+                    dispatch(navBottomError('[PUT]', 'Submit Failed', err));
                     console.log("err validate", err)
                 })
         }
@@ -467,6 +476,7 @@ const useFooterInitializer = (document_type_id) => {
                     clearFooterAction();
                 })
         }
+        clearFooterAction();
     }, [footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL], footer.requiresHandleClick[FOOTER_ACTIONS.CHECK_APPROVAL],
     footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL_ORDER], footer.requiresHandleClick[FOOTER_ACTIONS.GOT_IT],
     footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK], footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]]);
