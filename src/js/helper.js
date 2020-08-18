@@ -1726,8 +1726,10 @@ export const downloadAttachmentDocumentData = (document_id, attachment_id) => ne
 // Get Latest Step Approval After Track Docuemnt
 export const fetchLatestStepApprovalDocumentData = (document_id) => new Promise((resolve, reject) => {
     const url = `${BASE_URL}/approval/${document_id}/latest/step`;
+    console.log(">>>> url", url);
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((latest_step_approve) => {
+            console.log(">>>> latest_step_approve", latest_step_approve);
             resolve(latest_step_approve.data);
         })
         .catch((err) => {

@@ -80,7 +80,7 @@ const useFooterInitializer = (document_type_id) => {
                 console.log("fetchLatestStepApprovalDocumentData", document_id)
                 fetchLatestStepApprovalDocumentData(document_id).then((latestApprovalInfo) => {
                     console.log("latestApprovalInfo", latestApprovalInfo)
-                    if ((latestApprovalInfo !== undefined || latestApprovalInfo.length !== 0) && document_status === DOCUMENT_STATUS.WAIT_APPROVE) {
+                    if ((latestApprovalInfo !== undefined || latestApprovalInfo.length !== 0) && (document_status === DOCUMENT_STATUS.WAIT_APPROVE || document_status === DOCUMENT_STATUS.ESCALATED)) {
                         console.log("latestApprovalInfo------> ", latestApprovalInfo)
                         console.log("user------> ", latestApprovalInfo.position_id, userInfo.position_id)
                         console.log("approval_step_action_id------> ", latestApprovalInfo.approval_step_action_id, APPROVAL_STEP_ACTION.CHECK_MAINTENANCE)
