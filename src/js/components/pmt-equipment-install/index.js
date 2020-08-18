@@ -63,7 +63,7 @@ const EquipmentInstallationComponent = (props) => {
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
-            <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "115vh" } : {}}>
+            <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "930px" } : {}}>
                 <TopContent />
                 <TabBar tabNames={tabNames} initialTabID="general">
                     <BottomContent />

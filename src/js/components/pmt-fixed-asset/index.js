@@ -70,7 +70,7 @@ const GoodsReceiptComponent = (props) => {
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
-            <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "120vh" } : {}}>
+            <form style={changeTheam() === true ? { backgroundImage: `url(${BgBlue})`, width: "100vw", height: "950px" } : {}}>
                 <TopContent />
                 <TabBar tabNames={tabNames} initialTabID="w1">
                     <BottomContent />

@@ -56,13 +56,13 @@ const GoodsReceiptComponent = (props) => {
                 setFieldValue("internal_document_id", internal_document_id, true);
             }
         })
-    }, [])
+    }, [window.location.search])
 
     // console.log(">>>>>values.remaek_approval", values.remark_approval)
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
-            <form style={changeTheam() === true ? { backgroundImage: `url(${BgRed})`, width: "100vw", height: "120vh" } : {}}>
+            <form style={changeTheam() === true ? { backgroundImage: `url(${BgRed})`, width: "100vw", height: "950px" } : {}}>
                 <TopContent />
                 <TabBar tabNames={tabNames} initialTabID="listItem">
                     <BottomContent />

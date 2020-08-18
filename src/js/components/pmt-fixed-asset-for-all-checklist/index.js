@@ -27,7 +27,7 @@ const GoodsReceiptComponent = (props) => {
 
     const { resetForm, setFieldValue, setValues, values } = useFormikContext();
 
-    useToolbarInitializer(TOOLBAR_MODE.REPORT);
+    useToolbarInitializer(TOOLBAR_MODE.SEARCH);
     useTokenInitializer();
     useFactInitializer();
     useExportPdfInitializer();

@@ -37,6 +37,7 @@ const Table = (props) => {
             <tr key={index}>
               <th className="edit-padding text-center">{line_number}</th>
               <td className="edit-padding">
+                {props.src_warehouse_id &&
                   <TextInput name={`line_items[${index}].internal_item_id`}
                     validate={internal_item_id => props.validateLineNumberInternalItemIDField(`line_items[${index}]`, internal_item_id, index)} tabIndex={props.tabIndex + line_number}
                     disabled={props.disabledBothMode !== true ? props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true}
@@ -44,6 +45,7 @@ const Table = (props) => {
                     handleModalClick={() => props.setLineNumber(line_number)}
                     redBorderForError="error-in-table"
                   />
+                }
               </td>
               <td className="edit-padding">{list.description}</td>
 

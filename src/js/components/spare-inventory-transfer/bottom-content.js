@@ -7,13 +7,12 @@ import { API_URL_DATABASE } from '../../config_url.js';
 
 import TextareaInput from '../common/formik-textarea-input';
 import TableStatus from '../common/table-status';
-import TableHaveStock from '../common/table-have-stock';
+import TableHaveStock from '../common/table-have-stock_for_s1646';
 
 import Files from '../common/files2'
 
 import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
 import { useFormikContext } from 'formik';
-import { FACTS } from '../../redux/modules/api/fact.js';
 
 import PopupModalNoPart from '../common/popup-modal-nopart'
 
@@ -154,6 +153,7 @@ const BottomContent = (props) => {
                 setLineNumber={setLineNumber}
                 checkBooleanForEdit={checkBooleanForEdit}
                 tabIndex={6}
+                src_warehouse_id={values.src_warehouse_id}
               />
             </div>
 

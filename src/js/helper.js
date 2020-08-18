@@ -677,7 +677,7 @@ export const packDataFromValues = (fact, values, document_type_id, checked_remar
                             per_unit_price: line_item.per_unit_price,
                             item_id: getItemIDFromInternalItemID(fact[FACTS.ITEM], line_item.internal_item_id),
                             item_status_id: line_item.item_status_id,
-                            adjustment_datetime: `${values.document_date} 00:00:00`
+                            adjustment_datetime: values.document_date + 'T00:00:00+00:00'
                         });
                     }
                 })
@@ -2205,7 +2205,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                 district_id: data.specific.selector_pm_plan.node.district_id,
                 node_id: data.specific.selector_pm_plan.node_id,
                 station_id: data.specific.selector_pm_plan.station_id,
-                start_on: data.specific.selector_pm_plan.start_on.split(".")[0],
+                start_on: data.specific.selector_pm_plan.start_on.slice(0, 16),
                 status_name_th: document_status.status,
 
                 w1_list: returnArrayLineSelector(data.specific.selector_pm_plan.selector_checklist_group, fact, 1),
@@ -2297,7 +2297,6 @@ function transformWorkRequestResponseToFormState(work_request_part) {
     }
 }
 function transformWorkOrderResponseToFormState(work_order_part) {
-    console.log(">>>>>")
     return {
         ...work_order_part,
         accident_on: work_order_part.accident_on.slice(0, 16),
@@ -2309,7 +2308,6 @@ function transformWorkOrderResponseToFormState(work_order_part) {
     }
 }
 function transformSS101ResponseToFormState(ss101_part, data) {
-    console.log("ss101_part", data)
     return {
         ...ss101_part,
         ...transformWorkRequestResponseToFormState(ss101_part),

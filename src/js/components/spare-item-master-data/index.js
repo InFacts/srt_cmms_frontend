@@ -84,7 +84,7 @@ const EnhancedItemMasterDataComponent = withFormik({
         quantity_lowest: '',    //ขั้นต่ำ
         quantity_highest: '',   //ขั้นสูง
         remark: '',
-        active: 1,            //สถานะอะไหล่ ปิด เปิด
+        active: '',            //สถานะอะไหล่ ปิด เปิด
         accounting_type: '',    // ประเภทเอกบัญชี
 
         //Field ที่ไม่ได้กรอก

@@ -349,12 +349,12 @@ const BottomContent = (props) => {
               </div>
               <div className="grid_4 alpha omega">
                 <TextInput name="member_lead" tabIndex="31"
-                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.REPORT} />
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
               </div>
 
               <Label>ตำแหน่ง</Label>
               <div className="grid_4 alpha omega">
-                <SelectNoChildrenInput name="member_lead_level_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.REPORT} tabIndex="32">
+                <SelectNoChildrenInput name="member_lead_level_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="32">
                   <option value='' selected></option>
                   {factLevel.items.map((position) => {
                     if (values.member_lead_level_id === position.level_id) {
@@ -371,11 +371,11 @@ const BottomContent = (props) => {
               </div>
               <div className="grid_4 alpha omega">
                 <TextInput name="member_1" tabIndex="33"
-                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.REPORT} />
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
               </div>
               <Label>ตำแหน่ง</Label>
               <div className="grid_4 alpha omega">
-                <SelectNoChildrenInput name="member_1_level_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.REPORT} tabIndex="34">
+                <SelectNoChildrenInput name="member_1_level_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="34">
                   <option value='' selected></option>
                   {factLevel.items.map((position) => {
                     if (values.member_1_level_id === position.level_id) {
@@ -393,11 +393,11 @@ const BottomContent = (props) => {
               </div>
               <div className="grid_4 alpha omega">
                 <TextInput name="member_2" tabIndex="35"
-                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.REPORT} />
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
               </div>
               <Label>ตำแหน่ง</Label>
               <div className="grid_4 alpha omega">
-                <SelectNoChildrenInput name="member_2_level_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.REPORT} tabIndex="36">
+                <SelectNoChildrenInput name="member_2_level_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="36">
                   <option value='' selected></option>
                   {factLevel.items.map((position) => {
                     if (values.member_2_level_id === position.level_id) {
@@ -414,11 +414,11 @@ const BottomContent = (props) => {
               </div>
               <div className="grid_4 alpha omega">
                 <TextInput name="member_3"
-                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.REPORT} tabIndex="37" />
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="37" />
               </div>
               <Label>ตำแหน่ง</Label>
               <div className="grid_4 alpha omega">
-                <SelectNoChildrenInput name="member_3_level_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.REPORT} tabIndex="38">
+                <SelectNoChildrenInput name="member_3_level_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="38">
                   <option value='' selected></option>
                   {factLevel.items.map((position) => {
                     if (values.member_3_level_id === position.level_id) {
@@ -435,11 +435,11 @@ const BottomContent = (props) => {
               </div>
               <div className="grid_4 alpha omega">
                 <TextInput name="member_4" tabIndex="39"
-                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.REPORT} />
+                  disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
               </div>
               <Label>ตำแหน่ง</Label>
               <div className="grid_4 alpha omega">
-                <SelectNoChildrenInput name="member_4_level_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.REPORT} tabIndex="40">
+                <SelectNoChildrenInput name="member_4_level_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="40">
                   <option value='' selected></option>
                   {factLevel.items.map((position) => {
                     if (values.member_4_level_id === position.level_id) {
