@@ -406,7 +406,7 @@ const useFooterInitializer = (document_type_id) => {
         else if (footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK]) { dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.FAST_TRACK]()); }
         else if (footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]) {
             dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.REJECT]()); 
-            dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]());
+            // dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]());
         }
         else if (footer.requiresHandleClick[FOOTER_ACTIONS.ESCALATED]) { dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.ESCALATED]()); }
     }
