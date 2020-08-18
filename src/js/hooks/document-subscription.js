@@ -13,7 +13,7 @@ const useDocumentSubscription = () => {
     // const dispatch = useDispatch();
     const { values, setFieldValue } = useFormikContext();
     const footer = useSelector((state) => ({ ...state.footer }), shallowEqual);
-
+    const nav_bottom_status = useSelector((state) => ({ ...state.nav_bottom_status }), shallowEqual);
 
     // Get approval Step when values.document_id changes
     useEffect(() => {
@@ -67,7 +67,9 @@ const useDocumentSubscription = () => {
 
     // Get  attachment when values.document_id changes
     useEffect(() => {
-        if (values.document_id && !footer.requiresHandleClick[FOOTER_ACTIONS.SEND]) { // If not an empty string AND isn't handlingSEND process)
+        console.log("footer.requiresHandleClick[FOOTER_ACTIONS.SEND]", footer.requiresHandleClick[FOOTER_ACTIONS.SEND])
+        console.log("footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]", footer.requiresHandleClick[FOOTER_ACTIONS.SAVE])
+        if (values.document_id && !(footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE])) { // If not an empty string AND isn't handlingSEND process)
             // Start Axios Get step_approve and attachment By nuk
             fetchAttachmentDocumentData(values.document_id)
                 .then((data_files) => {

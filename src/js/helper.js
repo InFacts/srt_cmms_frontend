@@ -3559,6 +3559,9 @@ export const checkBooleanForEditHelper = (values, decoded_token, fact) => (
     values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.DRAFT)
     && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
 
+export const checkBooleanForEditInPmtMaintenanceHelper = (values, decoded_token, fact) => (
+    values.status_name_th === DOCUMENT_STATUS.ESCALATED || values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.DRAFT)
+
 export const checkBooleanForEditCheckNodeIDHelper = (values, decoded_token, fact) => (
     values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.DRAFT)
     && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.specific.location_node_id) === decoded_token.has_position[0].node_id)
