@@ -3546,7 +3546,7 @@ export const identifyEndpoinsHelper = (document_type_id) => {
     // PMT
     if (doc_type === "201") return "pmt-work-request"; // แจ้งการเกิดอุบัติเหตุ/เสียหาย
     if (doc_type === "202") return "pmt-work-order"; // สั่งซ่อม
-    if (doc_type === "203") return "pmt-fixed-asset"; // สรุปการทำวาระ  WORK_ORDER_PM
+    if (doc_type === "205") return "pmt-fixed-asset"; // สรุปการทำวาระ  WORK_ORDER_PM
     if (doc_type === "204") return "pmt-ss-101"; // สรุปการซ่อมบำรุง
     if (doc_type === "206") return "pmt-equipment-installation"; // ติดตั้ง
     if (doc_type === "207") return "pmt-maitenant-item"; // ดำเนินการซ่อมอะไหล่

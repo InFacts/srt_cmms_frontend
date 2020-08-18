@@ -250,7 +250,7 @@ const BottomContent = (props) => {
                             : ""}
                         </td>
                         <td className="edit-padding">{values.w3_list[index].station_id ? "-" : line_item.checklist_th}</td>
-                        <td className="edit-padding">{values.w3_list[index].station_id ? "-" : line_item.x_cross_x_cross_id}</td>
+                        <td className="edit-padding">{values.w3_list[index].station_id ? "-" : line_item.x_cross_x_cross_th}</td>
 
                       </tr>
                     )
