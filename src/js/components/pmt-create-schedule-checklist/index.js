@@ -63,7 +63,7 @@ const GoodsReceiptComponent = (props) => {
                     setFieldValue("internal_document_id", internal_document_id, true);
                 }
             })
-    }, [])
+    }, [window.location.search])
 
     const initialRowsChecklist = () => {
         // checklist สำหรับ station
