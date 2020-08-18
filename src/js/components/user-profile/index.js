@@ -44,7 +44,8 @@ const Home = (props) => {
         // console.log("URL IS", url)
         const urlParams = new URLSearchParams(url);
         const user_id = urlParams.get('user_id');
-        if (user_id !== null && user_id !== '') {
+
+        if (user_id) {
             // console.log(" IA M NOT SETTING ", user_id);
             setFieldValue("user_id", user_id, true);
             // console.log(" THIS IS AFTER VALUES ", values);
@@ -63,7 +64,7 @@ const Home = (props) => {
                 setFieldValue("firstname_th", data.results[0].firstname_th);
                 setFieldValue("lastname_th", data.results[0].lastname_th);
                 setFieldValue("address", data.results[0].address);
-                setFieldValue("birthdate", data.results[0].birthdate.slice(0, 10));
+                setFieldValue("birthdate", data.results[0].birthdate && data.results[0].birthdate.slice(0, 10));
                 setFieldValue("phone", data.results[0].phone);
                 setFieldValue("created_at", data.results[0].created_at);
                 setFieldValue("updated_at", data.results[0].updated_at);

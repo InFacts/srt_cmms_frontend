@@ -55,18 +55,20 @@ const GoodsReceiptComponent = (props) => {
         dispatch(footerToModeSearch());
     }, []);
 
-        // If Link to this url via Track Document
-        useEffect(() => {
-            getUrlParamsLink()
-                .then((internal_document_id) => {
+    // If Link to this url via Track Document
+    useEffect(() => {
+        getUrlParamsLink()
+            .then((internal_document_id) => {
+                console.log("internal_document_id", internal_document_id)
                 if (internal_document_id !== "") {
                     // action_approval
                     setFieldValue("status_name_th", "", true);
                     setFieldValue("internal_document_id", internal_document_id, true);
                 }
             })
-        }, [])
-        
+    }, [])
+
+
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
@@ -75,7 +77,7 @@ const GoodsReceiptComponent = (props) => {
                 <TabBar tabNames={tabNames} initialTabID="w1">
                     <BottomContent />
                 </TabBar>
-                <Footer setFieldValue={setFieldValue}/>
+                <Footer setFieldValue={setFieldValue} />
             </form>
         </>
     )
@@ -136,11 +138,11 @@ const EnhancedGoodsReceiptComponent = withFormik({
 
         //Field ที่ไม่ได้กรอก
         files: [],
-        
+
         // NOT USE FOR FOOTER
         step_approve: [],
         remark_approval: "",
-        
+
         created_by_admin_employee_id: '',
 
         //Field ที่ไม่ได้ display

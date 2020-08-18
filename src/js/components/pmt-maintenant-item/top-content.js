@@ -17,7 +17,7 @@ import { FACTS } from '../../redux/modules/api/fact';
 import Label from '../common/form-label'
 import {
     getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, validateEmployeeIDField, validateWarehouseIDField, validateInternalDocumentIDFieldHelper,
-    checkBooleanForEditHelper
+    checkBooleanForEditHelper, checkBooleanForEditInPmtMaintenanceHelper
 } from '../../helper';
 import useFillDefaultsOnModeAdd from '../../hooks/fill-defaults-on-mode-add'
 import RadioAutoIncrementInput from '../common/formik-radio-input-ai'
@@ -111,7 +111,8 @@ const TopContent = (props) => {
             });
     });
 
-    let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
+    // let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
+    let checkBooleanForEdit = checkBooleanForEditInPmtMaintenanceHelper(values, decoded_token, fact);
     // useEffect(() => {
     //     checkBooleanForEdit = false
     //     validateField("internal_document_id")

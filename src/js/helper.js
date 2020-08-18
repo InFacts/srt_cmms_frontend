@@ -1726,8 +1726,10 @@ export const downloadAttachmentDocumentData = (document_id, attachment_id) => ne
 // Get Latest Step Approval After Track Docuemnt
 export const fetchLatestStepApprovalDocumentData = (document_id) => new Promise((resolve, reject) => {
     const url = `${BASE_URL}/approval/${document_id}/latest/step`;
+    console.log(">>>> url", url);
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((latest_step_approve) => {
+            console.log(">>>> latest_step_approve", latest_step_approve);
             resolve(latest_step_approve.data);
         })
         .catch((err) => {
@@ -3546,7 +3548,7 @@ export const identifyEndpoinsHelper = (document_type_id) => {
     // PMT
     if (doc_type === "201") return "pmt-work-request"; // แจ้งการเกิดอุบัติเหตุ/เสียหาย
     if (doc_type === "202") return "pmt-work-order"; // สั่งซ่อม
-    if (doc_type === "203") return "pmt-fixed-asset"; // สรุปการทำวาระ  WORK_ORDER_PM
+    if (doc_type === "205") return "pmt-fixed-asset"; // สรุปการทำวาระ  WORK_ORDER_PM
     if (doc_type === "204") return "pmt-ss-101"; // สรุปการซ่อมบำรุง
     if (doc_type === "206") return "pmt-equipment-installation"; // ติดตั้ง
     if (doc_type === "207") return "pmt-maitenant-item"; // ดำเนินการซ่อมอะไหล่
@@ -3558,6 +3560,9 @@ export const identifyEndpoinsHelper = (document_type_id) => {
 export const checkBooleanForEditHelper = (values, decoded_token, fact) => (
     values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.DRAFT)
     && (getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id) === decoded_token.id)
+
+export const checkBooleanForEditInPmtMaintenanceHelper = (values, decoded_token, fact) => (
+    values.status_name_th === DOCUMENT_STATUS.ESCALATED || values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.DRAFT)
 
 export const checkBooleanForEditCheckNodeIDHelper = (values, decoded_token, fact) => (
     values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.DRAFT)
