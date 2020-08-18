@@ -165,10 +165,10 @@ const BottomContent = (props) => {
 
   let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
   
-  useEffect(() => {
-    checkBooleanForEdit = false
-    validateField("internal_document_id")
-  }, [values.internal_document_id])
+  // useEffect(() => {
+  //   checkBooleanForEdit = false
+  //   validateField("internal_document_id")
+  // }, [values.internal_document_id])
 
   return (
     <div id={changeTheam() === true ? "" : "blackground-gray"}>
