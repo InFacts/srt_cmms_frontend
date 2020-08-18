@@ -13,7 +13,7 @@ import PopupModalNoPart from '../common/popup-modal-nopart'
 import TableLineItem from './table-line-item.js';
 
 import BgBlue from '../../../images/pmt/bg_blue.jpg';
-import { fetchPositionPermissionData, changeTheam, checkBooleanForEditHelper } from '../../helper.js'
+import { fetchPositionPermissionData, changeTheam, checkBooleanForEditHelper, checkBooleanForEditInPmtMaintenanceHelper } from '../../helper.js'
 const BottomContent = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
     const factItems = useSelector((state) => ({ ...state.api.fact.items }), shallowEqual);
@@ -25,7 +25,8 @@ const BottomContent = (props) => {
 
     const [lineNumber, setLineNumber] = useState('');
 
-  let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
+//   let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
+    let checkBooleanForEdit = checkBooleanForEditInPmtMaintenanceHelper(values, decoded_token, fact);
 //   useEffect(() => {
 //     checkBooleanForEdit = false
 //     validateField("internal_document_id")
