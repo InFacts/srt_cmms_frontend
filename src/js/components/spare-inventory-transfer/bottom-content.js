@@ -13,7 +13,6 @@ import Files from '../common/files2'
 
 import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
 import { useFormikContext } from 'formik';
-import { FACTS } from '../../redux/modules/api/fact.js';
 
 import PopupModalNoPart from '../common/popup-modal-nopart'
 
@@ -154,6 +153,7 @@ const BottomContent = (props) => {
                 setLineNumber={setLineNumber}
                 checkBooleanForEdit={checkBooleanForEdit}
                 tabIndex={6}
+                src_warehouse_id={values.src_warehouse_id}
               />
             </div>
 
