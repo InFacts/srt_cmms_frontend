@@ -49,7 +49,6 @@ const PopupModalEquipmentNoChildren = (props) => {
                             </thead>
                             <tbody>
                                 {data.map(function (no_part_show, index) {
-                                    console.log("no_part_show", no_part_show)
                                     return (
                                         <tr key={index} id={index}>
                                             <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show.equipment_group.item.internal_item_id} </td>

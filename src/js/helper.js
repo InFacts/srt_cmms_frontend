@@ -1807,6 +1807,7 @@ export const DOCUMENT_STATUS = {
     VOID: "เอกสารหมดสถานะการใช้งาน",
     REOPEN: "แก้ไขเอกสาร",
     FAST_TRACK: "Fast Track",
+    ESCALATED: "ส่งต่อให้ผู้มีอำนาจ"
 }
 export const DOCUMENT_STATUS_ID = {
     DRAFT: 1,
@@ -1815,6 +1816,7 @@ export const DOCUMENT_STATUS_ID = {
     VOID: 4,
     REOPEN: 5,
     FAST_TRACK: 6,
+    ESCALATED: 7,
 }
 // approval_step_action_id
 export const APPROVAL_STEP_ACTION = {

@@ -30,10 +30,10 @@ const BottomContent = (props) => {
   const [rowItem, setRowItem] = useState([]);
 
   let checkBooleanForEdit = checkBooleanForEditCheckNodeIDHelperForWorkOrderPM(values, decoded_token, fact);
-  useEffect(() => {
-    checkBooleanForEdit = false
-    validateField("internal_document_id")
-  }, [values.internal_document_id])
+  // useEffect(() => {
+  //   checkBooleanForEdit = false
+  //   validateField("internal_document_id")
+  // }, [values.internal_document_id])
 
   const onlyUnique = (value, index, self) => {
     return self.indexOf(value) === index;

@@ -26,10 +26,10 @@ const BottomContent = (props) => {
     const [lineNumber, setLineNumber] = useState('');
 
   let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
-  useEffect(() => {
-    checkBooleanForEdit = false
-    validateField("internal_document_id")
-  }, [values.internal_document_id])
+//   useEffect(() => {
+//     checkBooleanForEdit = false
+//     validateField("internal_document_id")
+//   }, [values.internal_document_id])
     return (
         <div id={changeTheam() === true ? "" : "blackground-gray"}>
             <div className="container_12 clearfix" id={changeTheam() === true ? "blackground-gray" : ""} style={ changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {} }>

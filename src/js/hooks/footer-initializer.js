@@ -404,18 +404,21 @@ const useFooterInitializer = (document_type_id) => {
         else if (footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL_ORDER]) { dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.APPROVAL_ORDER]()); }
         else if (footer.requiresHandleClick[FOOTER_ACTIONS.GOT_IT]) { dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.GOT_IT]()); }
         else if (footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK]) { dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.FAST_TRACK]()); }
-        else if (footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]) { dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.REJECT]()); }
-        else if (footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]) { dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]()); }
+        else if (footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]) {
+            dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.REJECT]()); 
+            // dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]());
+        }
+        else if (footer.requiresHandleClick[FOOTER_ACTIONS.ESCALATED]) { dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.ESCALATED]()); }
     }
 
     // Handle Click Approval
     useEffect(() => {
         if (footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL] || footer.requiresHandleClick[FOOTER_ACTIONS.CHECK_APPROVAL]
             || footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL_ORDER] || footer.requiresHandleClick[FOOTER_ACTIONS.GOT_IT]
-            || footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK] || footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]) {
+            || footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK] || footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]
+            || footer.requiresHandleClick[FOOTER_ACTIONS.ESCALATED]) {
             // console.log("I AM Handle APPROVAL", values);
             validateForm().then((err) => {
-                console.log("err>>", err)
                 dispatch(navBottomSending('[API]', 'Sending ...', ''));
                 setErrors(err);
                 if (isEmpty(err)) {
@@ -432,7 +435,11 @@ const useFooterInitializer = (document_type_id) => {
                     } else if (footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK]) {
                         data.document.document_status_id = DOCUMENT_STATUS_ID.FAST_TRACK;
                         approval_status = APPROVAL_STATUS.FAST_TRACKED;
-                    } else {
+                    } else if (footer.requiresHandleClick[FOOTER_ACTIONS.ESCALATED]) {
+                        data.document.document_status_id = DOCUMENT_STATUS_ID.ESCALATED;
+                        approval_status = APPROVAL_STATUS.ESCALATED;
+                    }
+                    else {
                         data.document.document_status_id = DOCUMENT_STATUS_ID.WAIT_APPROVE;
                         approval_status = APPROVAL_STATUS.APPROVED;
                     }
@@ -480,7 +487,7 @@ const useFooterInitializer = (document_type_id) => {
         clearFooterAction();
     }, [footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL], footer.requiresHandleClick[FOOTER_ACTIONS.CHECK_APPROVAL],
     footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL_ORDER], footer.requiresHandleClick[FOOTER_ACTIONS.GOT_IT],
-    footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK], footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]]);
+    footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK], footer.requiresHandleClick[FOOTER_ACTIONS.REJECT], footer.requiresHandleClick[FOOTER_ACTIONS.ESCALATED]]);
 
     // Handle Click CANCEL_APPROVAL_PROCESS
     useEffect(() => {
