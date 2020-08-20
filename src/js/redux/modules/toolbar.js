@@ -273,4 +273,5 @@ export const MODE_TO_ACTION_CREATOR = {
     [TOOLBAR_MODE.JUST_SEARCH]: toModeJustSearch,
     [TOOLBAR_MODE.ADD]: toModeAdd,
     [TOOLBAR_MODE.REPORT]: toModeReport,
+    [TOOLBAR_MODE.INVISIBLE]: toModeInvisible
 }

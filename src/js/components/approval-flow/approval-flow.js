@@ -9,6 +9,7 @@ import { useFormik, withFormik, useFormikContext } from 'formik';
 import { useSelector, shallowEqual } from 'react-redux';
 import { fetchDocuments } from '../../redux/modules/track_doc.js';
 import { FACTS } from '../../redux/modules/api/fact.js'
+import Logo from '../../../images/logo.png';
 
 import BgPink from '../../../images/bg-light-pink.jpg';
 import { changeTheam } from '../../helper.js'
@@ -38,7 +39,7 @@ const ApprovalFlow = (props) => {
                 {/* Section Title */}
                 <h4 className="head-title" style={{ marginTop: "80px" }}>บริหารจัดการเส้นทางเอกสาร</h4>
 
-                <table className="table-many-column mt-2" style={{ height: "500px"}}>
+                <table className="table-many-column mt-2" style={{ height: "400px"}}>
                     <thead>
                         <tr>
                             <th className="font text-center" style={{ width: "350px" }}>ประเภทเอกสาร</th>
@@ -64,7 +65,9 @@ const ApprovalFlow = (props) => {
                         })}
                     </tbody>
                 </table>
-
+                <div style={{ margin: "auto", width: "960px", height: "25%" }}>
+                            <img className="float-right mt-2" width="200px" alt='red house' src={Logo} />
+                            </div>
                 {/* <TableStatus bodyTableStatus={values.step_approve} /> */}
             </div>
         </div>

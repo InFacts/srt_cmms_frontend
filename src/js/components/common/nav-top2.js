@@ -104,7 +104,7 @@ const MainModule = (props) => {
     }
 
     // console.log("nav.mode", toolbar.mode, footer.mode)
-    if (toolbar.mode === "INVISIBLE" && footer.mode === "INVISIBLE") {
+    if (toolbar.mode === "INVISIBLE" && footer.mode === "INVISIBLE" && (url === "/forgot-password" || url === "/")) {
         return null
     }
     else {

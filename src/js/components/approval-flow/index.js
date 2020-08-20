@@ -17,7 +17,7 @@ import useTokenInitializer from '../../hooks/token-initializer';
 
 const Home = (props) => {
     const dispatch = useDispatch();
-    useToolbarChangeModeInitializer(TOOLBAR_MODE.NONE);
+    useToolbarChangeModeInitializer(TOOLBAR_MODE.INVISIBLE);
     useFactInitializer();
     useTokenInitializer();
     useEffect(() => {

@@ -12,7 +12,7 @@ import useTokenInitializer from '../../hooks/token-initializer';
 const MainModulePmt = (props) => {
 
     // Initializer: Change Toolbar to Mode None
-    useToolbarChangeModeInitializer(TOOLBAR_MODE.NONE);
+    useToolbarChangeModeInitializer(TOOLBAR_MODE.INVISIBLE);
     useTokenInitializer();
     const loggedIn = useSelector(state => state.token.isLoggedIn); 
     useFactInitializer();

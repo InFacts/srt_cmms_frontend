@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { useFormik, withFormik, useFormikContext } from 'formik';
 
 import RedHouse from '../../../images/red-house.svg';
+import Logo from '../../../images/logo.png';
 import Icon from '../../../images/icon-main-module.svg';
 import Spare from '../../../images/main/spare.svg';
 import Pmt from '../../../images/main/pmt.svg';
@@ -29,6 +30,7 @@ const TopContent = (props) => {
       <div id={changeTheam() === true ? "" : "blackground-white"} style={changeTheam() === true ? {} : { width: "100vw", height: "100vh" }}>
         <div className="container_12 clearfix" >
           <section className="grid_12" style={{ width: "960px" }}>
+          <img className="float-right" width="200px" alt='red house' src={Logo} />
             <h4 className="head-title" style={{ color: "black" }}>ระบบฐานข้อมูลระบบอาณัติสัญญาณเพื่อวิเคราะห์และวางแผนซ่อมบำรุง</h4>
 
             <div className="grid_4">
