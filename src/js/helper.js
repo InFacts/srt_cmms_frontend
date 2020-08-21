@@ -2164,8 +2164,12 @@ const responseToFormState = (fact, data, document_type_group_id) => {
             }
         }
     } else if (document_type_group_id === DOCUMENT_TYPE_ID.EQUIPMENT_INSTALLATION) {
-        // var created_on = new Date(data.document.created_on);
-        // created_on.setHours(created_on.getHours() + 7);
+        var announce_use_on = new Date(data.specific.announce_use_on);
+        announce_use_on.setHours(announce_use_on.getHours() - 7);
+
+        var installed_on = new Date(data.specific.installed_on);
+        installed_on.setHours(installed_on.getHours() - 7);
+
         let document_statuses = fact[FACTS.DOCUMENT_STATUS].items;
         let document_status = document_statuses.find(document_status => `${document_status.document_status_id}` === `${data.document.document_status_id}`);
         
@@ -2187,12 +2191,12 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                 created_on: data.document.created_on.split(".")[0],
                 remark: data.document.remark,
                 document_date: data.document.document_date.slice(0, 10),
-                announce_use_on: data.specific.announce_use_on.slice(0, 10),
+                announce_use_on: announce_use_on.toISOString().slice(0, 10),
                 location_description: data.specific.location_description,
                 location_district_id: data.specific.location_district_id,
                 location_node_id: data.specific.location_node_id,
                 location_station_id: data.specific.location_station_id,
-                installed_on: data.specific.installed_on.slice(0, 10),
+                installed_on: installed_on.toISOString().slice(0, 10),
                 x_cross_x_cross_id: data.specific.x_cross_x_cross_id ? location_x_cross.road_center : null,
                 status_name_th: document_status.status
             }
@@ -2308,11 +2312,15 @@ function transformWorkRequestResponseToFormState(work_request_part) {
     }
 }
 function transformWorkOrderResponseToFormState(work_order_part) {
-    
+    var accident_on = new Date(work_order_part.accident_on);
+    accident_on.setHours(accident_on.getHours() - 7);
+
+    var request_on = new Date(work_order_part.request_on);
+    request_on.setHours(request_on.getHours() - 7);
     return {
         ...work_order_part,
-        accident_on: work_order_part.accident_on.slice(0, 16),
-        request_on: work_order_part.request_on.slice(0, 16),
+        accident_on: accident_on.toISOString().slice(0, 16),
+        request_on: request_on.toISOString().slice(0, 16),
         location_district_id: returnEmptyStringIfNull(work_order_part.location_district_id),
         location_node_id: returnEmptyStringIfNull(work_order_part.location_node_id),
         location_station_id: returnEmptyStringIfNull(work_order_part.location_station_id),
@@ -2320,17 +2328,36 @@ function transformWorkOrderResponseToFormState(work_order_part) {
     }
 }
 function transformSS101ResponseToFormState(ss101_part, data, fact) {
+
+    var departed_on = new Date(ss101_part.departed_on);
+    departed_on.setHours(departed_on.getHours() - 7);
+
+    var arrived_on = new Date(ss101_part.arrived_on);
+    arrived_on.setHours(arrived_on.getHours() - 7);
+
+    var request_on = new Date(ss101_part.request_on);
+    request_on.setHours(request_on.getHours() - 7);
+
+    var finished_on = new Date(ss101_part.finished_on);
+    finished_on.setHours(finished_on.getHours() - 7);
+
+    var accident_on = new Date(ss101_part.accident_on);
+    accident_on.setHours(accident_on.getHours() - 7);
+
     var location_x_cross = fact[FACTS.X_CROSS].items.find(x_cross => `${x_cross.x_cross_id}` === `${data.specific.location_x_cross_id}`); // Returns undefined if not found
     return {
         ...ss101_part,
-        ...transformWorkRequestResponseToFormState(ss101_part),
+        accident_on: accident_on.toISOString().slice(0, 16),
+        location_district_id: returnEmptyStringIfNull(ss101_part.location_district_id),
+        location_node_id: returnEmptyStringIfNull(ss101_part.location_node_id),
+        location_station_id: returnEmptyStringIfNull(ss101_part.location_station_id),
 
         // // Bottom Content
         car_type_id: returnEmptyStringIfNull(ss101_part.car_type_id),
-        departed_on: ss101_part.departed_on.slice(0, 16),
-        arrived_on: ss101_part.arrived_on.slice(0, 16),
-        request_on: ss101_part.request_on.slice(0, 16),
-        finished_on: ss101_part.finished_on.slice(0, 16),
+        departed_on: departed_on.toISOString().slice(0, 16),
+        arrived_on: arrived_on.toISOString().slice(0, 16),
+        request_on: request_on.toISOString().slice(0, 16),
+        finished_on: finished_on.toISOString().slice(0, 16),
         system_type_group_id: returnEmptyStringIfNull(data.specific.system_type.system_type_group_id),
         sub_maintenance_type_id: returnEmptyStringIfNull(ss101_part.sub_maintenance_type_id),
         hardware_type_id: returnEmptyStringIfNull(ss101_part.hardware_type_id),
