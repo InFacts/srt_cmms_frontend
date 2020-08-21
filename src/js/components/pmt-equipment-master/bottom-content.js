@@ -443,7 +443,7 @@ const BottomContent = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {console.log("factEquipmentStatus.items", factEquipmentStatus.items)}
+                  {/* {console.log("factEquipmentStatus.items", factEquipmentStatus.items)} */}
                   {values.ref_document.map((document, index) => {
                     let statuses = factEquipmentStatus.items;
                     let status = statuses.find(status => `${status.item_status_id}` === `${document.equipment_status_id}`); // Returns undefined if not found

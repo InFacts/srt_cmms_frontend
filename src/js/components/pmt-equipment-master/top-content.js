@@ -37,11 +37,11 @@ const TopContent = (props) => {
   const factItemStatus = useSelector((state) => ({ ...state.api.fact[FACTS.ITEM_STATUS] }), shallowEqual);
   const factChecklist = useSelector((state) => ({ ...state.api.fact.checklist }), shallowEqual);
 
+  console.log("line_position_permission>>>>", values.line_position_permission)
+
   const responseToFormState = (data) => {
-    console.log("data>>>>", data)
     let fact_checklists = factChecklist.items;
     let fact_checklist = fact_checklists.find(factChecklist => `${factChecklist.checklist_id}` === `${data.equipment_group.checklist_id}`); // Returns undefined if not found
-    // if (fact_checklist) {
     return {
       item_id: data.item_id,
       internal_item_id: data.equipment_group.item.internal_item_id,
@@ -52,7 +52,7 @@ const TopContent = (props) => {
       equipment_group_id: data.equipment_group.equipment_group_id,
       active: data.equipment_group.item.active.data[0],
       item_type_id: data.equipment_group.item.item_type_id,
-      uom_group_id: 1,                   
+      uom_group_id: 1,
       uom_id: data.equipment_group.item.uom_group.uom[0].uom_id,
       uom_name: data.equipment_group.item.uom_group.uom[0].name,
       remark: data.equipment_group.item.remark,
@@ -77,9 +77,7 @@ const TopContent = (props) => {
 
       equipment_id: data.equipment_id,
       modeEdit: values.line_position_permission[0].module_admin === true ? true : false     // IF Check user If User is Admin -> return true Else -> return false
-
-    // }
-  }
+    }
   }
 
   // Fetch permissiton
@@ -95,26 +93,25 @@ const TopContent = (props) => {
       if (internal_item_id !== values.internal_item_id) {
         var item_match_equipments = factEquipment.items;
         let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.equipment_group.item.internal_item_id}` === `${internal_item_id}`); // Returns undefined if not found
-        // console.log("item_match_equipment", item_match_equipment)
+        console.log("item_match_equipment", item_match_equipment)
         if (item_match_equipment) {
           setValues({ ...values, ...responseToFormState(item_match_equipment) }, false); //Setvalues and don't validate
-
           const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/fact/equipment/${item_match_equipment.equipment_id}/history`;
           axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
             .then((res) => {
-              console.log("history", res.data);
+              // console.log("history", res.data);
               setFieldValue("ref_document", res.data.results, false);
               return;
             }).catch((err) => {
               console.log("history", err.response);
-          });
+            });
 
         } else {
           // console.log("values.modeEdit", values.modeEdit)
           if (values.modeEdit) {
             return;
           } else {
-          return 'Invalid Equipment ID';
+            return 'Invalid Equipment ID';
           }
         }
       }
@@ -139,7 +136,7 @@ const TopContent = (props) => {
   const validateItemMasterdataField = (fieldName, name) => {
     if (!name) {
       return 'Required'
-    } 
+    }
     return;
   };
 
@@ -230,8 +227,8 @@ const TopContent = (props) => {
               {/* === import_on === */}
               <div className="float-right">
                 <div className="grid_3 float-right">
-                  <DateInput name="import_on" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH} 
-                  validate={validateImportOnField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="5" />
+                  <DateInput name="import_on" disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH}
+                    validate={validateImportOnField} cssStyle={{ left: "-160px", top: "10px" }} tabIndex="5" />
                 </div>
                 <div className="grid_2 float-right">
                   <p className="top-text float-right">วันที่นำเข้า</p>

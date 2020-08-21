@@ -37,7 +37,7 @@ const GoodsReceiptComponent = (props) => {
     const [toolbarMode, setToolBarMode] = useState(TOOLBAR_MODE.SEARCH);
 
     useEffect(() => {
-        if (values.line_position_permission.length >= 1) {
+        if (values.line_position_permission) {
             if (values.line_position_permission[0].module_admin) {
                 setToolBarMode(TOOLBAR_MODE.SEARCH)
             } else {
@@ -45,10 +45,6 @@ const GoodsReceiptComponent = (props) => {
             }
         }
     }, [decoded_token]);
-
-    useEffect(() => {
-        resetForm({ values }); 
-    }, [TOOLBAR_MODE.SEARCH, TOOLBAR_MODE.ADD]);
 
     useToolbarInitializer(toolbarMode);
     useTokenInitializer();
@@ -64,7 +60,7 @@ const GoodsReceiptComponent = (props) => {
                 <TabBar tabNames={tabNames} initialTabID="general">
                     <BottomContent />
                 </TabBar>
-                <Footer setFieldValue={setFieldValue}/>
+                <Footer setFieldValue={setFieldValue} />
             </form>
         </>
     )
@@ -149,8 +145,7 @@ const EnhancedGoodsReceiptComponent = withFormik({
 
         // FOR CHECK USER_ID ADMIN FOR EDIT
         modeEdit: false,
-        line_position_permission: [],
-        
+
         // For Attactment
         desrciption_files_length: '',
         desrciption_files: [],
