@@ -775,7 +775,9 @@ export const packDataFromValues = (fact, values, document_type_id, checked_remar
             refer_to_document_id: values.refer_to_document_id ? values.refer_to_document_id : null,
             document_date: values.document_date + 'T00:00:00+00:00'
         };
-        console.log("document_part", document_part)
+
+        var location_x_cross = fact[FACTS.X_CROSS].items.find(x_cross => `${x_cross.road_center}` === `${values.location_x_cross_id}`); // Returns undefined if not found
+        console.log("location_x_cross", location_x_cross)
         let ss101_part = {
             document_id: values.document_id,
             accident_name: values.accident_name,
@@ -806,7 +808,7 @@ export const packDataFromValues = (fact, values, document_type_id, checked_remar
             request_by: values.request_by,
             location_district_id: values.location_district_id ? parseInt(values.location_district_id) : null,
             departed_on: values.departed_on + ':00+00:00',
-            location_x_cross_id: values.location_x_cross_id ? parseInt(values.location_x_cross_id) : null,
+            location_x_cross_id: values.location_x_cross_id ? location_x_cross.x_cross_id : null,
             auditor_name: values.auditor_name,
             auditor_position_id: values.auditor_position_id ? parseInt(values.auditor_position_id) : null,
             fixer_name: values.fixer_name,
@@ -902,7 +904,9 @@ export const packDataFromValues = (fact, values, document_type_id, checked_remar
             created_by_user_id: getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_user_employee_id),
             document_date: values.document_date + 'T00:00:00+00:00',
         }
-
+        
+        var location_x_cross = fact[FACTS.X_CROSS].items.find(x_cross => `${x_cross.road_center}` === `${values.x_cross_x_cross_id}`); // Returns undefined if not found
+        console.log("location_x_cross", location_x_cross)
         var equipment_install_part = {
             document_id: values.document_id,
             equipment_id: values.equipment_id ? parseInt(values.equipment_id) : null,
@@ -912,7 +916,7 @@ export const packDataFromValues = (fact, values, document_type_id, checked_remar
             location_description: values.location_description,
             installed_on: values.installed_on + 'T00:00:00+00:00',
             announce_use_on: values.announce_use_on + 'T00:00:00+00:00',
-            x_cross_x_cross_id: values.x_cross_x_cross_id ? parseInt(values.x_cross_x_cross_id) : null,
+            x_cross_x_cross_id: location_x_cross.x_cross_id,
             responsible_node_id: values.location_node_id ? parseInt(values.location_node_id) : null
         }
         var line_items_part = [
@@ -2122,7 +2126,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
         )
         // console.log("this is document_part 123  ", document_part)
         // console.log("this is ss101_part ", ss101_part)
-        return { ...transformDocumentResponseToFormState(document_part, fact, document_type_group_id), ...transformSS101ResponseToFormState(ss101_part, data) }
+        return { ...transformDocumentResponseToFormState(document_part, fact, document_type_group_id), ...transformSS101ResponseToFormState(ss101_part, data, fact) }
     } else if (document_type_group_id === DOCUMENT_TYPE_ID.MAINTENANT_ITEM) {
         for (var i = data.specific.line_items.length; i <= 9; i++) {
             data.specific.line_items.push(
@@ -2164,6 +2168,9 @@ const responseToFormState = (fact, data, document_type_group_id) => {
         // created_on.setHours(created_on.getHours() + 7);
         let document_statuses = fact[FACTS.DOCUMENT_STATUS].items;
         let document_status = document_statuses.find(document_status => `${document_status.document_status_id}` === `${data.document.document_status_id}`);
+        
+        var location_x_cross = fact[FACTS.X_CROSS].items.find(x_cross => `${x_cross.x_cross_id}` === `${data.specific.x_cross_x_cross_id}`); // Returns undefined if not found
+
         if (document_status) {
             return {
                 document_id: data.document.document_id,
@@ -2186,7 +2193,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                 location_node_id: data.specific.location_node_id,
                 location_station_id: data.specific.location_station_id,
                 installed_on: data.specific.installed_on.slice(0, 10),
-                x_cross_x_cross_id: data.specific.x_cross_x_cross_id,
+                x_cross_x_cross_id: location_x_cross.road_center,
                 status_name_th: document_status.status
             }
         }
@@ -2311,7 +2318,8 @@ function transformWorkOrderResponseToFormState(work_order_part) {
         line_items: returnFullArrayHasEquipmentItemNull(work_order_part.line_items),
     }
 }
-function transformSS101ResponseToFormState(ss101_part, data) {
+function transformSS101ResponseToFormState(ss101_part, data, fact) {
+    var location_x_cross = fact[FACTS.X_CROSS].items.find(x_cross => `${x_cross.x_cross_id}` === `${data.specific.location_x_cross_id}`); // Returns undefined if not found
     return {
         ...ss101_part,
         ...transformWorkRequestResponseToFormState(ss101_part),
@@ -2330,7 +2338,7 @@ function transformSS101ResponseToFormState(ss101_part, data) {
         service_method_id: returnEmptyStringIfNull(ss101_part.service_method_id),
         interrupt_id: returnEmptyStringIfNull(ss101_part.interrupt_id),
         doc_bypass_doc_bypass_id: data.specific.doc_bypass_doc_bypass_id,
-        location_x_cross_id: data.specific.location_x_cross_id,
+        location_x_cross_id: location_x_cross.road_center,
 
         // // Bottom Content ผู้เกี่ยวข้อง
         auditor_position_id: returnEmptyStringIfNull(ss101_part.auditor_position_id),

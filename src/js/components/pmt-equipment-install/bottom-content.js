@@ -8,6 +8,8 @@ import TextareaInput from '../common/formik-textarea-input';
 import DateInput from '../common/formik-date-input';
 import DateTimeInput from '../common/formik-datetime-input';
 import SelectNoChildrenInput from '../common/formik-select-no-children';
+import DatalisrNoChildrenInput from '../common/formik-datalist-no-children';
+
 import { useFormik, withFormik, useFormikContext } from 'formik';
 import Label from '../common/form-label'
 import {
@@ -38,6 +40,19 @@ const BottomContent = (props) => {
     const validateLocationDistrictIDField = (...args) => validatedataDocumentField("location_district_id", setFieldValue, ...args)
     const validateLocationNodeIDField = (...args) => validatedataDocumentField("location_node_id", setFieldValue, ...args)
     const validateLocationStationIDField = (...args) => validatedataDocumentField("location_station_id", setFieldValue, ...args)
+
+    const validateDocumentLocationXCrossIDField = (location_x_cross_id) => {
+        if (location_x_cross_id) {
+            var location_x_cross = fact[FACTS.X_CROSS].items.find(x_cross => `${x_cross.road_center}` === `${location_x_cross_id}`); // Returns undefined if not found
+            if (location_x_cross) {
+                return;
+            } else {
+                return 'Invalid Location x Cross'
+            }
+        } else {
+            return;
+        }
+    }
 
     return (
         <div id={changeTheam() === true ? "" : "blackground-gray"}>
@@ -203,13 +218,16 @@ const BottomContent = (props) => {
                                 <p className="top-text">ศูนย์กลางทางผ่าน</p>
                             </div>
                             <div className="grid_7 pull_0">
-                                <SelectNoChildrenInput name="x_cross_x_cross_id" tabIndex="15" validate={validateLocationStationIDField} cssStyle={{ left: "-480px", top: "10px" }}
+                                {/* <SelectNoChildrenInput name="x_cross_x_cross_id" tabIndex="15" validate={validateLocationStationIDField} cssStyle={{ left: "-480px", top: "10px" }}
                                     disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                                     <option value=''></option>
                                     {factXCross.items.map((x_cross) => {
                                         return <option key={x_cross.x_cross_id} value={x_cross.x_cross_id} selected>{x_cross.road_center} \\ {x_cross.name} \\ {x_cross.x_road_name}</option>
                                     })}
-                                </SelectNoChildrenInput>
+                                </SelectNoChildrenInput> */}
+                                <DatalisrNoChildrenInput name="x_cross_x_cross_id" validate={validateDocumentLocationXCrossIDField} cssStyle={{ left: "-480px", top: "10px" }}
+                                    disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                    tabIndex="15" />
                             </div>
 
                             <div class="clear" />
