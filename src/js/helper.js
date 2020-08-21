@@ -2526,9 +2526,13 @@ export const validateInternalDocumentIDWorfOrderPMFieldHelper = (decoded_token, 
     // Internal Document ID
     //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
     //  ie. GR-PYO-2563/0001
-    if (checkBooleanForEdit === true && (toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)) {
+    // if (toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME) {
+    //     return resolve();
+    // }
+    if (internal_document_id === values.internal_document_id) {
         return resolve();
     }
+
     if (document_type_group_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM) {
         let error;
         getDocumentbyInternalDocumentID(internal_document_id)
@@ -2565,10 +2569,13 @@ export const validateInternalDocumentIDFieldHelper = (decoded_token, checkBoolea
     // Internal Document ID
     //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
     //  ie. GR-PYO-2563/0001
-    if (checkBooleanForEdit === true && (toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)) {
+    // if (checkBooleanForEdit === true && (toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)) {
+    //     return resolve();
+    // }
+    if (internal_document_id === values.internal_document_id) {
         return resolve();
     }
-
+    
     // Basic Form Checks of the Internal Document ID
     // 1. If it is empty
     // 2. If it is in the valid Form

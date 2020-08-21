@@ -46,6 +46,10 @@ const GoodsReceiptComponent = (props) => {
         }
     }, [decoded_token]);
 
+    useEffect(() => {
+        resetForm({ values }); 
+    }, [TOOLBAR_MODE.SEARCH, TOOLBAR_MODE.ADD]);
+
     useToolbarInitializer(toolbarMode);
     useTokenInitializer();
     useFactInitializer();
@@ -118,6 +122,15 @@ const EnhancedGoodsReceiptComponent = withFormik({
         active: '',
         accounting_type: '',
         remark: '',
+        method: '',
+        responsible_district_id: '',
+        responsible_node_id: '',
+        location_district_id: '',
+        location_node_id: '',
+        location_station_id: '',
+        location_description: '',
+        x_cross_x_cross_id: '',
+        depreciation: '',
         // Equipment Content
         price_import: '',
         price_currently: '',
