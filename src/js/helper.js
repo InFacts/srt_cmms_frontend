@@ -906,7 +906,7 @@ export const packDataFromValues = (fact, values, document_type_id, checked_remar
         }
         
         var location_x_cross = fact[FACTS.X_CROSS].items.find(x_cross => `${x_cross.road_center}` === `${values.x_cross_x_cross_id}`); // Returns undefined if not found
-        console.log("location_x_cross", location_x_cross)
+
         var equipment_install_part = {
             document_id: values.document_id,
             equipment_id: values.equipment_id ? parseInt(values.equipment_id) : null,
@@ -916,7 +916,7 @@ export const packDataFromValues = (fact, values, document_type_id, checked_remar
             location_description: values.location_description,
             installed_on: values.installed_on + 'T00:00:00+00:00',
             announce_use_on: values.announce_use_on + 'T00:00:00+00:00',
-            x_cross_x_cross_id: location_x_cross.x_cross_id,
+            x_cross_x_cross_id: values.x_cross_x_cross_id ? location_x_cross.x_cross_id : null,
             responsible_node_id: values.location_node_id ? parseInt(values.location_node_id) : null
         }
         var line_items_part = [
@@ -2193,7 +2193,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                 location_node_id: data.specific.location_node_id,
                 location_station_id: data.specific.location_station_id,
                 installed_on: data.specific.installed_on.slice(0, 10),
-                x_cross_x_cross_id: location_x_cross.road_center,
+                x_cross_x_cross_id: data.specific.x_cross_x_cross_id ? location_x_cross.road_center : null,
                 status_name_th: document_status.status
             }
         }
@@ -2308,6 +2308,7 @@ function transformWorkRequestResponseToFormState(work_request_part) {
     }
 }
 function transformWorkOrderResponseToFormState(work_order_part) {
+    
     return {
         ...work_order_part,
         accident_on: work_order_part.accident_on.slice(0, 16),
@@ -2338,7 +2339,7 @@ function transformSS101ResponseToFormState(ss101_part, data, fact) {
         service_method_id: returnEmptyStringIfNull(ss101_part.service_method_id),
         interrupt_id: returnEmptyStringIfNull(ss101_part.interrupt_id),
         doc_bypass_doc_bypass_id: data.specific.doc_bypass_doc_bypass_id,
-        location_x_cross_id: location_x_cross.road_center,
+        location_x_cross_id: data.specific.location_x_cross_id ? location_x_cross.road_center : null,
 
         // // Bottom Content ผู้เกี่ยวข้อง
         auditor_position_id: returnEmptyStringIfNull(ss101_part.auditor_position_id),
