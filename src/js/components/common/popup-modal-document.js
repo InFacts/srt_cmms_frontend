@@ -28,7 +28,8 @@ const PopupModalDocument = (props) => {
     const [valueNodeID, setValueNodeID] = useState('');
     const [valueNodeIDWorkOrderPM, setValueNodeIDWorkOrderPM] = useState([]);
     const [valueNodeIDFormDistrictWorkOrderPM, setValueNodeIDFormDistrictWorkOrderPM] = useState([]);
-
+    console.log("valueDivisionID", valueDivisionID, "valueDistrictID", valueDistrictID, "valueNodeID", valueNodeID)
+    console.log("decoded_token.has_position", decoded_token)
     useEffect(() => {
         let users = factUsers.items;
         let user = users.find(user => `${user.user_id}` === `${decoded_token.id}`);
@@ -110,7 +111,6 @@ const PopupModalDocument = (props) => {
                             <tbody>
                                 {data.map(function (document, index) {
                                     // console.log("document>>>", document)
-                                    // console.log("decoded_token.has_position", decoded_token)
                                     // <<<<<<======= DOCUMENT SPARE ===========>>>>>>>>>
                                     if (document.dest_warehouse_id && document.src_warehouse_id || document.physical_count_warehouse_id
                                         || document.inventory_adjustment_warehouse_id) {

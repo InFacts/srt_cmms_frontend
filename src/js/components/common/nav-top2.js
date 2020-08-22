@@ -42,10 +42,12 @@ const MainModule = (props) => {
         }
     }, [decoded_token.has_position]);
 
+    let url = window.location.pathname;
+
     useEffect(() => {
         // Load Notify
         props.loadNotify();
-    }, [toolbar.mode]);
+    }, [toolbar.mode, url]);
 
     // useEffect(() => {
     //     // Setup SubNav
@@ -54,7 +56,7 @@ const MainModule = (props) => {
 
     const identifyEndpoins = (document_type_id) => identifyEndpoinsHelper(document_type_id)
 
-    let url = window.location.pathname;
+   
 
     useEffect(() => {
         // Setup SubNav
