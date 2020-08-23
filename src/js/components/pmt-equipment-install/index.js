@@ -90,6 +90,7 @@ const EnhancedEquipmentInstallationComponent = withFormik({
         status_name_th: '',              // TODO doesn't have (Field ที่ไม่ได้กรอก)
         equipment_id: '',
         equipment_status_id: '',
+        location_x_cross_id: '',
 
         // Bottom Content
         // general_content

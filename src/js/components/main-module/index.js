@@ -17,7 +17,7 @@ const MainModule = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }));
 
     // Initializer: Change Toolbar to Mode None
-    useToolbarChangeModeInitializer(TOOLBAR_MODE.NONE);
+    useToolbarChangeModeInitializer(TOOLBAR_MODE.INVISIBLE);
     useFactInitializer();
     useTokenInitializer();
     const loggedIn = useSelector(state => state.token.isLoggedIn); 

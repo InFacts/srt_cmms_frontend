@@ -139,8 +139,8 @@ const BottomContent = (props) => {
                               handleModalClick={() => setLineNumber1(line_number)} />
                             : ""}
                         </td>
-                        <td className="edit-padding">{values.w1_list[index].station_id ? "-" : line_item.checklist_th}</td>
-                        <td className="edit-padding">{values.w1_list[index].station_id ? "-" : line_item.x_cross_x_cross_th}</td>
+                        <td className="edit-padding">{values.w1_list[index].station_id ? "-" : values.w1_list[index].internal_item_id && line_item.checklist_th}</td>
+                        <td className="edit-padding">{values.w1_list[index].station_id ? "-" : values.w1_list[index].internal_item_id && line_item.x_cross_x_cross_th}</td>
 
                       </tr>
                     )
@@ -195,8 +195,8 @@ const BottomContent = (props) => {
                             : ""
                           }
                         </td>
-                        <td className="edit-padding">{values.w2_list[index].station_id ? "-" : line_item.checklist_th}</td>
-                        <td className="edit-padding">{values.w2_list[index].station_id ? "-" : line_item.x_cross_x_cross_th}</td>
+                        <td className="edit-padding">{values.w2_list[index].station_id ? "-" : values.w2_list[index].internal_item_id && line_item.checklist_th}</td>
+                        <td className="edit-padding">{values.w2_list[index].station_id ? "-" : values.w2_list[index].internal_item_id && line_item.x_cross_x_cross_th}</td>
                       </tr>
                     )
                   })}
@@ -249,8 +249,8 @@ const BottomContent = (props) => {
                               handleModalClick={() => setLineNumber3(line_number)} />
                             : ""}
                         </td>
-                        <td className="edit-padding">{values.w3_list[index].station_id ? "-" : line_item.checklist_th}</td>
-                        <td className="edit-padding">{values.w3_list[index].station_id ? "-" : line_item.x_cross_x_cross_th}</td>
+                        <td className="edit-padding">{values.w3_list[index].station_id ? "-" : values.w3_list[index].internal_item_id && line_item.checklist_th}</td>
+                        <td className="edit-padding">{values.w3_list[index].station_id ? "-" : values.w3_list[index].internal_item_id && line_item.x_cross_x_cross_th}</td>
 
                       </tr>
                     )
@@ -304,8 +304,8 @@ const BottomContent = (props) => {
                               handleModalClick={() => setLineNumber4(line_number)} />
                             : ""}
                         </td>
-                        <td className="edit-padding">{values.w4_list[index].station_id ? "-" : line_item.checklist_th}</td>
-                        <td className="edit-padding">{values.w4_list[index].station_id ? "-" : line_item.x_cross_x_cross_th}</td>
+                        <td className="edit-padding">{values.w4_list[index].station_id ? "-" : values.w4_list[index].internal_item_id && line_item.checklist_th}</td>
+                        <td className="edit-padding">{values.w4_list[index].station_id ? "-" : values.w4_list[index].internal_item_id && line_item.x_cross_x_cross_th}</td>
 
                       </tr>
                     )

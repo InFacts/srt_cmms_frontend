@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import '../../../vender/fontawesome-free/css/all.css';
 import '../../../css/position-arrow-spare-part.css';
-
+import Logo from '../../../images/logo.png';
 import Dropdown from '../../../images/spare/drop-dawn.svg'
 
 import Oneone from '../../../images/spare/one-one.svg'
@@ -144,6 +144,7 @@ class Map extends React.Component {
                 <div>
                     <div className="container_12 clearfix">
                         <section className="grid_12 ">
+                            
                             <h4 className="head-title" style={{ color: "black" }}>ระบบบริหารข้อมูลอะไหล่ - Spare</h4>
                             <div id="blackground-white" style={changeTheam() === true ? { borderRadius: "25px", border: "2px dashed gray", height: "380px" } : { height: "380px" }}>
 
@@ -299,8 +300,12 @@ class Map extends React.Component {
                                     </span>
                                 </span>
                             </div>
+                            
                         </section>
                     </div>
+                </div>
+                <div style={{ margin: "auto", width: "960px", height: "25%" }}>
+                <img className="float-right mt-2" width="200px" alt='red house' src={Logo} />
                 </div>
                 {/* <div id="red-house2">
                     <div className="container_12 clearfix">

@@ -32,7 +32,7 @@ const PermisstionAdminComponent = (props) => {
     useEffect(() => {
         fetchPositionPermissionData()
             .then((position_permission) => {
-                // console.log("position_permission", position_permission)
+                console.log("position_permission", position_permission)
                 position_permission.map((list_module) => {
                     module.push({
                         position_id: list_module.position_id,

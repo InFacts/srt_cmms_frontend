@@ -6,7 +6,7 @@ import '../../../css/position-arrow-als.css';
 
 import Oneone from '../../../images/als/one-one.svg'
 import OneoneNew from '../../../images/als/one-one-new.svg'
-
+import Logo from '../../../images/logo.png';
 import Text1 from '../../../images/als/text1.svg'
 
 import Twoone from '../../../images/als/two-one.svg'
@@ -160,7 +160,9 @@ class Map extends React.Component {
                         </section>
                     </div>
                 </div>
-
+                <div style={{ margin: "auto", width: "960px", height: "25%" }}>
+                <img className="float-right mt-2" width="200px" alt='red house' src={Logo} />
+                </div>
                 {/* <div id="red-house2">
                     <div className="container_12 clearfix">
                         <div className="grid_12 from-red-house">

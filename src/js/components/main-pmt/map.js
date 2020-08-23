@@ -5,7 +5,7 @@ import '../../../vender/fontawesome-free/css/all.css';
 import '../../../css/position-arrow-pmt.css';
 
 import Dropdown from '../../../images/spare/drop-dawn.svg'
-
+import Logo from '../../../images/logo.png';
 import Oneone from '../../../images/pmt/one-one.svg'
 import OneoneNew from '../../../images/pmt/one-one-new.svg'
 
@@ -256,6 +256,9 @@ class Map extends React.Component {
 
                         </div>
                     </section>
+                </div>
+                <div style={{ margin: "auto", width: "960px", height: "25%" }}>
+                <img className="float-right mt-2" width="200px" alt='red house' src={Logo} />
                 </div>
                 {/* <div id="red-house2">
                     <div className="container_12 clearfix">

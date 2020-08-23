@@ -775,7 +775,9 @@ export const packDataFromValues = (fact, values, document_type_id, checked_remar
             refer_to_document_id: values.refer_to_document_id ? values.refer_to_document_id : null,
             document_date: values.document_date + 'T00:00:00+00:00'
         };
-        console.log("document_part", document_part)
+
+        var location_x_cross = fact[FACTS.X_CROSS].items.find(x_cross => `${x_cross.road_center}` === `${values.location_x_cross_id}`); // Returns undefined if not found
+        console.log("location_x_cross", location_x_cross)
         let ss101_part = {
             document_id: values.document_id,
             accident_name: values.accident_name,
@@ -806,7 +808,7 @@ export const packDataFromValues = (fact, values, document_type_id, checked_remar
             request_by: values.request_by,
             location_district_id: values.location_district_id ? parseInt(values.location_district_id) : null,
             departed_on: values.departed_on + ':00+00:00',
-            location_x_cross_id: values.location_x_cross_id ? parseInt(values.location_x_cross_id) : null,
+            location_x_cross_id: values.location_x_cross_id ? location_x_cross.x_cross_id : null,
             auditor_name: values.auditor_name,
             auditor_position_id: values.auditor_position_id ? parseInt(values.auditor_position_id) : null,
             fixer_name: values.fixer_name,
@@ -902,6 +904,8 @@ export const packDataFromValues = (fact, values, document_type_id, checked_remar
             created_by_user_id: getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_user_employee_id),
             document_date: values.document_date + 'T00:00:00+00:00',
         }
+        
+        var location_x_cross = fact[FACTS.X_CROSS].items.find(x_cross => `${x_cross.road_center}` === `${values.x_cross_x_cross_id}`); // Returns undefined if not found
 
         var equipment_install_part = {
             document_id: values.document_id,
@@ -912,7 +916,7 @@ export const packDataFromValues = (fact, values, document_type_id, checked_remar
             location_description: values.location_description,
             installed_on: values.installed_on + 'T00:00:00+00:00',
             announce_use_on: values.announce_use_on + 'T00:00:00+00:00',
-            x_cross_x_cross_id: values.x_cross_x_cross_id ? parseInt(values.x_cross_x_cross_id) : null,
+            x_cross_x_cross_id: values.x_cross_x_cross_id ? location_x_cross.x_cross_id : null,
             responsible_node_id: values.location_node_id ? parseInt(values.location_node_id) : null
         }
         var line_items_part = [
@@ -1779,7 +1783,7 @@ export const fetchPositionPermissionData = (position_id) => new Promise((resolve
     const url = `${BASE_URL}/admin/position-permission?${position_id ? `position_id=${position_id}` : `&page_size=${PAGE_SIZE}`}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
         .then((res) => {
-            console.log("res", res)
+            // console.log("res", res)
             resolve(res.data.results);
         })
         .catch((err) => {
@@ -2122,7 +2126,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
         )
         // console.log("this is document_part 123  ", document_part)
         // console.log("this is ss101_part ", ss101_part)
-        return { ...transformDocumentResponseToFormState(document_part, fact, document_type_group_id), ...transformSS101ResponseToFormState(ss101_part, data) }
+        return { ...transformDocumentResponseToFormState(document_part, fact, document_type_group_id), ...transformSS101ResponseToFormState(ss101_part, data, fact) }
     } else if (document_type_group_id === DOCUMENT_TYPE_ID.MAINTENANT_ITEM) {
         for (var i = data.specific.line_items.length; i <= 9; i++) {
             data.specific.line_items.push(
@@ -2160,10 +2164,17 @@ const responseToFormState = (fact, data, document_type_group_id) => {
             }
         }
     } else if (document_type_group_id === DOCUMENT_TYPE_ID.EQUIPMENT_INSTALLATION) {
-        // var created_on = new Date(data.document.created_on);
-        // created_on.setHours(created_on.getHours() + 7);
+        var announce_use_on = new Date(data.specific.announce_use_on);
+        announce_use_on.setHours(announce_use_on.getHours() - 7);
+
+        var installed_on = new Date(data.specific.installed_on);
+        installed_on.setHours(installed_on.getHours() - 7);
+
         let document_statuses = fact[FACTS.DOCUMENT_STATUS].items;
         let document_status = document_statuses.find(document_status => `${document_status.document_status_id}` === `${data.document.document_status_id}`);
+        
+        var location_x_cross = fact[FACTS.X_CROSS].items.find(x_cross => `${x_cross.x_cross_id}` === `${data.specific.x_cross_x_cross_id}`); // Returns undefined if not found
+
         if (document_status) {
             return {
                 document_id: data.document.document_id,
@@ -2180,13 +2191,13 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                 created_on: data.document.created_on.split(".")[0],
                 remark: data.document.remark,
                 document_date: data.document.document_date.slice(0, 10),
-                announce_use_on: data.specific.announce_use_on.slice(0, 10),
+                announce_use_on: announce_use_on.toISOString().slice(0, 10),
                 location_description: data.specific.location_description,
                 location_district_id: data.specific.location_district_id,
                 location_node_id: data.specific.location_node_id,
                 location_station_id: data.specific.location_station_id,
-                installed_on: data.specific.installed_on.slice(0, 10),
-                x_cross_x_cross_id: data.specific.x_cross_x_cross_id,
+                installed_on: installed_on.toISOString().slice(0, 10),
+                x_cross_x_cross_id: data.specific.x_cross_x_cross_id ? location_x_cross.road_center : null,
                 status_name_th: document_status.status
             }
         }
@@ -2301,27 +2312,52 @@ function transformWorkRequestResponseToFormState(work_request_part) {
     }
 }
 function transformWorkOrderResponseToFormState(work_order_part) {
+    var accident_on = new Date(work_order_part.accident_on);
+    accident_on.setHours(accident_on.getHours() - 7);
+
+    var request_on = new Date(work_order_part.request_on);
+    request_on.setHours(request_on.getHours() - 7);
     return {
         ...work_order_part,
-        accident_on: work_order_part.accident_on.slice(0, 16),
-        request_on: work_order_part.request_on.slice(0, 16),
+        accident_on: accident_on.toISOString().slice(0, 16),
+        request_on: request_on.toISOString().slice(0, 16),
         location_district_id: returnEmptyStringIfNull(work_order_part.location_district_id),
         location_node_id: returnEmptyStringIfNull(work_order_part.location_node_id),
         location_station_id: returnEmptyStringIfNull(work_order_part.location_station_id),
         line_items: returnFullArrayHasEquipmentItemNull(work_order_part.line_items),
     }
 }
-function transformSS101ResponseToFormState(ss101_part, data) {
+function transformSS101ResponseToFormState(ss101_part, data, fact) {
+
+    var departed_on = new Date(ss101_part.departed_on);
+    departed_on.setHours(departed_on.getHours() - 7);
+
+    var arrived_on = new Date(ss101_part.arrived_on);
+    arrived_on.setHours(arrived_on.getHours() - 7);
+
+    var request_on = new Date(ss101_part.request_on);
+    request_on.setHours(request_on.getHours() - 7);
+
+    var finished_on = new Date(ss101_part.finished_on);
+    finished_on.setHours(finished_on.getHours() - 7);
+
+    var accident_on = new Date(ss101_part.accident_on);
+    accident_on.setHours(accident_on.getHours() - 7);
+
+    var location_x_cross = fact[FACTS.X_CROSS].items.find(x_cross => `${x_cross.x_cross_id}` === `${data.specific.location_x_cross_id}`); // Returns undefined if not found
     return {
         ...ss101_part,
-        ...transformWorkRequestResponseToFormState(ss101_part),
+        accident_on: accident_on.toISOString().slice(0, 16),
+        location_district_id: returnEmptyStringIfNull(ss101_part.location_district_id),
+        location_node_id: returnEmptyStringIfNull(ss101_part.location_node_id),
+        location_station_id: returnEmptyStringIfNull(ss101_part.location_station_id),
 
         // // Bottom Content
         car_type_id: returnEmptyStringIfNull(ss101_part.car_type_id),
-        departed_on: ss101_part.departed_on.slice(0, 16),
-        arrived_on: ss101_part.arrived_on.slice(0, 16),
-        request_on: ss101_part.request_on.slice(0, 16),
-        finished_on: ss101_part.finished_on.slice(0, 16),
+        departed_on: departed_on.toISOString().slice(0, 16),
+        arrived_on: arrived_on.toISOString().slice(0, 16),
+        request_on: request_on.toISOString().slice(0, 16),
+        finished_on: finished_on.toISOString().slice(0, 16),
         system_type_group_id: returnEmptyStringIfNull(data.specific.system_type.system_type_group_id),
         sub_maintenance_type_id: returnEmptyStringIfNull(ss101_part.sub_maintenance_type_id),
         hardware_type_id: returnEmptyStringIfNull(ss101_part.hardware_type_id),
@@ -2330,7 +2366,7 @@ function transformSS101ResponseToFormState(ss101_part, data) {
         service_method_id: returnEmptyStringIfNull(ss101_part.service_method_id),
         interrupt_id: returnEmptyStringIfNull(ss101_part.interrupt_id),
         doc_bypass_doc_bypass_id: data.specific.doc_bypass_doc_bypass_id,
-        location_x_cross_id: data.specific.location_x_cross_id,
+        location_x_cross_id: data.specific.location_x_cross_id ? location_x_cross.road_center : null,
 
         // // Bottom Content ผู้เกี่ยวข้อง
         auditor_position_id: returnEmptyStringIfNull(ss101_part.auditor_position_id),
@@ -2526,9 +2562,13 @@ export const validateInternalDocumentIDWorfOrderPMFieldHelper = (decoded_token, 
     // Internal Document ID
     //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
     //  ie. GR-PYO-2563/0001
-    if (checkBooleanForEdit === true && (toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)) {
+    // if (toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME) {
+    //     return resolve();
+    // }
+    if (internal_document_id === values.internal_document_id) {
         return resolve();
     }
+
     if (document_type_group_id === DOCUMENT_TYPE_ID.WORK_ORDER_PM) {
         let error;
         getDocumentbyInternalDocumentID(internal_document_id)
@@ -2565,10 +2605,13 @@ export const validateInternalDocumentIDFieldHelper = (decoded_token, checkBoolea
     // Internal Document ID
     //  {DocumentTypeGroupAbbreviation}-{WH Abbreviation}-{Year}-{Auto Increment ID}
     //  ie. GR-PYO-2563/0001
-    if (checkBooleanForEdit === true && (toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)) {
+    // if (checkBooleanForEdit === true && (toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.NONE || toolbar.mode === TOOLBAR_MODE.NONE_HOME)) {
+    //     return resolve();
+    // }
+    if (internal_document_id === values.internal_document_id) {
         return resolve();
     }
-
+    
     // Basic Form Checks of the Internal Document ID
     // 1. If it is empty
     // 2. If it is in the valid Form

@@ -298,18 +298,12 @@ const useExportPdfInitializer = () => {
           "Totol": "",
         }
 
-
-
         exportPDF(routeLocation, data_json).then(function (htmlCode) {
-
-          // const blob = pdf(htmlCode).toBlob();
-          // console.log(blob)
-          // MyDocument(htmlCode)
           var w = window.open();
           w.document.write(htmlCode);
           setTimeout(() => {
-            w.print();
-            w.close();
+            // w.print();
+            // w.close();
           }, 500);
         })
         dispatch(handleClickExportPDF())
@@ -646,21 +640,21 @@ const createHtmlS16_46 = (table) =>
 const createRowS16_46 = (item) =>
   `<tr class="item">
     <td style=" text-align:center ; vertical-align: middle;">${item.item_id}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.internal_item_id}</td>
+    <td style=" text-align:left ; vertical-align: middle;">${item.internal_item_id}</td>
     <td style=" text-align:left ; vertical-align: middle;">${item.description}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.price_quantity}</td>
+    <td style=" text-align:right ; vertical-align: middle;">${item.price_quantity}</td>
     <td style=" text-align:center ; vertical-align: middle;">${item.unit}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.quantity}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.price}</td>
-    <td style=" text-align:center ; vertical-align: middle;">${item.type}</td>
+    <td style=" text-align:right ; vertical-align: middle;">${item.quantity}</td>
+    <td style=" text-align:right ; vertical-align: middle;">${item.price}</td>
+    <td style=" text-align:right ; vertical-align: middle;">${item.type}</td>
   </tr>`;
 
 const createTableS16_46 = (head, rows, content, total) =>
   `<table cellpadding="0" cellspacing="0" >
       <tr class="heading">
         <td  style="width: 4%; text-align:center ; vertical-align: middle; border: 0px solid #ffffff;background:#ffffff" ></td>
-        <td  style="width: 15%; text-align:center ; vertical-align: middle; border: 0px solid #ffffff;background:#ffffff"></td>
-        <td  style="width: 25%; text-align:center ; vertical-align: middle; border: 0px solid #ffffff;background:#ffffff"></td>
+        <td  style="width: 8%; text-align:center ; vertical-align: middle; border: 0px solid #ffffff;background:#ffffff"></td>
+        <td  style="width: 20%; text-align:center ; vertical-align: middle; border: 0px solid #ffffff;background:#ffffff"></td>
         <td  style="width: 8%; text-align:center; vertical-align: middle;" colSpan="2">ประเภทบัญชี</td>
         <td  style="width: 5%; text-align:center; vertical-align: middle;" >รหัสความรับผิดชอบ</td>
         <td style=" text-align:center; vertical-align: middle;" >เลขที่ งทป. คสง. งกน. รอฯ</td>   
@@ -677,8 +671,8 @@ const createTableS16_46 = (head, rows, content, total) =>
       </tr>
       <tr class="heading">
         <td  style="width: 4%; text-align:center ; vertical-align: middle;"  rowspan="2">${head.item_id}</td>
-        <td  style="width: 15%; text-align:center ; vertical-align: middle;" rowspan="2">${head.internal_item_id}</td>
-        <td  style="width: 25%; text-align:center ; vertical-align: middle;" rowspan="2">${head.description}</td>
+        <td  style="width: 8%; text-align:center ; vertical-align: middle;" rowspan="2">${head.internal_item_id}</td>
+        <td  style="width: 20%; text-align:center ; vertical-align: middle;" rowspan="2">${head.description}</td>
         <td  style="width: 8%; text-align:center; vertical-align: middle;" rowspan="2">${head.price_quantity}</td>
         <td  style="width: 5%; text-align:center; vertical-align: middle;" rowspan="2">${head.unit}</td>
         <td style=" text-align:center; vertical-align: middle;" colSpan="3">การดำเนินการ</td>    
@@ -695,7 +689,7 @@ const createTableS16_46 = (head, rows, content, total) =>
         <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"></td>
         <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;"></td>
         <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;"></td>
-        <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;">รวม</td>
+        <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;">รวมเป็นเงิน</td>
         <td style=" text-align:center ; vertical-align: middle;">${total}</td>
         <td style=" text-align:center ; vertical-align: middle;"></td>
       </tr>
@@ -724,7 +718,7 @@ const createPageS16_46 = (table, date, content) =>
       <table>
         <tr>
           <td>
-              <div class="left">ลงวันที่</div><div contenteditable="true" ><div class="dotted" style="width: 250px;"><label>${date}</label></div></div>
+              <div class="left">ลงวันที่</div><div contenteditable="true" ><div class="dotted" style="width: 250px;"><label>${date.split(".")[0].replace("T", " เวลา ") + " น."}</label></div></div>
           </td>
           <td>
               <pr><div class="left">ลงวันที่</div><div contenteditable="true"><div class="dotted" style="width: 250px;"><label> </label></div></div></pr>
@@ -735,7 +729,7 @@ const createPageS16_46 = (table, date, content) =>
       <table>
         <tr>
           <td>
-              <div class="left">เบิกจากงานคลังพัสดุ</div><div contenteditable="true" ><div class="dotted" style="width: 250px;"><label>${content.SourceWarehouseName}</label></div></div>
+              <div class="left">เบิกจากงานคลังพัสดุ</div><div contenteditable="true" ><div class="dotted" style="width: 250px; white-space: pre;"><label>${content.SourceWarehouseName}</label></div></div>
           </td>
         </tr>
       </table>
@@ -743,7 +737,7 @@ const createPageS16_46 = (table, date, content) =>
       <table>
         <tr>
           <td>
-              <div class="left">ผู้เบิก</div><div contenteditable="true" ><div class="dotted" style="width: 400px;"><label>${content.CreatedByUserNameTh}</label></div></div>
+              <div class="left">ผู้เบิก</div><div contenteditable="true" ><div class="dotted" style="width: 400px; white-space: pre;"><label>${content.CreatedByUserNameTh}</label></div></div>
           </td>
         </tr>
       </table>
@@ -751,7 +745,7 @@ const createPageS16_46 = (table, date, content) =>
       <table>
         <tr>
           <td>
-              <div class="left">ให้ส่งสิ่งของไปที่</div><div contenteditable="true" ><div class="dotted" style="width: 250px;"><label>${content.DestWarehouseName}</label></div></div>
+              <div class="left">ให้ส่งสิ่งของไปที่</div><div contenteditable="true" ><div class="dotted" style="width: 250px; white-space: pre;"><label>${content.DestWarehouseName}</label></div></div>
           </td>
         </tr>
       </table>
@@ -789,7 +783,7 @@ const createPageS16_46 = (table, date, content) =>
 
       <table>
       <tr class="item2">
-        <td style="width: 33%; text-align:center ; vertical-align: middle;">
+        <td style="width: 33%; text-align:center ; vertical-align: middle; font-size: 12px;">
           อนุญาตให้เบิกได้
         </td>
         <td style="width: 33%; text-align:center ; vertical-align: middle;">
@@ -823,7 +817,7 @@ const createPageS16_46 = (table, date, content) =>
           <td style="width: 33%; text-align:center ; vertical-align: middle;">
           เจ้าหน้าที่พัสดุ
           </td>
-          <td style="width: 33%; text-align:center ; vertical-align: middle;">
+          <td style="width: 33%; padding-left: 80px; vertical-align: middle;">
           หัวหน้างานคลังพัสดุ
           </td>
         </tr>
@@ -832,7 +826,7 @@ const createPageS16_46 = (table, date, content) =>
 
       <table>
       <tr class="item2">
-        <td style="width: 40%; text-align:center ; vertical-align: middle;">
+        <td style="width: 40%; text-align:center ; vertical-align: middle; font-size: 13px;">
         <div class="left">ได้รับของตามรายการข้างบนนี้ ถูกต้องแล้ว</div>
         </td>
         <td style="width: 40%; text-align:center ; vertical-align: middle;">
@@ -848,7 +842,7 @@ const createPageS16_46 = (table, date, content) =>
       <tr class="item2">
         <td style="width: 30%; text-align:center ; vertical-align: middle;">
 
-        <div class="left"><div contenteditable="true"><div class="dotted" style="width: 200px;"><label></label></div></div></div><div>ผู้รับ</div>
+        <div class="left"><div contenteditable="true"><div class="dotted" style="width: 180px;"><label></label></div></div></div><div>ผู้รับ</div>
         </td>
         <td style="width: 33%; text-align:center ; vertical-align: middle;">
         
@@ -863,11 +857,11 @@ const createPageS16_46 = (table, date, content) =>
 
       <table>
         <tr class="item2">
-          <td style="width: 35%; text-align:center ; vertical-align: middle;">
+          <td style="width: 40%; text-align:center ; vertical-align: middle;">
             <div class="left">(</div><div contenteditable="true"><div class="dotted" style="width: 200px;"><label></label></div></div>
           </td>
           <td style="width: 40%; text-align:center ; vertical-align: middle;">
-              <div contenteditable="true" ><div class="dotted" style="width: 200px;"><label></label></div></div>
+              <div contenteditable="true" ><div class="dotted" style="width: 100%;"><label></label></div></div>
           </td>
           <td style="width: 40%; text-align:center ; vertical-align: middle;">   
           </td>
@@ -876,32 +870,18 @@ const createPageS16_46 = (table, date, content) =>
 
       <table>
       <tr class="item2">
-        <td style="width: 33%; text-align:center ; vertical-align: middle;">
+        <td style="width: 40%; text-align:center ; vertical-align: middle;">
             <div class="left">ตำแหน่ง</div><div contenteditable="true" ><div class="dotted" style="width: 200px;"><label></label></div></div>
         </td>
-        <td style="width: 33%; text-align:center ; vertical-align: middle;">
+        <td style="width: 40%; text-align:center ; vertical-align: middle;">
             แทนหัวหน้ากองจัดการพัสดุ </br> ปฎิบัติการแทน ผู้อำนวยการฝ่ายการพัสดุ
         </td>
-        <td style="width: 33%; text-align:center ; vertical-align: middle;">   
+        <td style="width: 40%; text-align:center ; vertical-align: middle;">   
         </td>
       </tr>
     </table>
 
-
-    <table>
-    <tr class="item2">
-      <td style="width: 60%; text-align:center ; vertical-align: middle;">
-      <div class="left">หมายเหตุ ใบเบิก ๑ ชุดมี ๘ ฉบับ ฉบับที่ ๑-๗ ส่งฝ่ายการพัสดุ และ ไม่ควรเบิกเกิน ๑๒ รายการ</div>
-      </td>
-      <td style="width: 20%; text-align:center ; vertical-align: middle;">
-        
-      </td>
-      <td style="width: 20%; text-align:center ; vertical-align: middle;">   
-      </td>
-    </tr>
-  </table>
-
-
+      <div class="left" style="padding-left: 25px;">หมายเหตุ ใบเบิก ๑ ชุดมี ๘ ฉบับ ฉบับที่ ๑-๗ ส่งฝ่ายการพัสดุ และ ไม่ควรเบิกเกิน ๑๒ รายการ</div>
 
   </div>`;
 
@@ -1179,10 +1159,10 @@ const createPageS101Page1 = (date, content) =>
       <table>
           <tr>
           <td>
-              <div class="left">รายงานการตรวจซ่อมอุปกรณ์แขวง</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>${content.District}</label></div></div>
+              <div class="left">รายงานการตรวจซ่อมอุปกรณ์แขวง</div><div contenteditable="true" style="white-space: pre;"><div class="dotted" style="width: 450px;"><label>${content.District}</label></div></div>
           </td>
           <td>
-              <pr><div class="left">วันที่</div><div contenteditable="true"><div class="dotted" style="width: 200px;"><label>${date}</label></div></div></pr>
+              <pr><div class="left">วันที่</div><div contenteditable="true"><div class="dotted" style="width: 200px;"><label>${date.split(".")[0].replace("T", " เวลา ") + " น."}</label></div></div></pr>
           </td>
           </tr>
       </table>
@@ -1249,10 +1229,10 @@ const createPageS101Page1 = (date, content) =>
           <td style="width: 1%; text-align:left ; vertical-align: middle;">
           </td>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
-              <div class="left">ก. ระบบอาณัติสัญญาณ</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบอาณัติสัญญาณ" && content.HardwareType}</label></div></div>
+              <div class="left">ก. ระบบอาณัติสัญญาณ</div><div contenteditable="true" style="white-space: pre;"><div class="dotted" style="width: 350px;"><label style="font-size: 13px;">${content.system_type_group_id === "ระบบอาณัติสัญญาณ" && content.HardwareType}</label></div></div>
           </td>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
-              <div class="left">ข. ระบบสายส่ง</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบสายส่ง" ? content.HardwareType : "-"}</label></div></div>
+              <div class="left">ข. ระบบสายส่ง</div><div contenteditable="true" style="white-space: pre;"><div class="dotted" style="width: 350px;"><label style="font-size: 13px;">${content.system_type_group_id === "ระบบสายส่ง" ? content.HardwareType : "-"}</label></div></div>
           </td>
             
         </tr>
@@ -1263,10 +1243,10 @@ const createPageS101Page1 = (date, content) =>
           <td style="width: 1%; text-align:left ; vertical-align: middle;">
           </td>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
-              <div class="left">ค. ระบบเครื่องกั้นถนน</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบเครื่องกั้นถนน" ? content.HardwareType : "-"}</label></div></div>
+              <div class="left">ค. ระบบเครื่องกั้นถนน</div><div contenteditable="true" style="white-space: pre;"><div class="dotted" style="width: 350px;"><label style="font-size: 13px;">${content.system_type_group_id === "ระบบเครื่องกั้นถนน" ? content.HardwareType : "-"}</label></div></div>
           </td>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
-              <div class="left">ง. ระบบเครื่องทางสะดวก</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบเครื่องทางสะดวก" ? content.HardwareType : "-"} </label></div></div>
+              <div class="left">ง. ระบบเครื่องทางสะดวก</div><div contenteditable="true" style="white-space: pre;"><div class="dotted" style="width: 350px;"><label style="font-size: 13px;">${content.system_type_group_id === "ระบบเครื่องทางสะดวก" ? content.HardwareType : "-"} </label></div></div>
           </td>
             
         </tr>
@@ -1276,10 +1256,10 @@ const createPageS101Page1 = (date, content) =>
         <td style="width: 1%; text-align:left ; vertical-align: middle;">
         </td>
         <td style="width: 40%; text-align:left ; vertical-align: middle;">
-            <div class="left">จ. ระบบโทรศัพท์</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบโทรศัพท์" ? content.HardwareType : "-"}</label></div></div>
+            <div class="left">จ. ระบบโทรศัพท์</div><div contenteditable="true" style="white-space: pre;"><div class="dotted" style="width: 350px;"><label style="font-size: 13px;">${content.system_type_group_id === "ระบบโทรศัพท์" ? content.HardwareType : "-"}</label></div></div>
         </td>
         <td style="width: 40%; text-align:left ; vertical-align: middle;">
-            <div class="left">ฉ. ระบบไฟฟ้า</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบไฟฟ้า" ? content.HardwareType : "-"}</label></div></div>
+            <div class="left">ฉ. ระบบไฟฟ้า</div><div contenteditable="true" style="white-space: pre;"><div class="dotted" style="width: 350px;"><label style="font-size: 13px;">${content.system_type_group_id === "ระบบไฟฟ้า" ? content.HardwareType : "-"}</label></div></div>
         </td>
           
       </tr>
@@ -1290,10 +1270,10 @@ const createPageS101Page1 = (date, content) =>
         <td style="width: 1%; text-align:left ; vertical-align: middle;">
         </td>
         <td style="width: 40%; text-align:left ; vertical-align: middle;">
-            <div class="left">ช. ระบบโทรพิมพ์</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบโทรพิมพ์" ? content.HardwareType : "-"}</label></div></div>
+            <div class="left">ช. ระบบโทรพิมพ์</div><div contenteditable="true" style="white-space: pre;"><div class="dotted" style="width: 350px;"><label style="font-size: 13px;">${content.system_type_group_id === "ระบบโทรพิมพ์" ? content.HardwareType : "-"}</label></div></div>
         </td>
         <td style="width: 40%; text-align:left ; vertical-align: middle;">
-            <div class="left">ซ. ระบบวิทยุ</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบวิทยุ" ? content.HardwareType : "-"}</label></div></div>
+            <div class="left">ซ. ระบบวิทยุ</div><div contenteditable="true" style="white-space: pre;"><div class="dotted" style="width: 350px;"><label style="font-size: 13px;">${content.system_type_group_id === "ระบบวิทยุ" ? content.HardwareType : "-"}</label></div></div>
         </td>
           
       </tr>
@@ -1304,7 +1284,7 @@ const createPageS101Page1 = (date, content) =>
         <td style="width: 1%; text-align:left ; vertical-align: middle;">
         </td>
         <td style="width: 40%; text-align:left ; vertical-align: middle;">
-            <div class="left">ฌ. ระบบอิเลคทรอนิคส์</div><div contenteditable="true"><div class="dotted" style="width: 350px;"><label>${content.system_type_group_id === "ระบบอิเลคทรอนิคส์" ? content.HardwareType : "-"}</label></div></div>
+            <div class="left">ฌ. ระบบอิเลคทรอนิคส์</div><div contenteditable="true" style="white-space: pre;"><div class="dotted" style="width: 350px;"><label style="font-size: 13px;">${content.system_type_group_id === "ระบบอิเลคทรอนิคส์" ? content.HardwareType : "-"}</label></div></div>
         </td>
         <td style="width: 40%; text-align:left ; vertical-align: middle;">
         </td>
@@ -1314,7 +1294,7 @@ const createPageS101Page1 = (date, content) =>
       <table>
           <tr>
           <td>
-              <div class="left">(6) ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม (สถานี/ตำแหน่งที่ต��้ง)</div><div contenteditable="true"><div class="dotted" style="width: 750px;"><label>${content.Station}</label></div></div>
+              <div class="left">(6) ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม (สถานี/ตำแหน่งที่ตั้ง)</div><div contenteditable="true"><div class="dotted" style="width: 750px;"><label>${content.Station}</label></div></div>
           </td>
           </tr>
       </table>
@@ -1375,28 +1355,28 @@ const createPageS101Page1 = (date, content) =>
 
       <table >
       <tr class="item2">
-        <td style="width: 33%; text-align:left ; vertical-align: middle;">
-            <div class="left">(12) ผู้ควบคุมทดสอบ ชื่อ</div><div contenteditable="true"><div class="dotted" style="width: 200px;"><label>${content.auditor_name}</label></div></div>
+        <td style="width: 40%; text-align:left ; vertical-align: middle; overflow: hidden;">
+            <div class="left">(12) ผู้ควบคุมทดสอบ ชื่อ</div><div contenteditable="true"><div class="dotted" style="width: 100%;"><label style="font-size: 12px;">${content.auditor_name}</label></div></div>
         </td>
-        <td style="width: 33%; text-align:left ; vertical-align: middle;">
-            <div class="left">ตำแหน่ง</div><div contenteditable="true"><div class="dotted" style="width: 400px;"><label>${content.auditor_position_id}</label></div></div>
+        <td style="width: 40%; text-align:left ; vertical-align: middle; overflow: hidden;">
+            <div class="left">ตำแหน่ง</div><div contenteditable="true"><div class="dotted" style="width: 100%;"><label style="font-size: 12px;">${content.auditor_position_id}</label></div></div>
         </td> 
-        <td style="width: 33%; text-align:left ; vertical-align: middle;">
-            <div class="left">ลงนาม</div><div contenteditable="true"><div class="dotted" style="width: 130px;"><label></label></div></div>
+        <td style="width: 20%; text-align:left ; vertical-align: middle; overflow: hidden;">
+            <div class="left">ลงนาม</div><div contenteditable="true"><div class="dotted" style="width: 100%;"><label></label></div></div>
         </td> 
       </tr>
     </table>
 
     <table >
       <tr class="item2">
-        <td style="width: 33%; text-align:left ; vertical-align: middle;">
-            <div class="left">(13) ผู้ควบคุมแก้ไข ชื่อ</div><div contenteditable="true"><div class="dotted" style="width: 200px;"><label>${content.fixer_name}</label></div></div>
+        <td style="width: 40%; text-align:left ; vertical-align: middle; overflow: hidden;">
+            <div class="left">(13) ผู้ควบคุมแก้ไข ชื่อ</div><div contenteditable="true"><div class="dotted" style="width: 100%;"><label style="font-size: 12px;">${content.fixer_name}</label></div></div>
         </td>
-        <td style="width: 33%; text-align:left ; vertical-align: middle;">
-            <div class="left">ตำแหน่ง</div><div contenteditable="true"><div class="dotted" style="width: 400px;"><label>${content.fixer_position_id}</label></div></div>
+        <td style="width: 40%; text-align:left ; vertical-align: middle; overflow: hidden;">
+            <div class="left">ตำแหน่ง</div><div contenteditable="true"><div class="dotted" style="width: 100%;"><label style="font-size: 12px;">${content.fixer_position_id}</label></div></div>
         </td> 
-        <td style="width: 33%; text-align:left ; vertical-align: middle;">
-            <div class="left">ลงนาม</div><div contenteditable="true"><div class="dotted" style="width: 130px;"><label></label></div></div>
+        <td style="width: 20%; text-align:left ; vertical-align: middle; overflow: hidden;">
+            <div class="left">ลงนาม</div><div contenteditable="true"><div class="dotted" style="width: 100%;"><label></label></div></div>
         </td> 
       </tr>
     </table>
@@ -1404,7 +1384,7 @@ const createPageS101Page1 = (date, content) =>
       <table>
           <tr>
           <td>
-              <div class="left">(14) รายชื่อผู้ร่วมวาน (ชื่อและตำแหน่ง)</div><div contenteditable="true"><div class="dotted" style="width: 750px;"><label>${content.member_1} ${content.member_1_position_id}${content.member_2} ${content.member_2_position_id}${content.member_3} ${content.member_3_position_id}</label></div></div>
+              <div class="left">(14) รายชื่อผู้ร่วมวาน (ชื่อและตำแหน่ง)</div><div contenteditable="true"><div class="dotted" style="width: 750px;"><label>${content.member_1} // ${content.member_1_position_id}, ${content.member_2} // ${content.member_2_position_id}, ${content.member_3} // ${content.member_3_position_id}</label></div></div>
               <div class="left"></div><div class="dotted" ></div>
               <div class="left"></div><div class="dotted" ></div>
           </td>
@@ -1417,7 +1397,7 @@ const createPageS101Page1 = (date, content) =>
               <div class="left">(15) ข้าพเจ้ารับรองว่าข้อความข้างบนนี้เป็นความจริง</div>
           </td>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
-              <div class="left">(ลงชื่อ)</div><pr><div contenteditable="true"><div class="dotted" style="width: 350px;"><label></label></div></div></pr>
+              <div class="left">(ลงชื่อ)</div><pr><div contenteditable="true"><div class="dotted" style="width: 320px;"><label></label></div></div></pr>
           </td>
         </tr>
       </table>
@@ -1437,7 +1417,7 @@ const createPageS101Page1 = (date, content) =>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
           </td>
           <td style="width: 50%; text-align:left ; vertical-align: middle;">
-          <div class="left">ตำแหน่ง</div><pr><div contenteditable="true"><div class="dotted" style="width: 350px;"><label></label></div></div></pr>
+          <div class="left">ตำแหน่ง</div><pr><div contenteditable="true"><div class="dotted" style="width: 340px;"><label></label></div></div></pr>
           </td>
         </tr>
       </table>
@@ -1478,7 +1458,7 @@ const createPageS101Page2 = (table, date, content) =>
         <table >
             <tr>
             <td>
-                <div class="left">(18) ความเห็นของนายตรวจลายหัวหน้าแขวง</div><div contenteditable="true"><div class="dotted" style="width: 750px;margin-bottom:2px;"><label>-</label></div></div>
+                <div class="left">(18) ความเห็นของนายตรวจลายหัวหน้าแขวง</div><div contenteditable="true"><div class="dotted" style="width: 750px;margin-bottom:2px;"><label>${content.checked_remark ? content.checked_remark : ""}</label></div></div>
                 <div class="left" ></div><div class="dotted"></div>
                 <div class="left"></div><div class="dotted" ></div>
                 <div class="left"></div><div class="dotted" ></div>
@@ -1492,7 +1472,7 @@ const createPageS101Page2 = (table, date, content) =>
 
         <table>
           <tr class="item2">
-            <td style="width: 40%; text-align:left ; vertical-align: middle;">
+            <td style="width: 35%; text-align:left ; vertical-align: middle;">
             </td>
             <td style="width: 40%; text-align:left ; vertical-align: middle;">
                 <div class="left">(ลงชื่อ)</div><pr><div contenteditable="true"><div class="dotted" style="width: 350px;"><label</label></div></div></pr>
@@ -1502,7 +1482,7 @@ const createPageS101Page2 = (table, date, content) =>
 
         <table>
           <tr class="item2">
-            <td style="width: 35%; text-align:left ; vertical-align: middle;">
+            <td style="width: 24%; text-align:left ; vertical-align: middle;">
             </td>
             <td style="width: 63%; text-align:left ; vertical-align: middle;">
                 <div class="left">นายตรวจสายหัวหน้าแขวง</div><pr><div contenteditable="true"><div class="dotted" style="width: 350px;"><label></label></div></div></pr>
@@ -1992,7 +1972,7 @@ const createTableReportPMT = (head, list_head, list_plan, row_body) => `
         <td style="text-align:center ; vertical-align: middle;" rowspan="3">รายละเอียด</td>
         <td style="text-align:center ; vertical-align: middle;" rowspan="3">หน่วย</td>
 
-        <td style="text-align:center; vertical-align: middle;" colSpan=${head.length * 2}>การดำเนินการ</td>
+        <td style="text-align:center; vertical-align: middle;" colSpan=${head.length * 2}>3 ช่องนี้พัสดุกรอก</td>
         <td style="text-align:center; vertical-align: middle;" colSpan="2">สรุปรวม</td> 
         
         <td style="text-align:center; vertical-align: middle;" rowspan="3">หมายเหตุ</td>
@@ -2133,7 +2113,7 @@ export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((re
     return resolve(html);
   } else if (routeLocation === '/spare-inventory-transfer') {
 
-    console.log(valuesContext)
+    // console.log("valuesContext", valuesContext)
     let data = [];
     let p = 1
     let total = 0
@@ -2144,17 +2124,14 @@ export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((re
         "description": lineItem.description,
         "internal_item_id": lineItem.internal_item_id,
         "unit": lineItem.unit,
-        "price_quantity": lineItem.quantity,
-        "quantity": " ",
-        "price": " ",
-        "type": " "
+        "price_quantity": lineItem.quantity && lineItem.quantity.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
+        "quantity": valuesContext.status_name_th === "อนุมัติเรียบร้อยแล้ว" ? lineItem.quantity && lineItem.quantity.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "",
+        "price": valuesContext.status_name_th === "อนุมัติเรียบร้อยแล้ว" ? lineItem.quantity && (lineItem.quantity * lineItem.per_unit_price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "",
+        "type": ""
       });
       p = p + 1;
-      total = total + lineItem.quantity
-
+      total = total + lineItem.quantity * lineItem.per_unit_price
     })
-
-
 
     const data_json = {
       "HeadersTilte": "ส.16/46",
@@ -2185,16 +2162,10 @@ export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((re
       "ItemInWarehouse": data,
       "ApprovalBy": {
 
-
-
       }
       ,
-      "Totol": total
+      "Totol": valuesContext.status_name_th === "อนุมัติเรียบร้อยแล้ว" ? total && parseInt(total).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"
     }
-
-
-
-
 
     let pageAll = ``;
     var R = [];
@@ -2222,15 +2193,12 @@ export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((re
       }
     }
 
-
     for (let i = 0; i < page.length; i++) {
       const rows = page[i].map(createRowS16_46).join('');
       const table = createTableS16_46(data_json.Headers, rows, data_json.Content, data_json.Totol);
       const tablePage = createPageS16_46(table, data_json.CreateOn, data_json.Content)
       pageAll = pageAll + tablePage
-
     }
-
 
     const html = createHtmlS16_46(pageAll);
     return resolve(html);
@@ -2373,7 +2341,7 @@ export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((re
     const html = createHtmlB22(pageAll);
     return resolve(html);
   } else if (routeLocation === '/pmt-ss-101') {
-
+    console.log("valuesContext", valuesContext)
     const data_json = valuesContext;
     let pageAll = ``;
 
