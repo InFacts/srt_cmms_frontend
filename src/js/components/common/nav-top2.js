@@ -49,14 +49,9 @@ const MainModule = (props) => {
         props.loadNotify();
     }, [toolbar.mode, url]);
 
-    // useEffect(() => {
-    //     // Setup SubNav
-    // setupAllSubNav();
-    // }, [checkNav, checkNav2]);
-
     const identifyEndpoins = (document_type_id) => identifyEndpoinsHelper(document_type_id)
 
-   
+
 
     useEffect(() => {
         // Setup SubNav
@@ -177,12 +172,12 @@ const MainModule = (props) => {
                                         props.notify.notify.map(function (notify) {
                                             return (
                                                 <li key={notify.notification_id} id={notify.notification_id}>
-                                                    <Link className="p-subnav__item sub_notify" onClick={(e) => {
-                                                        props.readNotify(e)
-                                                        setCheckNav(true)
-                                                    }
-                                                    }
-                                                        to={identifyEndpoins(notify.document_type_id) + "?internal_document_id=" + notify.internal_document_id + "&document_id=" + notify.document_id} 
+                                                    <Link className="p-subnav__item sub_notify"
+                                                        onClick={(e) => {
+                                                            props.readNotify(e)
+                                                            setCheckNav(true)
+                                                        }}
+                                                        to={identifyEndpoins(notify.document_type_id) + "?internal_document_id=" + notify.internal_document_id + "&document_id=" + notify.document_id}
                                                         style={notify.is_read.data[0] === 1 ? {} : { backgroundColor: "#edf2fa" }} id="dropDawnNoti">
                                                         <div id="dropDawnNoti">
                                                             <i className="fas fa-file-alt float-left" id="dropDawnNoti" style={{ fontSize: "30px", "marginTop": "16px", "marginLeft": "10px", "color": "#111" }}></i>

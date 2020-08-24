@@ -46,7 +46,7 @@ const GoodsInventoryAdjustmentComponent = (props) => {
 
     useEffect(() => {
         dispatch(footerToModeSearch());
-    }, []);
+    }, [window.location.search]);
 
     // If Link to this url via Track Document
     useEffect(() => {
