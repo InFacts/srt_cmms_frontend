@@ -14,6 +14,7 @@ const MainModule = (props) => {
     const footer = useSelector((state) => ({ ...state.footer }));
     const [checkNav, setCheckNav] = useState(false);
     const [checkNav2, setCheckNav2] = useState(false);
+    const [fetchNoti, setFetchNoti] = useState(false);
 
     const [checkPermission, setCheckPermission] = useState([]);
     const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
@@ -43,11 +44,11 @@ const MainModule = (props) => {
     }, [decoded_token.has_position]);
 
     let url = window.location.pathname;
-
+    console.log("url", url)
     useEffect(() => {
         // Load Notify
         props.loadNotify();
-    }, [toolbar.mode, url]);
+    }, [toolbar.mode, url, fetchNoti]);
 
     const identifyEndpoins = (document_type_id) => identifyEndpoinsHelper(document_type_id)
 
@@ -176,6 +177,10 @@ const MainModule = (props) => {
                                                         onClick={(e) => {
                                                             props.readNotify(e)
                                                             setCheckNav(true)
+                                                            setFetchNoti(true)
+                                                        }}
+                                                        onBlur={(e) => {
+                                                            setFetchNoti(false)
                                                         }}
                                                         to={identifyEndpoins(notify.document_type_id) + "?internal_document_id=" + notify.internal_document_id + "&document_id=" + notify.document_id}
                                                         style={notify.is_read.data[0] === 1 ? {} : { backgroundColor: "#edf2fa" }} id="dropDawnNoti">

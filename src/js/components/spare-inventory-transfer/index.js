@@ -54,11 +54,11 @@ const InventoryTransferComponent = (props) => {
             .then((internal_document_id) => {
             if (internal_document_id !== "") {
                 // action_approval
-                setFieldValue("status_name_th", "", true);
+                // setFieldValue("status_name_th", "", true);
                 setFieldValue("internal_document_id", internal_document_id, true);
             }
         })
-    }, [window.location.search])
+    }, [])
 
     return (
         <>
