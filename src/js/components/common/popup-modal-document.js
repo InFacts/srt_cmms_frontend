@@ -28,8 +28,7 @@ const PopupModalDocument = (props) => {
     const [valueNodeID, setValueNodeID] = useState('');
     const [valueNodeIDWorkOrderPM, setValueNodeIDWorkOrderPM] = useState([]);
     const [valueNodeIDFormDistrictWorkOrderPM, setValueNodeIDFormDistrictWorkOrderPM] = useState([]);
-    console.log("valueDivisionID", valueDivisionID, "valueDistrictID", valueDistrictID, "valueNodeID", valueNodeID)
-    console.log("decoded_token.has_position", decoded_token)
+
     useEffect(() => {
         let users = factUsers.items;
         let user = users.find(user => `${user.user_id}` === `${decoded_token.id}`);

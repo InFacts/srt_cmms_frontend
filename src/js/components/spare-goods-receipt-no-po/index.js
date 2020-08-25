@@ -57,7 +57,7 @@ const GoodsReceiptNoPoComponent = (props) => {
                 setFieldValue("internal_document_id", internal_document_id, true);
             }
         })
-    }, [])
+    }, [window.location.search])
 
     return (
         <>
