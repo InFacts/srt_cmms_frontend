@@ -1,7 +1,7 @@
 version: '3'
 services:
   srt-frontend:
-    image: 127.0.0.1:5000/frontend:10
+    image: 127.0.0.1:5000/frontend:11
     container_name: srt-frontend
     restart: always
     ports:
