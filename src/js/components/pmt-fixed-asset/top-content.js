@@ -41,17 +41,13 @@ const TopContent = (props) => {
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
   // Fill Default Forms
-  useFillDefaultsOnModeAdd();
+  useFillDefaultsOnModeAdd(DOCUMENT_TYPE_ID.WORK_ORDER_PM);
   const validateInternalDocumentIDField = (...args) => validateInternalDocumentIDWorfOrderPMFieldHelper(decoded_token, checkBooleanForEdit, DOCUMENT_TYPE_ID.WORK_ORDER_PM, toolbar, footer, fact, values, setValues, setFieldValue, validateField, ...args);
 
   const validateNameField = (...args) => validatedataDocumentField("name", setFieldValue, ...args)
   const validateDocumentDateField = (...args) => validatedataDocumentField("document_date", setFieldValue, ...args)
 
   let checkBooleanForEdit = checkBooleanForEditCheckNodeIDHelperForWorkOrderPM(values, decoded_token, fact);
-  // useEffect(() => {
-  //   checkBooleanForEdit = false
-  //   validateField("internal_document_id")
-  // }, [values.internal_document_id])
 
   return (
     <div id={changeTheam() === true ? "" : "blackground-white"}>
@@ -113,6 +109,14 @@ const TopContent = (props) => {
                   tabIndex="4" />
               </div>
               <div class="clear" />
+
+              {/* Admin Employee ID  */}
+              <div className="grid_1 alpha white-space mt-4">
+                <p className="top-text" style={{ color: "red" }}>หมายเหตุ ห้ามสร้างเอกสารทำวาระจำเป็นที่จะต้องรอระบบทำการสร้างตามกำหนดวาระประจำเดือน</p>
+              </div>
+
+              <div class="clear" />
+
             </div>
 
 

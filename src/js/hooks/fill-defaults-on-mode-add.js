@@ -23,6 +23,7 @@ const useFillDefaultsOnModeAdd = (document_type_group_id) => {
             var localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0, -1);
 
             var this_warehouse_id, this_warehouse_id_name;
+
             if(isICD(document_type_group_id)) {
                 if (isICDWarehouseDest(document_type_group_id)) {
                     this_warehouse_id_name = "dest_warehouse_id";
