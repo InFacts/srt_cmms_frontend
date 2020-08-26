@@ -2846,7 +2846,7 @@ export const validateInternalDocumentIDFieldHelper = (decoded_token, checkBoolea
             }
         })
         .catch(async (err) => { // 404 NOT FOUND  If input Document ID doesn't exists
-            console.log("validateInternalDocumentIDFieldHelper:: I think I have 404 not found in doc id.", err)
+            console.log("validateInternalDocumentIDFieldHelper:: I think I have 404 not found in doc id.", err.response)
 
             //Reset Document ID to Empty String
             setFieldValue('document_id', '', false);
