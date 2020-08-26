@@ -451,7 +451,7 @@ const useFooterInitializer = (document_type_id) => {
                         approveDocument(values.document_id, approval_status, user_id, remark).then(() => {
                             dispatch(navBottomSuccess('[PUT]', 'Submit Success', ''));
                             putDocument(values.document_id, document_type_id, data, null, data.document.document_status_id, false);
-                            fetchApprovalStep(values.document_id);
+                            // fetchApprovalStep(values.document_id);
                         })
                             .catch((err) => {
                                 console.warn("Approve Document Failed ", err.response);
