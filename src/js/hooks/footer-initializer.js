@@ -16,6 +16,7 @@ import history from '../history';
 
 const spacialPage = {
     ITEM_MASTER_DATA: "/spare-item-master-data",
+    S16_46: "/spare-inventory-transfer",
     WAREHOUSE: "/spare-warehouse",
     PMT_EQUIPMENT_MASTER: "/pmt-equipment-master",
     PMT_CREATE_CHECKOUT: "/pmt-create-checklist",
@@ -53,6 +54,7 @@ const useFooterInitializer = (document_type_id) => {
             position_id: user_id.has_position[0].position_id,
             has_positions: user_id.has_position,
         };
+        let routeLocation = getRouteLocation();
         let document_status = values.status_name_th; // TEST: values.status_name_th
         console.log("document_status", document_status)
         console.log("document_status values", values)
@@ -88,7 +90,8 @@ const useFooterInitializer = (document_type_id) => {
                             if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_APPROVAL) { dispatch(footerToModeApApproval()); }
                             else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.APPROVAL) { dispatch(footerToModeApCheckApproval()); }
                             else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.GOT_IT) { dispatch(footerToModeApGotIt()); }
-                            else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_ORDER) { dispatch(footerToModeApCheckOrder()); }
+                            else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_ORDER && routeLocation === spacialPage.S16_46 ) { dispatch(footerToModeApCheckOrder()); }
+                            else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_ORDER && routeLocation !== spacialPage.S16_46 ) { dispatch(footerToModeApCheckApproval()); }
                             else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.CHECK_MAINTENANCE) { dispatch(footerToModeApCheckMaintenance()); }
                             else if (latestApprovalInfo.approval_step_action_id === APPROVAL_STEP_ACTION.GUARANTEE_MAINTENANCE) { dispatch(footerToModeApGuarnteeMaintenance()); }
                         }
