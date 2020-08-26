@@ -64,7 +64,7 @@ const useFooterInitializer = (document_type_id) => {
                 // || values.internal_document_id.indexOf("-FastTrack") !== -1
                 // && (getNumberFromEscapedString(values.src_warehouse_id) === decoded_token.has_position[0].warehouse_id)
             ) {
-                console.log("hadleDocumentStatusWithFooter", document_status)
+                console.log("hadleDocumentStatusWithFooter", values)
                 if (document_status === DOCUMENT_STATUS.DRAFT) { dispatch(footerToModeAddDraft()); }
                 else if (document_status === DOCUMENT_STATUS.WAIT_APPROVE) { dispatch(footerToModeOwnDocument()); }
                 else if (document_status === DOCUMENT_STATUS.APPROVE_DONE) { dispatch(footerToModeApApprovalDone()); }
@@ -318,13 +318,39 @@ const useFooterInitializer = (document_type_id) => {
         if (DOCUMENT_STATUS_ID.WAIT_APPROVE === document_status_id && values.status_name_th !== DOCUMENT_STATUS.REOPEN) {
             // setFieldValue('status_name_th', DOCUMENT_STATUS.WAIT_APPROVE, true);
             fetchLatestStepApprovalDocumentData(document_id).then((latestApprovalInfo) => {
+                if (data.document.document_status_id === DOCUMENT_STATUS_ID.WAIT_APPROVE) {
+                    setFieldValue('status_name_th', DOCUMENT_STATUS.WAIT_APPROVE, true);
+                }
+                else if (data.document.document_status_id === DOCUMENT_STATUS_ID.REOPEN) {
+                    setFieldValue('status_name_th', DOCUMENT_STATUS.REOPEN, true);
+                }
+                else if (data.document.document_status_id === DOCUMENT_STATUS_ID.FAST_TRACK) {
+                    setFieldValue('status_name_th', DOCUMENT_STATUS.FAST_TRACK, true);
+                }
+                else if (data.document.document_status_id === DOCUMENT_STATUS_ID.ESCALATED) {
+                    setFieldValue('status_name_th', DOCUMENT_STATUS.ESCALATED, true);
+                }
+
                 if (latestApprovalInfo.position === undefined) {
                     data.document.document_status_id = DOCUMENT_STATUS_ID.APPROVE_DONE;
+                    setFieldValue('status_name_th', DOCUMENT_STATUS.APPROVE_DONE, true);
                 }
                 editDocumentAggregateAPI(document_id, document_type_id, data, files, flag_create_approval_flow)
             });
         }
         else {
+            if (data.document.document_status_id === DOCUMENT_STATUS_ID.WAIT_APPROVE) {
+                setFieldValue('status_name_th', DOCUMENT_STATUS.WAIT_APPROVE, true);
+            }
+            else if (data.document.document_status_id === DOCUMENT_STATUS_ID.REOPEN) {
+                setFieldValue('status_name_th', DOCUMENT_STATUS.REOPEN, true);
+            }
+            else if (data.document.document_status_id === DOCUMENT_STATUS_ID.FAST_TRACK) {
+                setFieldValue('status_name_th', DOCUMENT_STATUS.FAST_TRACK, true);
+            }
+            else if (data.document.document_status_id === DOCUMENT_STATUS_ID.ESCALATED) {
+                setFieldValue('status_name_th', DOCUMENT_STATUS.ESCALATED, true);
+            }
             editDocumentAggregateAPI(document_id, document_type_id, data, files, flag_create_approval_flow)
         }
     }
