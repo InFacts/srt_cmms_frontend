@@ -44,7 +44,6 @@ const MainModule = (props) => {
     }, [decoded_token.has_position]);
 
     let url = window.location.pathname;
-    console.log("url", url)
     useEffect(() => {
         // Load Notify
         props.loadNotify();

@@ -43,7 +43,7 @@ const WarehouesMasterDataComponent = (props) => {
         }
     }, [decoded_token]);
 
-    useToolbarInitializer(toolbarMode);
+    useToolbarInitializer(toolbarMode, DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA);
     useTokenInitializer();
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA);
