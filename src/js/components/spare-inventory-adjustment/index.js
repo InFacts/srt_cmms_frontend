@@ -36,7 +36,7 @@ const GoodsInventoryAdjustmentComponent = (props) => {
     ]);
     const [initialTabbar, setInitialTabbar] = useState(true);
 
-    useToolbarInitializer(TOOLBAR_MODE.SEARCH);
+    useToolbarInitializer(TOOLBAR_MODE.SEARCH, DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT);
     useTokenInitializer();
     useFactInitializer();
     useDocumentSubscription();

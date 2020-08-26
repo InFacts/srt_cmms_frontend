@@ -33,7 +33,7 @@ const SalvageReturnComponent = (props) => {
         {id:"table_status", name:"สถานะเอกสาร"},
     ]);
 
-    useToolbarInitializer(TOOLBAR_MODE.SEARCH);
+    useToolbarInitializer(TOOLBAR_MODE.SEARCH, DOCUMENT_TYPE_ID.SALVAGE_RETURN);
     useTokenInitializer();
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.SALVAGE_RETURN);

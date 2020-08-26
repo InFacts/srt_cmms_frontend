@@ -34,7 +34,7 @@ const GoodsReceiptFixComponent = (props) => {
         {id:"table_status", name:"สถานะเอกสาร"},
     ]);
 
-    useToolbarInitializer(TOOLBAR_MODE.SEARCH);
+    useToolbarInitializer(TOOLBAR_MODE.SEARCH, DOCUMENT_TYPE_ID.GOODS_RECEIPT_FIX);
     useTokenInitializer();
     useFactInitializer();
     useDocumentSubscription();
