@@ -34,7 +34,7 @@ const GoodsReceiptNoPoComponent = (props) => {
         {id:"table_status", name:"สถานะเอกสาร"},
     ]);
 
-    useToolbarInitializer(TOOLBAR_MODE.SEARCH);
+    useToolbarInitializer(TOOLBAR_MODE.SEARCH, DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO);
     useTokenInitializer();
     useFactInitializer();
     useFooterInitializer(DOCUMENT_TYPE_ID.GOODS_RECEIPT_PO_NO_PO);

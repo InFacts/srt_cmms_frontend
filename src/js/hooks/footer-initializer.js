@@ -520,14 +520,19 @@ const useFooterInitializer = (document_type_id) => {
 
     // Handle Click CANCEL_APPROVAL_PROCESS
     useEffect(() => {
-        if (footer.requiresHandleClick[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]) {
+        if (footer.requiresHandleClick[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS] || footer.requiresHandleClick[FOOTER_ACTIONS.VOID]) {
             console.log("CANCEL_APPROVAL_PROCESS")
             validateForm().then((err) => {
                 dispatch(navBottomSending('[API]', 'Sending ...', ''));
                 setErrors(err);
                 if (isEmpty(err)) {
                     let data = packDataFromValues(fact, values, document_type_id);
-                    data.document.document_status_id = DOCUMENT_STATUS_ID.REOPEN;
+                    if (footer.requiresHandleClick[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]) {
+                        data.document.document_status_id = DOCUMENT_STATUS_ID.REOPEN;
+                    }
+                    else if (footer.requiresHandleClick[FOOTER_ACTIONS.VOID]) {
+                        data.document.document_status_id = DOCUMENT_STATUS_ID.VOID;
+                    }
                     if (values.document_id) { // Case If you ever saved document and then you SEND document. (If have document_id, no need to create new doc)
                         cancelApproval(values.document_id, values.step_approve[0].approval_process_id).then(() => {
                             dispatch(navBottomSuccess('[PUT]', 'Canceled Success', ''));
@@ -558,16 +563,17 @@ const useFooterInitializer = (document_type_id) => {
                     clearFooterAction();
                 }
             })
-                .catch((err) => {
-                    console.warn("Submit Failed ", err);
-                    if (toolbar.mode !== TOOLBAR_MODE.SEARCH && toolbar.mode !== TOOLBAR_MODE.NONE) {
-                        dispatch(navBottomError('[PUT] validateForm', 'Error Validate Form', err));
-                    }
-                    else if (toolbar.mode === TOOLBAR_MODE.SEARCH && (values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.WAIT_APPROVE)) {
-                        dispatch(navBottomError('[PUT] validateForm', 'Error Validate Form', err));
-                    }
-                    clearFooterAction();
-                })
+            .catch((err) => {
+                console.warn("Submit Failed ", err);
+                if (toolbar.mode !== TOOLBAR_MODE.SEARCH && toolbar.mode !== TOOLBAR_MODE.NONE) {
+                    dispatch(navBottomError('[PUT] validateForm', 'Error Validate Form', err));
+                }
+                else if (toolbar.mode === TOOLBAR_MODE.SEARCH && (values.status_name_th === DOCUMENT_STATUS.REOPEN || values.status_name_th === DOCUMENT_STATUS.WAIT_APPROVE)) {
+                    dispatch(navBottomError('[PUT] validateForm', 'Error Validate Form', err));
+                }
+                clearFooterAction();
+            })
+            clearFooterAction();
         }
     }, [footer.requiresHandleClick[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS],]);
 
