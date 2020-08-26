@@ -314,7 +314,7 @@ const useFooterInitializer = (document_type_id) => {
     }
 
     const putDocument = (document_id, document_type_id, data, files, document_status_id, flag_create_approval_flow) => {
-        console.log("putDocument -> values.status_name_th", values.status_name_th)
+        // console.log("putDocument -> values.status_name_th", values.status_name_th)
         if (DOCUMENT_STATUS_ID.WAIT_APPROVE === document_status_id && values.status_name_th !== DOCUMENT_STATUS.REOPEN) {
             // setFieldValue('status_name_th', DOCUMENT_STATUS.WAIT_APPROVE, true);
             fetchLatestStepApprovalDocumentData(document_id).then((latestApprovalInfo) => {
@@ -332,15 +332,15 @@ const useFooterInitializer = (document_type_id) => {
     const fetchApprovalStep = (document_id) => {
         // console.log("fetchStepApprovalDocumentData -> document_id", document_id, values)
         fetchStepApprovalDocumentData(document_id).then((result) => {
-            // console.log("fetchStepApprovalDocumentData -> result", result, result.approval_step, toolbar.mode)
+            console.log("fetchStepApprovalDocumentData -> result", result, result.approval_step, toolbar.mode)
             setFieldValue("step_approve", result.approval_step === undefined ? [] : result.approval_step, false);
             if (result.approval_step) {
                 if (result.approval_step.length !== 0 && toolbar.mode === TOOLBAR_MODE.ADD) {
-                    // console.log("fetchStepApprovalDocumentData -> WAIT_APPROVE TOOLBAR_MODE.ADD")
+                    console.log("fetchStepApprovalDocumentData -> WAIT_APPROVE TOOLBAR_MODE.ADD")
                     setFieldValue('status_name_th', DOCUMENT_STATUS.WAIT_APPROVE, true);
                 }
                 else if (result.approval_step.length !== 0 && toolbar.mode === TOOLBAR_MODE.SEARCH) {
-                    // console.log("fetchStepApprovalDocumentData -> WAIT_APPROVE TOOLBAR_MODE.SEARCH", result.approval_step)
+                    console.log("fetchStepApprovalDocumentData -> WAIT_APPROVE TOOLBAR_MODE.SEARCH", result.approval_step)
                     setFieldValue("step_approve", result.approval_step, true);
                 }
                 if (result.is_canceled) {
@@ -428,7 +428,6 @@ const useFooterInitializer = (document_type_id) => {
                 if (isEmpty(err)) {
                     let checked_remark = values.checked_remark;
                     if (document_type_id === DOCUMENT_TYPE_ID.SS101 && decoded_token.has_position[0].position_group_id === 5) {
-                        console.log(">>>>>>> set check",values.remark_approval)
                         checked_remark = values.remark_approval// For ss101 นายตรวจสาย
                     }
                     let data = packDataFromValues(fact, values, document_type_id, checked_remark);

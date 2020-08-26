@@ -38,6 +38,8 @@ export const DOCUMENT_TYPE_ID = {
     // These needs to change later!!! since Doc Type Group ID will need to be used in other API's
     WAREHOUSE_MASTER_DATA: 1,
     ITEM_MASTER_DATA: 2,
+    REPORT_S1: 6,
+    REPORT_B22: 7,
     EQUIPMENT_MASTER_DATA: 3,
     CREATE_CHECKLIST_LINE_ITEM: 4,
     WORK_ORDER_CHECKLIST: 5
@@ -64,6 +66,10 @@ export const ICD_DOCUMENT_TYPE_GROUP_IDS = [
     DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT,
     DOCUMENT_TYPE_ID.SALVAGE_RETURN,
     DOCUMENT_TYPE_ID.SALVAGE_SOLD,
+    DOCUMENT_TYPE_ID.ITEM_MASTER_DATA,
+    DOCUMENT_TYPE_ID.WAREHOUSE_MASTER_DATA,
+    DOCUMENT_TYPE_ID.REPORT_S1,
+    DOCUMENT_TYPE_ID.REPORT_B22
 ]
 
 // Group of ICD Type Group where this_warehouse_id_name = dest_warehouse_id

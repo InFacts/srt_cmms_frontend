@@ -48,7 +48,7 @@ const useToolbarInitializer = (initial_mode, documentTypeGroupID) => {
     // Handle home button, only re-subscribe if requiresHandleClick of HOME changes
     useEffect(()=> {
         if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.HOME]){
-            if(!documentTypeGroupID || isICD(documentTypeGroupID)){ //Handle undefined documentTypeGroupID for not breaking change, but need to remove it!!
+            if(isICD(documentTypeGroupID)){ //Handle undefined documentTypeGroupID for not breaking change, but need to remove it!!
                 dispatch(handleClickHomeToSpareMain());
             }else{ // Assume going to Module #2, but TODO to other modules too isPMT... or something
                 dispatch(handleClickHomeToPMTMain());
