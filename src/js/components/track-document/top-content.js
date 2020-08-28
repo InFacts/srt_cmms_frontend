@@ -32,7 +32,7 @@ const TopContent = (props) => {
           <div className="container_12 clearfix">
             <section className="container_12 ">
               <h4 className="head-title">รายการติดตามเอกสาร</h4>
-              <div className="container_12">
+              {/* <div className="container_12">
                 <div className="grid_11"><p className="cancel-default">ค้นหาข้อมูล</p></div>
                 <div className="grid_7">
                   <input className="d-inline" type="radio" name="RadioOptions" id="Radio1" value="1" onChange={props.onChangeFindTrackDocument}  />
@@ -40,7 +40,7 @@ const TopContent = (props) => {
                   <input className="d-inline ml-3" type="radio" name="RadioOptions" id="Radio2" value="2" onChange={props.onChangeFindTrackDocument} checked />
                   <label htmlFor="Radio2" className="cancel-default d-inline ml-3">เอกสารทั้งหมด</label>
                 </div>
-              </div>
+              </div> */}
 
               <div className="container_12 mt-2">
                 <div className="grid_1 cancel-default" style={{whiteSpace: "nowrap"}}>

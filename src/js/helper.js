@@ -2310,6 +2310,7 @@ function transformWorkRequestResponseToFormState(work_request_part) {
         location_station_id: returnEmptyStringIfNull(work_request_part.location_station_id),
     }
 }
+
 function transformWorkOrderResponseToFormState(work_order_part) {
     var accident_on = new Date(work_order_part.accident_on);
     accident_on.setHours(accident_on.getHours() - 7);
@@ -2326,6 +2327,7 @@ function transformWorkOrderResponseToFormState(work_order_part) {
         line_items: returnFullArrayHasEquipmentItemNull(work_order_part.line_items),
     }
 }
+
 function transformSS101ResponseToFormState(ss101_part, data) {
 
     var departed_on = new Date(ss101_part.departed_on);
