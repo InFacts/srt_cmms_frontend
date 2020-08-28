@@ -449,4 +449,5 @@ export const ACTION_TO_HANDLE_CLICK = {
     [FOOTER_ACTIONS.FAST_TRACK]: handleFooterClickFastTrack,
     [FOOTER_ACTIONS.REJECT]: handleFooterClickReject,
     [FOOTER_ACTIONS.ESCALATED]: handleFooterClickEscalated,
+    [FOOTER_ACTIONS.VOID]: handleFooterClickVoid,
 }

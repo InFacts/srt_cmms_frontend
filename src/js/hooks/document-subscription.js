@@ -67,8 +67,8 @@ const useDocumentSubscription = () => {
 
     // Get  attachment when values.document_id changes
     useEffect(() => {
-        console.log("footer.requiresHandleClick[FOOTER_ACTIONS.SEND]", footer.requiresHandleClick[FOOTER_ACTIONS.SEND])
-        console.log("footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]", footer.requiresHandleClick[FOOTER_ACTIONS.SAVE])
+        // console.log("footer.requiresHandleClick[FOOTER_ACTIONS.SEND]", footer.requiresHandleClick[FOOTER_ACTIONS.SEND])
+        // console.log("footer.requiresHandleClick[FOOTER_ACTIONS.SAVE]", footer.requiresHandleClick[FOOTER_ACTIONS.SAVE])
         if (values.document_id && !(footer.requiresHandleClick[FOOTER_ACTIONS.SEND] || footer.requiresHandleClick[FOOTER_ACTIONS.SAVE])) { // If not an empty string AND isn't handlingSEND process)
             // Start Axios Get step_approve and attachment By nuk
             fetchAttachmentDocumentData(values.document_id)
@@ -78,7 +78,7 @@ const useDocumentSubscription = () => {
                     setFieldValue("files", data_files.data.results, false);
                 });
         }
-    }, [values.document_id, footer.requiresHandleClick[FOOTER_ACTIONS.SEND]]);
+    }, [values.document_id, nav_bottom_status.mode]);
 
     return;
 }
