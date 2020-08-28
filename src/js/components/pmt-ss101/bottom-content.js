@@ -64,18 +64,18 @@ const BottomContent = (props) => {
 
     const validateDocumentAccidentOnField = (...args) => validatedataDocumentField("accident_on", setFieldValue, ...args)
 
-    const validateDocumentLocationXCrossIDField = (location_x_cross_id) => {
-        if (location_x_cross_id) {
-            var location_x_cross = fact[FACTS.X_CROSS].items.find(x_cross => `${x_cross.road_center}` === `${location_x_cross_id}`); // Returns undefined if not found
-            if (location_x_cross) {
-                return;
-            } else {
-                return 'Invalid Location x Cross'
-            }
-        } else {
-            return;
-        }
-    }
+    // const validateDocumentLocationXCrossIDField = (location_x_cross_id) => {
+    //     if (location_x_cross_id) {
+    //         var location_x_cross = fact[FACTS.X_CROSS].items.find(x_cross => `${x_cross.road_center}` === `${location_x_cross_id}`); // Returns undefined if not found
+    //         if (location_x_cross) {
+    //             return;
+    //         } else {
+    //             return 'Invalid Location x Cross'
+    //         }
+    //     } else {
+    //         return;
+    //     }
+    // }
 
     const validateDocumentRequestOnField = (request_on) => {
         if (request_on > values.accident_on) {
@@ -320,9 +320,22 @@ const BottomContent = (props) => {
                             <p className="top-text">ศูนย์กลางทางผ่าน</p>
                         </div>
                         <div className="grid_3 alpha omega pull">
-                            <DatalisrNoChildrenInput name="location_x_cross_id" validate={validateDocumentLocationXCrossIDField} cssStyle={{ left: "-160px", top: "14px" }}
+                            {/* <DatalisrNoChildrenInput name="location_x_cross_id" validate={validateDocumentLocationXCrossIDField} cssStyle={{ left: "-160px", top: "14px" }}
                                 disabled={values.system_type_group_id == 3 ? checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true}
-                                tabIndex="19" />
+                                tabIndex="19" /> */}
+
+                            <SelectNoChildrenInput name="location_x_cross_id" disabled={values.system_type_group_id == 3 ? checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true} tabIndex="19">
+                                <option value=''></option>
+                                {factXCross.items.map((x_cross) => {
+                                    if (values.system_type_group_id == 3 && values.location_node_id == x_cross.node_id) {
+                                        if (values.sub_maintenance_type_id == factHardwareType.system_type_id) {
+                                            return <option key={x_cross.x_cross_id} value={x_cross.x_cross_id} selected>{x_cross.road_center} \\ {x_cross.name} \\ {x_cross.x_road_name}</option>
+                                        } else {
+                                            return <option key={x_cross.x_cross_id} value={x_cross.x_cross_id}>{x_cross.road_center} \\ {x_cross.name} \\ {x_cross.x_road_name}</option>
+                                        }
+                                    } else return null
+                                })}
+                            </SelectNoChildrenInput>
                         </div>
 
                         <div className="clear" />
