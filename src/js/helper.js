@@ -2166,10 +2166,10 @@ const responseToFormState = (fact, data, document_type_group_id) => {
         }
     } else if (document_type_group_id === DOCUMENT_TYPE_ID.EQUIPMENT_INSTALLATION) {
         var announce_use_on = new Date(data.specific.announce_use_on);
-        announce_use_on.setHours(announce_use_on.getHours() - 7);
+        announce_use_on.setHours(announce_use_on.getHours());
 
         var installed_on = new Date(data.specific.installed_on);
-        installed_on.setHours(installed_on.getHours() - 7);
+        installed_on.setHours(installed_on.getHours());
 
         let document_statuses = fact[FACTS.DOCUMENT_STATUS].items;
         let document_status = document_statuses.find(document_status => `${document_status.document_status_id}` === `${data.document.document_status_id}`);
@@ -2313,10 +2313,10 @@ function transformWorkRequestResponseToFormState(work_request_part) {
 
 function transformWorkOrderResponseToFormState(work_order_part) {
     var accident_on = new Date(work_order_part.accident_on);
-    accident_on.setHours(accident_on.getHours() - 7);
+    accident_on.setHours(accident_on.getHours());
 
     var request_on = new Date(work_order_part.request_on);
-    request_on.setHours(request_on.getHours() - 7);
+    request_on.setHours(request_on.getHours());
     return {
         ...work_order_part,
         accident_on: accident_on.toISOString().slice(0, 16),
@@ -2331,19 +2331,19 @@ function transformWorkOrderResponseToFormState(work_order_part) {
 function transformSS101ResponseToFormState(ss101_part, data) {
 
     var departed_on = new Date(ss101_part.departed_on);
-    departed_on.setHours(departed_on.getHours() - 7);
+    departed_on.setHours(departed_on.getHours());
 
     var arrived_on = new Date(ss101_part.arrived_on);
-    arrived_on.setHours(arrived_on.getHours() - 7);
+    arrived_on.setHours(arrived_on.getHours());
 
     var request_on = new Date(ss101_part.request_on);
-    request_on.setHours(request_on.getHours() - 7);
+    request_on.setHours(request_on.getHours());
 
     var finished_on = new Date(ss101_part.finished_on);
-    finished_on.setHours(finished_on.getHours() - 7);
+    finished_on.setHours(finished_on.getHours());
 
     var accident_on = new Date(ss101_part.accident_on);
-    accident_on.setHours(accident_on.getHours() - 7);
+    accident_on.setHours(accident_on.getHours());
 
     return {
         ...ss101_part,
