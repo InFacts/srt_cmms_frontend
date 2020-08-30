@@ -29,7 +29,7 @@ const ItemMasterDataComponent = (props) => {
     const [tabNames, setTabNames] = useState([
         { id: "general", name: "ทั่วไป" },
         { id: "warehouse", name: "คลัง" },
-        // { id: "attachment", name: "แนบไฟล์" },
+        { id: "attachment", name: "แนบไฟล์" },
     ]);
 
     const [toolbarMode, setToolBarMode] = useState(TOOLBAR_MODE.SEARCH);
@@ -53,7 +53,7 @@ const ItemMasterDataComponent = (props) => {
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
-            <form style={changeTheam() === true ? { backgroundImage: `url(${BgRed})`, width: "100vw", height: "100vh" } : {}}>
+            <form style={changeTheam() === true ? { backgroundImage: `url(${BgRed})`, width: "100vw", height: "800px" } : {}}>
                 <TopContent />
                 <TabBar tabNames={tabNames} initialTabID="general">
                     <BottomContent />
