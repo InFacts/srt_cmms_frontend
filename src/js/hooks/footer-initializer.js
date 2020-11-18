@@ -56,8 +56,8 @@ const useFooterInitializer = (document_type_id) => {
         };
         let routeLocation = getRouteLocation();
         let document_status = values.status_name_th; // TEST: values.status_name_th
-        console.log("document_status", document_status)
-        console.log("document_status values", values)
+        // console.log("document_status", document_status)
+        // console.log("document_status values", values)
         let created_by_admin_employee_id = getUserIDFromEmployeeID(fact[FACTS.USERS], values.created_by_admin_employee_id); // TEST: values.created_by_admin_employee_id;
 
         // Check That user who create document?
@@ -446,19 +446,23 @@ const useFooterInitializer = (document_type_id) => {
 
     // Handle Click Approval
     useEffect(() => {
+        console.log("Handle Click Approval")
         if (footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL] || footer.requiresHandleClick[FOOTER_ACTIONS.CHECK_APPROVAL]
             || footer.requiresHandleClick[FOOTER_ACTIONS.APPROVAL_ORDER] || footer.requiresHandleClick[FOOTER_ACTIONS.GOT_IT]
             || footer.requiresHandleClick[FOOTER_ACTIONS.FAST_TRACK] || footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]
             || footer.requiresHandleClick[FOOTER_ACTIONS.ESCALATED]) {
-            // console.log("I AM Handle APPROVAL", values);
+            console.log("I AM Handle APPROVAL", values);
             validateForm().then((err) => {
+                console.log("validate >>>>>>>>>>>>>>>>>>>>>", err)
                 dispatch(navBottomSending('[API]', 'Sending ...', ''));
                 setErrors(err);
                 if (isEmpty(err)) {
+                    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>1111111111111111111111")
                     let checked_remark = values.checked_remark;
                     if (document_type_id === DOCUMENT_TYPE_ID.SS101 && decoded_token.has_position[0].position_group_id === 5) {
                         checked_remark = values.remark_approval// For ss101 นายตรวจสาย
                     }
+                    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>22222222222222222222")
                     let data = packDataFromValues(fact, values, document_type_id, checked_remark);
                     let approval_status = APPROVAL_STATUS.APPROVED;
                     if (footer.requiresHandleClick[FOOTER_ACTIONS.REJECT]) {

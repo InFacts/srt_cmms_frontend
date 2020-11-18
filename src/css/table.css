@@ -8,6 +8,10 @@ table.table-many-column{
   height: 330px;
 }
 
+table.table-many-column::-webkit-scrollbar {
+  display: none;
+}
+
 table.cancel-border{
   border-bottom: 0;
   overflow-y: auto;

@@ -60,6 +60,7 @@ const AlsEquipmentStatusComponent = () => {
 
         ALSGetDocumentSS101(begin_document_date, end_document_date).then((data) => {
             let data_ss101 = data.results;
+            console.log("data_ss101", data_ss101)
             data_ss101.map((item) => { 
                 let d = new Date(item.document.document_date);
                 if (FilterByAdjustmentBarSS101(item, values)) {
@@ -68,6 +69,7 @@ const AlsEquipmentStatusComponent = () => {
                     let b = new Date(item.specific.finished_on);
                     let hour = parseInt((b-a)/1000/60/60);
                     if (d.getFullYear() === values.year-543) {
+                        console.log(">>>>>>>>> if")
                         if (item.specific.district.district_id !== undefined){
                             count_color_map[item.specific.district.district_id-1][d.getMonth()-1]++;
                             count_groups[item.specific.system_type.system_type_group_id]++;
@@ -79,6 +81,7 @@ const AlsEquipmentStatusComponent = () => {
                         }
                     }
                     else {
+                        console.log(">>>>>> else")
                         item.specific.loss_line_item.map((sub_data) => {
                             count_loss_ss101_prev[d.getMonth()-1] = count_loss_ss101_prev[d.getMonth()-1] + sub_data.price;
                         })
@@ -95,6 +98,9 @@ const AlsEquipmentStatusComponent = () => {
                 results.push({key: groups[i], value: count_groups[i]});
             }
 
+            console.log("maintenance_system", results)
+            console.log("interrupt", results_pieInterrupt)
+            console.log("accident_color_map", {values_data: count_color_map, xLabels, yLabels})
             setFieldValue('maintenance_system', results);
             setFieldValue('interrupt', results_pieInterrupt);
             setFieldValue('accident_color_map', {values_data: count_color_map, xLabels, yLabels});
@@ -131,6 +137,8 @@ const AlsEquipmentStatusComponent = () => {
             for (let i = 0; i < groups_interrupt.length; i++) {
                 results_groups_interrupt.push({key: groups_interrupt[i], value: count_interrupt[i]});
             }
+            console.log("loss_ss101", results_loss)
+            console.log("accident_ss101", results_accident)
             setFieldValue('loss_ss101', results_loss);
             setFieldValue('accident_ss101', results_accident);
         })

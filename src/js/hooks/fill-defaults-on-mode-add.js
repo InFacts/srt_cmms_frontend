@@ -81,12 +81,12 @@ const useFillDefaultsOnModeAdd = (document_type_group_id) => {
 
                 // If auto increment
                 if(values.is_auto_internal_document_id === "auto") {
-                    console.log("document_type_group_id",document_type_group_id)
+                    // console.log("document_type_group_id",document_type_group_id)
                     documentTypeGroupIDSplit = `${document_type_group_id.toString()[0]}-${document_type_group_id.toString().substr(1)}`;
                     fullYearBE = (parseInt(localISOTime.slice(0, 4))+543).toString();
 
                     try{
-                        console.log("fillDefaults:: runningInternalDocumentID positionID", positionID, document_type_group_id, fullYearBE)
+                        // console.log("fillDefaults:: runningInternalDocumentID positionID", positionID, document_type_group_id, fullYearBE)
                         let fullYearBEForAPI = (parseInt(fullYearBE)-543).toString();
                         runningInternalDocumentID = await fetchLastestRunningInternalDocumentID(positionID, document_type_group_id, fullYearBEForAPI);
                         let splitRunningInternalDocumentID =  runningInternalDocumentID.split(delimiter);
@@ -94,7 +94,7 @@ const useFillDefaultsOnModeAdd = (document_type_group_id) => {
                         
                     }catch(err){
                         if (err === 'No Results in fetchLastestRunningInternalDocumentID'){
-                            console.log("fillDefaults:: No Results in fetchLastestRunningInternalDocumentID")
+                            // console.log("fillDefaults:: No Results in fetchLastestRunningInternalDocumentID")
                             runningInternalDocumentID = "0001";
                         }else{
                             throw "fillDefaults:: try catch values.is_auto_internal_document_id === auto";
@@ -102,11 +102,11 @@ const useFillDefaultsOnModeAdd = (document_type_group_id) => {
                     }
                     internalDocumentID = [positionAbbreviation, documentTypeGroupIDSplit, fullYearBE, runningInternalDocumentID].join(delimiter);
                     
-                    console.log("fillDefaults:: positionAbbreviation", positionAbbreviation);
-                    console.log("fillDefaults:: documentTypeGroupIDSplit", documentTypeGroupIDSplit);
-                    console.log("fillDefaults:: fullYearBE", fullYearBE);
-                    console.log("fillDefaults:: runningInternalDocumentID", runningInternalDocumentID);
-                    console.log("fillDefaults:: internalDocumentID", internalDocumentID);
+                    // console.log("fillDefaults:: positionAbbreviation", positionAbbreviation);
+                    // console.log("fillDefaults:: documentTypeGroupIDSplit", documentTypeGroupIDSplit);
+                    // console.log("fillDefaults:: fullYearBE", fullYearBE);
+                    // console.log("fillDefaults:: runningInternalDocumentID", runningInternalDocumentID);
+                    // console.log("fillDefaults:: internalDocumentID", internalDocumentID);
 
                     setFieldValue('internal_document_id', internalDocumentID, false);
                     
@@ -170,9 +170,9 @@ const useFillDefaultsOnModeAdd = (document_type_group_id) => {
                 var internalDocumentID;
                 if (isICD(document_type_group_id)) { // If document type group ID is ICD
                     
-                    console.log("subscribeInternalDocumentIDChanges:: values[this_warehouse_id_name]", values[this_warehouse_id_name]);
+                    // console.log("subscribeInternalDocumentIDChanges:: values[this_warehouse_id_name]", values[this_warehouse_id_name]);
                     let position = getPositionAbbreviationFromWarehouseID(fact.position, values[this_warehouse_id_name]);
-                    console.log("subscribeInternalDocumentIDChanges:: position",position);
+                    // console.log("subscribeInternalDocumentIDChanges:: position",position);
                     if (position) {
                     positionAbbreviation = position.abbreviation;
                     positionID = position.position_id;
@@ -186,7 +186,7 @@ const useFillDefaultsOnModeAdd = (document_type_group_id) => {
                     // internalDocumentID = getInternalDocumentIDFromCurrentValuesPMT(fact, values, document_type_group_id, positionAbbreviation, runningInternalDocumentID);
                     
                 }
-                console.log("subscribeInternalDocumentIDChanges:: positionAbbreviation",positionAbbreviation)
+                // console.log("subscribeInternalDocumentIDChanges:: positionAbbreviation",positionAbbreviation)
                 documentTypeGroupIDSplit = `${document_type_group_id.toString()[0]}-${document_type_group_id.toString().substr(1)}`;
                 fullYearBE = (parseInt(values["document_date"].slice(0, 4))+543).toString();
                 try{
@@ -196,7 +196,7 @@ const useFillDefaultsOnModeAdd = (document_type_group_id) => {
                     runningInternalDocumentID = (parseInt(splitRunningInternalDocumentID[splitRunningInternalDocumentID.length-1]) + 1).toString().padStart(4, '0');
                 }catch(err){
                     if (err === 'No Results in fetchLastestRunningInternalDocumentID'){
-                        console.log("subscribeInternalDocumentIDChanges:: No Results in fetchLastestRunningInternalDocumentID")
+                        // console.log("subscribeInternalDocumentIDChanges:: No Results in fetchLastestRunningInternalDocumentID")
                         runningInternalDocumentID = "0001";
                     }else{
                         throw "validateInternalDocumentIDFieldHelper:: try catch values.is_auto_internal_document_id === auto";

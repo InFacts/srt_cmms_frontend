@@ -49,7 +49,7 @@ const PopupModalUsername = (props) => {
                   return (
                     <tr key={index} id={index}>
                       <td className="edit-padding" style={{ minWidth: "150px" }}> {line_users.employee_id} </td>
-                      <td className="edit-padding" style={{ minWidth: "300px" }}> {line_users.firstname_th} {line_users.lastname_th}</td>
+                      <td className="edit-padding" style={{ maxWidth: "300px" }}> {line_users.firstname_th} {line_users.lastname_th}</td>
                       <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
                         <button type="button" className="button-blue" onClick={() => setFieldValue('created_by_user_employee_id', line_users.employee_id, true)} aria-label="Close active modal" aria-controls="modalUserName" id="closeModalInventory" >เลือก</button>
                       </td>

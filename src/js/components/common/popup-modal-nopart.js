@@ -52,7 +52,7 @@ const PopupModalNoPart = (props) => {
                                     return (
                                         <tr key={index} id={index}>
                                             <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show.internal_item_id} </td>
-                                            <td className="edit-padding" style={{ minWidth: "300px" }}> {no_part_show.description} </td>
+                                            <td className="edit-padding" style={{ maxWidth: "300px" }}> {no_part_show.description} </td>
                                             <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
                                                 <button type="button" className="button-blue" 
                                                 onClick={() => setFieldValue(`${props.keyname}[${props.lineNumber - 1}].internal_item_id`, no_part_show.internal_item_id, true)} 

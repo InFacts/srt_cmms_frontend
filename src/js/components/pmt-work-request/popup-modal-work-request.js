@@ -66,10 +66,10 @@ const PopupModalWorkRequest = (props) => {
                         <tr key={index} id={index}>
 
                           <td className="edit-padding" style={{ minWidth: "150px", paddingLeft: "50px" }}>{word_request_show_popup.no_word_request}</td>
-                          <td className="edit-padding" style={{ minWidth: "150px" }}>{word_request_show_popup.job_name}</td>
+                          <td className="edit-padding" style={{ maxWidth: "150px" }}>{word_request_show_popup.job_name}</td>
                           <td className="edit-padding" style={{ minWidth: "150px" }}>{word_request_show_popup.date_start} {word_request_show_popup.time_start}</td>
-                          <td className="edit-padding" style={{ minWidth: "150px" }}>{word_request_show_popup.create_name}</td>
-                          <td className="edit-padding" style={{ minWidth: "150px" }}>{word_request_show_popup.station}</td>
+                          <td className="edit-padding" style={{ maxWidth: "150px" }}>{word_request_show_popup.create_name}</td>
+                          <td className="edit-padding" style={{ maxWidth: "150px" }}>{word_request_show_popup.station}</td>
                           <td className="edit-padding" style={{ minWidth: "150px" }}>
                             <button type="button" className="button-blue" onClick={(e) => props.onClickSelectNoWorkRequset(e)} aria-label="Close active modal" aria-controls="modalWorkRequset" id="closeModalWorkRequset">เลือก</button>
                           </td>

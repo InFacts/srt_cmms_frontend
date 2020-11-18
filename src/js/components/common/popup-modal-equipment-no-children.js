@@ -53,7 +53,7 @@ const PopupModalEquipmentNoChildren = (props) => {
                                         <tr key={index} id={index}>
                                             <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show.equipment_group.item.internal_item_id} </td>
                                             <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show.is_installed.data[0] === 0 ? "ยังไม่ติดตั้งแล้ว" : "ติดตั้งแล้ว" } </td>
-                                            <td className="edit-padding" style={{ minWidth: "450px" }}> {no_part_show.equipment_group.item.description} </td>
+                                            <td className="edit-padding" style={{ maxWidth: "450px" }}> {no_part_show.equipment_group.item.description} </td>
                                             <td className="edit-padding text-center" style={{ minWidth: "150px" }}>
                                                 <button type="button" className="button-blue"
                                                     onClick={() => setFieldValue("internal_item_id", no_part_show.equipment_group.item.internal_item_id, true)}

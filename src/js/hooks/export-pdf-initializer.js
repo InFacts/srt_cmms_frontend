@@ -88,6 +88,7 @@ const useExportPdfInitializer = () => {
             service_method_id = factServiceMethod.sm_method_type
           }
         })
+       
         factInterrupt.items.map((factInterrupt) => {
           if (values.interrupt_id === factInterrupt.interrupt_id) {
             interrupt_id = factInterrupt.interrupt_id + "-" + factInterrupt.interrupt_type
@@ -99,11 +100,13 @@ const useExportPdfInitializer = () => {
             auditor_position_id = position.name
           }
         })
+        
         factPosition.items.map((position) => {
           if (values.fixer_position_id === position.position_id) {
             fixer_position_id = position.name
           }
         })
+        
         factPosition.items.map((position) => {
           if (values.member_1_position_id === position.position_id) {
             member_1_position_id = position.name
@@ -119,7 +122,6 @@ const useExportPdfInitializer = () => {
             member_3_position_id = position.name
           }
         })
-
 
         let node = "";
         let station = "";
@@ -156,7 +158,6 @@ const useExportPdfInitializer = () => {
         let day2 = Number(dateParts2[0]) + 543
         let mount2 = dateParts2[1]
         let year2 = dateParts2[2]
-
 
         let dateTimeParts3 = values.departed_on.split('T')
         let timeParts3 = dateTimeParts3[1]
