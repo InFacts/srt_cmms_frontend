@@ -33,7 +33,7 @@ const BottomContent = (props) => {
     // const factAccidentCause = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_ACCIDENT_CAUSE] }), shallowEqual);
     const factServiceMethod = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_SERVICE_METHOD] }), shallowEqual);
     const factSystemTypeGroup = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_SYSTEM_TYPE_GROUP] }), shallowEqual);
-    const factSystemType = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_SYSTEM_TYPE] }), shallowEqual);
+    // const factSystemType = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_SYSTEM_TYPE] }), shallowEqual);
     const factHardwareType = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_HARDWARE_TYPE] }), shallowEqual);
     const factCarType = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_CAR_TYPE] }), shallowEqual);
     // const factCaseType = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_CASE_TYPE] }), shallowEqual);
@@ -261,7 +261,7 @@ const BottomContent = (props) => {
                         <div className="clear" />
 
                         {/* system_type_id  */}
-                        <div className="grid_2 alpha white-space">
+                        {/* <div className="grid_2 alpha white-space">
                             <p className="top-text">ระบบตรวจซ่อมหลัก</p>
                         </div>
                         <div className="grid_3 alpha omega">
@@ -272,7 +272,7 @@ const BottomContent = (props) => {
                                         return <option key={factSystemType.system_type_id} value={factSystemType.system_type_id}>{factSystemType.abbreviation} - {factSystemType.system_type}</option>
                                 })}
                             </SelectNoChildrenInput>
-                        </div>
+                        </div> */}
 
                         <div className="clear" />
 
@@ -284,7 +284,7 @@ const BottomContent = (props) => {
                             <SelectNoChildrenInput name="hardware_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="19">
                                 <option value=''></option>
                                 {factHardwareType.items.map((factHardwareType) => {
-                                    if (values.sub_maintenance_type_id == factHardwareType.system_type_id)
+                                    // if (values.sub_maintenance_type_id == factHardwareType.system_type_id)
                                         return <option key={factHardwareType.hardware_type_id} value={factHardwareType.hardware_type_id}>{factHardwareType.abbreviation} - {factHardwareType.hardware_type}</option>
                                 })}
                             </SelectNoChildrenInput>
@@ -301,10 +301,6 @@ const BottomContent = (props) => {
                             <p className="top-text">ศูนย์กลางทางผ่าน</p>
                         </div>
                         <div className="grid_3 alpha omega pull">
-                            {/* <DatalisrNoChildrenInput name="location_x_cross_id" validate={validateDocumentLocationXCrossIDField} cssStyle={{ left: "-160px", top: "14px" }}
-                                disabled={values.system_type_group_id == 3 ? checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true}
-                                tabIndex="19" /> */}
-
                             <SelectNoChildrenInput name="location_x_cross_id" disabled={values.system_type_group_id == 3 ? checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true} tabIndex="19">
                                 <option value=''></option>
                                 {factXCross.items.map((x_cross) => {

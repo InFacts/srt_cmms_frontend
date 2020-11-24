@@ -203,7 +203,7 @@ export const SS101_SCHEMA = {
     arrived_on: '',           // เดินทางถึง  DATETIME
     finished_on: '',          // วันเวลาที่แล้วเสร็จ DATETIME
     // system_type_group_id: -1,   // ระบบตรวจซ่อม FK_ID - this is automatically infered from sub_maintenance_type_id
-    sub_maintenance_type_id: -1,      //  ชนิดระบบตรวจซ่อม FK_ID
+    sub_maintenance_type_id: 1,      //  ชนิดระบบตรวจซ่อม FK_ID
     hardware_type_id: -1,   // ชื่ออุปกรณ์ที่บำรุงรักษา FK_ID
 
     summary_cause_condition: '', // สาเหตุและอาการเสียโดยสรุป link [root_cause] from WO NVARCHAR
@@ -806,7 +806,8 @@ export const packDataFromValues = (fact, values, document_type_id, checked_remar
             member_3: values.member_3,
             remark: values.remark,
             checked_remark: checked_remark,
-            sub_maintenance_type_id: values.sub_maintenance_type_id ? parseInt(values.sub_maintenance_type_id) : null,
+            // sub_maintenance_type_id: values.sub_maintenance_type_id ? parseInt(values.sub_maintenance_type_id) : null,
+            sub_maintenance_type_id: 1,
             request_on: values.request_on + ':00+00:00',
             request_by: values.request_by,
             location_district_id: values.location_district_id ? parseInt(values.location_district_id) : null,
@@ -1692,13 +1693,16 @@ export const uploadAttachmentDocumentData = (document_id, files) => new Promise(
         }
     })
     if (tempFiles.length !== 0) {
+        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
         tempFiles.map((file) => { formData.append('file', file); })
         let url = `${BASE_URL}/attachment/${document_id}`
         axios.post(url, formData,
             { headers: { "x-access-token": localStorage.getItem('token_auth') } })
             .then((res) => {
+                console.log(">>>>>>>>>>>>>>>>>>>>>res", res)
                 resolve(res);
             }).catch(function (err) {
+                console.log(">>>>>>>>>>>>>>>>>>>>>err", err.response)
                 reject(err);
             })
     }

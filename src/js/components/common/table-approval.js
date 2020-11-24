@@ -22,8 +22,7 @@ const TableApproval = (props) => {
         };
         fetchData();
     }, [url]);
-
-
+)
     return (
         <>
 
