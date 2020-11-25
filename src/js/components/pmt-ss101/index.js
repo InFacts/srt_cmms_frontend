@@ -43,7 +43,7 @@ const PmtSS101Componant = (props) => {
         { id: "breakdown", name: "อาการเสีย" },
         { id: "related_parties", name: "ผู้ที่เกี่ยวข้อง" },
         { id: "compensation_list", name: "รายการค่าเสียหาย" },
-        { id: "assets_under_maintenance", name: "สินทรัพที่ดำเดินการซ่อมบำรุง" },
+        { id: "assets_under_maintenance", name: "สินทรัพย์ที่ดำเดินการซ่อมบำรุง" },
         { id: "attachment", name: "แนบไฟล์" },
         { id: "table_status", name: "สถานะเอกสาร" },
     ]);

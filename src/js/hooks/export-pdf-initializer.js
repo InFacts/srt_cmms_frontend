@@ -88,6 +88,7 @@ const useExportPdfInitializer = () => {
             service_method_id = factServiceMethod.sm_method_type
           }
         })
+       
         factInterrupt.items.map((factInterrupt) => {
           if (values.interrupt_id === factInterrupt.interrupt_id) {
             interrupt_id = factInterrupt.interrupt_id + "-" + factInterrupt.interrupt_type
@@ -99,11 +100,13 @@ const useExportPdfInitializer = () => {
             auditor_position_id = position.name
           }
         })
+        
         factPosition.items.map((position) => {
           if (values.fixer_position_id === position.position_id) {
             fixer_position_id = position.name
           }
         })
+        
         factPosition.items.map((position) => {
           if (values.member_1_position_id === position.position_id) {
             member_1_position_id = position.name
@@ -119,7 +122,6 @@ const useExportPdfInitializer = () => {
             member_3_position_id = position.name
           }
         })
-
 
         let node = "";
         let station = "";
@@ -156,7 +158,6 @@ const useExportPdfInitializer = () => {
         let day2 = Number(dateParts2[0]) + 543
         let mount2 = dateParts2[1]
         let year2 = dateParts2[2]
-
 
         let dateTimeParts3 = values.departed_on.split('T')
         let timeParts3 = dateTimeParts3[1]
@@ -209,7 +210,7 @@ const useExportPdfInitializer = () => {
             "AccidentOnYear": year,
 
 
-
+            "checked_remark": values.checked_remark,
 
             "RequesstOn": values.request_on,
             "RequesstOnTimeParts": timeParts2,
@@ -302,8 +303,8 @@ const useExportPdfInitializer = () => {
           var w = window.open();
           w.document.write(htmlCode);
           setTimeout(() => {
-            // w.print();
-            // w.close();
+            w.print();
+            w.close();
           }, 500);
         })
         dispatch(handleClickExportPDF())
@@ -1229,7 +1230,7 @@ const createPageS101Page1 = (date, content) =>
           <td style="width: 1%; text-align:left ; vertical-align: middle;">
           </td>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
-              <div class="left">ก. ระบบอาณัติสัญญาณ</div><div contenteditable="true" style="white-space: pre;"><div class="dotted" style="width: 350px;"><label style="font-size: 13px;">${content.system_type_group_id === "ระบบอาณัติสัญญาณ" && content.HardwareType}</label></div></div>
+              <div class="left">ก. ระบบอาณัติสัญญาณ</div><div contenteditable="true" style="white-space: pre;"><div class="dotted" style="width: 350px;"><label style="font-size: 13px;">${content.system_type_group_id === "ระบบอาณัติสัญญาณ" ? content.HardwareType : "-"}</label></div></div>
           </td>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
               <div class="left">ข. ระบบสายส่ง</div><div contenteditable="true" style="white-space: pre;"><div class="dotted" style="width: 350px;"><label style="font-size: 13px;">${content.system_type_group_id === "ระบบสายส่ง" ? content.HardwareType : "-"}</label></div></div>
@@ -1243,7 +1244,7 @@ const createPageS101Page1 = (date, content) =>
           <td style="width: 1%; text-align:left ; vertical-align: middle;">
           </td>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
-              <div class="left">ค. ระบบเครื่องกั้นถนน</div><div contenteditable="true" style="white-space: pre;"><div class="dotted" style="width: 350px;"><label style="font-size: 13px;">${content.system_type_group_id === "ระบบเครื่องกั้นถนน" ? content.HardwareType : "-"}</label></div></div>
+              <div class="left">ค. ระบบเครื่องกั้นถนน</div><div contenteditable="true" style="white-space: pre;"><div class="dotted" style="width: 350px;"><label style="font-size: 13px;">${content.system_type_group_id === "ระบบทางผ่านเครื่องกั้นถนน" ? content.HardwareType : "-"}</label></div></div>
           </td>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
               <div class="left">ง. ระบบเครื่องทางสะดวก</div><div contenteditable="true" style="white-space: pre;"><div class="dotted" style="width: 350px;"><label style="font-size: 13px;">${content.system_type_group_id === "ระบบเครื่องทางสะดวก" ? content.HardwareType : "-"} </label></div></div>
@@ -1284,7 +1285,7 @@ const createPageS101Page1 = (date, content) =>
         <td style="width: 1%; text-align:left ; vertical-align: middle;">
         </td>
         <td style="width: 40%; text-align:left ; vertical-align: middle;">
-            <div class="left">ฌ. ระบบอิเลคทรอนิคส์</div><div contenteditable="true" style="white-space: pre;"><div class="dotted" style="width: 350px;"><label style="font-size: 13px;">${content.system_type_group_id === "ระบบอิเลคทรอนิคส์" ? content.HardwareType : "-"}</label></div></div>
+            <div class="left">ฌ. ระบบอิเล็กทรอนิกส์</div><div contenteditable="true" style="white-space: pre;"><div class="dotted" style="width: 350px;"><label style="font-size: 13px;">${content.system_type_group_id === "ระบบอิเล็กทรอนิกส์" ? content.HardwareType : "-"}</label></div></div>
         </td>
         <td style="width: 40%; text-align:left ; vertical-align: middle;">
         </td>
@@ -2341,9 +2342,9 @@ export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((re
     const html = createHtmlB22(pageAll);
     return resolve(html);
   } else if (routeLocation === '/pmt-ss-101') {
-    console.log("valuesContext", valuesContext)
     const data_json = valuesContext;
     let pageAll = ``;
+    console.log("valuesContext", data_json.Content)
 
     const tablePage = createPageS101Page1(data_json.CreateOn, data_json.Content)
     pageAll = pageAll + tablePage

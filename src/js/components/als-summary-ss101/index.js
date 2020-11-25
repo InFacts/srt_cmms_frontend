@@ -24,10 +24,11 @@ import AdjustmentBarComponent from './adjustment-bar';
 
 import BgGreen from '../../../images/als/bg_als.jpg';
 import { ALSGetDocumentSS101, changeTheam, FilterByAdjustmentBarSS101 } from '../../helper.js'
+import { ExportCSV } from '../common/exportCSV';
 const AlsEquipmentStatusComponent = () => {
     const dispatch = useDispatch();
     const loggedIn = useSelector(state => state.token.isLoggedIn);
-    const {values, setFieldValue} = useFormikContext();
+    const { values, setFieldValue } = useFormikContext();
 
     // Initializer: Change Toolbar to Mode None
     useToolbarChangeModeInitializer(TOOLBAR_MODE.NONE_HOME); // TODO: Needs to find where to go when we press "HOME"!!
@@ -38,9 +39,9 @@ const AlsEquipmentStatusComponent = () => {
     }, []);
 
     useEffect(() => {
-        let begin_document_date = (values.year-543-1).toString() + "-01-01";
-        let end_document_date = (values.year-543).toString() + "-12-31";
-        let groups = ["ระบบอาณัติสัญญาณ", "ระบบสายส่ง", "ระบบทางผ่านเครื่องกั้นถนน", "ระบบเครื่องทางสะดวก", "ระบบโทรศัพท์", "ระบบไฟฟ้า", "ระบบโทรพิมพ์", "ระบบวิทยุ", "ระบบอิเล็กทรอนิกส์"]; 
+        let begin_document_date = (values.year - 543 - 1).toString() + "-01-01";
+        let end_document_date = (values.year - 543).toString() + "-12-31";
+        let groups = ["ระบบอาณัติสัญญาณ", "ระบบสายส่ง", "ระบบทางผ่านเครื่องกั้นถนน", "ระบบเครื่องทางสะดวก", "ระบบโทรศัพท์", "ระบบไฟฟ้า", "ระบบโทรพิมพ์", "ระบบวิทยุ", "ระบบอิเล็กทรอนิกส์"];
         let count_groups = new Array(9).fill(0)
         let count_loss_ss101_now = new Array(12).fill(0)
         let count_loss_ss101_prev = new Array(12).fill(0)
@@ -54,53 +55,123 @@ const AlsEquipmentStatusComponent = () => {
 
         // ColorMap
         let xLabels = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
-        let yLabels = ["สสญ.ธบ.", "สสญ.อย.", "สสญ.ก.", "สญก.", "สญค.", "สญพ.", "สสญ.กค.", "สสญ.ลช.", "สสญ.ขอ.", "สสญ.นว.","สสญ.ลป.", "สสญ.หห.", "สสญ.ทส.", "สสญ.หใ.", "สสญ.ฉท.","สสญ.ศช."];
-        
+        let yLabels = ["สสญ.ธบ.", "สสญ.อย.", "สสญ.ก.", "สญก.", "สญค.", "สญพ.", "สสญ.กค.", "สสญ.ลช.", "สสญ.ขอ.", "สสญ.นว.", "สสญ.ลป.", "สสญ.หห.", "สสญ.ทส.", "สสญ.หใ.", "สสญ.ฉท.", "สสญ.ศช."];
+
         let groups_interrupt = ["รอเครื่องมือและอะไหล่", "ธรรมชาติไม่เอื้ออำนวย", "รอเวลาในการซ่อมแก้ไข", "พนักงานไม่เพียงพอ", "พาหนะไม่มี", "ระยะทางไกล", "สาเหตุอื่นๆ", "ไม่มี"];
+
+        let groups_hardware_type = [
+            "ระบบไฟแสงสว่าง",
+            "ระบบจ่ายไฟเครื่องกันถนนฯ",
+            "ระบบไฟตอน เครื่องนับล้อ",
+            "เสาและระบบสัญญาณเตือน",
+            "ระบบการควบคุมบังคับ",
+            "ตู้อุปกรณ์ สายเคเบิลและจุดต่อสาย",
+            "แท่นและคานหรือชุดกั้น",
+            "มอเตอร์ชำรุด",
+            "เสาอุปกรณ์และระบบแสดงสัญญาณ",
+            "สัญญาณ-ระบบไฟตอนทาง",
+            "อุปกรณ์และระบบการควบคุมบังคับ",
+            "แหล่งจ่ายไฟในระบบ",
+            "ตู้และอุปกรณ์",
+            "สายเคเบิลและจุดต่อสาย",
+            "ไฟแสดงและแผงบรรยายทาง",
+            "อุปกรณ์และระบบควบคุมบังคับ",
+            "ระบบตรวจสอบท่า",
+            "ระบบจ่ายไฟวงจรประแจ",
+            "อุปกรณ์ชุดล็อกปลายลิ้นประแจ",
+            "อุปกรณ์ชุดตกราง",
+            "สายโถงหรือสายส่งสัญญาณ",
+            "ชุดกันฟ้าและฟิวส์",
+            "อุปกรณ์และเครื่องทางสะดวก",
+            "ชุดจ่ายไฟ",
+            "ระบบสายโถง, สายส่งและเสาโทรเลข",
+            "อินเตอนร์คอม, โทรศัพท์เครื่องกั้น",
+            "โทรศัพท์ควบคุมระบบและอุปกรณ์",
+            "โทรศัพท์ควบคุมชุดจ่ายไฟ",
+            "ระบบวิทยุสถานีและอุปกรณ์ร่วม",
+            "ชุดจ่ายไฟระบบวิทยุ",
+            "ชุดเครื่องขยายสถานี",
+            "โทรศัพท์พื้นฐาน, ระบบชุมสายและอุปกรณ์",
+            "แหล่งจ่ายจากการไฟฟ้า",
+            "แหล่งจ่ายจากเครื่องกำเนิดไฟฟ้าสำรอง",
+            "ระบบตรวจสอบและป้องกัน",
+            "อุปกรณ์และระบบในตู้จ่ายไฟระบบ",
+            "ระบบไฟอาคารและชานชลา",
+            "กล้องวงจรปิด (CCTV) สถานีหรือขบวนรถไฟ"
+        ]
+        let count_groups_list_hardware_type = new Array(12).fill(0).map(() => {
+            return new Array(38).fill(0)
+        });
+        let prev_results_hardware_type = []
 
         ALSGetDocumentSS101(begin_document_date, end_document_date).then((data) => {
             let data_ss101 = data.results;
-            data_ss101.map((item) => { 
+            console.log("data_ss101", data_ss101)
+            data_ss101.map((item) => {
                 let d = new Date(item.document.document_date);
                 if (FilterByAdjustmentBarSS101(item, values)) {
                     // https://stackoverflow.com/questions/1968167/difference-between-dates-in-javascript
                     let a = new Date(item.specific.accident_on);
                     let b = new Date(item.specific.finished_on);
-                    let hour = parseInt((b-a)/1000/60/60);
-                    if (d.getFullYear() === values.year-543) {
-                        if (item.specific.district.district_id !== undefined){
-                            count_color_map[item.specific.district.district_id-1][d.getMonth()-1]++;
+                    let hour = parseInt((b - a) / 1000 / 60 / 60);
+                    if (d.getFullYear() === values.year - 543) {
+                        console.log(">>>>>>>>> if", values.year - 543)
+                        if (item.specific.district.district_id !== undefined) {
+                            count_color_map[item.specific.district.district_id - 1][d.getMonth() - 1]++;
                             count_groups[item.specific.system_type.system_type_group_id]++;
+
                             item.specific.loss_line_item.map((sub_data) => {
-                                count_loss_ss101_now[d.getMonth()-1] = count_loss_ss101_now[d.getMonth()-1] + sub_data.price;
+                                count_loss_ss101_now[d.getMonth() - 1] = count_loss_ss101_now[d.getMonth() - 1] + sub_data.price;
                             })
-                            count_accident_now[d.getMonth()-1] = count_accident_now[d.getMonth()-1] + hour;
-                            count_interrupt[item.specific.interrupt_id-1]++;
+                            count_accident_now[d.getMonth() - 1] = count_accident_now[d.getMonth() - 1] + hour;
+                            count_interrupt[item.specific.interrupt_id - 1]++;
+
+
+                            // sum hardware tyes
+                            count_groups_list_hardware_type[d.getMonth() - 1][item.specific.hardware_type_id]++;
+
+                            // console.log("count_groups_list_hardware_type", count_groups_list_hardware_type)
                         }
-                    }
-                    else {
+                    } else {
+                        // console.log(">>>>>> else")
                         item.specific.loss_line_item.map((sub_data) => {
-                            count_loss_ss101_prev[d.getMonth()-1] = count_loss_ss101_prev[d.getMonth()-1] + sub_data.price;
+                            count_loss_ss101_prev[d.getMonth() - 1] = count_loss_ss101_prev[d.getMonth() - 1] + sub_data.price;
                         })
-                        count_accident_prev[d.getMonth()-1] = count_accident_prev[d.getMonth()-1] + hour;
+                        count_accident_prev[d.getMonth() - 1] = count_accident_prev[d.getMonth() - 1] + hour;
                     }
                 }
             })
+
+            let count_groups_list_hardware_type_v2 = []
+            for (const outer_row of count_groups_list_hardware_type) {
+
+                const row_data = {}
+                for (let i = 0; i < 38; i++) {
+                    row_data[groups_hardware_type[i]] = outer_row[i]
+                }
+
+                count_groups_list_hardware_type_v2.push(row_data)
+            }
+
+            console.log("count_groups_list_hardware_type_v2", count_groups_list_hardware_type_v2);
+
+
             // PieChartDataSystemType
             for (let i = 0; i < groups_interrupt.length; i++) {
-                results_pieInterrupt.push({key: groups_interrupt[i], value: count_interrupt[i]});
+                results_pieInterrupt.push({ key: groups_interrupt[i], value: count_interrupt[i] });
             }
 
             for (let i = 0; i < groups.length; i++) {
-                results.push({key: groups[i], value: count_groups[i]});
+                results.push({ key: groups[i], value: count_groups[i] });
             }
 
             setFieldValue('maintenance_system', results);
             setFieldValue('interrupt', results_pieInterrupt);
-            setFieldValue('accident_color_map', {values_data: count_color_map, xLabels, yLabels});
+            setFieldValue('accident_color_map', { values_data: count_color_map, xLabels, yLabels });
 
             let results_loss = [];
             let results_accident = [];
+            let results_hardware_type = [];
             let now_year = values.year
             let prev_year = values.year - 1
             results_loss.columns = [prev_year, now_year];
@@ -110,7 +181,11 @@ const AlsEquipmentStatusComponent = () => {
             results_accident.columns = [prev_year, now_year];
             results_accident.yAxis = "ระยะเวลาขัดข้อง (ชั่วโมง)";
             results_accident.xAxis = "เดือน";
-    
+
+            results_hardware_type.columns = [now_year];
+            // results_hardware_type.yAxis = "ระยะเวลาขัดข้อง (ชั่วโมง)";
+            results_hardware_type.xAxis = "เดือน";
+
             let xGroups = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
 
             for (let i = 0; i < xGroups.length; i++) {
@@ -125,64 +200,60 @@ const AlsEquipmentStatusComponent = () => {
                     [results_accident.columns[0]]: count_accident_prev[i],
                     [results_accident.columns[1]]: count_accident_now[i],
                 });
+
+                results_hardware_type.push({
+                    [results_hardware_type.xAxis]: xGroups[i],
+                    ...count_groups_list_hardware_type_v2[i],
+                });
             }
-            
+
+            console.log("results_hardware_type", results_hardware_type)
+
             let results_groups_interrupt = [];
             for (let i = 0; i < groups_interrupt.length; i++) {
-                results_groups_interrupt.push({key: groups_interrupt[i], value: count_interrupt[i]});
+                results_groups_interrupt.push({ key: groups_interrupt[i], value: count_interrupt[i] });
             }
+
             setFieldValue('loss_ss101', results_loss);
             setFieldValue('accident_ss101', results_accident);
+            setFieldValue('results_hardware_type', results_hardware_type)
         })
     }, [values.year, values.district_id, values.node_id]);
 
     return (
         <>
             {!loggedIn ? <Redirect to="/" /> : null}
-            <div id={changeTheam() === true ? "" : "blackground-white"} style={changeTheam() === true ? { backgroundImage: `url(${BgGreen})`, width: "100vw", height: "120vh" } : {height: "120vh"}}>
+            <div id={changeTheam() === true ? "" : "blackground-white"} style={changeTheam() === true ? { backgroundImage: `url(${BgGreen})`, width: "100vw", height: "120vh" } : { height: "120vh" }}>
                 <div className="bootstrap-wrapper">
                     <div className="container" style={{ marginTop: "70px" }}>
                         {/* Section Title */}
-                        <h4 className="head-title no-margin">ภาพรวมของสถิติเหตุขัดข้อง/เสียหาย - สส.101</h4>
+                        <h4 className="head-title no-margin">ภาพรวมของสถิติเหตุขัดข้อง/เสียหาย - สส.101<ExportCSV csvData={values.results_hardware_type} fileName="ส.1" /></h4>
 
                         {/* Columns have horizontal padding to create the gutters between individual columns, however, you can remove the margin from rows and padding from columns with .no-gutters on the .row. */}
                         <div className="row_bootstrap no-gutters">
 
                             {/* First Half Column */}
                             <div className="col-6"
-                                // style={{ border: "1px red solid" }}
+                            // style={{ border: "1px red solid" }}
                             >
                                 <div className="row_bootstrap no-gutters">
                                     <div className="col-4"
-                                        // style={{ border: "1px purple solid" }}
+                                    // style={{ border: "1px purple solid" }}
                                     >
                                         <AdjustmentBarComponent />
                                     </div>
                                     <div className="col-8"
-                                        // style={{ border: "1px purple solid" }}
+                                    // style={{ border: "1px purple solid" }}
                                     >
-                                    <PieChart 
-                                        title="สถิติจำนวนครั้งการขัดข้องของระบบที่ตรวจซ่อม"
-                                        chartSettings={{
-                                            marginTop:50,
-                                            marginBottom:80,
-                                            height:280,
-                                        }}
-                                        data={values.maintenance_system}
+                                        <PieChart
+                                            title="สถิติจำนวนครั้งการขัดข้องของระบบที่ตรวจซ่อม"
+                                            chartSettings={{
+                                                marginTop: 50,
+                                                marginBottom: 80,
+                                                height: 280,
+                                            }}
+                                            data={values.maintenance_system}
                                         // data={randomPieChartDataSystemType()}
-                                    />
-                                </div>
-
-                                </div>
-
-                                <div className="row_bootstrap no-gutters">
-                                    <div className="col-12"
-                                        // style={{ border: "1px purple solid" }}
-                                    >
-                                        <GroupedBarGraph
-                                            title="สถิติค่าใช้จ่ายในการซ่อมบำรุงเทียบแต่ละเดือน"
-                                            data={values.loss_ss101}
-                                            // data={randomGroupedBarGraphData()}
                                         />
                                     </div>
 
@@ -190,12 +261,25 @@ const AlsEquipmentStatusComponent = () => {
 
                                 <div className="row_bootstrap no-gutters">
                                     <div className="col-12"
-                                        // style={{ border: "1px purple solid" }}
-                                    >   
-                                        <PieChart 
+                                    // style={{ border: "1px purple solid" }}
+                                    >
+                                        <GroupedBarGraph
+                                            title="สถิติค่าใช้จ่ายในการซ่อมบำรุงเทียบแต่ละเดือน"
+                                            data={values.loss_ss101}
+                                        // data={randomGroupedBarGraphData()}
+                                        />
+                                    </div>
+
+                                </div>
+
+                                <div className="row_bootstrap no-gutters">
+                                    <div className="col-12"
+                                    // style={{ border: "1px purple solid" }}
+                                    >
+                                        <PieChart
                                             title="สถิติการซ่อมบำรุงในแต่ละหมวด"
                                             data={values.interrupt}
-                                            // data={randomPieChartData()}
+                                        // data={randomPieChartData()}
                                         />
                                     </div>
 
@@ -204,16 +288,16 @@ const AlsEquipmentStatusComponent = () => {
 
                             {/* Second Half Column */}
                             <div className="col-6"
-                                // style={{ border: "1px red solid" }}
+                            // style={{ border: "1px red solid" }}
                             >
                                 <div className="row_bootstrap no-gutters">
                                     <div className="col-12"
-                                        // style={{ border: "1px purple solid" }}
+                                    // style={{ border: "1px purple solid" }}
                                     >
-                                        <ColorMap 
+                                        <ColorMap
                                             title="สถิติจำนวนครั้งการขัดข้องของแขวงเทียบแต่ละเดือน"
-                                            data={values.accident_color_map }
-                                            // data={randomColorMapData()}
+                                            data={values.accident_color_map}
+                                        // data={randomColorMapData()}
                                         />
                                     </div>
 
@@ -222,12 +306,12 @@ const AlsEquipmentStatusComponent = () => {
                                 {/* ระยะเวลาเฉลี่ยก่อนการเสียหายแต่ละครั้ง - MTBF */}
                                 <div className="row_bootstrap no-gutters">
                                     <div className="col-12"
-                                        // style={{ border: "1px purple solid" }}
+                                    // style={{ border: "1px purple solid" }}
                                     >
                                         <GroupedBarGraph
                                             title="ระยะเวลาขัดข้องแต่ละครั้งเทียบแต่ละเดือน"
-                                            data={values.accident_ss101 }
-                                            // data={randomGroupedBarGraphDataMTBF()}
+                                            data={values.accident_ss101}
+                                        // data={randomGroupedBarGraphDataMTBF()}
                                         />
                                     </div>
 
@@ -246,7 +330,7 @@ _loss_ss101.columns = [];
 _loss_ss101.yAxis = "";
 _loss_ss101.xAxis = "เดือน";
 const EnhancedAlsEquipmentStatusComponent = withFormik({
-    
+
     mapPropsToValues: () => ({
         year: 2563,
         fix_type: '',
@@ -254,7 +338,7 @@ const EnhancedAlsEquipmentStatusComponent = withFormik({
         node_id: 'ทั้งหมด',
         interrupt: [],
         maintenance_system: [],
-        accident_color_map: {values_data: [], xLabels: [], yLabels: []},
+        accident_color_map: { values_data: [], xLabels: [], yLabels: [] },
         loss_ss101: _loss_ss101,
         accident_ss101: _loss_ss101,
     })

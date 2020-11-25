@@ -1,20 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import axios from "axios";
-import { Link, Redirect } from 'react-router-dom'
-import { API_PORT_DATABASE } from '../../config_port.js';
-import { API_URL_DATABASE } from '../../config_url.js';
-import { connect } from 'react-redux';
 import '../../../vender/fontawesome-free/css/all.css';
-import { useFormik, withFormik, useFormikContext } from 'formik';
+import { useFormikContext } from 'formik';
 import { useSelector, shallowEqual } from 'react-redux';
 import TextInput from '../common/formik-text-input'
-import SelectNoChildrenInput from '../common/formik-select-no-children';
 
-import PopupModalDocument from '../common/popup-modal-document'
+// import PopupModalDocument from '../common/popup-modal-document'
 import PopupModalUsername from '../common/popup-modal-username'
-import { validateEmployeeIDField, DOCUMENT_TYPE_ID, validateInternalDocumentIDFieldHelper, getUserIDFromEmployeeID } from '../../helper';
+import { getUserIDFromEmployeeID } from '../../helper';
 
-import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
+import { changeTheam } from '../../helper.js'
 const TopContent = (props) => {
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
@@ -87,10 +81,10 @@ const TopContent = (props) => {
 
 
             {/* PopUp ค้นหาเลขที่เอกสาร */}
-            <PopupModalDocument documentTypeGroupID={"document_all_type"}
+            {/* <PopupModalDocument documentTypeGroupID={"document_all_type"}
                 id="modalDocument" //For Open POPUP
                 name="internal_document_id" //For setFieldValue
-            />
+            /> */}
 
             {/* PopUp ค้นหาชื่อพนักงาน MODE ADD */}
             <PopupModalUsername />

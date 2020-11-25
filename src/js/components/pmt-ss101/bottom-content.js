@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux'
 import { useSelector, shallowEqual } from 'react-redux';
 
 import TableStatus from '../common/table-status';
-import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
+import { TOOLBAR_MODE } from '../../redux/modules/toolbar.js';
 
 import Files from '../common/files2'
 import Label from '../common/form-label'
@@ -12,17 +12,15 @@ import TextareaInput from '../common/formik-textarea-input';
 import NumberInput from '../common/formik-number-input';
 import DateTimeInput from '../common/formik-datetime-input';
 import SelectNoChildrenInput from '../common/formik-select-no-children';
-import DatalisrNoChildrenInput from '../common/formik-datalist-no-children';
 import PopupModalEquipment from '../common/popup-modal-equipment';
 import TableHasEquipment from '../common/table-has-equipment';
 
 import { useFormikContext } from 'formik';
 
-import { validatedataDocumentField, DOCUMENT_STATUS, getUserIDFromEmployeeID, checkBooleanForEditHelper } from '../../helper';
+import { validatedataDocumentField, checkBooleanForEditHelper } from '../../helper';
 import { FACTS } from '../../redux/modules/api/fact';
 
-import BgBlue from '../../../images/pmt/bg_blue.jpg';
-import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
+import { changeTheam } from '../../helper.js'
 const BottomContent = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
     const factDistricts = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
@@ -32,19 +30,19 @@ const BottomContent = (props) => {
     const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
 
     const factRecvAccidentFrom = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_RECV_ACCIDENT_FROM] }), shallowEqual);
-    const factAccidentCause = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_ACCIDENT_CAUSE] }), shallowEqual);
+    // const factAccidentCause = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_ACCIDENT_CAUSE] }), shallowEqual);
     const factServiceMethod = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_SERVICE_METHOD] }), shallowEqual);
     const factSystemTypeGroup = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_SYSTEM_TYPE_GROUP] }), shallowEqual);
-    const factSystemType = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_SYSTEM_TYPE] }), shallowEqual);
+    // const factSystemType = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_SYSTEM_TYPE] }), shallowEqual);
     const factHardwareType = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_HARDWARE_TYPE] }), shallowEqual);
     const factCarType = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_CAR_TYPE] }), shallowEqual);
-    const factCaseType = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_CASE_TYPE] }), shallowEqual);
+    // const factCaseType = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_CASE_TYPE] }), shallowEqual);
     const factInterrupt = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_INTERRUPT] }), shallowEqual);
     const factLevel = useSelector((state) => ({ ...state.api.fact[FACTS.LEVEL] }), shallowEqual);
     const factXCross = useSelector((state) => ({ ...state.api.fact[FACTS.X_CROSS] }), shallowEqual);
     const factDocByPass = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_DOC_BYPASS] }), shallowEqual);
 
-    const factUnit = useSelector((state) => ({ ...state.api.fact[FACTS.UNIT_OF_MEASURE] }), shallowEqual);
+    // const factUnit = useSelector((state) => ({ ...state.api.fact[FACTS.UNIT_OF_MEASURE] }), shallowEqual);
     const { values, setFieldValue, validateField } = useFormikContext();
 
     const [lineNumber, setLineNumber] = useState('');
@@ -63,19 +61,6 @@ const BottomContent = (props) => {
     const validateDocumentServiceMethodIDField = (...args) => validatedataDocumentField("service_method_id", setFieldValue, ...args)
 
     const validateDocumentAccidentOnField = (...args) => validatedataDocumentField("accident_on", setFieldValue, ...args)
-
-    const validateDocumentLocationXCrossIDField = (location_x_cross_id) => {
-        if (location_x_cross_id) {
-            var location_x_cross = fact[FACTS.X_CROSS].items.find(x_cross => `${x_cross.road_center}` === `${location_x_cross_id}`); // Returns undefined if not found
-            if (location_x_cross) {
-                return;
-            } else {
-                return 'Invalid Location x Cross'
-            }
-        } else {
-            return;
-        }
-    }
 
     const validateDocumentRequestOnField = (request_on) => {
         if (request_on > values.accident_on) {
@@ -142,11 +127,7 @@ const BottomContent = (props) => {
     }
 
     let checkBooleanForEdit = checkBooleanForEditHelper(values, decoded_token, fact);
-    // useEffect(() => {
-    //     checkBooleanForEdit = false
-    //     validateField("internal_document_id")
-    // }, [values.internal_document_id])
-
+    let totalPrice = 0;
     return (
         <div id={changeTheam() === true ? "" : "blackground-gray"}>
             <div className="container_12 clearfix" id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>
@@ -280,7 +261,7 @@ const BottomContent = (props) => {
                         <div className="clear" />
 
                         {/* system_type_id  */}
-                        <div className="grid_2 alpha white-space">
+                        {/* <div className="grid_2 alpha white-space">
                             <p className="top-text">ระบบตรวจซ่อมหลัก</p>
                         </div>
                         <div className="grid_3 alpha omega">
@@ -291,7 +272,7 @@ const BottomContent = (props) => {
                                         return <option key={factSystemType.system_type_id} value={factSystemType.system_type_id}>{factSystemType.abbreviation} - {factSystemType.system_type}</option>
                                 })}
                             </SelectNoChildrenInput>
-                        </div>
+                        </div> */}
 
                         <div className="clear" />
 
@@ -303,7 +284,7 @@ const BottomContent = (props) => {
                             <SelectNoChildrenInput name="hardware_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="19">
                                 <option value=''></option>
                                 {factHardwareType.items.map((factHardwareType) => {
-                                    if (values.sub_maintenance_type_id == factHardwareType.system_type_id)
+                                    // if (values.sub_maintenance_type_id == factHardwareType.system_type_id)
                                         return <option key={factHardwareType.hardware_type_id} value={factHardwareType.hardware_type_id}>{factHardwareType.abbreviation} - {factHardwareType.hardware_type}</option>
                                 })}
                             </SelectNoChildrenInput>
@@ -320,9 +301,18 @@ const BottomContent = (props) => {
                             <p className="top-text">ศูนย์กลางทางผ่าน</p>
                         </div>
                         <div className="grid_3 alpha omega pull">
-                            <DatalisrNoChildrenInput name="location_x_cross_id" validate={validateDocumentLocationXCrossIDField} cssStyle={{ left: "-160px", top: "14px" }}
-                                disabled={values.system_type_group_id == 3 ? checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true}
-                                tabIndex="19" />
+                            <SelectNoChildrenInput name="location_x_cross_id" disabled={values.system_type_group_id == 3 ? checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true} tabIndex="19">
+                                <option value=''></option>
+                                {factXCross.items.map((x_cross) => {
+                                    if (values.system_type_group_id == 3 && values.location_node_id == x_cross.node_id) {
+                                        if (values.sub_maintenance_type_id == factHardwareType.system_type_id) {
+                                            return <option key={x_cross.x_cross_id} value={x_cross.x_cross_id} selected>{x_cross.road_center} \\ {x_cross.name} \\ {x_cross.x_road_name}</option>
+                                        } else {
+                                            return <option key={x_cross.x_cross_id} value={x_cross.x_cross_id}>{x_cross.road_center} \\ {x_cross.name} \\ {x_cross.x_road_name}</option>
+                                        }
+                                    } else return null
+                                })}
+                            </SelectNoChildrenInput>
                         </div>
 
                         <div className="clear" />
@@ -666,38 +656,45 @@ const BottomContent = (props) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {values.loss_line_items.map((loss_line_item, index) => (
-                                    <tr key={index}>
-                                        <td className="edit-padding text-center">{index + 1}</td>
-                                        <td className="edit-padding">
-                                            <TextInput name={`loss_line_items[${index}].description`} tabIndex={41 + index + 1}
-                                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                            />
-                                        </td>
-                                        <td className="edit-padding text-center">
-                                            <NumberInput step={0.01} name={`loss_line_items[${index}].quantity`} tabIndex={41 + index + 1}
-                                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                            />
-                                        </td>
-                                        <td className="edit-padding text-center">
-                                            <TextInput name={`loss_line_items[${index}].uom_name`} tabIndex={41 + index + 1}
-                                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                            />
-                                        </td>
-                                        <td className="edit-padding text-center">
-                                            <NumberInput step={1} name={`loss_line_items[${index}].price`} tabIndex={41 + index + 1}
-                                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                            />
-                                        </td>
-                                        <td className="edit-padding">
-                                            <TextInput name={`loss_line_items[${index}].remark`} tabIndex={41 + index + 1}
-                                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                            />
-                                        </td>
-                                    </tr>
-                                ))}
+                                {values.loss_line_items.map((loss_line_item, index) => {
+                                    if (loss_line_item.price) {totalPrice = parseInt(totalPrice) + parseInt(loss_line_item.price)}
+                                    return (
+                                        <tr key={index}>
+                                            <td className="edit-padding text-center">{index + 1}</td>
+                                            <td className="edit-padding">
+                                                <TextInput name={`loss_line_items[${index}].description`} tabIndex={41 + index + 1}
+                                                    disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                                />
+                                            </td>
+                                            <td className="edit-padding text-center">
+                                                <NumberInput step={0.01} name={`loss_line_items[${index}].quantity`} tabIndex={41 + index + 1}
+                                                    disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                                />
+                                            </td>
+                                            <td className="edit-padding text-center">
+                                                <TextInput name={`loss_line_items[${index}].uom_name`} tabIndex={41 + index + 1}
+                                                    disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                                />
+                                            </td>
+                                            <td className="edit-padding text-center">
+                                                <NumberInput step={1} name={`loss_line_items[${index}].price`} tabIndex={41 + index + 1}
+                                                    disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                                />
+                                            </td>
+                                            <td className="edit-padding">
+                                                <TextInput name={`loss_line_items[${index}].remark`} tabIndex={41 + index + 1}
+                                                    disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                                />
+                                            </td>
+                                        </tr>
+                                    )
+                                })}
                             </tbody>
                         </table>
+
+                        <div className="float-right">
+                            <h3>รวมทั้งสิ้น {totalPrice} บาท</h3>
+                        </div>
                     </div>
                 </div>
 

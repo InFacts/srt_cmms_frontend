@@ -129,7 +129,7 @@ const ActivityLog = (props) => {
                         </div>
                     </div>
 
-                    <div className="container_12">
+                    <div className="container_12 mb-2">
                         <div className="grid_2 cancel-default">
                             <p className="cancel-default">ช่วงเวลา </p>
                         </div>
@@ -148,7 +148,7 @@ const ActivityLog = (props) => {
 
                     </div>
 
-                    <table className="table-many-column mt-2" style={{ height: "400px", padding: "10px" }}>
+                    <table className="table-many-column" style={{ height: "400px", padding: "0 10px" }}>
                         <thead>
                             <tr>
                                 <th className="font text-center" style={{ width: "350px" }}>วันเวลา</th>
