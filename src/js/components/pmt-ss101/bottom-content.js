@@ -247,7 +247,7 @@ const BottomContent = (props) => {
 
                         {/* system_type_group_id  */}
                         <div className="grid_2 alpha white-space">
-                            <p className="top-text">กลุ่มระบบตรวจซ่อม</p>
+                            <p className="top-text">ระบบตรวจซ่อม</p>
                         </div>
                         <div className="grid_3 alpha omega">
                             <SelectNoChildrenInput name="system_type_group_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentSystemTypeGroupIDnField} cssStyle={{ left: "-160px", top: "14px" }} tabIndex="17">
@@ -284,7 +284,7 @@ const BottomContent = (props) => {
                             <SelectNoChildrenInput name="hardware_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="19">
                                 <option value=''></option>
                                 {factHardwareType.items.map((factHardwareType) => {
-                                    // if (values.sub_maintenance_type_id == factHardwareType.system_type_id)
+                                    if (values.system_type_group_id == factHardwareType.system_type_id)
                                         return <option key={factHardwareType.hardware_type_id} value={factHardwareType.hardware_type_id}>{factHardwareType.abbreviation} - {factHardwareType.hardware_type}</option>
                                 })}
                             </SelectNoChildrenInput>
@@ -319,7 +319,7 @@ const BottomContent = (props) => {
 
                         {/* car_type_id  */}
                         <div className="grid_2 alpha white-space">
-                            <p className="top-text">ประเภทรถ</p>
+                            <p className="top-text">ประเภทรถคู่กรณี</p>
                         </div>
                         <div className="grid_3 alpha omega">
                             <SelectNoChildrenInput name="car_type_id" disabled={values.system_type_group_id == 3 ? checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true}
@@ -657,7 +657,7 @@ const BottomContent = (props) => {
                             </thead>
                             <tbody>
                                 {values.loss_line_items.map((loss_line_item, index) => {
-                                    if (loss_line_item.price) {totalPrice = parseInt(totalPrice) + parseInt(loss_line_item.price)}
+                                    if (loss_line_item.price) {totalPrice = parseInt(totalPrice) + parseInt(loss_line_item.price * loss_line_item.quantity)}
                                     return (
                                         <tr key={index}>
                                             <td className="edit-padding text-center">{index + 1}</td>

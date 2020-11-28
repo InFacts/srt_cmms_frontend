@@ -9,7 +9,7 @@ table.table-many-column{
 }
 
 table.table-many-column::-webkit-scrollbar {
-  display: none;
+  /* display: none; */
 }
 
 table.cancel-border{

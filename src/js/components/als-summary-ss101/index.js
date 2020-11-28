@@ -4,7 +4,7 @@ import { extent } from "d3-array"
 import { useFormik, withFormik, useFormikContext } from 'formik';
 
 import { footerToModeInvisible } from '../../redux/modules/footer.js';
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector, shallowEqual } from 'react-redux'
 import { Redirect } from 'react-router-dom';
 
 import { useToolbarChangeModeInitializer } from '../../hooks/toolbar-initializer';
@@ -24,11 +24,15 @@ import AdjustmentBarComponent from './adjustment-bar';
 
 import BgGreen from '../../../images/als/bg_als.jpg';
 import { ALSGetDocumentSS101, changeTheam, FilterByAdjustmentBarSS101 } from '../../helper.js'
-import { ExportCSV } from '../common/exportCSV';
+import { ExportCSV, ExportCSVRealJournal } from '../common/exportCSVForSS101';
+import { FACTS } from '../../redux/modules/api/fact';
+
 const AlsEquipmentStatusComponent = () => {
     const dispatch = useDispatch();
     const loggedIn = useSelector(state => state.token.isLoggedIn);
     const { values, setFieldValue } = useFormikContext();
+    const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
+    const factStations = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
 
     // Initializer: Change Toolbar to Mode None
     useToolbarChangeModeInitializer(TOOLBAR_MODE.NONE_HOME); // TODO: Needs to find where to go when we press "HOME"!!
@@ -41,7 +45,7 @@ const AlsEquipmentStatusComponent = () => {
     useEffect(() => {
         let begin_document_date = (values.year - 543 - 1).toString() + "-01-01";
         let end_document_date = (values.year - 543).toString() + "-12-31";
-        let groups = ["ระบบอาณัติสัญญาณ", "ระบบสายส่ง", "ระบบทางผ่านเครื่องกั้นถนน", "ระบบเครื่องทางสะดวก", "ระบบโทรศัพท์", "ระบบไฟฟ้า", "ระบบโทรพิมพ์", "ระบบวิทยุ", "ระบบอิเล็กทรอนิกส์"];
+        let groups = ["ระบบอาณัติสัญญาณ", "ระบบสายส่ง", "ระบบเครื่องกั้นถนน", "ระบบเครื่องทางสะดวก", "ระบบโทรศัพท์", "ระบบไฟฟ้า", "ระบบโทรพิมพ์", "ระบบวิทยุ", "ระบบอิเล็กทรอนิกส์"];
         let count_groups = new Array(9).fill(0)
         let count_loss_ss101_now = new Array(12).fill(0)
         let count_loss_ss101_prev = new Array(12).fill(0)
@@ -60,87 +64,156 @@ const AlsEquipmentStatusComponent = () => {
         let groups_interrupt = ["รอเครื่องมือและอะไหล่", "ธรรมชาติไม่เอื้ออำนวย", "รอเวลาในการซ่อมแก้ไข", "พนักงานไม่เพียงพอ", "พาหนะไม่มี", "ระยะทางไกล", "สาเหตุอื่นๆ", "ไม่มี"];
 
         let groups_hardware_type = [
-            "ระบบไฟแสงสว่าง",
-            "ระบบจ่ายไฟเครื่องกันถนนฯ",
-            "ระบบไฟตอน เครื่องนับล้อ",
-            "เสาและระบบสัญญาณเตือน",
-            "ระบบการควบคุมบังคับ",
-            "ตู้อุปกรณ์ สายเคเบิลและจุดต่อสาย",
-            "แท่นและคานหรือชุดกั้น",
-            "มอเตอร์ชำรุด",
-            "เสาอุปกรณ์และระบบแสดงสัญญาณ",
-            "สัญญาณ-ระบบไฟตอนทาง",
-            "อุปกรณ์และระบบการควบคุมบังคับ",
-            "แหล่งจ่ายไฟในระบบ",
-            "ตู้และอุปกรณ์",
-            "สายเคเบิลและจุดต่อสาย",
-            "ไฟแสดงและแผงบรรยายทาง",
-            "อุปกรณ์และระบบควบคุมบังคับ",
-            "ระบบตรวจสอบท่า",
-            "ระบบจ่ายไฟวงจรประแจ",
-            "อุปกรณ์ชุดล็อกปลายลิ้นประแจ",
-            "อุปกรณ์ชุดตกราง",
-            "สายโถงหรือสายส่งสัญญาณ",
-            "ชุดกันฟ้าและฟิวส์",
-            "อุปกรณ์และเครื่องทางสะดวก",
-            "ชุดจ่ายไฟ",
-            "ระบบสายโถง, สายส่งและเสาโทรเลข",
-            "อินเตอนร์คอม, โทรศัพท์เครื่องกั้น",
-            "โทรศัพท์ควบคุมระบบและอุปกรณ์",
-            "โทรศัพท์ควบคุมชุดจ่ายไฟ",
-            "ระบบวิทยุสถานีและอุปกรณ์ร่วม",
-            "ชุดจ่ายไฟระบบวิทยุ",
-            "ชุดเครื่องขยายสถานี",
-            "โทรศัพท์พื้นฐาน, ระบบชุมสายและอุปกรณ์",
-            "แหล่งจ่ายจากการไฟฟ้า",
-            "แหล่งจ่ายจากเครื่องกำเนิดไฟฟ้าสำรอง",
-            "ระบบตรวจสอบและป้องกัน",
-            "อุปกรณ์และระบบในตู้จ่ายไฟระบบ",
-            "ระบบไฟอาคารและชานชลา",
-            "กล้องวงจรปิด (CCTV) สถานีหรือขบวนรถไฟ"
+            "1.ระบบไฟแสงสว่าง",
+            "1.ระบบจ่ายไฟเครื่องกันถนนฯ",
+            "1.ระบบไฟตอน เครื่องนับล้อ",
+            "1.เสาและระบบสัญญาณเตือน",
+            "1.ระบบการควบคุมบังคับ",
+            "1.ตู้อุปกรณ์ สายเคเบิลและจุดต่อสาย",
+            "1.แท่นและคานหรือชุดกั้น",
+            "1.มอเตอร์ชำรุด",
+            "2.เสาอุปกรณ์และระบบแสดงสัญญาณ",
+            "2.สัญญาณ-ระบบไฟตอนทาง",
+            "2.อุปกรณ์และระบบการควบคุมบังคับ",
+            "2.แหล่งจ่ายไฟในระบบ",
+            "2.ตู้และอุปกรณ์",
+            "2.สายเคเบิลและจุดต่อสาย",
+            "2.ไฟแสดงและแผงบรรยายทาง",
+            "3.อุปกรณ์และระบบควบคุมบังคับ",
+            "3.ระบบตรวจสอบท่า",
+            "3.ระบบจ่ายไฟวงจรประแจ",
+            "3.อุปกรณ์ชุดล็อกปลายลิ้นประแจ",
+            "3.อุปกรณ์ชุดตกราง",
+            "4.สายโถงหรือสายส่งสัญญาณ",
+            "4.ชุดกันฟ้าและฟิวส์",
+            "4.อุปกรณ์และเครื่องทางสะดวก",
+            "4.ชุดจ่ายไฟ",
+            "5.ระบบสายโถง, สายส่งและเสาโทรเลข",
+            "5.อินเตอนร์คอม, โทรศัพท์เครื่องกั้น",
+            "5.โทรศัพท์ควบคุมระบบและอุปกรณ์",
+            "5.โทรศัพท์ควบคุมชุดจ่ายไฟ",
+            "5.ระบบวิทยุสถานีและอุปกรณ์ร่วม",
+            "5.ชุดจ่ายไฟระบบวิทยุ",
+            "5.ชุดเครื่องขยายสถานี",
+            "5.โทรศัพท์พื้นฐาน, ระบบชุมสายและอุปกรณ์",
+            "6.แหล่งจ่ายจากการไฟฟ้า",
+            "6.แหล่งจ่ายจากเครื่องกำเนิดไฟฟ้าสำรอง",
+            "6.ระบบตรวจสอบและป้องกัน",
+            "6.อุปกรณ์และระบบในตู้จ่ายไฟระบบ",
+            "6.ระบบไฟอาคารและชานชลา",
+            "7.กล้องวงจรปิด (CCTV) สถานีหรือขบวนรถไฟ"
+        ];
+
+        let groups_time_hardware_type = [
+            "1.ระยะเวลาขัดข้องระบบไฟแสงสว่าง",
+            "1.ระยะเวลาขัดข้องระบบจ่ายไฟเครื่องกันถนนฯ",
+            "1.ระยะเวลาขัดข้องระบบไฟตอน เครื่องนับล้อ",
+            "1.ระยะเวลาขัดข้องเสาและระบบสัญญาณเตือน",
+            "1.ระยะเวลาขัดข้องระบบการควบคุมบังคับ",
+            "1.ระยะเวลาขัดข้องตู้อุปกรณ์ สายเคเบิลและจุดต่อสาย",
+            "1.ระยะเวลาขัดข้องแท่นและคานหรือชุดกั้น",
+            "1.ระยะเวลาขัดข้องมอเตอร์ชำรุด",
+            "2.ระยะเวลาขัดข้องเสาอุปกรณ์และระบบแสดงสัญญาณ",
+            "2.ระยะเวลาขัดข้องสัญญาณ-ระบบไฟตอนทาง",
+            "2.ระยะเวลาขัดข้องอุปกรณ์และระบบการควบคุมบังคับ",
+            "2.ระยะเวลาขัดข้องแหล่งจ่ายไฟในระบบ",
+            "2.ระยะเวลาขัดข้องตู้และอุปกรณ์",
+            "2.ระยะเวลาขัดข้องสายเคเบิลและจุดต่อสาย",
+            "2.ระยะเวลาขัดข้องไฟแสดงและแผงบรรยายทาง",
+            "3.ระยะเวลาขัดข้องอุปกรณ์และระบบควบคุมบังคับ",
+            "3.ระยะเวลาขัดข้องระบบตรวจสอบท่า",
+            "3.ระยะเวลาขัดข้องระบบจ่ายไฟวงจรประแจ",
+            "3.ระยะเวลาขัดข้องอุปกรณ์ชุดล็อกปลายลิ้นประแจ",
+            "3.ระยะเวลาขัดข้องอุปกรณ์ชุดตกราง",
+            "4.ระยะเวลาขัดข้องสายโถงหรือสายส่งสัญญาณ",
+            "4.ระยะเวลาขัดข้องชุดกันฟ้าและฟิวส์",
+            "4.ระยะเวลาขัดข้องอุปกรณ์และเครื่องทางสะดวก",
+            "4.ระยะเวลาขัดข้องชุดจ่ายไฟ",
+            "5.ระยะเวลาขัดข้องระบบสายโถง, สายส่งและเสาโทรเลข",
+            "5.ระยะเวลาขัดข้องอินเตอนร์คอม, โทรศัพท์เครื่องกั้น",
+            "5.ระยะเวลาขัดข้องโทรศัพท์ควบคุมระบบและอุปกรณ์",
+            "5.ระยะเวลาขัดข้องโทรศัพท์ควบคุมชุดจ่ายไฟ",
+            "5.ระยะเวลาขัดข้องระบบวิทยุสถานีและอุปกรณ์ร่วม",
+            "5.ระยะเวลาขัดข้องชุดจ่ายไฟระบบวิทยุ",
+            "5.ระยะเวลาขัดข้องชุดเครื่องขยายสถานี",
+            "5.ระยะเวลาขัดข้องโทรศัพท์พื้นฐาน, ระบบชุมสายและอุปกรณ์",
+            "6.ระยะเวลาขัดข้องแหล่งจ่ายจากการไฟฟ้า",
+            "6.ระยะเวลาขัดข้องแหล่งจ่ายจากเครื่องกำเนิดไฟฟ้าสำรอง",
+            "6.ระยะเวลาขัดข้องระบบตรวจสอบและป้องกัน",
+            "6.ระยะเวลาขัดข้องอุปกรณ์และระบบในตู้จ่ายไฟระบบ",
+            "6.ระยะเวลาขัดข้องระบบไฟอาคารและชานชลา",
+            "7.ระยะเวลาขัดข้องกล้องวงจรปิด (CCTV) สถานีหรือขบวนรถไฟ"
         ]
+
         let count_groups_list_hardware_type = new Array(12).fill(0).map(() => {
             return new Array(38).fill(0)
         });
-        let prev_results_hardware_type = []
+        let count_groups_time_list_hardware_type = new Array(12).fill(0).map(() => {
+            return new Array(38).fill(0)
+        });
 
         ALSGetDocumentSS101(begin_document_date, end_document_date).then((data) => {
             let data_ss101 = data.results;
             console.log("data_ss101", data_ss101)
+            let data_ss101_journal = [];
             data_ss101.map((item) => {
                 let d = new Date(item.document.document_date);
                 if (FilterByAdjustmentBarSS101(item, values)) {
                     // https://stackoverflow.com/questions/1968167/difference-between-dates-in-javascript
-                    let a = new Date(item.specific.accident_on);
-                    let b = new Date(item.specific.finished_on);
-                    let hour = parseInt((b - a) / 1000 / 60 / 60);
-                    if (d.getFullYear() === values.year - 543) {
-                        console.log(">>>>>>>>> if", values.year - 543)
-                        if (item.specific.district.district_id !== undefined) {
-                            count_color_map[item.specific.district.district_id - 1][d.getMonth() - 1]++;
-                            count_groups[item.specific.system_type.system_type_group_id]++;
 
+                    if (values.systems_group_id === "ทั้งหมด" || values.systems_group_id == item.specific.system_type.system_type_id) {
+                        data_ss101_journal.push(item);
+                        
+                        let a = new Date(item.specific.accident_on);
+                        let b = new Date(item.specific.finished_on);
+                        let hour = parseInt((b - a) / 1000 / 60 / 60);
+                        if (d.getFullYear() === values.year - 543) {
+                            // console.log(">>>>>>>>> if", values.year - 543)
+                            if (item.specific.district.district_id !== undefined) {
+                                count_color_map[item.specific.district.district_id - 1][d.getMonth() - 1]++;
+                                count_groups[item.specific.system_type.system_type_group_id]++;
+
+                                item.specific.loss_line_item.map((sub_data) => {
+                                    count_loss_ss101_now[d.getMonth() - 1] = count_loss_ss101_now[d.getMonth() - 1] + sub_data.price;
+                                })
+                                count_accident_now[d.getMonth() - 1] = count_accident_now[d.getMonth() - 1] + hour;
+                                count_interrupt[item.specific.interrupt_id - 1]++;
+
+                                // sum hardware tyes and time
+                                count_groups_list_hardware_type[d.getMonth() - 1][item.specific.hardware_type_id-1]++;
+                                count_groups_time_list_hardware_type[d.getMonth() - 1][item.specific.hardware_type_id-1] = hour++;
+
+                                // console.log("count_groups_list_hardware_type[d.getMonth() - 1][item.specific.hardware_type_id]", item.specific.hardware_type_id, d.getMonth() - 1, ">>>", ">>", count_groups_list_hardware_type[d.getMonth() - 1][item.specific.hardware_type_id])
+                            }
+                        } else {
+                            // console.log(">>>>>> else")
                             item.specific.loss_line_item.map((sub_data) => {
-                                count_loss_ss101_now[d.getMonth() - 1] = count_loss_ss101_now[d.getMonth() - 1] + sub_data.price;
+                                count_loss_ss101_prev[d.getMonth() - 1] = count_loss_ss101_prev[d.getMonth() - 1] + sub_data.price;
                             })
-                            count_accident_now[d.getMonth() - 1] = count_accident_now[d.getMonth() - 1] + hour;
-                            count_interrupt[item.specific.interrupt_id - 1]++;
-
-
-                            // sum hardware tyes
-                            count_groups_list_hardware_type[d.getMonth() - 1][item.specific.hardware_type_id]++;
-
-                            // console.log("count_groups_list_hardware_type", count_groups_list_hardware_type)
+                            count_accident_prev[d.getMonth() - 1] = count_accident_prev[d.getMonth() - 1] + hour;
                         }
-                    } else {
-                        // console.log(">>>>>> else")
-                        item.specific.loss_line_item.map((sub_data) => {
-                            count_loss_ss101_prev[d.getMonth() - 1] = count_loss_ss101_prev[d.getMonth() - 1] + sub_data.price;
-                        })
-                        count_accident_prev[d.getMonth() - 1] = count_accident_prev[d.getMonth() - 1] + hour;
                     }
                 }
             })
+            console.log("count_groups_list_hardware_type", count_groups_list_hardware_type)
+
+            // console.log("count_groups_list_hardware_type", count_groups_list_hardware_type)
+            let realJournal = [];
+            data_ss101_journal.map((data_ss101_journal_test) => {
+                let subRealJournal = {};
+                subRealJournal.internal_document_id = data_ss101_journal_test.document.internal_document_id;
+                subRealJournal.accident_on = data_ss101_journal_test.specific.accident_on;
+                subRealJournal.finished_on = data_ss101_journal_test.specific.finished_on;
+                subRealJournal.district = data_ss101_journal_test.specific.district.name;
+                subRealJournal.node_id = factNodes.items.length > 0 && factNodes.items.find(node => `${node.node_id}` === `${data_ss101_journal_test.specific.location_node_id}`).name;
+                subRealJournal.station_id = factStations.items.length > 0 && factStations.items.find(station => `${station.station_id}` === `${data_ss101_journal_test.specific.location_station_id}`).name;
+                subRealJournal.system_type = data_ss101_journal_test.specific.system_type.system_type;
+                subRealJournal.total_fail_time = data_ss101_journal_test.specific.total_fail_time;
+                subRealJournal.auditor_name = data_ss101_journal_test.specific.auditor_name;
+                realJournal.push(subRealJournal);
+            })
+
+            setFieldValue("realJournal", realJournal, false);
 
             let count_groups_list_hardware_type_v2 = []
             for (const outer_row of count_groups_list_hardware_type) {
@@ -152,9 +225,42 @@ const AlsEquipmentStatusComponent = () => {
 
                 count_groups_list_hardware_type_v2.push(row_data)
             }
+            console.log("count_groups_list_hardware_type_v2", count_groups_list_hardware_type_v2)
 
-            console.log("count_groups_list_hardware_type_v2", count_groups_list_hardware_type_v2);
+            let count_groups_time_list_hardware_type_v2 = []
+            for (const outer_row of count_groups_time_list_hardware_type) {
 
+                const row_data = {}
+                for (let i = 0; i < 38; i++) {
+                    row_data[groups_time_hardware_type[i]] = outer_row[i]
+                }
+
+                count_groups_time_list_hardware_type_v2.push(row_data)
+            }
+
+            let tmpArr1 = [];
+
+            for (let i = 0; i < 12; i++) {
+
+                let tmpObj1 = {}
+
+                // console.log("wow much error", count_groups_list_hardware_type_v2)
+                
+                for (let j = 0; j < Object.keys(count_groups_list_hardware_type_v2[i]).length; j++) {
+                    if (values.systems_group_id === "ทั้งหมด" || !Object.keys(count_groups_list_hardware_type_v2[i])[j].search(values.systems_group_id)
+                    || !Object.keys(count_groups_time_list_hardware_type_v2[i])[j].search(values.systems_group_id)) {
+                        // console.log("Object.keys(count_groups_list_hardware_type_v2[i])[j]", Object.keys(count_groups_list_hardware_type_v2[i])[j])
+                        const firstKey = Object.keys(count_groups_list_hardware_type_v2[i])[j]
+                        const secondKey = Object.keys(count_groups_time_list_hardware_type_v2[i])[j]
+                        // console.log("count_groups_list_hardware_type_v2[i][firstKey]", count_groups_list_hardware_type_v2[i][firstKey])
+    
+                        tmpObj1[firstKey] = count_groups_list_hardware_type_v2[i][firstKey]
+                        tmpObj1[secondKey] = count_groups_time_list_hardware_type_v2[i][secondKey]   
+                    }
+                }
+                tmpArr1.push(tmpObj1)
+            }
+            // console.log("tmpArr1", tmpArr1)
 
             // PieChartDataSystemType
             for (let i = 0; i < groups_interrupt.length; i++) {
@@ -183,7 +289,7 @@ const AlsEquipmentStatusComponent = () => {
             results_accident.xAxis = "เดือน";
 
             results_hardware_type.columns = [now_year];
-            // results_hardware_type.yAxis = "ระยะเวลาขัดข้อง (ชั่วโมง)";
+            results_hardware_type.yAxis = "ระยะเวลาขัดข้อง (ชั่วโมง)";
             results_hardware_type.xAxis = "เดือน";
 
             let xGroups = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
@@ -203,7 +309,7 @@ const AlsEquipmentStatusComponent = () => {
 
                 results_hardware_type.push({
                     [results_hardware_type.xAxis]: xGroups[i],
-                    ...count_groups_list_hardware_type_v2[i],
+                    ...tmpArr1[i]
                 });
             }
 
@@ -218,7 +324,7 @@ const AlsEquipmentStatusComponent = () => {
             setFieldValue('accident_ss101', results_accident);
             setFieldValue('results_hardware_type', results_hardware_type)
         })
-    }, [values.year, values.district_id, values.node_id]);
+    }, [values.year, values.district_id, values.node_id, values.systems_group_id, factNodes.items, factStations.items]);
 
     return (
         <>
@@ -227,7 +333,10 @@ const AlsEquipmentStatusComponent = () => {
                 <div className="bootstrap-wrapper">
                     <div className="container" style={{ marginTop: "70px" }}>
                         {/* Section Title */}
-                        <h4 className="head-title no-margin">ภาพรวมของสถิติเหตุขัดข้อง/เสียหาย - สส.101<ExportCSV csvData={values.results_hardware_type} fileName="ส.1" /></h4>
+                        <h4 className="head-title no-margin">ภาพรวมของสถิติเหตุขัดข้อง/เสียหาย - สส.101
+                        <ExportCSV csvData={values.results_hardware_type} fileName="รายงานสถิติ" />
+                        <ExportCSVRealJournal csvData={values.realJournal} fileName="data" />
+                        </h4>
 
                         {/* Columns have horizontal padding to create the gutters between individual columns, however, you can remove the margin from rows and padding from columns with .no-gutters on the .row. */}
                         <div className="row_bootstrap no-gutters">
@@ -334,6 +443,7 @@ const EnhancedAlsEquipmentStatusComponent = withFormik({
     mapPropsToValues: () => ({
         year: 2563,
         fix_type: '',
+        systems_group_id: 'ทั้งหมด',
         district_id: 'ทั้งหมด',
         node_id: 'ทั้งหมด',
         interrupt: [],

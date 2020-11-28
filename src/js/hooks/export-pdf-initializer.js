@@ -418,26 +418,26 @@ const createHtmlS1 = (table) =>
             height: 29.7cm;
             margin: 0 auto;
             margin-bottom: 0.5cm;
-            border: 0.1px solid #eee;
+            border: 0.1px solid black;
             font-size: 16px;
             font-family: 'AngsanaUPC', 'MS Sans Serif';
         }
         .invoice-box table {
             width: 95%;
             margin: auto;
-            border: 1px solid #eee;
+            border: 1px solid black;
         }
         .invoice-box table td {
             vertical-align: top;
         }
         .invoice-box table tr.heading td {
             background: #eee;
-            border-bottom: 1px solid #ddd;
-            border-top: 1px solid #ddd;
+            border-bottom: 1px solid black;
+            border-top: 1px solid black;
             font-weight: bold;
         }
         .invoice-box table tr.item td {
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid black;
         }
         .invoice-box p {
             width: 95%;
@@ -546,28 +546,28 @@ const createHtmlS16_46 = (table) =>
               height: 29.7cm;
               margin: 0 auto;
               margin-bottom: 0.5cm;
-              border: 0.1px solid #eee;
+              border: 0.1px solid black;
               font-size: 16px;
               font-family: 'AngsanaUPC', 'MS Sans Serif'; 
           }
           .invoice-box table {
               width: 95%;
               margin: auto;
-              border: 0px solid #eee;
+              border: 0px solid black;
           }
           .invoice-box table td {
               vertical-align: top;
           }
           .invoice-box table tr.heading td {
               background: #eee;
-              border: 1px solid #ddd;
+              border: 1px solid black;
               font-weight: bold;
           }
           .invoice-box table tr.item td {
-              border: 1px solid #eee;
+              border: 1px solid black;
           }
           .invoice-box table tr.item2 td {
-              border-bottom: 0px solid #eee;
+              border-bottom: 0px solid black;
           }
           .invoice-box p {
               width: 95%;
@@ -662,9 +662,9 @@ const createTableS16_46 = (head, rows, content, total) =>
         <td style=" text-align:center; vertical-align: middle;" >รหัส</td>  
       </tr>
       <tr class="item">
-        <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;"></td>
-        <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;"></td>
-        <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"></td>
+        <td style=" text-align:center ; vertical-align: middle; border: 0px solid black;"></td>
+        <td style=" text-align:center ; vertical-align: middle; border: 0px solid black;"></td>
+        <td style=" text-align:left ; vertical-align: middle; border: 0px solid black;"></td>
         <td style=" text-align:center ; vertical-align: middle;" colSpan="2">${content.AccountType}</td>
         <td style=" text-align:center ; vertical-align: middle;" >${content.ResponsibilityCode}</td>
         <td style=" text-align:center ; vertical-align: middle;">${content.Number}</td>
@@ -685,12 +685,12 @@ const createTableS16_46 = (head, rows, content, total) =>
       </tr>
       ${rows}
       <tr class="item">
-        <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;"></td>
-        <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;"></td>
-        <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"></td>
-        <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;"></td>
-        <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;"></td>
-        <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;">รวมเป็นเงิน</td>
+        <td style=" text-align:center ; vertical-align: middle; border: 0px solid black;"></td>
+        <td style=" text-align:center ; vertical-align: middle; border: 0px solid black;"></td>
+        <td style=" text-align:left ; vertical-align: middle; border: 0px solid black;"></td>
+        <td style=" text-align:center ; vertical-align: middle; border: 0px solid black;"></td>
+        <td style=" text-align:center ; vertical-align: middle; border: 0px solid black;"></td>
+        <td style=" text-align:center ; vertical-align: middle; border: 0px solid black;">รวมเป็นเงิน</td>
         <td style=" text-align:center ; vertical-align: middle;">${total}</td>
         <td style=" text-align:center ; vertical-align: middle;"></td>
       </tr>
@@ -925,21 +925,21 @@ const createHtmlB22 = (table) => `
       .invoice-box table {
           width: 95%;
           margin: auto;
-          border: 0px solid #eee;
+          border: 0px solid black;
       }
       .invoice-box table td {
            vertical-align: top;
       }
       .invoice-box table tr.heading td {
            background: #eee;
-           border: 1px solid #ddd;
+           border: 1px solid black;
            font-weight: bold;
       }
       .invoice-box table tr.item td {
-           border: 1px solid #eee;
+           border: 1px solid black;
       }
       .invoice-box table tr.item2 td {
-           border-bottom: 0px solid #eee;
+           border-bottom: 0px solid black;
       }
       .invoice-box p {
            width: 95%;
@@ -1045,35 +1045,35 @@ const createHtmlS101 = (table) =>
         <style>
           @page {
             size: A4;
-            margin:0 ;
+            margin:20 ;
           }
           .invoice-box {
               width: 210mm;
               height: 29.7cm;
               margin: 0 auto;
               margin-bottom: 0.5cm;
-              border: 0.1px solid #eee;
+              border: 0.1px solid black;
               font-size: 16px;
               font-family: 'AngsanaUPC', 'MS Sans Serif';   
           }
           .invoice-box table {
               width: 95%;
               margin: auto;
-              border: 0px solid #eee;
+              border: 0px solid black;
           }
           .invoice-box table td {
               vertical-align: top;
           }
           .invoice-box table tr.heading td {
               background: #eee;
-              border: 1px solid #ddd;
+              border: 1px solid black;
               font-weight: bold;
           }
           .invoice-box table tr.item td {
-              border: 1px solid #eee;
+              border: 1px solid black;
           }
           .invoice-box table tr.item2 td {
-              border-bottom: 0px solid #eee;
+              border-bottom: 0px solid black;
           }
           .invoice-box p {
               width: 95%;
@@ -1181,40 +1181,40 @@ const createPageS101Page1 = (date, content) =>
               <td style="width: 6%; text-align:center; vertical-align: middle;" >พ.ศ.</td>  
           </tr>
           <tr class="item">
-          <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">(2) ได้รับแจ้งเหตุจาก</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>${content.RequestBy}</label></div></div></td>
-          <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">วันเวลาที่รับแจ้ง</td>
+          <td style=" text-align:left ; vertical-align: middle; border: 0px solid black;"><div class="left">(2) ได้รับแจ้งเหตุจาก</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>${content.RequestBy}</label></div></div></td>
+          <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid black;">วันเวลาที่รับแจ้ง</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.RequesstOnTimeParts}</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.RequesstOnYear}</td>
           <td style=" text-align:center ; vertical-align: middle;">${content.RequesstOnMount}</td>
           <td style=" text-align:center ; vertical-align: middle;">${content.RequesstOnDay}</td>
       </tr>
       <tr class="item">
-          <td style="padding-left: 15px; text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">โดยจดหมายหรือโทรเลขที่</div><div contenteditable="true"><div class="dotted" style="width: 435px;"><label>${content.RecvAccidentFromRecvId}</label></div></div></td>
-          <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">วันเวลาที่เกิดเหตุ</td>
+          <td style="padding-left: 15px; text-align:left ; vertical-align: middle; border: 0px solid black;"><div class="left">โดยจดหมายหรือโทรเลขที่</div><div contenteditable="true"><div class="dotted" style="width: 435px;"><label>${content.RecvAccidentFromRecvId}</label></div></div></td>
+          <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid black;">วันเวลาที่เกิดเหตุ</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.AccidentOnTimeParts}</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.AccidentOnYear}</td>
           <td style=" text-align:center ; vertical-align: middle;">${content.AccidentOnMount}</td>
           <td style=" text-align:center ; vertical-align: middle;">${content.AccidentOnDay}</td>
       </tr>
       <tr class="item">
-          <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">(3) งาน</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>${content.AccidentName}</label></div></div></td>
-          <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">ออกเดินทาง</td>
+          <td style=" text-align:left ; vertical-align: middle; border: 0px solid black;"><div class="left">(3) งาน</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>${content.AccidentName}</label></div></div></td>
+          <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid black;">ออกเดินทาง</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.DepartedOnTimeParts}</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.DepartedOnYear}</td>
           <td style=" text-align:center ; vertical-align: middle;">${content.DepartedOnMount}</td>
           <td style=" text-align:center ; vertical-align: middle;">${content.DepartedOnDay}</td>
       </tr>
       <tr class="item">
-          <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">(4) เดินทางโดย</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>-</label></div></div></td>
-          <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">เดินทางถึง</td>
+          <td style=" text-align:left ; vertical-align: middle; border: 0px solid black;"><div class="left">(4) เดินทางโดย</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>-</label></div></div></td>
+          <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid black;">เดินทางถึง</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.ArrivedOnTimeParts}</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.ArrivedOnYear}</td>
           <td style=" text-align:center ; vertical-align: middle;">${content.ArrivedOnMount}</td>
           <td style=" text-align:center ; vertical-align: middle;">${content.ArrivedOnDay}</td>
       </tr>
       <tr class="item">
-          <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">(5) ระบบที่ตรวจซ่อม</div></td>
-          <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">วันเวลาแล้วเสร็จ</td>
+          <td style=" text-align:left ; vertical-align: middle; border: 0px solid black;"><div class="left">(5) ระบบที่ตรวจซ่อม</div></td>
+          <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid black;">วันเวลาแล้วเสร็จ</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.FinishedOnTimeParts}</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.FinishedOnYear}</td>
           <td style=" text-align:center ; vertical-align: middle;">${content.FinishedOnMount}</td>
@@ -1532,28 +1532,28 @@ const createHtmlChecklistLineItem = (info_this_page, row_table_checklist_line_it
       height: 29.7cm;
       margin: 0 auto;
       margin-bottom: 0.5cm;
-      border: 0.1px solid #eee;
+      border: 0.1px solid black;
       font-size: 16px;
       font-family: 'AngsanaUPC', 'MS Sans Serif';   
   }
   .invoice-box table {
       width: 95%;
       margin: auto;
-      border: 0px solid #eee;
+      border: 0px solid black;
   }
   .invoice-box table td {
       vertical-align: top;
   }
   .invoice-box table tr.heading td {
       background: #eee;
-      border: 1px solid #ddd;
+      border: 1px solid black;
       font-weight: bold;
   }
   .invoice-box table tr.item td {
-      border: 1px solid #eee;
+      border: 1px solid black;
   }
   .invoice-box table tr.item2 td {
-      border-bottom: 0px solid #eee;
+      border-bottom: 0px solid black;
   }
   .invoice-box p {
       width: 95%;
@@ -1666,28 +1666,28 @@ const createHtmlWorkOrderPM = (info_this_page, row_table_checklist_week_1, row_t
       height: 29.7cm;
       margin: 0 auto;
       margin-bottom: 0.5cm;
-      border: 0.1px solid #eee;
+      border: 0.1px solid black;
       font-size: 16px;
       font-family: 'AngsanaUPC', 'MS Sans Serif';   
   }
   .invoice-box table {
       width: 95%;
       margin: auto;
-      border: 0px solid #eee;
+      border: 0px solid black;
   }
   .invoice-box table td {
       vertical-align: top;
   }
   .invoice-box table tr.heading td {
       background: #eee;
-      border: 1px solid #ddd;
+      border: 1px solid black;
       font-weight: bold;
   }
   .invoice-box table tr.item td {
-      border: 1px solid #eee;
+      border: 1px solid black;
   }
   .invoice-box table tr.item2 td {
-      border-bottom: 0px solid #eee;
+      border-bottom: 0px solid black;
   }
   .invoice-box p {
       width: 95%;
@@ -1887,21 +1887,21 @@ const createHtmlReportPMT = (info_page, htmlTable) => `
       .invoice-box table {
           width: 95%;
           margin: auto;
-          border: 0px solid #eee;
+          border: 0px solid black;
       }
       .invoice-box table td {
            vertical-align: top;
       }
       .invoice-box table tr.heading td {
            background: #eee;
-           border: 1px solid #ddd;
+           border: 1px solid black;
            font-weight: bold;
       }
       .invoice-box table tr.item td {
-           border: 1px solid #eee;
+           border: 1px solid black;
       }
       .invoice-box table tr.item2 td {
-           border-bottom: 0px solid #eee;
+           border-bottom: 0px solid black;
       }
       .invoice-box p {
            width: 95%;

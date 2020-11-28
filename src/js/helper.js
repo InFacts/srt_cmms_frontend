@@ -203,7 +203,7 @@ export const SS101_SCHEMA = {
     arrived_on: '',           // เดินทางถึง  DATETIME
     finished_on: '',          // วันเวลาที่แล้วเสร็จ DATETIME
     // system_type_group_id: -1,   // ระบบตรวจซ่อม FK_ID - this is automatically infered from sub_maintenance_type_id
-    sub_maintenance_type_id: 1,      //  ชนิดระบบตรวจซ่อม FK_ID
+    sub_maintenance_type_id: -1,      //  ชนิดระบบตรวจซ่อม FK_ID
     hardware_type_id: -1,   // ชื่ออุปกรณ์ที่บำรุงรักษา FK_ID
 
     summary_cause_condition: '', // สาเหตุและอาการเสียโดยสรุป link [root_cause] from WO NVARCHAR
@@ -806,8 +806,8 @@ export const packDataFromValues = (fact, values, document_type_id, checked_remar
             member_3: values.member_3,
             remark: values.remark,
             checked_remark: checked_remark,
-            // sub_maintenance_type_id: values.sub_maintenance_type_id ? parseInt(values.sub_maintenance_type_id) : null,
-            sub_maintenance_type_id: 1,
+            sub_maintenance_type_id: values.system_type_group_id ? parseInt(values.system_type_group_id) : null,
+            // sub_maintenance_type_id: 1,
             request_on: values.request_on + ':00+00:00',
             request_by: values.request_by,
             location_district_id: values.location_district_id ? parseInt(values.location_district_id) : null,
@@ -2177,7 +2177,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
 
         let document_statuses = fact[FACTS.DOCUMENT_STATUS].items;
         let document_status = document_statuses.find(document_status => `${document_status.document_status_id}` === `${data.document.document_status_id}`);
-        
+
         if (document_status) {
             return {
                 document_id: data.document.document_id,
@@ -2615,7 +2615,7 @@ export const validateInternalDocumentIDFieldHelper = (decoded_token, checkBoolea
     if (internal_document_id === values.internal_document_id) {
         return resolve();
     }
-    
+
     // Basic Form Checks of the Internal Document ID
     // 1. If it is empty
     // 2. If it is in the valid Form
@@ -3687,11 +3687,12 @@ export const FilterByAdjustmentBar = (equipment_installation, equipment_group, a
     return false;
 }
 export const FilterByAdjustmentBarSS101 = (item, adjustmentBar) => {
-    if (adjustmentBar.district_id === "ทั้งหมด" || adjustmentBar.district_id == item.specific.location_district_id) {
-        if (adjustmentBar.node_id === "ทั้งหมด" || adjustmentBar.node_id == item.specific.location_node_id) {
-            return true;
+        if (adjustmentBar.district_id === "ทั้งหมด" || adjustmentBar.district_id == item.specific.location_district_id) {
+            if (adjustmentBar.node_id === "ทั้งหมด" || adjustmentBar.node_id == item.specific.location_node_id) {
+                return true;
+            }
         }
-    }
+    
     return false;
 }
 
