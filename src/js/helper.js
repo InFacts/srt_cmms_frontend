@@ -1767,7 +1767,7 @@ export const fetchLatestStepApprovalDocumentData = (document_id) => new Promise(
             resolve(latest_step_approve.data);
         })
         .catch((err) => {
-            reject(err)
+            reject(err.response)
         });
 });
 
@@ -3255,7 +3255,7 @@ export const getLatestApprovalStep = (document_id, approval_step_action_id, user
             }
             resolve(obj_body);
         }).catch(function (err) {
-            reject(err)
+            reject(err.response)
         })
 });
 
