@@ -76,7 +76,7 @@ const TopContent = (props) => {
       x_cross_x_cross_id: data.equipment_installation.length > 0 ? data.equipment_installation[0].x_cross_x_cross_id : null,
 
       equipment_id: data.equipment_id,
-      modeEdit: values.line_position_permission[0].module_admin === true ? true : false     // IF Check user If User is Admin -> return true Else -> return false
+      modeEdit: values.line_position_permission[0].module_master_data === true ? true : false     // IF Check user If User is Admin -> return true Else -> return false
     }
   }
 

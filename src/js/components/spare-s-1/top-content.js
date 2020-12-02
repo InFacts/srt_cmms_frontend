@@ -15,7 +15,8 @@ import PopupModalInventory from '../common/popup-modal-inventory'
 import PopupModalNoPartNoChildren from '../common/popup-modal-nopart-no-children'
 
 import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
-import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, getNumberFromEscapedString, validatedataDocumentField } from '../../helper';
+import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, getNumberFromEscapedString, 
+  validatedataDocumentField, getLotFromQty, weightedAverage, rawLotFromQty } from '../../helper';
 import { FACTS } from '../../redux/modules/api/fact.js';
 
 import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
@@ -89,7 +90,7 @@ const TopContent = (props) => {
   const searchGoodsOnHand = () => new Promise(resolve => {
     validateForm()
       .then((err) => {
-        console.log("THIS IS ErR I GET ", err, " i dont think it is touched ", touched)
+        // console.log("THIS IS ErR I GET ", err, " i dont think it is touched ", touched)
         setTouched(setNestedObjectValues(values, true))
         setErrors(err);
         if (isEmpty1(err)) {
@@ -102,16 +103,16 @@ const TopContent = (props) => {
           if (values.year_id - 543 === year_now && parseInt(values.mouth_id) === mouth_now) {
             if (values.mouth_id === "12") {
               end_date = values.year_id - 543 + 1 + "-1-1";
-              console.log(">>>start_date", start_date, "end_date", end_date)
+              // console.log(">>>start_date", start_date, "end_date", end_date)
             }
             else {
               end_date = values.year_id - 543 + "-" + `${parseInt(values.mouth_id) + 1}` + "-1";
-              console.log("start_date", start_date, "end_date", end_date)
+              // console.log("start_date", start_date, "end_date", end_date)
             }
-            const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-onhand/plus?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&item_internal_item_id=${values.internal_item_id}&start_date=${start_date}&end_date=${end_date}&item_status_id=${values.item_status_id}&page_size=10000`;
+            const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-onhand/plus?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&internal_item_id=${values.internal_item_id}&start_date=${start_date}&end_date=${end_date}&item_status_id=${values.item_status_id}`; //&page_size=10000
             axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
               .then((res) => {
-                console.log("res", res)
+                // console.log("res", res)
                 setFieldValue("line_items", res.data.results, false);
                 setFieldValue("checkClick", true, false);
               })
@@ -128,16 +129,16 @@ const TopContent = (props) => {
           else {
             if (values.mouth_id === "12") {
               end_date = values.year_id - 543 + 1 + "-1-1";
-              console.log(">>>start_date", start_date, "end_date", end_date)
+              // console.log(">>>start_date", start_date, "end_date", end_date)
             }
             else {
               end_date = values.year_id - 543 + "-" + `${parseInt(values.mouth_id) + 1}` + "-1";
-              console.log("start_date", start_date, "end_date", end_date)
+              // console.log("start_date", start_date, "end_date", end_date)
             }
-            const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-monthly-summary/plus?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&item_internal_item_id=${values.internal_item_id}&start_date=${start_date}&end_date=${end_date}&item_status_id=${values.item_status_id}&page_size=10000`;
+            const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-monthly-summary/plus?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&internal_item_id=${values.internal_item_id}&start_date=${start_date}&end_date=${end_date}&item_status_id=${values.item_status_id}`;
             axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
               .then((res) => {
-                console.log("res", res)
+                // console.log("res", res)
                 setFieldValue("line_items", res.data.results, false);
                 setFieldValue("checkClick", true, false);
               })
@@ -157,6 +158,7 @@ const TopContent = (props) => {
   
   useEffect(() => {
     let line_item_shows = [];
+    console.log("line_item", values.line_items)
     values.line_items.map((line_item) => {
       line_item_shows.push({
         "warehouse_name": line_item.warehouse_name,
@@ -167,12 +169,18 @@ const TopContent = (props) => {
         "item_status_description_th": line_item.item_status_description_th,
         "quantity": line_item.pricing !== undefined ? (line_item.current_unit_count - line_item.committed_unit_count).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : line_item.end_unit_count.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
         "total": line_item.pricing !== undefined ? (line_item.pricing.average_price * (line_item.current_unit_count - line_item.committed_unit_count)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : line_item.end_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
-        "per_unit_price": line_item.pricing !== undefined ? line_item.pricing.average_price ? line_item.pricing.average_price.toFixed(4).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.0000" : (line_item.end_state_in_total_price / line_item.current_ending_unit_count).toFixed(4).replace(/\d(?=(\d{3})+\.)/g, '$&,') ? (line_item.end_total_price / line_item.end_unit_count).toFixed(4).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.0000"
+        "per_unit_price": line_item.pricing !== undefined ? line_item.pricing.average_price ? line_item.pricing.average_price.toFixed(4).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.0000" : (line_item.end_state_in_total_price / line_item.current_ending_unit_count).toFixed(4).replace(/\d(?=(\d{3})+\.)/g, '$&,') ? (line_item.end_total_price / line_item.end_unit_count).toFixed(4).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.0000",
+        "lot_fifo": line_item.pricing.fifo.length > 0 && rawLotFromQty( line_item.pricing.fifo, line_item.current_unit_count - line_item.committed_unit_count )
       })
     })
     setFieldValue("checkClick", false, false)
     setFieldValue("line_item_shows", line_item_shows, false)
   }, [values.line_items, values.checkClick])
+
+  // useEffect(() => {
+  //   console.log("line_item", values.line_items[0])
+  //   console.log("rawLotFromQty", values.line_items[0] && rawLotFromQty( values.line_items[0].pricing.fifo, values.line_items[0].current_unit_count - values.line_items[0].committed_unit_count ))
+  // }, [values.line_items, values.checkClick])
 
   return (
     <>

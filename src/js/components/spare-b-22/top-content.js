@@ -106,11 +106,13 @@ const TopContent = (props) => {
               end_date = values.year_id - 543 + "-" + `${parseInt(values.mouth_id) + 1}` + "-1";
               console.log("start_date", start_date, "end_date", end_date)
             }
-            const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-monthly-summary/plus?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&item_internal_item_id=${values.internal_item_id}&start_date=${start_date}&end_date=${end_date}&item_status_id=${values.item_status_id}&item_internal_item_id=${values.internal_item_id}`;
+            const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-monthly-summary/plus?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&start_date=${start_date}&end_date=${end_date}&item_status_id=${values.item_status_id}&internal_item_id=${values.internal_item_id}&page_size=10000`; //&page_size=10000
             axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
               .then((res) => {
                 console.log("res", res)
                 setFieldValue("line_items", res.data.results, false);
+                setFieldValue("start_date", start_date, false);
+                setFieldValue("end_date", end_date, false);
               })
               .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
                 if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
@@ -131,11 +133,13 @@ const TopContent = (props) => {
               end_date = values.year_id - 543 + "-" + `${parseInt(values.mouth_id) + 1}` + "-1";
               console.log("start_date", start_date, "end_date", end_date)
             }
-            const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-monthly-summary/plus?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&item_internal_item_id=${values.internal_item_id}&start_date=${start_date}&end_date=${end_date}&item_status_id=${values.item_status_id}&internal_item_id=${values.internal_item_id}`;
+            const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-monthly-summary/plus?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&start_date=${start_date}&end_date=${end_date}&item_status_id=${values.item_status_id}&internal_item_id=${values.internal_item_id}&page_size=10000`; //&page_size=10000
             axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
               .then((res) => {
-                // console.log("res", res.data.results)
+                console.log("res", res)
                 setFieldValue("line_items", res.data.results, false);
+                setFieldValue("start_date", start_date, false);
+                setFieldValue("end_date", end_date, false);
               })
               .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
                 if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID

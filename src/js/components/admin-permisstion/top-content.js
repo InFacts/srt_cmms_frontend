@@ -35,6 +35,7 @@ const TopContent = (props) => {
                         module_als: list_module.function.indexOf(3) !== -1,
                         module_track_document: list_module.function.indexOf(4) !== -1,
                         module_admin: list_module.function.indexOf(5) !== -1,
+                        module_master_data: list_module.function.indexOf(6) !== -1
                     })
                 })
                 setFieldValue('line_position_permission', module, false);

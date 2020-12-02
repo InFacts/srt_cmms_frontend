@@ -155,6 +155,7 @@ const EnhancedPmtSS101Component = withFormik({
         system_type_group_id: '',   // ระบบตรวจซ่อม FK_ID
         sub_maintenance_type_id: '',      //  ชนิดระบบตรวจซ่อม FK_ID
         hardware_type_id: '',   // ชื่ออุปกรณ์ที่บำรุงรักษา FK_ID
+        x_type_id: "",
 
         summary_cause_condition: '', // สาเหตุและอาการเสียโดยสรุป link [root_cause] from WO NVARCHAR
         cargo_id: '', //ขบวนรถที่ NVARCHAR/INT (**not in DB)
@@ -175,6 +176,16 @@ const EnhancedPmtSS101Component = withFormik({
         member_2_position_id: '', //รายชื่อเพื่อนร่วมงาน 2 ตำแหน่ง FK_ID
         member_3: '',             //รายชื่อเพื่อนร่วมงาน 3
         member_3_position_id: '',  //รายชื่อเพื่อนร่วมงาน 3 ตำแหน่ง
+        member_4: '',               //รายชื่อเพื่อนร่วมงาน 4 NVARCHAR
+        member_4_position_id: '', //รายชื่อเพื่อนร่วมงาน 4 ตำแหน่ง FK_ID
+        member_5: '',              //รายชื่อเพื่อนร่วมงาน 5 NVARCHAR
+        member_5_position_id: '', //รายชื่อเพื่อนร่วมงาน 5 ตำแหน่ง FK_ID
+        member_6: '',             //รายชื่อเพื่อนร่วมงาน 6
+        member_6_position_id: '',  //รายชื่อเพื่อนร่วมงาน 6 ตำแหน่ง
+        member_7: '',              //รายชื่อเพื่อนร่วมงาน 7 NVARCHAR
+        member_7_position_id: '', //รายชื่อเพื่อนร่วมงาน 7 ตำแหน่ง FK_ID
+        member_8: '',             //รายชื่อเพื่อนร่วมงาน 8
+        member_8_position_id: '',  //รายชื่อเพื่อนร่วมงาน 8 ตำแหน่ง
 
 
         remark: '',

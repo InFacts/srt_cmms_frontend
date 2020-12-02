@@ -36,7 +36,7 @@ const ItemMasterDataComponent = (props) => {
 
     useEffect(() => {
         if (values.line_position_permission.length >= 1) {
-            if (values.line_position_permission[0].module_admin) {
+            if (values.line_position_permission[0].module_master_data) {
                 setToolBarMode(TOOLBAR_MODE.SEARCH)
             } else {
                 setToolBarMode(TOOLBAR_MODE.JUST_SEARCH)

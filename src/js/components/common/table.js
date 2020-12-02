@@ -5,6 +5,7 @@ import { TOOLBAR_MODE, toModeAdd } from '../../redux/modules/toolbar.js';
 import TextInput from '../common/formik-text-input';
 import NumberInput from '../common/formik-number-input';
 import SelectInput from '../common/formik-select-input';
+import DateInput from '../common/formik-date-input';
 
 const Table = (props) => {
   const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
@@ -15,6 +16,7 @@ const Table = (props) => {
           <th className="font text-center" style={{ minWidth: "30px" }}>#</th>
           <th className="font" style={{ minWidth: "130px" }}>เลขที่อะไหล่</th>
           <th className="font" style={{ minWidth: "368px" }}>รายละเอียด</th>
+          {props.document_type_group_id === 101 && <th className="font" style={{ minWidth: "80px", maxWidth: "80px" }}>วันที่ผลิต</th>}
           <th className="font text-center" style={{ minWidth: "80px" }}>จำนวน</th>
           <th className="font text-center" style={{ minWidth: "80px" }}>หน่วยนับ</th>
           <th className="font text-right" style={{ minWidth: "80px" }}>สถานะ</th>
@@ -38,6 +40,10 @@ const Table = (props) => {
                 />
               </td>
               <td className="edit-padding">{list.description}</td>
+              {props.document_type_group_id === 101 && <td className="edit-padding">
+                <DateInput name={`line_items[${index}].date_manufactured`} tabIndex={props.tabIndex + line_number} 
+                 disabled={props.disabledBothMode !== true ? props.checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true}/>
+              </td> }
               <td className="edit-padding text-center">
                 {props.document_type_group_id !== 141 && props.document_type_group_id !== 142
                   ?

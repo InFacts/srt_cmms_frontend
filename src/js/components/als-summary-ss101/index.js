@@ -33,6 +33,9 @@ const AlsEquipmentStatusComponent = () => {
     const { values, setFieldValue } = useFormikContext();
     const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
     const factStations = useSelector((state) => ({ ...state.api.fact.stations }), shallowEqual);
+    const factXCross = useSelector((state) => ({ ...state.api.fact[FACTS.X_CROSS] }), shallowEqual);
+    const factDocByPass = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_DOC_BYPASS] }), shallowEqual);
+    const factXType = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_X_TYPE] }), shallowEqual);
 
     // Initializer: Change Toolbar to Mode None
     useToolbarChangeModeInitializer(TOOLBAR_MODE.NONE_HOME); // TODO: Needs to find where to go when we press "HOME"!!
@@ -154,7 +157,7 @@ const AlsEquipmentStatusComponent = () => {
 
         ALSGetDocumentSS101(begin_document_date, end_document_date).then((data) => {
             let data_ss101 = data.results;
-            console.log("data_ss101", data_ss101)
+            // console.log("data_ss101", data_ss101)
             let data_ss101_journal = [];
             data_ss101.map((item) => {
                 let d = new Date(item.document.document_date);
@@ -195,23 +198,35 @@ const AlsEquipmentStatusComponent = () => {
                     }
                 }
             })
-            console.log("count_groups_list_hardware_type", count_groups_list_hardware_type)
-
             // console.log("count_groups_list_hardware_type", count_groups_list_hardware_type)
+            console.log("data_ss101_journal", data_ss101_journal)
+            // console.log("factXCross.items", factXCross.items)
             let realJournal = [];
             data_ss101_journal.map((data_ss101_journal_test) => {
-                let subRealJournal = {};
-                subRealJournal.internal_document_id = data_ss101_journal_test.document.internal_document_id;
-                subRealJournal.accident_on = data_ss101_journal_test.specific.accident_on;
-                subRealJournal.finished_on = data_ss101_journal_test.specific.finished_on;
-                subRealJournal.district = data_ss101_journal_test.specific.district.name;
-                subRealJournal.node_id = factNodes.items.length > 0 && factNodes.items.find(node => `${node.node_id}` === `${data_ss101_journal_test.specific.location_node_id}`).name;
-                subRealJournal.station_id = factStations.items.length > 0 && factStations.items.find(station => `${station.station_id}` === `${data_ss101_journal_test.specific.location_station_id}`).name;
-                subRealJournal.system_type = data_ss101_journal_test.specific.system_type.system_type;
-                subRealJournal.total_fail_time = data_ss101_journal_test.specific.total_fail_time;
-                subRealJournal.auditor_name = data_ss101_journal_test.specific.auditor_name;
-                realJournal.push(subRealJournal);
+                let node = factNodes.items.find(node => `${node.node_id}` === `${data_ss101_journal_test.specific.location_node_id}`);
+                if (node) {
+                    let subRealJournal = {};
+                    subRealJournal.internal_document_id = data_ss101_journal_test.document.internal_document_id;
+                    subRealJournal.accident_on = data_ss101_journal_test.specific.accident_on;
+                    subRealJournal.finished_on = data_ss101_journal_test.specific.finished_on;
+                    subRealJournal.district = data_ss101_journal_test.specific.district.name;
+                    subRealJournal.node_id = factNodes.items.length > 0 && factNodes.items.find(node => `${node.node_id}` === `${data_ss101_journal_test.specific.location_node_id}`).name;
+                    subRealJournal.station_id = factStations.items.length > 0 && factStations.items.find(station => `${station.station_id}` === `${data_ss101_journal_test.specific.location_station_id}`).name;
+                    subRealJournal.remark = data_ss101_journal_test.specific.remark;
+                    subRealJournal.service_method_desc = data_ss101_journal_test.specific.service_method_desc;
+                    subRealJournal.summary_cause_condition = data_ss101_journal_test.specific.summary_cause_condition;
+                    subRealJournal.location_detail = data_ss101_journal_test.specific.location_detail;
+                    subRealJournal.system_type = data_ss101_journal_test.specific.system_type.system_type;
+                    subRealJournal.total_fail_time = data_ss101_journal_test.specific.total_fail_time;
+                    subRealJournal.auditor_name = data_ss101_journal_test.specific.auditor_name;
+                    subRealJournal.location_x_cross_id = factXCross.items.length > 0 && factXCross.items.find(x_cross => `${x_cross.x_cross_id}` === `${data_ss101_journal_test.specific.location_x_cross_id}`) ? factXCross.items.find(x_cross => `${x_cross.x_cross_id}` === `${data_ss101_journal_test.specific.location_x_cross_id}`).road_center : "-" ;
+                    subRealJournal.doc_bypass_doc_bypass_id = factDocByPass.items.length > 0 && factDocByPass.items.find(doc_by_pass => `${doc_by_pass.doc_bypass_id}` === `${data_ss101_journal_test.specific.doc_bypass_doc_bypass_id}`) ? factDocByPass.items.find(doc_by_pass => `${doc_by_pass.doc_bypass_id}` === `${data_ss101_journal_test.specific.doc_bypass_doc_bypass_id}`).name : "-";
+                    subRealJournal.x_type_id = factXType.items.length > 0 && factXType.items.find(x_type => `${x_type.x_type_id}` === `${data_ss101_journal_test.specific.x_type_id}`) ? factXType.items.find(x_type => `${x_type.x_type_id}` === `${data_ss101_journal_test.specific.x_type_id}`).name : "-";
+
+                    realJournal.push(subRealJournal);
+                }
             })
+            console.log("realJournal", realJournal)
 
             setFieldValue("realJournal", realJournal, false);
 
@@ -225,7 +240,7 @@ const AlsEquipmentStatusComponent = () => {
 
                 count_groups_list_hardware_type_v2.push(row_data)
             }
-            console.log("count_groups_list_hardware_type_v2", count_groups_list_hardware_type_v2)
+            // console.log("count_groups_list_hardware_type_v2", count_groups_list_hardware_type_v2)
 
             let count_groups_time_list_hardware_type_v2 = []
             for (const outer_row of count_groups_time_list_hardware_type) {
@@ -313,7 +328,7 @@ const AlsEquipmentStatusComponent = () => {
                 });
             }
 
-            console.log("results_hardware_type", results_hardware_type)
+            // console.log("results_hardware_type", results_hardware_type)
 
             let results_groups_interrupt = [];
             for (let i = 0; i < groups_interrupt.length; i++) {
@@ -324,7 +339,7 @@ const AlsEquipmentStatusComponent = () => {
             setFieldValue('accident_ss101', results_accident);
             setFieldValue('results_hardware_type', results_hardware_type)
         })
-    }, [values.year, values.district_id, values.node_id, values.systems_group_id, factNodes.items, factStations.items]);
+    }, [values.year, values.district_id, values.node_id, values.systems_group_id, factNodes.items, factStations.items, factXCross.items, factDocByPass.items, factXType.items]);
 
     return (
         <>

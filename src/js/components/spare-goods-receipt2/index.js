@@ -79,6 +79,7 @@ const initialLineItem = {
     per_unit_price: '',
     // item_id: '',
     item_status_id: 1,
+    date_manufactured: '',
 
     //Field ที่ไม่ได้กรอก
     description: '',

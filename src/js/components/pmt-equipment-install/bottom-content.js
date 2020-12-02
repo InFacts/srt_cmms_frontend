@@ -40,6 +40,7 @@ const BottomContent = (props) => {
     const validateLocationDistrictIDField = (...args) => validatedataDocumentField("location_district_id", setFieldValue, ...args)
     const validateLocationNodeIDField = (...args) => validatedataDocumentField("location_node_id", setFieldValue, ...args)
     const validateLocationStationIDField = (...args) => validatedataDocumentField("location_station_id", setFieldValue, ...args)
+    const validateDocumentLocationXCrossIDField = (...args) => validatedataDocumentField("x_cross_x_cross_id", setFieldValue, ...args)
 
     // const validateDocumentLocationXCrossIDField = (location_x_cross_id) => {
     //     if (location_x_cross_id) {
@@ -218,7 +219,7 @@ const BottomContent = (props) => {
                                 <p className="top-text">ศูนย์กลางทางผ่าน</p>
                             </div>
                             <div className="grid_7 pull_0">
-                                <SelectNoChildrenInput name="x_cross_x_cross_id" tabIndex="15" validate={validateLocationStationIDField} cssStyle={{ left: "-480px", top: "10px" }}
+                                {/* <SelectNoChildrenInput name="x_cross_x_cross_id" tabIndex="15" validate={validateLocationStationIDField} cssStyle={{ left: "-480px", top: "10px" }}
                                     disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} >
                                     <option value=''></option>
                                     {factXCross.items.map((x_cross) => {
@@ -226,10 +227,10 @@ const BottomContent = (props) => {
                                         return <option key={x_cross.x_cross_id} value={x_cross.x_cross_id} selected>{x_cross.road_center} \\ {x_cross.name} \\ {x_cross.x_road_name}</option>
                                         }
                                     })}
-                                </SelectNoChildrenInput>
-                                {/* <DatalisrNoChildrenInput name="x_cross_x_cross_id" validate={validateDocumentLocationXCrossIDField} cssStyle={{ left: "-480px", top: "10px" }}
+                                </SelectNoChildrenInput> */}
+                                <DatalisrNoChildrenInput name="x_cross_x_cross_id" validate={validateDocumentLocationXCrossIDField} cssStyle={{ left: "-480px", top: "10px" }}
                                     disabled={checkBooleanForEdit === true ? false : checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
-                                    tabIndex="15" /> */}
+                                    tabIndex="15" />
                             </div>
 
                             <div class="clear" />

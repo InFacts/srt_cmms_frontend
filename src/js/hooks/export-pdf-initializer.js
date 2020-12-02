@@ -29,7 +29,7 @@ const useExportPdfInitializer = () => {
   const factCaseType = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_CASE_TYPE] }), shallowEqual);
   const factInterrupt = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_INTERRUPT] }), shallowEqual);
   const factPosition = useSelector((state) => ({ ...state.api.fact[FACTS.POSITION] }), shallowEqual);
-
+  const factXType = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_X_TYPE] }), shallowEqual);
 
   // Handle Toolbar Mode
   useEffect(() => {
@@ -48,6 +48,7 @@ const useExportPdfInitializer = () => {
         let system_type_group_id = "";
         let system_type_id = "";
         let hardware_type_id = "";
+        let x_type = "";
 
         let District = "";
 
@@ -58,6 +59,11 @@ const useExportPdfInitializer = () => {
         let member_1_position_id = "";
         let member_2_position_id = "";
         let member_3_position_id = "";
+        let member_4_position_id = "";
+        let member_5_position_id = "";
+        let member_6_position_id = "";
+        let member_7_position_id = "";
+        let member_8_position_id = "";
 
         factCarType.items.map((factCarType) => {
           if (values.car_type_id === factCarType.car_id) {
@@ -122,6 +128,31 @@ const useExportPdfInitializer = () => {
             member_3_position_id = position.name
           }
         })
+        factPosition.items.map((position) => {
+          if (values.member_4_position_id === position.position_id) {
+            member_4_position_id = position.name
+          }
+        })
+        factPosition.items.map((position) => {
+          if (values.member_5_position_id === position.position_id) {
+            member_5_position_id = position.name
+          }
+        })
+        factPosition.items.map((position) => {
+          if (values.member_6_position_id === position.position_id) {
+            member_6_position_id = position.name
+          }
+        })
+        factPosition.items.map((position) => {
+          if (values.member_7_position_id === position.position_id) {
+            member_7_position_id = position.name
+          }
+        })
+        factPosition.items.map((position) => {
+          if (values.member_8_position_id === position.position_id) {
+            member_8_position_id = position.name
+          }
+        })
 
         let node = "";
         let station = "";
@@ -140,6 +171,12 @@ const useExportPdfInitializer = () => {
         factStations.items.map(function ({ station_id, name, node_id }) {
           if (values.location_station_id == station_id) {
             station = name
+          }
+        })
+
+        factXType.items.map(function ({ x_type_id, name, abbreviation }) {
+          if (values.x_type_id == x_type_id) {
+            x_type = abbreviation + " " + name
           }
         })
 
@@ -251,7 +288,7 @@ const useExportPdfInitializer = () => {
             "H": "",
             "I": "",
 
-            "Station": node + "/" + station,
+            "Station": node + "/" + station + "/" + values.location_detail,
 
             "HardwareType": hardware_type_id,
             "LocationDetail": values.location_detail,
@@ -271,6 +308,18 @@ const useExportPdfInitializer = () => {
             "member_2_position_id": member_2_position_id,
             "member_3": values.member_3,
             "member_3_position_id": member_3_position_id,
+            "member_4": values.member_4,
+            "member_4_position_id": member_4_position_id,
+            "member_5": values.member_5,
+            "member_5_position_id": member_5_position_id,
+            "member_6": values.member_6,
+            "member_6_position_id": member_6_position_id,
+            "member_7": values.member_7,
+            "member_7_position_id": member_7_position_id,
+            "member_8": values.member_8,
+            "member_8_position_id": member_8_position_id,
+            "x_type": x_type,
+            "location_x_cross_id": values.location_x_cross_id,
             "remark": values.remark,
             "RequestBy": values.request_by,
             "RecvAccidentFromRecvId": values.recv_accident_from_recv_id === 1 ? "จดหมาย" : "โทรศัพท์",
@@ -342,7 +391,7 @@ const useExportPdfInitializer = () => {
         dispatch(handleClickExportPDF())
       }
     } else if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF] && document_item_list && document_item_list.length > 0 && routeLocation === "/spare-report-s-1") {
-      exportPDF(routeLocation, values).then(function (htmlCode) {
+      exportPDF(routeLocation, values, fact).then(function (htmlCode) {
         var w = window.open();
         w.document.write(htmlCode);
         setTimeout(() => {
@@ -352,7 +401,7 @@ const useExportPdfInitializer = () => {
       })
       dispatch(handleClickExportPDF())
     } else if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF] && document_item_list && document_item_list.length > 0 && routeLocation === "/spare-report-b22") {
-      exportPDF(routeLocation, values).then(function (htmlCode) {
+      exportPDF(routeLocation, values, fact).then(function (htmlCode) {
         var w = window.open();
         w.document.write(htmlCode);
         setTimeout(() => {
@@ -494,7 +543,7 @@ const createPageS1LastPage = (table, date, total) =>
   </div>`;
 
 const createCategory = (item) =>
-  `<h2 style=" text-align:center ; vertical-align: middle;align-items:center">(${item})</h2>`;
+  `<span style=" text-align:center ; vertical-align: middle;align-items:center; font-size: 20px; font-weight: bold; margin-right: 10px; ">(${item})</span>`;
 
 const createPageS1Header = (category_group, date, source, index, img) =>
   `<div class="invoice-box">
@@ -521,7 +570,7 @@ const createPageS1Header = (category_group, date, source, index, img) =>
       <div>
           <h1 style=" text-align:center ; vertical-align: middle;align-items:center">จำนวน ${index} รหัส</h1>
       </div>
-      <div>
+      <div style=" padding: 0 100px; ">
           ${category_group}
       </div>
   </div>`;
@@ -1244,7 +1293,7 @@ const createPageS101Page1 = (date, content) =>
           <td style="width: 1%; text-align:left ; vertical-align: middle;">
           </td>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
-              <div class="left">ค. ระบบเครื่องกั้นถนน</div><div contenteditable="true" style="white-space: pre;"><div class="dotted" style="width: 350px;"><label style="font-size: 13px;">${content.system_type_group_id === "ระบบทางผ่านเครื่องกั้นถนน" ? content.HardwareType : "-"}</label></div></div>
+              <div class="left">ค. ระบบเครื่องกั้นถนน</div><div contenteditable="true" style="white-space: pre;"><div class="dotted" style="width: 350px;"><label style="font-size: 13px;">${content.system_type_group_id === "ระบบเครื่องกั้นถนน" ? content.HardwareType : "-"}</label></div></div>
           </td>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
               <div class="left">ง. ระบบเครื่องทางสะดวก</div><div contenteditable="true" style="white-space: pre;"><div class="dotted" style="width: 350px;"><label style="font-size: 13px;">${content.system_type_group_id === "ระบบเครื่องทางสะดวก" ? content.HardwareType : "-"} </label></div></div>
@@ -1385,7 +1434,7 @@ const createPageS101Page1 = (date, content) =>
       <table>
           <tr>
           <td>
-              <div class="left">(14) รายชื่อผู้ร่วมวาน (ชื่อและตำแหน่ง)</div><div contenteditable="true"><div class="dotted" style="width: 750px;"><label>${content.member_1} // ${content.member_1_position_id}, ${content.member_2} // ${content.member_2_position_id}, ${content.member_3} // ${content.member_3_position_id}</label></div></div>
+              <div class="left">(14) รายชื่อผู้ร่วมวาน (ชื่อและตำแหน่ง)</div><div contenteditable="true"><div class="dotted" style="width: 750px;"><label>${content.member_1} // ${content.member_1_position_id}, ${content.member_2} // ${content.member_2_position_id}, ${content.member_3} // ${content.member_3_position_id}, ${content.member_4} // ${content.member_4_position_id}, ${content.member_5} // ${content.member_5_position_id}, ${content.member_6} // ${content.member_6_position_id}, ${content.member_7} // ${content.member_7_position_id}, ${content.member_8} // ${content.member_8_position_id}</label></div></div>
               <div class="left"></div><div class="dotted" ></div>
               <div class="left"></div><div class="dotted" ></div>
           </td>
@@ -2220,8 +2269,11 @@ export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((re
       return element.id === mouth;
     })
     let create_on = date + " " + mouth.mouth + " " + year;
-
+    console.log("fact", fact)
     valuesContext.new_line_items_pdf.map(lineItem => {
+      let items = fact.items.items;
+      let item = items.find(item => `${item.item_id}` === `${lineItem.item_id}`)
+      if (lineItem.internal_item_id) {
       data.push({
         "item_id": p,
         "description": lineItem.item_description,
@@ -2243,6 +2295,28 @@ export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((re
         "type": lineItem.accounting_type
       });
       p = p + 1;
+    } else {
+      data.push({
+        "internal_item_id": item.internal_item_id,
+            "description": `${item.description} Lot: ${lineItem.item_inventory_journal_id} Price: ${lineItem.per_unit_price} Quality: ${lineItem.quantity}`,
+
+            "unit": item.list_uoms[0].name,
+
+            "left_month_unit": "-",
+        "left_month_price": "-",
+
+        "get_month_unit": "-",
+        "get_month_price": "-",
+
+        "pay_month_unit": "-",
+        "pay_month_price": "-",
+
+        "ending_unit_count": "-",
+        "ending_unit_count_total": "-",
+
+        "type": "-"
+      })
+    }
     })
 
     const data_json = {

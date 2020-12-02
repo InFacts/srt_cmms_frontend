@@ -235,6 +235,7 @@ const PopupModalDocument = (props) => {
                                                 </tr>
                                             )
                                         } else if (document.document_type_id === 2011 || document.document_type_id === 2071) {
+                                            // console.log("document Maintenant", document)
                                             // Work Request // Maintenant Item ต้องเห็นทุกเอกสาร 
                                             // console.log("Work Request // Maintenant Item")
                                             return (

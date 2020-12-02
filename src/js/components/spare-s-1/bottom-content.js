@@ -32,6 +32,7 @@ const BottomContent = (props) => {
       return <td className="edit-padding text-right" style={{ color: "DarkGreen" }}>{quantity}</td>
     }
   }
+
   return (
     <div id={changeTheam() === true ? "" : "blackground-gray"}>
       <div className="container_12 clearfix" id={changeTheam() === true ? "blackground-gray" : ""} style={changeTheam() === true ? { marginTop: "10px", borderRadius: "25px", border: "1px solid gray" } : {}}>
@@ -47,6 +48,7 @@ const BottomContent = (props) => {
                   <th className="font text-center" style={{ minWidth: "80px" }}>เลขที่สิ่งของคงคลัง</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>สถานะ</th>
                   <th className="font text-center" style={{ minWidth: "80px" }}>หน่วย</th>
+                  <th className="font text-center" style={{ minWidth: "80px" }}>วันที่ผลิต</th>
 
                   <th className="font text-center" style={{ minWidth: "100px" }}>จำนวนเหลือ ณ วันนี้</th>
                   <th className="font text-center" style={{ minWidth: "96px" }}>รวมเป็นเงิน</th>
@@ -57,19 +59,40 @@ const BottomContent = (props) => {
                 {values.line_item_shows.map(function (line_items, index) {
                   if (values.warehouse_type_id !== 1 && values.warehouse_type_id !== 2 && values.warehouse_type_id !== 4) {
                     return (
-                      <tr key={index}>
-                        <th className="edit-padding text-center">{index + 1}</th>
-                        <td className="edit-padding">{line_items.item_description}</td>
-                        <td className="edit-padding">{line_items.internal_item_id}</td>
-                        <td className="edit-padding">{line_items.item_status_description_th}</td>
-                        <td className="edit-padding text-center">{line_items.uom_name}</td>
+                      <>
+                        <tr key={index} onClick={() => values[`sub_${index}`] ? setFieldValue(`sub_${index}`, false, false) : setFieldValue(`sub_${index}`, true, false) }>
+                          <th className="edit-padding text-center">{index + 1}</th>
+                          <td className="edit-padding">{line_items.item_description}</td>
+                          <td className="edit-padding">{line_items.internal_item_id}</td>
+                          <td className="edit-padding">{line_items.item_status_description_th}</td>
+                          <td className="edit-padding text-center">{line_items.uom_name}</td>
 
-                        <td className="edit-padding text-right">{line_items.quantity}</td>
+                          <td className="edit-padding text-center">-</td>  {/* วันที่ผลิต */}
 
-                        <td className="edit-padding text-right">{line_items.total}</td>
+                          <td className="edit-padding text-right">{line_items.quantity}</td>
 
-                        <td className="edit-padding text-right">{line_items.per_unit_price}</td>
-                      </tr>
+                          <td className="edit-padding text-right">{line_items.total}</td>
+
+                          <td className="edit-padding text-right">{line_items.per_unit_price}</td>
+                        </tr>
+                        {
+                          line_items.lot_fifo && line_items.lot_fifo.map((lot, sub_index) => {
+                            return (
+                              <tr style={{ display: values[`sub_${index}`] ? "" : "none" }}>
+                                <th className="edit-padding text-right blue">{index + 1}.{sub_index + 1}</th>
+                                <td className="edit-padding blue">Lot: {lot.item_inventory_journal_id} {line_items.item_description}</td>
+                                <td className="edit-padding blue">{line_items.internal_item_id}</td>
+                                <td className="edit-padding blue">{line_items.item_status_description_th}</td>
+                                <td className="edit-padding blue text-center">{line_items.uom_name}</td>
+                                <td className="edit-padding blue text-center">{lot.date_manufactured ? lot.date_manufactured.split("T")[0] : "ไม่มีการบันทึก"}</td>
+                                <td className="edit-padding blue text-right">{lot.quantity.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                <td className="edit-padding blue text-right">{(lot.quantity * lot.per_unit_price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                <td className="edit-padding blue text-right">{lot.per_unit_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                              </tr>
+                            )
+                          })
+                        }
+                      </>
                     )
                   } else { //ถ้าไม่เป็นคลังของตอน
                     let items = factItems.items;
