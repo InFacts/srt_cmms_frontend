@@ -29,7 +29,7 @@ const useExportPdfInitializer = () => {
   const factCaseType = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_CASE_TYPE] }), shallowEqual);
   const factInterrupt = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_INTERRUPT] }), shallowEqual);
   const factPosition = useSelector((state) => ({ ...state.api.fact[FACTS.POSITION] }), shallowEqual);
-
+  const factXType = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_X_TYPE] }), shallowEqual);
 
   // Handle Toolbar Mode
   useEffect(() => {
@@ -48,6 +48,7 @@ const useExportPdfInitializer = () => {
         let system_type_group_id = "";
         let system_type_id = "";
         let hardware_type_id = "";
+        let x_type = "";
 
         let District = "";
 
@@ -58,6 +59,11 @@ const useExportPdfInitializer = () => {
         let member_1_position_id = "";
         let member_2_position_id = "";
         let member_3_position_id = "";
+        let member_4_position_id = "";
+        let member_5_position_id = "";
+        let member_6_position_id = "";
+        let member_7_position_id = "";
+        let member_8_position_id = "";
 
         factCarType.items.map((factCarType) => {
           if (values.car_type_id === factCarType.car_id) {
@@ -88,7 +94,7 @@ const useExportPdfInitializer = () => {
             service_method_id = factServiceMethod.sm_method_type
           }
         })
-       
+
         factInterrupt.items.map((factInterrupt) => {
           if (values.interrupt_id === factInterrupt.interrupt_id) {
             interrupt_id = factInterrupt.interrupt_id + "-" + factInterrupt.interrupt_type
@@ -100,13 +106,13 @@ const useExportPdfInitializer = () => {
             auditor_position_id = position.name
           }
         })
-        
+
         factPosition.items.map((position) => {
           if (values.fixer_position_id === position.position_id) {
             fixer_position_id = position.name
           }
         })
-        
+
         factPosition.items.map((position) => {
           if (values.member_1_position_id === position.position_id) {
             member_1_position_id = position.name
@@ -120,6 +126,31 @@ const useExportPdfInitializer = () => {
         factPosition.items.map((position) => {
           if (values.member_3_position_id === position.position_id) {
             member_3_position_id = position.name
+          }
+        })
+        factPosition.items.map((position) => {
+          if (values.member_4_position_id === position.position_id) {
+            member_4_position_id = position.name
+          }
+        })
+        factPosition.items.map((position) => {
+          if (values.member_5_position_id === position.position_id) {
+            member_5_position_id = position.name
+          }
+        })
+        factPosition.items.map((position) => {
+          if (values.member_6_position_id === position.position_id) {
+            member_6_position_id = position.name
+          }
+        })
+        factPosition.items.map((position) => {
+          if (values.member_7_position_id === position.position_id) {
+            member_7_position_id = position.name
+          }
+        })
+        factPosition.items.map((position) => {
+          if (values.member_8_position_id === position.position_id) {
+            member_8_position_id = position.name
           }
         })
 
@@ -140,6 +171,12 @@ const useExportPdfInitializer = () => {
         factStations.items.map(function ({ station_id, name, node_id }) {
           if (values.location_station_id == station_id) {
             station = name
+          }
+        })
+
+        factXType.items.map(function ({ x_type_id, name, abbreviation }) {
+          if (values.x_type_id == x_type_id) {
+            x_type = abbreviation + " " + name
           }
         })
 
@@ -251,7 +288,7 @@ const useExportPdfInitializer = () => {
             "H": "",
             "I": "",
 
-            "Station": node + "/" + station,
+            "Station": node + "/" + station + "/" + values.location_detail,
 
             "HardwareType": hardware_type_id,
             "LocationDetail": values.location_detail,
@@ -271,6 +308,18 @@ const useExportPdfInitializer = () => {
             "member_2_position_id": member_2_position_id,
             "member_3": values.member_3,
             "member_3_position_id": member_3_position_id,
+            "member_4": values.member_4,
+            "member_4_position_id": member_4_position_id,
+            "member_5": values.member_5,
+            "member_5_position_id": member_5_position_id,
+            "member_6": values.member_6,
+            "member_6_position_id": member_6_position_id,
+            "member_7": values.member_7,
+            "member_7_position_id": member_7_position_id,
+            "member_8": values.member_8,
+            "member_8_position_id": member_8_position_id,
+            "x_type": x_type,
+            "location_x_cross_id": values.location_x_cross_id,
             "remark": values.remark,
             "RequestBy": values.request_by,
             "RecvAccidentFromRecvId": values.recv_accident_from_recv_id === 1 ? "จดหมาย" : "โทรศัพท์",
@@ -342,7 +391,7 @@ const useExportPdfInitializer = () => {
         dispatch(handleClickExportPDF())
       }
     } else if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF] && document_item_list && document_item_list.length > 0 && routeLocation === "/spare-report-s-1") {
-      exportPDF(routeLocation, values).then(function (htmlCode) {
+      exportPDF(routeLocation, values, fact).then(function (htmlCode) {
         var w = window.open();
         w.document.write(htmlCode);
         setTimeout(() => {
@@ -352,7 +401,7 @@ const useExportPdfInitializer = () => {
       })
       dispatch(handleClickExportPDF())
     } else if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF] && document_item_list && document_item_list.length > 0 && routeLocation === "/spare-report-b22") {
-      exportPDF(routeLocation, values).then(function (htmlCode) {
+      exportPDF(routeLocation, values, fact).then(function (htmlCode) {
         var w = window.open();
         w.document.write(htmlCode);
         setTimeout(() => {
@@ -418,26 +467,26 @@ const createHtmlS1 = (table) =>
             height: 29.7cm;
             margin: 0 auto;
             margin-bottom: 0.5cm;
-            border: 0.1px solid #eee;
+            border: 0.1px solid black;
             font-size: 16px;
             font-family: 'AngsanaUPC', 'MS Sans Serif';
         }
         .invoice-box table {
             width: 95%;
             margin: auto;
-            border: 1px solid #eee;
+            border: 1px solid black;
         }
         .invoice-box table td {
             vertical-align: top;
         }
         .invoice-box table tr.heading td {
             background: #eee;
-            border-bottom: 1px solid #ddd;
-            border-top: 1px solid #ddd;
+            border-bottom: 1px solid black;
+            border-top: 1px solid black;
             font-weight: bold;
         }
         .invoice-box table tr.item td {
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid black;
         }
         .invoice-box p {
             width: 95%;
@@ -494,7 +543,7 @@ const createPageS1LastPage = (table, date, total) =>
   </div>`;
 
 const createCategory = (item) =>
-  `<h2 style=" text-align:center ; vertical-align: middle;align-items:center">(${item})</h2>`;
+  `<span style=" text-align:center ; vertical-align: middle;align-items:center; font-size: 20px; font-weight: bold; margin-right: 10px; ">(${item})</span>`;
 
 const createPageS1Header = (category_group, date, source, index, img) =>
   `<div class="invoice-box">
@@ -521,7 +570,7 @@ const createPageS1Header = (category_group, date, source, index, img) =>
       <div>
           <h1 style=" text-align:center ; vertical-align: middle;align-items:center">จำนวน ${index} รหัส</h1>
       </div>
-      <div>
+      <div style=" padding: 0 100px; ">
           ${category_group}
       </div>
   </div>`;
@@ -546,28 +595,28 @@ const createHtmlS16_46 = (table) =>
               height: 29.7cm;
               margin: 0 auto;
               margin-bottom: 0.5cm;
-              border: 0.1px solid #eee;
+              border: 0.1px solid black;
               font-size: 16px;
               font-family: 'AngsanaUPC', 'MS Sans Serif'; 
           }
           .invoice-box table {
               width: 95%;
               margin: auto;
-              border: 0px solid #eee;
+              border: 0px solid black;
           }
           .invoice-box table td {
               vertical-align: top;
           }
           .invoice-box table tr.heading td {
               background: #eee;
-              border: 1px solid #ddd;
+              border: 1px solid black;
               font-weight: bold;
           }
           .invoice-box table tr.item td {
-              border: 1px solid #eee;
+              border: 1px solid black;
           }
           .invoice-box table tr.item2 td {
-              border-bottom: 0px solid #eee;
+              border-bottom: 0px solid black;
           }
           .invoice-box p {
               width: 95%;
@@ -662,9 +711,9 @@ const createTableS16_46 = (head, rows, content, total) =>
         <td style=" text-align:center; vertical-align: middle;" >รหัส</td>  
       </tr>
       <tr class="item">
-        <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;"></td>
-        <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;"></td>
-        <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"></td>
+        <td style=" text-align:center ; vertical-align: middle; border: 0px solid black;"></td>
+        <td style=" text-align:center ; vertical-align: middle; border: 0px solid black;"></td>
+        <td style=" text-align:left ; vertical-align: middle; border: 0px solid black;"></td>
         <td style=" text-align:center ; vertical-align: middle;" colSpan="2">${content.AccountType}</td>
         <td style=" text-align:center ; vertical-align: middle;" >${content.ResponsibilityCode}</td>
         <td style=" text-align:center ; vertical-align: middle;">${content.Number}</td>
@@ -685,12 +734,12 @@ const createTableS16_46 = (head, rows, content, total) =>
       </tr>
       ${rows}
       <tr class="item">
-        <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;"></td>
-        <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;"></td>
-        <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"></td>
-        <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;"></td>
-        <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;"></td>
-        <td style=" text-align:center ; vertical-align: middle; border: 0px solid #eee;">รวมเป็นเงิน</td>
+        <td style=" text-align:center ; vertical-align: middle; border: 0px solid black;"></td>
+        <td style=" text-align:center ; vertical-align: middle; border: 0px solid black;"></td>
+        <td style=" text-align:left ; vertical-align: middle; border: 0px solid black;"></td>
+        <td style=" text-align:center ; vertical-align: middle; border: 0px solid black;"></td>
+        <td style=" text-align:center ; vertical-align: middle; border: 0px solid black;"></td>
+        <td style=" text-align:center ; vertical-align: middle; border: 0px solid black;">รวมเป็นเงิน</td>
         <td style=" text-align:center ; vertical-align: middle;">${total}</td>
         <td style=" text-align:center ; vertical-align: middle;"></td>
       </tr>
@@ -925,21 +974,21 @@ const createHtmlB22 = (table) => `
       .invoice-box table {
           width: 95%;
           margin: auto;
-          border: 0px solid #eee;
+          border: 0px solid black;
       }
       .invoice-box table td {
            vertical-align: top;
       }
       .invoice-box table tr.heading td {
            background: #eee;
-           border: 1px solid #ddd;
+           border: 1px solid black;
            font-weight: bold;
       }
       .invoice-box table tr.item td {
-           border: 1px solid #eee;
+           border: 1px solid black;
       }
       .invoice-box table tr.item2 td {
-           border-bottom: 0px solid #eee;
+           border-bottom: 0px solid black;
       }
       .invoice-box p {
            width: 95%;
@@ -1045,35 +1094,35 @@ const createHtmlS101 = (table) =>
         <style>
           @page {
             size: A4;
-            margin:0 ;
+            margin:20 ;
           }
           .invoice-box {
               width: 210mm;
               height: 29.7cm;
               margin: 0 auto;
               margin-bottom: 0.5cm;
-              border: 0.1px solid #eee;
+              border: 0.1px solid black;
               font-size: 16px;
               font-family: 'AngsanaUPC', 'MS Sans Serif';   
           }
           .invoice-box table {
               width: 95%;
               margin: auto;
-              border: 0px solid #eee;
+              border: 0px solid black;
           }
           .invoice-box table td {
               vertical-align: top;
           }
           .invoice-box table tr.heading td {
               background: #eee;
-              border: 1px solid #ddd;
+              border: 1px solid black;
               font-weight: bold;
           }
           .invoice-box table tr.item td {
-              border: 1px solid #eee;
+              border: 1px solid black;
           }
           .invoice-box table tr.item2 td {
-              border-bottom: 0px solid #eee;
+              border-bottom: 0px solid black;
           }
           .invoice-box p {
               width: 95%;
@@ -1181,40 +1230,40 @@ const createPageS101Page1 = (date, content) =>
               <td style="width: 6%; text-align:center; vertical-align: middle;" >พ.ศ.</td>  
           </tr>
           <tr class="item">
-          <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">(2) ได้รับแจ้งเหตุจาก</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>${content.RequestBy}</label></div></div></td>
-          <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">วันเวลาที่รับแจ้ง</td>
+          <td style=" text-align:left ; vertical-align: middle; border: 0px solid black;"><div class="left">(2) ได้รับแจ้งเหตุจาก</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>${content.RequestBy}</label></div></div></td>
+          <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid black;">วันเวลาที่รับแจ้ง</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.RequesstOnTimeParts}</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.RequesstOnYear}</td>
           <td style=" text-align:center ; vertical-align: middle;">${content.RequesstOnMount}</td>
           <td style=" text-align:center ; vertical-align: middle;">${content.RequesstOnDay}</td>
       </tr>
       <tr class="item">
-          <td style="padding-left: 15px; text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">โดยจดหมายหรือโทรเลขที่</div><div contenteditable="true"><div class="dotted" style="width: 435px;"><label>${content.RecvAccidentFromRecvId}</label></div></div></td>
-          <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">วันเวลาที่เกิดเหตุ</td>
+          <td style="padding-left: 15px; text-align:left ; vertical-align: middle; border: 0px solid black;"><div class="left">โดยจดหมายหรือโทรเลขที่</div><div contenteditable="true"><div class="dotted" style="width: 435px;"><label>${content.RecvAccidentFromRecvId}</label></div></div></td>
+          <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid black;">วันเวลาที่เกิดเหตุ</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.AccidentOnTimeParts}</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.AccidentOnYear}</td>
           <td style=" text-align:center ; vertical-align: middle;">${content.AccidentOnMount}</td>
           <td style=" text-align:center ; vertical-align: middle;">${content.AccidentOnDay}</td>
       </tr>
       <tr class="item">
-          <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">(3) งาน</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>${content.AccidentName}</label></div></div></td>
-          <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">ออกเดินทาง</td>
+          <td style=" text-align:left ; vertical-align: middle; border: 0px solid black;"><div class="left">(3) งาน</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>${content.AccidentName}</label></div></div></td>
+          <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid black;">ออกเดินทาง</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.DepartedOnTimeParts}</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.DepartedOnYear}</td>
           <td style=" text-align:center ; vertical-align: middle;">${content.DepartedOnMount}</td>
           <td style=" text-align:center ; vertical-align: middle;">${content.DepartedOnDay}</td>
       </tr>
       <tr class="item">
-          <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">(4) เดินทางโดย</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>-</label></div></div></td>
-          <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">เดินทางถึง</td>
+          <td style=" text-align:left ; vertical-align: middle; border: 0px solid black;"><div class="left">(4) เดินทางโดย</div><div contenteditable="true"><div class="dotted" style="width: 450px;"><label>-</label></div></div></td>
+          <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid black;">เดินทางถึง</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.ArrivedOnTimeParts}</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.ArrivedOnYear}</td>
           <td style=" text-align:center ; vertical-align: middle;">${content.ArrivedOnMount}</td>
           <td style=" text-align:center ; vertical-align: middle;">${content.ArrivedOnDay}</td>
       </tr>
       <tr class="item">
-          <td style=" text-align:left ; vertical-align: middle; border: 0px solid #eee;"><div class="left">(5) ระบบที่ตรวจซ่อม</div></td>
-          <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid #eee;">วันเวลาแล้วเสร็จ</td>
+          <td style=" text-align:left ; vertical-align: middle; border: 0px solid black;"><div class="left">(5) ระบบที่ตรวจซ่อม</div></td>
+          <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid black;">วันเวลาแล้วเสร็จ</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.FinishedOnTimeParts}</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.FinishedOnYear}</td>
           <td style=" text-align:center ; vertical-align: middle;">${content.FinishedOnMount}</td>
@@ -1244,7 +1293,7 @@ const createPageS101Page1 = (date, content) =>
           <td style="width: 1%; text-align:left ; vertical-align: middle;">
           </td>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
-              <div class="left">ค. ระบบเครื่องกั้นถนน</div><div contenteditable="true" style="white-space: pre;"><div class="dotted" style="width: 350px;"><label style="font-size: 13px;">${content.system_type_group_id === "ระบบทางผ่านเครื่องกั้นถนน" ? content.HardwareType : "-"}</label></div></div>
+              <div class="left">ค. ระบบเครื่องกั้นถนน</div><div contenteditable="true" style="white-space: pre;"><div class="dotted" style="width: 350px;"><label style="font-size: 13px;">${content.system_type_group_id === "ระบบเครื่องกั้นถนน" ? content.HardwareType : "-"}</label></div></div>
           </td>
           <td style="width: 40%; text-align:left ; vertical-align: middle;">
               <div class="left">ง. ระบบเครื่องทางสะดวก</div><div contenteditable="true" style="white-space: pre;"><div class="dotted" style="width: 350px;"><label style="font-size: 13px;">${content.system_type_group_id === "ระบบเครื่องทางสะดวก" ? content.HardwareType : "-"} </label></div></div>
@@ -1385,7 +1434,7 @@ const createPageS101Page1 = (date, content) =>
       <table>
           <tr>
           <td>
-              <div class="left">(14) รายชื่อผู้ร่วมวาน (ชื่อและตำแหน่ง)</div><div contenteditable="true"><div class="dotted" style="width: 750px;"><label>${content.member_1} // ${content.member_1_position_id}, ${content.member_2} // ${content.member_2_position_id}, ${content.member_3} // ${content.member_3_position_id}</label></div></div>
+              <div class="left">(14) รายชื่อผู้ร่วมวาน (ชื่อและตำแหน่ง)</div><div contenteditable="true"><div class="dotted" style="width: 750px;"><label>${content.member_1} // ${content.member_1_position_id}, ${content.member_2} // ${content.member_2_position_id}, ${content.member_3} // ${content.member_3_position_id}, ${content.member_4} // ${content.member_4_position_id}, ${content.member_5} // ${content.member_5_position_id}, ${content.member_6} // ${content.member_6_position_id}, ${content.member_7} // ${content.member_7_position_id}, ${content.member_8} // ${content.member_8_position_id}</label></div></div>
               <div class="left"></div><div class="dotted" ></div>
               <div class="left"></div><div class="dotted" ></div>
           </td>
@@ -1532,28 +1581,28 @@ const createHtmlChecklistLineItem = (info_this_page, row_table_checklist_line_it
       height: 29.7cm;
       margin: 0 auto;
       margin-bottom: 0.5cm;
-      border: 0.1px solid #eee;
+      border: 0.1px solid black;
       font-size: 16px;
       font-family: 'AngsanaUPC', 'MS Sans Serif';   
   }
   .invoice-box table {
       width: 95%;
       margin: auto;
-      border: 0px solid #eee;
+      border: 0px solid black;
   }
   .invoice-box table td {
       vertical-align: top;
   }
   .invoice-box table tr.heading td {
       background: #eee;
-      border: 1px solid #ddd;
+      border: 1px solid black;
       font-weight: bold;
   }
   .invoice-box table tr.item td {
-      border: 1px solid #eee;
+      border: 1px solid black;
   }
   .invoice-box table tr.item2 td {
-      border-bottom: 0px solid #eee;
+      border-bottom: 0px solid black;
   }
   .invoice-box p {
       width: 95%;
@@ -1666,28 +1715,28 @@ const createHtmlWorkOrderPM = (info_this_page, row_table_checklist_week_1, row_t
       height: 29.7cm;
       margin: 0 auto;
       margin-bottom: 0.5cm;
-      border: 0.1px solid #eee;
+      border: 0.1px solid black;
       font-size: 16px;
       font-family: 'AngsanaUPC', 'MS Sans Serif';   
   }
   .invoice-box table {
       width: 95%;
       margin: auto;
-      border: 0px solid #eee;
+      border: 0px solid black;
   }
   .invoice-box table td {
       vertical-align: top;
   }
   .invoice-box table tr.heading td {
       background: #eee;
-      border: 1px solid #ddd;
+      border: 1px solid black;
       font-weight: bold;
   }
   .invoice-box table tr.item td {
-      border: 1px solid #eee;
+      border: 1px solid black;
   }
   .invoice-box table tr.item2 td {
-      border-bottom: 0px solid #eee;
+      border-bottom: 0px solid black;
   }
   .invoice-box p {
       width: 95%;
@@ -1887,21 +1936,21 @@ const createHtmlReportPMT = (info_page, htmlTable) => `
       .invoice-box table {
           width: 95%;
           margin: auto;
-          border: 0px solid #eee;
+          border: 0px solid black;
       }
       .invoice-box table td {
            vertical-align: top;
       }
       .invoice-box table tr.heading td {
            background: #eee;
-           border: 1px solid #ddd;
+           border: 1px solid black;
            font-weight: bold;
       }
       .invoice-box table tr.item td {
-           border: 1px solid #eee;
+           border: 1px solid black;
       }
       .invoice-box table tr.item2 td {
-           border-bottom: 0px solid #eee;
+           border-bottom: 0px solid black;
       }
       .invoice-box p {
            width: 95%;
@@ -1959,7 +2008,7 @@ const createRowReportPMT = (item, index, plan_checked, total_plan, total_checked
     <td style="text-align:center; vertical-align: middle;"></td>
   </tr>`;
 
-  const createRowPlanCheckedReportPMT = (plan_checked) =>
+const createRowPlanCheckedReportPMT = (plan_checked) =>
   `
     <td style="text-align:center; vertical-align: middle;">${plan_checked.checklist_count}</td>
     <td style="text-align:center; vertical-align: middle;">${plan_checked.completed_count}</td>
@@ -2017,45 +2066,74 @@ export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((re
     let group_type = []
     let j = ''
     filterResult.map((item) => {
-      var text = item.internal_item_id.replace(/\d+|^\s+|\s+$/g, '')
-      text = text.replace(/\s/g, '');
-      if (j === '') {
-        group_type.push(text);
-        j = text;
-      }
-      else {
-        if (text === j) {
-        } else {
+      if (item.internal_item_id) {
+        var text = item.internal_item_id.replace(/\d+|^\s+|\s+$/g, '')
+        text = text.replace(/\s/g, '');
+        if (j === '') {
           group_type.push(text);
           j = text;
+        }
+        else {
+          if (text === j) {
+          } else {
+            group_type.push(text);
+            j = text;
+          }
         }
       }
     })
     var r = {}
+    console.log("filterResult", filterResult)
     for (var i = 0; i < group_type.length; i++) {
       let filterResult_type = filterResult.filter((component) => {
-        var text = component.internal_item_id.replace(/\d+|^\s+|\s+$/g, '')
-        text = text.replace(/\s/g, '');
-        return text === group_type[i];
+        if (!component.item_inventory_journal_id) {
+          var text = component.internal_item_id.replace(/\d+|^\s+|\s+$/g, '')
+          text = text.replace(/\s/g, '');
+          return text === group_type[i];
+        } else {
+          let items = fact.items.items;
+          let itemFact = items.find(item => `${item.item_id}` === `${component.item_id}`)
+
+          var text = itemFact.internal_item_id.replace(/\d+|^\s+|\s+$/g, '')
+          text = text.replace(/\s/g, '');
+          return text === group_type[i];
+        }
       });
       const line_items = [];
       var line_number = 1
       var total = 0;
       var keyss = group_type[i];
-      // console.log("filterResult_type", filterResult_type)
+      console.log("filterResult_type", filterResult_type)
       filterResult_type.map((item) => {
-        var myObj = {
-          "item_id": line_number,
-          "description": item.item_description,
-          "internal_item_id": item.internal_item_id,
-          "unit": item.uom_name,
-          "quantity": item.quantity,
-          "total": item.total,
-          "per_unit_price": item.per_unit_price
-        };
-        line_number = line_number + 1;
-        total = total + parseFloat(item.total.replace(/,/g, ''))
-        line_items.push(myObj)
+        let items = fact.items.items;
+        let itemFact = items.find(item => `${item.item_id}` === `${item.item_id}`)
+        if (item.internal_item_id) {
+          var myObj = {
+            "item_id": line_number,
+            "description": item.item_description,
+            "internal_item_id": item.internal_item_id,
+            "unit": item.uom_name,
+            "quantity": item.quantity,
+            "total": item.total,
+            "per_unit_price": item.per_unit_price
+          };
+          line_number = line_number + 1;
+          total = total + parseFloat(item.total.replace(/,/g, ''))
+          line_items.push(myObj)
+        } else {
+          var myObj = {
+            "item_id": line_number,
+            "description": `Lot: ${item.item_inventory_journal_id} วันที่ผลิต: ${item.date_manufactured.split("T")[0]} ${itemFact.description}`,
+            "internal_item_id": itemFact.internal_item_id,
+            "unit": itemFact.list_uoms[0].name,
+            "quantity": item.quantity,
+            "total": "-",
+            "per_unit_price": item.per_unit_price
+          };
+          line_number = line_number + 1;
+          // total = total + parseFloat(item.total.replace(/,/g, ''))
+          line_items.push(myObj)
+        }
       })
       r[keyss] = {
         "Totol": total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
@@ -2220,29 +2298,56 @@ export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((re
       return element.id === mouth;
     })
     let create_on = date + " " + mouth.mouth + " " + year;
-
+    // console.log("valuesContext.new_line_items_pdf", valuesContext.new_line_items_pdf)
     valuesContext.new_line_items_pdf.map(lineItem => {
-      data.push({
-        "item_id": p,
-        "description": lineItem.item_description,
+      let items = fact.items.items;
+      let item = items.find(item => `${item.item_id}` === `${lineItem.item_id}`)
+      if (!lineItem.Lot) {
+        data.push({
+          "item_id": p,
+          "description": lineItem.item_description,
 
-        "unit": lineItem.uom_name,
+          "unit": lineItem.uom_name,
 
-        "left_month_unit": lineItem.begin_unit_count,
-        "left_month_price": lineItem.begin_state_in_total_price,
+          "left_month_unit": lineItem.begin_unit_count,
+          "left_month_price": lineItem.begin_state_in_total_price,
 
-        "get_month_unit": lineItem.state_in_unit_count,
-        "get_month_price": lineItem.end_state_in_total_price,
+          "get_month_unit": lineItem.state_in_unit_count,
+          "get_month_price": lineItem.end_state_in_total_price,
 
-        "pay_month_unit": lineItem.state_out_unit_count,
-        "pay_month_price": lineItem.end_state_out_total_price,
+          "pay_month_unit": lineItem.state_out_unit_count,
+          "pay_month_price": lineItem.end_state_out_total_price,
 
-        "ending_unit_count": lineItem.ending_unit_count,
-        "ending_unit_count_total": lineItem.ending_unit_count_total,
+          "ending_unit_count": lineItem.ending_unit_count,
+          "ending_unit_count_total": lineItem.ending_unit_count_total,
 
-        "type": lineItem.accounting_type
-      });
-      p = p + 1;
+          "type": lineItem.accounting_type
+        });
+        p = p + 1;
+      } else {
+        data.push({
+          "item_id": p,
+          "internal_item_id": item.internal_item_id,
+          "description": `${item.description} Lot: ${lineItem.Lot} Price: ${lineItem.price} Quality: ${lineItem.quality} วันที่ผลิต: ${lineItem.date_manufactured.split("T")[0]}`,
+
+          "unit": lineItem.uom_name,
+
+          "left_month_unit": "-",
+          "left_month_price": "-",
+
+          "get_month_unit": "-",
+          "get_month_price": "-",
+
+          "pay_month_unit": "-",
+          "pay_month_price": "-",
+
+          "ending_unit_count": "-",
+          "ending_unit_count_total": "-",
+
+          "type": "-"
+        })
+        p = p + 1;
+      }
     })
 
     const data_json = {

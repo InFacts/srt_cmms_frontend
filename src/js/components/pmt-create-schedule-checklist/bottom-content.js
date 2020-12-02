@@ -51,7 +51,7 @@ const BottomContent = (props) => {
 
       let factXCrosses = fact[FACTS.X_CROSS].items;
       let factXCross = factXCrosses.find(factXCross => `${factXCross.x_cross_id}` === `${item.equipment_installation[0].x_cross_x_cross_id}`); // Returns undefined if not found
-      // console.log("factXCross", factXCross)
+      console.log("factXCross", factXCross)
 
       setFieldValue(fieldName + `.equipment_id`, item.equipment_id, false);
       setFieldValue(fieldName + `.checklist_id`, item.equipment_group.checklist_id, false);
@@ -326,10 +326,10 @@ const BottomContent = (props) => {
 
         </div>
 
-        <PopupModalEquipment keyname='w1_list' lineNumber={lineNumber1} ariaControls="modalEquipment1" />
-        <PopupModalEquipment keyname='w2_list' lineNumber={lineNumber2} ariaControls="modalEquipment2" />
-        <PopupModalEquipment keyname='w3_list' lineNumber={lineNumber3} ariaControls="modalEquipment3" />
-        <PopupModalEquipment keyname='w4_list' lineNumber={lineNumber4} ariaControls="modalEquipment4" />
+        <PopupModalEquipment keyname='w1_list' lineNumber={lineNumber1} valueNodeID={values.node_id} ariaControls="modalEquipment1" />
+        <PopupModalEquipment keyname='w2_list' lineNumber={lineNumber2} valueNodeID={values.node_id} ariaControls="modalEquipment2" />
+        <PopupModalEquipment keyname='w3_list' lineNumber={lineNumber3} valueNodeID={values.node_id} ariaControls="modalEquipment3" />
+        <PopupModalEquipment keyname='w4_list' lineNumber={lineNumber4} valueNodeID={values.node_id} ariaControls="modalEquipment4" />
 
         <PopupModalStation line_station={values.lineNumberStation} name={values.nameValueStation} checkBooleanForEdit={checkBooleanForEdit} />
 

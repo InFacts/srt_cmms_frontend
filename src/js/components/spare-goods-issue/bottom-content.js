@@ -102,7 +102,7 @@ const BottomContent = (props) => {
     }
     if (quantity !== 0) {
       setFieldValue(fieldName, quantity, false);
-      setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(rawLotFromQty(values.line_items[index].at_source[0].pricing.fifo, values.line_items[index].at_source[0].current_unit_count), quantity)), false);
+      setFieldValue(`line_items[${index}].per_unit_price`, values.line_items[index].at_source[0].pricing.fifo ? weightedAverage(getLotFromQty(rawLotFromQty(values.line_items[index].at_source[0].pricing.fifo, values.line_items[index].at_source[0].current_unit_count), quantity)) : "0.00", false);
       return;
     } else {
       return 'Invalid Quantity Line Item';
@@ -121,7 +121,7 @@ const BottomContent = (props) => {
         if (at_source) {
           setFieldValue(`line_items[${index}].at_source`, [at_source], false);
           setFieldValue(`line_items[${index}].item_status_id`, item_status_id, false);
-          setFieldValue(`line_items[${index}].per_unit_price`, weightedAverage(getLotFromQty(rawLotFromQty(at_source.pricing.fifo, at_source.current_unit_count), values.line_items[index].quantity)), false);
+          setFieldValue(`line_items[${index}].per_unit_price`, at_source.pricing.fifo ? weightedAverage(getLotFromQty(rawLotFromQty(at_source.pricing.fifo, at_source.current_unit_count), values.line_items[index].quantity)) : "0.00", false);
         }
         else {
           console.log(" NOT FOUND AT SOURCES FOR CALCULATE FIFO")

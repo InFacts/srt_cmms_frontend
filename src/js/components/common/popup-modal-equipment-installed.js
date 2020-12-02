@@ -50,7 +50,7 @@ const PopupModalNoPart = (props) => {
                                 {data.map(function (no_part_show, index) {
                                     var item_match_equipments = props.equipment;
                                     let item_match_equipment = item_match_equipments.find(item_match_equipment => `${item_match_equipment.item_id}` === `${no_part_show.item_id}`); // Returns undefined if not found
-                                    if (item_match_equipment && item_match_equipment.is_installed.data[0] === 1) {
+                                    if (item_match_equipment && item_match_equipment.is_installed.data[0] === 1 && props.valueNodeID == item_match_equipment.equipment_installation[0].location_node_id) {
                                         return (
                                             <tr key={index} id={index}>
                                                 <td className="edit-padding" style={{ minWidth: "150px" }}> {no_part_show.internal_item_id} </td>

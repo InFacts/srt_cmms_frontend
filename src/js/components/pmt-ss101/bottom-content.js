@@ -20,7 +20,8 @@ import { useFormikContext } from 'formik';
 import { validatedataDocumentField, checkBooleanForEditHelper } from '../../helper';
 import { FACTS } from '../../redux/modules/api/fact';
 
-import { changeTheam } from '../../helper.js'
+import { changeTheam } from '../../helper.js';
+import DatalisrNoChildrenInput from '../common/formik-datalist-no-children';
 const BottomContent = (props) => {
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
     const factDistricts = useSelector((state) => ({ ...state.api.fact.districts }), shallowEqual);
@@ -41,6 +42,7 @@ const BottomContent = (props) => {
     const factLevel = useSelector((state) => ({ ...state.api.fact[FACTS.LEVEL] }), shallowEqual);
     const factXCross = useSelector((state) => ({ ...state.api.fact[FACTS.X_CROSS] }), shallowEqual);
     const factDocByPass = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_DOC_BYPASS] }), shallowEqual);
+    const factXType = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_X_TYPE] }), shallowEqual);
 
     // const factUnit = useSelector((state) => ({ ...state.api.fact[FACTS.UNIT_OF_MEASURE] }), shallowEqual);
     const { values, setFieldValue, validateField } = useFormikContext();
@@ -247,7 +249,7 @@ const BottomContent = (props) => {
 
                         {/* system_type_group_id  */}
                         <div className="grid_2 alpha white-space">
-                            <p className="top-text">กลุ่มระบบตรวจซ่อม</p>
+                            <p className="top-text">ระบบตรวจซ่อม</p>
                         </div>
                         <div className="grid_3 alpha omega">
                             <SelectNoChildrenInput name="system_type_group_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentSystemTypeGroupIDnField} cssStyle={{ left: "-160px", top: "14px" }} tabIndex="17">
@@ -284,7 +286,7 @@ const BottomContent = (props) => {
                             <SelectNoChildrenInput name="hardware_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="19">
                                 <option value=''></option>
                                 {factHardwareType.items.map((factHardwareType) => {
-                                    // if (values.sub_maintenance_type_id == factHardwareType.system_type_id)
+                                    if (values.system_type_group_id == factHardwareType.system_type_id)
                                         return <option key={factHardwareType.hardware_type_id} value={factHardwareType.hardware_type_id}>{factHardwareType.abbreviation} - {factHardwareType.hardware_type}</option>
                                 })}
                             </SelectNoChildrenInput>
@@ -301,7 +303,9 @@ const BottomContent = (props) => {
                             <p className="top-text">ศูนย์กลางทางผ่าน</p>
                         </div>
                         <div className="grid_3 alpha omega pull">
-                            <SelectNoChildrenInput name="location_x_cross_id" disabled={values.system_type_group_id == 3 ? checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true} tabIndex="19">
+                            <DatalisrNoChildrenInput name="location_x_cross_id" tabIndex="19" 
+                            disabled={values.system_type_group_id == 3 ? checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true} />
+                            {/* <SelectNoChildrenInput name="location_x_cross_id" disabled={values.system_type_group_id == 3 ? checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true} tabIndex="19">
                                 <option value=''></option>
                                 {factXCross.items.map((x_cross) => {
                                     if (values.system_type_group_id == 3 && values.location_node_id == x_cross.node_id) {
@@ -312,6 +316,20 @@ const BottomContent = (props) => {
                                         }
                                     } else return null
                                 })}
+                            </SelectNoChildrenInput> */}
+                        </div>
+
+                        <div className="clear" />
+
+                        <div className="grid_2 alpha white-space">
+                            <p className="top-text">ประเภทเครื่องกั้น</p>
+                        </div>
+                        <div className="grid_3 alpha omega">
+                            <SelectNoChildrenInput name="x_type_id" disabled={values.system_type_group_id == 3 ? checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true} cssStyle={{ left: "-160px", top: "14px" }} tabIndex="19">
+                                <option value='' selected></option>
+                                {factXType.items.map((systemXType) => {
+                                    return <option key={systemXType.x_type_id} value={systemXType.x_type_id}>{systemXType.abbreviation} {systemXType.name}</option>
+                                })}
                             </SelectNoChildrenInput>
                         </div>
 
@@ -319,7 +337,7 @@ const BottomContent = (props) => {
 
                         {/* car_type_id  */}
                         <div className="grid_2 alpha white-space">
-                            <p className="top-text">ประเภทรถ</p>
+                            <p className="top-text">ประเภทรถคู่กรณี</p>
                         </div>
                         <div className="grid_3 alpha omega">
                             <SelectNoChildrenInput name="car_type_id" disabled={values.system_type_group_id == 3 ? checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH : true}
@@ -633,6 +651,111 @@ const BottomContent = (props) => {
                             </SelectNoChildrenInput>
                         </div>
                         <div className="clear" />
+
+                        {/* member_4  */}
+                        <div className="grid_2 alpha white-space">
+                            <p className="top-text">รายชื่อเพื่อนร่วมงาน</p>
+                        </div>
+                        <div className="grid_4 alpha omega">
+                            <TextInput name="member_4" tabIndex="39"
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                        </div>
+                        <Label>ตำแหน่ง</Label>
+                        <div className="grid_4 alpha omega">
+                            <SelectNoChildrenInput name="member_4_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="40">
+                                <option value='' selected></option>
+                                {factLevel.items.map((position) => {
+                                    if (values.member_4_position_id === position.level_id) {
+                                        return <option key={position.level_id} value={position.level_id} selected>{position.level}</option>
+                                    } else return <option key={position.level_id} value={position.level_id}>{position.level}</option>
+                                })}
+                            </SelectNoChildrenInput>
+                        </div>
+                        <div className="clear" />
+
+                        {/* member_5  */}
+                        <div className="grid_2 alpha white-space">
+                            <p className="top-text">รายชื่อเพื่อนร่วมงาน</p>
+                        </div>
+                        <div className="grid_4 alpha omega">
+                            <TextInput name="member_5" tabIndex="39"
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                        </div>
+                        <Label>ตำแหน่ง</Label>
+                        <div className="grid_4 alpha omega">
+                            <SelectNoChildrenInput name="member_5_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="40">
+                                <option value='' selected></option>
+                                {factLevel.items.map((position) => {
+                                    if (values.member_5_position_id === position.level_id) {
+                                        return <option key={position.level_id} value={position.level_id} selected>{position.level}</option>
+                                    } else return <option key={position.level_id} value={position.level_id}>{position.level}</option>
+                                })}
+                            </SelectNoChildrenInput>
+                        </div>
+                        <div className="clear" />
+
+                        {/* member_6  */}
+                        <div className="grid_2 alpha white-space">
+                            <p className="top-text">รายชื่อเพื่อนร่วมงาน</p>
+                        </div>
+                        <div className="grid_4 alpha omega">
+                            <TextInput name="member_6" tabIndex="39"
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                        </div>
+                        <Label>ตำแหน่ง</Label>
+                        <div className="grid_4 alpha omega">
+                            <SelectNoChildrenInput name="member_6_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="40">
+                                <option value='' selected></option>
+                                {factLevel.items.map((position) => {
+                                    if (values.member_6_position_id === position.level_id) {
+                                        return <option key={position.level_id} value={position.level_id} selected>{position.level}</option>
+                                    } else return <option key={position.level_id} value={position.level_id}>{position.level}</option>
+                                })}
+                            </SelectNoChildrenInput>
+                        </div>
+                        <div className="clear" />
+
+                        {/* member_7  */}
+                        <div className="grid_2 alpha white-space">
+                            <p className="top-text">รายชื่อเพื่อนร่วมงาน</p>
+                        </div>
+                        <div className="grid_4 alpha omega">
+                            <TextInput name="member_7" tabIndex="39"
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                        </div>
+                        <Label>ตำแหน่ง</Label>
+                        <div className="grid_4 alpha omega">
+                            <SelectNoChildrenInput name="member_7_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="40">
+                                <option value='' selected></option>
+                                {factLevel.items.map((position) => {
+                                    if (values.member_7_position_id === position.level_id) {
+                                        return <option key={position.level_id} value={position.level_id} selected>{position.level}</option>
+                                    } else return <option key={position.level_id} value={position.level_id}>{position.level}</option>
+                                })}
+                            </SelectNoChildrenInput>
+                        </div>
+                        <div className="clear" />
+
+                        {/* member_8  */}
+                        <div className="grid_2 alpha white-space">
+                            <p className="top-text">รายชื่อเพื่อนร่วมงาน</p>
+                        </div>
+                        <div className="grid_4 alpha omega">
+                            <TextInput name="member_8" tabIndex="39"
+                                disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
+                        </div>
+                        <Label>ตำแหน่ง</Label>
+                        <div className="grid_4 alpha omega">
+                            <SelectNoChildrenInput name="member_8_position_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="40">
+                                <option value='' selected></option>
+                                {factLevel.items.map((position) => {
+                                    if (values.member_8_position_id === position.level_id) {
+                                        return <option key={position.level_id} value={position.level_id} selected>{position.level}</option>
+                                    } else return <option key={position.level_id} value={position.level_id}>{position.level}</option>
+                                })}
+                            </SelectNoChildrenInput>
+                        </div>
+                        <div className="clear" />
                     </div>
 
                 </div>
@@ -657,7 +780,7 @@ const BottomContent = (props) => {
                             </thead>
                             <tbody>
                                 {values.loss_line_items.map((loss_line_item, index) => {
-                                    if (loss_line_item.price) {totalPrice = parseInt(totalPrice) + parseInt(loss_line_item.price)}
+                                    if (loss_line_item.price) {totalPrice = parseInt(totalPrice) + parseInt(loss_line_item.price * loss_line_item.quantity)}
                                     return (
                                         <tr key={index}>
                                             <td className="edit-padding text-center">{index + 1}</td>

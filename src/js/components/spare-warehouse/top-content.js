@@ -56,7 +56,7 @@ const TopContent = (props) => {
         if (warehouse) {
           console.log(">>>>>", values.line_position_permission)
           // IF Check user If User is Admin -> return true Else -> return false
-          if (values.line_position_permission[0].module_admin === true) { //{/* TODO USER_ID FOR ADMIN */}
+          if (values.line_position_permission[0].module_master_data === true) { //{/* TODO USER_ID FOR ADMIN */}
             console.log(" YES I AM ADMIN ")
             setFieldValue("modeEdit", true, false);
           } else {

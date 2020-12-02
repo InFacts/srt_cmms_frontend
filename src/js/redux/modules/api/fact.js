@@ -47,6 +47,7 @@ export const FACTS = {
     SS101_CASE_TYPE: "ss101/case-type",
     SS101_INTERRUPT: "ss101/interrupt",
     SS101_DOC_BYPASS: "ss101/doc-bypass",
+    SS101_X_TYPE: "ss101/x-type",
 
     // For reporting period
     REPORTING_PERIOD: "statistic/reporting-period"

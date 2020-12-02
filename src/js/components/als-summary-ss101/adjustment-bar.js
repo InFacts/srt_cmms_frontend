@@ -13,7 +13,8 @@ const AdjustmentBarComponent = () => {
     const factNodes = useSelector((state) => ({ ...state.api.fact.nodes }), shallowEqual);
     const validateDocumentLocationDistrictIDField = (...args) => validatedataDocumentField("district_id", setFieldValue, ...args)
     const validateDocumentLocationNodeIDField = (...args) => validatedataDocumentField("node_id", setFieldValue, ...args)
-    let thisYear = new Date().getFullYear() + 543
+    let thisYear = new Date().getFullYear() + 543;
+    let groups = ["ระบบอาณัติสัญญาณ", "ระบบสายส่ง", "ระบบเครื่องกั้นถนน", "ระบบเครื่องทางสะดวก", "ระบบโทรศัพท์", "ระบบไฟฟ้า", "ระบบโทรพิมพ์", "ระบบวิทยุ", "ระบบอิเล็กทรอนิกส์"];
     return (
         <div className="gray-background adjustment-bar">
             <h5 className="adjustment-bar-name">ปรับแต่งข้อมูลของภาพรวม</h5>
@@ -28,13 +29,13 @@ const AdjustmentBarComponent = () => {
 
                 <div className="space-10px" />
 
-                <div className="adjustment-bar-inner-text">กลุ่มอุปกรณ์</div  >
+                <div className="adjustment-bar-inner-text">ระบบตรวจซ่อม</div  >
                 <SelectNoChildrenInput 
-                    name="equipment_group_id" >
+                    name="systems_group_id" >
                     <option value='ทั้งหมด'>ทั้งหมด</option>
-                    {factEquipmentGroup.items.map(function ({ equipment_group_id, name, description }) {
-                    return <option value={equipment_group_id} key={equipment_group_id}> {description}  </option>
-                    })}
+                    {groups.map((dataGroup, index) => (
+                        <option value={index+1} key={dataGroup}> {dataGroup}  </option>
+                    ))}
                 </SelectNoChildrenInput>
 
                 <div className="space-10px" />

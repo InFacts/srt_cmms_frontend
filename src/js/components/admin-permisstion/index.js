@@ -7,7 +7,7 @@ import TopContent from './top-content';
 import BottomContent from './bottom-content';
 import Footer from '../common/footer.js';
 
-import { packDataFromValues, DOCUMENT_TYPE_ID, saveDocument, fetchPositionPermissionData } from '../../helper';
+import { packDataFromValues, DOCUMENT_TYPE_ID, saveDocument, fetchPositionPermissionData, fetchUserPermissionData } from '../../helper';
 
 import useToolbarInitializer from '../../hooks/toolbar-initializer';
 import useFactInitializer from '../../hooks/fact-initializer';
@@ -29,6 +29,37 @@ const PermisstionAdminComponent = (props) => {
     const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
 
     let module = [];
+    // useEffect(() => {
+    //     fetchUserPermissionData()
+    //         .then((user_permission) => {
+    //             console.log("user_permission", user_permission)
+    //             user_permission.map((list_module) => {
+    //                 module.push({
+    //                     user_id: list_module.user_id,
+    //                     username: list_module.username,
+    //                     employee_id: list_module.employee_id,
+    //                     firstname_th: list_module.firstname_th,
+    //                     module_spare: list_module.function.indexOf(1) !== -1,
+    //                     module_pmt: list_module.function.indexOf(2) !== -1,
+    //                     module_als: list_module.function.indexOf(3) !== -1,
+    //                     module_track_document: list_module.function.indexOf(4) !== -1,
+    //                     module_admin: list_module.function.indexOf(5) !== -1,
+    //                     module_master_data: list_module.function.indexOf(6) !== -1,
+
+    //                     // position_id: list_module.position_id,
+    //                     // name: list_module.name,
+    //                     // abbreviation: list_module.abbreviation,
+    //                     // module_spare: list_module.function.indexOf(1) !== -1,
+    //                     // module_pmt: list_module.function.indexOf(2) !== -1,
+    //                     // module_als: list_module.function.indexOf(3) !== -1,
+    //                     // module_track_document: list_module.function.indexOf(4) !== -1,
+    //                     // module_admin: list_module.function.indexOf(5) !== -1,
+    //                 })
+    //             })
+    //             setFieldValue('line_position_permission', module, false);
+    //         })
+    // }, []);
+    
     useEffect(() => {
         fetchPositionPermissionData()
             .then((position_permission) => {
@@ -43,11 +74,13 @@ const PermisstionAdminComponent = (props) => {
                         module_als: list_module.function.indexOf(3) !== -1,
                         module_track_document: list_module.function.indexOf(4) !== -1,
                         module_admin: list_module.function.indexOf(5) !== -1,
+                        module_master_data: list_module.function.indexOf(6) !== -1
                     })
                 })
                 setFieldValue('line_position_permission', module, false);
             })
     }, []);
+
     const loggedIn = useSelector(state => state.token.isLoggedIn);
     return (
         <>

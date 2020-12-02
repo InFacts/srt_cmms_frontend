@@ -203,7 +203,7 @@ export const SS101_SCHEMA = {
     arrived_on: '',           // เดินทางถึง  DATETIME
     finished_on: '',          // วันเวลาที่แล้วเสร็จ DATETIME
     // system_type_group_id: -1,   // ระบบตรวจซ่อม FK_ID - this is automatically infered from sub_maintenance_type_id
-    sub_maintenance_type_id: 1,      //  ชนิดระบบตรวจซ่อม FK_ID
+    sub_maintenance_type_id: -1,      //  ชนิดระบบตรวจซ่อม FK_ID
     hardware_type_id: -1,   // ชื่ออุปกรณ์ที่บำรุงรักษา FK_ID
 
     summary_cause_condition: '', // สาเหตุและอาการเสียโดยสรุป link [root_cause] from WO NVARCHAR
@@ -213,6 +213,7 @@ export const SS101_SCHEMA = {
     service_method_desc: '', //สรุปการแก้ไขและการซ่อมแซม STRING
     interrupt_id: -1, //ยังไมไ่ด้จัดการแก้ไขเพราะเหตุนี้ FK_ID
     checked_remark: '',
+    x_type_id: -1,
 
     // Bottom Content ผู้เกี่ยวข้อง
     auditor_name: '',           //ผู้ควบคุมตรวจสอบชื่อ NVARCHAR
@@ -225,6 +226,16 @@ export const SS101_SCHEMA = {
     member_2_position_id: -1, //รายชื่อเพื่อนร่วมงาน 2 ตำแหน่ง FK_ID
     member_3: '',             //รายชื่อเพื่อนร่วมงาน 3
     member_3_position_id: -1,  //รายชื่อเพื่อนร่วมงาน 3 ตำแหน่ง
+    member_4: '',               //รายชื่อเพื่อนร่วมงาน 1 NVARCHAR
+    member_4_position_id: -1, //รายชื่อเพื่อนร่วมงาน 1 ตำแหน่ง FK_ID
+    member_5: '',              //รายชื่อเพื่อนร่วมงาน 2 NVARCHAR
+    member_5_position_id: -1, //รายชื่อเพื่อนร่วมงาน 2 ตำแหน่ง FK_ID
+    member_6: '',             //รายชื่อเพื่อนร่วมงาน 3
+    member_6_position_id: -1,  //รายชื่อเพื่อนร่วมงาน 3 ตำแหน่ง
+    member_7: '',               //รายชื่อเพื่อนร่วมงาน 1 NVARCHAR
+    member_7_position_id: -1, //รายชื่อเพื่อนร่วมงาน 1 ตำแหน่ง FK_ID
+    member_8: '',              //รายชื่อเพื่อนร่วมงาน 2 NVARCHAR
+    member_8_position_id: -1, //รายชื่อเพื่อนร่วมงาน 2 ตำแหน่ง FK_ID
     location_x_cross_id: -1,
     doc_bypass_doc_bypass_id: -1,
 
@@ -579,6 +590,7 @@ export const packDataFromValues = (fact, values, document_type_id, checked_remar
                     per_unit_price: line_item.per_unit_price,
                     item_id: getItemIDFromInternalItemID(fact[FACTS.ITEM], line_item.internal_item_id),
                     item_status_id: line_item.item_status_id,
+                    date_manufactured: line_item.date_manufactured ? line_item.date_manufactured : null
                 });
             }
         })
@@ -801,18 +813,25 @@ export const packDataFromValues = (fact, values, document_type_id, checked_remar
             location_station_id: values.location_station_id ? parseInt(values.location_station_id) : null,
             location_detail: values.location_detail,
             hardware_type_id: values.hardware_type_id ? parseInt(values.hardware_type_id) : null,
+            x_type_id: values.x_type_id ? parseInt(values.x_type_id) : null,
             member_1: values.member_1,
             member_2: values.member_2,
             member_3: values.member_3,
+            member_4: values.member_4,
+            member_5: values.member_5,
+            member_6: values.member_6,
+            member_7: values.member_7,
+            member_8: values.member_7,
             remark: values.remark,
             checked_remark: checked_remark,
-            // sub_maintenance_type_id: values.sub_maintenance_type_id ? parseInt(values.sub_maintenance_type_id) : null,
-            sub_maintenance_type_id: 1,
+            sub_maintenance_type_id: values.system_type_group_id ? parseInt(values.system_type_group_id) : null,
+            // sub_maintenance_type_id: 1,
             request_on: values.request_on + ':00+00:00',
             request_by: values.request_by,
             location_district_id: values.location_district_id ? parseInt(values.location_district_id) : null,
             departed_on: values.departed_on + ':00+00:00',
-            location_x_cross_id: values.location_x_cross_id ? parseInt(values.location_x_cross_id) : null,
+            location_x_cross_id: values.location_x_cross_id,
+            // location_x_cross_id: values.location_x_cross_id ? parseInt(values.location_x_cross_id) : null,
             auditor_name: values.auditor_name,
             auditor_position_id: values.auditor_position_id ? parseInt(values.auditor_position_id) : null,
             fixer_name: values.fixer_name,
@@ -820,6 +839,11 @@ export const packDataFromValues = (fact, values, document_type_id, checked_remar
             member_1_position_id: values.member_1_position_id ? parseInt(values.member_1_position_id) : null,
             member_2_position_id: values.member_2_position_id ? parseInt(values.member_2_position_id) : null,
             member_3_position_id: values.member_3_position_id ? parseInt(values.member_3_position_id) : null,
+            member_4_position_id: values.member_4_position_id ? parseInt(values.member_4_position_id) : null,
+            member_5_position_id: values.member_5_position_id ? parseInt(values.member_5_position_id) : null,
+            member_6_position_id: values.member_6_position_id ? parseInt(values.member_6_position_id) : null,
+            member_7_position_id: values.member_7_position_id ? parseInt(values.member_7_position_id) : null,
+            member_8_position_id: values.member_8_position_id ? parseInt(values.member_8_position_id) : null,
             doc_bypass_doc_bypass_id: values.doc_bypass_doc_bypass_id ? parseInt(values.doc_bypass_doc_bypass_id) : null
         }
         values.loss_line_items = removeEmptyLineItems(values.loss_line_items);
@@ -918,7 +942,8 @@ export const packDataFromValues = (fact, values, document_type_id, checked_remar
             location_description: values.location_description,
             installed_on: values.installed_on + 'T00:00:00+00:00',
             announce_use_on: values.announce_use_on + 'T00:00:00+00:00',
-            x_cross_x_cross_id: values.x_cross_x_cross_id ? parseInt(values.x_cross_x_cross_id) : null,
+            // x_cross_x_cross_id: values.x_cross_x_cross_id ? parseInt(values.x_cross_x_cross_id) : null,
+            x_cross_x_cross_id: values.x_cross_x_cross_id,
             responsible_node_id: values.location_node_id ? parseInt(values.location_node_id) : null
         }
         var line_items_part = [
@@ -1742,7 +1767,7 @@ export const fetchLatestStepApprovalDocumentData = (document_id) => new Promise(
             resolve(latest_step_approve.data);
         })
         .catch((err) => {
-            reject(err)
+            reject(err.response)
         });
 });
 
@@ -1809,6 +1834,19 @@ export const fetchPositionPermissionDataSearchPositionName = (position_name) => 
         });
 });
 
+
+// Get Position Permission For Admin
+export const fetchUserPermissionData = (position_id) => new Promise((resolve, reject) => {
+    const url = `${BASE_URL}/admin/user-permission?${position_id ? `position_id=${position_id}` : `&page_size=${PAGE_SIZE}`}`;
+    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+        .then((res) => {
+            console.log("res", res)
+            resolve(res.data.results);
+        })
+        .catch((err) => {
+            reject(err)
+        });
+});
 
 // Check Document Status from 
 export const DOCUMENT_STATUS = {
@@ -1918,6 +1956,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
         if (document_type_group_id !== DOCUMENT_TYPE_ID.PHYSICAL_COUNT && document_type_group_id !== DOCUMENT_TYPE_ID.INVENTORY_ADJUSTMENT) {
             data.line_items.map((item) => {
                 item.item_type_id = item.item.item_type_id
+                if(item.date_manufactured) { item.date_manufactured = item.date_manufactured.split("T")[0] };
             })
             for (var i = data.line_items.length; i <= 9; i++) {
                 data.line_items.push(
@@ -1929,7 +1968,8 @@ const responseToFormState = (fact, data, document_type_group_id) => {
                         uom_group_id: "",
                         unit: "",
                         per_unit_price: "",
-                        list_uoms: []
+                        list_uoms: [],
+                        date_manufactured: ""
                     }
                 );
             }
@@ -2177,7 +2217,7 @@ const responseToFormState = (fact, data, document_type_group_id) => {
 
         let document_statuses = fact[FACTS.DOCUMENT_STATUS].items;
         let document_status = document_statuses.find(document_status => `${document_status.document_status_id}` === `${data.document.document_status_id}`);
-        
+
         if (document_status) {
             return {
                 document_id: data.document.document_id,
@@ -2348,8 +2388,8 @@ function transformSS101ResponseToFormState(ss101_part, data) {
 
     var accident_on = new Date(ss101_part.accident_on);
     accident_on.setHours(accident_on.getHours());
-
-    return {
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>", data)
+    return {    
         ...ss101_part,
         accident_on: accident_on.toISOString().slice(0, 16),
         location_district_id: returnEmptyStringIfNull(ss101_part.location_district_id),
@@ -2365,6 +2405,7 @@ function transformSS101ResponseToFormState(ss101_part, data) {
         system_type_group_id: returnEmptyStringIfNull(data.specific.system_type.system_type_group_id),
         sub_maintenance_type_id: returnEmptyStringIfNull(ss101_part.sub_maintenance_type_id),
         hardware_type_id: returnEmptyStringIfNull(ss101_part.hardware_type_id),
+        x_type_id: returnEmptyStringIfNull(ss101_part.x_type_id),
 
         cargo_id: returnEmptyStringIfNull(ss101_part.cargo_id),
         service_method_id: returnEmptyStringIfNull(ss101_part.service_method_id),
@@ -2378,6 +2419,11 @@ function transformSS101ResponseToFormState(ss101_part, data) {
         member_1_position_id: returnEmptyStringIfNull(ss101_part.member_1_position_id),
         member_2_position_id: returnEmptyStringIfNull(ss101_part.member_2_position_id),
         member_3_position_id: returnEmptyStringIfNull(ss101_part.member_3_position_id),
+        member_4_position_id: returnEmptyStringIfNull(ss101_part.member_4_position_id),
+        member_5_position_id: returnEmptyStringIfNull(ss101_part.member_5_position_id),
+        member_6_position_id: returnEmptyStringIfNull(ss101_part.member_6_position_id),
+        member_7_position_id: returnEmptyStringIfNull(ss101_part.member_7_position_id),
+        member_8_position_id: returnEmptyStringIfNull(ss101_part.member_8_position_id),
 
         // line_items: [ss101_part.line_items],
         line_items: returnFullArrayHasEquipmentItemNull(data.specific.ss101_line_item),
@@ -2446,8 +2492,8 @@ function returnArrayLineSelector(line_custom, fact, week) {
         // console.log("internal_item_id", internal_item_id)
         if (line_custom.weekly_task.weekly_plan_id === week)
             if (internal_item_id) {
-                let factXCrosses = fact[FACTS.X_CROSS].items;
-                let factXCross = factXCrosses.find(factXCross => `${factXCross.x_cross_id}` === `${internal_item_id.equipment_installation[0].x_cross_x_cross_id}`);
+                // let factXCrosses = fact[FACTS.X_CROSS].items;
+                // let factXCross = factXCrosses.find(factXCross => `${factXCross.x_cross_id}` === `${internal_item_id.equipment_installation[0].x_cross_x_cross_id}`);
 
                 line_customs.push({
                     station_id: null,
@@ -2456,7 +2502,7 @@ function returnArrayLineSelector(line_custom, fact, week) {
                     checklist_id: line_custom.selector_checklist[0].checklist_id,
                     x_cross_x_cross_id: internal_item_id.equipment_installation[0].x_cross_x_cross_id,
                     checklist_th: line_custom.selector_checklist[0].checklist_name,
-                    x_cross_x_cross_th: factXCross.road_center
+                    // x_cross_x_cross_th: factXCross.road_center
                 });
             } else {
                 let selector_checklist_part = []
@@ -2615,7 +2661,7 @@ export const validateInternalDocumentIDFieldHelper = (decoded_token, checkBoolea
     if (internal_document_id === values.internal_document_id) {
         return resolve();
     }
-    
+
     // Basic Form Checks of the Internal Document ID
     // 1. If it is empty
     // 2. If it is in the valid Form
@@ -3209,7 +3255,7 @@ export const getLatestApprovalStep = (document_id, approval_step_action_id, user
             }
             resolve(obj_body);
         }).catch(function (err) {
-            reject(err)
+            reject(err.response)
         })
 });
 
@@ -3300,9 +3346,9 @@ export const getLotFromQty = (fifo, quantity) => {
 var fifoCopyRaw = [];
 var compose_fifo2;
 export const rawLotFromQty = (raw_fifo, quantity) => {
-    console.log("raw_fifo?>>>>", raw_fifo, "fifoCopyRaw", fifoCopyRaw)
+    // console.log("raw_fifo?>>>>", raw_fifo, "fifoCopyRaw", fifoCopyRaw)
     if (fifoCopyRaw.length === 0) {
-        console.log("IN PROCESS")
+        // console.log("IN PROCESS")
         // var fifoCopyRaw = Object.assign([], raw_fifo)
         fifoCopyRaw = [...raw_fifo]; // make a copy
         var compose_fifo = [];
@@ -3337,23 +3383,23 @@ export const rawLotFromQty = (raw_fifo, quantity) => {
                 }
             }
         }
-        console.log("quantityLeft>>>>>>", quantityLeft)
+        // console.log("quantityLeft>>>>>>", quantityLeft)
         let total = 0;
         for (var composeLotFifo of compose_fifo2) {
             total = total + composeLotFifo.quantity
         }
         // console.log("total", total, "quantity", quantity)
         if (total === quantity) {
-            console.log("total === quantity", "=>", "compose_fifo", compose_fifo2)
+            // console.log("total === quantity", "=>", "compose_fifo", compose_fifo2)
             return compose_fifo2;
         } else {
-            console.log("total !== quantity", "=>", "compose_fifo", compose_fifo2)
+            // console.log("total !== quantity", "=>", "compose_fifo", compose_fifo2)
             return compose_fifo2;
         }
     } else if (`${fifoCopyRaw[0].item_id}` !== `${raw_fifo[0].item_id}`
         || `${fifoCopyRaw[0].item_status_id}` !== `${raw_fifo[0].item_status_id}`
         || `${fifoCopyRaw[0].warehouse_id}` !== `${raw_fifo[0].warehouse_id}`) {
-        console.log("IN PROCESS ELSE IF")
+        // console.log("IN PROCESS ELSE IF")
         // var fifoCopyRaw = Object.assign([], raw_fifo)
         fifoCopyRaw = [...raw_fifo]; // make a copy
         var compose_fifo = [];
@@ -3397,14 +3443,14 @@ export const rawLotFromQty = (raw_fifo, quantity) => {
         }
         // console.log("total", total, "quantity", quantity)
         if (total === quantity) {
-            console.log("total === quantity", "=>", "compose_fifo", compose_fifo2)
+            // console.log("total === quantity", "=>", "compose_fifo", compose_fifo2)
             return compose_fifo2;
         } else {
-            console.log("total !== quantity", "=>", "compose_fifo", compose_fifo2)
+            // console.log("total !== quantity", "=>", "compose_fifo", compose_fifo2)
             return compose_fifo2;
         }
     } else {
-        console.log("OUT PROCESS", compose_fifo2)
+        // console.log("OUT PROCESS", compose_fifo2)
         return compose_fifo2
     }
 };
@@ -3687,11 +3733,12 @@ export const FilterByAdjustmentBar = (equipment_installation, equipment_group, a
     return false;
 }
 export const FilterByAdjustmentBarSS101 = (item, adjustmentBar) => {
-    if (adjustmentBar.district_id === "ทั้งหมด" || adjustmentBar.district_id == item.specific.location_district_id) {
-        if (adjustmentBar.node_id === "ทั้งหมด" || adjustmentBar.node_id == item.specific.location_node_id) {
-            return true;
+        if (adjustmentBar.district_id === "ทั้งหมด" || adjustmentBar.district_id == item.specific.location_district_id) {
+            if (adjustmentBar.node_id === "ทั้งหมด" || adjustmentBar.node_id == item.specific.location_node_id) {
+                return true;
+            }
         }
-    }
+    
     return false;
 }
 

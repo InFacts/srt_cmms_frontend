@@ -57,7 +57,7 @@ const TopContent = (props) => {
       accounting_type: data.accounting_type,
       list_uoms: data.list_uoms,
 
-      modeEdit: values.line_position_permission[0].module_admin === true ? true : false     // IF Check user If User is Admin -> return true Else -> return false
+      modeEdit: values.line_position_permission[0].module_master_data === true ? true : false     // IF Check user If User is Admin -> return true Else -> return false
 
     }
   }

@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect, useSelector, shallowEqual } from 'react-redux';
 
-import axios from "axios";
-import { API_PORT_DATABASE } from '../../config_port.js';
-import { API_URL_DATABASE } from '../../config_url.js';
-
 import TextareaInput from '../common/formik-textarea-input';
 import TableStatus from '../common/table-status';
 import Table from '../common/table';
@@ -60,7 +56,7 @@ const BottomContent = (props) => {
 
           <div id="listItem_content" className="tabcontent">
             <div className="container_12 mt-1" style={{ paddingRight: "10px" }}>
-              <Table line_items={values.line_items}
+              <Table line_items={values.line_items} document_type_group_id={101}
                 sumTotalLineItem={sumTotalLineItem}
                 validateLineNumberInternalItemIDField={validateLineNumberInternalItemIDField}
                 validateLineNumberQuatityItemIDField={validateLineNumberQuatityItemIDField}
