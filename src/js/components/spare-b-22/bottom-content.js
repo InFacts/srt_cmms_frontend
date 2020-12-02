@@ -232,7 +232,7 @@ const BottomContent = (props) => {
                             <td className="edit-padding blue" style={{ maxWidth: "400px" }}>{item.internal_item_id} - {item.description}</td>
                             <td className="edit-padding text-center blue">{item.list_uoms[0].name}</td>
 
-                            <td colSpan="9" className="edit-padding blue">Lot: {line_items.item_inventory_journal_id} ราคา: {line_items.per_unit_price} จำนวน: {line_items.quantity} วันที่ผลิต: {line_items.date_manufactured.split("T")[0]}</td>
+                            <td colSpan="9" className="edit-padding blue">Lot: {line_items.item_inventory_journal_id} ราคา: {line_items.per_unit_price} จำนวน: {line_items.quantity} วันที่ผลิต: {line_items.date_manufactured && line_items.date_manufactured.split("T")[0]}</td>
                           </tr>
                         </>
                       )

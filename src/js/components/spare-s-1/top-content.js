@@ -107,7 +107,7 @@ const TopContent = (props) => {
               end_date = values.year_id - 543 + "-" + `${parseInt(values.mouth_id) + 1}` + "-1";
               console.log("start_date", start_date, "end_date", end_date)
             }
-            const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-monthly-summary/plus?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&start_date=${start_date}&end_date=${end_date}&item_status_id=${values.item_status_id}&internal_item_id=${values.internal_item_id}`; //&page_size=10000
+            const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-monthly-summary/plus?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&start_date=${start_date}&end_date=${end_date}&item_status_id=${values.item_status_id}&internal_item_id=${values.internal_item_id}&page_size=10000`; //&page_size=10000
             axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
               .then((res) => {
                 console.log("res", res)
@@ -134,7 +134,7 @@ const TopContent = (props) => {
               end_date = values.year_id - 543 + "-" + `${parseInt(values.mouth_id) + 1}` + "-1";
               console.log("start_date", start_date, "end_date", end_date)
             }
-            const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-monthly-summary/plus?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&start_date=${start_date}&end_date=${end_date}&item_status_id=${values.item_status_id}&internal_item_id=${values.internal_item_id}`; //&page_size=10000
+            const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-monthly-summary/plus?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&start_date=${start_date}&end_date=${end_date}&item_status_id=${values.item_status_id}&internal_item_id=${values.internal_item_id}&page_size=10000`; //&page_size=10000
             axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
               .then((res) => {
                 console.log("res", res)

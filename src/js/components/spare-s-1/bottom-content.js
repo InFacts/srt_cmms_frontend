@@ -103,7 +103,7 @@ const BottomContent = (props) => {
                             <td className="edit-padding blue">-</td>
                             <td className="edit-padding blue text-center">{item.list_uoms[0].name}</td>
 
-                            <td className="edit-padding blue text-center">{line_items.date_manufactured.split("T")[0]}</td>  {/* วันที่ผลิต */}
+                            <td className="edit-padding blue text-center">{line_items.date_manufactured ? line_items.date_manufactured.split("T")[0] : "-"}</td>  {/* วันที่ผลิต */}
 
                             <td className="edit-padding blue text-right">{line_items.quantity.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
 
@@ -143,7 +143,7 @@ const BottomContent = (props) => {
                             <td className="edit-padding blue">-</td>
                             <td className="edit-padding blue text-center">{item.list_uoms[0].name}</td>
 
-                            <td className="edit-padding blue text-center">{line_items.date_manufactured.split("T")[0]}</td>  {/* วันที่ผลิต */}
+                            <td className="edit-padding blue text-center">{line_items.date_manufactured ? line_items.date_manufactured.split("T")[0] : "-"}</td>  {/* วันที่ผลิต */}
 
                             <td className="edit-padding blue text-right">{line_items.quantity.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
 

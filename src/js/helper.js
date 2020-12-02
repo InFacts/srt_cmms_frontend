@@ -590,7 +590,7 @@ export const packDataFromValues = (fact, values, document_type_id, checked_remar
                     per_unit_price: line_item.per_unit_price,
                     item_id: getItemIDFromInternalItemID(fact[FACTS.ITEM], line_item.internal_item_id),
                     item_status_id: line_item.item_status_id,
-                    date_manufactured: line_item.date_manufactured
+                    date_manufactured: line_item.date_manufactured ? line_item.date_manufactured : null
                 });
             }
         })
