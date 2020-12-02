@@ -94,7 +94,7 @@ const useExportPdfInitializer = () => {
             service_method_id = factServiceMethod.sm_method_type
           }
         })
-       
+
         factInterrupt.items.map((factInterrupt) => {
           if (values.interrupt_id === factInterrupt.interrupt_id) {
             interrupt_id = factInterrupt.interrupt_id + "-" + factInterrupt.interrupt_type
@@ -106,13 +106,13 @@ const useExportPdfInitializer = () => {
             auditor_position_id = position.name
           }
         })
-        
+
         factPosition.items.map((position) => {
           if (values.fixer_position_id === position.position_id) {
             fixer_position_id = position.name
           }
         })
-        
+
         factPosition.items.map((position) => {
           if (values.member_1_position_id === position.position_id) {
             member_1_position_id = position.name
@@ -2008,7 +2008,7 @@ const createRowReportPMT = (item, index, plan_checked, total_plan, total_checked
     <td style="text-align:center; vertical-align: middle;"></td>
   </tr>`;
 
-  const createRowPlanCheckedReportPMT = (plan_checked) =>
+const createRowPlanCheckedReportPMT = (plan_checked) =>
   `
     <td style="text-align:center; vertical-align: middle;">${plan_checked.checklist_count}</td>
     <td style="text-align:center; vertical-align: middle;">${plan_checked.completed_count}</td>
@@ -2066,45 +2066,74 @@ export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((re
     let group_type = []
     let j = ''
     filterResult.map((item) => {
-      var text = item.internal_item_id.replace(/\d+|^\s+|\s+$/g, '')
-      text = text.replace(/\s/g, '');
-      if (j === '') {
-        group_type.push(text);
-        j = text;
-      }
-      else {
-        if (text === j) {
-        } else {
+      if (item.internal_item_id) {
+        var text = item.internal_item_id.replace(/\d+|^\s+|\s+$/g, '')
+        text = text.replace(/\s/g, '');
+        if (j === '') {
           group_type.push(text);
           j = text;
+        }
+        else {
+          if (text === j) {
+          } else {
+            group_type.push(text);
+            j = text;
+          }
         }
       }
     })
     var r = {}
+    console.log("filterResult", filterResult)
     for (var i = 0; i < group_type.length; i++) {
       let filterResult_type = filterResult.filter((component) => {
-        var text = component.internal_item_id.replace(/\d+|^\s+|\s+$/g, '')
-        text = text.replace(/\s/g, '');
-        return text === group_type[i];
+        if (!component.item_inventory_journal_id) {
+          var text = component.internal_item_id.replace(/\d+|^\s+|\s+$/g, '')
+          text = text.replace(/\s/g, '');
+          return text === group_type[i];
+        } else {
+          let items = fact.items.items;
+          let itemFact = items.find(item => `${item.item_id}` === `${component.item_id}`)
+
+          var text = itemFact.internal_item_id.replace(/\d+|^\s+|\s+$/g, '')
+          text = text.replace(/\s/g, '');
+          return text === group_type[i];
+        }
       });
       const line_items = [];
       var line_number = 1
       var total = 0;
       var keyss = group_type[i];
-      // console.log("filterResult_type", filterResult_type)
+      console.log("filterResult_type", filterResult_type)
       filterResult_type.map((item) => {
-        var myObj = {
-          "item_id": line_number,
-          "description": item.item_description,
-          "internal_item_id": item.internal_item_id,
-          "unit": item.uom_name,
-          "quantity": item.quantity,
-          "total": item.total,
-          "per_unit_price": item.per_unit_price
-        };
-        line_number = line_number + 1;
-        total = total + parseFloat(item.total.replace(/,/g, ''))
-        line_items.push(myObj)
+        let items = fact.items.items;
+        let itemFact = items.find(item => `${item.item_id}` === `${item.item_id}`)
+        if (item.internal_item_id) {
+          var myObj = {
+            "item_id": line_number,
+            "description": item.item_description,
+            "internal_item_id": item.internal_item_id,
+            "unit": item.uom_name,
+            "quantity": item.quantity,
+            "total": item.total,
+            "per_unit_price": item.per_unit_price
+          };
+          line_number = line_number + 1;
+          total = total + parseFloat(item.total.replace(/,/g, ''))
+          line_items.push(myObj)
+        } else {
+          var myObj = {
+            "item_id": line_number,
+            "description": `Lot: ${item.item_inventory_journal_id} วันที่ผลิต: ${item.date_manufactured.split("T")[0]} ${itemFact.description}`,
+            "internal_item_id": itemFact.internal_item_id,
+            "unit": itemFact.list_uoms[0].name,
+            "quantity": item.quantity,
+            "total": "-",
+            "per_unit_price": item.per_unit_price
+          };
+          line_number = line_number + 1;
+          // total = total + parseFloat(item.total.replace(/,/g, ''))
+          line_items.push(myObj)
+        }
       })
       r[keyss] = {
         "Totol": total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
@@ -2269,54 +2298,56 @@ export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((re
       return element.id === mouth;
     })
     let create_on = date + " " + mouth.mouth + " " + year;
-    console.log("fact", fact)
+    // console.log("valuesContext.new_line_items_pdf", valuesContext.new_line_items_pdf)
     valuesContext.new_line_items_pdf.map(lineItem => {
       let items = fact.items.items;
       let item = items.find(item => `${item.item_id}` === `${lineItem.item_id}`)
-      if (lineItem.internal_item_id) {
-      data.push({
-        "item_id": p,
-        "description": lineItem.item_description,
+      if (!lineItem.Lot) {
+        data.push({
+          "item_id": p,
+          "description": lineItem.item_description,
 
-        "unit": lineItem.uom_name,
+          "unit": lineItem.uom_name,
 
-        "left_month_unit": lineItem.begin_unit_count,
-        "left_month_price": lineItem.begin_state_in_total_price,
+          "left_month_unit": lineItem.begin_unit_count,
+          "left_month_price": lineItem.begin_state_in_total_price,
 
-        "get_month_unit": lineItem.state_in_unit_count,
-        "get_month_price": lineItem.end_state_in_total_price,
+          "get_month_unit": lineItem.state_in_unit_count,
+          "get_month_price": lineItem.end_state_in_total_price,
 
-        "pay_month_unit": lineItem.state_out_unit_count,
-        "pay_month_price": lineItem.end_state_out_total_price,
+          "pay_month_unit": lineItem.state_out_unit_count,
+          "pay_month_price": lineItem.end_state_out_total_price,
 
-        "ending_unit_count": lineItem.ending_unit_count,
-        "ending_unit_count_total": lineItem.ending_unit_count_total,
+          "ending_unit_count": lineItem.ending_unit_count,
+          "ending_unit_count_total": lineItem.ending_unit_count_total,
 
-        "type": lineItem.accounting_type
-      });
-      p = p + 1;
-    } else {
-      data.push({
-        "internal_item_id": item.internal_item_id,
-            "description": `${item.description} Lot: ${lineItem.item_inventory_journal_id} Price: ${lineItem.per_unit_price} Quality: ${lineItem.quantity}`,
+          "type": lineItem.accounting_type
+        });
+        p = p + 1;
+      } else {
+        data.push({
+          "item_id": p,
+          "internal_item_id": item.internal_item_id,
+          "description": `${item.description} Lot: ${lineItem.Lot} Price: ${lineItem.price} Quality: ${lineItem.quality} วันที่ผลิต: ${lineItem.date_manufactured.split("T")[0]}`,
 
-            "unit": item.list_uoms[0].name,
+          "unit": lineItem.uom_name,
 
-            "left_month_unit": "-",
-        "left_month_price": "-",
+          "left_month_unit": "-",
+          "left_month_price": "-",
 
-        "get_month_unit": "-",
-        "get_month_price": "-",
+          "get_month_unit": "-",
+          "get_month_price": "-",
 
-        "pay_month_unit": "-",
-        "pay_month_price": "-",
+          "pay_month_unit": "-",
+          "pay_month_price": "-",
 
-        "ending_unit_count": "-",
-        "ending_unit_count_total": "-",
+          "ending_unit_count": "-",
+          "ending_unit_count_total": "-",
 
-        "type": "-"
-      })
-    }
+          "type": "-"
+        })
+        p = p + 1;
+      }
     })
 
     const data_json = {

@@ -4,26 +4,23 @@ import { connect, useSelector, shallowEqual } from 'react-redux'
 import axios from "axios";
 import { API_PORT_DATABASE } from '../../config_port.js';
 import { API_URL_DATABASE } from '../../config_url.js';
-import { v4 as uuidv4 } from 'uuid';
-
 import TextInput from '../common/formik-text-input'
 import SelectNoChildrenInput from '../common/formik-select-no-children';
 
-import { useFormikContext, useField } from 'formik';
+import { useFormikContext } from 'formik';
 
 import PopupModalInventory from '../common/popup-modal-inventory'
-import PopupModalNoPartNoChildren from '../common/popup-modal-nopart-no-children'
 
-import { TOOLBAR_MODE, TOOLBAR_ACTIONS, toModeAdd } from '../../redux/modules/toolbar.js';
-import { getEmployeeIDFromUserID, fetchStepApprovalDocumentData, DOCUMENT_TYPE_ID, getNumberFromEscapedString, validatedataDocumentField } from '../../helper';
+import { TOOLBAR_MODE } from '../../redux/modules/toolbar.js';
+import { getNumberFromEscapedString, validatedataDocumentField } from '../../helper';
 import { FACTS } from '../../redux/modules/api/fact.js';
 
-import { fetchPositionPermissionData, changeTheam } from '../../helper.js'
+import { changeTheam } from '../../helper.js'
 const TopContent = (props) => {
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
-  const { values, errors, touched, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm, setTouched, setErrors } = useFormikContext();
+  const { values, touched, setFieldValue, validateField, validateForm, setTouched, setErrors } = useFormikContext();
 
   useEffect(() => {
     validateField("src_warehouse_id")
@@ -84,10 +81,11 @@ const TopContent = (props) => {
 
     return response;
   }
+
   const searchGoodsOnHand = () => new Promise(resolve => {
     validateForm()
       .then((err) => {
-        console.log("THIS IS ErR I GET ", err, " i dont think it is touched ", touched)
+        // console.log("THIS IS ErR I GET ", err, " i dont think it is touched ", touched)
         setTouched(setNestedObjectValues(values, true))
         setErrors(err);
         if (isEmpty1(err)) {

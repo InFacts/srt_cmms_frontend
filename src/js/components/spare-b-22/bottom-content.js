@@ -31,7 +31,7 @@ const BottomContent = (props) => {
       let items = factItems.items;
       let item = items.find(item => `${item.item_id}` === `${line_item.item_id}`)
       if (item) {
-        if (line_item.internal_item_id) {
+        if (!line_item.date_manufactured) {
           new_line_items.push({
             "warehouse_name": line_item.warehouse_name,
             "internal_item_id": line_item.internal_item_id,
@@ -77,6 +77,8 @@ const BottomContent = (props) => {
         
         } else {
           new_line_items.push({
+            "item_id": line_item.item_id,
+            "date_manufactured": line_item.date_manufactured.split("T")[0],
             "warehouse_name": line_item.warehouse_name,
             "internal_item_id": item.internal_item_id,
             "item_description": item.description,
@@ -87,6 +89,8 @@ const BottomContent = (props) => {
           });
 
           new_line_items_pdf.push({
+            "item_id": line_item.item_id,
+            "date_manufactured": line_item.date_manufactured.split("T")[0],
             "warehouse_name": line_item.warehouse_name,
             "internal_item_id": item.internal_item_id,
             "item_description": item.description,
@@ -228,7 +232,7 @@ const BottomContent = (props) => {
                             <td className="edit-padding blue" style={{ maxWidth: "400px" }}>{item.internal_item_id} - {item.description}</td>
                             <td className="edit-padding text-center blue">{item.list_uoms[0].name}</td>
 
-                            <td colSpan="9" className="edit-padding blue">Lot: {line_items.item_inventory_journal_id} ราคา: {line_items.per_unit_price} จำนวน: {line_items.quantity}</td>
+                            <td colSpan="9" className="edit-padding blue">Lot: {line_items.item_inventory_journal_id} ราคา: {line_items.per_unit_price} จำนวน: {line_items.quantity} วันที่ผลิต: {line_items.date_manufactured.split("T")[0]}</td>
                           </tr>
                         </>
                       )
