@@ -694,7 +694,7 @@ export const packDataFromValues = (fact, values, document_type_id, checked_remar
                             unit_count: line_item.unit_count,
                             per_unit_price: line_item.per_unit_price,
                             item_id: getItemIDFromInternalItemID(fact[FACTS.ITEM], line_item.internal_item_id),
-                            item_status_id: line_item.item_status_id,
+                            item_status_id: parseInt(line_item.item_status_id),
                             adjustment_datetime: values.document_date + 'T00:00:00+00:00'
                         });
                     }
