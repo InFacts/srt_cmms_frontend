@@ -120,12 +120,13 @@ const BottomContent = (props) => {
                     if (item) {
                       if (line_items.internal_item_id) {
                         return (
-                          <tr key={index}>
+                          <tr key={index} onClick={() => !values[`sub${index}`] && handleSubDoc(line_items, index)}>
                             <th className="edit-padding text-center">{index + 1}</th>
                             <td className="edit-padding">{line_items.item_description}</td>
                             <td className="edit-padding">{line_items.internal_item_id}</td>
                             <td className="edit-padding text-center">{line_items.item_status_description_th}</td>
                             <td className="edit-padding text-center">{line_items.uom_name}</td>
+                            <td className="edit-padding text-center">-</td>  {/* วันที่ผลิต */}
 
                             {returnUnitCount(line_items.quantity, item)}
 
