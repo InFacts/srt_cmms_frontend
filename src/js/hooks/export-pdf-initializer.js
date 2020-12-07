@@ -30,6 +30,7 @@ const useExportPdfInitializer = () => {
   const factInterrupt = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_INTERRUPT] }), shallowEqual);
   const factPosition = useSelector((state) => ({ ...state.api.fact[FACTS.POSITION] }), shallowEqual);
   const factXType = useSelector((state) => ({ ...state.api.fact[FACTS.SS101_X_TYPE] }), shallowEqual);
+  const factLevel = useSelector((state) => ({ ...state.api.fact[FACTS.LEVEL] }), shallowEqual);
 
   // Handle Toolbar Mode
   useEffect(() => {
@@ -101,56 +102,56 @@ const useExportPdfInitializer = () => {
           }
         })
 
-        factPosition.items.map((position) => {
-          if (values.auditor_position_id === position.position_id) {
-            auditor_position_id = position.name
+        factLevel.items.map((position) => {
+          if (values.auditor_position_id === position.level_id) {
+            auditor_position_id = position.level
           }
         })
 
-        factPosition.items.map((position) => {
-          if (values.fixer_position_id === position.position_id) {
-            fixer_position_id = position.name
+        factLevel.items.map((position) => {
+          if (values.fixer_position_id === position.level_id) {
+            fixer_position_id = position.level
           }
         })
 
-        factPosition.items.map((position) => {
-          if (values.member_1_position_id === position.position_id) {
-            member_1_position_id = position.name
+        factLevel.items.map((position) => {
+          if (values.member_1_position_id === position.level_id) {
+            member_1_position_id = position.level
           }
         })
-        factPosition.items.map((position) => {
-          if (values.member_2_position_id === position.position_id) {
-            member_2_position_id = position.name
+        factLevel.items.map((position) => {
+          if (values.member_2_position_id === position.level_id) {
+            member_2_position_id = position.level
           }
         })
-        factPosition.items.map((position) => {
-          if (values.member_3_position_id === position.position_id) {
-            member_3_position_id = position.name
+        factLevel.items.map((position) => {
+          if (values.member_3_position_id === position.level_id) {
+            member_3_position_id = position.level
           }
         })
-        factPosition.items.map((position) => {
-          if (values.member_4_position_id === position.position_id) {
-            member_4_position_id = position.name
+        factLevel.items.map((position) => {
+          if (values.member_4_position_id === position.level_id) {
+            member_4_position_id = position.level
           }
         })
-        factPosition.items.map((position) => {
-          if (values.member_5_position_id === position.position_id) {
-            member_5_position_id = position.name
+        factLevel.items.map((position) => {
+          if (values.member_5_position_id === position.level_id) {
+            member_5_position_id = position.level
           }
         })
-        factPosition.items.map((position) => {
-          if (values.member_6_position_id === position.position_id) {
-            member_6_position_id = position.name
+        factLevel.items.map((position) => {
+          if (values.member_6_position_id === position.level_id) {
+            member_6_position_id = position.level
           }
         })
-        factPosition.items.map((position) => {
-          if (values.member_7_position_id === position.position_id) {
-            member_7_position_id = position.name
+        factLevel.items.map((position) => {
+          if (values.member_7_position_id === position.level_id) {
+            member_7_position_id = position.level
           }
         })
-        factPosition.items.map((position) => {
-          if (values.member_8_position_id === position.position_id) {
-            member_8_position_id = position.name
+        factLevel.items.map((position) => {
+          if (values.member_8_position_id === position.level_id) {
+            member_8_position_id = position.level
           }
         })
 
@@ -294,7 +295,7 @@ const useExportPdfInitializer = () => {
             "LocationDetail": values.location_detail,
             "summary_cause_condition": values.summary_cause_condition,
             "cargo_id": values.cargo_id,
-            "total_fail_time": values.total_fail_time,
+            "total_fail_time": values.total_fail_time ? values.total_fail_time : "-",
             "service_method_id": service_method_id,
             "service_method_desc": values.service_method_desc,
             "interrupt_id": interrupt_id,

@@ -111,10 +111,10 @@ const EnhancedGoodsReceiptComponent = withFormik({
         // Bottom Content
         // General Content
         uom_id: '',
-        minimum_order_quantity: '',
+        minimum_order_quantity: 0,
         uom_name: '',
-        lead_time: '',
-        tolerance_time: '',
+        lead_time: 0,
+        tolerance_time: 0,
         active: '',
         accounting_type: '',
         remark: '',

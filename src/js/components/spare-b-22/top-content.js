@@ -20,7 +20,7 @@ const TopContent = (props) => {
   const fact = useSelector((state) => ({ ...state.api.fact }), shallowEqual);
   const decoded_token = useSelector((state) => ({ ...state.token.decoded_token }), shallowEqual);
 
-  const { values, touched, setFieldValue, validateField, validateForm, setTouched, setErrors } = useFormikContext();
+  const { values, touched, setFieldValue, validateField, validateForm, setTouched, setErrors, resetForm } = useFormikContext();
 
   useEffect(() => {
     validateField("src_warehouse_id")
@@ -93,21 +93,22 @@ const TopContent = (props) => {
           var new_date = new Date();
           var year_now = new_date.getFullYear();
           var mouth_now = new_date.getMonth() + 1;
-          var start_date = values.year_id - 543 + "-" + values.mouth_id + "-1";
+          var start_date = values.year_id - 543 + "-" + values.mouth_id + "-01";
           var end_date
           if (values.year_id - 543 === year_now && parseInt(values.mouth_id) === mouth_now) {
             if (values.mouth_id === "12") {
-              end_date = values.year_id - 543 + 1 + "-1-1";
+              end_date = values.year_id - 543 + 1 + "-01-01";
               console.log(">>>start_date", start_date, "end_date", end_date)
             }
             else {
-              end_date = values.year_id - 543 + "-" + `${parseInt(values.mouth_id) + 1}` + "-1";
+              end_date = values.year_id - 543 + "-" + `${parseInt(values.mouth_id) + 1}` + "-01";
               console.log("start_date", start_date, "end_date", end_date)
             }
             const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-monthly-summary/plus?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&start_date=${start_date}&end_date=${end_date}&item_status_id=${values.item_status_id}&internal_item_id=${values.internal_item_id}&page_size=10000`; //&page_size=10000
             axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
               .then((res) => {
                 console.log("res", res)
+
                 setFieldValue("line_items", res.data.results, false);
                 setFieldValue("start_date", start_date, false);
                 setFieldValue("end_date", end_date, false);
@@ -124,11 +125,11 @@ const TopContent = (props) => {
           }
           else {
             if (values.mouth_id === "12") {
-              end_date = values.year_id - 543 + 1 + "-1-1";
+              end_date = values.year_id - 543 + 1 + "-01-01";
               console.log(">>>start_date", start_date, "end_date", end_date)
             }
             else {
-              end_date = values.year_id - 543 + "-" + `${parseInt(values.mouth_id) + 1}` + "-1";
+              end_date = values.year_id - 543 + "-" + `${parseInt(values.mouth_id) + 1}` + "-01";
               console.log("start_date", start_date, "end_date", end_date)
             }
             const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-monthly-summary/plus?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&start_date=${start_date}&end_date=${end_date}&item_status_id=${values.item_status_id}&internal_item_id=${values.internal_item_id}&page_size=10000`; //&page_size=10000
