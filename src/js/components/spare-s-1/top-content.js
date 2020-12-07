@@ -93,18 +93,19 @@ const TopContent = (props) => {
         setErrors(err);
         if (isEmpty1(err)) {
           // check ว่าเดือน ปี ที่เข้ามาเป็นของ ปัจจุบันหรือไหม
+          let pad = "00"
           var new_date = new Date();
           var year_now = new_date.getFullYear();
           var mouth_now = new_date.getMonth() + 1;
-          var start_date = values.year_id - 543 + "-" + values.mouth_id + "-1";
+          var start_date = values.year_id - 543 + "-" + (pad + values.mouth_id).slice(-pad.length) + "-01";
           var end_date
           if (values.year_id - 543 === year_now && parseInt(values.mouth_id) === mouth_now) {
             if (values.mouth_id === "12") {
-              end_date = values.year_id - 543 + 1 + "-1-1";
+              end_date = values.year_id - 543 + 1 + "-01-01";
               console.log(">>>start_date", start_date, "end_date", end_date)
             }
             else {
-              end_date = values.year_id - 543 + "-" + `${parseInt(values.mouth_id) + 1}` + "-1";
+              end_date = values.year_id - 543 + "-" + `${(pad + (parseInt(values.mouth_id) + 1)).slice(-pad.length)}` + "-01";
               console.log("start_date", start_date, "end_date", end_date)
             }
             const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-monthly-summary/plus?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&start_date=${start_date}&end_date=${end_date}&item_status_id=${values.item_status_id}&internal_item_id=${values.internal_item_id}&page_size=10000`; //&page_size=10000
@@ -127,11 +128,11 @@ const TopContent = (props) => {
           }
           else {
             if (values.mouth_id === "12") {
-              end_date = values.year_id - 543 + 1 + "-1-1";
+              end_date = values.year_id - 543 + 1 + "-01-01";
               console.log(">>>start_date", start_date, "end_date", end_date)
             }
             else {
-              end_date = values.year_id - 543 + "-" + `${parseInt(values.mouth_id) + 1}` + "-1";
+              end_date = values.year_id - 543 + "-" + `${(pad + (parseInt(values.mouth_id) + 1)).slice(-pad.length)}` + "-01";
               console.log("start_date", start_date, "end_date", end_date)
             }
             const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-monthly-summary/plus?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&start_date=${start_date}&end_date=${end_date}&item_status_id=${values.item_status_id}&internal_item_id=${values.internal_item_id}&page_size=10000`; //&page_size=10000
@@ -157,7 +158,7 @@ const TopContent = (props) => {
   
   useEffect(() => {
     let line_item_shows = [];
-    console.log("line_item", values.line_items)
+    // console.log("line_item", values.line_items)
     values.line_items.map((line_item) => {
       line_item_shows.push({
         "item_status_id": line_item.item_status_id,
@@ -169,7 +170,7 @@ const TopContent = (props) => {
         "item_status_description_th": line_item.item_status_description_th,
         "quantity": line_item.end_unit_count.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
         "total": line_item.end_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
-        "per_unit_price": line_item.end_state_in_total_price / line_item.current_ending_unit_count ? (line_item.end_state_in_total_price / line_item.current_ending_unit_count).toFixed(4).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00",
+        "per_unit_price": line_item.end_total_price / line_item.end_unit_count ? (line_item.end_total_price / line_item.end_unit_count).toFixed(4).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00",
         // "lot_fifo": line_item.pricing.fifo.length > 0 && rawLotFromQty( line_item.pricing.fifo, line_item.current_unit_count - line_item.committed_unit_count )
       })
     })

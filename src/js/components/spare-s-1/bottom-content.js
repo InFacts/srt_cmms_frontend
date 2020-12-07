@@ -32,10 +32,10 @@ const BottomContent = (props) => {
   const handleSubDoc = (line_items, index) => {
     console.log("line_items", line_items);
 
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-price?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&item_id=${line_items.item_id}&start_date=${values.start_date}&end_date=${values.end_date}&item_status_id=${line_items.item_status_id}`;
+    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-price?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&item_id=${line_items.item_id}&end_date=${values.end_date}&item_status_id=${line_items.item_status_id}`;
     axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
       .then((res) => {
-        // console.log("res.data.data.fifo", res.data.data.fifo)
+        console.log("res.data.data.fifo", res)
         // console.log("values.line_items.splice(index + 1, 0, ...res.data.data.fifo", values.line_items.splice(index + 1, 0, ...res.data.data.fifo))
         if (res.data.data.fifo.length > 0) {
           values.line_item_shows.splice(index + 1, 0, ...rawLotFromQty(res.data.data.fifo, line_items.end_unit_count))

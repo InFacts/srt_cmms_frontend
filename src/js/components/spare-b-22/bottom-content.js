@@ -118,9 +118,9 @@ const BottomContent = (props) => {
         console.log("res.data.data.fifo", res)
         // console.log("values.line_items.splice(index + 1, 0, ...res.data.data.fifo", values.line_items.splice(index + 1, 0, ...res.data.data.fifo))
         if (res.data.data.fifo.length > 0) {
-          values.line_items.splice(index + 1, 0, ...rawLotFromQty(res.data.data.fifo, line_items.end_unit_count))
-          console.log("values.line_items", values.line_items)
-          setFieldValue("line_items", values.line_items, false);
+          let line_items_copy = [...values.line_items]
+          line_items_copy.splice(index + 1, 0, ...rawLotFromQty(res.data.data.fifo, line_items.end_unit_count))
+          setFieldValue("line_items", line_items_copy, false);
           setFieldValue("test", true, false);
           setFieldValue(`sub${index}`, true, false);
         }

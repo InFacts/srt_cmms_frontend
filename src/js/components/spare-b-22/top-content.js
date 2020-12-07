@@ -90,10 +90,11 @@ const TopContent = (props) => {
         setErrors(err);
         if (isEmpty1(err)) {
           // check ว่าเดือน ปี ที่เข้ามาเป็นของ ปัจจุบันหรือไหม
+          let pad = "00"
           var new_date = new Date();
           var year_now = new_date.getFullYear();
           var mouth_now = new_date.getMonth() + 1;
-          var start_date = values.year_id - 543 + "-" + values.mouth_id + "-01";
+          var start_date = values.year_id - 543 + "-" + (pad + values.mouth_id).slice(-pad.length) + "-01";
           var end_date
           if (values.year_id - 543 === year_now && parseInt(values.mouth_id) === mouth_now) {
             if (values.mouth_id === "12") {
@@ -101,14 +102,13 @@ const TopContent = (props) => {
               console.log(">>>start_date", start_date, "end_date", end_date)
             }
             else {
-              end_date = values.year_id - 543 + "-" + `${parseInt(values.mouth_id) + 1}` + "-01";
+              end_date = values.year_id - 543 + "-" + `${(pad + (parseInt(values.mouth_id) + 1)).slice(-pad.length)}` + "-01";
               console.log("start_date", start_date, "end_date", end_date)
             }
             const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-monthly-summary/plus?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&start_date=${start_date}&end_date=${end_date}&item_status_id=${values.item_status_id}&internal_item_id=${values.internal_item_id}&page_size=10000`; //&page_size=10000
             axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
               .then((res) => {
                 console.log("res", res)
-
                 setFieldValue("line_items", res.data.results, false);
                 setFieldValue("start_date", start_date, false);
                 setFieldValue("end_date", end_date, false);
@@ -129,7 +129,7 @@ const TopContent = (props) => {
               console.log(">>>start_date", start_date, "end_date", end_date)
             }
             else {
-              end_date = values.year_id - 543 + "-" + `${parseInt(values.mouth_id) + 1}` + "-01";
+              end_date = values.year_id - 543 + "-" + `${(pad + (parseInt(values.mouth_id) + 1)).slice(-pad.length)}` + "-01";
               console.log("start_date", start_date, "end_date", end_date)
             }
             const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-monthly-summary/plus?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&start_date=${start_date}&end_date=${end_date}&item_status_id=${values.item_status_id}&internal_item_id=${values.internal_item_id}&page_size=10000`; //&page_size=10000

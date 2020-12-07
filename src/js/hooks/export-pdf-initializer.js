@@ -2124,7 +2124,7 @@ export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((re
         } else {
           var myObj = {
             "item_id": line_number,
-            "description": `Lot: ${item.item_inventory_journal_id} วันที่ผลิต: ${item.date_manufactured.split("T")[0]} ${itemFact.description}`,
+            "description": `Lot: ${item.item_inventory_journal_id} วันที่ผลิต: ${item.date_manufactured ? item.date_manufactured.split("T")[0] : "-" } ${itemFact.description}`,
             "internal_item_id": itemFact.internal_item_id,
             "unit": itemFact.list_uoms[0].name,
             "quantity": item.quantity,
@@ -2329,7 +2329,7 @@ export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((re
         data.push({
           "item_id": p,
           "internal_item_id": item.internal_item_id,
-          "description": `${item.description} Lot: ${lineItem.Lot} Price: ${lineItem.price} Quality: ${lineItem.quality} วันที่ผลิต: ${lineItem.date_manufactured.split("T")[0]}`,
+          "description": `${item.description} Lot: ${lineItem.Lot} Price: ${lineItem.price} Quality: ${lineItem.quality} วันที่ผลิต: ${lineItem.date_manufactured ? lineItem.date_manufactured.split("T")[0] : '-'}`,
 
           "unit": lineItem.uom_name,
 
