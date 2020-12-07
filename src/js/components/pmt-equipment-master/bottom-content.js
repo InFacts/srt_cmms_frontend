@@ -50,9 +50,9 @@ const BottomContent = (props) => {
     }
     return;
   };
-  const validateMinimumOrderQuantityField = (...args) => validateItemMasterdataField("minimum_order_quantity", ...args);
-  const validateLeadTimeField = (...args) => validateItemMasterdataField("lead_time", ...args);
-  const validateToleranceTimeField = (...args) => validateItemMasterdataField("tolerance_time", ...args);
+  // const validateMinimumOrderQuantityField = (...args) => validateItemMasterdataField("minimum_order_quantity", ...args);
+  // const validateLeadTimeField = (...args) => validateItemMasterdataField("lead_time", ...args);
+  // const validateToleranceTimeField = (...args) => validateItemMasterdataField("tolerance_time", ...args);
   const validateActiveField = (...args) => validateItemMasterdataField("active", ...args);
   const validateItemGroupIDField = (...args) => validateItemMasterdataField("checklist_group_id", ...args);
 
@@ -94,7 +94,7 @@ const BottomContent = (props) => {
                 </div>
                 <div className="grid_2">
                   <NumberInput step={0.01} name="minimum_order_quantity" tabIndex="7" cssStyle={{ left: "60px", top: "-5px" }}
-                    validate={validateMinimumOrderQuantityField}
+                    // validate={validateMinimumOrderQuantityField}
                     disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH}
                   />
                 </div>
@@ -119,7 +119,9 @@ const BottomContent = (props) => {
                   <p className="cancel-default float-right">Lead Time</p>
                 </div>
                 <div className="grid_2">
-                  <NumberInput step={1} name="lead_time" tabIndex="8" validate={validateLeadTimeField} cssStyle={{ left: "60px", top: "-5px" }}
+                  <NumberInput step={1} name="lead_time" tabIndex="8" 
+                  // validate={validateLeadTimeField} 
+                  cssStyle={{ left: "60px", top: "-5px" }}
                     disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH}
                   />
                 </div>
@@ -137,7 +139,8 @@ const BottomContent = (props) => {
                 </div>
                 <div className="grid_2">
                   <NumberInput step={1} name="tolerance_time" tabIndex="9"
-                    validate={validateToleranceTimeField} cssStyle={{ left: "60px", top: "-5px" }}
+                    // validate={validateToleranceTimeField} 
+                    cssStyle={{ left: "60px", top: "-5px" }}
                     disabled={values.modeEdit ? false : toolbar.mode === TOOLBAR_MODE.SEARCH || toolbar.mode === TOOLBAR_MODE.JUST_SEARCH}
                   />
                 </div>

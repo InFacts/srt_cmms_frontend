@@ -526,7 +526,7 @@ const BottomContent = (props) => {
                     <div className="grid_12" style={{ marginTop: "10px" }}>
                         {/* checked_remark */}
                         <div className="grid_2 alpha white-space">
-                            <p className="top-text">ความเห็นสายตรวจ</p>
+                            <p className="top-text">ความเห็นนายตรวจ</p>
                         </div>
                         <div className="grid_10 alpha omega">
                             <TextareaInput name="checked_remark" tabIndex="30"

@@ -37,7 +37,7 @@ const TopContent = (props) => {
   const factItemStatus = useSelector((state) => ({ ...state.api.fact[FACTS.ITEM_STATUS] }), shallowEqual);
   const factChecklist = useSelector((state) => ({ ...state.api.fact.checklist }), shallowEqual);
 
-  console.log("line_position_permission>>>>", values.line_position_permission)
+  // console.log("line_position_permission>>>>", values.line_position_permission)
 
   const responseToFormState = (data) => {
     let fact_checklists = factChecklist.items;
