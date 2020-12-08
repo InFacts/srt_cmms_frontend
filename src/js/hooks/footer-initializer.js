@@ -527,6 +527,7 @@ const useFooterInitializer = (document_type_id) => {
 
     // Handle Click CANCEL_APPROVAL_PROCESS
     useEffect(() => {
+        console.log(">>>>")
         if (footer.requiresHandleClick[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS] || footer.requiresHandleClick[FOOTER_ACTIONS.VOID]) {
             console.log("CANCEL_APPROVAL_PROCESS")
             validateForm().then((err) => {
@@ -534,11 +535,17 @@ const useFooterInitializer = (document_type_id) => {
                 setErrors(err);
                 if (isEmpty(err)) {
                     let data = packDataFromValues(fact, values, document_type_id);
+                    console.log("footer.requiresHandleClick[FOOTER_ACTIONS.VOID]", footer.requiresHandleClick[FOOTER_ACTIONS.VOID])
                     if (footer.requiresHandleClick[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]) {
                         data.document.document_status_id = DOCUMENT_STATUS_ID.REOPEN;
                     }
                     else if (footer.requiresHandleClick[FOOTER_ACTIONS.VOID]) {
                         data.document.document_status_id = DOCUMENT_STATUS_ID.VOID;
+                        dispatch(navBottomSuccess('[PUT]', 'Canceled Success', ''));
+                        putDocument(values.document_id, document_type_id, data, null, DOCUMENT_STATUS_ID.VOID, false);
+                        setFieldValue('status_name_th', DOCUMENT_STATUS.VOID, true);
+                        clearFooterAction();
+                        return;
                     }
                     if (values.document_id) { // Case If you ever saved document and then you SEND document. (If have document_id, no need to create new doc)
                         cancelApproval(values.document_id, values.step_approve[0].approval_process_id).then(() => {
@@ -582,7 +589,7 @@ const useFooterInitializer = (document_type_id) => {
             })
             clearFooterAction();
         }
-    }, [footer.requiresHandleClick[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS],]);
+    }, [footer.requiresHandleClick[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS], footer.requiresHandleClick[FOOTER_ACTIONS.VOID]]);
 
 
     return;

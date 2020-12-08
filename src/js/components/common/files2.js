@@ -7,6 +7,10 @@ import { TOOLBAR_MODE } from '../../redux/modules/toolbar'
 import { navBottomOnReady, navBottomWarning } from '../../redux/modules/nav-bottom'
 import { useDispatch, shallowEqual, useSelector } from 'react-redux'
 
+import { API_PORT_DATABASE } from '../../config_port.js';
+import { API_URL_DATABASE } from '../../config_url.js';
+
+const BASE_URL = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}`;
 const Files = () => {
     const dispatch = useDispatch();
     const toolbar = useSelector((state) => ({ ...state.toolbar }), shallowEqual);
@@ -130,7 +134,7 @@ const Files = () => {
                             {(file.preview_url !== undefined && (file.extension.replace(".", "") === "jpg" || file.extension.replace(".", "") === "png" || file.extension.replace(".", "") === "jpeg" || file.extension.replace(".", "") === "bmp")) ? 
                                 <>
                                 <div className="media-body media-left">
-                                    <img className="media-object" src={file.preview_url} width={150} height={100}/>
+                                    <img className="media-object" src={`${BASE_URL}${file.preview_url}`} width={150} height={100}/>
                                 </div>
                                 <div className="media-body">
                                     <h4 className="media-heading" style={{ fontWeight: 'bold', display: 'block' }}>{file.filename}</h4>

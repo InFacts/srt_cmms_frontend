@@ -1747,7 +1747,7 @@ export const downloadAttachmentDocumentData = (document_id, attachment_id) => ne
             console.log("url", url)
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', `sample.${(response.data.type).split("/")[1]}`);
+            link.setAttribute('download', `${response.headers.filename}`);
             document.body.appendChild(link);
             link.click();
             link.parentNode.removeChild(link);
