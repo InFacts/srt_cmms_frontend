@@ -26,7 +26,7 @@ const PieChart = ({ data, chartSettings, title}) => {
     // useChartDimensions will have a ref to the Chart_wrapper and get its own Height and Width
     // See reference of Amelia Wattenberger https://wattenberger.com/blog/react-and-d3#sizing-responsivity
     const [ref, dms] = useChartDimensions({ ...defaultChartSettings, ...chartSettings });
-    
+
     const [arcs, setArcs] = useState([]);
     
     const arcGenerator = useMemo(() => (

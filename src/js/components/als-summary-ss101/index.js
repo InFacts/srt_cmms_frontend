@@ -186,11 +186,12 @@ const AlsEquipmentStatusComponent = () => {
                         let a = new Date(item.specific.accident_on);
                         let b = new Date(item.specific.finished_on);
                         let hour = parseInt((b - a) / 1000 / 60 / 60);
+                        console.log("hour", hour)
                         if (d.getFullYear() === values.year - 543) {
                             // console.log(">>>>>>>>> if", values.year - 543)
                             if (item.specific.district.district_id !== undefined) {
                                 count_color_map[item.specific.district.district_id - 1][d.getMonth() - 1]++;
-                                count_groups[item.specific.system_type.system_type_group_id]++;
+                                count_groups[item.specific.system_type.system_type_group_id-1]++;
 
                                 item.specific.loss_line_item.map((sub_data) => {
                                     count_loss_ss101_now[d.getMonth() - 1] = count_loss_ss101_now[d.getMonth() - 1] + sub_data.price;
