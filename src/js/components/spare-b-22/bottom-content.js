@@ -20,7 +20,7 @@ import { fetchGoodsOnhandData, getNumberFromEscapedString, changeTheam, rawLotFr
 
 const BottomContent = (props) => {
 
-  const { values, errors, setFieldValue, handleChange, handleBlur, getFieldProps, setValues, validateField, validateForm } = useFormikContext();
+  const { values, setFieldValue } = useFormikContext();
   const factItems = useSelector((state) => ({ ...state.api.fact.items }), shallowEqual);
 
   const setValuesForCSV = (line_items) => {
@@ -28,10 +28,13 @@ const BottomContent = (props) => {
     let new_line_items_pdf = [];
     // console.log("line_items", line_items)
     line_items.map((line_item) => {
+      // console.log("line_item", line_item)
       let items = factItems.items;
       let item = items.find(item => `${item.item_id}` === `${line_item.item_id}`)
+      // console.log("item", item)
       if (item) {
-        if (!line_item.date_manufactured) {
+        if (line_item.internal_item_id) {
+          // console.log(">>>>>>>>>>>>>1")
           new_line_items.push({
             "warehouse_name": line_item.warehouse_name,
             "internal_item_id": line_item.internal_item_id,
@@ -74,11 +77,12 @@ const BottomContent = (props) => {
 
             "accounting_type": item.accounting_type
           })
-        
+
         } else {
+          // console.log(">>>>>>>>>>>>2")
           new_line_items.push({
             "item_id": line_item.item_id,
-            "date_manufactured": line_item.date_manufactured.split("T")[0],
+            "date_manufactured": line_item.date_manufactured ? line_item.date_manufactured.split("T")[0] : '-',
             "warehouse_name": line_item.warehouse_name,
             "internal_item_id": item.internal_item_id,
             "item_description": item.description,
@@ -90,7 +94,7 @@ const BottomContent = (props) => {
 
           new_line_items_pdf.push({
             "item_id": line_item.item_id,
-            "date_manufactured": line_item.date_manufactured.split("T")[0],
+            "date_manufactured": line_item.date_manufactured ? line_item.date_manufactured.split("T")[0] : '-',
             "warehouse_name": line_item.warehouse_name,
             "internal_item_id": item.internal_item_id,
             "item_description": item.description,
@@ -100,7 +104,7 @@ const BottomContent = (props) => {
             "price": line_item.per_unit_price,
             "quality": line_item.quantity,
           })
-        
+
         }
       }
     });
@@ -110,26 +114,65 @@ const BottomContent = (props) => {
     setFieldValue("test", false, false);
   }
 
-  const handleSubDoc = (line_items, index) => {
-    console.log("click sub doc")
-    const url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/statistic/goods-price?warehouse_id=${getNumberFromEscapedString(values.src_warehouse_id)}&item_id=${line_items.item_id}&end_date=${values.end_date}&item_status_id=${line_items.item_status_id}`;
-    axios.get(url, { headers: { "x-access-token": localStorage.getItem('token_auth') } })
+  useEffect(() => {
+    setValuesForCSV(values.line_items_pdf)
+  }, [values.line_items, factItems.items, values.test, values.line_items_pdf])
+
+  const getInformation = (index) => new Promise((resolve, reject) => {
+    axios.get("statistic/goods-price", {
+      baseURL: `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/`,
+      params: {
+        warehouse_id: getNumberFromEscapedString(values.src_warehouse_id),
+        item_id: values.line_items[index].item_id,
+        end_date: `${values.end_date}`,
+        item_status_id: `${values.line_items[index].item_status_id}`,
+      },
+      headers: {
+        "x-access-token": localStorage.getItem('token_auth')
+      }
+    })
       .then((res) => {
         console.log("res.data.data.fifo", res)
-        // console.log("values.line_items.splice(index + 1, 0, ...res.data.data.fifo", values.line_items.splice(index + 1, 0, ...res.data.data.fifo))
         if (res.data.data.fifo.length > 0) {
-          let line_items_copy = [...values.line_items]
-          line_items_copy.splice(index + 1, 0, ...rawLotFromQty(res.data.data.fifo, line_items.end_unit_count))
-          setFieldValue("line_items", line_items_copy, false);
-          setFieldValue("test", true, false);
-          setFieldValue(`sub${index}`, true, false);
+          const listFifo = rawLotFromQty(res.data.data.fifo, values.line_items[index].end_unit_count);
+
+          return resolve([index, listFifo])
         }
       });
-  };
+  });
+
+  const [itemData, setItemData] = useState({})
 
   useEffect(() => {
-    setValuesForCSV(values.line_items)
-  }, [values.line_items, factItems.items, values.test])
+    // When selected values changes only when selected changes
+    // Easy version:
+    // we query everything again
+    // Hard version:
+    // we query only things we don't have
+
+    // We make promises then resolve for each index that was selected
+    // TODO make it query only ones we dont have
+    Promise.all(values.selectedIndex.map((index) => {
+      return getInformation(index)
+    })).then((resolvedInformationArr) => {
+      const selectedItemObject = {}
+      resolvedInformationArr.forEach(([index, arr]) => {
+        selectedItemObject["" + index] = arr
+      })
+      setItemData(selectedItemObject)
+      // console.log("selectedItemObject", selectedItemObject)
+      const weavedArr = []
+      values.line_items.forEach((ele, index) => {
+        weavedArr.push(ele)
+        if (values.selectedIndex.includes(index)) {
+          weavedArr.push(...selectedItemObject[index])
+        }
+      })
+      console.log("weavedArr", weavedArr)
+      setFieldValue("line_items_pdf", weavedArr, false);
+
+    })
+  }, [values.line_items, values.selectedIndex])
 
   return (
     <div id={changeTheam() === true ? "" : "blackground-gray"}>
@@ -184,61 +227,73 @@ const BottomContent = (props) => {
                   let item = items.find(item => `${item.item_id}` === `${line_items.item_id}`)
                   // console.log("item", item)
                   if (item) {
-                    if (line_items.internal_item_id) {
-                      // console.log("values[`sub${index}`]", values[`sub${index}`])
-                      return (
-                        <>
-                          <tr key={index} onClick={() => !values[`sub${index}`] && handleSubDoc(line_items, index)}>
-                            <th className="edit-padding text-center">{index + 1}</th>
-                            <td className="edit-padding" style={{ maxWidth: "400px" }}>{line_items.internal_item_id} - {line_items.item_description}</td>
-                            <td className="edit-padding text-center">{line_items.uom_name}</td>
+                    // if (line_items.internal_item_id) {
+                    return (
+                      <>
+                        <tr key={index} onClick={() => {
+                          values.selectedIndex.includes(index) ?
+                            setFieldValue("selectedIndex", [...values.selectedIndex], false) :
+                            setFieldValue("selectedIndex", [...values.selectedIndex, index], false)
+                        }}>
+                          <th className="edit-padding text-center">{index + 1}</th>
+                          <td className="edit-padding" style={{ maxWidth: "400px" }}>{line_items.internal_item_id} - {line_items.item_description}</td>
+                          <td className="edit-padding text-center">{line_items.uom_name}</td>
 
-                            <td className="edit-padding text-right">
-                              {line_items.begin_unit_count ? line_items.begin_unit_count.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}
-                            </td> {/* เหลือเดือนก่อน */}
-                            <td className="edit-padding text-right">
-                              {line_items.begin_total_price ? line_items.begin_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}
-                            </td>
+                          <td className="edit-padding text-right">
+                            {line_items.begin_unit_count ? line_items.begin_unit_count.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}
+                          </td> {/* เหลือเดือนก่อน */}
+                          <td className="edit-padding text-right">
+                            {line_items.begin_total_price ? line_items.begin_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}
+                          </td>
 
-                            <td className="edit-padding text-right">
-                              {line_items.state_in_unit_count ? line_items.state_in_unit_count.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}
-                            </td> {/* รับเดือนนี้ */}
-                            <td className="edit-padding text-right">
-                              {line_items.state_in_total_price ? line_items.state_in_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}
-                            </td>
+                          <td className="edit-padding text-right">
+                            {line_items.state_in_unit_count ? line_items.state_in_unit_count.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}
+                          </td> {/* รับเดือนนี้ */}
+                          <td className="edit-padding text-right">
+                            {line_items.state_in_total_price ? line_items.state_in_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}
+                          </td>
 
-                            <td className="edit-padding text-right">
-                              {line_items.state_out_unit_count ? line_items.state_out_unit_count.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}
-                            </td> {/* จ่ายเดือนนี้ */}
-                            <td className="edit-padding text-right">
-                              {line_items.state_out_total_price ? line_items.state_out_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}
-                            </td>
+                          <td className="edit-padding text-right">
+                            {line_items.state_out_unit_count ? line_items.state_out_unit_count.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}
+                          </td> {/* จ่ายเดือนนี้ */}
+                          <td className="edit-padding text-right">
+                            {line_items.state_out_total_price ? line_items.state_out_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}
+                          </td>
 
-                            <td className="edit-padding text-right">
-                              {line_items.end_unit_count ? line_items.end_unit_count.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}
-                            </td> {/* คงเหลือ */}
-                            <td className="edit-padding text-right">
-                              {line_items.end_total_price ? line_items.end_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}
-                            </td>
+                          <td className="edit-padding text-right">
+                            {line_items.end_unit_count ? line_items.end_unit_count.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}
+                          </td> {/* คงเหลือ */}
+                          <td className="edit-padding text-right">
+                            {line_items.end_total_price ? line_items.end_total_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "0.00"}
+                          </td>
 
-                            {/* <td className="edit-padding text-right">-</td> */}
-                            <td className="edit-padding text-center">{item.accounting_type}</td>
-                          </tr>
-                        </>
-                      )
-                    } else {
-                      return (
-                        <>
-                          <tr key={index}>
-                            <th className="edit-padding text-center blue">{index + 1}</th>
-                            <td className="edit-padding blue" style={{ maxWidth: "400px" }}>{item.internal_item_id} - {item.description}</td>
-                            <td className="edit-padding text-center blue">{item.list_uoms[0].name}</td>
+                          {/* <td className="edit-padding text-right">-</td> */}
+                          <td className="edit-padding text-center">{item.accounting_type}</td>
+                        </tr>
 
-                            <td colSpan="9" className="edit-padding blue">Lot: {line_items.item_inventory_journal_id} ราคา: {line_items.per_unit_price} จำนวน: {line_items.quantity} วันที่ผลิต: {line_items.date_manufactured && line_items.date_manufactured.split("T")[0]}</td>
-                          </tr>
-                        </>
-                      )
-                    }
+                        {(() => {
+                          const lotData = itemData["" + index]
+                          if (!lotData) return; // No lot for this item
+                          // Map you lots here!
+                          // console.log("lotData", lotData)
+                          return lotData.map((lotFifo, subIndex) => {
+                            let items = factItems.items;
+                            let item = items.find(item => `${item.item_id}` === `${lotFifo.item_id}`)
+                            return (
+                              <tr key={subIndex}>
+                                <th className="edit-padding text-right blue">{index + 1}.{subIndex + 1}</th>
+                                <td className="edit-padding blue" style={{ maxWidth: "400px" }}>{item.internal_item_id} - {item.description}</td>
+                                <td className="edit-padding text-center blue">{item.list_uoms[0].name}</td>
+
+                                <td colSpan="9" className="edit-padding blue">Lot: {lotFifo.item_inventory_journal_id} ราคา: {lotFifo.per_unit_price} จำนวน: {lotFifo.quantity} วันที่ผลิต: {lotFifo.date_manufactured && lotFifo.date_manufactured.split("T")[0]}</td>
+                              </tr>
+                            )
+                          })
+                        })()
+                        }
+
+                      </>
+                    )
                   }
                 })}
               </tbody>

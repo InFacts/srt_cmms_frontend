@@ -115,6 +115,7 @@ const TopContent = (props) => {
                 setFieldValue("line_items", res.data.results, false);
                 setFieldValue("start_date", start_date, false);
                 setFieldValue("end_date", end_date, false);
+                setFieldValue("selectedIndex", [], false);
               })
               .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
                 if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID
@@ -142,6 +143,7 @@ const TopContent = (props) => {
                 setFieldValue("line_items", res.data.results, false);
                 setFieldValue("start_date", start_date, false);
                 setFieldValue("end_date", end_date, false);
+                setFieldValue("selectedIndex", [], false);
               })
               .catch((err) => { // 404 NOT FOUND  If input Document ID doesn't exists
                 if (props.toolbar.mode === TOOLBAR_MODE.SEARCH) { //If Mode Search, invalid Document ID

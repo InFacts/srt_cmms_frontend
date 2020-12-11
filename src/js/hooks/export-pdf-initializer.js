@@ -2061,7 +2061,7 @@ export const exportPDF = (routeLocation, valuesContext, fact) => new Promise((re
     })
     // console.log("valuesContext.line_items", valuesContext.line_items)
     let create_on = date + " " + mouth.mouth + " " + year;
-    let filterResult = valuesContext.line_item_shows.sort(function (a, b) {
+    let filterResult = valuesContext.line_item_shows_pdf.sort(function (a, b) {
       return parseInt(a.internal_item_id) - parseInt(b.internal_item_id);
     })
     let group_type = []
