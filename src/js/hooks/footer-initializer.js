@@ -442,6 +442,7 @@ const useFooterInitializer = (document_type_id) => {
             // dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]());
         }
         else if (footer.requiresHandleClick[FOOTER_ACTIONS.ESCALATED]) { dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.ESCALATED]()); }
+        else if (footer.requiresHandleClick[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]) { dispatch(ACTION_TO_HANDLE_CLICK[FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]()); }
     }
 
     // Handle Click Approval

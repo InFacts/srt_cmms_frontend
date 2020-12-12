@@ -415,6 +415,7 @@ export const handleFooterClickGotIt = makeActionCreator(HANDLE_CLICK_GOT_IT);
 export const handleFooterClickFastTrack = makeActionCreator(HANDLE_CLICK_FAST_TRACK);
 export const handleFooterClickApprovalProcess = makeActionCreator(HANDLE_CLICK_CANCEL_APPROVAL_PROCESS);
 export const handleFooterClickVoid = makeActionCreator(HANDLE_CLICK_VOID);
+// handleFooterClickCancelApprovalProcess
 export const handleFooterClickApprovalDone = makeActionCreator(HANDLE_CLICK_APPROVAL_DONE);
 export const handleFooterClickEscalated = makeActionCreator(HANDLE_CLICK_ESCALATED);
 
@@ -450,4 +451,5 @@ export const ACTION_TO_HANDLE_CLICK = {
     [FOOTER_ACTIONS.REJECT]: handleFooterClickReject,
     [FOOTER_ACTIONS.ESCALATED]: handleFooterClickEscalated,
     [FOOTER_ACTIONS.VOID]: handleFooterClickVoid,
+    [FOOTER_ACTIONS.CANCEL_APPROVAL_PROCESS]: handleFooterClickApprovalProcess,
 }
