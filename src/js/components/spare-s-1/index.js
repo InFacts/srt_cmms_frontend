@@ -75,6 +75,9 @@ const initialLineYears = (n = 10) => {
 var now_date = new Date();
 const EnhancedReportS1Component = withFormik({
     mapPropsToValues: (props) => ({
+        selectedIndex: [],
+        line_item_shows_pdf: [],
+        
         // Field ที่ให้ User กรอก
         internal_item_id: '',
         warehouse_type_id: -1,
