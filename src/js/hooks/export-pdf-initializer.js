@@ -357,8 +357,8 @@ const useExportPdfInitializer = () => {
           var w = window.open();
           w.document.write(htmlCode);
           setTimeout(() => {
-            // w.print();
-            // w.close();
+            w.print();
+            w.close();
           }, 500);
         })
         dispatch(handleClickExportPDF())
