@@ -143,7 +143,7 @@ const BottomContent = (props) => {
                     <div className={changeTheam() === true ? "grid_5" : "grid_6"} style={{ paddingLeft: "10px" }}>
                         {/* Accident Name  */}
                         <div className="grid_2 alpha white-space">
-                            <p className="top-text">ชื่องาน</p>
+                            <p className="top-text">งาน (3)</p>
                         </div>
                         <div className="grid_3 alpha omega">
                             <TextInput name="accident_name" validate={validateDocumentAccidentNameField} tabIndex="8"
@@ -179,7 +179,7 @@ const BottomContent = (props) => {
 
                         {/* request_by */}
                         <div className="grid_2 alpha white-space">
-                            <p className="top-text">ได้รับเหตุจาก</p>
+                            <p className="top-text">ได้รับเหตุจาก (2)</p>
                         </div>
                         <div className="grid_3 alpha omega">
                             <TextInput name="request_by" validate={validateDocumentRequestByField} tabIndex="11"
@@ -190,7 +190,7 @@ const BottomContent = (props) => {
 
                         {/* recv_accident_from_recv_idid */}
                         <div className="grid_2 alpha white-space">
-                            <p className="top-text">รับข้อมูลผ่านช่องทาง</p>
+                            <p className="top-text">รับข้อมูลผ่านช่องทาง (2)</p>
                         </div>
                         <div className="grid_3 alpha omega">
                             {/* Need to change to radio button later */}
@@ -249,7 +249,7 @@ const BottomContent = (props) => {
 
                         {/* system_type_group_id  */}
                         <div className="grid_2 alpha white-space">
-                            <p className="top-text">ระบบตรวจซ่อม</p>
+                            <p className="top-text">ระบบตรวจซ่อม (5)</p>
                         </div>
                         <div className="grid_3 alpha omega">
                             <SelectNoChildrenInput name="system_type_group_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} validate={validateDocumentSystemTypeGroupIDnField} cssStyle={{ left: "-160px", top: "14px" }} tabIndex="17">
@@ -280,7 +280,7 @@ const BottomContent = (props) => {
 
                         {/* hardware_type_id  */}
                         <div className="grid_2 alpha white-space">
-                            <p className="top-text">ระบบตรวจซ่อมย่อย</p>
+                            <p className="top-text">ระบบตรวจซ่อมย่อย (7)</p>
                         </div>
                         <div className="grid_3 alpha omega pull">
                             <SelectNoChildrenInput name="hardware_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="19">
@@ -363,7 +363,7 @@ const BottomContent = (props) => {
                     {/* === Right Column === */}
                     <div className="grid_6 prefix_1">
                         {/* District ID */}
-                        <Label>สถานที่ แขวง</Label>
+                        <Label>สถานที่ แขวง (6)</Label>
                         <div className="grid_4 alpha omega">
                             <SelectNoChildrenInput name="location_district_id" validate={validateDocumentLocationDistrictIDField}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
@@ -378,7 +378,7 @@ const BottomContent = (props) => {
                         <div className="clear" />
 
                         {/* Node ID */}
-                        <Label>สถานที่ ตอน</Label>
+                        <Label>สถานที่ ตอน (6)</Label>
                         <div className="grid_4 alpha omega">
                             <SelectNoChildrenInput name="location_node_id" validate={validateDocumentLocationNodeIDField}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
@@ -395,7 +395,7 @@ const BottomContent = (props) => {
                         <div className="clear" />
 
                         {/* Station ID */}
-                        <Label>สถานที่ สถานี</Label>
+                        <Label>สถานที่ สถานี (6)</Label>
                         <div className="grid_4 alpha omega">
                             <SelectNoChildrenInput name="location_station_id" validate={validateDocumentLocationStationIDField}
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
@@ -412,7 +412,7 @@ const BottomContent = (props) => {
                         <div className="clear" />
 
                         {/* Station ID */}
-                        <Label>รายละเอียดสถานที่</Label>
+                        <Label>รายละเอียดสถานที่ (6)</Label>
                         <div className="grid_4 alpha omega">
                             <TextareaInput name="location_detail" tabIndex="23"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
@@ -435,7 +435,7 @@ const BottomContent = (props) => {
                         <div className="clear" />
 
                         {/* summary_cause_condition link [root_cause] from WO */}
-                        <Label>สาเหตุและอาการเสียโดยสรุป</Label>
+                        <Label>สาเหตุและอาการเสีย (8)</Label>
                         <div className="grid_4 alpha omega">
                             <TextareaInput name="summary_cause_condition" tabIndex="24"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
@@ -444,7 +444,7 @@ const BottomContent = (props) => {
                         <div className="clear" />
 
                         {/* cargo_id  */}
-                        <Label>ขบวนรถที่</Label>
+                        <Label>ขบวนรถที่ (9)</Label>
                         <div className="grid_4 alpha omega">
                             <TextInput name="cargo_id" tabIndex="25"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
@@ -453,7 +453,7 @@ const BottomContent = (props) => {
                         <div className="clear" />
 
                         {/* total_fail_time  */}
-                        <Label>เสียเวลาเพราะเหตุนี้</Label>
+                        <Label>เสียเวลาเพราะเหตุนี้ (9)</Label>
                         <div className="grid_3 alpha omega">
                             <NumberInput name="total_fail_time" step={1} tabIndex="26"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} cssStyle={{ left: "60px", top: "-5px" }} />
@@ -467,7 +467,7 @@ const BottomContent = (props) => {
                         <div className="clear" />
 
                         {/* service_method_id */}
-                        <Label>ประเภทการซ่อม</Label>
+                        <Label>ประเภทการซ่อม </Label>
                         <div className="grid_4 alpha omega">
                             <SelectNoChildrenInput name="service_method_id" validate={validateDocumentServiceMethodIDField} disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="27" cssStyle={{ left: "-240px", top: "10px" }}>
                                 <option value='' selected></option>
@@ -484,7 +484,7 @@ const BottomContent = (props) => {
                         <div className="clear" />
 
                         {/* service_method_desc */}
-                        <Label>สรุปการแก้ไขและการซ่อมแซม</Label>
+                        <Label>สรุปการแก้ไข (10)</Label>
                         <div className="grid_4 alpha omega">
                             <TextareaInput name="service_method_desc" tabIndex="28"
                                 disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} />
@@ -493,7 +493,7 @@ const BottomContent = (props) => {
                         <div className="clear" />
 
                         {/* interrupt_id */}
-                        <Label>อุปสรรค</Label>
+                        <Label>อุปสรรค (11)</Label>
                         <div className="grid_4 alpha omega">
                             <SelectNoChildrenInput name="interrupt_id" validate={validateDocumentInterruptIDField} disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH} tabIndex="29" cssStyle={{ left: "-240px", top: "10px" }}>
                                 <option value='' selected></option>
@@ -513,7 +513,7 @@ const BottomContent = (props) => {
                     <div className="grid_12" style={{ marginTop: "10px" }}>
                         {/* Remark */}
                         <div className="grid_2 alpha white-space">
-                            <p className="top-text">รายละเอียดการซ่อม</p>
+                            <p className="top-text">รายละเอียดการซ่อม (16)</p>
                         </div>
                         <div className="grid_10 alpha omega">
                             <TextareaInput name="remark" tabIndex="30"
@@ -526,7 +526,7 @@ const BottomContent = (props) => {
                     <div className="grid_12" style={{ marginTop: "10px" }}>
                         {/* checked_remark */}
                         <div className="grid_2 alpha white-space">
-                            <p className="top-text">ความเห็นนายตรวจ</p>
+                            <p className="top-text">ความเห็นนายตรวจ (18)</p>
                         </div>
                         <div className="grid_10 alpha omega">
                             <TextareaInput name="checked_remark" tabIndex="30"
@@ -541,7 +541,7 @@ const BottomContent = (props) => {
                 {/* === Tab related_parties_content  === */}
                 <div id="related_parties_content" className="tabcontent">
                     {/* Component Title */}
-                    <h3 className="head-title-bottom mt-2">ผู้ปฎิบัติงาน</h3>
+                    <h3 className="head-title-bottom mt-2">ผู้ปฎิบัติงาน (14)</h3>
 
                     {/* === One Column   ==== */}
                     <div className="grid_12">
@@ -764,7 +764,7 @@ const BottomContent = (props) => {
                 <div id="compensation_list_content" className="tabcontent">
 
                     {/* Component Title */}
-                    <h4 className="head-title-bottom mt-2">ข้อมูลรายการค่าเสียหาย</h4>
+                    <h4 className="head-title-bottom mt-2">ข้อมูลรายการค่าเสียหาย (17)</h4>
 
                     <div style={{ padding: "10px" }}>
                         <table className="table-many-column">
@@ -780,7 +780,7 @@ const BottomContent = (props) => {
                             </thead>
                             <tbody>
                                 {values.loss_line_items.map((loss_line_item, index) => {
-                                    if (loss_line_item.price) {totalPrice = parseInt(totalPrice) + parseInt(loss_line_item.price * loss_line_item.quantity)}
+                                    if (loss_line_item.price) {totalPrice = parseInt(totalPrice) + parseInt(loss_line_item.price)}
                                     return (
                                         <tr key={index}>
                                             <td className="edit-padding text-center">{index + 1}</td>
