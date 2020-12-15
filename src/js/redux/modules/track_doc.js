@@ -126,12 +126,13 @@ function getQueryString(state) {
         // station: ""
     }
     Object.keys(mapStateToQuery).map((key) => {
-
+        console.log("state[key]", state[key], "queryString", queryString)
         if (state[key]) {
-            if (queryString !== "?") {
+            // if (queryString === "?") {
                 queryString += '&'
-            }
+            // }
             queryString += `${mapStateToQuery[key]}=${state[key]}`;
+            console.log("queryString", queryString)
         }
     });
     console.log("QRUERYSAD", queryString)
@@ -143,7 +144,7 @@ export function fetchDocuments() {
 
         // TODO: dispatch fetching
         let queryString = getQueryString(getState().track_doc);
-        let url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search${queryString}?page_size=100000`;
+        let url = `http://${API_URL_DATABASE}:${API_PORT_DATABASE}/document/search?page_size=100000${queryString}`;
         console.log("url", url)
         return axios.get(url,
             { headers: { "x-access-token": localStorage.getItem('token_auth') } }).then((res) => {
