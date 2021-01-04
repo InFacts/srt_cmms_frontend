@@ -48,7 +48,7 @@ const TopContent = (props) => {
                 </div>
                 <div className="grid_2" style={{ marginLeft: "20px"}}>
                   <FormDropdown factList={props.type_document_list} onChange={props.onChangeTypeTrackDocument} 
-                    idName="document_type_group_id" descriptionName="name" gridClass="grid_2"/>
+                    idName="document_type_id" descriptionName="name" gridClass="grid_2"/>
                 </div>
                 <div className="grid_1">
                   <p className="cancel-default">วันเริ่มต้น </p>
@@ -89,6 +89,7 @@ const TopContent = (props) => {
 const mapStateToProps = (state) => {
   var fact = state.api.fact;
   state = state.track_doc;
+
   return {
 
     find_document_list: state.find_document_list,
