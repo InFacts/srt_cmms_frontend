@@ -18,7 +18,9 @@ const FormDropdown = ({factList, onChange, idName, descriptionName, gridClass}) 
   <select className={`edit-select-top ${gridClass}`} onChange={onChange}>
     <option defaultValue="" key={0}></option>
     {factList.map(function (fact, index) {
+      console.log("fact", fact)
       if (fact[idName] !== 0) { // Mostly Zeros are Defaults made by System
+        console.log("fact[idName]", fact[idName])
         return <option value={fact[idName]} key={index+1}>{fact[descriptionName]}</option>
       }
     })}
@@ -48,7 +50,7 @@ const TopContent = (props) => {
                 </div>
                 <div className="grid_2" style={{ marginLeft: "20px"}}>
                   <FormDropdown factList={props.type_document_list} onChange={props.onChangeTypeTrackDocument} 
-                    idName="document_type_group_id" descriptionName="name" gridClass="grid_2"/>
+                    idName="document_type_id" descriptionName="name" gridClass="grid_2"/>
                 </div>
                 <div className="grid_1">
                   <p className="cancel-default">วันเริ่มต้น </p>
@@ -89,6 +91,7 @@ const TopContent = (props) => {
 const mapStateToProps = (state) => {
   var fact = state.api.fact;
   state = state.track_doc;
+
   return {
 
     find_document_list: state.find_document_list,
