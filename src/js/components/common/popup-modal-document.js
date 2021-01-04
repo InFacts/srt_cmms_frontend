@@ -29,10 +29,13 @@ const PopupModalDocument = (props) => {
     const [valueNodeIDWorkOrderPM, setValueNodeIDWorkOrderPM] = useState([]);
     const [valueNodeIDFormDistrictWorkOrderPM, setValueNodeIDFormDistrictWorkOrderPM] = useState([]);
 
+    const [valueUser, setValueUser] = useState(null);
+
     useEffect(() => {
         let users = factUsers.items;
         let user = users.find(user => `${user.user_id}` === `${decoded_token.id}`);
         if (user) {
+            setValueUser(user);
             let nodes = factNodes.items;
             let districts = factDistricts.items;
             if (!user.position[0].district_id && !user.position[0].division_id) { //สำหรับ User ที่เป็น node
@@ -358,6 +361,21 @@ const PopupModalDocument = (props) => {
                                                                 aria-label="Close active modal" aria-controls={props.id} >เลือก</button>
                                                         </td>
                                                     </tr>
+                                                )
+                                            }
+                                        } else if (valueUser) {
+                                            if ((valueUser.position[0].position_id === 44 || valueUser.position[0].position_id === 178) && (document.document_type_id === 2041 || document.document_type_id === 2042)) { // สำหรับ user นักวิจัย eng_research, insp_research, tech_research
+                                                return (
+                                                        <tr key={index} id={index}>
+                                                            <td className="edit-padding"> {document.internal_document_id} </td>
+                                                            <td className="edit-padding"> {document.created_on.split(".")[0].replace("T", " เวลา ") + " น."} </td>
+                                                            <td className="edit-padding"> {document.document_status_en}</td>
+                                                            <td className="edit-padding text-center">
+                                                                <button type="button" className="button-blue"
+                                                                    onClick={() => setFieldValue(`${props.name}`, document.internal_document_id, true)}
+                                                                    aria-label="Close active modal" aria-controls={props.id} >เลือก</button>
+                                                            </td>
+                                                        </tr>
                                                 )
                                             }
                                         }
