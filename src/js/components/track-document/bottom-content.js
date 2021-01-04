@@ -26,12 +26,15 @@ const BottomContent = (props) => {
   const [valueNodeIDWorkOrderPM, setValueNodeIDWorkOrderPM] = useState([]);
   const [valueNodeIDFormDistrictWorkOrderPM, setValueNodeIDFormDistrictWorkOrderPM] = useState([]);
 
+  const [valueUser, setValueUser] = useState(null);
+
   const identifyEndpoins = (document_type_id) => identifyEndpoinsHelper(document_type_id)
 
   useEffect(() => {
     let users = factUsers.items;
     let user = users.find(user => `${user.user_id}` === `${decoded_token.id}`);
     if (user) {
+      setValueUser(user);
       let nodes = factNodes.items;
       let districts = factDistricts.items;
       if (!user.position[0].district_id && !user.position[0].division_id) { //สำหรับ User ที่เป็น node
@@ -92,7 +95,7 @@ const BottomContent = (props) => {
                 <tbody>
                   {props.track_document_show.map(function (track_document_show, index) {
                     if (Object.keys(listUsers).length !== 0 && listUsers !== undefined && Object.keys(listDocumentStatus).length !== 0 && listDocumentStatus !== undefined) {
-
+                      // console.log("track_document_show.document_type_id === 2041", track_document_show.document_type_id === 2041)
                       // <<<<<<======= DOCUMENT SPARE ===========>>>>>>>>>
                       if (track_document_show.dest_warehouse_id && track_document_show.src_warehouse_id || track_document_show.physical_count_warehouse_id
                         || track_document_show.inventory_adjustment_warehouse_id) {
@@ -101,7 +104,6 @@ const BottomContent = (props) => {
                           decoded_token.has_position[0].warehouse_id ?
                             decoded_token.has_position[0].warehouse_id :
                             "no_warehouse" : null;
-
                         if (findWarehouse === track_document_show.dest_warehouse_id || findWarehouse === track_document_show.src_warehouse_id) {
                           return (
                             <tr key={index} id={index}>
@@ -381,6 +383,23 @@ const BottomContent = (props) => {
                                 </tr>
                               )
                             }
+                          }
+                        } else if (valueUser) {
+                          if ((valueUser.position[0].position_id === 44 || valueUser.position[0].position_id === 178) && (track_document_show.document_type_id === 2041 || track_document_show.document_type_id === 2042)) { // สำหรับ user นักวิจัย eng_research, insp_research, tech_research
+                            return (
+                              <tr key={index} id={index}>
+                                <td className="edit-padding" style={{ paddingLeft: "5px", maxWidth: "150px" }}>{formatDate(track_document_show.created_on)}</td>
+                                <td className="edit-padding" style={{ maxWidth: "150px" }}>
+                                  <Link to={identifyEndpoins(track_document_show.document_type_id) + "?internal_document_id=" + track_document_show.internal_document_id + "&document_id=" + track_document_show.document_id}>{track_document_show.internal_document_id}</Link>
+                                </td>
+                                <td className="edit-padding" style={{ maxWidth: "350px" }}>{track_document_show.document_type_name} </td>
+                                <td className="edit-padding" style={{ maxWidth: "150px" }}>{
+                                  track_document_show.created_by_user_id === 0 && listUsers[0].username !== undefined ? "Server" :
+                                    Object.values(listUsers).find(user => user.user_id === track_document_show.created_by_user_id).username
+                                }</td>
+                                <td className="edit-padding" style={{ maxWidth: "150px" }}>{track_document_show.document_status_en}</td>
+                              </tr>
+                            )
                           }
                         }
                       }

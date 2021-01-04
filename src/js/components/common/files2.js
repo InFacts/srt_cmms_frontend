@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useFormikContext } from 'formik';
 
 import Document from '../../../images/document.svg';
-import { downloadAttachmentDocumentData, fetchAttachmentDocumentData, checkBooleanForEditHelper } from '../../helper';
+import { downloadAttachmentDocumentData, fetchAttachmentDocumentData, checkBooleanForEditHelper, uploadAttachmentDocumentData } from '../../helper';
 import { TOOLBAR_MODE } from '../../redux/modules/toolbar'
 import { navBottomOnReady, navBottomWarning } from '../../redux/modules/nav-bottom'
 import { useDispatch, shallowEqual, useSelector } from 'react-redux'
@@ -104,7 +104,12 @@ const Files = () => {
             }
         })
         setFieldValue("files", files);
-        // console.log("convertFormFileToAPI values.files", files);
+        console.log("convertFormFileToAPI values.files", files);
+        if (values.document_id) {
+            uploadAttachmentDocumentData(values.document_id, files)
+        } else {
+            return;
+        }
     }
 
     const deleteFileInState = (e) => {
