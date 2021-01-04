@@ -18,9 +18,7 @@ const FormDropdown = ({factList, onChange, idName, descriptionName, gridClass}) 
   <select className={`edit-select-top ${gridClass}`} onChange={onChange}>
     <option defaultValue="" key={0}></option>
     {factList.map(function (fact, index) {
-      console.log("fact", fact)
       if (fact[idName] !== 0) { // Mostly Zeros are Defaults made by System
-        console.log("fact[idName]", fact[idName])
         return <option value={fact[idName]} key={index+1}>{fact[descriptionName]}</option>
       }
     })}
