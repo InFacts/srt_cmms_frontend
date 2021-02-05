@@ -2675,7 +2675,7 @@ export const validateInternalDocumentIDFieldHelper = (decoded_token, checkBoolea
         // && !isValidInternalDocumentIDFastTrackFormat(internal_document_id)
         && !isValidInternalDocumentIDDraftFormat(internal_document_id)) {
         console.log("Invalid Document ID Format Be sure to use the format ie. สสญ.ธบ.-ธบ./2-4/2563/0001")
-        return resolve('Invalid Document ID Format Be sure to use the format ie. สสญ.ธบ.-ธบ./2-4/2563/0001')
+        // return resolve('Invalid Document ID Format Be sure to use the format ie. สสญ.ธบ.-ธบ./2-4/2563/0001') //เอาออกเพราะว่ามีการ เปลี่ยนชื่อเอกสารตามใจผู้ใช้ ในวันที่ 05/02/2021
     }
 
     // Basic information to share
