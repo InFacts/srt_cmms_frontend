@@ -805,6 +805,7 @@ export const packDataFromValues = (fact, values, document_type_id, checked_remar
             summary_cause_condition: values.summary_cause_condition,
             loss: values.loss,
             car_type_id: values.car_type_id ? parseInt(values.car_type_id) : null,
+            by_car_type_id: values.by_car_type_id ? parseInt(values.by_car_type_id) : null,
             cargo_id: values.cargo_id,
             interrupt_id: values.interrupt_id ? parseInt(values.interrupt_id) : null,
             service_method_id: values.service_method_id ? parseInt(values.service_method_id) : null,
@@ -2398,6 +2399,7 @@ function transformSS101ResponseToFormState(ss101_part, data) {
 
         // // Bottom Content
         car_type_id: returnEmptyStringIfNull(ss101_part.car_type_id),
+        by_car_type_id: returnEmptyStringIfNull(ss101_part.by_car_type_id),
         departed_on: departed_on.toISOString().slice(0, 16),
         arrived_on: arrived_on.toISOString().slice(0, 16),
         request_on: request_on.toISOString().slice(0, 16),

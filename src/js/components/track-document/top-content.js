@@ -16,7 +16,7 @@ import {FACTS} from '../../redux/modules/api/fact.js'
 
 const FormDropdown = ({factList, onChange, idName, descriptionName, gridClass}) => (
   <select className={`edit-select-top ${gridClass}`} onChange={onChange}>
-    <option defaultValue="" key={0}></option>
+    <option defaultValue="" key={0}>ทั้งหมด</option>
     {factList.map(function (fact, index) {
       if (fact[idName] !== 0) { // Mostly Zeros are Defaults made by System
         return <option value={fact[idName]} key={index+1}>{fact[descriptionName]}</option>

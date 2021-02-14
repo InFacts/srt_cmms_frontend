@@ -45,6 +45,7 @@ const useExportPdfInitializer = () => {
     if (toolbar.requiresHandleClick[TOOLBAR_ACTIONS.EXPORT_PDF] && document_item) {
       if (routeLocation === '/pmt-ss-101') {
         console.log(">>>>>>>>>>>>", values)
+        let by_car_type_id = "";
         let car_type_id = "";
         let system_type_group_id = "";
         let system_type_id = "";
@@ -69,6 +70,12 @@ const useExportPdfInitializer = () => {
         factCarType.items.map((factCarType) => {
           if (values.car_type_id === factCarType.car_id) {
             car_type_id = factCarType.car_type;
+          }
+        });
+
+        factCarType.items.map((factCarType) => {
+          if (values.by_car_type_id === factCarType.car_id) {
+            by_car_type_id = factCarType.car_type;
           }
         });
 
@@ -294,6 +301,7 @@ const useExportPdfInitializer = () => {
 
             "Station": values.location_x_cross_id ? node + "/" + station + "/" + values.location_detail  + "/" + values.location_x_cross_id : node + "/" + station + "/" + values.location_detail,
 
+            "ByCarType": by_car_type_id,
             "HardwareType": hardware_type_id,
             "LocationDetail": values.location_detail,
             "summary_cause_condition": values.summary_cause_condition,
@@ -1261,7 +1269,7 @@ const createPageS101Page1 = (date, content) =>
           <td style=" text-align:center ; vertical-align: middle;">${content.DepartedOnDay}</td>
       </tr>
       <tr class="item">
-          <td style=" text-align:left ; vertical-align: middle; border: 0px solid black;"><div class="left">(4) เดินทางโดย</div><div contenteditable="true"><div class="dotted" style="width: 450px; text-align: center"><label>-</label></div></div></td>
+          <td style=" text-align:left ; vertical-align: middle; border: 0px solid black;"><div class="left">(4) เดินทางโดย</div><div contenteditable="true"><div class="dotted" style="width: 450px; text-align: center"><label>${content.ByCarType}</label></div></div></td>
           <td style=" text-align:center ; vertical-align: middle; border: 0.1px solid black;">เดินทางถึง</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.ArrivedOnTimeParts}</td>
           <td style=" text-align:center ; vertical-align: middle;" >${content.ArrivedOnYear}</td>

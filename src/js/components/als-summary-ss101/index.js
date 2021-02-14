@@ -221,6 +221,11 @@ const AlsEquipmentStatusComponent = () => {
             let realJournal = [];
             data_ss101_journal.map((data_ss101_journal_test) => {
                 let node = factNodes.items.find(node => `${node.node_id}` === `${data_ss101_journal_test.specific.location_node_id}`);
+                let accident_on = new Date(data_ss101_journal_test.specific.accident_on); 
+                let finished_on = new Date(data_ss101_journal_test.specific.finished_on);
+                let difference= Math.abs(finished_on-accident_on);
+                let calDiffereance = (difference/(1000 * 3600)).toFixed(2)
+                let total_fail_time = `${calDiffereance.toString().slice(0, calDiffereance.length-3)} ชม. ${(parseInt(calDiffereance.toString().slice(calDiffereance.length-2, calDiffereance.length))*60/100).toFixed(2).toString().slice(0, calDiffereance.length-3)} นาที`
                 if (node) {
                     let subRealJournal = {};
                     subRealJournal.internal_document_id = data_ss101_journal_test.document.internal_document_id;
@@ -234,7 +239,7 @@ const AlsEquipmentStatusComponent = () => {
                     subRealJournal.summary_cause_condition = data_ss101_journal_test.specific.summary_cause_condition;
                     subRealJournal.location_detail = data_ss101_journal_test.specific.location_detail;
                     subRealJournal.system_type = data_ss101_journal_test.specific.system_type.system_type;
-                    subRealJournal.total_fail_time = data_ss101_journal_test.specific.total_fail_time;
+                    subRealJournal.total_fail_time = total_fail_time;
                     subRealJournal.auditor_name = data_ss101_journal_test.specific.auditor_name;
                     subRealJournal.location_x_cross_id = factXCross.items.length > 0 && factXCross.items.find(x_cross => `${x_cross.x_cross_id}` === `${data_ss101_journal_test.specific.location_x_cross_id}`) ? factXCross.items.find(x_cross => `${x_cross.x_cross_id}` === `${data_ss101_journal_test.specific.location_x_cross_id}`).road_center : "-" ;
                     subRealJournal.doc_bypass_doc_bypass_id = factDocByPass.items.length > 0 && factDocByPass.items.find(doc_by_pass => `${doc_by_pass.doc_bypass_id}` === `${data_ss101_journal_test.specific.doc_bypass_doc_bypass_id}`) ? factDocByPass.items.find(doc_by_pass => `${doc_by_pass.doc_bypass_id}` === `${data_ss101_journal_test.specific.doc_bypass_doc_bypass_id}`).name : "-";
