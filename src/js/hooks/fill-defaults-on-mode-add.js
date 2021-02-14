@@ -63,6 +63,7 @@ const useFillDefaultsOnModeAdd = (document_type_group_id) => {
 
                     let position = getPositionAbbreviationFromWarehouseID(fact.position, this_warehouse_id);
                     if (position) {
+                        console.log("position", position)
                     positionAbbreviation = position.abbreviation;
                     positionID = position.position_id;
                     }
@@ -102,7 +103,7 @@ const useFillDefaultsOnModeAdd = (document_type_group_id) => {
                     }
                     internalDocumentID = [positionAbbreviation, documentTypeGroupIDSplit, fullYearBE, runningInternalDocumentID].join(delimiter);
                     
-                    // console.log("fillDefaults:: positionAbbreviation", positionAbbreviation);
+                    console.log("fillDefaults:: positionAbbreviation", positionAbbreviation);
                     // console.log("fillDefaults:: documentTypeGroupIDSplit", documentTypeGroupIDSplit);
                     // console.log("fillDefaults:: fullYearBE", fullYearBE);
                     // console.log("fillDefaults:: runningInternalDocumentID", runningInternalDocumentID);

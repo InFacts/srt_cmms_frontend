@@ -208,6 +208,26 @@ const BottomContent = (props) => {
 
                         <div className="clear" />
 
+                        {/* recv_accident_from_recv_idid */}
+                        <div className="grid_2 alpha white-space">
+                            <p className="top-text">เดินทางโดย (4)</p>
+                        </div>
+                        <div className="grid_3 alpha omega">
+                        <SelectNoChildrenInput name="by_car_type_id" disabled={checkBooleanForEdit === true ? false : toolbar.mode === TOOLBAR_MODE.SEARCH}
+                                cssStyle={{ left: "-160px", top: "14px" }} tabIndex="12">
+                                <option value=''></option>
+                                {factCarType.items.map((factCarType) => {
+                                    if (values.by_car_type_id === factCarType.car_id) {
+                                        return <option value={factCarType.car_id} key={factCarType.car_id} selected>{factCarType.car_type}</option>
+                                    } else {
+                                        return <option value={factCarType.car_id} key={factCarType.car_id}>{factCarType.car_type}</option>
+                                    }
+                                })}
+                            </SelectNoChildrenInput>
+                        </div>
+
+                        <div className="clear" />
+
                         {/* departed_on  */}
                         <div className="grid_2 alpha white-space">
                             <p className="top-text">ออกเดินทาง</p>

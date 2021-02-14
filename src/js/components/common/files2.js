@@ -142,7 +142,6 @@ const Files = () => {
                     </div>
                 </div>
             </div>
-            {console.log("values.files", values.files)}
             {values.files.length !== 0 && values.files !== undefined ?
                 <div className="dropZone-list">
                     {values.files.map((file, index) => (
