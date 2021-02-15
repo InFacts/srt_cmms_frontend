@@ -181,6 +181,20 @@ const PopupModalDocument = (props) => {
                                                     </td>
                                                 </tr>
                                             )
+                                        } else if (valueNodeID ? valueNodeID === document.work_request_node_id : valueDistrictID === document.work_request_district_id) {
+                                            // console.log("work_request")
+                                            return (
+                                                <tr key={index} id={index}>
+                                                    <td className="edit-padding"> {document.internal_document_id} </td>
+                                                    <td className="edit-padding"> {document.created_on.split(".")[0].replace("T", " เวลา ") + " น."} </td>
+                                                    <td className="edit-padding"> {document.document_status_en}</td>
+                                                    <td className="edit-padding text-center">
+                                                        <button type="button" className="button-blue"
+                                                            onClick={() => setFieldValue(`${props.name}`, document.internal_document_id, true)}
+                                                            aria-label="Close active modal" aria-controls={props.id} >เลือก</button>
+                                                    </td>
+                                                </tr>
+                                            )
                                         } else if (valueNodeID ? valueNodeID === document.ss101_node_id : valueDistrictID === document.ss101_district_id) {
                                             // console.log("ss101")
                                             return (
@@ -237,9 +251,9 @@ const PopupModalDocument = (props) => {
                                                     </td>
                                                 </tr>
                                             )
-                                        } else if (document.document_type_id === 2011 || document.document_type_id === 2071) {
-                                            // console.log("document Maintenant", document)
-                                            // Work Request // Maintenant Item ต้องเห็นทุกเอกสาร 
+                                        } else if (document.document_type_id === 2071) {
+                                            console.log("document Maintenant", document)
+                                            // Maintenant Item ต้องเห็นทุกเอกสาร 
                                             // console.log("Work Request // Maintenant Item")
                                             return (
                                                 <tr key={index} id={index}>
@@ -255,11 +269,26 @@ const PopupModalDocument = (props) => {
                                             )
                                         } else if (valueDivisionID.length !== 0) {
                                             // console.log("valueDivisionID.length !== 0")
+                                            let work_request_division = valueDivisionID.find(division => `${division.district_id}` === `${document.work_request_district_id}`);
                                             let work_order_division = valueDivisionID.find(division => `${division.district_id}` === `${document.work_order_district_id}`);
                                             let ss101_division = valueDivisionID.find(division => `${division.district_id}` === `${document.ss101_district_id}`);
                                             let equipment_installation_division = valueDivisionID.find(division => `${division.district_id}` === `${document.equipment_installation_district_id}`);
                                             let selector_pm_plan_division = valueDivisionID.find(division => `${division.district_id}` === `${document.selector_pm_plan_district_id}`);
                                             if (document.work_order_node_id && work_order_division) {
+                                                // console.log("DIVISION")
+                                                return (
+                                                    <tr key={index} id={index}>
+                                                        <td className="edit-padding"> {document.internal_document_id} </td>
+                                                        <td className="edit-padding"> {document.created_on.split(".")[0].replace("T", " เวลา ") + " น."} </td>
+                                                        <td className="edit-padding"> {document.document_status_en}</td>
+                                                        <td className="edit-padding text-center">
+                                                            <button type="button" className="button-blue"
+                                                                onClick={() => setFieldValue(`${props.name}`, document.internal_document_id, true)}
+                                                                aria-label="Close active modal" aria-controls={props.id} >เลือก</button>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            } else if (document.work_request_node_id && work_request_division) {
                                                 // console.log("DIVISION")
                                                 return (
                                                     <tr key={index} id={index}>

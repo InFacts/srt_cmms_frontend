@@ -43,7 +43,7 @@ const PmtSS101Componant = (props) => {
         { id: "breakdown", name: "อาการเสีย" },
         { id: "related_parties", name: "ผู้ที่เกี่ยวข้อง" },
         { id: "compensation_list", name: "รายการค่าเสียหาย" },
-        { id: "assets_under_maintenance", name: "สินทรัพย์ที่ดำเดินการซ่อมบำรุง" },
+        { id: "assets_under_maintenance", name: "สินทรัพย์ที่ดำเนินการซ่อมบำรุง" },
         { id: "attachment", name: "แนบไฟล์" },
         { id: "table_status", name: "สถานะเอกสาร" },
     ]);
@@ -148,7 +148,8 @@ const EnhancedPmtSS101Component = withFormik({
 
 
         // Bottom Content
-        car_type_id: '',           // เดินทางโดย FK_ID
+        by_car_type_id: '',           // เดินทางโดย FK_ID
+        car_type_id: '',           // เดินทางโดย 
         departed_on: '',          // ออกเดินทาง DATETIME
         arrived_on: '',           // เดินทางถึง  DATETIME
         finished_on: '',          // วันเวลาที่แล้วเสร็จ DATETIME

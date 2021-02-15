@@ -104,7 +104,7 @@ const Files = () => {
             }
         })
         setFieldValue("files", files);
-        console.log("convertFormFileToAPI values.files", files);
+        // console.log("convertFormFileToAPI values.files", files);
         if (values.document_id) {
             uploadAttachmentDocumentData(values.document_id, files)
         } else {
@@ -142,7 +142,6 @@ const Files = () => {
                     </div>
                 </div>
             </div>
-            {console.log("values.files", values.files)}
             {values.files.length !== 0 && values.files !== undefined ?
                 <div className="dropZone-list">
                     {values.files.map((file, index) => (
