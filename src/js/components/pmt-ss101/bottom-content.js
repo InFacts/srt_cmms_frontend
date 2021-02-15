@@ -207,7 +207,7 @@ const BottomContent = (props) => {
                         </div>
 
                         <div className="clear" />
-
+                        
                         {/* recv_accident_from_recv_idid */}
                         <div className="grid_2 alpha white-space">
                             <p className="top-text">เดินทางโดย (4)</p>

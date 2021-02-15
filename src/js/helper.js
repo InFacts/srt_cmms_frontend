@@ -198,6 +198,7 @@ export const SS101_SCHEMA = {
     location_detail: '',       //รายละเอียดสถานที่ [WR]  ที่ตั้งอุปกรณ์ที่ทำการตรวจซ่อม (สถานที่/ที่ตั้ง) [WO] NVARCHAR
 
     // Bottom Content
+    by_car_type_id: -1,   
     car_type_id: -1,           // เดินทางโดย FK_ID
     departed_on: '',          // ออกเดินทาง DATETIME
     arrived_on: '',           // เดินทางถึง  DATETIME
@@ -2389,7 +2390,8 @@ function transformSS101ResponseToFormState(ss101_part, data) {
 
     var accident_on = new Date(ss101_part.accident_on);
     accident_on.setHours(accident_on.getHours());
-    console.log(">>>>>>>>>>>>>>>>>>>>>>>", data)
+    // console.log(">>>>>>>>>>>>>>>>>>>>>>>", data)
+    // console.log("ss101_part.by_car_type_id", ss101_part.by_car_type_id)
     return {    
         ...ss101_part,
         accident_on: accident_on.toISOString().slice(0, 16),

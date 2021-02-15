@@ -104,7 +104,7 @@ const Files = () => {
             }
         })
         setFieldValue("files", files);
-        console.log("convertFormFileToAPI values.files", files);
+        // console.log("convertFormFileToAPI values.files", files);
         if (values.document_id) {
             uploadAttachmentDocumentData(values.document_id, files)
         } else {
